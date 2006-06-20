@@ -11,6 +11,7 @@ core:
 CONTIKI=../..
 TARGET=esb
 
+blinker.cm: blinker.co blinker2.co
 
 ifdef ENABLE_BACNET
 APPS += bacnet

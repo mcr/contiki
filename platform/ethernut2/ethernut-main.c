@@ -38,7 +38,6 @@
 #include "dev/serial.h"
 #include "dev/slip.h"
 #include "dev/rs232.h"
-#include "telnetd.h"
 
 #include <avr/interrupt.h>
 /*static void setup_xram(void) __attribute__ ((naked)) \
