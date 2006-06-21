@@ -34,6 +34,8 @@
 
 PROCESS(beeper_process, "Beeper");
 
+AUTOSTART_PROCESSES(&beeper_process);
+
 static struct etimer etimer;
 
 static struct pt beeper_pt;
@@ -72,7 +74,7 @@ PROCESS_THREAD(beeper_process, ev, data)
     
     PROCESS_WAIT_EVENT();
     
-    if(ev == codeprop_event_quit) {
+    if(ev == PROCESS_EVENT_EXIT) {
       break;
     } else if(ev == sensors_event &&
 	      data == &button_sensor) {
