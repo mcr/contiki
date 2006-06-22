@@ -48,7 +48,7 @@ CFLAGSNO = -I. -I$(CONTIKI)/core -I$(CONTIKI_CPU) \
            -DWITH_UIP -DWITH_ASCII \
            -Wall -mmcu=$(MCU) -g
 CFLAGS  += $(CFLAGSNO) -Os
-LDFLAGS  = -mmcu=$(MCU) -Wl,-Map=contiki-$(TARGET).map
+LDFLAGS += -mmcu=$(MCU) -Wl,-Map=contiki-$(TARGET).map
 
 PROJECT_OBJECTFILES += ${addprefix $(OBJECTDIR)/,$(CONTIKI_TARGET_MAIN:.c=.o)}
 
