@@ -251,7 +251,7 @@ msg_for_me(void)
 {
   struct dhcp_msg *m = (struct dhcp_msg *)uip_appdata;
   u8_t *optptr = &m->options[4];
-  u8_t *end = uip_appdata + uip_datalen();
+  u8_t *end = (u8_t*)uip_appdata + uip_datalen();
   
   if(m->op == DHCP_REPLY &&
      memcmp(m->xid, &xid, sizeof(xid)) == 0 &&
