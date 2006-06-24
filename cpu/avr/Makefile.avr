@@ -60,9 +60,6 @@ vpath %.c $(PROJECTDIRS) $(CONTIKI)/cpu/avr/dev \
 $(OBJECTDIR)/%.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# %.firmware:	%.co $(PROJECT_OBJECTFILES) contiki-$(TARGET).a
-# 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(filter-out %.a,$^) $(filter %.a,$^) $(LDLIBS)
-
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
@@ -91,9 +88,6 @@ $(OBJECTDIR)/%.o: %.c
 
 %.o: ${CONTIKI_TARGET}/loader/%.S
 	$(AS) -o $(notdir $(<:.S=.o)) $<
-
-# %:	%.o $(CONTIKI_TARGET_MAIN) $(PROJECT_OBJECTFILES) contiki-$(TARGET).a
-# 	$(CC) $(LDFLAGS) $(CFLAGS) -o $@.$(TARGET) $(filter-out %.a,$^) $(filter %.a,$^)
 
 %.srec: %.$(TARGET)
 	$(OBJCOPY) -O srec $< $@

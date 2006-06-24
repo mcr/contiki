@@ -81,10 +81,6 @@ vpath %.c $(PROJECTDIRS) \
 %.firmware:	%.co $(PROJECT_OBJECTFILES) contiki-$(TARGET).a
 	$(CC) $(LDFLAGS) $(CFLAGS) -o $@ $(filter-out %.a,$^) $(filter %.a,$^)
 
-
-# %.firmware:	%.o contiki-esb-main.o contikiesb.a
-# 	$(CC) $(LDFLAGS) $(CFLAGS) -o $@ $(filter-out %.a,$^) $(filter %.a,$^)
-
 %.ihex: %.firmware
 	$(OBJCOPY) $^ -O ihex $@
 
