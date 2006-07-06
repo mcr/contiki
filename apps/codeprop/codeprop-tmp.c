@@ -74,6 +74,7 @@
 #include "cfs/cfs.h"
 #include "codeprop-tmp.h"
 #include "loader/elfloader-tmp.h"
+#include <string.h>
 
 static const char *err_msgs[] =
   {"OK\r\n", "Bad ELF header\r\n", "No symtab\r\n", "No strtab\r\n",
@@ -160,8 +161,6 @@ codeprop_set_rate(clock_time_t time)
 /*---------------------------------------------------------------------*/
 PROCESS_THREAD(codeprop_process, ev, data)
 {
-  static int n;
-
   PROCESS_BEGIN();
 
   elfloader_init();
