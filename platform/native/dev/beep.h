@@ -50,9 +50,6 @@
 #ifndef __BEEP_H__
 #define __BEEP_H__
 
-#define BEEP_ON  1
-#define BEEP_OFF 0
-
 #define BEEP_ALARM1 1
 #define BEEP_ALARM2 2
 
