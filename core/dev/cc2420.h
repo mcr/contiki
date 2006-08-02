@@ -94,6 +94,16 @@ struct hdr_802_15_ack {
   /* no more */
 };
 
+struct cc2420_neigbour {
+  unsigned mac:16, nretrans:4, expire:4; /* expiration time */
+#if 0
+  unsigned rssi:6, correlation:6;
+#endif
+};
+
+#define NNEIGBOURS 16
+extern struct cc2420_neigbour neigbours[NNEIGBOURS];
+
 PROCESS_NAME(cc2420_process);
 
 extern struct uip_fw_netif cc2420if;

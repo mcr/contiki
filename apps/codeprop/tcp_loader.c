@@ -75,7 +75,7 @@ PT_THREAD(recv_tcpthread(struct pt *pt))
   uip_appdata += sizeof(struct codeprop_tcphdr);
   uip_len -= sizeof(struct codeprop_tcphdr);
 
-  xmem_erase(s.len, EEPROMFS_ADDR_CODEPROP);
+  xmem_erase(XMEM_ERASE_UNIT_SIZE, EEPROMFS_ADDR_CODEPROP);
 
   /* Read the rest of the data. */
   do {      

@@ -92,7 +92,7 @@ main(int argc, char **argv) {
   }
   
   
-  {
+  while(1) {
     char buf[64000];
     int len;
     
@@ -116,17 +116,12 @@ main(int argc, char **argv) {
       exit(0);
     }
     total += len;
-
     buf[0] = len >> 8;
     buf[1] = len & 0xff;
     if(write(s, buf, len + 2) == -1) {
       perror("network send failed");
       exit(1);
     }
-    printf("File sent\n");
-    len = read(s, buf, sizeof(buf));
-    buf[len] = 0;
-    printf("%s", buf);
   }
   
   return 0;
