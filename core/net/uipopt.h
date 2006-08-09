@@ -540,7 +540,5 @@ typedef struct httpd_state uip_tcp_appstate_t
  */
 /** @} */
 
-#include "net/tcpip.h"
-
 #endif /* __UIPOPT_H__ */
 /** @} */

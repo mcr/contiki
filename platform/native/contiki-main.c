@@ -57,14 +57,14 @@ main(void)
   
   autostart_start(autostart_processes);
   
-  uip_ipaddr(addr, 192,168,2,2);
-  uip_sethostaddr(addr);
+  uip_ipaddr(&addr, 192,168,2,2);
+  uip_sethostaddr(&addr);
 
-  uip_ipaddr(addr, 192,168,2,1);
-  uip_setdraddr(addr);
+  uip_ipaddr(&addr, 192,168,2,1);
+  uip_setdraddr(&addr);
 
-  uip_ipaddr(addr, 255,255,255,0);
-  uip_setnetmask(addr);
+  uip_ipaddr(&addr, 255,255,255,0);
+  uip_setnetmask(&addr);
 
   printf("Contiki initiated, now starting process scheduling\n");
   

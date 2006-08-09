@@ -59,7 +59,7 @@ PROCESS_THREAD(webserver_nogui_process, ev, data)
 }
 /*---------------------------------------------------------------------------*/
 void
-httpd_log_file(u16_t *requester, char *file)
+httpd_log_file(uip_ipaddr_t *requester, char *file)
 {
 }
 /*---------------------------------------------------------------------------*/

@@ -223,7 +223,7 @@ void udp_attach(struct uip_udp_conn *conn,
  * \return A pointer to the newly created connection, or NULL if
  * memory could not be allocated for the connection.
  */
-struct uip_udp_conn *udp_new(u16_t *ripaddr, u16_t port,
+struct uip_udp_conn *udp_new(uip_ipaddr_t *ripaddr, u16_t port,
 			     void *appstate);
 
 /**

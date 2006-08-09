@@ -76,8 +76,8 @@ uaodv_rt_add(uip_ipaddr_t *dest, uip_ipaddr_t *nexthop,
     }
   }
 
-  uip_ipaddr_copy(e->dest, dest);
-  uip_ipaddr_copy(e->nexthop, nexthop);
+  uip_ipaddr_copy(&e->dest, dest);
+  uip_ipaddr_copy(&e->nexthop, nexthop);
   e->hop_count = hop_count;
   e->seqno = seqno;
 

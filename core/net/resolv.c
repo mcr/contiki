@@ -356,7 +356,7 @@ PROCESS_THREAD(resolv_process, ev, data)
 	uip_udp_remove(resolv_conn);
       }
       
-      resolv_conn = udp_new((u16_t *)data, HTONS(53), NULL);
+      resolv_conn = udp_new((uip_ipaddr_t *)data, HTONS(53), NULL);
       
     } else if(ev == tcpip_event) {
       if(uip_udp_conn->rport == HTONS(53)) {
@@ -459,7 +459,7 @@ resolv_getserver(void)
   if(resolv_conn == NULL) {
     return NULL;
   }
-  return resolv_conn->ripaddr;
+  return resolv_conn->ripaddr.u16;
 }
 /*-----------------------------------------------------------------------------------*/
 /**

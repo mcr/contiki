@@ -128,7 +128,7 @@ main(int argc, char **argv)
   uip_ipaddr_copy(&uip_netmask, &cc2420if.netmask);
   printf("IP %d.%d.%d.%d netmask %d.%d.%d.%d\n",
 	 ip2quad(&uip_hostaddr), ip2quad(&uip_netmask));
-  cc2420_set_chan_pan_addr(RF_CHANNEL, panId, uip_hostaddr[1], ds2411_id);
+  cc2420_set_chan_pan_addr(RF_CHANNEL, panId, uip_hostaddr.u16[1], ds2411_id);
 
   /*
    * Initialize Contiki and our processes.
