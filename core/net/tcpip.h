@@ -162,7 +162,7 @@ void tcp_unlisten(u16_t port);
  * memory could not be allocated for the connection.
  *
  */
-struct uip_conn *tcp_connect(u16_t *ripaddr, u16_t port,
+struct uip_conn *tcp_connect(uip_ipaddr_t *ripaddr, u16_t port,
 			     void *appstate);
 
 /**

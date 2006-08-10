@@ -112,11 +112,11 @@ tcpip_output(void)
 }
 /*---------------------------------------------------------------------------*/
 struct uip_conn *
-tcp_connect(u16_t *ripaddr, u16_t port, void *appstate)
+tcp_connect(uip_ipaddr_t *ripaddr, u16_t port, void *appstate)
 {
   struct uip_conn *c;
   
-  c = uip_connect((uip_ipaddr_t *)ripaddr, port);
+  c = uip_connect(ripaddr, port);
   if(c == NULL) {
     return NULL;
   }
