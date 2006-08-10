@@ -48,13 +48,13 @@ PROCESS_THREAD(test_process, ev, data)
   
   PROCESS_BEGIN();
 
-  uip_ip6addr(ip6addr, 0xfc00,0,0,0,0,0,0,0x232);  
-  uip_sethostaddr(ip6addr);
+  uip_ip6addr(&ip6addr, 0xfc00,0,0,0,0,0,0,0x232);  
+  uip_sethostaddr(&ip6addr);
   uip_setethaddr(ethaddr);
 
-  uip_ip6addr(ip6addr, 0xfc00,0,0,0,0,0,0,0x231);  
+  uip_ip6addr(&ip6addr, 0xfc00,0,0,0,0,0,0,0x231);  
 
-  tcp_connect(ip6addr, HTONS(7), NULL);
+  tcp_connect(&ip6addr, HTONS(7), NULL);
   
   while(1) {
     PROCESS_WAIT_EVENT();

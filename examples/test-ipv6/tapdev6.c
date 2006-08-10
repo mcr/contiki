@@ -181,10 +181,10 @@ tapdev_send(void)
   struct uip_neighbor_addr *addr;
   /*  uip_arp_out();*/
 
-  addr = uip_neighbor_lookup(IPBUF->destipaddr);
+  addr = uip_neighbor_lookup(&IPBUF->destipaddr);
   if(addr == NULL) {
     printf("tapdev6: tapdev_send: no matching neighbor found\n");
-    DEBUG_PRINT6ADDR(IPBUF->destipaddr);
+    DEBUG_PRINT6ADDR(&IPBUF->destipaddr);
     printf("\n");
   } else {
     memcpy(&BUF->dest, addr, 6);
