@@ -56,7 +56,7 @@ pollhandler(void)
   if(uip_len > 0) {
 #if UIP_CONF_IPV6
     if(BUF->type == htons(UIP_ETHTYPE_IPV6)) {
-      uip_neighbor_add(IPBUF->srcipaddr, &BUF->src);
+      uip_neighbor_add(&IPBUF->srcipaddr, &BUF->src);
       tcpip_input();
     } else
 #endif /* UIP_CONF_IPV6 */
