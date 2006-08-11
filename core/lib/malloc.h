@@ -57,6 +57,7 @@ void free(void *ptr);
 
 extern char *__brkval;		/* first location not yet allocated */
 extern struct __freelist *__flp; /* freelist pointer (head of freelist) */
+extern char *__malloc_heap_end;
 
 #define MALLOC_ROUNDUP (sizeof(int) - 1)
 
