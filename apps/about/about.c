@@ -37,6 +37,7 @@
 
 #include "contiki.h"
 #include "ctk/ctk.h"
+#include "lib/petsciiconv.h"
 
 static struct ctk_window aboutdialog;
 static struct ctk_label aboutlabel1 =
