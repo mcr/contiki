@@ -42,6 +42,9 @@
 
 #define CC_CONF_VA_ARGS                1
 
+#define CCI
+#define CLI
+
 /*------------------------------------------------------------------------------*/
 /**
  * \defgroup uipopttypedef uIP type definitions
