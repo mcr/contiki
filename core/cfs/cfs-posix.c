@@ -76,8 +76,8 @@ PROCESS_THREAD(cfs_posix_process, ev, data)
 
   SERVICE_REGISTER(cfs_posix_service);
 
-  PROCESS_WAIT_EVENT_UNTIL(ev != PROCESS_EVENT_SERVICE_REMOVED &&
-			   ev != PROCESS_EVENT_EXIT);
+  PROCESS_WAIT_EVENT_UNTIL(ev == PROCESS_EVENT_SERVICE_REMOVED ||
+			   ev == PROCESS_EVENT_EXIT);
 
   SERVICE_REMOVE(cfs_posix_service);
   
