@@ -4,6 +4,9 @@
 #ifndef CONTIKI_CONF_H
 #define CONTIKI_CONF_H
 
+#define CCI
+#define CLI
+
 /* This is still experimental. /bg */
 #define UAODV_BAD_ROUTE
 
