@@ -48,7 +48,7 @@ unsigned char ctk_draw_windowborder_width = 1,
 void
 ctk_draw_init(void)
 {
-  struct ctk_draw_service *i;
+  const struct ctk_draw_service *i;
   struct service *s;
   
   s = SERVICE_FIND(ctk_draw_service);
