@@ -60,7 +60,7 @@ SERVICE(cfs_nullservice, cfs_service,
   });
 
 /*---------------------------------------------------------------------------*/
-struct cfs_service_interface *
+const struct cfs_service_interface *
 cfs_find_service(void)
 {
   struct service *s;
