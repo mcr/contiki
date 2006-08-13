@@ -208,7 +208,7 @@ draw_widget(struct ctk_widget *w,
       }
       x = xpos;
   
-      len = strlen(w->widget.icon.title);
+      len = (unsigned char)strlen(w->widget.icon.title);
       if(x + len >= sizex) {
 	x = sizex - len;
       }
@@ -491,10 +491,10 @@ s_ctk_draw_menus(struct ctk_menus *menus)
 
   /* Draw desktopmenu */
   if(wherex() + strlen(menus->desktopmenu->title) + 1 >= sizex) {
-    gotoxy(sizex - strlen(menus->desktopmenu->title) - 1, 0);
+    gotoxy(sizex - (unsigned char)strlen(menus->desktopmenu->title) - 1, 0);
   } else {
     cclear(sizex - wherex() -
-	   strlen(menus->desktopmenu->title) - 1);
+	   (unsigned char)strlen(menus->desktopmenu->title) - 1);
   }
   draw_menu(menus->desktopmenu, menus->desktopmenu == menus->open);
 
