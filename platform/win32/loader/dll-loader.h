@@ -35,6 +35,11 @@
 #ifndef __DLL_LOADER_H__
 #define __DLL_LOADER_H__
 
+#define LOADER_LOAD(name, arg) dll_loader_load(name, arg);
+#define LOADER_UNLOAD()        dll_loader_unload((void *)process_load)
+#define LOADER_LOAD_DSC(name)  dll_loader_load_dsc(name)
+#define LOADER_UNLOAD_DSC(dsc) dll_loader_unload_dsc(dsc)
+
 CCI int dll_loader_load(char *name, char *arg);
 CCI void dll_loader_unload(void *addr);
 CCI struct dsc *dll_loader_load_dsc(char *name);
