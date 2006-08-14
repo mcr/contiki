@@ -41,6 +41,7 @@
 #include "htmlparser.h"
 #include "http-strings.h"
 
+#include "sys/arg.h"
 #include "lib/petsciiconv.h"
 
 #include "program-handler.h"
@@ -853,7 +854,7 @@ htmlparser_submitbutton(char *text, char *name,
 {
   register struct formattribs *form;
   
-  form = add_pagewidget(text, strlen(text), CTK_WIDGET_BUTTON, 1);
+  form = add_pagewidget(text, (unsigned char)strlen(text), CTK_WIDGET_BUTTON, 1);
   if(form != NULL) {
     strncpy(form->formaction, formaction, WWW_CONF_MAX_FORMACTIONLEN);
     strncpy(form->formname, formname, WWW_CONF_MAX_FORMNAMELEN);
@@ -870,7 +871,7 @@ htmlparser_inputfield(char *text, char *name,
 {
   register struct formattribs *form;
 
-  form = add_pagewidget(text, strlen(text), CTK_WIDGET_TEXTENTRY, 1);
+  form = add_pagewidget(text, (unsigned char)strlen(text), CTK_WIDGET_TEXTENTRY, 1);
   if(form != NULL) {
     strncpy(form->formaction, formaction, WWW_CONF_MAX_FORMACTIONLEN);
     strncpy(form->formname, formname, WWW_CONF_MAX_FORMNAMELEN);
