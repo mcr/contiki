@@ -233,19 +233,20 @@ clock_seconds(void)
 void
 uip_log(char *m)
 {
-  u16_t addr[2];
-  uip_gethostaddr(addr);
+  uip_ipaddr_t addr;
+
+  uip_gethostaddr(&addr);
 
   printf("uIP log at %d.%d.%d.%d: %s\n",
-	 uip_ipaddr1(addr),
-	 uip_ipaddr2(addr),
-	 uip_ipaddr3(addr),
-	 uip_ipaddr4(addr),
+	 uip_ipaddr1(&addr),
+	 uip_ipaddr2(&addr),
+	 uip_ipaddr3(&addr),
+	 uip_ipaddr4(&addr),
 	 m);
   fflush(NULL);
 }
 void
-configurator_send_config(u16_t *addr, unsigned long seconds)
+configurator_send_config(uip_ipaddr_t *addr, unsigned long seconds)
 {
   printf("Configurator: address %d.%d.%d.%d, seconds %lu\n",
 	 uip_ipaddr1(addr),

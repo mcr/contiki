@@ -50,7 +50,7 @@ static void init_node_log(void);
 void
 node_init(int id, int posx, int posy, int b)
 {
-  u16_t addr[2];
+  uip_ipaddr_t addr;
   
   node.id = id;
   node.x = posx;
@@ -58,11 +58,11 @@ node_init(int id, int posx, int posy, int b)
   node.type = NODE_TYPE_NORMAL;
 
   if(b) {
-    uip_ipaddr(addr, 192,168,250,2);
+    uip_ipaddr(&addr, 192,168,250,2);
   } else {
-    uip_ipaddr(addr, 10,10,posx,posy);
+    uip_ipaddr(&addr, 10,10,posx,posy);
   }
-  uip_sethostaddr(addr);
+  uip_sethostaddr(&addr);
 
   drift = random() % 9572627217;
 

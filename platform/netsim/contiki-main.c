@@ -158,7 +158,7 @@ contiki_main(int flag)
     process_start(&tapdev_drv_process, NULL);
     uip_fw_register(&ethernodeif);
     uip_fw_default(&tapif);
-    printf("uip_hostaddr %02x%02x\n", uip_hostaddr[0], uip_hostaddr[1]);
+    printf("uip_hostaddr %02x%02x\n", uip_hostaddr.u16[0], uip_hostaddr.u16[1]);
   } else {
     uip_fw_default(&ethernodeif);
   }
