@@ -79,8 +79,8 @@ struct uip_fw_netif {
  */
 #define UIP_FW_NETIF(ip1,ip2,ip3,ip4, nm1,nm2,nm3,nm4, outputfunc) \
         NULL, \
-	{ .u16 = {HTONS((ip1 << 8) | ip2), HTONS((ip3 << 8) | ip4)} }, \
-	{ .u16 = {HTONS((nm1 << 8) | nm2), HTONS((nm3 << 8) | nm4)} }, \
+	{ {ip1, ip2, ip3, ip4} }, \
+	{ {nm1, nm2, nm3, nm4} }, \
         outputfunc
 
 /**
