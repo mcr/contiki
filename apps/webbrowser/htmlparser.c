@@ -412,7 +412,7 @@ parse_tag(void)
       newline();
       add_char(ISO_rbrack);
       do_word();
-      htmlparser_link((char *)html_frame, strlen(html_frame), s.tagattrparam);
+      htmlparser_link((char *)html_frame, (unsigned char)strlen(html_frame), s.tagattrparam);
       PRINTF(("Frame [%s]\n", s.tagattrparam));
       add_char(ISO_lbrack);
       newline();
@@ -843,7 +843,7 @@ htmlparser_parse(char *data, u16_t datalen)
     if(datalen > 255) {
       plen = parse_word(data, 255);
     } else {
-      plen = parse_word(data, datalen);
+      plen = parse_word(data, (u8_t)datalen);
     }
     datalen -= plen;
     data += plen;
