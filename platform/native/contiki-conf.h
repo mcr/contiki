@@ -42,8 +42,8 @@
 #define CC_CONF_VA_ARGS                1
 #define CC_CONF_INLINE                 inline
 
-#define CCI
-#define CLI
+#define CCIF
+#define CLIF
 
 typedef uint8_t u8_t;
 typedef uint16_t u16_t;
