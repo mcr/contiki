@@ -40,9 +40,9 @@
 #define LOADER_LOAD_DSC(name)  dll_loader_load_dsc(name)
 #define LOADER_UNLOAD_DSC(dsc) dll_loader_unload_dsc(dsc)
 
-CCI int dll_loader_load(char *name, char *arg);
-CCI void dll_loader_unload(void *addr);
-CCI struct dsc *dll_loader_load_dsc(char *name);
-CCI void __stdcall dll_loader_unload_dsc(void *addr);
+CCIF int dll_loader_load(char *name, char *arg);
+CCIF void dll_loader_unload(void *addr);
+CCIF struct dsc *dll_loader_load_dsc(char *name);
+CCIF void __stdcall dll_loader_unload_dsc(void *addr);
 
 #endif /* __DLL_LOADER_H__ */
