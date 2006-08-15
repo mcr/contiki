@@ -42,8 +42,8 @@
 
 #define CC_CONF_VA_ARGS                1
 
-#define CCI
-#define CLI
+#define CCIF
+#define CLIF
 
 /*------------------------------------------------------------------------------*/
 /**
