@@ -44,7 +44,7 @@
 #define STATE_WAITING 0
 #define STATE_OUTPUT  1
 
-#define SEND_STRING(s, str) PSOCK_SEND(s, str, strlen(str))
+#define SEND_STRING(s, str) PSOCK_SEND(s, str, (unsigned int)strlen(str))
 MEMB(conns, struct httpd_state, 8);
 
 #define ISO_nl      0x0a
