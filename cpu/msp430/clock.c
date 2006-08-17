@@ -46,6 +46,8 @@
 /* #define INTERVAL (307200ULL / CLOCK_SECOND) */
 #define INTERVAL (4096ULL / CLOCK_SECOND)
 
+#define MAX_TICKS (~((clock_time_t)0) / 2)
+
 static volatile clock_time_t count = 0;
 /*---------------------------------------------------------------------------*/
 interrupt(TIMERA1_VECTOR) timera1 (void) {
@@ -53,8 +55,8 @@ interrupt(TIMERA1_VECTOR) timera1 (void) {
     TACCR1 += INTERVAL;
     ++count;
 
-    if(etimer_pending() && count >= etimer_next_expiration_time()) {
-/*     if(etimer_pending()) { */
+    if(etimer_pending()
+       && (etimer_next_expiration_time() - count) >= MAX_TICKS) {
       etimer_request_poll();
       LPM_AWAKE();
     }
