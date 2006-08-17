@@ -353,6 +353,16 @@ process_run(void)
 }
 /*---------------------------------------------------------------------------*/
 int
+process_nevents(void)
+{
+#ifdef NPOLLS
+  return nevents + npolls;
+#else
+  return nevents + poll_requested;
+#endif
+}
+/*---------------------------------------------------------------------------*/
+int
 process_post(struct process *p, process_event_t ev, process_data_t data)
 {
   static unsigned char snum;

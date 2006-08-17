@@ -503,7 +503,7 @@ void process_init(void);
  * Run the system once - call poll handlers and process one event.
  *
  * This function should be called repeatedly from the main() program
- * to actuall run the Contiki system. It calls the necessary poll
+ * to actually run the Contiki system. It calls the necessary poll
  * handlers, and processes one event. The function returns the number
  * of events that are waiting in the event queue so that the caller
  * may choose to put the CPU to sleep when there are no pending
@@ -513,6 +513,14 @@ void process_init(void);
  * event queue.
  */
 int process_run(void);
+
+/**
+ *  Number of events waiting to be processed.
+ *
+ * \return The number of events that are currently waiting to be
+ * processed.
+ */
+int process_nevents(void);
 
 /** @} */
 
