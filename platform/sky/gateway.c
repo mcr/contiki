@@ -56,6 +56,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <io.h>
+
 #include "contiki.h"
 
 /* Also IP output. */
@@ -64,7 +66,6 @@
 #include "dev/slip.h"
 #include "dev/cc2420.h"
 
-#include "dev/lpm.h"
 #include "dev/ds2411.h"
 #include "dev/leds.h"
 #include "dev/light.h"
@@ -83,6 +84,18 @@
 #include "net/psock.h"
 void *force_psock_inclusion = &psock_init;
 void *force_button_inclusion = &button_init;
+#if 0
+int
+force_float_inclusion()
+{
+  extern int __fixsfsi;
+  extern int __floatsisf;
+  extern int __mulsf3;
+  extern int __subsf3;
+
+  return __fixsfsi + __floatsisf + __mulsf3 + __subsf3;
+}
+#endif
 
 void uip_log(char *msg) { puts(msg); }
 
@@ -156,13 +169,21 @@ main(int argc, char **argv)
    * This is the scheduler loop.
    */
   printf("process_run()...\n");
-  lpm_on();
   while (1) {
     do {
       /* Reset watchdog. */
     } while(process_run() > 0);
-    /* Idle processing. */
-    LPM_SLEEP();
+
+    /*
+     * Idle processing.
+     */
+    int s = splhigh();		/* Disable interrupts. */
+    if(process_nevents() != 0) {
+      splx(s);			/* Re-enable interrupts. */
+    } else {
+      /* Re-enable interrupts and go to sleep atomically. */
+      _BIS_SR(GIE | SCG0 | CPUOFF); /* LPM1 sleep. */
+    }
   }
 
   return 0;
