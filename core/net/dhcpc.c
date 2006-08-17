@@ -344,11 +344,14 @@ PT_THREAD(handle_dhcp(process_event_t ev, void *data))
 
   dhcpc_configured(&s);
   
-  if((s.lease_time[0]*65536ul + ntohs(s.lease_time[1]))*CLOCK_SECOND/2
-     <= (clock_time_t)~0ul) {
-    s.ticks = (s.lease_time[0]*65536ul +ntohs(s.lease_time[1]))*CLOCK_SECOND/2;
+#define MAX_TICKS (~((clock_time_t)0) / 2)
+
+  if((ntohs(s.lease_time[0])*65536ul + ntohs(s.lease_time[1]))*CLOCK_SECOND/2
+     <= MAX_TICKS) {
+    s.ticks = (ntohs(s.lease_time[0])*65536ul
+	       + ntohs(s.lease_time[1]))*CLOCK_SECOND/2;
   } else {
-    s.ticks = ~0u;
+    s.ticks = MAX_TICKS;
   }
 
   etimer_set(&s.etimer, s.ticks);
