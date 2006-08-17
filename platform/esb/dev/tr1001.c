@@ -343,6 +343,9 @@ interrupt (UART0RX_VECTOR)
      tr1001_rxhandler(void)
 {
   tr1001_default_rxhandler_pt(RXBUF0);
+  if(tr1001_rxstate == RXSTATE_FULL) {
+    LPM_AWAKE();
+  }
 }
 /*---------------------------------------------------------------------------*/
 static void
@@ -501,7 +504,6 @@ PT_THREAD(tr1001_default_rxhandler_pt(unsigned char incoming_byte))
 
       PACKET_ACCEPTED();
       tr1001_drv_request_poll();
-      LPM_AWAKE();
 
       /* We'll set the receive state flag to signal that a full frame
 	 is present in the buffer, and we'll wait until the buffer has
