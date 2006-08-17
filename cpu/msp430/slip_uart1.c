@@ -38,7 +38,6 @@
 
 #include "contiki.h"
 
-#include "dev/lpm.h"
 #include "dev/slip.h"
 
 void
@@ -160,6 +159,6 @@ __uart1_intr()
     dummy = RXBUF1;   /* Clear error flags by forcing a dummy read. */
   } else {
     if(slip_input_byte(RXBUF1))
-      LPM_AWAKE();
+      LPM4_EXIT;
   }
 }

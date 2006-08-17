@@ -34,8 +34,6 @@
 
 #include "contiki.h"
 
-#include "dev/lpm.h"
-
 #include "dev/button.h"
 
 #define BUTTON_PORT 2
@@ -75,6 +73,6 @@ __button_interrupt(void)
     if(selecting_proc != NULL) {
       process_post(selecting_proc, PROCESS_EVENT_MSG, &button_msg);
     }
-    LPM_AWAKE();
+    LPM4_EXIT;
   }
 }

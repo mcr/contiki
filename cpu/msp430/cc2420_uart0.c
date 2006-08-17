@@ -35,7 +35,6 @@
 #include "contiki.h"
 #include "contiki-net.h"
 
-#include "dev/lpm.h"
 #include "dev/spi.h"
 #include "dev/cc2420.h"
 
@@ -43,7 +42,7 @@ interrupt(PORT1_VECTOR)
 __fifop_interrupt(void)
 {
   if(__cc2420_intr())
-    LPM_AWAKE();
+    LPM4_EXIT;
 }
 
 void

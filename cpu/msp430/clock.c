@@ -37,8 +37,6 @@
 
 #include "contiki-conf.h"
 
-#include "dev/lpm.h"
-
 #include "sys/clock.h"
 #include "sys/etimer.h"
 
@@ -58,7 +56,7 @@ interrupt(TIMERA1_VECTOR) timera1 (void) {
     if(etimer_pending()
        && (etimer_next_expiration_time() - count) >= MAX_TICKS) {
       etimer_request_poll();
-      LPM_AWAKE();
+      LPM4_EXIT;
     }
   }
 }
