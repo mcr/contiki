@@ -29,6 +29,7 @@
  * $Id$
  */
 
+#include <stdio.h>
 #include "contiki-net.h"
 #include "net/uaodv.h"
 #include "net/uaodv-rt.h"
@@ -60,9 +61,9 @@ PROCESS_THREAD(uaodv_example_process, ev, data)
   while(1) {
     PROCESS_WAIT_EVENT();
     if(ev == sensors_event && data == &button_sensor && button_sensor.value(0)) {
-      uip_ipaddr(addr, 10,10,0,1);
+      uip_ipaddr(&addr, 10,10,0,1);
       log_message("Sending RREQ to (static) 10.10.0.1\n", "");
-      uaodv_request_route_to(addr);
+      uaodv_request_route_to(&addr);
     } else if(ev == serial_event_message) {
       sscanf(data, "SENDTO>%d.%d.%d.%d", &ipA, &ipB, &ipC, &ipD);
       sprintf(buf, "Sending RREQ to %d.%d.%d.%d .. \n", ipA, ipB, ipC, ipD);
