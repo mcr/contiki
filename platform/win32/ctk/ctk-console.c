@@ -48,6 +48,7 @@ static unsigned char width;
 static unsigned char height;
 
 static DWORD               saved_inputmode;
+static DWORD               saved_outputmode;
 static unsigned char       saved_color;
 static char                saved_title[1024];
 static CONSOLE_CURSOR_INFO saved_cursorinfo;
@@ -85,6 +86,9 @@ console_init(void)
   GetConsoleMode(stdinhandle, &saved_inputmode);
   SetConsoleMode(stdinhandle, ENABLE_MOUSE_INPUT | ENABLE_PROCESSED_INPUT);
 
+  GetConsoleMode(stdouthandle, &saved_outputmode);
+  SetConsoleMode(stdouthandle, ENABLE_PROCESSED_OUTPUT);
+
   screensize(&width, &height);
 
   GetConsoleScreenBufferInfo(stdouthandle, &consoleinfo);
@@ -105,13 +109,13 @@ console_init(void)
 void
 console_exit(void)
 {
-  SetConsoleMode(stdinhandle, saved_inputmode);
-
   textcolor(saved_color);
   revers(0);
   clrscr();
   gotoxy(0, 0);
 
+  SetConsoleMode(stdinhandle,  saved_inputmode);
+  SetConsoleMode(stdouthandle, saved_outputmode);
   SetConsoleTitle(saved_title);
   SetConsoleCursorInfo(stdouthandle, &saved_cursorinfo);
 }
