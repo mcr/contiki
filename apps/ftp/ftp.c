@@ -207,7 +207,7 @@ show_statustext(char *text1, char *text2)
 {
   int len;
 
-  len = strlen(text1);
+  len = (int)strlen(text1);
   if(len < sizeof(statustext)) {
     strncpy(statustext, text1, sizeof(statustext));
     strncpy(statustext + len, text2, sizeof(statustext) - len);
