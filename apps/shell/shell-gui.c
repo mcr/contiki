@@ -87,7 +87,7 @@ shell_output(char *str1, char *str2)
   memset(&log[(SHELL_GUI_YSIZE - 1) * SHELL_GUI_XSIZE],
 	 0, SHELL_GUI_XSIZE);
 
-  len = strlen(str1);
+  len = (unsigned char)strlen(str1);
 
   strncpy(&log[(SHELL_GUI_YSIZE - 1) * SHELL_GUI_XSIZE],
 	  str1, SHELL_GUI_XSIZE);
