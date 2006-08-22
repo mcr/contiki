@@ -77,7 +77,7 @@ public class GUI extends JDesktopPane {
   /**
    * Default platform configuration filename.
    */
-  public static final String PLATFORM_DEFAULT_CONFIG_FILENAME = "cooja_default.config";
+  public static final String PLATFORM_DEFAULT_CONFIG_FILENAME = "/cooja_default.config";
 
   /**
    * User platform configuration filename.
@@ -565,11 +565,19 @@ public class GUI extends JDesktopPane {
     // logger.info("Loading default platform configuration: " +
     // PLATFORM_DEFAULT_CONFIG_FILENAME);
     try {
-      platformConfig.appendConfig(new File(PLATFORM_DEFAULT_CONFIG_FILENAME));
-    } catch (FileNotFoundException e) {
-      logger.fatal("Could not find default platform config file: "
-          + PLATFORM_DEFAULT_CONFIG_FILENAME);
-      return false;
+      InputStream input =
+	GUI.class.getResourceAsStream(PLATFORM_DEFAULT_CONFIG_FILENAME);
+      if (input != null) {
+	try {
+	  platformConfig.appendConfig(input);
+	} finally {
+	  input.close();
+	}
+      } else {
+	logger.fatal("Could not find default platform config file: "
+		     + PLATFORM_DEFAULT_CONFIG_FILENAME);
+	return false;
+      }
     } catch (IOException e) {
       logger.fatal("Error when reading default platform config file: "
           + PLATFORM_DEFAULT_CONFIG_FILENAME);
