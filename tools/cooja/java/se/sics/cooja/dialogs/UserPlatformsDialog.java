@@ -220,22 +220,14 @@ public class UserPlatformsDialog extends JDialog {
     button = new JButton("View resulting config");
     button.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        // Create default configuration
-        PlatformConfig config = new PlatformConfig();
+        PlatformConfig config;
         try {
-	  InputStream input =
-	    GUI.class.getResourceAsStream(GUI.PLATFORM_DEFAULT_CONFIG_FILENAME);
-	  if (input != null) {
-	    try {
-	      config.appendConfig(input);
-	    } finally {
-	      input.close();
-	    }
-	  } else {
-	    logger.fatal("Could not find default platform config file1: "
-			 + GUI.PLATFORM_DEFAULT_CONFIG_FILENAME);
-	    return;
-	  }
+          // Create default configuration
+          config = new PlatformConfig(true);
+        } catch (FileNotFoundException ex) {
+          logger.fatal("Could not find default platform config file: "
+              + GUI.PLATFORM_DEFAULT_CONFIG_FILENAME);
+          return;
         } catch (IOException ex) {
           logger.fatal("Error when reading default platform config file: "
               + GUI.PLATFORM_DEFAULT_CONFIG_FILENAME);
@@ -245,10 +237,8 @@ public class UserPlatformsDialog extends JDialog {
         // Add the fixed platform configurations
         if (fixedPlatformsList != null) {
           for (String userPlatform : fixedPlatformsList.getItems()) {
-            File userPlatformConfig = new File(userPlatform + File.separatorChar
-                + GUI.PLATFORM_CONFIG_FILENAME);
             try {
-              config.appendConfig(userPlatformConfig);
+              config.appendUserPlatform(new File(userPlatform));
             } catch (Exception ex) {
               logger.fatal("Error when merging configurations: " + ex);
               return;
@@ -258,10 +248,8 @@ public class UserPlatformsDialog extends JDialog {
         
         // Add the user platform configurations
         for (String userPlatform : changablePlatformsList.getItems()) {
-          File userPlatformConfig = new File(userPlatform + File.separatorChar
-              + GUI.PLATFORM_CONFIG_FILENAME);
           try {
-            config.appendConfig(userPlatformConfig);
+            config.appendUserPlatform(new File(userPlatform));
           } catch (Exception ex) {
             logger.fatal("Error when merging configurations: " + ex);
             return;
@@ -422,7 +410,10 @@ class ConfigViewer extends JDialog {
       String propertyName = allPropertyNames.nextElement();
 
       keyPane.add(new JLabel(propertyName));
-      valuePane.add(new JLabel(config.getStringValue(propertyName)));
+      if (config.getStringValue(propertyName).equals(""))
+        valuePane.add(new JLabel(" "));
+      else
+        valuePane.add(new JLabel(config.getStringValue(propertyName)));
     }
 
     // Add components
