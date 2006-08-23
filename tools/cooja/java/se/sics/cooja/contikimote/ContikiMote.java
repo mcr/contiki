@@ -300,7 +300,10 @@ public class ContikiMote implements Mote {
         }
         
         MoteInterface moteInterface = myInterfaceHandler.getInterfaceOfType(moteInterfaceClass);
-        moteInterface.setConfigXML(element.getChildren());
+        if (moteInterface != null)
+          moteInterface.setConfigXML(element.getChildren());
+        else
+          logger.warn("Can't restore configuration for non-existing interface: " + moteInterfaceClass.getName());
       }
     }
     
