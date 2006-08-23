@@ -54,7 +54,7 @@ public class Lib4 extends CoreComm {
   public native void tick();
   public native void init();
   public native int getReferenceAbsAddr();
-  public native byte[] getMemory(int start, int length);
+  public native void getMemory(int start, int length, byte[] mem);
   public native void setMemory(int start, int length, byte[] mem);
 
 }
