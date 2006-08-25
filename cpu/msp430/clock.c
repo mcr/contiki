@@ -54,7 +54,7 @@ interrupt(TIMERA1_VECTOR) timera1 (void) {
     ++count;
 
     if(etimer_pending()
-       && (etimer_next_expiration_time() - count) >= MAX_TICKS) {
+       && (etimer_next_expiration_time() - count - 1) > MAX_TICKS) {
       etimer_request_poll();
       LPM4_EXIT;
     }
