@@ -42,7 +42,7 @@
 extern char program_handler_screensaver[];
 
 void program_handler_init(void);
-void program_handler_load(char *name, char *arg);
+CCIF void program_handler_load(char *name, char *arg);
 void program_handler_setscreensaver(char *name);
 
 void program_handler_add(struct dsc *dsc, char *menuname,
