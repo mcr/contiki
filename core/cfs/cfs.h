@@ -185,7 +185,7 @@ int cfs_readdir(struct cfs_dir *dirp, struct cfs_dirent *dirent);
  */
 int cfs_closedir(struct cfs_dir *dirp);
 
-const struct cfs_service_interface *cfs_find_service(void);
+CCIF const struct cfs_service_interface *cfs_find_service(void);
 
 #define cfs_open(name, flags)   (cfs_find_service()->open(name, flags))
 #define cfs_close(fd)           (cfs_find_service()->close(fd))
