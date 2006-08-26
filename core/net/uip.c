@@ -73,6 +73,7 @@
 
 #include "net/uip.h"
 #include "net/uipopt.h"
+#include "net/uip_arp.h"
 #include "net/uip_arch.h"
 
 #if UIP_CONF_IPV6
