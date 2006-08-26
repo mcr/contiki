@@ -114,7 +114,7 @@ makestrings(void)
 {
   u16_t addr[2], *addrptr;
 
-  uip_gethostaddr(&addr);
+  uip_gethostaddr((uip_ipaddr_t *)addr);
   makeaddr(addr, ipaddr);
   
 #ifdef WITH_ETHERNET  
@@ -147,7 +147,7 @@ apply_tcpipconfig(void)
 
   nullterminate(ipaddr);
   if(uiplib_ipaddrconv(ipaddr, (unsigned char *)addr)) {
-    uip_sethostaddr(addr);
+    uip_sethostaddr((uip_ipaddr_t *)addr);
   }
   
 #ifdef WITH_ETHERNET
