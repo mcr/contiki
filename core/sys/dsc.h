@@ -110,7 +110,7 @@ struct dsc {
  */
 #if WITH_LOADER_ARCH
 #define DSC(dscname, description, prgname, process, icon) \
-        const struct dsc dscname = {description, prgname, icon}
+        CLIF const struct dsc dscname = {description, prgname, icon}
 #else /* WITH_LOADER_ARCH */
 #define DSC(dscname, description, prgname, process, icon) \
     PROCESS_NAME(process); \
