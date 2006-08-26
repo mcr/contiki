@@ -273,8 +273,8 @@ void ctk_draw_menus(struct ctk_menus *menus);
 
 
 /* Returns width and height of screen. */
-unsigned char ctk_draw_width(void);
-unsigned char ctk_draw_height(void);
+CCIF unsigned char ctk_draw_width(void);
+CCIF unsigned char ctk_draw_height(void);
 
 
 extern unsigned char ctk_draw_windowborder_width,
