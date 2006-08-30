@@ -118,10 +118,10 @@ irq_adc12_activate(const struct sensors_sensor *sensor,
 {
   /* stop converting */
   ADC12CTL0 &= ~ENC;
-  ADC12IE = 0;
-
   /* wait for conversion to stop */
   while(ADC12CTL0 & ADC12BUSY);
+  ADC12CTL0 &= ~(ADC12ON | REFON);
+  ADC12IE = 0;
 
   /* clear any pending interrupts */
   ADC12IFG = 0;
@@ -147,10 +147,10 @@ irq_adc12_deactivate(const struct sensors_sensor *sensor, unsigned char adcno)
 {
   /* stop converting */
   ADC12CTL0 &= ~ENC;
-  ADC12IE = 0;
-
   /* wait for conversion to stop */
   while(ADC12CTL0 & ADC12BUSY);
+  ADC12CTL0 &= ~(ADC12ON | REFON);
+  ADC12IE = 0;
 
   /* clear any pending interrupts */
   ADC12IFG = 0;
@@ -163,11 +163,13 @@ irq_adc12_deactivate(const struct sensors_sensor *sensor, unsigned char adcno)
 
   sensors_remove_irq(sensor, IRQ_ADC);
 
-  if(!adcflags) {
-    /* Turn off the ADC12 */
-    ADC12CTL0 &= ~(ADC12ON | REFON);
+  if(adcflags) {
+    /* Turn on the ADC12 */
+    ADC12CTL0 |= (ADC12ON | REFON);
 
-  } else {
+    /* Delay */
+    clock_delay(20000);
+
     /* Still active. Turn on the conversion. */
     ADC12CTL0 |= ENC | ADC12SC;
   }
