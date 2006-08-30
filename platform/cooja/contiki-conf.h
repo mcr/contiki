@@ -42,6 +42,11 @@
 
 #define CC_CONF_VA_ARGS                1
 
+/* Interface configuration. */
+
+#define CCIF
+#define CLIF
+
 /*------------------------------------------------------------------------------*/
 /**
  * \defgroup uipopttypedef uIP type definitions
