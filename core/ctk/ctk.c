@@ -1600,14 +1600,9 @@ PROCESS_THREAD(ctk_process, ev, data)
 		      widget = widget->next) {
 		
 		    if(mxc >= widget->x &&
-		       mxc <= widget->x + widget->w &&
-		       (myc == widget->y ||
-			((widget->type == CTK_WIDGET_BITMAP ||
-			  /*widget->type == CTK_WIDGET_TEXTMAP ||*/
-			  widget->type == CTK_WIDGET_ICON) &&
-			 (myc >= widget->y &&
-			  myc <= widget->y +
-			  ((struct ctk_bitmap *)widget)->h)))) {
+		       mxc <= widget->x + widget->w + 1 &&
+		       myc >= widget->y &&
+		       myc <= widget->y + widget->h - 1) {
 		      break;
 		    }
 		  }
