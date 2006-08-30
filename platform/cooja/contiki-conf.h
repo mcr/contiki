@@ -238,9 +238,9 @@ architecture specific files to work). */
 
 /*------------------------------------------------------------------------------*/
 
-#define UIP_CONF_MAX_CONNECTIONS 40
-#define UIP_CONF_MAX_LISTENPORTS 40
-#define UIP_CONF_BUFFER_SIZE     420
+#define UIP_CONF_MAX_CONNECTIONS 4
+#define UIP_CONF_MAX_LISTENPORTS 4
+#define UIP_CONF_BUFFER_SIZE     200
 
 #define UIP_CONF_BYTE_ORDER      LITTLE_ENDIAN
 
