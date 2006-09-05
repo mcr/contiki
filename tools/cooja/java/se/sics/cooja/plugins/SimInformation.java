@@ -86,7 +86,8 @@ public class SimInformation extends VisPlugin {
     // Register as tick observer
     simulation.addTickObserver(tickObserver = new Observer() {
       public void update(Observable obs, Object obj) {
-        labelSimTime.setText("" + simulation.getSimulationTime());
+        if (labelSimTime != null)
+          labelSimTime.setText("" + simulation.getSimulationTime());
       }
     });
     
