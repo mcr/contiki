@@ -1827,26 +1827,6 @@ public class ContikiMoteTypeDialog extends JDialog {
         myDialog.createButton, ActionEvent.ACTION_PERFORMED,
         "recheck_interface_dependencies"));
 
-    // Check if COOJA was started with a recommended process (select process)
-    if (System.getProperty("QUICKSTART_APP") != null) {
-
-      // Pre-select recommended process
-      String wantedSourceFilename = System.getProperty("QUICKSTART_APP");
-
-      for (Component checkBox : myDialog.processPanel.getComponents()) {
-        JCheckBox processCheckBox = (JCheckBox) checkBox;
-        String processFilename = processCheckBox.getToolTipText();
-
-        if (processFilename.startsWith(wantedSourceFilename)) {
-          // We found the recommended process, select it
-          processCheckBox.setSelected(true);
-          myDialog.autoSelectDependencyProcesses(processCheckBox.getText(),
-              processFilename, false);
-          break;
-        }
-      }
-    }
-
     settingsOK = true;
     testButton.setEnabled(settingsOK);
   }
