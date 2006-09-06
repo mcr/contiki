@@ -134,8 +134,8 @@ public class PlatformConfig {
    */
   public boolean appendUserPlatform(File userPlatform)
       throws FileNotFoundException, IOException {
-    File userPlatformConfig = new File(userPlatform.getPath()
-        + File.separatorChar + GUI.PLATFORM_CONFIG_FILENAME);
+    File userPlatformConfig = new File(userPlatform.getPath(),
+        GUI.PLATFORM_CONFIG_FILENAME);
     myUserPlatformHistory.add(userPlatform);
     return appendConfigFile(userPlatformConfig);
   }

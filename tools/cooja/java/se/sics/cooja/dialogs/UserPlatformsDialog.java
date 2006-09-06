@@ -371,8 +371,8 @@ public class UserPlatformsDialog extends JDialog {
       return;
     }
 
-    File userPlatformConfigFile = new File(userPlatform.getPath()
-        + File.separatorChar + GUI.PLATFORM_CONFIG_FILENAME);
+    File userPlatformConfigFile = new File(userPlatform.getPath(),
+        GUI.PLATFORM_CONFIG_FILENAME);
     if (!userPlatformConfigFile.exists()) {
       logger.fatal("User platform has no configuration file: "
           + userPlatformConfigFile);

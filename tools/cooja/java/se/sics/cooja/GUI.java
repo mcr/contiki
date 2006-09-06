@@ -449,12 +449,12 @@ public class GUI extends JDesktopPane {
     File contikiBaseDir = new File(getExternalToolsSetting("PATH_CONTIKI"));
     File contikiCoreDir = new File(contikiBaseDir,
         getExternalToolsSetting("PATH_COOJA_CORE_RELATIVE"));
-    File libFile = new File(ContikiMoteType.tempOutputDirectory.getPath()
-        + File.separatorChar + moteTypeID + ContikiMoteType.librarySuffix);
-    File mapFile = new File(ContikiMoteType.tempOutputDirectory.getPath()
-        + File.separatorChar + moteTypeID + ContikiMoteType.mapSuffix);
-    File depFile = new File(ContikiMoteType.tempOutputDirectory.getPath()
-        + File.separatorChar + moteTypeID + ContikiMoteType.dependSuffix);
+    File libFile = new File(ContikiMoteType.tempOutputDirectory,
+        moteTypeID + ContikiMoteType.librarySuffix);
+    File mapFile = new File(ContikiMoteType.tempOutputDirectory,
+        moteTypeID + ContikiMoteType.mapSuffix);
+    File depFile = new File(ContikiMoteType.tempOutputDirectory,
+        moteTypeID + ContikiMoteType.dependSuffix);
     if (libFile.exists())
       libFile.delete();
     if (depFile.exists())
