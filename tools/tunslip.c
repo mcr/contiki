@@ -831,7 +831,7 @@ main(int argc, char **argv)
    * agent.
    */
   if (argc == 4) {
-    dhcp_server = optarg;
+    dhcp_server = argv[3];
   }
   if (dhcp_server != NULL) {
     struct sockaddr_in myaddr;
