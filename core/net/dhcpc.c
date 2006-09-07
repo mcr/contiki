@@ -348,10 +348,10 @@ PT_THREAD(handle_dhcp(process_event_t ev, void *data))
 
   if((ntohs(s.lease_time[0])*65536ul + ntohs(s.lease_time[1]))*CLOCK_SECOND/2
      <= MAX_TICKS) {
-    s.ticks = (u16_t)(ntohs(s.lease_time[0])*65536ul
-		      + ntohs(s.lease_time[1]))*CLOCK_SECOND/2;
+    s.ticks = (clock_time_t)((ntohs(s.lease_time[0])*65536ul
+			      + ntohs(s.lease_time[1]))*CLOCK_SECOND/2);
   } else {
-    s.ticks = (u16_t)MAX_TICKS;
+    s.ticks = MAX_TICKS;
   }
 
   etimer_set(&s.etimer, s.ticks);
