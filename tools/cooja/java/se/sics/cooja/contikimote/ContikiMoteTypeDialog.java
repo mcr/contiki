@@ -1172,37 +1172,43 @@ public class ContikiMoteTypeDialog extends JDialog {
 
     // Recheck that contiki path exists
     if (!contikiDir.exists()) {
-      appender.addMessage("Bad Contiki OS path", MessageList.ERROR);
+      if (appender != null)
+        appender.addMessage("Bad Contiki OS path", MessageList.ERROR);
       logger.fatal("Contiki path does not exist");
       return false;
     }
     if (!contikiDir.isDirectory()) {
-      appender.addMessage("Bad Contiki OS path", MessageList.ERROR);
+      if (appender != null)
+        appender.addMessage("Bad Contiki OS path", MessageList.ERROR);
       logger.fatal("Contiki path is not a directory");
       return false;
     }
 
     if (libFile.exists()) {
-      appender.addMessage("Bad output filenames", MessageList.ERROR);
+      if (appender != null)
+        appender.addMessage("Bad output filenames", MessageList.ERROR);
       logger.fatal("Could not overwrite already existing library");
       return false;
     }
 
     if (CoreComm.hasLibraryFileBeenLoaded(libFile)) {
-      appender.addMessage("Bad output filenames", MessageList.ERROR);
+      if (appender != null)
+        appender.addMessage("Bad output filenames", MessageList.ERROR);
       logger
           .fatal("A library has already been loaded with the same name before");
       return false;
     }
 
     if (depFile.exists()) {
-      appender.addMessage("Bad output filenames", MessageList.ERROR);
+      if (appender != null)
+        appender.addMessage("Bad output filenames", MessageList.ERROR);
       logger.fatal("Could not overwrite already existing dependency file");
       return false;
     }
 
     if (mapFile.exists()) {
-      appender.addMessage("Bad output filenames", MessageList.ERROR);
+      if (appender != null)
+        appender.addMessage("Bad output filenames", MessageList.ERROR);
       logger.fatal("Could not overwrite already existing map file");
       return false;
     }
