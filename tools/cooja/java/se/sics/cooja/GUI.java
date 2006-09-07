@@ -662,7 +662,7 @@ public class GUI extends JDesktopPane {
     // Compile library
     logger.info("> Compiling library");
     boolean compilationSucceded = ContikiMoteTypeDialog.compileLibrary(
-        moteTypeID, contikiBaseDir, filesToCompile, null);
+        moteTypeID, contikiBaseDir, filesToCompile, null, System.err);
     if (!libFile.exists() || !depFile.exists() || !mapFile.exists())
       compilationSucceded = false;
 
