@@ -67,13 +67,6 @@ static unsigned short ypos;
 static unsigned char  button;
 
 /*-----------------------------------------------------------------------------------*/
-static BOOL WINAPI
-consolehandler(DWORD event)
-{
-  console_exit();
-  exit(EXIT_SUCCESS);
-}
-/*-----------------------------------------------------------------------------------*/
 void
 console_init(void)
 {
@@ -100,7 +93,7 @@ console_init(void)
   GetConsoleCursorInfo(stdouthandle, &saved_cursorinfo);
   SetConsoleCursorInfo(stdouthandle, &cursorinfo);
 
-  SetConsoleCtrlHandler(consolehandler, TRUE);
+  atexit(console_exit);
 
   memset(blank, ' ',  sizeof(blank));
   memset(hline, 0xC4, sizeof(hline));
