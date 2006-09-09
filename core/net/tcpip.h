@@ -294,7 +294,7 @@ CCIF extern process_event_t tcpip_event;
  *             and the length of the packet must be in the global
  *             uip_len variable.
  */
-void tcpip_input(void);
+CCIF void tcpip_input(void);
 
 void tcpip_output(void);
 void tcpip_set_forwarding(unsigned char f);
