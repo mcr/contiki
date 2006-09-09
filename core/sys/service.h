@@ -186,8 +186,8 @@ struct service {
  */
 #define SERVICE_FIND(service_name) service_find(service_name##_name)
 
-void service_register(struct service *s);
-void service_remove(struct service *s);
+CCIF void service_register(struct service *s);
+CCIF void service_remove(struct service *s);
 struct service *service_find(const char *name);
 
 #endif /* __SERVICE_H__ */

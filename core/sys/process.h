@@ -482,7 +482,7 @@ process_event_t process_alloc_event(void);
  *
  * \param p A pointer to the process' process structure.
  */
-void process_poll(struct process *p);
+CCIF void process_poll(struct process *p);
 
 /** @} */
 
