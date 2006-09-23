@@ -1539,8 +1539,8 @@ CCIF extern const uip_ipaddr_t uip_hostaddr, uip_netmask, uip_draddr;
 #else /* UIP_FIXEDADDR */
 CCIF extern uip_ipaddr_t uip_hostaddr, uip_netmask, uip_draddr;
 #endif /* UIP_FIXEDADDR */
-extern const uip_ipaddr_t uip_broadcast_addr;
-extern const uip_ipaddr_t all_zeroes_addr;
+CCIF extern const uip_ipaddr_t uip_broadcast_addr;
+CCIF extern const uip_ipaddr_t all_zeroes_addr;
 
 
 /**
