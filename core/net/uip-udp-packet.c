@@ -55,5 +55,6 @@ uip_udp_packet_send(struct uip_udp_conn *c, char *data, int len)
   if(uip_len > 0) {
     tcpip_output();
   }
+  uip_slen = 0;
 }
 /*---------------------------------------------------------------------------*/
