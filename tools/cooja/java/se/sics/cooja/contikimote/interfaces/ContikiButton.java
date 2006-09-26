@@ -106,7 +106,7 @@ public class ContikiButton extends Button implements ContikiMoteInterface {
 
       // If mote is inactive, wake it up
       if (RAISES_EXTERNAL_INTERRUPT)
-        mote.setState(Mote.STATE_ACTIVE);
+        mote.setState(Mote.State.ACTIVE);
 
       setChanged();
       notifyObservers();
@@ -121,7 +121,7 @@ public class ContikiButton extends Button implements ContikiMoteInterface {
 
       // If mote is inactive, wake it up
       if (RAISES_EXTERNAL_INTERRUPT)
-        mote.setState(Mote.STATE_ACTIVE);
+        mote.setState(Mote.State.ACTIVE);
 
       setChanged();
       notifyObservers();

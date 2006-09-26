@@ -151,7 +151,7 @@ public class ContikiRadio extends Radio implements ContikiMoteInterface {
 
     // If mote is inactive, wake it up
     if (RAISES_EXTERNAL_INTERRUPT)
-      myMote.setState(Mote.STATE_ACTIVE);
+      myMote.setState(Mote.State.ACTIVE);
   }
 
   public void advanceListenState() {

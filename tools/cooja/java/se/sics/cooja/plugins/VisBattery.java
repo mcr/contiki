@@ -96,7 +96,7 @@ public class VisBattery extends Visualizer2D {
   }
 
   public Color[] getColorOf(Mote mote) {
-    if (mote.getState() == Mote.STATE_DEAD)
+    if (mote.getState() == Mote.State.DEAD)
       return new Color[]{Color.RED};
 
     Battery battery = mote.getInterfaces().getBattery();

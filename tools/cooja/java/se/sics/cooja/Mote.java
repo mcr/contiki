@@ -50,21 +50,15 @@ import org.jdom.Element;
  * @author Fredrik Osterlind
  */
 public interface Mote {
-  
-  /**
-   * Active state.
-   */
-  public static int STATE_ACTIVE = 1;
 
   /**
-   * Sleeping state.
+   * Possible mote states
    */
-  public static int STATE_LPM = 2;
-
-  /**
-   * Dead state (may be out of batteries).
-   */
-  public static int STATE_DEAD = 3;
+  public static enum State {
+    ACTIVE, // Active state
+    LPM, // Low power mode (sleeping)
+    DEAD // Dead (for example out of batteries)
+  }
   
   /**
    * Tries to change state to given argument.
@@ -72,12 +66,12 @@ public interface Mote {
    * 
    * @param newState New state of mote.
    */
-  public void setState(int newState);
+  public void setState(State newState);
 
   /**
    * @return Current mote state
    */
-  public int getState();
+  public State getState();
 
   /**
    * Adds new state observer.

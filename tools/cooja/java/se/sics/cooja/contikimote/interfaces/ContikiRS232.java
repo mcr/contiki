@@ -181,7 +181,7 @@ public class ContikiRS232 extends MoteInterface implements ContikiMoteInterface 
     moteMem.setByteArray("simSerialReceivingData", newData);
 
     if (RAISES_EXTERNAL_INTERRUPT)
-      mote.setState(Mote.STATE_ACTIVE);
+      mote.setState(Mote.State.ACTIVE);
 
   }
 

@@ -36,6 +36,7 @@ import java.util.*;
 import org.apache.log4j.Logger;
 
 import se.sics.cooja.*;
+import se.sics.cooja.Mote.State;
 
 /**
  * A State Visualizer indicates mote states by painting them in different colors.
@@ -107,11 +108,11 @@ public class VisState extends Visualizer2D {
     Color[] returnColors = new Color[2];
     
     // If mote is sleeping, make outer circle blue 
-    if (mote.getState() == Mote.STATE_LPM)
+    if (mote.getState() == Mote.State.LPM)
       returnColors[1] = Color.GRAY;
     
     // If mote is dead, make outer circle red
-    else if (mote.getState() == Mote.STATE_DEAD)
+    else if (mote.getState() == State.DEAD)
       returnColors[1] = Color.RED;
     
     else

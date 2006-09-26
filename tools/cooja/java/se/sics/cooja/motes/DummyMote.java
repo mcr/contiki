@@ -100,12 +100,12 @@ public class DummyMote implements Mote {
     myInterfaceHandler.addPassiveInterface(myPosition);
   }
 
-  public void setState(int newState) {
+  public void setState(State newState) {
     logger.fatal("Dummy mote can not change state");
   }
 
-  public int getState() {
-    return Mote.STATE_ACTIVE;
+  public State getState() {
+    return Mote.State.ACTIVE;
   }
 
   public void addStateObserver(Observer newObserver) {

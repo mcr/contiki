@@ -112,7 +112,7 @@ public class ContikiVib extends MoteInterface implements ContikiMoteInterface {
 
       // If mote is inactive, wake it up
       if (RAISES_EXTERNAL_INTERRUPT)
-        mote.setState(Mote.STATE_ACTIVE);
+        mote.setState(Mote.State.ACTIVE);
     }
   }
 
