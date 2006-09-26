@@ -55,7 +55,7 @@ node_init(int id, int posx, int posy, int b)
   node.id = id;
   node.x = posx;
   node.y = posy;
-  node.type = NODE_TYPE_NORMAL;
+  /*  node.type = NODE_TYPE_NORMAL;*/
 
   if(b) {
     uip_ipaddr(&addr, 192,168,250,2);
