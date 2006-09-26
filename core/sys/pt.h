@@ -56,9 +56,9 @@ struct pt {
 };
 
 #define PT_WAITING 0
-#define PT_EXITED  1
-#define PT_ENDED   2
-#define PT_YIELDED 3
+#define PT_YIELDED 1
+#define PT_EXITED  2
+#define PT_ENDED   3
 
 /**
  * \name Initialization
@@ -268,7 +268,7 @@ struct pt {
  *
  * \hideinitializer
  */
-#define PT_SCHEDULE(f) ((f) == PT_WAITING)
+#define PT_SCHEDULE(f) ((f) < PT_EXITED)
 
 /** @} */
 
