@@ -90,7 +90,8 @@ public class Battery extends MoteInterface implements PassiveMoteInterface {
 
   private double myEnergy;
   private boolean hasInfiniteEnergy;
-
+  private double lastEnergyConsumption = 0;
+  
   /**
    * Creates a new battery connected to given mote.
    * 
@@ -125,6 +126,8 @@ public class Battery extends MoteInterface implements PassiveMoteInterface {
   }
 
   public void doActionsAfterTick() {
+    lastEnergyConsumption = 0;
+    
     // If infinite energy, do nothing
     if (hasInfiniteEnergy)
       return;
@@ -145,6 +148,7 @@ public class Battery extends MoteInterface implements PassiveMoteInterface {
       }
 
       decreaseEnergy(totalEnergyConsumption);
+      lastEnergyConsumption += totalEnergyConsumption;
     } else {
       // Mote is awake. Sum up energy usage.
       double totalEnergyConsumption = 0.0;
@@ -160,6 +164,7 @@ public class Battery extends MoteInterface implements PassiveMoteInterface {
       }
 
       decreaseEnergy(totalEnergyConsumption);
+      lastEnergyConsumption += totalEnergyConsumption;
     }
 
     // Check if we are out of energy
@@ -262,6 +267,10 @@ public class Battery extends MoteInterface implements PassiveMoteInterface {
   public double energyConsumptionPerTick() {
     // The battery itself does not require any power.
     return 0.0;
+  }
+
+  public double getLastTotalEnergyConsumption() {
+    return lastEnergyConsumption;
   }
 
   public Collection<Element> getConfigXML() {
