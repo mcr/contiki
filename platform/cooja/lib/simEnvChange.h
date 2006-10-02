@@ -43,6 +43,9 @@ extern int simProcessRunValue;
 extern int simEtimerPending;
 extern int simNextExpirationTime;
 
+// Variable that if set to != 0, immediately yields before then next process_run() call
+extern char busyWaitNext;
+
 // Definition for registering an interface
 #define SIM_INTERFACE(name, doActionsBeforeTick, doActionsAfterTick) \
 const struct simInterface name = { doActionsBeforeTick, doActionsAfterTick }
