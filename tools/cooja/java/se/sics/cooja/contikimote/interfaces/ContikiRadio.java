@@ -307,7 +307,12 @@ public class ContikiRadio extends Radio implements ContikiMoteInterface {
       transmitting = true;
       int size = myMoteMemory.getIntValueOf("simOutSize");
       packetFromMote = myMoteMemory.getByteArray("simOutDataBuffer", size);
-      transmissionEndTime = myMote.getSimulation().getSimulationTime() + 100; // TODO What's the duration?
+
+      // Assuming sending at 19.2 kbps, with manchester-encoding (x2) and 1
+      // bit/byte UART overhead (x9 instead of x8)
+      int duration = (int) ((2 * size * 9) / 19.2); // ms
+      transmissionEndTime = myMote.getSimulation().getSimulationTime()
+          + Math.max(1, duration);
       
       lastEventTime = myMote.getSimulation().getSimulationTime();
       lastEvent = RadioEvent.TRANSMISSION_STARTED;
