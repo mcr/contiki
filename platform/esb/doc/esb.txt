@@ -29,17 +29,10 @@ Windows users, see \ref esb-win-setup. FreeBSD users, see \ref esb-freebsd-setup
 
 \section esb-win-setup Setting up the Windows environment
 
-This is a brief introduction to Contik/ESB programming under Windows
-using cygwin and some other free software tools.
-
-\subsection winintro-installing Installing the development environment
-
-\subsubsection winintro-installing-cygwin Installing Cygwin 
-
-The first "need to have" software is the cygwin environment that can
-be found at http://www.cygwin.com. Cygwin is a Linux-like environment
-for Windows. Click on the icon "Install Cygwin Now" to the right to
-get the installation started.
+The Contiki development environment under Windows uses the Cygwin
+environment. Cygwin is a Linux-like environment for Windows. Cygwin
+can be found at http://www.cygwin.com. Click on the icon "Install
+Cygwin Now" to the right to get the installation started.
 
 Choose "Install from Internet" and then specify where you want to
 install cygwin (recommended installation path:
