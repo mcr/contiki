@@ -35,7 +35,7 @@
 #include "contiki.h"
 #include "net/uip.h"
 
-PROCESS_NAME(ether_process);
 u8_t simDoSend(void);
+
 
 #endif /* __RADIO_ARCH_H__ */
