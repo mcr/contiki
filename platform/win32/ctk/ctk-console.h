@@ -50,7 +50,7 @@ void bordercolor(unsigned char c);
 void screensize(unsigned char *x, unsigned char *y);
 void revers(unsigned char c);
 void console_cputc(char c);
-void console_cputs(char *str);
+CCIF void console_cputs(char *str);
 void cclear(unsigned char length);
 void chline(unsigned char length);
 void cvline(unsigned char length);
