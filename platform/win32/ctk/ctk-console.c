@@ -102,6 +102,13 @@ console_init(void)
 void
 console_exit(void)
 {
+  static unsigned char done;
+
+  if(done) {
+    return;
+  }
+  done = 1;
+
   textcolor(saved_color);
   revers(0);
   clrscr();

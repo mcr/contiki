@@ -37,7 +37,6 @@
 #include <windows.h>
 #include <winsock2.h>
 #include <stdlib.h>
-#include <process.h>
 
 #pragma comment(lib, "wsock32")
 
@@ -84,15 +83,6 @@ static int (* pcap_sendpacket)(struct pcap *, unsigned char *, int);
 
 /*---------------------------------------------------------------------------*/
 static void
-error_exit(char *message)
-{
-  debug_printf("Error Exit: %s", message);
-  _cexit();
-  console_cputs(message);
-  ExitProcess(EXIT_FAILURE);
-}
-/*---------------------------------------------------------------------------*/
-static void
 pollhandler(void)
 {
   struct pcap_pkthdr *packet_header;
@@ -114,6 +104,7 @@ pollhandler(void)
     debug_printf("I");
     uip_len -= sizeof(struct uip_eth_hdr);
     tcpip_input();
+
   } else if(BUF->type == HTONS(UIP_ETHTYPE_ARP)) {
     debug_printf("A");
     uip_arp_arpin();
