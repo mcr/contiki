@@ -139,8 +139,11 @@ public class ContikiButton extends Button implements ContikiMoteInterface {
   public void doActionsAfterTick() {
     // If a button is pressed and should be clicked, release it now
     if (shouldBeReleased) {
-      releaseButton();
-      shouldBeReleased = false;
+      // Make sure that the earlier press event has been handled by core
+      if (moteMem.getByteValueOf("simButtonChanged") == 0) {
+        releaseButton();
+        shouldBeReleased = false;
+      }
     }
   }
 
