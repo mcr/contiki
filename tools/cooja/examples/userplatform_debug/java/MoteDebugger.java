@@ -148,7 +148,7 @@ public class MoteDebugger extends VisPlugin {;
           logger.info("Sleeping 2500 ms while starting up GDB");
           Thread.sleep(2500);
           logger.info("Ticking chosen mote now! (setting state to active)");
-          moteToDebug.setState(Mote.STATE_ACTIVE);
+          moteToDebug.setState(Mote.State.ACTIVE);
           moteToDebug.tick(GUI.currentSimulation.getSimulationTime());
           
           gdbProcess.waitFor();
