@@ -35,6 +35,7 @@
 
 const struct simInterface button_interface;
 const struct sensors_sensor button_sensor;
+static struct timer debouncetimer;
 
 // COOJA variables
 char simButtonChanged;
@@ -46,6 +47,7 @@ static void
 init(void)
 {
   simButtonIsActive = 1;
+  timer_set(&debouncetimer, 0);
 }
 /*---------------------------------------------------------------------------*/
 static int
@@ -75,7 +77,7 @@ active(void)
 static unsigned int
 value(int type)
 {
-  return simButtonIsDown;
+  return simButtonIsDown || !timer_expired(&debouncetimer);
 }
 /*---------------------------------------------------------------------------*/
 static int
@@ -94,9 +96,12 @@ static void
 doInterfaceActionsBeforeTick(void)
 {
   // Check if button value has changed
-  if (simButtonChanged && simButtonIsActive) {
-    sensors_changed(&button_sensor);
-    simButtonChanged = 0;
+  if (simButtonChanged && simButtonIsActive && simButtonIsDown) {
+    if(timer_expired(&debouncetimer)) {
+      timer_set(&debouncetimer, CLOCK_SECOND / 4);
+      sensors_changed(&button_sensor);
+      simButtonChanged = 0;
+    }
   }
 }
 /*---------------------------------------------------------------------------*/
