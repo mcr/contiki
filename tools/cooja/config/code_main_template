@@ -116,13 +116,13 @@ start_process_run_loop(void *data)
 		/* Always pretend we have processes left while inside process_run() */
 		simProcessRunValue = 1;
 
-		// Busy-wait while receiving
-		while (busyWaitNext > 0) {
-			busyWaitNext--;
-			cooja_mt_yield();
-		}
-
 		simProcessRunValue = process_run();
+
+		// Check if we must stay awake
+		if (simDontFallAsleep) {
+			simDontFallAsleep=0;
+			simProcessRunValue = 1;
+		}
 
 		/* Yield thread when one process_run has completed */
 		cooja_mt_yield();
