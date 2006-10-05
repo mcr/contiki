@@ -102,11 +102,11 @@ public class ContikiButton extends Button implements ContikiMoteInterface {
     moteMem.setByteValueOf("simButtonIsDown", (byte) 0);
 
     if (moteMem.getByteValueOf("simButtonIsActive") == 1) {
-      moteMem.setByteValueOf("simButtonChanged", (byte) 1);
+//      moteMem.setByteValueOf("simButtonChanged", (byte) 1);
 
       // If mote is inactive, wake it up
-      if (RAISES_EXTERNAL_INTERRUPT)
-        mote.setState(Mote.State.ACTIVE);
+//      if (RAISES_EXTERNAL_INTERRUPT)
+//        mote.setState(Mote.State.ACTIVE);
 
       setChanged();
       notifyObservers();
