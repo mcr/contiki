@@ -117,7 +117,7 @@ start_process_run_loop(void *data)
 		simProcessRunValue = 1;
 
 		// Busy-wait while receiving
-		while (busyWaitNext) {
+		while (busyWaitNext > 0) {
 			busyWaitNext--;
 			cooja_mt_yield();
 		}
