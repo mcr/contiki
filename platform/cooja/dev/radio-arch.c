@@ -68,9 +68,9 @@ doInterfaceActionsBeforeTick(void)
     return;
   }
   
-  // Busy-wait while receiving (in main file)
+  // Don't fall asleep while receiving (in main file)
   if (simReceiving) {
-    busyWaitNext = 1;
+    simDontFallAsleep = 1;
     return;
   }
   
