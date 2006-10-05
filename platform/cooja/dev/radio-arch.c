@@ -68,14 +68,14 @@ doInterfaceActionsBeforeTick(void)
     return;
   }
   
-  // If no incoming radio data, do nothing
-  if (simInSize == 0) {
+  // Busy-wait while receiving (in main file)
+  if (simReceiving) {
+    busyWaitNext = 1;
     return;
   }
   
-  // Busy-wait while receiving (in main file)
-  while (simReceiving) {
-    busyWaitNext = 1;
+  // If no incoming radio data, do nothing
+  if (simInSize == 0) {
     return;
   }
   
