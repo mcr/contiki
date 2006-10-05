@@ -37,7 +37,7 @@
 // All registered interfaces
 extern const struct simInterface *simInterfaces[];
 
-char busyWaitNext = 0;
+char simDontFallAsleep = 0;
 
 int simProcessRunValue;
 int simEtimerPending;

@@ -43,8 +43,8 @@ extern int simProcessRunValue;
 extern int simEtimerPending;
 extern int simNextExpirationTime;
 
-// Variable that if set to != 0, immediately yields before then next process_run() call
-extern char busyWaitNext;
+// Variable that when set to != 0, stops the mote from falling asleep next tick
+extern char simDontFallAsleep;
 
 // Definition for registering an interface
 #define SIM_INTERFACE(name, doActionsBeforeTick, doActionsAfterTick) \
