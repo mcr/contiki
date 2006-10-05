@@ -200,11 +200,11 @@ public class ContikiRadio extends Radio implements ContikiMoteInterface {
   }
 
   public void receivePacket(byte[] data, int endTime) {
-    if (isInterfered())
+    if (isInterfered() || isReceiving() || isTransmitting()) {
+      interferReception(endTime);
       return;
-    if (isReceiving())
-      return;
-    
+    }
+
     lockInReceivingMode();
 
     receptionEndTime = endTime;
