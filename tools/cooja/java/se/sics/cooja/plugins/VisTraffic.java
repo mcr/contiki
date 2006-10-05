@@ -85,7 +85,8 @@ public class VisTraffic extends Visualizer2D {
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f));
         if (radioMedium != null && radioMedium.getLastTickConnections() != null) {
           for (RadioConnection conn: radioMedium.getLastTickConnections()) {
-            paintConnection(conn, g2d);
+            if (conn != null)
+              paintConnection(conn, g2d);
           }
         }
         getCurrentCanvas().repaint();
