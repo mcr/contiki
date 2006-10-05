@@ -71,7 +71,7 @@ public abstract class Radio extends MoteInterface {
   public abstract byte[] getLastPacketReceived();
 
   /**
-   * Receive given packet in given time. If reception is not interfered during
+   * Receive given packet. If reception is not interfered during
    * this time, the packet will be delivered ok.
    * 
    * @param data
@@ -104,12 +104,24 @@ public abstract class Radio extends MoteInterface {
   public abstract boolean isReceiving();
 
   /**
-   * If any packet has been received but not yet taken care of, this packet will
-   * be removed. This method can be used to simulate significant interference
-   * during transmissions.
+   * If a packet is being received, it will be interfered and dropped. The
+   * interference will continue until the given time, during which no other
+   * radio traffic may be received. This method can be used to simulate
+   * significant interference during transmissions.
+   * 
+   * @param endTime
+   *          Time when interference stops
    */
-  public abstract void interferReception();
+  public abstract void interferReception(int endTime);
 
+  /**
+   * Returns true is this radio is currently hearing noise from another
+   * transmission.
+   * 
+   * @return True if this radio is interfered
+   */
+  public abstract boolean isInterfered();
+  
   /**
    * @return Current surrounding signal strength
    */
