@@ -123,6 +123,16 @@ public abstract class Radio extends MoteInterface {
   public abstract boolean isInterfered();
   
   /**
+   * @return Current output power (dBm)
+   */
+  public abstract double getCurrentOutputPower();
+
+  /**
+   * @return Current output power indicator (1-100)
+   */
+  public abstract int getCurrentOutputPowerIndicator();
+
+  /**
    * @return Current surrounding signal strength
    */
   public abstract double getCurrentSignalStrength();
