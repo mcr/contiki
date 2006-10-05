@@ -381,7 +381,7 @@ public class StandardRadioMedium extends RadioMedium {
                     dataToSend);
 
                 // If close enough to transmit ok..
-                if (listeningRadio.isReceiving()) {
+                if (listeningRadio.isReceiving() || listeningRadio.isInterfered()) {
                   // .. but listening radio already received a packet
                   listeningRadio.interferReception(sendingRadio.getTransmissionEndTime());
                 } else {
