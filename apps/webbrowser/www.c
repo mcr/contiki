@@ -861,8 +861,6 @@ htmlparser_submitbutton(char *text, char *name,
     strncpy(form->inputname, name, WWW_CONF_MAX_INPUTNAMELEN);
     form->inputtype = FORMINPUTTYPE_SUBMITBUTTON;
   }
-
-
 }
 /*-----------------------------------------------------------------------------------*/
 void
