@@ -146,6 +146,14 @@ msp430-libc packages from
 http://www.sics.se/~adam/contiki/freebsd-packages/. Install the
 packages (as root) with <tt>pkg_add</tt>. 
 
+\section esb-test-compilation Compiling your first Contiki system
+
+\section esb-burn-node-id Burning node IDs to EEPRMOM
+
+The Contiki ESB port comes with a small program that semi-permanently
+stores a (unique) node ID number in the ESB EEPROM. When the Contiki
+ESB port boots up, this node ID is restored from the EEPROM.
+
 @{
 
 */
