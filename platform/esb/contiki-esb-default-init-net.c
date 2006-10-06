@@ -45,9 +45,13 @@ void
 init_net(void)
 {
   uip_ipaddr_t hostaddr;
+
+  uip_init();
+  uip_fw_init();
   
   rs232_set_input(slip_input_byte);
 
+  tr1001_init();
   process_start(&tr1001_drv_process, NULL);
   process_start(&slip_process, NULL);
   
