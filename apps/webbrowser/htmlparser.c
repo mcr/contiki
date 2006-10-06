@@ -400,6 +400,7 @@ parse_tag(void)
   case TAG_SLASHSCRIPT:
   case TAG_SLASHSTYLE:
   case TAG_SLASHSELECT:
+    do_word();
     switch_majorstate(s.lastmajorstate);
     break;
   case TAG_BODY:
