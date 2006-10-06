@@ -84,6 +84,20 @@ public class RadioConnection {
     destinationPositions.add(position);
     destinationData.add(data);
   }
+  
+  /**
+   * Remove a connection destination.
+   *
+   * @param radio Destination to remove
+   */
+  public void removeDestination(Radio radio) {
+    int pos = destinationRadios.indexOf(radio);
+    if (pos > 0) {
+      destinationRadios.remove(pos);
+      destinationPositions.remove(pos);
+      destinationData.remove(pos);
+    }
+  }
 
   /**
    * @return Source radio
