@@ -364,7 +364,7 @@ static void
 parse_tag(void)
 {
   static char *tagattrparam;
-  static unsigned char size, i;
+  static unsigned char size;
 
   static char dummy;
   
