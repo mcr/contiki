@@ -181,7 +181,7 @@ ethernode_send(void)
 
   dest = ID_BROADCAST;
   
-  usleep(800 * (random_rand() % 1000));
+  /*  usleep(800 * (random_rand() % 1000));*/
 
   do_send(TYPE_DATA, dest, hdr, len);
 

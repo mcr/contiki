@@ -35,7 +35,7 @@
 
 void init(void);
 
-void main_add_node(int x, int y);
+int main_add_node(int x, int y);
 void main_add_base(int x, int y);
 
 #endif /* __INIT_H__ */

@@ -105,7 +105,7 @@ idle(void)
 
 }
 /*---------------------------------------------------------------------------*/
-static void
+static int
 start_node(int x, int y, int b)
 {
   pid_t pid;
@@ -123,7 +123,7 @@ start_node(int x, int y, int b)
 
     usleep(1000 * ((random() & 0x0f) << 6) );
     
-    node_init(port - NODES_PORTBASE, x, y, b);
+    node_init(port - NODES_PORTBASE + 1, x, y, b);
     ethernode_init(port);
 
     
@@ -138,12 +138,13 @@ start_node(int x, int y, int b)
   
 
   ++port;
+  return port - NODES_PORTBASE;
 }
 /*---------------------------------------------------------------------------*/
-void
+int
 main_add_node(int x, int y)
 {
-  start_node(x, y, 0);
+  return start_node(x, y, 0);
 }
 /*---------------------------------------------------------------------------*/
 void

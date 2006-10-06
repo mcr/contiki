@@ -40,7 +40,6 @@
  */
 
 #include "dev/temperature-sensor.h"
-#include "dev/radio-sensor.h"
 
 /*---------------------------------------------------------------------------*/
 static void
@@ -89,8 +88,5 @@ status(int type)
 }
 /*---------------------------------------------------------------------------*/
 SENSORS_SENSOR(temperature_sensor, TEMPERATURE_SENSOR,
-	       init, irq, activate, deactivate, active,
-	       value, configure, status);
-SENSORS_SENSOR(radio_sensor, RADIO_SENSOR,
 	       init, irq, activate, deactivate, active,
 	       value, configure, status);

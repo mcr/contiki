@@ -251,7 +251,11 @@ display_tick(void)
     } else {
       e = NULL;
     }
-    d->size -= 4;
+    if(d->size > 40) {
+      d->size -= 8;
+    } else {
+      d->size -= 4;
+    }
     /*    --(d->intensity);*/
     if(d->size > 0) {
       list_push(tempdots, d);
@@ -329,7 +333,8 @@ key_press_event (GtkWidget * widget, GdkEventKey * event)
     }*/
 
   if(event->keyval == 'q') {
-    exit(0);
+    gtk_exit(0);
+    /*   exit(0);*/
   }
   return TRUE;
 }
