@@ -866,12 +866,12 @@ htmlparser_submitbutton(char *text, char *name,
 }
 /*-----------------------------------------------------------------------------------*/
 void
-htmlparser_inputfield(char *text, char *name,
+htmlparser_inputfield(unsigned char size, char *text, char *name,
 		      char *formname, char *formaction)
 {
   register struct formattribs *form;
 
-  form = add_pagewidget(text, (unsigned char)strlen(text), CTK_WIDGET_TEXTENTRY, 1);
+  form = add_pagewidget(text, size, CTK_WIDGET_TEXTENTRY, 1);
   if(form != NULL) {
     strncpy(form->formaction, formaction, WWW_CONF_MAX_FORMACTIONLEN);
     strncpy(form->formname, formname, WWW_CONF_MAX_FORMNAMELEN);

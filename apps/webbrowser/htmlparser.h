@@ -43,7 +43,8 @@ void htmlparser_submitbutton(char *value,
 			     char *name,
 			     char *formname,
 			     char *formaction);
-void htmlparser_inputfield(char *value,
+void htmlparser_inputfield(unsigned char size,
+			   char *value,
 			   char *name,
 			   char *formname,
 			   char *formaction);
