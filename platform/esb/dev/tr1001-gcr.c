@@ -131,9 +131,14 @@ static struct timer rxtimer;
 
 static unsigned short tmp_sstrength, sstrength;
 
+#define DEBUG 0
+
+#if DEBUG
 #include <stdio.h>
-/* #define LOG(...) /\*printf(__VA_ARGS__)*\/ */
 #define LOG(...) printf(__VA_ARGS__)
+#else
+#define LOG(...)
+#endif
 
 #define GCRLOG(...) /* printf(__VA_ARGS__) */
 
