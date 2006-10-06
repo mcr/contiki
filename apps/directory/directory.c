@@ -97,7 +97,7 @@ startloading(void)
     show_statustext("Cannot open directory");
     loading = 0;
   } else {
-    loading = 1;
+    loading = LOADING_DIR;
     process_post(&directory_process, PROCESS_EVENT_CONTINUE, NULL);
     numfiles = 0;
   }
@@ -155,7 +155,9 @@ quit(void)
 {
   unsigned char i;
 
-  cfs_closedir(&dir);
+  if(loading == LOADING_DIR) {
+    cfs_closedir(&dir);
+  }
   ctk_window_close(&window);
   for(i = 0; dscs[i] != NULL; ++i) {
     LOADER_UNLOAD_DSC(dscs[i]);
