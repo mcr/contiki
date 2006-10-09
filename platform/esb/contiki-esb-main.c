@@ -154,15 +154,10 @@ void  arg_init(void) {}
 void  arg_free(char *arg) {}
 /*---------------------------------------------------------------------------*/
 
-int
-putchar(int c)
-{
-  rs232_send(c);
-  return c;
-}
-
 void
 uip_log(char *m)
 {
-  printf("uIP log: '%s'\n", m);
+  printf("uIP log: '%s'", m);
+  /* Needed to force link with putchar */
+  putchar('\n');
 }
