@@ -37,6 +37,9 @@
 
 extern const struct sensors_sensor radio_sensor;
 
+#define RADIO_SENSOR_LAST_VALUE  0
+#define RADIO_SENSOR_LAST_PACKET 1
+
 #define RADIO_SENSOR "Radio"
 
 extern unsigned int radio_sensor_signal;

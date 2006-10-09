@@ -35,6 +35,8 @@
 #include "dev/irq.h"
 #include <io.h>
 
+#include "dev/tr1001.h"
+
 const struct sensors_sensor radio_sensor;
 
 unsigned int radio_sensor_signal;
@@ -78,7 +80,13 @@ active(void)
 static unsigned int
 value(int type)
 {
-  return radio_sensor_signal;
+  switch(type) {
+  case RADIO_SENSOR_LAST_PACKET:
+    return tr1001_sstrength();
+  case RADIO_SENSOR_LAST_VALUE:
+  default:
+    return radio_sensor_signal;
+  }
 }
 /*---------------------------------------------------------------------------*/
 static int
