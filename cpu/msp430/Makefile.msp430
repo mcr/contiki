@@ -10,6 +10,10 @@ ifndef WINDIR
   endif
 endif
 
+ifdef nodeid
+CFLAGS += -DNODEID=$(nodeid)
+endif
+
 .SUFFIXES:
 
 ### Define the CPU directory
