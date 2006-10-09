@@ -35,6 +35,7 @@
 
 #include "uip.h"
 
-int tcpdump_print(char *buf, u16_t buflen);
+int tcpdump_format(u8_t *packet, u16_t *len,
+		   char *printbuf, u16_t printbuflen);
 
 #endif /* __TCPDUMP_H__ */
