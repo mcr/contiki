@@ -40,9 +40,11 @@
 #ifndef __HC_H__
 #define __HC_H__
 
+#include "net/uip.h"
+
 void hc_init(void);
-int  hc_compress(void);
-int  hc_inflate(void);
+int  hc_compress(u8_t *buf, int len);
+int  hc_inflate(u8_t *buf, int len);
 
 #define HC_HLEN 6
 
