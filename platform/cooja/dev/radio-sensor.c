@@ -46,7 +46,6 @@ extern int simSignalStrength;
 static void
 init(void)
 {
-  simSignalStrength = 0;;
 }
 /*---------------------------------------------------------------------------*/
 static int
