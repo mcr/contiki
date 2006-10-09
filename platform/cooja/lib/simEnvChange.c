@@ -38,7 +38,7 @@
 extern const struct simInterface *simInterfaces[];
 
 char simDontFallAsleep = 0;
-char simInsideProcessRun = 0;
+char simNoYield = 0;
 
 int simProcessRunValue;
 int simEtimerPending;
