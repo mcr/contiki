@@ -632,12 +632,14 @@ tr1001_poll(void)
 
     tmplen = tr1001_rxlen;
 
-    if(tmplen > UIP_BUFSIZE - (UIP_LLH_LEN - TR1001_HDRLEN)) {
+    /*    if(tmplen > UIP_BUFSIZE - (UIP_LLH_LEN - TR1001_HDRLEN)) {
       tmplen = UIP_BUFSIZE - (UIP_LLH_LEN - TR1001_HDRLEN);
+      }*/
+    if(tmplen > bufsize - TR1001_HDRLEN) {
+      tmplen = bufsize - TR1001_HDRLEN;
     }
 
-    memcpy(&uip_buf[UIP_LLH_LEN], &tr1001_rxbuf[TR1001_HDRLEN],
-	   tmplen);
+    memcpy(buf, &tr1001_rxbuf[TR1001_HDRLEN], tmplen);
 
     /* header + content + CRC */
     sstrength = (tmp_sstrength / (TR1001_HDRLEN + tr1001_rxlen + 2)) << 1;
