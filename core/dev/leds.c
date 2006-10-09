@@ -39,7 +39,7 @@ static unsigned char leds, invert;
 static void
 show_leds(void)
 {
-  leds_arch_set(leds);
+  leds_arch_set(leds ^ invert);
 }
 /*---------------------------------------------------------------------------*/
 void
@@ -87,7 +87,7 @@ leds_toggle(unsigned char leds)
 
 /*   invert the ínvert register using the leds parameter */
 void leds_invert(unsigned char l) {
-  leds = ~leds;
+  invert = invert ^ l;
   show_leds();
 }
 
