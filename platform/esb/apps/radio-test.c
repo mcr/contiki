@@ -121,10 +121,10 @@ PROCESS_THREAD(radio_test_process, ev, data)
 
       if(uip_poll()) {
 	/* send packet */
-	memcpy(uip_sappdata, HEADER, sizeof(HEADER));
-	((char *)uip_sappdata)[sizeof(HEADER)] = recv.onoff;
+	memcpy(uip_appdata, HEADER, sizeof(HEADER));
+	((char *)uip_appdata)[sizeof(HEADER)] = recv.onoff;
 	/* send arbitrary data to fill the packet size */
-	uip_send(uip_sappdata, PACKET_SIZE);
+	uip_send(uip_appdata, PACKET_SIZE);
 
 	set(&flash, ON);
       }
