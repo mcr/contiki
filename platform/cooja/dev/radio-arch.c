@@ -105,7 +105,11 @@ doInterfaceActionsBeforeTick(void)
   // Hand over new packet to uIP
   uip_len = simInSize;
   memcpy(&uip_buf[UIP_LLH_LEN], &simInDataBuffer[0], simInSize);
-  tcpip_input();
+	
+  if (simNoYield)
+  	simDoTcpipInput = 1;
+  else
+    tcpip_input();
   simInSize = 0;
 }
 
