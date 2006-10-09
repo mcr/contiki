@@ -116,6 +116,11 @@ start_process_run_loop(void *data)
 		/* Always pretend we have processes left while inside process_run() */
 		simProcessRunValue = 1;
 
+		if (simDoTcpipInput) {
+		  simDoTcpipInput = 0;
+		  tcpip_input();
+		}
+
 		simProcessRunValue = process_run();
 
 		// Check if we must stay awake
