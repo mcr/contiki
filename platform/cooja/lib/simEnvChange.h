@@ -46,6 +46,7 @@ extern int simNextExpirationTime;
 // Variable that when set to != 0, stops the mote from falling asleep next tick
 extern char simDontFallAsleep;
 extern char simNoYield;
+extern char simDoTcpipInput;
 
 // Definition for registering an interface
 #define SIM_INTERFACE(name, doActionsBeforeTick, doActionsAfterTick) \
