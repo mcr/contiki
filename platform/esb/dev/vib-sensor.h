@@ -39,4 +39,6 @@ extern const struct sensors_sensor vib_sensor;
 
 #define VIB_SENSOR "Vibration"
 
+#define VIB_ENABLE_EVENT 1
+
 #endif /* __VIB_SENSOR_H__ */

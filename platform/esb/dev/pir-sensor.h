@@ -39,4 +39,6 @@ extern const struct sensors_sensor pir_sensor;
 
 #define PIR_SENSOR "PIR"
 
+#define PIR_ENABLE_EVENT 1
+
 #endif /* __PIR_SENSOR_H__ */

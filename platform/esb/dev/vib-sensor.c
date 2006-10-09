@@ -36,6 +36,7 @@
 const struct sensors_sensor vib_sensor;
 
 static unsigned int vib;
+static unsigned char flags;
 
 HWCONF_PIN(VIB, 1, 4);
 HWCONF_IRQ(VIB, 1, 4);
@@ -46,7 +47,9 @@ irq(void)
 {
   if(VIB_CHECK_IRQ()) {
     ++vib;
-    sensors_changed(&vib_sensor);
+    if(flags & VIB_ENABLE_EVENT) {
+      sensors_changed(&vib_sensor);
+    }
     return 1;
   }
   return 0;
@@ -89,13 +92,18 @@ value(int type)
 static int
 configure(int type, void *c)
 {
-  return 0;
+  if(c) {
+    flags |= type & 0xff;
+  } else {
+    flags &= ~type & 0xff;
+  }
+  return 1;
 }
 /*---------------------------------------------------------------------------*/
 static void *
 status(int type)
 {
-  return NULL;
+  return (void *) (((int) (flags & type)) & 0xff);
 }
 /*---------------------------------------------------------------------------*/
 SENSORS_SENSOR(vib_sensor, VIB_SENSOR,
