@@ -68,6 +68,8 @@
 
 #include "dev/leds.h"
 
+#include "node-id.h"
+
 void msp430_cpu_init(void);
 void init_lowlevel(void);
 void init_apps(void);
