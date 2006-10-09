@@ -92,7 +92,7 @@ public class RadioConnection {
    */
   public void removeDestination(Radio radio) {
     int pos = destinationRadios.indexOf(radio);
-    if (pos > 0) {
+    if (pos >= 0) {
       destinationRadios.remove(pos);
       destinationPositions.remove(pos);
       destinationData.remove(pos);
