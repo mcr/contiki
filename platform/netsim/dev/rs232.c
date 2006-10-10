@@ -44,6 +44,12 @@
 void
 rs232_set_input(int (* f)(unsigned char))
 {
-  printf("rs232_set_input(%p)\n", f);
+  /*  printf("rs232_set_input(%p)\n", f);*/
+}
+/*---------------------------------------------------------------------------*/
+void
+slip_arch_writeb(unsigned char c)
+{
+  printf("%c", c);
 }
 /*---------------------------------------------------------------------------*/

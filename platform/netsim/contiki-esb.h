@@ -60,4 +60,6 @@
 
 #include "dev/beep.h"
 
+#include "node-id.h"
+
 #endif /* __CONTIKI_ESB_H__ */

@@ -50,4 +50,6 @@ extern const struct sensors_sensor vib_sensor;
 
 void vib_sensor_changed(void);
 
+#define VIB_ENABLE_EVENT 1
+
 #endif /* __VIB_SENSOR_H__ */

@@ -76,13 +76,6 @@ PROCESS_THREAD(ethernode_drv_process, ev, data)
 
 	uip_len = hc_inflate(&uip_buf[UIP_LLH_LEN], uip_len);
 
-	{
-	  char buf[40];
-	  tcpdump_format(&uip_buf[UIP_LLH_LEN], uip_len, buf, sizeof(buf));
-	  printf("radio_sniffer: packet length %d, %s\n", uip_len, buf);
-
-	}
-
 	tapdev_send_raw();
 	/*    if(uip_fw_forward() == UIP_FW_LOCAL)*/ {
 	  /* A frame was avaliable (and is now read into the uip_buf), so
