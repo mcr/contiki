@@ -39,6 +39,8 @@
 
 #define HWCONF_PIN(name, port, bit)                                           \
 static CC_INLINE void name##_SELECT() {P##port##SEL &= ~(1 << bit);}          \
+static CC_INLINE void name##_SELECT_IO() {P##port##SEL &= ~(1 << bit);}       \
+static CC_INLINE void name##_SELECT_PM() {P##port##SEL |= 1 << bit;}          \
 static CC_INLINE void name##_SET() {P##port##OUT |= 1 << bit;}                \
 static CC_INLINE void name##_CLEAR() {P##port##OUT &= ~(1 << bit);}           \
 static CC_INLINE int  name##_READ() {return (P##port##IN & (1 << bit));}      \
