@@ -160,7 +160,7 @@ PROCESS_THREAD(dhclient_process, ev, data)
 
   printf("dhclient_process starting\n");
 
-  leds_on(LEDS_GREEN);
+  leds_toggle(LEDS_GREEN);
 
   uip_setipid(rand());
 
@@ -199,7 +199,7 @@ dhcpc_configured(const struct dhcpc_state *s)
     printf("dhcp reconfigure %d.%d.%d.%d\n", ip2quad(&s->ipaddr));
   else {
     printf("dhcpc_configured %d.%d.%d.%d\n", ip2quad(&s->ipaddr));
-    leds_off(LEDS_GREEN);
+    leds_toggle(LEDS_GREEN);
     dhcp_is_conf = 1;
     process_start(&uaodv_process, NULL);
   }
@@ -231,7 +231,7 @@ void
 dhcpc_unconfigured(const struct dhcpc_state *s)
 {
   printf("dhcpc_unconfigured\n");
-  leds_on(LEDS_GREEN);
+  leds_toggle(LEDS_GREEN);
   dhcp_is_conf = 0;
   process_exit(&uaodv_process);
 
