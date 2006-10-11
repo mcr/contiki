@@ -44,7 +44,7 @@
 
 #include "sys/log.h"
 
-#define MAX_RETRIES 50
+#define MAX_RETRIES 100
 #define SS_INTERFERENCE -150
 
 const struct simInterface radio_interface;
@@ -151,18 +151,21 @@ simDoSend(void)
   memcpy(&simOutDataBuffer[0], &uip_buf[UIP_LLH_LEN], uip_len);
   simOutSize = uip_len;
   
-  // Busy-wait while we are receiving
-  if (simReceiving && !simNoYield) {
-    cooja_mt_yield();
-  }
-  
-  // Busy-wait until ether is ready, or die (MAC imitation)
+  // Busy-wait until both radio HW and ether is ready
   int retries=0;
-  while (retries < MAX_RETRIES && simSignalStrength > SS_INTERFERENCE && !simNoYield) {
+  while (retries < MAX_RETRIES && !simNoYield &&
+    (simSignalStrength > SS_INTERFERENCE || simReceiving))
+  {
 	retries++;
 	cooja_mt_yield();
+	
+	if (!(simSignalStrength > SS_INTERFERENCE || simReceiving))
+	{
+      // Wait one extra tick before transmission starts
+  	  cooja_mt_yield();
+	}
   }
-  if (simSignalStrength > SS_INTERFERENCE) {
+  if (simSignalStrength > SS_INTERFERENCE || simReceiving) {
 	return UIP_FW_DROPPED;
   }
 
