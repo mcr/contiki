@@ -64,6 +64,7 @@ import se.sics.cooja.interfaces.Radio;
  * <li>char simRadioHWOn (radio hardware status (on/off))
  * <li>int simSignalStrength (heard radio signal strength)
  * <li>char simPower (number indicating power output)
+ * <li>int simRadioChannel
  * </ul>
  * <p>
  * Dependency core interfaces are:
@@ -159,6 +160,10 @@ public class ContikiRadio extends Radio implements ContikiMoteInterface {
       return true;
     
     return myMoteMemory.getIntValueOf("simInSize") != 0;
+  }
+
+  public int getChannel() {
+    return myMoteMemory.getIntValueOf("simRadioChannel");
   }
   
   public RadioEvent getLastEvent() {
