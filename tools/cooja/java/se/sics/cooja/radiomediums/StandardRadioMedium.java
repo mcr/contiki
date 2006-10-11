@@ -394,7 +394,8 @@ public class StandardRadioMedium extends RadioMedium {
                 * (0.01 * (double) sendingRadio
                     .getCurrentOutputPowerIndicator());
 
-            if (distance <= moteTransmissionRange) {
+            if (distance <= moteTransmissionRange
+                && sendingRadio.getChannel() == listeningRadio.getChannel()) {
               newConnection.addDestination(registeredRadios.get(listenNr),
                   registeredPositions.get(listenNr), dataToSend);
 
@@ -410,7 +411,8 @@ public class StandardRadioMedium extends RadioMedium {
                     .getTransmissionEndTime());
                 listeningRadio.setCurrentSignalStrength(SS_OK);
               }
-            } else if (distance <= moteInterferenceRange) {
+            } else if (distance <= moteInterferenceRange
+                && sendingRadio.getChannel() == listeningRadio.getChannel()) {
               // If close enough to sabotage other transmissions..
               listeningRadio.interferReception(sendingRadio
                   .getTransmissionEndTime());
