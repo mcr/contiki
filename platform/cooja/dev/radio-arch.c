@@ -61,7 +61,14 @@ int simOutSize;
 char simRadioHWOn = 1;
 int simSignalStrength = -200;
 char simPower = 100;
+int simRadioChannel = 1;
 
+/*-----------------------------------------------------------------------------------*/
+void
+radio_set_channel(int channel)
+{
+  simRadioChannel = channel;
+}
 /*-----------------------------------------------------------------------------------*/
 int
 radio_sstrength(void)
