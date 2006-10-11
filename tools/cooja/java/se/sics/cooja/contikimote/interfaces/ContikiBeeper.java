@@ -121,14 +121,14 @@ public class ContikiBeeper extends Beeper implements ContikiMoteInterface {
     JPanel panel = new JPanel();
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-    final JLabel statusLabel = new JLabel("Beeping activate");
+    final JLabel statusLabel = new JLabel("Beeping active");
     panel.add(statusLabel);
     
     Observer observer;
     this.addObserver(observer = new Observer() {
       public void update(Observable obs, Object obj) {
         int currentTime = mote.getSimulation().getSimulationTime();
-        statusLabel.setText("Beeping activate: last beep at " + currentTime);
+        statusLabel.setText("Beeping active: last beep at " + currentTime);
         // Beep on speakers
         Toolkit.getDefaultToolkit().beep();
       }
