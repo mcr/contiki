@@ -50,11 +50,11 @@ import se.sics.cooja.interfaces.Position;
 @ClassDescription("Traffic Visualizer")
 @VisPluginType(VisPluginType.SIM_PLUGIN)
 public class VisTraffic extends Visualizer2D {
-  private boolean USE_ALPHA = false;
+  protected boolean USE_ALPHA = false;
 
-  private boolean USE_HISTORY = true;
+  protected boolean USE_HISTORY = true;
 
-  private int MAX_PAINTED_CONNS = 50;
+  protected int MAX_PAINTED_CONNS = 50;
 
   private static final long serialVersionUID = 1L;
 
