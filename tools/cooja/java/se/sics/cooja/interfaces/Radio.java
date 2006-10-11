@@ -145,4 +145,11 @@ public abstract class Radio extends MoteInterface {
    */
   public abstract void setCurrentSignalStrength(double signalStrength);
 
+  /**
+   * Returns the current radio channel number.
+   * 
+   * @return Current channel number
+   */
+  public abstract int getChannel();
+  
 }
