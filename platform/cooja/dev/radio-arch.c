@@ -180,7 +180,7 @@ simDoSend(void)
   simTransmitting = 1;
 
   // Busy-wait while transmitting
-  if (simTransmitting && !simNoYield) {
+  while (simTransmitting && !simNoYield) {
     cooja_mt_yield();
   }
   
