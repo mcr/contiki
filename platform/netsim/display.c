@@ -251,8 +251,8 @@ display_tick(void)
     } else {
       e = NULL;
     }
-    if(d->size > 40) {
-      d->size -= 8;
+    if(d->size > 20) {
+      d->size /= 2;
     } else {
       d->size -= 4;
     }

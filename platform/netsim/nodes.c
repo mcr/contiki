@@ -51,13 +51,15 @@ nodes_init(void)
 }
 /*---------------------------------------------------------------------------*/
 void
-nodes_add(int pid, int x, int y, int port)
+nodes_add(int pid, int x, int y, int port, int id)
 {
   nodes[numnodes].pid = pid;
   nodes[numnodes].x = x;
   nodes[numnodes].y = y;
   nodes[numnodes].port = port;
   nodes[numnodes].leds = 0;
+  nodes[numnodes].done = 0;
+  nodes[numnodes].id = id;
   ++numnodes;
 }
 /*---------------------------------------------------------------------------*/
@@ -124,5 +126,26 @@ nodes_find_pid(pid_t pid)
     }
   }
   return NULL;
+}
+/*---------------------------------------------------------------------------*/
+void
+nodes_done(int id)
+{
+  int i;
+  int num_done = 0;
+
+  for(i = numnodes; i >= 0; --i) {
+    if(nodes[i].id == id) {
+      nodes[i].done = 1;
+    }
+    if(nodes[i].done != 0) {
+      num_done++;
+    }
+  }
+
+  if(num_done == numnodes) {
+    ether_print_stats();
+    exit(0);
+  }
 }
 /*---------------------------------------------------------------------------*/

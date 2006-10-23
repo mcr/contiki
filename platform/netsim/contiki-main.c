@@ -147,7 +147,7 @@ idle(void)
 void
 contiki_main(int flag)
 {
-  random_init(0);
+  random_init(getpid());
 
   leds_init();
   

@@ -123,7 +123,7 @@ start_node(int x, int y, int b)
 
     usleep(1000 * ((random() & 0x0f) << 6) );
     
-    node_init(port - NODES_PORTBASE + 1, x, y, b);
+    node_init(port - NODES_PORTBASE + 2, x, y, b);
     ethernode_init(port);
 
     
@@ -134,11 +134,11 @@ start_node(int x, int y, int b)
   }
   /*    printf("Adding sensor %d at (%d,%d)\n", pid, x, y);*/
   main_process = 1;
-  nodes_add(pid, x, y, port);
+  nodes_add(pid, x, y, port, port - NODES_PORTBASE + 2);
   
 
   ++port;
-  return port - NODES_PORTBASE;
+  return port - NODES_PORTBASE + 1;
 }
 /*---------------------------------------------------------------------------*/
 int
