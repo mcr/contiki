@@ -70,6 +70,9 @@ public class LogListener extends VisPlugin {
     // Log observer
     logObserver = new Observer() {
       public void update(Observable obs, Object obj) {
+        if (logTextArea == null)
+          return;
+        
         logTextArea.append("\n");
 
         Mote mote = (Mote) obj;
