@@ -70,7 +70,7 @@
 #include "lib/sensors.h"
 #include "net/uip.h"
 #include "dev/radio-arch.h"
-#include "dev/cfs-cooja.h"
+#include "cfs/cfs-cooja.h"
 #include "sys/etimer.h"
 #include "sys/cooja_mt.h"
 
