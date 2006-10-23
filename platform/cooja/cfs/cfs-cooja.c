@@ -31,7 +31,7 @@
  * $Id$
  */
 #include <string.h>
-#include "dev/cfs-cooja.h"
+#include "cfs/cfs-cooja.h"
 #include "lib/simEnvChange.h"
 
 #include "cfs/cfs.h"
@@ -51,7 +51,7 @@ const struct simInterface cfs_interface;
 
 // COOJA variables
 #define CFS_BUF_SIZE 60*1024
-char simCFSData[CFS_BUF_SIZE];
+char simCFSData[CFS_BUF_SIZE] = { 0 };
 char simCFSChanged = 0;
 int simCFSRead = 0;
 int simCFSWritten = 0;

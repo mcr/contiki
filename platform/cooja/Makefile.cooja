@@ -25,7 +25,7 @@ MAINFILE = $(OUTPUT_DIR)/$(TYPEID).co
 
 ### Define COOJA core interfaces
 COOJA = $(CONTIKI)/platform/$(TARGET)
-CONTIKI_TARGET_DIRS = . dev lib sys
+CONTIKI_TARGET_DIRS = . dev lib sys cfs
 
 COOJA_BASE	= simEnvChange.c irq.c cooja_mt.c cooja_mtarch.c
 
@@ -64,6 +64,11 @@ vpath %.c $(PROJECTDIRS) \
 
 ### Define custom targets
 $(LIBFILE): $(MAINFILE) $(PROJECT_OBJECTFILES) $(DEPFILE)
+	${CONTIKI}/tools/make-symbols-nm $(LIBFILE)
+	$(CC) $(CFLAGS) -c symbols.c -o $(OBJECTDIR)/symbols.o
+	$(LD) -Map=$(MAPFILE) -shared $(LD_ARGS_1) -o $@ $^ $(LD_ARGS_2)
+	${CONTIKI}/tools/make-symbols-nm $(LIBFILE)
+	$(CC) $(CFLAGS) -c symbols.c -o $(OBJECTDIR)/symbols.o
 	$(LD) -Map=$(MAPFILE) -shared $(LD_ARGS_1) -o $@ $^ $(LD_ARGS_2)
 
 $(DEPFILE): ${addprefix $(OBJECTDIR)/, $(CONTIKI_SOURCEFILES:.c=.o)}
