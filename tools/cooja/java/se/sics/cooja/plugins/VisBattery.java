@@ -92,9 +92,6 @@ public class VisBattery extends Visualizer2D {
 
   }
 
-  public void postVisualizeSimulation(Graphics g) {
-  }
-
   public Color[] getColorOf(Mote mote) {
     if (mote.getState() == Mote.State.DEAD)
       return new Color[]{Color.RED};
