@@ -101,9 +101,6 @@ public class VisState extends Visualizer2D {
     
   }
   
-  public void postVisualizeSimulation(Graphics g) {
-  }
-
   public Color[] getColorOf(Mote mote) {
     Color[] returnColors = new Color[2];
     
