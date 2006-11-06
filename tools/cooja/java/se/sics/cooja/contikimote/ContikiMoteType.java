@@ -582,12 +582,21 @@ public class ContikiMoteType implements MoteType {
       if (nmPath == null || nmPath.equals(""))
         return null;
 
-      String[] splittedNmArgs = nmArgs.split(" ");
-      String[] nmExecArray = new String[1 + splittedNmArgs.length + 1];
+      String[] nmExecArray;
+      if (!nmArgs.trim().equals("")) {
+        // Arguments need to be passed to program
+        String[] splittedNmArgs = nmArgs.split(" ");
+        nmExecArray = new String[1 + splittedNmArgs.length + 1];
 
-      nmExecArray[0] = nmPath.trim();
-      nmExecArray[nmExecArray.length-1] = libraryFile.getAbsolutePath();
-      System.arraycopy(splittedNmArgs, 0, nmExecArray, 1, splittedNmArgs.length);
+        nmExecArray[0] = nmPath.trim();
+        
+        nmExecArray[nmExecArray.length-1] = libraryFile.getAbsolutePath();
+        System.arraycopy(splittedNmArgs, 0, nmExecArray, 1, splittedNmArgs.length);
+      } else {
+        nmExecArray = new String[2];
+        nmExecArray[0] = nmPath.trim();
+        nmExecArray[1] = libraryFile.getAbsolutePath();
+      }
 
       String line;
       Process p = Runtime.getRuntime().exec(nmExecArray);
@@ -607,6 +616,7 @@ public class ContikiMoteType implements MoteType {
     
     if (nmData == null || nmData.size() == 0)
       return null;
+    logger.debug("#4");
 
     return nmData;
   }
