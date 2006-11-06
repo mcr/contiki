@@ -64,12 +64,16 @@ vpath %.c $(PROJECTDIRS) \
 
 ### Define custom targets
 $(LIBFILE): $(MAINFILE) $(PROJECT_OBJECTFILES) $(DEPFILE)
+ifdef SYMBOLS
 	${CONTIKI}/tools/make-symbols-nm $(LIBFILE)
 	$(CC) $(CFLAGS) -c symbols.c -o $(OBJECTDIR)/symbols.o
-	$(LD) -Map=$(MAPFILE) -shared $(LD_ARGS_1) -o $@ $^ $(LD_ARGS_2)
+	$(LD) -Map=$(MAPFILE) -shared $(LD_ARGS_1) -o $@ $^ $(OBJECTDIR)/symbols.o $(LD_ARGS_2)
 	${CONTIKI}/tools/make-symbols-nm $(LIBFILE)
 	$(CC) $(CFLAGS) -c symbols.c -o $(OBJECTDIR)/symbols.o
+	$(LD) -Map=$(MAPFILE) -shared $(LD_ARGS_1) -o $@ $^ $(OBJECTDIR)/symbols.o $(LD_ARGS_2)
+else
 	$(LD) -Map=$(MAPFILE) -shared $(LD_ARGS_1) -o $@ $^ $(LD_ARGS_2)
+endif
 
 $(DEPFILE): ${addprefix $(OBJECTDIR)/, $(CONTIKI_SOURCEFILES:.c=.o)}
 	$(AR) rcf $@ $^
