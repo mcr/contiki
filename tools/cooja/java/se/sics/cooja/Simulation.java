@@ -177,11 +177,6 @@ public class Simulation extends Observable implements Runnable {
    */
   public Simulation() {
     // New simulation instance
-
-    // logger.fatal("WARNING ADDING 10000 BLINKER NODES NOW!!!");
-    // for (int i=0; i < 10000; i++)
-    // addMote(new BlinkerNode());
-
   }
 
   /**
