@@ -162,7 +162,7 @@ msp430_cpu_init(void)
 #define asmv(arg) __asm__ __volatile__(arg)
 
 #define STACK_EXTRA 32
-static char *cur_break = (char *)&__bss_end;
+static char *cur_break = (char *)(&__bss_end + 1);
 
 /*
  * Allocate memory from the heap. Check that we don't collide with the
