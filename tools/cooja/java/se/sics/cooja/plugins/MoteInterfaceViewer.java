@@ -33,7 +33,10 @@ package se.sics.cooja.plugins;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Collection;
+import java.util.Vector;
 import javax.swing.*;
+import org.jdom.Element;
 
 import se.sics.cooja.*;
 
@@ -50,7 +53,8 @@ public class MoteInterfaceViewer extends VisPlugin {
   private Mote mote;
   private MoteInterface selectedMoteInterface = null;
   private JPanel currentInterfaceVisualizer = null;
-  
+  private JComboBox selectInterfaceComboBox = null; 
+
   /**
    * Create a new mote interface viewer.
    *
@@ -71,7 +75,7 @@ public class MoteInterfaceViewer extends VisPlugin {
 
     label = new JLabel("Select interface:");
 
-    final JComboBox selectInterfaceComboBox = new JComboBox();
+    selectInterfaceComboBox = new JComboBox();
     final JPanel interfacePanel = new JPanel();
 
     for (int i=0; i < mote.getInterfaces().getAllActiveInterfaces().size(); i++) {
@@ -147,6 +151,32 @@ public class MoteInterfaceViewer extends VisPlugin {
     // Release old interface visualizer if any
     if (selectedMoteInterface != null && currentInterfaceVisualizer != null)
       selectedMoteInterface.releaseInterfaceVisualizer(currentInterfaceVisualizer);
+  }
+  
+  public Collection<Element> getConfigXML() {
+    Vector<Element> config = new Vector<Element>();
+    
+    Element element;
+
+    // Selected variable name
+    element = new Element("interface");
+    element.setText((String) selectInterfaceComboBox.getSelectedItem());
+    config.add(element);
+
+    return config;
+  }
+
+  public boolean setConfigXML(Collection<Element> configXML) {
+    for (Element element : configXML) {
+      if (element.getName().equals("interface")) {
+        for (int i=0; i < selectInterfaceComboBox.getItemCount(); i++) {
+          if (selectInterfaceComboBox.getItemAt(i).equals(element.getText())) {
+            selectInterfaceComboBox.setSelectedIndex(i);
+          }
+        }
+      } 
+    }
+    return true;
   }
   
 }
