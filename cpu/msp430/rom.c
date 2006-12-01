@@ -90,12 +90,10 @@ rom_erase(long nbytes, off_t offset)
   struct ictx c;
   
   if(nbytes % ROM_ERASE_UNIT_SIZE != 0) {
-    printf("rom_erase: bad size\n");
     return -1;
   }
 
   if(offset % ROM_ERASE_UNIT_SIZE != 0) {
-    printf("rom_erase: bad offset\n");
     return -1;
   }
 
