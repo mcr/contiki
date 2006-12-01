@@ -91,7 +91,9 @@ PROCESS(button_process, "Button process");
 /* Radio stuff in network byte order. */
 static u16_t panId = HTONS(0x2024);
 
-#define RF_CHANNEL              26
+#ifndef RF_CHANNEL
+#define RF_CHANNEL              15
+#endif
 
 int
 main(int argc, char **argv)
