@@ -135,10 +135,17 @@ slip_arch_init(void)
 
   UTCTL1 = SSEL1;                       /* UCLK = MCLK */
 
+#ifdef TMOTE_SKY
+  /* rs232_set_speed(RS232_115200); */
+  UBR01 = 0x15;
+  UBR11 = 0x00;
+  UMCTL1 = 0x4a;
+#else
   /* rs232_set_speed(RS232_57600); */
   UBR01 = 0x2a;
   UBR11 = 0x00;
   UMCTL1 = 0x5b;
+#endif
 
   ME2 &= ~USPIE1;			/* USART1 SPI module disable */
   ME2 |= (UTXE1 | URXE1);               /* Enable USART1 TXD/RXD */
