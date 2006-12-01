@@ -109,7 +109,9 @@ static struct uip_fw_netif slipif =
 /* Radio stuff in network byte order. */
 static u16_t panId = HTONS(0x2024);
 
-#define RF_CHANNEL              26
+#ifndef RF_CHANNEL
+#define RF_CHANNEL              15
+#endif
 
 int
 main(int argc, char **argv)
@@ -173,17 +175,7 @@ main(int argc, char **argv)
     do {
       /* Reset watchdog. */
     } while(process_run() > 0);
-
-    /*
-     * Idle processing.
-     */
-    int s = splhigh();		/* Disable interrupts. */
-    if(process_nevents() != 0) {
-      splx(s);			/* Re-enable interrupts. */
-    } else {
-      /* Re-enable interrupts and go to sleep atomically. */
-      _BIS_SR(GIE | SCG0 | CPUOFF); /* LPM1 sleep. */
-    }
+    /* Idle! */
   }
 
   return 0;
