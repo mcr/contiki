@@ -33,6 +33,6 @@
 #ifndef __SYMTAB_H__
 #define __SYMTAB_H__
 
-const char *symtab_lookup(const char *name);
+void *symtab_lookup(const char *name);
 
 #endif /* __SYMTAB_H__ */

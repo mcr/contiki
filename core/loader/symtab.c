@@ -38,11 +38,11 @@
 #include <string.h>
 
 /*---------------------------------------------------------------------------*/
-const char *
+void *
 symtab_lookup(const char *name)
 {
   const struct symbols *s;
-  for(s = symbols; s->name != (const void *)0; ++s) {
+  for(s = symbols; s->name != NULL; ++s) {
     if(strcmp(name, s->name) == 0) {
       return s->value;
     }
