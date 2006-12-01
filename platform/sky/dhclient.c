@@ -87,7 +87,9 @@ PROCESS(dhclient_process, "Dhclient process");
 /* Radio stuff in network byte order. */
 static u16_t panId = HTONS(0x2024);
 
-#define RF_CHANNEL              26
+#ifndef RF_CHANNEL
+#define RF_CHANNEL              15
+#endif
 
 int
 main(int argc, char **argv)
@@ -116,7 +118,8 @@ main(int argc, char **argv)
 	 ds2411_id[0], ds2411_id[1], ds2411_id[2], ds2411_id[3],
 	 ds2411_id[4], ds2411_id[5], ds2411_id[6], ds2411_id[7]);
 
-  srand((ds2411_id[3]<<8) + (ds2411_id[4]<<6) + (ds2411_id[5]<<4) +
+  srand(rand() +
+	(ds2411_id[3]<<8) + (ds2411_id[4]<<6) + (ds2411_id[5]<<4) +
 	(ds2411_id[6]<<2) +  ds2411_id[7]);
 
   /*
