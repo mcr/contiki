@@ -45,7 +45,7 @@
 #include "sys/log.h"
 
 #define MAX_RETRIES 100
-#define SS_INTERFERENCE -150
+#define SS_INTERFERENCE -70
 
 const struct simInterface radio_interface;
 
