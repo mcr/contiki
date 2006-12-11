@@ -59,7 +59,7 @@ PROCESS_THREAD(udprecv_process, ev, data)
     PROCESS_YIELD();
 
     if(ev == tcpip_event && uip_newdata()) {
-      u8_t *src = ((struct uip_udpip_hdr *)uip_buf)->srcipaddr.u8;
+      u8_t *src = ((struct uip_udpip_hdr *)&uip_buf[UIP_LLH_LEN])->srcipaddr.u8;
       printf("%d.%d.%d.%d: %s\n",
 	     src[0], src[1], src[2], src[3], (char *)uip_appdata);
     }
