@@ -475,13 +475,13 @@ public class StandardRadioMedium extends RadioMedium {
 
         pendingConnections = updatedPendingConnections;
 
+        if (myLogger != null) {
+          for (RadioConnection conn : lastTickConnections)
+            myLogger.logConnection(conn);
+        }
+
         // Radio medium has changed, notifing below
         radioMediumObservable.setRadioMediumChanged();
-      }
-
-      if (myLogger != null) {
-        for (RadioConnection conn : lastTickConnections)
-          myLogger.logConnection(conn);
       }
 
       // Set signal strengths on all radios
