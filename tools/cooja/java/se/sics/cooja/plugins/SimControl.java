@@ -86,6 +86,9 @@ public class SimControl extends VisPlugin {
     // Register as tickobserver
     simulation.addTickObserver(tickObserver = new Observer() {
       public void update(Observable obs, Object obj) {
+        if (simulation ==  null || simulationTime == null)
+          return;
+        
         // During simulation running, only update text 10 times each second
         if (lastTextUpdateTime < System.currentTimeMillis() - 100) {
           lastTextUpdateTime = System.currentTimeMillis();
