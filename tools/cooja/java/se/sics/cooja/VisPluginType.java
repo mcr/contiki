@@ -104,6 +104,16 @@ public @interface VisPluginType {
    */
   public static final int SIM_STANDARD_PLUGIN = 4;
 
+
+  /**
+   * GUI Standard Plugin
+   *
+   * This is treated exactly like a GUI Plugin, with the
+   * only difference that this will automatically be opened
+   * when a GUI is created.
+   */
+  public static final int GUI_STANDARD_PLUGIN = 5;
+
   int value();
 }
 
