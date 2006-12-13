@@ -184,6 +184,7 @@ public class Simulation extends Observable implements Runnable {
    */
   public void startSimulation() {
     if (!isRunning()) {
+      isRunning = true;
       thread = new Thread(this);
       thread.start();
     }
@@ -376,7 +377,8 @@ public class Simulation extends Observable implements Runnable {
           pluginElement.setText(openedPlugin.getClass().getName());
 
           pluginSubElement = new Element("constructor");
-          if (pluginType == VisPluginType.GUI_PLUGIN) {
+          if (pluginType == VisPluginType.GUI_PLUGIN ||
+              pluginType == VisPluginType.GUI_STANDARD_PLUGIN) {
             pluginSubElement.setText("gui");
             pluginElement.addContent(pluginSubElement);
           } else if (pluginType == VisPluginType.SIM_PLUGIN || 
