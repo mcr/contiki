@@ -77,6 +77,16 @@ public class SectionMoteMemory implements MoteMemory {
     return names;
   }
 
+  /**
+   * @param varName Variable name
+   * @return Address of given variable, or -1
+   */
+  public int getVariableAddress(String varName) {
+    if (!variableAddresses.containsKey(varName))
+      return -1;
+    return ((Integer) variableAddresses.get(varName)).intValue();
+  }
+  
   public void clearMemory() {
     sections.clear();
   }
