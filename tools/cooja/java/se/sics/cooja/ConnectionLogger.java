@@ -36,7 +36,6 @@ import java.io.FileOutputStream;
 import org.apache.log4j.Logger;
 
 import se.sics.cooja.interfaces.Position;
-import se.sics.cooja.plugins.SimControl;
 
 /**
  * ConnectionLogger is a simple connection information outputter. All
@@ -54,7 +53,7 @@ import se.sics.cooja.plugins.SimControl;
  */
 public class ConnectionLogger {
   private static final long serialVersionUID = 1L;
-  private static Logger logger = Logger.getLogger(SimControl.class);
+  private static Logger logger = Logger.getLogger(ConnectionLogger.class);
 
   private static int LOG_TO_FILE = 1;
   private static int LOG_TO_LOG4J = 2;
