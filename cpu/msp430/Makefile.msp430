@@ -28,7 +28,7 @@ UIPDRIVERS = me.c me_tabs.c slip.c crc16.c
 SYSAPPS    = codeprop-tmp.c
 APPDIRS += $(CONTIKI)/apps/codeprop
 #ELFLOADER  = loader-arch.c elfloader.c elfloader-msp430.c symtab.c
-ELFLOADER  = elfloader-tmp.c elfloader-msp430.c symtab.c
+ELFLOADER  = elfloader.c elfloader-msp430.c symtab.c
 TARGETLIBS = random.c serial.c
 
 CONTIKI_TARGET_SOURCEFILES += $(MSP430) \
