@@ -66,7 +66,7 @@
 #ifndef __ELFLOADER_ARCH_H__
 #define __ELFLOADER_ARCH_H__
 
-#include "elfloader-tmp.h"
+#include "elfloader.h"
 
 /**
  * \brief      Allocate RAM for a new module.

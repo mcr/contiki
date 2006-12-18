@@ -33,7 +33,7 @@
 
 #include "contiki.h"
 
-#include "loader/elfloader-tmp.h"
+#include "loader/elfloader.h"
 #include "loader/elfloader-arch.h"
 
 #include "cfs/cfs.h"
