@@ -73,7 +73,7 @@
 #include "contiki-net.h"
 #include "cfs/cfs.h"
 #include "codeprop-tmp.h"
-#include "loader/elfloader-tmp.h"
+#include "loader/elfloader.h"
 #include <string.h>
 
 static const char *err_msgs[] =
