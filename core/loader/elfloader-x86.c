@@ -67,8 +67,9 @@ elfloader_arch_allocate_rom(int size)
 }
 /*---------------------------------------------------------------------------*/
 void
-elfloader_arch_write_text(int fd, unsigned int size, char *mem)
+elfloader_arch_write_rom(int fd, unsigned short textoff, unsigned int size, char *mem)
 {
+  cfs_seek(fd, textoff);
   cfs_read(fd, (unsigned char *)mem, size);
 }
 /*---------------------------------------------------------------------------*/

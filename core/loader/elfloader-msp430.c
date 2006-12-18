@@ -54,7 +54,7 @@ elfloader_arch_allocate_rom(int size)
 /*---------------------------------------------------------------------------*/
 #define READSIZE 32
 void
-elfloader_arch_write_text(int fd, unsigned int size, char *mem)
+elfloader_arch_write_rom(int fd, unsigned short textoff, unsigned int size, char *mem)
 {
   int i;
   unsigned int ptr;
@@ -64,6 +64,7 @@ elfloader_arch_write_text(int fd, unsigned int size, char *mem)
 
   flashptr = (unsigned short *)mem;
   
+  cfs_seek(fd, textoff);
   for(ptr = 0; ptr < size; ptr += READSIZE) {
     
     /* Read data from file into RAM. */
@@ -90,6 +91,7 @@ elfloader_arch_write_text(int fd, unsigned int size, char *mem)
 /*---------------------------------------------------------------------------*/
 void
 elfloader_arch_relocate(int fd, unsigned int sectionoffset,
+			char *sectionaddr,
 			struct elf32_rela *rela, char *addr)
 {
   addr += rela->r_addend;
