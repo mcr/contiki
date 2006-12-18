@@ -33,7 +33,7 @@
 
 #include "symtab.h"
 
-#include "loader/symbols.h"
+#include "symbols.h"
 
 #include <string.h>
 
