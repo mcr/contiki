@@ -21,7 +21,7 @@ SENSORS    = #sensors.c button.c pir.c irq.c vib.c sound.c radio.c ctsrts.c \
              #lm71.c
 UIPDRIVERS = #me.c me_tabs.c slip.c tr1001-drv.c tr1001.c crc16.c
 SYSAPPS    = #codeprop.c
-ELFLOADER  = #loader-arch.c elfloader-tmp.c elfloader-avr.c symtab.c
+ELFLOADER  = #loader-arch.c elfloader.c elfloader-avr.c symtab.c
 TARGETLIBS = clock.c flash.c
 
 CONTIKI_TARGET_SOURCEFILES += $(SENSORS) \
