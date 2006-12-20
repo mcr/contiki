@@ -36,7 +36,7 @@
 
 #include "contiki.h"
 #include "sys/etimer.h"
-#include "loader/elfloader.h"
+#include "loader/elfloader_compat.h"
 
 #include "net/uip.h"
 

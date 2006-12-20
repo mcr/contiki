@@ -44,7 +44,7 @@
 
 #include "contiki.h"
 
-#include "loader/elfloader.h"
+#include "loader/elfloader_compat.h"
 #include "loader/cle.h"
 
 #include "lib/malloc.h"
