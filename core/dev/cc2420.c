@@ -252,7 +252,7 @@ cc2420_resend(void)
    * FIFO by waiting for transmission to start here and synchronizing
    * with the CC2420_TX_ACTIVE check in cc2420_send.
    *
-   * Note that we may have to wait up to 320 us (symbols) before
+   * Note that we may have to wait up to 320 us (20 symbols) before
    * transmission starts.
    */
 #ifdef TMOTE_SKY
