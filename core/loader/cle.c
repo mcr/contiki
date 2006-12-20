@@ -176,7 +176,7 @@ cle_read_info(struct cle_info *info,
 /*
  * Update one reloc.
  *
- * Writing relocs is machine dependent and this function is MPS430
+ * Writing relocs is machine dependent and this function is MSP430
  * specific!
  */
 static inline int
@@ -243,10 +243,12 @@ cle_relocate(struct cle_info *info,
       } else if(addr != NULL && sym == NULL) { /* Exported symbol. */
 	addr = addr + s.st_value;
       } else if(addr == NULL && sym == NULL) {
-	PRINTF("cle: undefined reference to %.32s\n", info->name);
+	PRINTF("cle: undefined reference to %.32s (%d)\n",
+	       info->name, s.st_info);
 	return CLE_UNDEFINED;	/* Or COMMON symbol. */
       } else if(addr != NULL && sym != NULL) {
-	PRINTF("cle: multiple definitions of %.32s\n", info->name);
+	PRINTF("cle: multiple definitions of %.32s (%d)\n",
+	       info->name, s.st_info);
 	return CLE_MULTIPLY_DEFINED;
       }
     }
