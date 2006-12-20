@@ -38,4 +38,8 @@ struct symbols {
   const char *value;
 };
 
+extern const int symbols_nelts;
+
+extern const struct symbols symbols[/* symbols_nelts */];
+
 #endif /* __SYMBOLS_DEF_H__ */
