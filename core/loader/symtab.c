@@ -33,7 +33,7 @@
 
 #include "symtab.h"
 
-#include "symbols.h"
+#include "loader/symbols-def.h"
 
 #include <string.h>
 
@@ -48,7 +48,7 @@ symtab_lookup(const char *name)
   int r;
   
   start = 0;
-  end = sizeof(symbols) / sizeof(struct symbols);
+  end = symbols_nelts;
 
   do {
     /* Check middle, divide */
