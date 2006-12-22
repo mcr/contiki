@@ -33,7 +33,7 @@
  * $Id$
  */
 
-#include "eeprom.h"
+#include "dev/eeprom.h"
 
 #include <avr/eeprom.h>
 #include <stdio.h>
