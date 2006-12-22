@@ -47,10 +47,14 @@
 
 #include "mmem.h"
 #include "list.h"
-
+#include "contiki-conf.h"
 #include <string.h>
 
+#ifdef MMEM_CONF_SIZE
+#define MMEM_SIZE MMEM_CONF_SIZE
+#else
 #define MMEM_SIZE 4096
+#endif
 
 LIST(mmemlist);
 unsigned int avail_memory;
