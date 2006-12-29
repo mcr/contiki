@@ -130,8 +130,10 @@ PROCESS_THREAD(shell_gui_process, ev, data)
        data == (process_data_t)&commandentry) {
       shell_output("> ", command);
       shell_input(command);
-      CTK_TEXTENTRY_CLEAR(&commandentry);
-      CTK_WIDGET_REDRAW(&commandentry);
+      if(shell_gui_process.state) {
+        CTK_TEXTENTRY_CLEAR(&commandentry);
+        CTK_WIDGET_REDRAW(&commandentry);
+      }
     } else if(ev == ctk_signal_window_close ||
 	      ev == PROCESS_EVENT_EXIT) {
       shell_quit(NULL);
