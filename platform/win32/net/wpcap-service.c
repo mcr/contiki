@@ -41,7 +41,7 @@
 #include <malloc.h>
 
 #pragma comment(lib, "wsock32")
-#pragma comment(lib, "iphlpapi.lib")
+#pragma comment(lib, "iphlpapi")
 
 #define htons		  /* Avoid 'redefinition' error. */
 #include "contiki.h"
