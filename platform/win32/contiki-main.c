@@ -128,6 +128,8 @@ main(int argc)
 
     uip_ipaddr(&addr, 192,168,0,1);
     resolv_conf(&addr);
+
+    program_handler_load("wpcap.drv", NULL);
   }
 #endif
 
