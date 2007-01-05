@@ -101,10 +101,8 @@ int
 main(int argc, char **argv)
 {
   int slipfd;
-  int ret;
   FILE *inslip;
   const char *siodev;
-  int c;
   
   if (argc != 2)
     err(1, "usage: scat device-file");
@@ -128,10 +126,28 @@ main(int argc, char **argv)
 	else if (c == SLIP_ESC_END)
 	  c = SLIP_END;
       }
-      if (isprint(c) || c == '\n' || c == '\t' || c == '\r')
+      switch (c) {
+      case EOF:
+	err(1, "getc(inslip)");
+	break;
+
+      case '\007':
+      case '\b':
+      case '\f':
+      case '\n':
+      case '\r':
+      case '\t':
+      case '\v':
 	putchar(c);
-      else
-	printf("%02x ", c);
+	break;
+
+      default:
+	if (isprint(c))
+	  putchar(c);
+	else
+	  printf("%02x ", c);
+	break;
+      }
       c = getc(inslip);
     } while (c != SLIP_END);
   }
