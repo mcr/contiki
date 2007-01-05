@@ -45,6 +45,8 @@ typedef u16_t cle_half;
 typedef unsigned char *cle_addr;
 /* typedef uintptr_t cle_addr; */
 
+typedef unsigned char cle_scratch[32];
+
 struct cle_info {
   cle_addr text, data, bss;
 
@@ -62,7 +64,7 @@ struct cle_info {
   unsigned char bss_shndx;
   unsigned char unused_shndx;
 
-  char name[32];		/* Scratch and errmsg buffer. */
+  cle_scratch name;		/* Scratch and errmsg buffer. */
 };
 
 int
