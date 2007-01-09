@@ -88,7 +88,7 @@ public class DummyInterface extends MoteInterface {
     return null;
   }
   
-  public void setConfigXML(Collection<Element> configXML) {
+  public void setConfigXML(Collection<Element> configXML, boolean visAvailable) {
   }
   
 }
