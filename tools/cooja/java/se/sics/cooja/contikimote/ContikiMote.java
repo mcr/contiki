@@ -278,7 +278,7 @@ public class ContikiMote implements Mote {
     return config;
   }
   
-  public boolean setConfigXML(Simulation simulation, Collection<Element> configXML) {
+  public boolean setConfigXML(Simulation simulation, Collection<Element> configXML, boolean visAvailable) {
     mySim = simulation;
     myState = State.ACTIVE;
     
@@ -292,7 +292,7 @@ public class ContikiMote implements Mote {
 
       } else if (name.equals("interface_config")) {
         Class<? extends MoteInterface> moteInterfaceClass = 
-          GUI.currentGUI.tryLoadClass(this, MoteInterface.class, element.getText().trim());
+          simulation.getGUI().tryLoadClass(this, MoteInterface.class, element.getText().trim());
 
         if (moteInterfaceClass == null) {
           logger.fatal("Could not load mote interface class: " + element.getText().trim());
@@ -301,7 +301,7 @@ public class ContikiMote implements Mote {
         
         MoteInterface moteInterface = myInterfaceHandler.getInterfaceOfType(moteInterfaceClass);
         if (moteInterface != null)
-          moteInterface.setConfigXML(element.getChildren());
+          moteInterface.setConfigXML(element.getChildren(), visAvailable);
         else
           logger.warn("Can't restore configuration for non-existing interface: " + moteInterfaceClass.getName());
       }
