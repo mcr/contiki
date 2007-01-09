@@ -250,7 +250,7 @@ public class ContikiRS232 extends MoteInterface implements ContikiMoteInterface 
     return null;
   }
 
-  public void setConfigXML(Collection<Element> configXML) {
+  public void setConfigXML(Collection<Element> configXML, boolean visAvailable) {
   }
 
 }

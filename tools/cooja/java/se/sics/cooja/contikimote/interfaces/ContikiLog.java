@@ -163,7 +163,7 @@ public class ContikiLog extends Log implements ContikiMoteInterface {
     return null;
   }
   
-  public void setConfigXML(Collection<Element> configXML) {
+  public void setConfigXML(Collection<Element> configXML, boolean visAvailable) {
   }
 
 }

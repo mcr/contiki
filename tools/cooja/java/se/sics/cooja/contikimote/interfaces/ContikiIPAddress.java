@@ -176,7 +176,7 @@ public class ContikiIPAddress extends IPAddress implements ContikiMoteInterface 
     return config;
   }
 
-  public void setConfigXML(Collection<Element> configXML) {
+  public void setConfigXML(Collection<Element> configXML, boolean visAvailable) {
     for (Element element : configXML) {
       if (element.getName().equals("ipv4address")) {
         setIPString(element.getText());

@@ -190,10 +190,10 @@ public class ContikiCFS extends MoteInterface implements ContikiMoteInterface {
         byte[] fileData = readDialogFileBytes(null);
 
         // Write file data to CFS
-        if (fileData != null)
+        if (fileData != null) {
           setFilesystemData(fileData);
-        
-        logger.info("Done! (" + fileData.length + " bytes written to CFS)");
+          logger.info("Done! (" + fileData.length + " bytes written to CFS)");
+        }
       }
     });
     
@@ -234,7 +234,7 @@ public class ContikiCFS extends MoteInterface implements ContikiMoteInterface {
     return null;
   }
 
-  public void setConfigXML(Collection<Element> configXML) {
+  public void setConfigXML(Collection<Element> configXML, boolean visAvailable) {
   }
 
   /**
