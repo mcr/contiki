@@ -57,6 +57,7 @@ public class CreateSimDialog extends JDialog {
   private final static int LABEL_HEIGHT = 15;
   
   private Simulation mySimulation = null;
+  private GUI myGUI = null;
   
   private CreateSimDialog myDialog;
   
@@ -75,7 +76,7 @@ public class CreateSimDialog extends JDialog {
    * @return True if simulation configured correctly
    */
   public static boolean showDialog(Frame parentFrame, Simulation simulationToConfigure) {
-    CreateSimDialog myDialog = new CreateSimDialog(parentFrame);
+    CreateSimDialog myDialog = new CreateSimDialog(parentFrame, simulationToConfigure.getGUI());
 
     myDialog.mySimulation = simulationToConfigure;
 
@@ -127,10 +128,11 @@ public class CreateSimDialog extends JDialog {
     return false;
   }
   
-  private CreateSimDialog(Frame frame) {
+  private CreateSimDialog(Frame frame, GUI gui) {
     super(frame, "Create new simulation", true);
     
     myDialog = this;
+    myGUI = gui;
     
     JPanel mainPane = new JPanel();
     mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.Y_AXIS));
@@ -193,7 +195,7 @@ public class CreateSimDialog extends JDialog {
     label.setPreferredSize(new Dimension(LABEL_WIDTH,LABEL_HEIGHT));
     
     Vector<String> radioMediumDescriptions = new Vector<String>();
-    for (Class<? extends RadioMedium> radioMediumClass: GUI.currentGUI.getRegisteredRadioMediums()) {
+    for (Class<? extends RadioMedium> radioMediumClass: gui.getRegisteredRadioMediums()) {
       String description = GUI.getDescriptionOf(radioMediumClass);   
       radioMediumDescriptions.add(description);
     }
@@ -312,12 +314,13 @@ public class CreateSimDialog extends JDialog {
         mySimulation.setTitle(title.getText());
         
         String currentRadioMediumDescription = (String) radioMediumBox.getSelectedItem();
-        for (Class<? extends RadioMedium> radioMediumClass: GUI.currentGUI.getRegisteredRadioMediums()) {
+        for (Class<? extends RadioMedium> radioMediumClass: myGUI.getRegisteredRadioMediums()) {
           String radioMediumDescription = GUI.getDescriptionOf(radioMediumClass);   
 
           if (currentRadioMediumDescription.equals(radioMediumDescription)) {
             try {
-              mySimulation.setRadioMedium(radioMediumClass.newInstance());
+              RadioMedium radioMedium = RadioMedium.generateInterface(radioMediumClass, mySimulation);
+              mySimulation.setRadioMedium(radioMedium);
             } catch (Exception ex) {
               logger.fatal("Exception when creating radio medium: " + ex);
               mySimulation.setRadioMedium(null);
