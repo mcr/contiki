@@ -211,7 +211,7 @@ public class Position extends MoteInterface {
     return config;
   }
 
-  public void setConfigXML(Collection<Element> configXML) {
+  public void setConfigXML(Collection<Element> configXML, boolean visAvailable) {
     double x = 0, y = 0, z = 0;
 
     for (Element element : configXML) {

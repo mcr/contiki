@@ -285,7 +285,7 @@ public class Battery extends MoteInterface implements PassiveMoteInterface {
     return config;
   }
 
-  public void setConfigXML(Collection<Element> configXML) {
+  public void setConfigXML(Collection<Element> configXML, boolean visAvailable) {
     for (Element element : configXML) {
       if (element.getName().equals("infinite")) {
         hasInfiniteEnergy = Boolean.parseBoolean(element.getText());
