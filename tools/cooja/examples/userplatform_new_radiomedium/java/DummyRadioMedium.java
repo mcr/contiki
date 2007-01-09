@@ -30,6 +30,7 @@
  */
 
 import java.util.Collection;
+import java.util.Observable;
 import java.util.Observer;
 import org.apache.log4j.Logger;
 import org.jdom.Element;
@@ -70,6 +71,10 @@ public class DummyRadioMedium extends RadioMedium {
     logger.debug("I'm a dummy. I will never change.");
   }
 
+  public Observable getRadioMediumObservable() {
+    return new Observable();
+  }
+
   public void deleteRadioMediumObserver(Observer observer) {
     // Do nothing
     logger.debug("I'm a dummy. I will never change.");
@@ -87,7 +92,7 @@ public class DummyRadioMedium extends RadioMedium {
     return null;
   }
   
-  public boolean setConfigXML(Collection<Element> configXML) {
+  public boolean setConfigXML(Collection<Element> configXML, boolean visAvailable) {
     return true;
   }
 
