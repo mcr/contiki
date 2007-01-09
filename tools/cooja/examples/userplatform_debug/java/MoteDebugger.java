@@ -54,20 +54,22 @@ import se.sics.cooja.contikimote.ContikiMoteType;
  * @author Fredrik Osterlind
  */
 @ClassDescription("Debug using GDB")
-@VisPluginType(VisPluginType.MOTE_PLUGIN)
+@PluginType(PluginType.MOTE_PLUGIN)
 public class MoteDebugger extends VisPlugin {;
   
   private static final long serialVersionUID = 1L;
   private static Logger logger = Logger.getLogger(MoteDebugger.class);
   private ContikiMote moteToDebug;
+  private Simulation mySimulation;
   
   /**
    * Creates a new VisDebug.
    * @param mote Contiki mote to debug next tick
    */
-  public MoteDebugger(Mote mote) {
-    super("VisDebug (" + mote + ")");
+  public MoteDebugger(Mote mote, Simulation simulation, GUI gui) {
+    super("VisDebug (" + mote + ")", gui);
     this.moteToDebug = (ContikiMote) mote;
+    this.mySimulation = simulation;
     
     JButton debugButton = new JButton("Debug now");
     debugButton.addActionListener(new ActionListener() {
@@ -149,7 +151,7 @@ public class MoteDebugger extends VisPlugin {;
           Thread.sleep(2500);
           logger.info("Ticking chosen mote now! (setting state to active)");
           moteToDebug.setState(Mote.State.ACTIVE);
-          moteToDebug.tick(GUI.currentSimulation.getSimulationTime());
+          moteToDebug.tick(mySimulation.getSimulationTime());
           
           gdbProcess.waitFor();
         } catch (Exception ex) {
