@@ -156,12 +156,12 @@ public class MantisMoteTypeDialog extends JDialog {
     }
 
     // Load all mote interface classes
-    String[] moteInterfaces = GUI.currentGUI.getPlatformConfig().getStringArrayValue(MantisMoteType.class, "MOTE_INTERFACES");
+    String[] moteInterfaces = simulation.getGUI().getPlatformConfig().getStringArrayValue(MantisMoteType.class, "MOTE_INTERFACES");
     myDialog.moteInterfaceClasses = new Vector<Class<? extends MoteInterface>>();
     for (String moteInterface : moteInterfaces) {
       try {
         Class<? extends MoteInterface> newMoteInterfaceClass = 
-          GUI.currentGUI.tryLoadClass(GUI.currentGUI, MoteInterface.class, moteInterface);
+          simulation.getGUI().tryLoadClass(simulation.getGUI(), MoteInterface.class, moteInterface);
         myDialog.moteInterfaceClasses.add(newMoteInterfaceClass);
         /*logger.info("Loaded Mantis mote interface: " + newMoteInterfaceClass);*/
       } catch (Exception e) {

@@ -188,7 +188,7 @@ public class MantisMote implements Mote {
   }
 
   public boolean setConfigXML(Simulation simulation,
-      Collection<Element> configXML) {
+      Collection<Element> configXML, boolean visAvailable) {
     mySimulation = simulation;
 
     for (Element element : configXML) {
@@ -201,7 +201,7 @@ public class MantisMote implements Mote {
             .getMoteInterfaces());
 
       } else if (name.equals("interface_config")) {
-        Class<? extends MoteInterface> moteInterfaceClass = GUI.currentGUI
+        Class<? extends MoteInterface> moteInterfaceClass = simulation.getGUI()
             .tryLoadClass(this, MoteInterface.class, element.getText().trim());
 
         if (moteInterfaceClass == null) {
@@ -213,7 +213,7 @@ public class MantisMote implements Mote {
         MoteInterface moteInterface = myInterfaceHandler
             .getInterfaceOfType(moteInterfaceClass);
         if (moteInterface != null)
-          moteInterface.setConfigXML(element.getChildren());
+          moteInterface.setConfigXML(element.getChildren(), visAvailable);
         else
           logger
               .warn("Can't restore configuration for non-existing interface: "

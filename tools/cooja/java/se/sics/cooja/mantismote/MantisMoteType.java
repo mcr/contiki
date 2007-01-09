@@ -355,7 +355,8 @@ public class MantisMoteType implements MoteType {
     return new MantisMote(this, mySimulation);
   }
 
-  public boolean configureAndInit(JFrame parentFrame, Simulation simulation) {
+  public boolean configureAndInit(JFrame parentFrame, Simulation simulation, boolean visAvailable) {
+    if (!visAvailable) logger.fatal(">>>>>>> NOT IMPLEMENTED");
     return MantisMoteTypeDialog.showDialog(parentFrame, simulation, this);
   }
 
@@ -383,7 +384,7 @@ public class MantisMoteType implements MoteType {
   }
 
   public boolean setConfigXML(Simulation simulation,
-      Collection<Element> configXML) {
+      Collection<Element> configXML, boolean visAvailable) {
     mySimulation = simulation;
 
     for (Element element : configXML) {
@@ -400,7 +401,7 @@ public class MantisMoteType implements MoteType {
       }
     }
 
-    boolean createdOK = configureAndInit(GUI.frame, simulation);
+    boolean createdOK = configureAndInit(GUI.frame, simulation, visAvailable);
     return createdOK;
   }
 
