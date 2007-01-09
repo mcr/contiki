@@ -153,6 +153,6 @@ public abstract class MoteInterface extends Observable {
    * @see #getConfigXML()
    * @param configXML Config XML elements
    */
-  public abstract void setConfigXML(Collection<Element> configXML);
+  public abstract void setConfigXML(Collection<Element> configXML, boolean visAvailable);
   
 }
