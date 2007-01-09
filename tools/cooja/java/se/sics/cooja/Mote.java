@@ -197,6 +197,6 @@ public interface Mote {
    * 
    * @see #getConfigXML()
    */
-  public abstract boolean setConfigXML(Simulation simulation, Collection<Element> configXML);
+  public abstract boolean setConfigXML(Simulation simulation, Collection<Element> configXML, boolean visAvailable);
 
 }
