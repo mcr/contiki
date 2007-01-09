@@ -43,7 +43,7 @@ import se.sics.cooja.*;
  * @author Fredrik Osterlind
  */
 @ClassDescription("Dummy Plugin")
-@VisPluginType(VisPluginType.SIM_PLUGIN)
+@PluginType(PluginType.SIM_PLUGIN)
 public class MyDummyPlugin extends VisPlugin {
   private static final long serialVersionUID = 1L;
   private static Logger logger = Logger.getLogger(MyDummyPlugin.class);
@@ -55,8 +55,8 @@ public class MyDummyPlugin extends VisPlugin {
    * 
    * @param simulationToVisualize Simulation to visualize
    */
-  public MyDummyPlugin(Simulation simulationToVisualize) {
-    super("This is my title!");
+  public MyDummyPlugin(Simulation simulationToVisualize, GUI gui) {
+    super("This is my title!", gui);
     mySimulation = simulationToVisualize;
     
     // Create and add a button
