@@ -43,7 +43,7 @@ import se.sics.cooja.*;
  * @author Fredrik Osterlind
  */
 @ClassDescription("Mote Type Information")
-@VisPluginType(VisPluginType.SIM_PLUGIN)
+@PluginType(PluginType.SIM_PLUGIN)
 public class MoteTypeInformation extends VisPlugin {
   private static Logger logger = Logger.getLogger(MoteTypeInformation.class);
 
@@ -59,8 +59,8 @@ public class MoteTypeInformation extends VisPlugin {
    *
    * @param simulation Simulation
    */
-  public MoteTypeInformation(Simulation simulation) {
-    super("Mote Type Information *frozen*");
+  public MoteTypeInformation(Simulation simulation, GUI gui) {
+    super("Mote Type Information *frozen*", gui);
 
     mySimulation = simulation;
 

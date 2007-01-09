@@ -49,7 +49,7 @@ import se.sics.cooja.interfaces.Battery;
  * @author Fredrik Osterlind
  */
 @ClassDescription("Battery Visualizer")
-@VisPluginType(VisPluginType.SIM_PLUGIN)
+@PluginType(PluginType.SIM_PLUGIN)
 public class VisBattery extends Visualizer2D {
   private static final long serialVersionUID = 1L;
   private static Logger logger = Logger.getLogger(VisBattery.class);
@@ -65,8 +65,8 @@ public class VisBattery extends Visualizer2D {
    * @param simulationToVisualize
    *          Simulation to visualize
    */
-  public VisBattery(Simulation simulationToVisualize) {
-    super(simulationToVisualize);
+  public VisBattery(Simulation simulationToVisualize, GUI gui) {
+    super(simulationToVisualize, gui);
     setTitle("Battery Visualizer");
 
     simulation = simulationToVisualize;

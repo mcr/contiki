@@ -48,7 +48,7 @@ import se.sics.cooja.interfaces.Position;
  * @author Fredrik Osterlind
  */
 @ClassDescription("Traffic Visualizer")
-@VisPluginType(VisPluginType.SIM_PLUGIN)
+@PluginType(PluginType.SIM_PLUGIN)
 public class VisTraffic extends Visualizer2D {
   protected boolean USE_ALPHA = false;
 
@@ -74,8 +74,8 @@ public class VisTraffic extends Visualizer2D {
    * @param simulationToVisualize
    *          Simulation to visualize
    */
-  public VisTraffic(Simulation simulationToVisualize) {
-    super(simulationToVisualize);
+  public VisTraffic(Simulation simulationToVisualize, GUI gui) {
+    super(simulationToVisualize, gui);
     setTitle("Traffic Visualizer");
     simulation = simulationToVisualize;
 

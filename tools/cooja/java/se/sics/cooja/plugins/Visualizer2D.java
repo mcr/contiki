@@ -57,7 +57,7 @@ import se.sics.cooja.interfaces.*;
  * @author Fredrik Osterlind
  */
 @ClassDescription("2D Mote Visualizer")
-@VisPluginType(VisPluginType.SIM_PLUGIN)
+@PluginType(PluginType.SIM_PLUGIN)
 public abstract class Visualizer2D extends VisPlugin {
   private static final long serialVersionUID = 1L;
   private static Logger logger = Logger.getLogger(Visualizer2D.class);
@@ -107,8 +107,8 @@ public abstract class Visualizer2D extends VisPlugin {
    * @param simulationToVisualize
    *          Simulation to visualize
    */
-  public Visualizer2D(Simulation simulationToVisualize) {
-    super("Visualizer2D");
+  public Visualizer2D(Simulation simulationToVisualize, GUI gui) {
+    super("Visualizer2D", gui);
 
     myPlugin = this;
 
@@ -257,7 +257,7 @@ public abstract class Visualizer2D extends VisPlugin {
       JMenuItem menuItem = new JMenuItem("Open mote plugin for " + mote);
       menuItem.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          GUI.currentGUI.showMotePluginsMenu(canvas, mote, pos);
+          simulation.getGUI().showMotePluginsMenu(canvas, mote, pos);
         }
       });
       pickMoteMenu.add(menuItem);

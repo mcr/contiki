@@ -52,7 +52,7 @@ import se.sics.cooja.interfaces.Log;
  * @author Fredrik Osterlind
  */
 @ClassDescription("Log Listener")
-@VisPluginType(VisPluginType.SIM_PLUGIN)
+@PluginType(PluginType.SIM_PLUGIN)
 public class LogListener extends VisPlugin {
   private static final long serialVersionUID = 1L;
   private static Logger logger = Logger.getLogger(LogListener.class);
@@ -69,8 +69,8 @@ public class LogListener extends VisPlugin {
    *
    * @param simulationToControl Simulation to control
    */
-  public LogListener(final Simulation simulationToControl) {
-    super("Log Listener - Listening on ?? mote logs");
+  public LogListener(final Simulation simulationToControl, GUI gui) {
+    super("Log Listener - Listening on ?? mote logs", gui);
     simulation = simulationToControl;
     int nrLogs = 0;
     
@@ -159,7 +159,7 @@ public class LogListener extends VisPlugin {
     return config;
   }
 
-  public boolean setConfigXML(Collection<Element> configXML) {
+  public boolean setConfigXML(Collection<Element> configXML, boolean visAvailable) {
     
     for (Element element : configXML) {
       if (element.getName().equals("filter")) {

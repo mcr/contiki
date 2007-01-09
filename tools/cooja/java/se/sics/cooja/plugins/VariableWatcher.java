@@ -51,7 +51,7 @@ import se.sics.cooja.*;
  * @author Fredrik Osterlind
  */
 @ClassDescription("Variable Watcher")
-@VisPluginType(VisPluginType.MOTE_PLUGIN)
+@PluginType(PluginType.MOTE_PLUGIN)
 public class VariableWatcher extends VisPlugin {
   private static final long serialVersionUID = 1L;
 
@@ -79,8 +79,8 @@ public class VariableWatcher extends VisPlugin {
    *
    * @param moteToView Mote to view
    */
-  public VariableWatcher(Mote moteToView) {
-    super("Variable Watcher (" + moteToView + ")");
+  public VariableWatcher(Mote moteToView, Simulation simulation, GUI gui) {
+    super("Variable Watcher (" + moteToView + ")", gui);
 
     moteMemory = (SectionMoteMemory) moteToView.getMemory();
 
@@ -343,7 +343,7 @@ public class VariableWatcher extends VisPlugin {
     return config;
   }
 
-  public boolean setConfigXML(Collection<Element> configXML) {
+  public boolean setConfigXML(Collection<Element> configXML, boolean visAvailable) {
     lengthPane.setVisible(false);
     setNumberOfValues(1);
     varLength.setValue(1);

@@ -43,7 +43,7 @@ import se.sics.cooja.*;
  * @author Fredrik Osterlind
  */
 @ClassDescription("Simulation Information")
-@VisPluginType(VisPluginType.SIM_PLUGIN)
+@PluginType(PluginType.SIM_PLUGIN)
 public class SimInformation extends VisPlugin {
   private static final long serialVersionUID = 1L;
   private Simulation simulation;
@@ -64,8 +64,8 @@ public class SimInformation extends VisPlugin {
    *
    * @param simulationToView Simulation to view
    */
-  public SimInformation(Simulation simulationToView) {
-    super("Simulation Information");
+  public SimInformation(Simulation simulationToView, GUI gui) {
+    super("Simulation Information", gui);
 
     simulation = simulationToView;
     
