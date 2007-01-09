@@ -190,7 +190,7 @@ public class DisturberMote implements Mote {
   }
 
   public boolean setConfigXML(Simulation simulation,
-      Collection<Element> configXML) {
+      Collection<Element> configXML, boolean visAvailable) {
 
     // Set initial configuration
     mySim = simulation;
@@ -208,7 +208,7 @@ public class DisturberMote implements Mote {
       if (name.equals("motetype_identifier")) {
         myType = simulation.getMoteType(element.getText());
       } else if (name.equals("interface_config")) {
-        Class<? extends MoteInterface> moteInterfaceClass = GUI.currentGUI
+        Class<? extends MoteInterface> moteInterfaceClass = simulation.getGUI()
             .tryLoadClass(this, MoteInterface.class, element.getText().trim());
 
         if (moteInterfaceClass == null) {
@@ -218,7 +218,7 @@ public class DisturberMote implements Mote {
 
         MoteInterface moteInterface = myInterfaceHandler
             .getInterfaceOfType(moteInterfaceClass);
-        moteInterface.setConfigXML(element.getChildren());
+        moteInterface.setConfigXML(element.getChildren(), visAvailable);
       }
 
     }

@@ -60,7 +60,7 @@ public class DummyMoteType implements MoteType {
     return new DummyMote(this, simulation);
   }
   
-  public boolean configureAndInit(JFrame parentFrame, Simulation simulation) {
+  public boolean configureAndInit(JFrame parentFrame, Simulation simulation, boolean visAvailable) {
  
     if (identifier == null) {
       // Create unique identifier
@@ -138,7 +138,7 @@ public class DummyMoteType implements MoteType {
     return config;
   }
 
-  public boolean setConfigXML(Simulation simulation, Collection<Element> configXML) {
+  public boolean setConfigXML(Simulation simulation, Collection<Element> configXML, boolean visAvailable) {
     for (Element element : configXML) {
       String name = element.getName();
 
@@ -151,7 +151,7 @@ public class DummyMoteType implements MoteType {
       }
     }
 
-    boolean createdOK = configureAndInit(GUI.frame, simulation);
+    boolean createdOK = configureAndInit(GUI.frame, simulation, visAvailable);
     return createdOK;
   }
 

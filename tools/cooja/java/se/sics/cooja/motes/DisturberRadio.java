@@ -242,7 +242,7 @@ public class DisturberRadio extends Radio {
     return config;
   }
 
-  public void setConfigXML(Collection<Element> configXML) {
+  public void setConfigXML(Collection<Element> configXML, boolean visAvailable) {
     for (Element element : configXML) {
       String name = element.getName();
 
