@@ -31,8 +31,8 @@
 
 package se.sics.cooja.radiomediums;
 import java.util.Collection;
+import java.util.Observable;
 import java.util.Observer;
-
 import org.jdom.Element;
 
 import se.sics.cooja.*;
@@ -43,8 +43,11 @@ import se.sics.cooja.interfaces.*;
  *
  * @author Fredrik Osterlind
  */
-@ClassDescription("Silent Radio")
+@ClassDescription("No radio traffic")
 public class SilentRadioMedium extends RadioMedium {
+
+  public SilentRadioMedium(Simulation simulation) {
+  }
 
   public void registerMote(Mote mote, Simulation sim) {
     // Do nothing
@@ -65,6 +68,11 @@ public class SilentRadioMedium extends RadioMedium {
   public void addRadioMediumObserver(Observer observer) {
     // Do nothing
   }
+  
+  public Observable getRadioMediumObservable() {
+    // Return empty observable
+    return new Observable();
+  }
 
   public void deleteRadioMediumObserver(Observer observer) {
     // Do nothing
@@ -82,7 +90,7 @@ public class SilentRadioMedium extends RadioMedium {
     return null;
   }
   
-  public boolean setConfigXML(Collection<Element> configXML) {
+  public boolean setConfigXML(Collection<Element> configXML, boolean visAvailable) {
     return true;
   }
 
