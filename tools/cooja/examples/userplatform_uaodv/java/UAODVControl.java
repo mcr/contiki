@@ -43,7 +43,7 @@ import se.sics.cooja.interfaces.*;
  * @author Fredrik Osterlind
  */
 @ClassDescription("uAODV Control")
-@VisPluginType(VisPluginType.SIM_PLUGIN)
+@PluginType(PluginType.SIM_PLUGIN)
 public class UAODVControl extends VisPlugin {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(UAODVControl.class);
@@ -54,8 +54,8 @@ public class UAODVControl extends VisPlugin {
 	/**
 	 * @param simulationToVisualize Current simulation
 	 */
-	public UAODVControl(Simulation simulationToVisualize) {
-    super("uAODV Control (uses RS232)");
+	public UAODVControl(Simulation simulationToVisualize, GUI gui) {
+    super("uAODV Control (uses RS232)", gui);
     mySimulation = simulationToVisualize;
 
     Container mainPane = this.getContentPane();
