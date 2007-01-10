@@ -342,7 +342,7 @@ public class Simulation extends Observable implements Runnable {
         if (radioMediumClass != null) {
           // Create radio medium specified in config
           try {
-            currentRadioMedium = RadioMedium.generateInterface(radioMediumClass, this);
+            currentRadioMedium = RadioMedium.generateRadioMedium(radioMediumClass, this);
           } catch (Exception e) {
             currentRadioMedium = null;
             logger.warn("Could not load radio medium class: "
