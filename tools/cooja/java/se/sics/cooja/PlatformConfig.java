@@ -149,12 +149,12 @@ public class PlatformConfig {
    * instead.
    * 
    * @param callingClass
-   *          Class which value belongs to
+   *          Class which value belong to
    * @param key
    *          Key
-   * @param value
-   *          Element of array
-   * @return User platform
+   * @param arrayElement
+   *          Value or array element
+   * @return User platform defining arguments or null
    */
   public File getUserPlatformDefining(Class callingClass, String key, String arrayElement) {
 

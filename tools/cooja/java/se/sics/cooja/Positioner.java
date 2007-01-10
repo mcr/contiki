@@ -72,11 +72,11 @@ public abstract class Positioner {
       double endZ) {
     try {
       // Generating positioner
-      Constructor constr = positionerClass.getConstructor(new Class[]{
+      Constructor constr = positionerClass.getConstructor(new Class[] {
           int.class, double.class, double.class, double.class, double.class,
-          double.class, double.class});
-      return (Positioner) constr.newInstance(new Object[]{totalNumberOfMotes,
-          startX, endX, startY, endY, startZ, endZ});
+          double.class, double.class });
+      return (Positioner) constr.newInstance(new Object[] { totalNumberOfMotes,
+          startX, endX, startY, endY, startZ, endZ });
     } catch (Exception e) {
       logger.fatal("Exception when creating " + positionerClass + ": " + e);
       return null;

@@ -41,6 +41,7 @@ package se.sics.cooja;
  * different memory sections, not covering the entire range
  * between the start address and the end address of this memory.
  *
+ * @see se.sics.cooja.SectionMoteMemory
  * @author Fredrik Osterlind
  */
 public interface MoteMemory {
@@ -49,7 +50,7 @@ public interface MoteMemory {
    * Clears the entire memory.
    */
   public void clearMemory();
-  
+
   /**
    * Returns a memory segment.
    * 
