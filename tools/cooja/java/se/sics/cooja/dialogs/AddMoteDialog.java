@@ -484,7 +484,7 @@ public class AddMoteDialog extends JDialog {
             ipDistClass = ipDistributor;
         }
 
-        IPDistributor ipDistributor = IPDistributor.generateInterface(
+        IPDistributor ipDistributor = IPDistributor.generateIPDistributor(
             ipDistClass, newMotes);
 
         if (ipDistributor == null) {
