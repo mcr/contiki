@@ -190,7 +190,7 @@ public abstract class RadioMedium {
    * 
    * @return Radio medium instance
    */
-  public static final RadioMedium generateInterface(
+  public static final RadioMedium generateRadioMedium(
       Class<? extends RadioMedium> radioMediumClass, Simulation simulation)
       throws NoSuchMethodException, InvocationTargetException,
       IllegalAccessException, InstantiationException {
