@@ -342,7 +342,7 @@ public class MantisMoteTypeDialog extends JDialog {
     libraryCreatedOK = false;
 
     JPanel progressPanel = new JPanel(new BorderLayout());
-    final JDialog progressDialog = new JDialog(myDialog, null);
+    final JDialog progressDialog = new JDialog(myDialog, (String) null);
     JProgressBar progressBar;
     JButton button;
     final MessageList taskOutput;
