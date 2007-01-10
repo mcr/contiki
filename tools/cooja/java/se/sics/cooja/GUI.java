@@ -773,7 +773,7 @@ public class GUI {
       Class<? extends RadioMedium> radioMediumClass = gui.tryLoadClass(gui,
           RadioMedium.class, radioMediumClassName);
       
-      RadioMedium radioMedium = RadioMedium.generateInterface(radioMediumClass, simulation);
+      RadioMedium radioMedium = RadioMedium.generateRadioMedium(radioMediumClass, simulation);
       simulation.setRadioMedium(radioMedium);
     } catch (Exception e) {
       logger.fatal(">> Failed to load radio medium, aborting: "
