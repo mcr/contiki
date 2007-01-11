@@ -41,7 +41,7 @@ int uninitialized_counter;
 JNIEXPORT void JNICALL
 Java_Level5_doCount(JNIEnv *env, jobject obj)
 {
- fprintf(stderr, ">> DATA_counter=\t%i\tBSS_counter=\t%i\n", initialized_counter++, uninitialized_counter++);
+ fprintf(stderr, ">> DATA_counter=\t%i\tBSS_counter=\t%i\n", ++initialized_counter, ++uninitialized_counter);
  fflush(stderr);
 }
 JNIEXPORT jint JNICALL
