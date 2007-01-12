@@ -35,7 +35,7 @@
 
 struct symbols {
   const char *name;
-  const char *value;
+  void *value;
 };
 
 extern const int symbols_nelts;
