@@ -39,8 +39,6 @@ import se.sics.cooja.*;
 import se.sics.cooja.contikimote.ContikiMoteType;
 
 /**
- * EXPERIMENTAL:
- * 
  * Allows a user to observe several different parts of the simulator, stopping a
  * simulation whenever an object changes.
  * 
@@ -156,7 +154,6 @@ public class EventListener extends VisPlugin {
     for (Class<? extends MoteInterface> moteTypeClass : allMoteTypesDups) {
       if (!allMoteTypes.contains(moteTypeClass)) {
         allMoteTypes.add(moteTypeClass);
-        logger.debug("Available mote interface class: " + moteTypeClass);
       }
     }
     JPanel interfacePanel = new JPanel();
@@ -165,6 +162,7 @@ public class EventListener extends VisPlugin {
     for (Class<? extends MoteInterface> moteTypeClass : allMoteTypes) {
       JCheckBox checkBox = new JCheckBox(GUI.getDescriptionOf(moteTypeClass),
           false);
+      checkBox.setToolTipText(moteTypeClass.getName());
       checkBox.putClientProperty("interface_class", moteTypeClass);
       checkBox.addActionListener(interfaceCheckBoxListener);
 
