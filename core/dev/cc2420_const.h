@@ -33,6 +33,14 @@
 #ifndef CC2420_CONST_H
 #define CC2420_CONST_H
 
+/*
+ * All constants are from the Chipcon CC2420 Data Sheet that at one
+ * point in time could be found at
+ * http://www.chipcon.com/files/CC2420_Data_Sheet_1_4.pdf
+ *
+ * The page numbers below refer to pages in this document.
+ */
+
 /* Page 27. */
 enum cc2420_status_byte {
   CC2420_XOSC16M_STABLE = 6,
