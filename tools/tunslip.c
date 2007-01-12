@@ -970,7 +970,7 @@ main(int argc, char **argv)
       if (slipfd == -1) err(1, "can't open siodev ``/dev/%s''", siodev);
   } else {
     static const char *siodevs[] = {
-      "cuad0", "ttyUSB0", "ucom0", "cuaU0"
+      "ttyUSB0", "cuaU0", "ucom0" /* linux, fbsd6, fbsd5 */
     };
     int i;
     for(i = 0; i < 3; i++) {
