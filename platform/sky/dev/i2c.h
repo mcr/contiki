@@ -32,9 +32,15 @@
 #ifndef I2C_H
 #define I2C_H
 
+/*
+ * On the Tmote sky access to I2C/SPI/UART0 must always be exclusive.
+ */
+#define I2C_ENABLE()  (i2c_enable())
+#define I2C_DISABLE() (i2c_disable())
+
 void     i2c_enable(void);
 void     i2c_disable(void);
-void     i2c_start(void);
+int      i2c_start(void);
 void     i2c_stop(void);
 
 int      i2c_write(unsigned);
