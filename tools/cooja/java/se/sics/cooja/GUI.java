@@ -1662,7 +1662,7 @@ public class GUI {
         try {
           newSim = loadSimulationConfig(loadFile, quick);
         } catch (UnsatisfiedLinkError e) {
-          logger.warn("Could not reopen libraries");
+          logger.warn("Could not reopen libraries: " + e.getMessage());
           newSim = null;
         }
         if (newSim != null) {
