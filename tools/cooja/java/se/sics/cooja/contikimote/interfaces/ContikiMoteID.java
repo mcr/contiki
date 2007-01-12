@@ -100,9 +100,9 @@ public class ContikiMoteID extends MoteID implements ContikiMoteInterface {
       setMoteID = false;
       moteMem.setIntValueOf("simMoteID", moteID);
       moteMem.setByteValueOf("simMoteIDChanged", (byte) 1);
+      setChanged();
+      notifyObservers();
     }
-    setChanged();
-    notifyObservers();
   }
 
   public void doActionsAfterTick() {
