@@ -1229,7 +1229,7 @@ public class GUI {
       ((VisPlugin) plugin).dispose();
     }
 
-    if (askUser && startedPlugins.isEmpty()) {
+    if (getSimulation() != null && askUser && startedPlugins.isEmpty()) {
       String s1 = "Remove";
       String s2 = "Cancel";
       Object[] options = { s1, s2 };
