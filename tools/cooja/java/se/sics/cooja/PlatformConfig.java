@@ -302,8 +302,8 @@ public class PlatformConfig {
     String val = currentValues.getProperty(callingClass.getName() + "." + id);
 
     if (val == null) {
-      logger.warn("Could not find key named '" + callingClass.getName() + "."
-          + id + "'");
+      /*logger.warn("Could not find key named '" + callingClass.getName() + "."
+          + id + "'");*/
       return defaultValue;
     }
 
