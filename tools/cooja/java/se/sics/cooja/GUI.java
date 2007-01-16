@@ -2523,12 +2523,16 @@ public class GUI {
     }
 
     // For all started visplugins, check if they have a zorder property
-    for (JInternalFrame plugin : getDesktopPane().getAllFrames()) {
-      if (plugin.getClientProperty("zorder") != null) {
-        getDesktopPane().setComponentZOrder(plugin,
-            ((Integer) plugin.getClientProperty("zorder")).intValue());
-        plugin.putClientProperty("zorder", null);
+    try {
+      for (JInternalFrame plugin : getDesktopPane().getAllFrames()) {
+        if (plugin.getClientProperty("zorder") != null) {
+          getDesktopPane().setComponentZOrder(plugin,
+              ((Integer) plugin.getClientProperty("zorder")).intValue());
+          plugin.putClientProperty("zorder", null);
+        }
       }
+    } catch (Exception e) {
+      // Ignore errors
     }
 
     return true;
