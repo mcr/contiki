@@ -63,7 +63,7 @@ u8_t slip_send(void);
  */
 int slip_input_byte(unsigned char c);
 
-u8_t slip_write(u8_t *ptr, int len);
+u8_t slip_write(const void *ptr, int len);
 
 /* Did we receive any bytes lately? */
 extern u8_t slip_active;
