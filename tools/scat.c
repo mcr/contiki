@@ -55,10 +55,12 @@
 #define SLIP_ESC_END 0334
 #define SLIP_ESC_ESC 0335
 
+#ifndef BAUDRATE
 #define BAUDRATE B115200
 //#define BAUDRATE B57600
 //#define BAUDRATE B38400
 //#define BAUDRATE B19200
+#endif
 
 void
 stty_telos(int fd)
