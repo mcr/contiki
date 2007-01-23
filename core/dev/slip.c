@@ -118,8 +118,9 @@ slip_send(void)
 }
 
 u8_t
-slip_write(u8_t *ptr, int len)
+slip_write(const void *_ptr, int len)
 {
+  const u8_t *ptr = _ptr;
   u16_t i;
   u8_t c;
 
