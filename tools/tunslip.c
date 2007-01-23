@@ -684,10 +684,12 @@ tun_to_serial(int infd, int outfd)
   write_to_serial(outfd, uip.inbuf, size);
 }
 
+#ifndef BAUDRATE
 #define BAUDRATE B115200
 //#define BAUDRATE B57600
 //#define BAUDRATE B38400
 //#define BAUDRATE B19200
+#endif
 
 void
 stty_telos(int fd)
