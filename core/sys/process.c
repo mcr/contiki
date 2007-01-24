@@ -68,7 +68,6 @@ struct event_data {
 
 #ifdef PROCESS_CONF_FASTPOLL
 #define NPOLLS PROCESS_CONF_FASTPOLL
-#include <signal.h>
 static volatile unsigned npolls;
 static struct process *needpoll[NPOLLS];
 #endif
