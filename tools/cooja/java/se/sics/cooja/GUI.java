@@ -2462,8 +2462,9 @@ public class GUI {
             .getChildren()) {
           if (pluginSubElement.getName().equals("mote_arg")) {
             int moteNr = Integer.parseInt(pluginSubElement.getText());
-            if (moteNr > 0 && moteNr < simulation.getMotesCount())
+            if (moteNr >= 0 && moteNr < simulation.getMotesCount()) {
               mote = simulation.getMote(moteNr);
+            }
           }
         }
 
