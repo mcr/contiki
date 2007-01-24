@@ -69,8 +69,9 @@ typedef unsigned long off_t;
 #define XMEM_ERASE_UNIT_SIZE (64*1024L)
 
 /* Use the first 64k of external flash for codeprop. */
-#define EEPROMFS_ADDR_CODEPROP  0x00000
+#define EEPROMFS_ADDR_CODEPROP  (1 * XMEM_ERASE_UNIT_SIZE)
 
+#define CC2420_RADIO
 /*
  * SPI bus configuration for the TMote Sky.
  */
