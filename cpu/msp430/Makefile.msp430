@@ -40,7 +40,7 @@ CONTIKI_SOURCEFILES        += $(CONTIKI_TARGET_SOURCEFILES)
 
 ### Compiler definitions
 CC       = msp430-gcc
-LD       = msp430-ld
+LD       = msp430-gcc
 AS       = msp430-as
 AR       = msp430-ar
 OBJCOPY  = msp430-objcopy
@@ -103,8 +103,9 @@ loader-init.o: ${CONTIKI_TARGET}/loader/loader-init.S
 
 .PHONY: symbols.c symbols.h
 ifdef CORE
-symbols.c symbols.h:
-	@${CONTIKI}/tools/msp430-make-symbols $(CORE)
+symbols.c:
+#	@${CONTIKI}/tools/msp430-make-symbols $(CORE)
+	$(NM) $(CORE) | awk -f ../../tools/mknmlist > symbols.c
 else
 symbols.c symbols.h:
 	@${CONTIKI}/tools/make-empty-symbols
