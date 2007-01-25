@@ -38,7 +38,6 @@
 #include "malloc.h"
 char mymem[256];
 #else
-#include <sys/unistd.h>
 #include "contiki.h"
 #include "lib/malloc.h"
 #endif /* !MALLOC_TEST */
