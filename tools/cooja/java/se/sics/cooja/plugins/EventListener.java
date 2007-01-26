@@ -30,13 +30,13 @@
 package se.sics.cooja.plugins;
 
 import java.awt.event.*;
-import java.awt.event.ActionListener;
 import java.util.*;
 import javax.swing.*;
 import org.apache.log4j.Logger;
 
 import se.sics.cooja.*;
 import se.sics.cooja.contikimote.ContikiMoteType;
+import se.sics.cooja.interfaces.*;
 
 /**
  * Allows a user to observe several different parts of the simulator, stopping a
@@ -145,6 +145,15 @@ public class EventListener extends VisPlugin {
     // Create selectable interfaces list (only supports Contiki mote types)
     Vector<Class<? extends MoteInterface>> allMoteTypes = new Vector<Class<? extends MoteInterface>>();
     Vector<Class<? extends MoteInterface>> allMoteTypesDups = new Vector<Class<? extends MoteInterface>>();
+
+    // Add standard interfaces
+    allMoteTypesDups.add(Button.class);
+    allMoteTypesDups.add(LED.class);
+    allMoteTypesDups.add(Log.class);
+    allMoteTypesDups.add(PIR.class);
+    allMoteTypesDups.add(Position.class);
+    allMoteTypesDups.add(Radio.class);
+
     for (MoteType moteType : simulationToControl.getMoteTypes()) {
       if (moteType instanceof ContikiMoteType) {
         allMoteTypesDups.addAll(((ContikiMoteType) moteType)
