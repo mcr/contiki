@@ -325,7 +325,7 @@ public abstract class Visualizer2D extends VisPlugin {
     Position newXYValues = transformPixelToPositon(new Point(x, y));
 
     if (moteMoveBeginTime <= 0 || System.currentTimeMillis() - moteMoveBeginTime > 300) {
-      int returnValue = JOptionPane.showConfirmDialog(myPlugin, "Mote mote to"
+      int returnValue = JOptionPane.showConfirmDialog(myPlugin, "Move mote to"
           + "\nX=" + newXYValues.getXCoordinate() + "\nY="
           + newXYValues.getYCoordinate() + "\nZ="
           + moteToMove.getInterfaces().getPosition().getZCoordinate());
