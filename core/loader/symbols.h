@@ -30,16 +30,16 @@
  *
  * @(#)$Id$
  */
-#ifndef __SYMBOLS_DEF_H__
-#define __SYMBOLS_DEF_H__
+#ifndef __SYMBOLS_H__
+#define __SYMBOLS_H__
 
 struct symbols {
   const char *name;
-  const char *value;
+  void *value;
 };
 
 extern const int symbols_nelts;
 
-extern const struct symbols symbols[];
+extern const struct symbols symbols[/* symbols_nelts */];
 
-#endif /* __SYMBOLS_DEF_H__ */
+#endif /* __SYMBOLS_H__ */
