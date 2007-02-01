@@ -437,9 +437,9 @@ public class GUI {
     JComponent newContentPane = gui.getDesktopPane();
     newContentPane.setOpaque(true);
     frame.setContentPane(newContentPane);
-    frame.setLocationRelativeTo(null);
 
     frame.setSize(700, 700);
+    frame.setLocationRelativeTo(null);
     frame.addWindowListener(gui.guiEventHandler);
 
     // Display the window.
