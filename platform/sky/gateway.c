@@ -122,7 +122,7 @@ main(int argc, char **argv)
   msp430_cpu_init();
   clock_init();
   leds_init();
-  leds_toggle(LEDS_RED | LEDS_GREEN | LEDS_BLUE);
+  leds_toggle(LEDS_ALL);
   slip_arch_init();		/* Must come before first printf */
   printf("Starting %s "
 	 "($Id$)\n", __FILE__);
@@ -130,7 +130,7 @@ main(int argc, char **argv)
   sensors_light_init();
   cc2420_init();
   xmem_init();
-  leds_toggle(LEDS_RED | LEDS_GREEN | LEDS_BLUE);
+  leds_toggle(LEDS_ALL);
   /*
    * Hardware initialization done!
    */
