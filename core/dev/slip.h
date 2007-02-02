@@ -75,7 +75,7 @@ extern u16_t slip_rubbish, slip_twopackets, slip_overflow, slip_ip_drop;
  * These machine dependent functions and an interrupt service routine
  * must be provided externally (slip_arch.c).
  */
-void slip_arch_init(void);
+void slip_arch_init(unsigned long ubr);
 void slip_arch_writeb(unsigned char c);
 
 #endif /* __SLIP_H__ */

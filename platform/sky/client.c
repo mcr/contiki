@@ -105,7 +105,7 @@ main(int argc, char **argv)
   clock_init();
   leds_init();
   leds_toggle(LEDS_ALL);
-  slip_arch_init();		/* Must come before first printf */
+  slip_arch_init(BAUD2UBR(115200)); /* Must come before first printf */
   printf("Starting %s "
 	 "($Id$)\n", __FILE__);
   ds2411_init();
