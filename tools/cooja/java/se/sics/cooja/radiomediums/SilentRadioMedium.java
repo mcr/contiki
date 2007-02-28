@@ -57,7 +57,7 @@ public class SilentRadioMedium extends RadioMedium {
     // Do nothing
   }
 
-  public void registerRadioInterface(Radio radio, Position position, Simulation sim) {
+  public void registerRadioInterface(Radio radio, Simulation sim) {
     // Do nothing
   }
 

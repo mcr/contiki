@@ -38,6 +38,7 @@ import org.apache.log4j.Logger;
 
 import se.sics.cooja.*;
 import se.sics.cooja.interfaces.Position;
+import se.sics.cooja.interfaces.Radio;
 
 /**
  * A Traffic Visualizer visualizes radio traffic by painting lines between
@@ -124,11 +125,10 @@ public class VisTraffic extends Visualizer2D {
    *          Graphics to paint on
    */
   protected void paintConnection(PaintedConnection connection, Graphics g2d) {
-    Point sourcePixelPosition = transformPositionToPixel(connection.radioConnection
-        .getSourcePosition());
+    Point sourcePixelPosition = transformPositionToPixel(connection.radioConnection.getSource().getPosition());
     g2d.setColor(connection.getColor(simulation.isRunning()));
-    for (Position destPosition : connection.radioConnection
-        .getDestinationPositons()) {
+    for (Radio destRadio : connection.radioConnection.getDestinations()) {
+      Position destPosition = destRadio.getPosition();
       Point destPixelPosition = transformPositionToPixel(destPosition);
       g2d.drawLine(sourcePixelPosition.x, sourcePixelPosition.y,
           destPixelPosition.x, destPixelPosition.y);
