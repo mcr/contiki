@@ -36,7 +36,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import org.jdom.Element;
 
-import se.sics.cooja.interfaces.Position;
 import se.sics.cooja.interfaces.Radio;
 
 /**
@@ -79,7 +78,7 @@ public abstract class RadioMedium {
   public abstract void unregisterMote(Mote mote, Simulation sim);
 
   /**
-   * Register a radio to this medium at a given position.
+   * Register a radio to this radio medium.
    * 
    * Concerning radio data, this radio will be treated the same way as a mote's
    * radio. This method can be used to add non-mote radio devices, such as a
@@ -87,16 +86,13 @@ public abstract class RadioMedium {
    * 
    * @param radio
    *          Radio
-   * @param position
-   *          Position
    * @param sim
    *          Simulation holding radio
    */
-  public abstract void registerRadioInterface(Radio radio, Position position,
-      Simulation sim);
+  public abstract void registerRadioInterface(Radio radio, Simulation sim);
 
   /**
-   * Unregisters a radio interface from this medium.
+   * Unregister given radio interface from this medium.
    * 
    * @param radio
    *          Radio interface to unregister
