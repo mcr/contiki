@@ -45,13 +45,13 @@
 
 struct queuebuf {
   u16_t len;
-  u8_t data[NETBUF_SIZE + NETBUF_HDR_SIZE];
+  u8_t data[RIMEBUF_SIZE + RIMEBUF_HDR_SIZE];
 };
 
 struct queuebuf_ref {
   u16_t len;
   u8_t *ref;
-  u8_t hdr[NETBUF_HDR_SIZE];
+  u8_t hdr[RIMEBUF_HDR_SIZE];
   u8_t hdrlen;
 };
 
@@ -74,7 +74,7 @@ queuebuf_new_from_rimebuf(void)
   if(rimebuf_is_reference()) {
     rbuf = memb_alloc(&refbufmem);
     if(rbuf != NULL) {
-      rbuf->len = rimebuf_len();
+      rbuf->len = rimebuf_datalen();
       rbuf->ref = rimebuf_reference_ptr();
       rbuf->hdrlen = rimebuf_copyto_hdr(rbuf->hdr);
     }
