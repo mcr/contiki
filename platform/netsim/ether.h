@@ -59,7 +59,7 @@ void ether_client_init(int port);
 void ether_tick(void);
 
 
-u16_t ether_client_poll(void);
+u16_t ether_client_poll(u8_t *buf, int len);
 void  ether_server_poll(void);
 
 void ether_put(char *packet, int len, int src_x, int src_y);

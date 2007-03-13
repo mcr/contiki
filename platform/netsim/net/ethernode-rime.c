@@ -37,56 +37,46 @@
 
 #include "ethernode.h"
 
-#include "net/uip-fw.h"
-#include "net/hc.h"
-#include "net/tapdev.h"
+#include "net/rime.h"
 
-#include "node-id.h"
+PROCESS(ethernode_rime_process, "Ethernode Rime driver");
 
-PROCESS(ethernode_drv_process, "Ethernode driver");
-
-enum { NULLEVENT };
 /*---------------------------------------------------------------------------*/
-u8_t
-ethernode_drv_send(void)
+PROCESS_THREAD(ethernode_rime_process, ev, data)
 {
-  /*  printf("%d: ethernode_drv_send\n", node_id);*/
-  uip_len = hc_compress(&uip_buf[UIP_LLH_LEN], uip_len);
-
-  return ethernode_send();
-}
-/*---------------------------------------------------------------------------*/
-PROCESS_THREAD(ethernode_drv_process, ev, data)
-{
-  static int drop = 3;
   PROCESS_BEGIN();
 
+  printf("ethernode_rime_process\n");
+  
   while(1) {
-    process_poll(&ethernode_drv_process);
+    process_poll(&ethernode_rime_process);
     PROCESS_WAIT_EVENT();
     
     /* Poll Ethernet device to see if there is a frame avaliable. */
-    uip_len = ethernode_poll(uip_buf, UIP_BUFSIZE);
+    {
+      u16_t len;
 
-    if(uip_len > 0) {
-      /*      printf("%d: new packet len %d\n", node_id, uip_len);*/
+      rimebuf_clear();
+      
+      len = ethernode_poll(rimebuf_dataptr(), RIMEBUF_SIZE);
 
-      /*      if((random_rand() % drop) <= drop / 2) {
-	printf("Bropp\n");
-	} else*/ {
+      if(len > 0) {
 
-	uip_len = hc_inflate(&uip_buf[UIP_LLH_LEN], uip_len);
-
-	tapdev_send_raw();
-	/*    if(uip_fw_forward() == UIP_FW_LOCAL)*/ {
-	  /* A frame was avaliable (and is now read into the uip_buf), so
-	     we process it. */
-	  tcpip_input();
-	}
+	rimebuf_set_datalen(len);
+	
+	printf("ethernode_rime_process: received len %d\n",
+	       len);
+	abc_input_packet();
       }
     }
   }
   PROCESS_END();
     
+}
+/*---------------------------------------------------------------------------*/
+void
+abc_arch_send(u8_t *buf, int len)
+{
+  ethernode_send_buf(buf, len);
 }
 /*---------------------------------------------------------------------------*/
