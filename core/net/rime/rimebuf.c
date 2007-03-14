@@ -76,11 +76,15 @@ rimebuf_copyfrom(u8_t *from, u16_t len)
 }
 /*---------------------------------------------------------------------------*/
 void
-rimebuf_copy_reference(void)
+rimebuf_compact(void)
 {
   if(rimebuf_is_reference()) {
     memcpy(&rimebuf[RIMEBUF_HDR_SIZE], rimebuf_reference_ptr(),
 	   rimebuf_datalen());
+  } else {
+    memcpy(&rimebuf[RIMEBUF_HDR_SIZE], &rimebuf[bufptr + RIMEBUF_HDR_SIZE],
+	   rimebuf_datalen());
+    bufptr = 0;
   }
 }
 /*---------------------------------------------------------------------------*/
