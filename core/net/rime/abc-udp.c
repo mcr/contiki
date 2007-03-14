@@ -63,9 +63,8 @@ PROCESS_THREAD(abc_udp_process, ev, data)
 }
 /*---------------------------------------------------------------------------*/
 void
-abc_arch_send(u8_t *buf, int len)
+abc_driver_send(void)
 {
-  uip_udp_packet_send(c, uip_buf, uip_len);
-  return 1;
+  uip_udp_packet_send(c, rimebuf_hdrptr(), rimebuf_totlen());
 }
 /*---------------------------------------------------------------------------*/
