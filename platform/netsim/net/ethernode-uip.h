@@ -1,5 +1,4 @@
-/*
- * Copyright (c) 2004, Swedish Institute of Computer Science.
+/* Copyright (c) 2004, Swedish Institute of Computer Science.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,61 +31,15 @@
  *
  * $Id$
  */
+#ifndef __ETHERNODE_UIP_H__
+#define __ETHERNODE_UIP_H__
 
 #include "contiki.h"
 
-#include "ethernode.h"
+PROCESS_NAME(ethernode_uip_process);
 
-#include "net/uip-fw.h"
-#include "net/hc.h"
-#include "net/tapdev.h"
+u8_t ethernode_uip_send(void);
 
-#include "node-id.h"
+u8_t ethernode_uip_send(void);
 
-PROCESS(ethernode_drv_process, "Ethernode driver");
-
-enum { NULLEVENT };
-/*---------------------------------------------------------------------------*/
-u8_t
-ethernode_drv_send(void)
-{
-  /*  printf("%d: ethernode_drv_send\n", node_id);*/
-  uip_len = hc_compress(&uip_buf[UIP_LLH_LEN], uip_len);
-
-  return ethernode_send();
-}
-/*---------------------------------------------------------------------------*/
-PROCESS_THREAD(ethernode_drv_process, ev, data)
-{
-  static int drop = 3;
-  PROCESS_BEGIN();
-
-  while(1) {
-    process_poll(&ethernode_drv_process);
-    PROCESS_WAIT_EVENT();
-    
-    /* Poll Ethernet device to see if there is a frame avaliable. */
-    uip_len = ethernode_poll(uip_buf, UIP_BUFSIZE);
-
-    if(uip_len > 0) {
-      /*      printf("%d: new packet len %d\n", node_id, uip_len);*/
-
-      /*      if((random_rand() % drop) <= drop / 2) {
-	printf("Bropp\n");
-	} else*/ {
-
-	uip_len = hc_inflate(&uip_buf[UIP_LLH_LEN], uip_len);
-
-	tapdev_send_raw();
-	/*    if(uip_fw_forward() == UIP_FW_LOCAL)*/ {
-	  /* A frame was avaliable (and is now read into the uip_buf), so
-	     we process it. */
-	  tcpip_input();
-	}
-      }
-    }
-  }
-  PROCESS_END();
-    
-}
-/*---------------------------------------------------------------------------*/
+#endif /* __ETHERNODE_UIP_H__ */

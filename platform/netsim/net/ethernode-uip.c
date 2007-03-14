@@ -37,47 +37,56 @@
 
 #include "ethernode.h"
 
-#include "net/rime.h"
+#include "net/uip-fw.h"
+#include "net/hc.h"
+#include "net/tapdev.h"
 
-PROCESS(ethernode_rime_process, "Ethernode Rime driver");
+#include "node-id.h"
 
+PROCESS(ethernode_uip_process, "Ethernode driver");
+
+enum { NULLEVENT };
 /*---------------------------------------------------------------------------*/
-PROCESS_THREAD(ethernode_rime_process, ev, data)
+u8_t
+ethernode_uip_send(void)
 {
+  /*  printf("%d: ethernode_uip_send\n", node_id);*/
+  uip_len = hc_compress(&uip_buf[UIP_LLH_LEN], uip_len);
+
+  return ethernode_send();
+}
+/*---------------------------------------------------------------------------*/
+PROCESS_THREAD(ethernode_uip_process, ev, data)
+{
+  static int drop = 3;
   PROCESS_BEGIN();
 
-  /*  printf("ethernode_rime_process\n");*/
-  
   while(1) {
-    process_poll(&ethernode_rime_process);
+    process_poll(&ethernode_uip_process);
     PROCESS_WAIT_EVENT();
     
     /* Poll Ethernet device to see if there is a frame avaliable. */
-    {
-      u16_t len;
+    uip_len = ethernode_poll(uip_buf, UIP_BUFSIZE);
 
-      rimebuf_clear();
-      
-      len = ethernode_poll(rimebuf_dataptr(), RIMEBUF_SIZE);
+    if(uip_len > 0) {
+      /*      printf("%d: new packet len %d\n", node_id, uip_len);*/
 
-      if(len > 0) {
+      /*      if((random_rand() % drop) <= drop / 2) {
+	printf("Bropp\n");
+	} else*/ {
 
-	rimebuf_set_datalen(len);
-	
-	/*	printf("ethernode_rime_process: received len %d\n",
-		len);*/
-	abc_input_packet();
+	uip_len = hc_inflate(&uip_buf[UIP_LLH_LEN], uip_len);
+
+	tapdev_send_raw();
+	/*    if(uip_fw_forward() == UIP_FW_LOCAL)*/ {
+	  /* A frame was avaliable (and is now read into the uip_buf), so
+	     we process it. */
+	  tcpip_input();
+	}
       }
     }
   }
   PROCESS_END();
     
-}
-/*---------------------------------------------------------------------------*/
-void
-abc_driver_send(void)
-{
-  /*  printf("ethernode_rime: sending %d bytes\n", rimebuf_totlen());*/
-  ethernode_send_buf(rimebuf_hdrptr(), rimebuf_totlen());
 }
 /*---------------------------------------------------------------------------*/

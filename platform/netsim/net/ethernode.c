@@ -90,6 +90,7 @@ do_send(u8_t type, u8_t dest, struct hdr *hdr, int len)
 
   ++state.seqno;
 
+  /*  printf("ether_send len %d\n", len);*/
   return ether_send((char *)hdr, len);
   
 }
