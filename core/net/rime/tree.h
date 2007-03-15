@@ -33,25 +33,26 @@
 
 /**
  * \file
- *         Header file for the Rime mesh routing protocol
+ *         A brief description of what this file is.
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
 
-#ifndef __MESH_H__
-#define __MESH_H__
+#ifndef __TREE_H__
+#define __TREE_H__
 
-#include "net/rime.h"
-
-struct mesh_callbacks {
-  void (* sent)(void);
-  void (* recv)(rimeaddr_t *from);
+struct tree_callbacks {
+  void (* recv)(rimeaddr_t *originator, u8_t seqno,
+		u8_t hops, u8_t retransmissions);
 };
 
-void mesh_setup(const struct mesh_callbacks *callbacks,
-	       void (* data_send_function)(rimeaddr_t *next));
-int mesh_send(rimeaddr_t *dest);
+void tree_setup(const struct tree_callbacks *callbacks);
 
-void mesh_data_received(rimeaddr_t *from);
+void tree_send(void);
 
-#endif /* __MESH_H__ */
+void tree_set_sink(int should_be_sink);
+int tree_depth(void);
+
+#define TREE_MAX_DEPTH 63
+
+#endif /* __TREE_H__ */

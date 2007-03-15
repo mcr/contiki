@@ -281,8 +281,8 @@ static const struct uc_callbacks rrep_callbacks = {rrep_packet_received};
 static const struct nf_callbacks rreq_callbacks = {rreq_packet_received, NULL};
 /*---------------------------------------------------------------------------*/
 void
-mesh_init(const struct mesh_callbacks *callbacks,
-	  void (* send_datapacket)(rimeaddr_t *next))
+mesh_setup(const struct mesh_callbacks *callbacks,
+	   void (* send_datapacket)(rimeaddr_t *next))
 {
   uc_setup(&mc.dataconn, CHANNEL_MESH_DATA, &data_callbacks);
   uc_setup(&mc.rrepconn, CHANNEL_MESH_RREP, &rrep_callbacks);
