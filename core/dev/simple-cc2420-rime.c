@@ -67,7 +67,7 @@ simple_cc2420_rime_init(void)
 }
 /*---------------------------------------------------------------------------*/
 void
-abc_driver_send(void)
+rime_driver_send(void)
 {
   /*  printf("simple_cc2420_rime: sending %d bytes\n", rimebuf_totlen());*/
   simple_cc2420_send(rimebuf_hdrptr(), rimebuf_totlen());
