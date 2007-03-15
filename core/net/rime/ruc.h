@@ -45,19 +45,19 @@
 
 struct ruc_conn;
 
-struct ruc_ulayer {
+struct ruc_callbacks {
   int (* recv)(struct ruc_conn *c, node_id_t from, u8_t seqno);
   void (* sent)(struct ruc_conn *c);
 };
 
 struct ruc_conn {
   struct suc_conn c;
-  const struct ruc_ulayer *u;
+  const struct ruc_callbacks *u;
   u8_t state;
 };
 
 void ruc_setup(struct ruc_conn *c, u16_t channel,
-	       const struct ruc_ulayer *u);
+	       const struct ruc_callbacks *u);
 
 int ruc_send(struct ruc_conn *c, node_id_t receiver_id);
 

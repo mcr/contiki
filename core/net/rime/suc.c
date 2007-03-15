@@ -53,11 +53,11 @@ recv_from_uc(struct uc_conn *uc, node_id_t from_id)
   }
 }
 /*---------------------------------------------------------------------------*/
-static const struct uc_ulayer suc = {recv_from_uc};
+static const struct uc_callbacks suc = {recv_from_uc};
 /*---------------------------------------------------------------------------*/
 void
 suc_setup(struct suc_conn *c, u16_t channel,
-	  const struct suc_ulayer *u)
+	  const struct suc_callbacks *u)
 {
   uc_setup(&c->c, channel, &suc);
   c->u = u;

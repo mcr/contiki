@@ -46,17 +46,17 @@
 
 struct ibc_conn;
 
-struct ibc_ulayer {
+struct ibc_callbacks {
   void (* recv)(struct ibc_conn *ptr, node_id_t sender);
 };
 
 struct ibc_conn {
   struct abc_conn c;
-  const struct ibc_ulayer *u;
+  const struct ibc_callbacks *u;
 };
 
 void ibc_setup(struct ibc_conn *c, u16_t channel,
-	       const struct ibc_ulayer *u);
+	       const struct ibc_callbacks *u);
 int ibc_send(struct ibc_conn *c);
 
 #endif /* __IBC_H__ */

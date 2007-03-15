@@ -57,11 +57,11 @@ recv_from_abc(struct abc_conn *bc)
   c->u->recv(c, hdr->sender_id);
 }
 /*---------------------------------------------------------------------------*/
-static const struct abc_ulayer ibc = {recv_from_abc};
+static const struct abc_callbacks ibc = {recv_from_abc};
 /*---------------------------------------------------------------------------*/
 void
 ibc_setup(struct ibc_conn *c, u16_t channel,
-	  const struct ibc_ulayer *u)
+	  const struct ibc_callbacks *u)
 {
   abc_setup(&c->c, channel, &ibc);
   c->u = u;

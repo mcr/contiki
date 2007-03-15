@@ -46,20 +46,20 @@
 
 struct ccsabc_conn;
 
-struct ccsabc_ulayer {
+struct ccsabc_callbacks {
   void (* recv)(struct ccsabc_conn *c);
   void (* sent)(struct ccsabc_conn *c);
 };
 
 struct ccsabc_conn {
   struct sabc_conn conn;
-  const struct ccsabc_ulayer *u;
+  const struct ccsabc_callbacks *u;
   unsigned char state;
   unsigned char c;
 };
 
 void ccsabc_setup(struct ccsabc_conn *c, u16_t channel,
-		  const struct ccsabc_ulayer *u);
+		  const struct ccsabc_callbacks *u);
 
 int ccsabc_send_stubborn(struct ccsabc_conn *c, clock_time_t t);
 void ccsabc_cancel(struct ccsabc_conn *c);

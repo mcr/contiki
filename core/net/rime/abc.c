@@ -57,10 +57,10 @@ LIST(channels);
 /*---------------------------------------------------------------------------*/
 void
 abc_setup(struct abc_conn *c, u16_t channel,
-	  const struct abc_ulayer *ulayer)
+	  const struct abc_callbacks *callbacks)
 {
   c->channel = channel;
-  c->u = ulayer;
+  c->u = callbacks;
 
   list_add(channels, c);
 }

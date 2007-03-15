@@ -41,7 +41,7 @@
 #ifndef __RIME_DEBUG_H__
 #define __RIME_DEBUG_H__
 
-#define DEBUG_LEVEL 0
+#define DEBUG_LEVEL 1
 
 #if DEBUG_LEVEL > 0
 #include <stdio.h>

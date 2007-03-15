@@ -60,11 +60,11 @@ recv_from_ibc(struct ibc_conn *ibc, node_id_t from_id)
   }
 }
 /*---------------------------------------------------------------------------*/
-static const struct ibc_ulayer uc = {recv_from_ibc};
+static const struct ibc_callbacks uc = {recv_from_ibc};
 /*---------------------------------------------------------------------------*/
 void
 uc_setup(struct uc_conn *c, u16_t channel,
-	 const struct uc_ulayer *u)
+	 const struct uc_callbacks *u)
 {
   ibc_setup(&c->c, channel, &uc);
   c->u = u;
