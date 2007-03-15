@@ -40,6 +40,8 @@
 
 #include "net/rime/queuebuf.h"
 
+#include <string.h> /* for memcpy() */
+
 #define QUEUEBUF_NUM 2
 #define QUEUEBUF_REF_NUM 2
 
