@@ -48,7 +48,7 @@
 struct sibc_conn;
 
 struct sibc_callbacks {
-  void (* recv)(struct sibc_conn *c, node_id_t from);
+  void (* recv)(struct sibc_conn *c, rimeaddr_t *from);
   void (* sent)(struct sibc_conn *c);
 };
 

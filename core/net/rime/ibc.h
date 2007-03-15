@@ -42,12 +42,12 @@
 #define __IBC_H__
 
 #include "net/rime/abc.h"
-#include "net/rime/node-id-t.h"
+#include "net/rime/rimeaddr.h"
 
 struct ibc_conn;
 
 struct ibc_callbacks {
-  void (* recv)(struct ibc_conn *ptr, node_id_t sender);
+  void (* recv)(struct ibc_conn *ptr, rimeaddr_t *sender);
 };
 
 struct ibc_conn {

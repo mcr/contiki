@@ -41,27 +41,25 @@
 #ifndef __NEIGHBOR_H__
 #define __NEIGHBOR_H__
 
-#include "net/rime/node-id-t.h"
+#include "net/rime/rimeaddr.h"
 
 struct neighbor {
   u16_t signal;
   u16_t time;
-  node_id_t nodeid;
+  rimeaddr_t addr;
   u8_t hopcount;
 };
 
 void neighbor_init(void);
 void neighbor_periodic(int max_time);
 
-void neighbor_add(node_id_t nodeid, u8_t hopcount, u16_t signal);
+void neighbor_add(rimeaddr_t *addr, u8_t hopcount, u16_t signal);
 void neighbor_update(struct neighbor *n, u8_t hopcount, u16_t signal);
 
-void neighbor_remove(node_id_t nodeid);
+void neighbor_remove(rimeaddr_t *addr);
 
-struct neighbor *neighbor_find(node_id_t nodeid);
+struct neighbor *neighbor_find(rimeaddr_t *addr);
 struct neighbor *neighbor_best(void);
-
-#define NEIGHBOR_NODEID(n) ((n)->nodeid)
 
 
 #endif /* __NEIGHBOR_H__ */

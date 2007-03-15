@@ -39,6 +39,7 @@
  */
 
 #include "net/rime.h"
+#include "node-id.h"
 /*---------------------------------------------------------------------------*/
 void
 rime_init(void)
@@ -46,5 +47,13 @@ rime_init(void)
   ctimer_init();
   queuebuf_init();
   rimebuf_clear();
+
+  rimeaddr_node_addr.u16 = node_id;
+}
+/*---------------------------------------------------------------------------*/
+void
+rime_input_packet(void)
+{
+  abc_input_packet();
 }
 /*---------------------------------------------------------------------------*/

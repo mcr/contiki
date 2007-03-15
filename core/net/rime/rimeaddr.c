@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006, Swedish Institute of Computer Science.
+ * Copyright (c) 2007, Swedish Institute of Computer Science.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,27 +38,21 @@
  *         Adam Dunkels <adam@sics.se>
  */
 
-#ifndef __RUC_H__
-#define __RUC_H__
+#include "rimeaddr.h"
 
-#include "net/rime/suc.h"
+rimeaddr_t rimeaddr_node_addr;
+const rimeaddr_t rimeaddr_null = {.u16 = 0};
 
-struct ruc_conn;
-
-struct ruc_callbacks {
-  int (* recv)(struct ruc_conn *c, rimeaddr_t *from, u8_t seqno);
-  void (* sent)(struct ruc_conn *c);
-};
-
-struct ruc_conn {
-  struct suc_conn c;
-  const struct ruc_callbacks *u;
-  u8_t state;
-};
-
-void ruc_setup(struct ruc_conn *c, u16_t channel,
-	       const struct ruc_callbacks *u);
-
-int ruc_send(struct ruc_conn *c, rimeaddr_t *receiver);
-
-#endif /* __RRUC_H__ */
+/*---------------------------------------------------------------------------*/
+void
+rimeaddr_copy(rimeaddr_t *dest, const rimeaddr_t *src)
+{
+  dest->u16 = src->u16;
+}
+/*---------------------------------------------------------------------------*/
+int
+rimeaddr_cmp(const rimeaddr_t *addr1, const rimeaddr_t *addr2)
+{
+  return addr1->u16 == addr2->u16;
+}
+/*---------------------------------------------------------------------------*/

@@ -48,8 +48,8 @@
 struct nf_conn;
 
 struct nf_callbacks {
-  int (* recv)(struct nf_conn *c, node_id_t from,
-	       node_id_t originator, u8_t seqno, u8_t hops);
+  int (* recv)(struct nf_conn *c, rimeaddr_t *from,
+	       rimeaddr_t *originator, u8_t seqno, u8_t hops);
   void (* sent)(struct nf_conn *c);
 };
 
@@ -59,7 +59,7 @@ struct nf_conn {
   struct queuebuf *buf;
   u8_t packets_received;
   u8_t last_originator_seqno;
-  node_id_t last_originator_id;
+  rimeaddr_t last_originator;
   const struct nf_callbacks *u;
 };
 

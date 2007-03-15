@@ -44,12 +44,12 @@
 
 /*---------------------------------------------------------------------------*/
 static void
-recv_from_ibc(struct ibc_conn *ibc, node_id_t from_id)
+recv_from_ibc(struct ibc_conn *ibc, rimeaddr_t *from)
 {
   register struct sibc_conn *c = (struct sibc_conn *)ibc;
   /*  DEBUGF(3, "sibc: recv_from_ibc from %d\n", from_id);*/
   if(c->u->recv != NULL) {
-    c->u->recv(c, from_id);
+    c->u->recv(c, from);
   }
 }
 /*---------------------------------------------------------------------------*/
