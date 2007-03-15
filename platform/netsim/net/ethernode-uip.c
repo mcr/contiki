@@ -58,7 +58,6 @@ ethernode_uip_send(void)
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(ethernode_uip_process, ev, data)
 {
-  static int drop = 3;
   PROCESS_BEGIN();
 
   while(1) {
