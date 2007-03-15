@@ -66,7 +66,7 @@ PROCESS_THREAD(ethernode_rime_process, ev, data)
 	
 	/*	printf("ethernode_rime_process: received len %d\n",
 		len);*/
-	abc_input_packet();
+	rime_input();
       }
     }
   }
@@ -75,7 +75,7 @@ PROCESS_THREAD(ethernode_rime_process, ev, data)
 }
 /*---------------------------------------------------------------------------*/
 void
-abc_driver_send(void)
+rime_driver_send(void)
 {
   /*  printf("ethernode_rime: sending %d bytes\n", rimebuf_totlen());*/
   ethernode_send_buf(rimebuf_hdrptr(), rimebuf_totlen());
