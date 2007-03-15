@@ -38,6 +38,9 @@
  *         Björn Grönvall <bg@sics.se>
  */
 
+#include "net/uip.h"
+
+#define asmv(arg) __asm__ __volatile__(arg)
 /*---------------------------------------------------------------------------*/
 #ifdef UIP_ARCH_IPCHKSUM
 u16_t
