@@ -34,7 +34,7 @@
 #include "contiki-esb.h"
 
 static struct uip_fw_netif tr1001if =
-  {UIP_FW_NETIF(0,0,0,0, 0,0,0,0, tr1001_drv_send)};
+  {UIP_FW_NETIF(0,0,0,0, 0,0,0,0, tr1001_uip_send)};
 
 static struct uip_fw_netif slipif =
   {UIP_FW_NETIF(172,16,0,0, 255,255,255,0, slip_send)};
@@ -51,9 +51,10 @@ init_net(void)
   
   rs232_set_input(slip_input_byte);
 
-  tr1001_init();
-  process_start(&tr1001_drv_process, NULL);
+  process_start(&tr1001_uip_process, NULL);
   process_start(&slip_process, NULL);
+  process_start(&uip_fw_process, NULL);
+  process_start(&tcpip_process, NULL);
   
   if (NODE_ID > 0) {
     /* node id is set, construct an ip address based on the node id */
