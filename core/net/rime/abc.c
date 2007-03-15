@@ -75,7 +75,7 @@ abc_send(struct abc_conn *c)
     
     hdr->channel = c->channel;
     rimebuf_compact();
-    abc_driver_send();
+    rime_driver_send();
     return 1;
   }
   return 0;
