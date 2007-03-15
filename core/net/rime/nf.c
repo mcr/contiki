@@ -118,7 +118,8 @@ recv_from_ibc(struct ibc_conn *ibc, node_id_t from_id)
     if(!(hdr->originator_id == c->last_originator_id &&
 	 hdr->originator_seqno <= c->last_originator_seqno)) {
 
-      if(c->u->recv(c, from_id, hdr->originator_id, hops)) {
+      if(c->u->recv(c, from_id, hdr->originator_id, hdr->originator_seqno,
+		    hops)) {
 	
 	if(queuebuf != NULL) {
 	  queuebuf_to_rimebuf(queuebuf);

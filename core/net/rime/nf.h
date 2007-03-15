@@ -49,7 +49,7 @@ struct nf_conn;
 
 struct nf_ulayer {
   int (* recv)(struct nf_conn *c, node_id_t from,
-	       node_id_t originator, u8_t hops);
+	       node_id_t originator, u8_t seqno, u8_t hops);
   void (* sent)(struct nf_conn *c);
 };
 
