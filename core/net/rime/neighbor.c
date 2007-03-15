@@ -113,6 +113,7 @@ neighbor_add(node_id_t nodeid, u8_t nhopcount, u16_t nsignal)
   hopcount = 0;
   signal = USHRT_MAX;
 
+  n = 0;
   for(i = 0; i < MAX_NEIGHBORS; ++i) {
     if(neighbors[i].nodeid == 0 ||
        neighbors[i].nodeid == nodeid) {
