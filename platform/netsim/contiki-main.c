@@ -36,6 +36,7 @@
 #include "contiki.h"
 #include "contiki-net.h"
 #include "contiki-lib.h"
+#include "net/rime.h"
 
 #include "net/tapdev.h"
 #include "net/tapdev-drv.h"
@@ -43,6 +44,7 @@
 #include "net/ethernode-uip.h"
 #include "net/ethernode-rime.h"
 #include "net/ethernode.h"
+
 #include "ether.h"
 
 /*#include <stdio.h>
