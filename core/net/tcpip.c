@@ -188,7 +188,7 @@ udp_attach(struct uip_udp_conn *conn,
 }
 /*---------------------------------------------------------------------------*/
 struct uip_udp_conn *
-udp_new(uip_ipaddr_t *ripaddr, u16_t port, void *appstate)
+udp_new(const uip_ipaddr_t *ripaddr, u16_t port, void *appstate)
 {
   struct uip_udp_conn *c;
   uip_udp_appstate_t *s;
@@ -403,7 +403,6 @@ PROCESS_THREAD(tcpip_process, ev, data)
   
   while(1) {
     PROCESS_YIELD();
-
     eventhandler(ev, data);
   }
   
