@@ -56,7 +56,7 @@ PROCESS_THREAD(radio_sniffer_process, ev, data)
   static int len;
   PROCESS_BEGIN();
 
-  tr1001_init();
+  tr1001_init(&radio_sniffer_process);
 
   printf("Radio sniffer started\n");
   
