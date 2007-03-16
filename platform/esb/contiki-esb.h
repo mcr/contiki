@@ -49,7 +49,7 @@
 #include "dev/serial.h"
 #include "dev/slip.h"
 #include "dev/tr1001.h"
-#include "net/tr1001-drv.h"
+#include "net/tr1001-uip.h"
 
 #include "node-id.h"
 
