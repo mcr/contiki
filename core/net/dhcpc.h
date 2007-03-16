@@ -38,7 +38,7 @@ struct dhcpc_state {
   char state;
   struct uip_udp_conn *conn;
   struct etimer etimer;
-  clock_time_t ticks;
+  u32_t ticks;
   const void *mac_addr;
   int mac_len;
   
