@@ -72,8 +72,6 @@
 
 #include "net/rime/rimebuf.h"
 
-#include "net/rime/rime-types.h"
-
 #include "net/rime/channel-assignments.h"
 
 #include "net/rime/rime-debug.h"
