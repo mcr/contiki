@@ -101,5 +101,12 @@ memb_free(struct memb_blocks *m, void *ptr)
   return -1;
 }
 /*---------------------------------------------------------------------------*/
+int
+memb_inmemb(struct memb_blocks *m, void *ptr)
+{
+  return (char *)ptr >= (char *)m->mem &&
+    (char *)ptr < (char *)m->mem + (m->num * m->size);
+}
+/*---------------------------------------------------------------------------*/
 
 /** @} */
