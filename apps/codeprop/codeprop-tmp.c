@@ -115,6 +115,7 @@ struct codeprop_udphdr {
 
 struct codeprop_tcphdr {
   u16_t len;
+  u16_t pad;
 };
 
 static void uipcall(void *state);
