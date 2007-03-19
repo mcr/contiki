@@ -46,7 +46,7 @@ struct tree_callbacks {
 		u8_t hops, u8_t retransmissions);
 };
 
-void tree_setup(const struct tree_callbacks *callbacks);
+void tree_open(const struct tree_callbacks *callbacks);
 
 void tree_send(void);
 

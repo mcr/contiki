@@ -77,7 +77,7 @@ struct abc_conn {
  *             when a packet arrives on the channel.
  *
  */
-void abc_setup(struct abc_conn *c, u16_t channel,
+void abc_open(struct abc_conn *c, u16_t channel,
 	       const struct abc_callbacks *u);
 
 /**
@@ -90,7 +90,7 @@ void abc_setup(struct abc_conn *c, u16_t channel,
  *             before this function is called.
  *
  *             The parameter c must point to an abc connection that
- *             must have previously been set up with abc_setup().
+ *             must have previously been set up with abc_open().
  *
  */
 int abc_send(struct abc_conn *c);

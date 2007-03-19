@@ -62,7 +62,7 @@ PROCESS_THREAD(test_abc_process, ev, data)
 {
   PROCESS_BEGIN();
 
-  abc_setup(&abc, 128, &abc_call);
+  abc_open(&abc, 128, &abc_call);
 
   while(1) {
     static struct etimer et;

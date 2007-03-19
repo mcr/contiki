@@ -55,7 +55,7 @@ struct ibc_conn {
   const struct ibc_callbacks *u;
 };
 
-void ibc_setup(struct ibc_conn *c, u16_t channel,
+void ibc_open(struct ibc_conn *c, u16_t channel,
 	       const struct ibc_callbacks *u);
 int ibc_send(struct ibc_conn *c);
 

@@ -48,7 +48,7 @@ struct mesh_callbacks {
   void (* recv)(rimeaddr_t *from);
 };
 
-void mesh_setup(const struct mesh_callbacks *callbacks,
+void mesh_open(const struct mesh_callbacks *callbacks,
 	       void (* data_send_function)(rimeaddr_t *next));
 int mesh_send(rimeaddr_t *dest);
 

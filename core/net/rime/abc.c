@@ -56,7 +56,7 @@ LIST(channels);
 
 /*---------------------------------------------------------------------------*/
 void
-abc_setup(struct abc_conn *c, u16_t channel,
+abc_open(struct abc_conn *c, u16_t channel,
 	  const struct abc_callbacks *callbacks)
 {
   c->channel = channel;

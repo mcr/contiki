@@ -59,7 +59,7 @@ struct sibc_conn {
   const struct sibc_callbacks *u;
 };
 
-void sibc_setup(struct sibc_conn *c, u16_t channel,
+void sibc_open(struct sibc_conn *c, u16_t channel,
 		const struct sibc_callbacks *u);
 
 int sibc_send_stubborn(struct sibc_conn *c, clock_time_t t);

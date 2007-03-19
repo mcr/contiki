@@ -60,7 +60,7 @@ struct suc_conn {
   rimeaddr_t receiver;
 };
 
-void suc_setup(struct suc_conn *c, u16_t channel,
+void suc_open(struct suc_conn *c, u16_t channel,
 	       const struct suc_callbacks *u);
 
 int suc_send_stubborn(struct suc_conn *c, rimeaddr_t *receiver);

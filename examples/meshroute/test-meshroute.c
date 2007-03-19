@@ -71,7 +71,7 @@ PROCESS_THREAD(test_mesh_process, ev, data)
 {
   PROCESS_BEGIN();
 
-  mesh_setup(&callbacks, NULL);
+  mesh_open(&callbacks, NULL);
 
   button_sensor.activate();
 

@@ -63,7 +63,7 @@ struct nf_conn {
   const struct nf_callbacks *u;
 };
 
-void nf_setup(struct nf_conn *c, u16_t channel,
+void nf_open(struct nf_conn *c, u16_t channel,
 	      const struct nf_callbacks *u);
 
 int nf_send(struct nf_conn *c);

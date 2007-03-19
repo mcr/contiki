@@ -49,7 +49,7 @@ struct rbc_conn {
   u16_t num_acked;
 };
 
-void rbc_setup(struct rbc_conn *c, u16_t channel);
+void rbc_open(struct rbc_conn *c, u16_t channel);
 int rbc_send(struct rbc_conn *c, struct lcpbuf *buf);
 int rbc_received(struct rbc_conn *c, u8_t **data, u16_t *len);
 

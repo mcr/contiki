@@ -83,7 +83,7 @@ PROCESS_THREAD(test_tree_process, ev, data)
 {
   PROCESS_BEGIN();
 
-  tree_setup(NULL);
+  tree_open(NULL);
   
   while(1) {
 
