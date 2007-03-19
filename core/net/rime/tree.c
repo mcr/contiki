@@ -193,6 +193,13 @@ tree_open(const struct tree_callbacks *cb)
 }
 /*---------------------------------------------------------------------------*/
 void
+tree_close(void)
+{
+  sibc_close(&sibc_conn);
+  ruc_close(&ruc_conn);
+}
+/*---------------------------------------------------------------------------*/
+void
 tree_set_sink(int should_be_sink)
 {
   if(should_be_sink) {

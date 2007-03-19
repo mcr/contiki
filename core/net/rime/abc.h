@@ -80,6 +80,8 @@ struct abc_conn {
 void abc_open(struct abc_conn *c, u16_t channel,
 	       const struct abc_callbacks *u);
 
+void abc_close(struct abc_conn *c);
+
 /**
  * \brief      Send an anonymous best-effort broadcast packet
  * \param c    The abc connection on which the packet should be sent

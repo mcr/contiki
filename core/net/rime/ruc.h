@@ -58,6 +58,7 @@ struct ruc_conn {
 
 void ruc_open(struct ruc_conn *c, u16_t channel,
 	       const struct ruc_callbacks *u);
+void ruc_close(struct ruc_conn *c);
 
 int ruc_send(struct ruc_conn *c, rimeaddr_t *receiver);
 

@@ -71,6 +71,12 @@ ccsabc_open(struct ccsabc_conn *c, u16_t channel,
   sabc_open(&c->c, channel, &ccsabc);
 }
 /*---------------------------------------------------------------------------*/
+void
+ccsabc_close(struct ccsabc_conn *c)
+{
+  sabc_close(&c->c);
+}
+/*---------------------------------------------------------------------------*/
 int
 ccsabc_send_stubborn(struct ccsabc_conn *c, clock_time_t t)
 {

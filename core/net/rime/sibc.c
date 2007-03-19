@@ -63,6 +63,13 @@ sibc_open(struct sibc_conn *c, u16_t channel,
   c->u = u;
 }
 /*---------------------------------------------------------------------------*/
+void
+sibc_close(struct sibc_conn *c)
+{
+  ibc_close(&c->c);
+  ctimer_stop(&c->t);
+}
+/*---------------------------------------------------------------------------*/
 static void
 send(void *ptr)
 {

@@ -65,6 +65,7 @@ struct nf_conn {
 
 void nf_open(struct nf_conn *c, u16_t channel,
 	      const struct nf_callbacks *u);
+void nf_close(struct nf_conn *c);
 
 int nf_send(struct nf_conn *c);
 

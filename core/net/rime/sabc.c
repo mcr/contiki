@@ -64,6 +64,13 @@ sabc_open(struct sabc_conn *c, u16_t channel,
   c->u = u;
 }
 /*---------------------------------------------------------------------------*/
+void
+sabc_close(struct sabc_conn *c)
+{
+  abc_close(&c->c);
+  ctimer_setop(&c->t);
+}
+/*---------------------------------------------------------------------------*/
 static void
 send(void *ptr)
 {

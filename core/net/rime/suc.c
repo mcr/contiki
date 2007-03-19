@@ -63,6 +63,13 @@ suc_open(struct suc_conn *c, u16_t channel,
   c->u = u;
 }
 /*---------------------------------------------------------------------------*/
+void
+suc_close(struct suc_conn *c)
+{
+  uc_close(&c->c);
+  ctimer_stop(&c->t);
+}
+/*---------------------------------------------------------------------------*/
 static void
 send(void *ptr)
 {

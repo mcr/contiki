@@ -47,6 +47,7 @@ struct tree_callbacks {
 };
 
 void tree_open(const struct tree_callbacks *callbacks);
+void tree_close(void);
 
 void tree_send(void);
 

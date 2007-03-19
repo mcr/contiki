@@ -292,6 +292,14 @@ mesh_open(const struct mesh_callbacks *callbacks,
   send_datapacket_handler = send_datapacket;
 }
 /*---------------------------------------------------------------------------*/
+void
+mesh_close(void)
+{
+  uc_close(&mc.dataconn);
+  uc_close(&mc.rrepconn);
+  nf_close(&mc.rreqconn);
+}
+/*---------------------------------------------------------------------------*/
 int
 mesh_send(rimeaddr_t *to)
 {

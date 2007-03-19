@@ -54,4 +54,6 @@ int mesh_send(rimeaddr_t *dest);
 
 void mesh_data_received(rimeaddr_t *from);
 
+void mesh_close(void);
+
 #endif /* __MESH_H__ */

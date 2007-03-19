@@ -120,6 +120,12 @@ ruc_open(struct ruc_conn *c, u16_t channel,
   c->u = u;
 }
 /*---------------------------------------------------------------------------*/
+void
+ruc_close(struct ruc_conn *c)
+{
+  suc_close(&c->c);
+}
+/*---------------------------------------------------------------------------*/
 int
 ruc_send(struct ruc_conn *c, rimeaddr_t *receiver)
 {

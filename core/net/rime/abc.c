@@ -65,6 +65,12 @@ abc_open(struct abc_conn *c, u16_t channel,
   list_add(channels, c);
 }
 /*---------------------------------------------------------------------------*/
+void
+abc_close(struct abc_conn *c)
+{
+  list_remove(channels, c);
+}
+/*---------------------------------------------------------------------------*/
 int
 abc_send(struct abc_conn *c)
 {

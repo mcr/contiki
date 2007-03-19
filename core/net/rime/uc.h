@@ -56,6 +56,8 @@ struct uc_conn {
 
 void uc_open(struct uc_conn *c, u16_t channel,
 	      const struct uc_callbacks *u);
+void uc_close(struct uc_conn *c);
+
 int uc_send(struct uc_conn *c, rimeaddr_t *receiver);
 
 #endif /* __UC_H__ */

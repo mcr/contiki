@@ -61,6 +61,7 @@ struct sibc_conn {
 
 void sibc_open(struct sibc_conn *c, u16_t channel,
 		const struct sibc_callbacks *u);
+void sibc_close(struct sibc_conn *c);
 
 int sibc_send_stubborn(struct sibc_conn *c, clock_time_t t);
 void sibc_cancel(struct sibc_conn *c);

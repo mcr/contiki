@@ -70,6 +70,12 @@ uc_open(struct uc_conn *c, u16_t channel,
   c->u = u;
 }
 /*---------------------------------------------------------------------------*/
+void
+uc_close(struct uc_conn *c)
+{
+  ibc_close(&c->c);
+}
+/*---------------------------------------------------------------------------*/
 int
 uc_send(struct uc_conn *c, rimeaddr_t *receiver)
 {

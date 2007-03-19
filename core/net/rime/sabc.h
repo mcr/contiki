@@ -98,7 +98,7 @@ struct sabc_conn {
  */
 void sabc_open(struct sabc_conn *c, u16_t channel,
 		const struct sabc_callbacks *u);
-
+void sabc_close(struct sabc_conn *c);
 
 /**
  * \brief      Send a stubborn message.

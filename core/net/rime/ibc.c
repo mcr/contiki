@@ -71,6 +71,12 @@ ibc_open(struct ibc_conn *c, u16_t channel,
   c->u = u;
 }
 /*---------------------------------------------------------------------------*/
+void
+ibc_close(struct ibc_conn *c)
+{
+  abc_close(&c->c);
+}
+/*---------------------------------------------------------------------------*/
 int
 ibc_send(struct ibc_conn *c)
 {
