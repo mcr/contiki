@@ -224,6 +224,8 @@ radio_off(void)
   onoroff = OFF;
   rxoff();
   rxclear();
+
+  ENERGEST_OFF(ENERGEST_TYPE_RECEIVE);
 }
 /*---------------------------------------------------------------------------*/
 /*
@@ -233,6 +235,8 @@ radio_off(void)
 void
 radio_on(void)
 {
+  ENERGEST_ON(ENERGEST_TYPE_RECEIVE);
+  
   onoroff = ON;
   rxon();
   rxclear();
@@ -618,6 +622,8 @@ tr1001_send(u8_t *packet, u16_t len)
 
   LOG("tr1001_send: sending %d bytes\n", len);
 
+  ENERGEST_ON(ENERGEST_TYPE_TRANSMIT);
+  
   /* Prepare the transmission. */
   prepare_transmission(NUM_SYNCHBYTES);
 
@@ -664,6 +670,8 @@ tr1001_send(u8_t *packet, u16_t len)
     rxclear();
   }
 
+  ENERGEST_OFF(ENERGEST_TYPE_TRANSMIT);
+  
   return UIP_FW_OK;
 }
 /*---------------------------------------------------------------------------*/
