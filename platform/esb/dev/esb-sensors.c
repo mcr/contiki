@@ -44,6 +44,7 @@
 #include "contiki-esb.h"
 
 HWCONF_PIN(SENSORSWITCH, 5, 5);
+
 /*---------------------------------------------------------------------------*/
 void
 esb_sensors_init(void)
@@ -56,11 +57,13 @@ void
 esb_sensors_on(void)
 {
   SENSORSWITCH_CLEAR();
+  ENERGEST_ON(ENERGEST_TYPE_SENSORS);
 }
 /*---------------------------------------------------------------------------*/
 void
 esb_sensors_off(void)
 {
   SENSORSWITCH_SET();
+  ENERGEST_OFF(ENERGEST_TYPE_SENSORS);
 }
 /*---------------------------------------------------------------------------*/
