@@ -52,4 +52,6 @@
 #include "sys/loader.h"
 #include "sys/clock.h"
 
+#include "lib/energest.h"
+
 #endif /* __CONTIKI_H__ */
