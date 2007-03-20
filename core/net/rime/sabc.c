@@ -68,7 +68,7 @@ void
 sabc_close(struct sabc_conn *c)
 {
   abc_close(&c->c);
-  ctimer_setop(&c->t);
+  ctimer_stop(&c->t);
 }
 /*---------------------------------------------------------------------------*/
 static void
@@ -101,6 +101,7 @@ sabc_send_stubborn(struct sabc_conn *c, clock_time_t t)
   if(c->buf == NULL) {
     return 0;
   }
+  send(c);
   ctimer_set(&c->t, t, send, c);
   return 1;
   

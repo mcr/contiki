@@ -117,7 +117,6 @@ void sabc_close(struct sabc_conn *c);
  */
 int sabc_send_stubborn(struct sabc_conn *c, clock_time_t t);
 
-
 /**
  * \brief      Cancel the current stubborn message.
  * \param c    A sabc connection that must have been previously set up
