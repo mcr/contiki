@@ -42,7 +42,6 @@
 #define __RIME_DEBUG_H__
 
 #define DEBUG_LEVEL 0
-
 #if DEBUG_LEVEL > 0
 #include <stdio.h>
 #define DEBUGF(level, ...) if(DEBUG_LEVEL <= level) {printf("%.*s %lu ", 6 - level, "            ", clock_time() / CLOCK_SECOND); printf(__VA_ARGS__);}
