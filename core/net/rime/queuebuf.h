@@ -52,4 +52,8 @@ void queuebuf_free(struct queuebuf *b);
 void queuebuf_from_rimebuf(struct queuebuf *b);
 void queuebuf_to_rimebuf(struct queuebuf *b);
 
+void *queuebuf_dataptr(struct queuebuf *b);
+int queuebuf_datalen(struct queuebuf *b);
+
+
 #endif /* __QUEUEBUF_H__ */

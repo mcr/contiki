@@ -116,3 +116,23 @@ queuebuf_to_rimebuf(struct queuebuf *b)
   }
 }
 /*---------------------------------------------------------------------------*/
+void *
+queuebuf_dataptr(struct queuebuf *b)
+{
+  struct queuebuf_ref *r;
+  
+  if(memb_inmemb(&bufmem, b)) {
+    return b->data;
+  } else if(memb_inmemb(&refbufmem, b)) {
+    r = (struct queuebuf_ref *)b;
+    return r->ref;
+  }
+  return NULL;
+}
+/*---------------------------------------------------------------------------*/
+int
+queuebuf_datalen(struct queuebuf *b)
+{
+  return b->len;
+}
+/*---------------------------------------------------------------------------*/
