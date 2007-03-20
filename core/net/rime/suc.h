@@ -67,7 +67,7 @@ void suc_close(struct suc_conn *c);
 int suc_send_stubborn(struct suc_conn *c, rimeaddr_t *receiver);
 void suc_cancel(struct suc_conn *c);
 
-int suc_send_uc(struct suc_conn *c, rimeaddr_t *receiver);
+int suc_send(struct suc_conn *c, rimeaddr_t *receiver);
 
 void suc_set_timer(struct suc_conn *c, clock_time_t t);
 
