@@ -41,18 +41,24 @@
 #include "rimeaddr.h"
 
 rimeaddr_t rimeaddr_node_addr;
-const rimeaddr_t rimeaddr_null = {.u16 = 0};
+const rimeaddr_t rimeaddr_null = {.u16 = {0}};
 
 /*---------------------------------------------------------------------------*/
 void
 rimeaddr_copy(rimeaddr_t *dest, const rimeaddr_t *src)
 {
-  dest->u16 = src->u16;
+  dest->u16[0] = src->u16[0];
 }
 /*---------------------------------------------------------------------------*/
 int
 rimeaddr_cmp(const rimeaddr_t *addr1, const rimeaddr_t *addr2)
 {
-  return addr1->u16 == addr2->u16;
+  return addr1->u16[0] == addr2->u16[0];
+}
+/*---------------------------------------------------------------------------*/
+void
+rimeaddr_set_node_addr(rimeaddr_t *t)
+{
+  rimeaddr_copy(&rimeaddr_node_addr, t);
 }
 /*---------------------------------------------------------------------------*/
