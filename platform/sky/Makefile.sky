@@ -4,7 +4,7 @@
 ARCH=msp430.c minileds.c watchdog.c light.c button.c spi.c ds2411.c \
      rom.c xmem.c i2c.c \
      simple-cc2420.c simple-cc2420-rime.c cc2420_uart0.c irq.c \
-     node-id.c sensors.c button-sensor.c
+     node-id.c sensors.c button-sensor.c cfs-xmem.c
 
 CONTIKI_TARGET_DIRS = . dev apps net loader
 ifndef CONTIKI_TARGET_MAIN
