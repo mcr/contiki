@@ -50,10 +50,10 @@ struct rudolph0_conn;
 
 struct rudolph0_callbacks {
   int (* new_file)(struct rudolph0_conn *c);
-  void (* received_file)(struct rudolph0_conn *c, int cfs_fd);
+  void (* received_file)(struct rudolph0_conn *c);
 };
 
-#define RUDOLPH0_DATASIZE 32
+#define RUDOLPH0_DATASIZE 64
 
 struct rudolph0_hdr {
   u8_t type;
@@ -80,5 +80,8 @@ void rudolph0_open(struct rudolph0_conn *c, u16_t channel,
 		   const struct rudolph0_callbacks *cb);
 void rudolph0_close(struct rudolph0_conn *c);
 void rudolph0_send(struct rudolph0_conn *c, int cfs_fd);
+
+void rudolph0_set_version(struct rudolph0_conn *c, int version);
+int rudolph0_version(struct rudolph0_conn *c);
 
 #endif /* __RUDOLPH0_H__ */
