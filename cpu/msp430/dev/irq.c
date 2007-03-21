@@ -46,7 +46,7 @@ interrupt(PORT1_VECTOR)
      irq_p1(void)
 {
   if(sensors_handle_irq(IRQ_PORT1)) {
-    LPM_AWAKE();
+    LPM4_EXIT;
   }
   P1IFG = 0x00;
 }
@@ -56,7 +56,7 @@ interrupt(PORT2_VECTOR)
      irq_p2(void)
 {
   if(sensors_handle_irq(IRQ_PORT2)) {
-    LPM_AWAKE();
+    LPM4_EXIT;
   }
   P2IFG = 0x00;
 }
@@ -65,7 +65,7 @@ interrupt (ADC_VECTOR)
      irq_adc(void)
 {
   if(sensors_handle_irq(IRQ_ADC)) {
-    LPM_AWAKE();
+    LPM4_EXIT;
   }
 }
 /*---------------------------------------------------------------------------*/
