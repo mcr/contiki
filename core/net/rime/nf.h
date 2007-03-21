@@ -41,9 +41,10 @@
 #ifndef __NF_H__
 #define __NF_H__
 
-#include "net/rime/uc.h"
+
 #include "net/rime/ctimer.h"
 #include "net/rime/queuebuf.h"
+#include "net/rime/uibc.h"
 
 struct nf_conn;
 
@@ -54,7 +55,7 @@ struct nf_callbacks {
 };
 
 struct nf_conn {
-  struct ibc_conn c;
+  struct uibc_conn c;
   struct ctimer t;
   struct queuebuf *buf;
   u8_t packets_received;
