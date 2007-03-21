@@ -47,8 +47,6 @@ rime_init(void)
   ctimer_init();
   queuebuf_init();
   rimebuf_clear();
-
-  rimeaddr_node_addr.u16 = node_id;
 }
 /*---------------------------------------------------------------------------*/
 void
