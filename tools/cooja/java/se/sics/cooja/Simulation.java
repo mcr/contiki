@@ -56,7 +56,7 @@ public class Simulation extends Observable implements Runnable {
 
   private Vector<MoteType> moteTypes = new Vector<MoteType>();
 
-  private int delayTime = 100;
+  private int delayTime = 5;
 
   private int currentSimulationTime = 0;
 
