@@ -1389,6 +1389,7 @@ public class ContikiMoteTypeDialog extends JDialog {
         }
       }
 
+      logger.info("-- Compiling --");
       logger.info("Project dirs: " + sourceDirs);
       logger.info("Project sources: " + sourceFileNames);
       logger.info("Compiler flags: " + ccFlags);
@@ -1509,14 +1510,14 @@ public class ContikiMoteTypeDialog extends JDialog {
       }
       input.close();
 
-      BufferedReader err = new BufferedReader(new InputStreamReader(p
-          .getErrorStream()));
-      if (err.ready())
-        logger.warn("Error occured during scan:");
-      while ((line = err.readLine()) != null) {
-        logger.warn(line);
-      }
-      err.close();
+//      BufferedReader err = new BufferedReader(new InputStreamReader(p
+//          .getErrorStream()));
+//      if (err.ready())
+//        logger.warn("Error occured during scan:");
+//      while ((line = err.readLine()) != null) {
+//        logger.warn(line);
+//      }
+//      err.close();
     } catch (IOException err) {
       logger.fatal("Error while scanning for processes: " + err);
       err.printStackTrace();
