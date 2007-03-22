@@ -79,6 +79,31 @@ public class CreateSimDialog extends JDialog {
   public static boolean showDialog(Frame parentFrame, Simulation simulationToConfigure) {
     final CreateSimDialog myDialog = new CreateSimDialog(parentFrame, simulationToConfigure.getGUI());
 
+    myDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+    myDialog.addWindowListener(new WindowListener() {
+      public void windowDeactivated(WindowEvent e) {
+      }
+
+      public void windowIconified(WindowEvent e) {
+      }
+
+      public void windowDeiconified(WindowEvent e) {
+      }
+
+      public void windowOpened(WindowEvent e) {
+      }
+
+      public void windowClosed(WindowEvent e) {
+      }
+
+      public void windowActivated(WindowEvent e) {
+      }
+
+      public void windowClosing(WindowEvent e) {
+        myDialog.cancelButton.doClick();
+      }
+    });
+
     myDialog.mySimulation = simulationToConfigure;
 
     // Set title
