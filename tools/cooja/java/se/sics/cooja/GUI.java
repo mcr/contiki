@@ -353,11 +353,11 @@ public class GUI {
     menu.add(menuItem);
     
     menuOpenSimulation = new JMenu("Open simulation");
-    menuOpenSimulation.setMnemonic(KeyEvent.VK_Q);
+    menuOpenSimulation.setMnemonic(KeyEvent.VK_O);
     menu.add(menuOpenSimulation);
 
     menuConfOpenSimulation = new JMenu("Open & Reconfigure simulation");
-    menuConfOpenSimulation.setMnemonic(KeyEvent.VK_O);
+    menuConfOpenSimulation.setMnemonic(KeyEvent.VK_R);
     menu.add(menuConfOpenSimulation);
 
     menuItem = new JMenuItem("Save simulation");
