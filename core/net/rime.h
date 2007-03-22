@@ -66,11 +66,9 @@
 #include "net/rime/ruc.h"
 #include "net/rime/sibc.h"
 #include "net/rime/nf.h"
-#include "net/rime/mesh.h"
-#include "net/rime/tree.h"
 #include "net/rime/ctimer.h"
-
 #include "net/rime/rimebuf.h"
+#include "net/rime/queuebuf.h"
 
 #include "net/rime/channel-assignments.h"
 
