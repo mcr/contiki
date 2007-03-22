@@ -61,4 +61,7 @@ void simple_cc2420_set_chan_pan_addr(unsigned channel, /* 11 - 26 */
 				     unsigned addr,
 				     const u8_t *ieee_addr);
 
+extern signed char simple_cc2420_last_rssi;
+extern u8_t simple_cc2420_last_correlation;
+
 #endif /* __SIMPLE_CC2420_H__ */
