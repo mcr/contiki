@@ -59,7 +59,7 @@ void ether_client_init(int port);
 void ether_tick(void);
 
 
-u16_t ether_client_poll(u8_t *buf, int len);
+u16_t ether_client_read(u8_t *buf, int len);
 void  ether_server_poll(void);
 
 void ether_put(char *packet, int len, int src_x, int src_y);
@@ -75,8 +75,9 @@ clock_time_t ether_time(void);
 /*#define ETHER_STRENGTH 24*/
 int ether_strength(void);
 void ether_set_strength(int s);
-
-
 void ether_set_collisions(int c);
+void ether_set_drop_probability(double p);
+
+int ether_print_stats(void);
 
 #endif /* __ETHER_H__ */

@@ -40,6 +40,4 @@ PROCESS_NAME(ethernode_uip_process);
 
 u8_t ethernode_uip_send(void);
 
-u8_t ethernode_uip_send(void);
-
 #endif /* __ETHERNODE_UIP_H__ */

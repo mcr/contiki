@@ -35,6 +35,7 @@
 #include "node.h"
 #include "contiki.h"
 #include "net/uip.h"
+#include "net/rime.h"
 #include <string.h>
 #include <stdlib.h>
 
@@ -58,11 +59,22 @@ node_init(int id, int posx, int posy, int b)
   /*  node.type = NODE_TYPE_NORMAL;*/
 
   if(b) {
-    uip_ipaddr(&addr, 192,168,250,2);
+    uip_ipaddr(&addr, 192,168,1,2);
   } else {
-    uip_ipaddr(&addr, 10,10,posx,posy);
+    uip_ipaddr(&addr, 172,16,posx,posy);
+
   }
   uip_sethostaddr(&addr);
+  
+  {
+    rimeaddr_t nodeaddr;
+    
+    nodeaddr.u8[0] = posx;
+    nodeaddr.u8[1] = posy;
+    rimeaddr_set_node_addr(&nodeaddr);
+  }
+    
+
 
   drift = random() % 95726272;
 

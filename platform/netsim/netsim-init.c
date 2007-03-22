@@ -34,7 +34,7 @@
 #include "random.h"
 
 void
-init(void)
+netsim_init(void)
 {
   int x, y;
 

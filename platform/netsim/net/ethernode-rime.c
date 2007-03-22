@@ -58,7 +58,7 @@ PROCESS_THREAD(ethernode_rime_process, ev, data)
 
       rimebuf_clear();
       
-      len = ethernode_poll(rimebuf_dataptr(), RIMEBUF_SIZE);
+      len = ethernode_read(rimebuf_dataptr(), RIMEBUF_SIZE);
 
       if(len > 0) {
 

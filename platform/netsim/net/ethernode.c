@@ -122,13 +122,13 @@ ethernode_init(int port)
  */
 /*-------------------------------------------------------------------------------*/
 int
-ethernode_poll(u8_t *buf, int bufsize)
+ethernode_read(u8_t *buf, int bufsize)
 {
   int len;
   u8_t tmpbuf[UIP_BUFSIZE];
   struct hdr *hdr = (struct hdr *)tmpbuf;
   
-  len = ether_client_poll(tmpbuf, UIP_BUFSIZE);
+  len = ether_client_read(tmpbuf, UIP_BUFSIZE);
   if(len == 0) {
     return 0;
   }
