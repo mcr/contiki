@@ -227,6 +227,13 @@ public class GUI {
       }
     }
 
+    if (frame != null) {
+      SwingUtilities.invokeLater(new Runnable() {
+        public void run() {
+          myGUI.doCreateSimulation(true);
+        }
+      });
+    }
   }
 
   /**
