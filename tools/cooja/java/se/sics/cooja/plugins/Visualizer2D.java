@@ -101,6 +101,18 @@ public abstract class Visualizer2D extends VisPlugin {
     }
   };
 
+  private class ButtonClickMoteMenuAction implements MoteMenuAction {
+    public boolean isEnabled(Mote mote) {
+      return mote.getInterfaces().getButton() != null && !mote.getInterfaces().getButton().isPressed();
+    }
+    public String getDescription(Mote mote) {
+      return "Click button on " + mote;
+    }
+    public void doAction(Mote mote) {
+      mote.getInterfaces().getButton().clickButton();
+    }
+  };
+
   private Vector<MoteMenuAction> menuActions = new Vector<MoteMenuAction>();
 
   /**
@@ -224,6 +236,9 @@ public abstract class Visualizer2D extends VisPlugin {
 
     // Add menu action for moving motes
     addMoteMenuAction(new MoveMoteMenuAction());
+
+    // Add menu action for clicking mote button
+    addMoteMenuAction(new ButtonClickMoteMenuAction());
     
     try {
       setSelected(true);
