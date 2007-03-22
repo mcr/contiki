@@ -71,7 +71,7 @@
  *
  * \sa cfs_open()
  */
-#define CFS_READ  0
+#define CFS_READ  1
 
 /**
  * Specify that cfs_open() should open a file for writing.
@@ -83,7 +83,19 @@
  *
  * \sa cfs_open()
  */
-#define CFS_WRITE 1
+#define CFS_WRITE 2
+
+/**
+ * Specify that cfs_open() should append written data to the file rather than overwriting it.
+ *
+ * This constant indicates to cfs_open() that a file that should be
+ * opened for writing gets written data appended to the end of the
+ * file. The default behaviour (without CFS_APPEND) is that the file
+ * is overwritten with the new data.
+ *
+ * \sa cfs_open()
+ */
+#define CFS_APPEND 4
 
 /**
  * \brief      Open a file.
