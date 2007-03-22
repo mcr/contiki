@@ -98,7 +98,7 @@ doInterfaceActionsBeforeTick(void)
   // Check if button value has changed
   if (simButtonChanged && simButtonIsActive && simButtonIsDown) {
     if(timer_expired(&debouncetimer)) {
-      timer_set(&debouncetimer, CLOCK_SECOND / 4);
+      timer_set(&debouncetimer, CLOCK_SECOND / 10);
       sensors_changed(&button_sensor);
       simButtonChanged = 0;
     }
