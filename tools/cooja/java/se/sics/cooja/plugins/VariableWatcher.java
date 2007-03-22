@@ -82,10 +82,7 @@ public class VariableWatcher extends VisPlugin {
   public VariableWatcher(Mote moteToView, Simulation simulation, GUI gui) {
     super("Variable Watcher (" + moteToView + ")", gui);
 
-    System.out.println("?!!");
-    
     moteMemory = (AddressMemory) moteToView.getMemory();
-    System.out.println("?!!");
 
     JLabel label;
     integerFormat = NumberFormat.getIntegerInstance();
