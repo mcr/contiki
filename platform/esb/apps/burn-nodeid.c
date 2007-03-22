@@ -40,7 +40,8 @@
 
 #include "node-id.h"
 #include "contiki.h"
-#include "contiki-esb.h"
+#include "dev/esb-sensors.h"
+#include "dev/rs232.h"
 
 #include <stdio.h>
 
