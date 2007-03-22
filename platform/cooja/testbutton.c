@@ -45,9 +45,9 @@
 #include "dev/button-sensor.h"
 
 
-PROCESS(button_process, "Button test process");
+PROCESS(button_test_process, "Button test process");
 
-PROCESS_THREAD(button_process, ev, data)
+PROCESS_THREAD(button_test_process, ev, data)
 {
   static int custom_counter = 0;
   static char logMess[100];
