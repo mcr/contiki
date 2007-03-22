@@ -126,7 +126,8 @@ public class ContikiMoteTypeDialog extends JDialog {
 
     final ContikiMoteTypeDialog myDialog = new ContikiMoteTypeDialog(
         parentFrame);
-
+    myDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+    
     myDialog.myMoteType = moteTypeToConfigure;
     myDialog.myGUI = simulation.getGUI();
     myDialog.allOtherTypes = simulation.getMoteTypes();
@@ -806,6 +807,31 @@ public class ContikiMoteTypeDialog extends JDialog {
     // mainPane.getPreferredSize().width + 50, 500));
     contentPane.add(mainScrollPane, BorderLayout.CENTER);
     contentPane.add(buttonPane, BorderLayout.SOUTH);
+
+    addWindowListener(new WindowListener() {
+      public void windowDeactivated(WindowEvent e) {
+      }
+
+      public void windowIconified(WindowEvent e) {
+      }
+
+      public void windowDeiconified(WindowEvent e) {
+      }
+
+      public void windowOpened(WindowEvent e) {
+      }
+
+      public void windowClosed(WindowEvent e) {
+      }
+
+      public void windowActivated(WindowEvent e) {
+      }
+
+      public void windowClosing(WindowEvent e) {
+        myMoteType = null;
+        dispose();
+      }
+    });
 
     // pack();
   }
