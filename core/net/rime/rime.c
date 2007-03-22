@@ -46,6 +46,7 @@ rime_init(void)
 {
   ctimer_init();
   queuebuf_init();
+  route_init();
   rimebuf_clear();
 }
 /*---------------------------------------------------------------------------*/
