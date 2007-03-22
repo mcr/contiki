@@ -83,7 +83,7 @@ neighbor_init(void)
     rimeaddr_copy(&neighbors[i].addr, &rimeaddr_null);
   }
   
-  ctimer_set(&t, periodic, CLOCK_SECOND, NULL);
+  ctimer_set(&t, CLOCK_SECOND, periodic, NULL);
 }
 /*---------------------------------------------------------------------------*/
 struct neighbor *
