@@ -370,6 +370,18 @@ public class ContikiMoteTypeDialog extends JDialog {
     myDialog.textDescription.requestFocus();
     myDialog.textDescription.select(0, myDialog.textDescription.getText()
         .length());
+
+    Rectangle maxSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+    if (maxSize != null && 
+        (myDialog.getSize().getWidth() > maxSize.getWidth()
+            || myDialog.getSize().getHeight() > maxSize.getHeight())) {
+      Dimension newSize = new Dimension();
+      newSize.height = Math.min((int) maxSize.getHeight(), (int) myDialog.getSize().getHeight());
+      newSize.width = Math.min((int) maxSize.getWidth(), (int) myDialog.getSize().getWidth());
+      logger.info("Resizing dialog: " + myDialog.getSize() + " -> " + newSize);
+      myDialog.setSize(newSize);
+    }
+    
     myDialog.setVisible(true);
 
     if (myDialog.myMoteType != null) {
@@ -832,8 +844,6 @@ public class ContikiMoteTypeDialog extends JDialog {
         dispose();
       }
     });
-
-    // pack();
   }
 
   /**
