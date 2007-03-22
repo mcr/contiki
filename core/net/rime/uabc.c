@@ -56,6 +56,7 @@ recv(struct abc_conn *abc)
     /* We received a copy of our own packet, so we do not send out
        packet. */
     queuebuf_free(c->q);
+    c->q = NULL;
     ctimer_stop(&c->t);
     if(c->cb->dropped) {
       c->cb->dropped(c);
@@ -74,6 +75,7 @@ send(void *ptr)
   if(c->q != NULL) {
     queuebuf_to_rimebuf(c->q);
     queuebuf_free(c->q);
+    c->q = NULL;
     abc_send(&c->c);
     if(c->cb->sent) {
 	c->cb->sent(c);
