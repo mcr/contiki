@@ -133,6 +133,7 @@ public class ExternalToolsDialog extends JDialog {
 
     // Set actual used values into all text fields
     updateTextFields();
+    compareWithDefaults();
 
     mainPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -149,6 +150,22 @@ public class ExternalToolsDialog extends JDialog {
     }
   }
 
+  private void compareWithDefaults() {
+    for (int i = 0; i < GUI.getExternalToolsSettingsCount(); i++) {
+      String currentValue = textFields[i].getText();
+
+      // Compare with default value
+      String defaultValue = GUI.getExternalToolsDefaultSetting(GUI.getExternalToolsSettingName(i), "");
+      if (currentValue.equals(defaultValue)) {
+        textFields[i].setBackground(Color.WHITE);
+        textFields[i].setToolTipText("");
+      } else {
+        textFields[i].setBackground(Color.LIGHT_GRAY);
+        textFields[i].setToolTipText("Default value: " + defaultValue);
+      }
+    }
+  }
+
   private class ExternalToolsEventHandler
       implements
         ActionListener,
@@ -157,12 +174,13 @@ public class ExternalToolsDialog extends JDialog {
       // NOP
     }
     public void focusLost(FocusEvent e) {
-      // NOP
+      compareWithDefaults();
     }
     public void actionPerformed(ActionEvent e) {
       if (e.getActionCommand().equals("reset")) {
         GUI.loadExternalToolsDefaultSettings();
         updateTextFields();
+        compareWithDefaults();
       } else if (e.getActionCommand().equals("ok")) {
         for (int i = 0; i < GUI.getExternalToolsSettingsCount(); i++) {
           GUI.setExternalToolsSetting(GUI.getExternalToolsSettingName(i), textFields[i].getText()

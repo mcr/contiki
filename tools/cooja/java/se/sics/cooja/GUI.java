@@ -130,6 +130,7 @@ public class GUI {
   private static Logger logger = Logger.getLogger(GUI.class);
 
   // External tools setting names
+  private static Properties defaultExternalToolsSettings;
   private static Properties currentExternalToolsSettings;
 
   private static final String externalToolsSettingNames[] = new String[] {
@@ -1993,6 +1994,17 @@ public class GUI {
   /**
    * @param name
    *          Name of setting
+   * @param defaultValue
+   *          Default value
+   * @return Value
+   */
+  public static String getExternalToolsDefaultSetting(String name, String defaultValue) {
+    return defaultExternalToolsSettings.getProperty(name, defaultValue);
+  }
+
+  /**
+   * @param name
+   *          Name of setting
    * @param newVal
    *          New value
    */
@@ -2018,12 +2030,14 @@ public class GUI {
       in.close();
 
       currentExternalToolsSettings = settings;
+      defaultExternalToolsSettings = (Properties) currentExternalToolsSettings.clone();
     } catch (IOException e) {
       // Error while importing default properties
       logger.warn(
           "Error when reading external tools settings from " + filename, e);
     } finally {
       if (currentExternalToolsSettings == null) {
+        defaultExternalToolsSettings = new Properties();
         currentExternalToolsSettings = new Properties();
       }
     }
