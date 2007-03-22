@@ -36,6 +36,9 @@
 #include "contiki.h"
 #include "contiki-net.h"
 #include "contiki-lib.h"
+
+#include "cfs/cfs-ram.h"
+
 #include "net/rime.h"
 
 #include "net/tapdev.h"
@@ -71,6 +74,7 @@ SENSORS(&button_sensor, &pir_sensor, &vib_sensor, &radio_sensor);
 
 PROCINIT(&sensors_process, &etimer_process, &tcpip_process,
 	 /*	 &ethernode_uip_process,*/
+	 &cfs_ram_process,
 	 &ethernode_rime_process,
 	 &uip_fw_process);
 
