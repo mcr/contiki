@@ -178,6 +178,26 @@ public class ContikiMoteTypeDialog extends JDialog {
     // Set preset description of mote type
     if (moteTypeToConfigure.getDescription() != null) {
       myDialog.textDescription.setText(moteTypeToConfigure.getDescription());
+    } else {
+      // Suggest unique description
+      int counter = 0;
+      String testDescription = "";
+      boolean descriptionOK = false;
+      while (!descriptionOK) {
+        counter++;
+        testDescription = "Contiki Mote #" + counter;
+        descriptionOK = true;
+
+        // Check if identifier is already used by some other type
+        for (MoteType existingMoteType : myDialog.allOtherTypes) {
+          if (existingMoteType != myDialog.myMoteType
+              && existingMoteType.getDescription().equals(testDescription)) {
+            descriptionOK = false;
+            break;
+          }
+        }
+      }
+      myDialog.textDescription.setText(testDescription);
     }
 
     // Set preset Contiki base directory of mote type
