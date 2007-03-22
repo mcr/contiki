@@ -396,13 +396,11 @@ public class ContikiMoteTypeDialog extends JDialog {
     buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.X_AXIS));
     buttonPane.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
 
-    button = new JButton("Test current settings");
-    button.setActionCommand("testsettings");
+    button = new JButton("Cancel");
+    button.setActionCommand("cancel");
     button.addActionListener(myEventHandler);
-    testButton = button;
-    this.getRootPane().setDefaultButton(button);
-    buttonPane.add(button);
     buttonPane.add(Box.createRigidArea(new Dimension(10, 0)));
+    buttonPane.add(button);
 
     buttonPane.add(Box.createHorizontalGlue());
 
@@ -412,9 +410,11 @@ public class ContikiMoteTypeDialog extends JDialog {
     buttonPane.add(Box.createRigidArea(new Dimension(10, 0)));
     buttonPane.add(button);
 
-    button = new JButton("Cancel");
-    button.setActionCommand("cancel");
+    button = new JButton("Compile & Test");
+    button.setActionCommand("testsettings");
     button.addActionListener(myEventHandler);
+    testButton = button;
+    this.getRootPane().setDefaultButton(button);
     buttonPane.add(Box.createRigidArea(new Dimension(10, 0)));
     buttonPane.add(button);
 
