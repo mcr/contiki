@@ -48,12 +48,13 @@ struct route_entry {
   struct route_entry *next;
   rimeaddr_t dest;
   rimeaddr_t nexthop;
-  u16_t seqno;
-  u16_t hop_count;
+  u8_t seqno;
+  u8_t hop_count;
+  u8_t time;
 };
 
 int route_add(rimeaddr_t *dest, rimeaddr_t *nexthop,
-	      u16_t hop_count, u16_t seqno);
+	      u8_t hop_count, u8_t seqno);
 struct route_entry *route_lookup(rimeaddr_t *dest);
 void route_remove(struct route_entry *e);
 void route_flush_all(void);

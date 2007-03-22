@@ -51,7 +51,7 @@ struct neighbor {
 };
 
 void neighbor_init(void);
-void neighbor_periodic(int max_time);
+/*void neighbor_periodic(int max_time);*/
 
 void neighbor_add(rimeaddr_t *addr, u8_t hopcount, u16_t signal);
 void neighbor_update(struct neighbor *n, u8_t hopcount, u16_t signal);
