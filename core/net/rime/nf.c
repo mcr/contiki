@@ -43,7 +43,7 @@
 #include "lib/rand.h"
 #include <string.h>
 
-#define QUEUE_TIME CLOCK_SECOND / 2
+#define QUEUE_TIME CLOCK_SECOND / 4
 
 #define HOPS_MAX 16
 
@@ -56,6 +56,15 @@ struct nf_hdr {
 static u8_t seqno;
 
 static void send(void *ptr);
+
+#define DEBUG 0
+#if DEBUG
+#include <stdio.h>
+#define PRINTF(...) printf(__VA_ARGS__)
+#else
+#define PRINTF(...)
+#endif
+
 
 /*---------------------------------------------------------------------------*/
 static void
@@ -77,6 +86,8 @@ send(void *ptr)
     queuebuf_to_rimebuf(c->buf);
     queuebuf_free(c->buf);
     c->buf = NULL;
+    PRINTF("%d.%d: nf send to uibc\n",
+	   rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1]);
     uibc_send(&c->c, QUEUE_TIME);
     if(c->u->sent != NULL) {
       c->u->sent(c);
@@ -129,10 +140,13 @@ recv_from_uibc(struct uibc_conn *uibc, rimeaddr_t *from)
 	  
 	  /* Rebroadcast received packet. */
 	  if(hops < HOPS_MAX) {
-	    /*	  printf("rebroadcasting %d/%d (%d/%d) hops %d\n",
-		  hdr->originator_id, hdr->originator_seqno,
-		  c->last_originator_id, c->last_originator_seqno,
-		  hops);*/
+	    PRINTF("%d.%d: nf rebroadcasting %d.%d/%d (%d.%d/%d) hops %d\n",
+		   rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1],
+		   hdr->originator.u8[0], hdr->originator.u8[1],
+		   hdr->originator_seqno,
+		   c->last_originator.u8[0], c->last_originator.u8[1],
+		   c->last_originator_seqno,
+		  hops);
 	    hdr->hops++;
 	    queue_for_send(c);
 	    rimeaddr_copy(&c->last_originator, &hdr->originator);
