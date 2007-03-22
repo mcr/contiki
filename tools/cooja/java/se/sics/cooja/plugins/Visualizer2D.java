@@ -272,13 +272,7 @@ public abstract class Visualizer2D extends VisPlugin {
           .getLocationOnScreen().y
           + y);
 
-      JMenuItem menuItem = new JMenuItem("Open mote plugin for " + mote);
-      menuItem.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          simulation.getGUI().showMotePluginsMenu(canvas, mote, pos);
-        }
-      });
-      pickMoteMenu.add(menuItem);
+      pickMoteMenu.add(simulation.getGUI().createMotePluginsSubmenu(mote));
     }
 
     // Add the rest of the actions
