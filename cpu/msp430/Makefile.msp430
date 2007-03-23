@@ -1,15 +1,5 @@
 # $Id$
 
-### Check if we are running under Windows
-
-ifndef WINDIR
-  ifdef OS
-    ifneq (,$(findstring Windows,$(OS)))
-      WINDIR := Windows
-    endif
-  endif
-endif
-
 ifdef nodeid
 CFLAGS += -DNODEID=$(nodeid)
 endif
@@ -110,14 +100,4 @@ symbols.c:
 else
 symbols.c symbols.h:
 	@${CONTIKI}/tools/make-empty-symbols
-endif
-
-### System dependent Makefile
-
-ifndef WINDIR
-  # settings for unix
-  -include ${CONTIKI}/cpu/msp430/buildscripts/Makefile.unix
-else
-  # settings for windows
-  -include ${CONTIKI}/cpu/msp430/buildscripts/Makefile.win
 endif
