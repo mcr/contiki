@@ -962,7 +962,9 @@ public class ContikiMoteTypeDialog extends JDialog {
         if (compilationThread != null && compilationThread.isAlive()) {
           compilationThread.interrupt();
         }
-        progressDialog.dispose();
+        if (progressDialog != null && progressDialog.isVisible()) {
+          progressDialog.dispose();
+        }
       }
     });
 
