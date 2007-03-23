@@ -37,6 +37,7 @@
 #include "contiki.h"
 
 #include "cfs/cfs-xmem.h"
+#include "cfs/cfs-ram.h"
 
 #include "dev/button-sensor.h"
 #include "dev/ds2411.h"
@@ -129,7 +130,8 @@ main(int argc, char **argv)
   process_start(&etimer_process, NULL);
   process_start(&sensors_process, NULL);
 
-  cfs_xmem_init();
+  /*  cfs_xmem_init();*/
+  cfs_ram_init();
 
   simple_cc2420_init();
   simple_cc2420_rime_init();
