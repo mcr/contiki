@@ -137,7 +137,7 @@ send_nack(struct rudolph1_conn *c)
 {
   struct rudolph1_hdr *hdr;
   rimebuf_clear();
-  rimebuf_hdrextend(sizeof(struct rudolph1_hdr));
+  rimebuf_hdralloc(sizeof(struct rudolph1_hdr));
   hdr = rimebuf_hdrptr();
 
   hdr->type = TYPE_NACK;
