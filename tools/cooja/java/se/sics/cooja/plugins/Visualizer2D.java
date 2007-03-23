@@ -103,7 +103,7 @@ public abstract class Visualizer2D extends VisPlugin {
 
   private class ButtonClickMoteMenuAction implements MoteMenuAction {
     public boolean isEnabled(Mote mote) {
-      return mote.getInterfaces().getButton() != null && !mote.getInterfaces().getButton().isPressed();
+      return mote.getInterfaces().getButton() != null;
     }
     public String getDescription(Mote mote) {
       return "Click button on " + mote;
