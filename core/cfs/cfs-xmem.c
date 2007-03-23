@@ -42,8 +42,8 @@ struct filestate {
   int flag;
 #define FLAG_FILE_CLOSED 0
 #define FLAG_FILE_OPEN   1
-  int fileptr;
-  int filesize;
+  unsigned int fileptr;
+  unsigned int filesize;
 };
 
 #ifdef CFS_XMEM_CONF_OFFSET
@@ -173,6 +173,8 @@ PROCESS(cfs_xmem_process, "CFS XMEM service");
 PROCESS_THREAD(cfs_xmem_process, ev, data)
 {
   PROCESS_BEGIN();
+
+  file.fileptr = file.filesize = 0;
 
   SERVICE_REGISTER(cfs_xmem_service);
 
