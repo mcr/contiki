@@ -20,12 +20,13 @@ include $(CONTIKI)/cpu/msp430/Makefile.msp430
 contiki-$(TARGET).a: ${addprefix $(OBJECTDIR)/,symbols.o}
 #	$(AR) rcf $@ $^
 
-BSL=$(CONTIKI)/tools/msp430-bsl
+BSL=msp430-bsl
 
 ifndef COMPORT
   COMPORT := /dev/ttyUSB0
 endif
-%.up: %.ihex
+
+%.u: %.ihex
 	$(BSL) --telosb -D -c $(COMPORT) -r -e -I -p $<
 
 %.send: %.ce
