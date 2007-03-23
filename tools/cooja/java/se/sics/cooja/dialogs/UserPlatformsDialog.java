@@ -373,9 +373,29 @@ public class UserPlatformsDialog extends JDialog {
     File userPlatformConfigFile = new File(userPlatform.getPath(),
         GUI.PLATFORM_CONFIG_FILENAME);
     if (!userPlatformConfigFile.exists()) {
-      logger.fatal("User platform has no configuration file: "
-          + userPlatformConfigFile);
-      return;
+      
+      Object[] options = {"Create",
+                          "Cancel"};
+
+      int n = JOptionPane.showOptionDialog(
+          this,
+          "No " + GUI.PLATFORM_CONFIG_FILENAME + " file exists in specified directory!"
+          + "\nCreate an empty " + GUI.PLATFORM_CONFIG_FILENAME + " file?",
+          "Create user platform configuration?",
+          JOptionPane.YES_NO_OPTION,
+          JOptionPane.QUESTION_MESSAGE,
+          null, options, options[1]);
+      
+      if (n == JOptionPane.NO_OPTION)
+        return;
+      
+      try {
+        userPlatformConfigFile.createNewFile();
+      } catch (IOException e) {
+        logger.fatal("Could not create user platform configuration file: "
+            + userPlatformConfigFile);
+        return;
+      }
     }
 
     changablePlatformsList.add(userPlatform.getPath(), index);
