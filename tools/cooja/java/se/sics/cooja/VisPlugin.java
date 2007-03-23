@@ -42,8 +42,8 @@ import org.jdom.Element;
  * visualizers. By extending JInternalFrame, the visual apperence is decided by
  * the plugin itself.
  * 
- * To add a new plugin to the simulator environment either add it via a user
- * platform or by altering the standard configuration files.
+ * To add a new plugin to the simulator environment either add it via a project
+ * directory or by altering the standard configuration files.
  * 
  * For example how to implement a plugin see plugins SimControl or Visualizer2D.
  * 

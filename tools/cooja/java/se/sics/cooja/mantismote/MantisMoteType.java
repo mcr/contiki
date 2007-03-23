@@ -346,7 +346,7 @@ public class MantisMoteType implements MoteType {
     return panel;
   }
 
-  public PlatformConfig getConfig() {
+  public ProjectConfig getConfig() {
     logger.debug("MantisMoteType::getConfig");
     return null;
   }

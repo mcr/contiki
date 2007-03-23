@@ -116,7 +116,7 @@ public class DummyMoteType implements MoteType {
     return null;
   }
 
-  public PlatformConfig getConfig() {
+  public ProjectConfig getConfig() {
     return null;
   }
 

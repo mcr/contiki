@@ -86,11 +86,11 @@ public interface MoteType {
   public JPanel getTypeVisualizer();
 
   /**
-   * Returns this mote type's platform configuration.
+   * Returns this mote type's project configuration.
    * 
-   * @return Platform configuration
+   * @return Project configuration
    */
-  public PlatformConfig getConfig();
+  public ProjectConfig getConfig();
 
   /**
    * Generates a mote of this mote type.
