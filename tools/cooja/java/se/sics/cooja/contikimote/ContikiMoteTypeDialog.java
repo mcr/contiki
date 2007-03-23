@@ -517,7 +517,35 @@ public class ContikiMoteTypeDialog extends JDialog {
     textField = new JTextField();
     textField.setBackground(Color.GREEN);
     textField.setText("[enter description here]");
-    textField.getDocument().addDocumentListener(myEventHandler);
+    textField.getDocument().addDocumentListener(new DocumentListener() {
+      public void insertUpdate(DocumentEvent e) {
+        if (myDialog.isVisible())
+          javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+              updateVisualFields();
+            }
+          });
+      }
+
+      public void removeUpdate(DocumentEvent e) {
+        if (myDialog.isVisible())
+          javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+              updateVisualFields();
+            }
+          });
+      }
+
+      public void changedUpdate(DocumentEvent e) {
+        if (myDialog.isVisible())
+          javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+              updateVisualFields();
+            }
+          });
+      }
+
+    });
     textDescription = textField;
     label.setLabelFor(textField);
     smallPane.add(label);
