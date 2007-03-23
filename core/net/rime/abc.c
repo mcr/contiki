@@ -74,7 +74,7 @@ abc_close(struct abc_conn *c)
 int
 abc_send(struct abc_conn *c)
 {
-  if(rimebuf_hdrextend(sizeof(struct abc_hdr))) {
+  if(rimebuf_hdralloc(sizeof(struct abc_hdr))) {
     struct abc_hdr *hdr = rimebuf_hdrptr();
 
     DEBUGF(1, "%d: abc: abc_send on channel %d\n", rimeaddr_node_addr.u16, c->channel);

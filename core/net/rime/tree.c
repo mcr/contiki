@@ -250,7 +250,7 @@ tree_send(struct tree_conn *tc)
   struct neighbor *n;
   struct hdr *hdr;
 
-  if(rimebuf_hdrextend(sizeof(struct hdr))) {
+  if(rimebuf_hdralloc(sizeof(struct hdr))) {
     hdr = rimebuf_hdrptr();
     hdr->originator_seqno = tc->seqno++;
     rimeaddr_copy(&hdr->originator, &rimeaddr_node_addr);

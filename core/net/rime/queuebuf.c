@@ -111,7 +111,7 @@ queuebuf_to_rimebuf(struct queuebuf *b)
     r = (struct queuebuf_ref *)b;
     rimebuf_clear();
     rimebuf_copyfrom(r->ref, r->len);
-    rimebuf_hdrextend(r->hdrlen);
+    rimebuf_hdralloc(r->hdrlen);
     memcpy(rimebuf_hdrptr(), r->hdr, r->hdrlen);
   }
 }

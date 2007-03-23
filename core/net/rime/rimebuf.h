@@ -262,7 +262,7 @@ int rimebuf_copyto_hdr(u8_t *to);
  *             zero and does not allocate anything.
  *
  */
-int rimebuf_hdrextend(int size);
+int rimebuf_hdralloc(int size);
 
 /**
  * \brief      Reduce the header in the rimebuf, for incoming packets

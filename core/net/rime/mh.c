@@ -64,7 +64,7 @@ send_data(struct mh_conn *c, rimeaddr_t *to, struct route_entry *next)
 {
   struct data_hdr *hdr;
 
-  if(rimebuf_hdrextend(sizeof(struct data_hdr))) {
+  if(rimebuf_hdralloc(sizeof(struct data_hdr))) {
     hdr = rimebuf_hdrptr();
     rimeaddr_copy(&hdr->dest, to);
     rimeaddr_copy(&hdr->originator, &rimeaddr_node_addr);

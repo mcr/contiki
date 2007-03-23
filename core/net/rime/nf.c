@@ -185,7 +185,7 @@ nf_send(struct nf_conn *c)
     c->buf = NULL;
   }
 
-  if(rimebuf_hdrextend(sizeof(struct nf_hdr))) {
+  if(rimebuf_hdralloc(sizeof(struct nf_hdr))) {
     struct nf_hdr *hdr = rimebuf_hdrptr();
     rimeaddr_copy(&hdr->originator, &rimeaddr_node_addr);
     rimeaddr_copy(&c->last_originator, &hdr->originator);

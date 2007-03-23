@@ -130,7 +130,7 @@ rimebuf_copyto(u8_t *to)
 }
 /*---------------------------------------------------------------------------*/
 int
-rimebuf_hdrextend(int size)
+rimebuf_hdralloc(int size)
 {
   if(hdrptr > size) {
     hdrptr -= size;

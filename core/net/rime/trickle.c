@@ -62,7 +62,7 @@ send(struct trickle_conn *c)
 
   if(c->q != NULL) {
     queuebuf_to_rimebuf(c->q);
-    rimebuf_hdrextend(sizeof(struct trickle_hdr));
+    rimebuf_hdralloc(sizeof(struct trickle_hdr));
     hdr = rimebuf_hdrptr();
     hdr->seqno = c->seqno;
     hdr->interval = c->interval;
