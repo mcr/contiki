@@ -9,11 +9,6 @@
 
 #define LPM_CONF_OFF LPM4_EXIT
 
-#define CFS_RAM_CONF_SIZE 4096
-
-#define NODE_ID_XMEM_OFFSET     0x0010 /* - 0x0014 */
-#define CFS_XMEM_CONF_OFFSET    0x0040
-
 #define IRQ_PORT1 0x01
 #define IRQ_PORT2 0x02
 #define IRQ_ADC   0x03
@@ -87,8 +82,15 @@ typedef unsigned long off_t;
 #define ROM_ERASE_UNIT_SIZE  512
 #define XMEM_ERASE_UNIT_SIZE (64*1024L)
 
-/* Use the first 64k of external flash for codeprop. */
+/* Use the first 64k of external flash for node configuration */
+#define NODE_ID_XMEM_OFFSET     (0 * XMEM_ERASE_UNIT_SIZE)
+
+/* Use the second 64k of external flash for codeprop. */
 #define EEPROMFS_ADDR_CODEPROP  (1 * XMEM_ERASE_UNIT_SIZE)
+
+#define CFS_XMEM_CONF_OFFSET    (2 * XMEM_ERASE_UNIT_SIZE)
+
+#define CFS_RAM_CONF_SIZE 4096
 
 #define CC2420_RADIO
 /*
