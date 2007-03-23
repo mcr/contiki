@@ -259,11 +259,6 @@ public class Simulation extends Observable implements Runnable {
     element.setText(Integer.toString(delayTime));
     config.add(element);
 
-    // Simulation time
-    element = new Element("simtime");
-    element.setText(Integer.toString(currentSimulationTime));
-    config.add(element);
-
     // Tick time
     element = new Element("ticktime");
     element.setText(Integer.toString(tickTime));
@@ -330,11 +325,6 @@ public class Simulation extends Observable implements Runnable {
       // Delay time
       if (element.getName().equals("delaytime")) {
         delayTime = Integer.parseInt(element.getText());
-      }
-
-      // Simulation time
-      if (element.getName().equals("simtime")) {
-        currentSimulationTime = Integer.parseInt(element.getText());
       }
 
       // Tick time
