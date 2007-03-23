@@ -1812,8 +1812,6 @@ public class GUI {
         }
       }
     });
-    loadThread.start();
-
 
     JPanel progressPanel = new JPanel(new BorderLayout());
     JProgressBar progressBar;
@@ -1847,6 +1845,7 @@ public class GUI {
     progressDialog.getRootPane().setDefaultButton(button);
     progressDialog.setLocationRelativeTo(frame);
     progressDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+    loadThread.start();
     if (quick)
       progressDialog.setVisible(true);
   }
