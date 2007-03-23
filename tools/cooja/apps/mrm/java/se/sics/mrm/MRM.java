@@ -308,24 +308,20 @@ public class MRM extends AbstractRadioMedium {
     }
     
     public void addDestination(Radio radio, double signalStrength) {
-      logger.debug("adding dest for " + radio + " => " + signalStrength);
       signalStrengths.put(radio, signalStrength);
       addDestination(radio);
     }
 
     public void addInterfered(Radio radio, double signalStrength) {
-      logger.debug("adding interference for " + radio + " => " + signalStrength);
       signalStrengths.put(radio, signalStrength);
       addInterfered(radio);
     }
 
     public double getDestinationSignalStrength(Radio radio) {
-      logger.debug("fetching dest for " + radio + " from " + signalStrengths);
       return signalStrengths.get(radio);
     }
 
     public double getInterferenceSignalStrength(Radio radio) {
-      logger.debug("fetching interference for " + radio + " from " + signalStrengths);
       return signalStrengths.get(radio);
     }
   }
