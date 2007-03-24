@@ -53,6 +53,7 @@ struct route_entry {
   u8_t time;
 };
 
+void route_init(void);
 int route_add(rimeaddr_t *dest, rimeaddr_t *nexthop,
 	      u8_t hop_count, u8_t seqno);
 struct route_entry *route_lookup(rimeaddr_t *dest);
