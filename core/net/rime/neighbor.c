@@ -39,6 +39,7 @@
  */
 
 #include <limits.h>
+#include <stdio.h>
 
 #include "contiki.h"
 #include "net/rime/neighbor.h"

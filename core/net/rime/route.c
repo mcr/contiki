@@ -38,6 +38,7 @@
  *         Adam Dunkels <adam@sics.se>
  */
 
+#include <stdio.h>
 
 #include "net/rime/route.h"
 
