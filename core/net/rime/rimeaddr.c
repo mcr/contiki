@@ -38,7 +38,7 @@
  *         Adam Dunkels <adam@sics.se>
  */
 
-#include "rimeaddr.h"
+#include "net/rime/rimeaddr.h"
 
 rimeaddr_t rimeaddr_node_addr;
 const rimeaddr_t rimeaddr_null = {.u16 = {0}};

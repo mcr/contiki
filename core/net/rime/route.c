@@ -39,7 +39,7 @@
  */
 
 
-#include "route.h"
+#include "net/rime/route.h"
 
 #define NUM_RT_ENTRIES 8
 
