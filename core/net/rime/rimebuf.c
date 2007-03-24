@@ -39,6 +39,7 @@
  */
 
 #include <string.h>
+#include <stdio.h>
 
 #include "contiki-net.h"
 #include "net/rime/rimebuf.h"
