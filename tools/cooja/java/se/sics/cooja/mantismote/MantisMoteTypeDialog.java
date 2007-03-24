@@ -361,7 +361,8 @@ public class MantisMoteTypeDialog extends JDialog {
         if (compilationThread != null && compilationThread.isAlive()) {
           compilationThread.interrupt();
         }
-        progressDialog.dispose();
+        if (progressDialog != null && progressDialog.isDisplayable())
+          progressDialog.dispose();
       }
     });
 

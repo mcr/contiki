@@ -187,9 +187,11 @@ public class ExternalToolsDialog extends JDialog {
               .trim());
         }
         GUI.saveExternalToolsUserSettings();
-        myDialog.dispose();
+        if (myDialog != null && myDialog.isDisplayable())
+          myDialog.dispose();
       } else if (e.getActionCommand().equals("cancel")) {
-        myDialog.dispose();
+        if (myDialog != null && myDialog.isDisplayable())
+          myDialog.dispose();
       } else
         logger.debug("Unhandled command: " + e.getActionCommand());
     }
