@@ -69,6 +69,9 @@ suc_close(struct suc_conn *c)
 {
   uc_close(&c->c);
   ctimer_stop(&c->t);
+  if(c->buf != NULL) {
+    queuebuf_free(c->buf);
+  }
 }
 /*---------------------------------------------------------------------------*/
 static void
