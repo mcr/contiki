@@ -101,7 +101,7 @@ void rs232_set_speed(unsigned char speed);
  *             correctly initalized and configured for this function
  *             to work.
  */
-void rs232_print(char *text);
+void rs232_print(char *str);
 
 /**
  * \brief      Print a character on RS232
