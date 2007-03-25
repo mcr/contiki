@@ -1,3 +1,8 @@
+/**
+ * \addtogroup rime-ibc
+ * @{
+ */
+
 /*
  * Copyright (c) 2006, Swedish Institute of Computer Science.
  * All rights reserved.
@@ -33,7 +38,7 @@
 
 /**
  * \file
- *         A brief description of what this file is.
+ *         Identified best-effort local area broadcast (ibc)
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
@@ -89,3 +94,4 @@ ibc_send(struct ibc_conn *c)
   return 0;
 }
 /*---------------------------------------------------------------------------*/
+/** @} */

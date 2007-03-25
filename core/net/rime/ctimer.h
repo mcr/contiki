@@ -33,7 +33,7 @@
 
 /**
  * \file
- *         Module which calls a function after a time
+ *         Header file for the callback timer
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
