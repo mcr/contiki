@@ -137,7 +137,7 @@ uibc_send(struct uibc_conn *c, clock_time_t interval)
   }
   c->q = queuebuf_new_from_rimebuf();
   if(c->q != NULL) {
-    ctimer_set(&c->t, interval / 2 + (rand() % (interval / 2)), send, c);
+    ctimer_set(&c->t, interval / 2 + (random_rand() % (interval / 2)), send, c);
     return 1;
   }
   return 0;
