@@ -643,6 +643,18 @@ public class GUI {
     logger.info("> Reparsing project directories and creating config");
     for (String projectDir : projectDirs) {
       logger.info(">> Adding: " + projectDir);
+      
+      // Check if config file exists
+      File configFile = new File(projectDir + File.separatorChar + PROJECT_CONFIG_FILENAME);
+      if (!configFile.exists()) {
+        logger.debug(">>> Creating empty cooja.config file");
+        try {
+          configFile.createNewFile();
+        } catch (IOException e) {
+          logger.fatal(">> Error when creating cooja.config file, aborting");
+          return false;
+        }
+      }
       gui.currentProjectDirs.add(new File(projectDir));
     }
     boolean parsedProjects = gui.reparseProjectConfig();
