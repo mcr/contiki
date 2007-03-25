@@ -102,7 +102,7 @@ sabc_send_stubborn(struct sabc_conn *c, clock_time_t t)
     return 0;
   }
   send(c);
-  ctimer_set(&c->t, t, send, c);
+  sabc_set_timer(c, t);
   return 1;
   
 }
