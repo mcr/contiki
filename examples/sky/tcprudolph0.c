@@ -310,5 +310,8 @@ dummy(void)
   sibc_close(NULL);
   rudolph0_close(NULL);
   rudolph1_close(NULL);
+
+  /* Make sure psock is included */
+  psock_datalen(NULL);
 }
 /*---------------------------------------------------------------------*/
