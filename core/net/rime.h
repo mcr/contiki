@@ -69,6 +69,7 @@
 #include "net/rime/ctimer.h"
 #include "net/rime/rimebuf.h"
 #include "net/rime/queuebuf.h"
+#include "net/rime/route.h"
 
 #include "net/rime/channel-assignments.h"
 
