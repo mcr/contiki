@@ -87,6 +87,14 @@ static u16_t panId = 0x2024;
 
 #define RF_CHANNEL              26
 /*---------------------------------------------------------------------------*/
+static void
+set_rime_addr(void)
+{
+  rimeaddr_t addr;
+  addr.u16[0] = node_id;
+  rimeaddr_set_node_addr(&addr);
+}
+/*---------------------------------------------------------------------------*/
 int
 main(int argc, char **argv)
 {
@@ -141,6 +149,7 @@ main(int argc, char **argv)
   simple_cc2420_rime_init();
   simple_cc2420_on();
   rime_init();
+  set_rime_addr();
 
   /*  rimeaddr_set_node_addr*/
 #if WITH_UIP
@@ -150,6 +159,8 @@ main(int argc, char **argv)
   /*  process_start(&tcp_loader_process, NULL);*/
 #endif /* WITH_UIP */
 
+  button_sensor.activate();
+  
   printf("Autostarting processes\n");
   autostart_start((struct process **) autostart_processes);
   
