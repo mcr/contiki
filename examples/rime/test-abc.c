@@ -53,13 +53,15 @@ AUTOSTART_PROCESSES(&test_abc_process);
 static void
 abc_recv(struct abc_conn *c)
 {
-  /*  log_message("abc message received", rimebuf_dataptr());*/
+  printf("abc message received '%s'\n", (char *)rimebuf_dataptr());
 }
 const static struct abc_callbacks abc_call = {abc_recv};
 static struct abc_conn abc;
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(test_abc_process, ev, data)
 {
+  PROCESS_EXITHANDLER(abc_close(&abc);)
+    
   PROCESS_BEGIN();
 
   abc_open(&abc, 128, &abc_call);
@@ -75,6 +77,7 @@ PROCESS_THREAD(test_abc_process, ev, data)
     abc_send(&abc);
 
   }
+
   PROCESS_END();
 }
 /*---------------------------------------------------------------------------*/

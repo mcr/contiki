@@ -77,6 +77,7 @@ const static struct mesh_callbacks callbacks = {recv, sent, timedout};
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(test_mesh_process, ev, data)
 {
+  PROCESS_EXITHANDLER(mesh_close(&mesh);)
   PROCESS_BEGIN();
 
   mesh_open(&mesh, 128, &callbacks);

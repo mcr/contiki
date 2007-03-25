@@ -39,7 +39,7 @@
  */
 
 #include "contiki.h"
-#include "rudolph1.h"
+#include "net/rime/rudolph1.h"
 
 #include "dev/button-sensor.h"
 
@@ -111,9 +111,9 @@ static struct rudolph1_conn rudolph1;
 PROCESS_THREAD(test_rudolph1_process, ev, data)
 {
   static int fd;
+  PROCESS_EXITHANDLER(rudolph1_close(&rudolph1);)
   PROCESS_BEGIN();
 
-  process_start(&cfs_ram_process, NULL);
   PROCESS_PAUSE();
 
   {

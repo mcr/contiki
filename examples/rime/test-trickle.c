@@ -61,6 +61,7 @@ static struct trickle_conn trickle;
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(test_trickle_process, ev, data)
 {
+  PROCESS_EXITHANDLER(trickle_close(&trickle);)
   PROCESS_BEGIN();
 
   /*  log_message("Trickle", "running");*/

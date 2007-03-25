@@ -45,6 +45,8 @@
 #include "dev/pir-sensor.h"
 #include "dev/button-sensor.h"
 
+#include <stdio.h>
+
 static struct tree_conn tc;
 
 /*---------------------------------------------------------------------------*/
