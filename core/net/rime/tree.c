@@ -173,6 +173,7 @@ node_packet_received(struct ruc_conn *c, rimeaddr_t *from, u8_t seqno)
 
   if(tc->hops_from_sink == SINK) {
 
+    rimebuf_hdrreduce(sizeof(struct hdr));
     if(tc->cb->recv != NULL) {
       tc->cb->recv(&hdr->originator, hdr->originator_seqno,
 		   hdr->hopcount, hdr->retransmissions);
