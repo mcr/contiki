@@ -59,5 +59,6 @@ int route_add(rimeaddr_t *dest, rimeaddr_t *nexthop,
 struct route_entry *route_lookup(rimeaddr_t *dest);
 void route_remove(struct route_entry *e);
 void route_flush_all(void);
+void route_set_lifetime(int seconds);
 
 #endif /* __ROUTE_H__ */
