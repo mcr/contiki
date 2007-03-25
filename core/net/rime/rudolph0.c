@@ -38,10 +38,10 @@
  *         Adam Dunkels <adam@sics.se>
  */
 
-#include "net/rime.h"
-#include "rudolph0.h"
-
 #include <stddef.h> /* for offsetof */
+
+#include "net/rime.h"
+#include "net/rime/rudolph0.h"
 
 #define SENDING_TIME CLOCK_SECOND / 2
 #define STEADY_TIME CLOCK_SECOND * 2
