@@ -43,7 +43,7 @@
 
 typedef unsigned long energest_t;
 
-enum {
+enum energest_type {
   ENERGEST_TYPE_NONE,
 
   ENERGEST_TYPE_CPU,
@@ -60,7 +60,7 @@ enum {
   ENERGEST_TYPE_SENSORS,
 
   ENERGEST_TYPE_MAX
-} energest_type;
+};
 
 void energest_init(void);
 energest_t energest_type_time(int type);
