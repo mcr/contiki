@@ -22,7 +22,9 @@ ifndef CONTIKI
 endif
 
 ifndef TYPEID
-  $(error TYPEID not defined!)
+### Quickstart simulator
+$(MAKECMDGOALS):
+	java -jar $(CONTIKI)/tools/cooja/dist/cooja.jar -quickstart=$(MAKECMDGOALS).c -contiki=$(CONTIKI)
 endif
 
 OUTPUT_DIR = obj_cooja
