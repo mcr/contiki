@@ -46,7 +46,7 @@
 
 #include "codeprop.h"
 
-#include "rudolph0.h"
+#include "core/net/rime/rudolph0.h"
 
 #define DEBUG 0
 #if DEBUG
