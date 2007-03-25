@@ -208,7 +208,7 @@ static const struct nf_callbacks rreq_callbacks = {rreq_packet_received, NULL};
 /*---------------------------------------------------------------------------*/
 void
 route_discovery_open(struct route_discovery_conn *c,
-		     clock_time time,
+		     clock_time_t time,
 		     u16_t channels,
 		     const struct route_discovery_callbacks *callbacks)
 {
