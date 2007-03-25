@@ -38,11 +38,11 @@
  *         Adam Dunkels <adam@sics.se>
  */
 
+#include <stddef.h> /* for offsetof */
+
 #include "net/rime.h"
 #include "net/rime/rudolph1.h"
 #include "cfs/cfs.h"
-
-#include <stddef.h> /* for offsetof */
 
 #define DATA_INTERVAL CLOCK_SECOND * 2
 #define TRICKLE_INTERVAL TRICKLE_SECOND
