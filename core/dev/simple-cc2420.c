@@ -416,7 +416,7 @@ simple_cc2420_read(u8_t *buf, u8_t bufsize)
       FASTSPI_READ_FIFO_GARBAGE(len);
       rx_fifo_remaining_bytes = 0; /* RX FIFO emptied! */
       splx(s);
-      len = 0;
+      len = 2; /* We eventually return len - 2 */
     } else {
       s = splhigh();
       FASTSPI_READ_FIFO_NO_WAIT(buf, len - 2);
@@ -447,6 +447,6 @@ simple_cc2420_read(u8_t *buf, u8_t bufsize)
     splx(s);
   }
 
-  return len;
+  return len - 2; /* Remove two bytes for the footer. */
 }
 /*---------------------------------------------------------------------------*/
