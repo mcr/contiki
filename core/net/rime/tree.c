@@ -42,6 +42,7 @@
 
 #include "net/rime.h"
 #include "net/rime/neighbor.h"
+#include "net/rime/nf.h"
 #include "net/rime/tree.h"
 
 #include "dev/radio-sensor.h"

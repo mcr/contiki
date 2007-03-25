@@ -41,6 +41,9 @@
 #ifndef __TREE_H__
 #define __TREE_H__
 
+#include "net/rime/uibc.h"
+#include "net/rime/ruc.h"
+
 struct tree_callbacks {
   void (* recv)(rimeaddr_t *originator, u8_t seqno,
 		u8_t hops, u8_t retransmissions);
