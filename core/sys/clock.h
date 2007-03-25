@@ -91,6 +91,10 @@ void clock_delay(unsigned int);
 #define CLOCK_SECOND (clock_time_t)32
 #endif
 
+int clock_fine_max(void);
+unsigned short clock_fine(void);
+
+
 #endif /* __CLOCK_H__ */
 
 /** @} */
