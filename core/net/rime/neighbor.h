@@ -60,6 +60,7 @@ void neighbor_remove(rimeaddr_t *addr);
 
 struct neighbor *neighbor_find(rimeaddr_t *addr);
 struct neighbor *neighbor_best(void);
+void neighbor_set_lifetime(int seconds);
 
 
 #endif /* __NEIGHBOR_H__ */

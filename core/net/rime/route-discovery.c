@@ -207,10 +207,12 @@ static const struct uc_callbacks rrep_callbacks = {rrep_packet_received};
 static const struct nf_callbacks rreq_callbacks = {rreq_packet_received, NULL};
 /*---------------------------------------------------------------------------*/
 void
-route_discovery_open(struct route_discovery_conn *c, u16_t channels,
+route_discovery_open(struct route_discovery_conn *c,
+		     clock_time time,
+		     u16_t channels,
 		     const struct route_discovery_callbacks *callbacks)
 {
-  nf_open(&c->rreqconn, channels + 0, &rreq_callbacks);
+  nf_open(&c->rreqconn, time, channels + 0, &rreq_callbacks);
   uc_open(&c->rrepconn, channels + 1, &rrep_callbacks);
   c->cb = callbacks;
 }
