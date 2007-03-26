@@ -336,7 +336,7 @@ PROCESS_THREAD(program_handler_process, ev, data)
       }
 #endif /* QUIT_MENU */
       dscp = &contikidsc[0];
-      for(i = 0; i < CTK_CONF_MAXMENUITEMS; ++i) {    
+      for(i = 0; i < CTK_MAXMENUITEMS; ++i) {    
 	if(*dscp != NULL &&
 	   data == (process_data_t)(*dscp)->icon) {
 	  RUN((*dscp)->prgname, (*dscp)->process, NULL);
