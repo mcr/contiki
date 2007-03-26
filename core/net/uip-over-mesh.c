@@ -38,6 +38,8 @@
  *         Adam Dunkels <adam@sics.se>
  */
 
+#include <stdio.h>
+
 #include "net/hc.h"
 #include "net/uip-fw.h"
 #include "net/rime/route-discovery.h"
