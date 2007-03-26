@@ -36,10 +36,17 @@
 #include "contiki.h"
 
 #include "net/uip.h"
+#ifdef __CYGWIN__
+#include "net/wpcap-service.h"
+#else
 #include "net/tapdev-service.h"
+#endif
 
-PROCINIT(&etimer_process, &tcpip_process,
-	 &tapdev_process);
+#ifdef __CYGWIN__
+PROCINIT(&etimer_process, &tcpip_process, &wpcap_process);
+#else
+PROCINIT(&etimer_process, &tcpip_process, &tapdev_process);
+#endif
 
 /*---------------------------------------------------------------------------*/
 int
