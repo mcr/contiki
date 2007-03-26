@@ -118,7 +118,7 @@ public interface MoteType {
    * @return True if mote type has valid settings and is ready to be used
    */
   public boolean configureAndInit(JFrame parentFrame, Simulation simulation,
-      boolean visAvailable);
+      boolean visAvailable) throws MoteTypeCreationException;
 
   /**
    * Returns XML elements representing the current config of this mote type.
@@ -146,6 +146,9 @@ public interface MoteType {
    * @return True if config was set successfully, false otherwise
    */
   public boolean setConfigXML(Simulation simulation,
-      Collection<Element> configXML, boolean visAvailable);
+      Collection<Element> configXML, boolean visAvailable) throws MoteTypeCreationException;
+
+  public class MoteTypeCreationException extends Exception {
+  }
 
 }

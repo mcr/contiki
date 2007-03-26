@@ -50,6 +50,7 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
+import se.sics.cooja.MoteType.MoteTypeCreationException;
 import se.sics.cooja.contikimote.*;
 import se.sics.cooja.dialogs.*;
 import se.sics.cooja.plugins.*;
@@ -896,7 +897,13 @@ public class GUI {
 
     // Create mote type
     logger.info("> Creating mote type");
-    ContikiMoteType moteType = new ContikiMoteType(moteTypeID);
+    ContikiMoteType moteType;
+    try {
+      moteType = new ContikiMoteType(moteTypeID);
+    } catch (MoteTypeCreationException e) {
+      logger.fatal("Exception when creating mote type: " + e);
+      return false;
+    }
     moteType.setDescription("Mote type: " + filename);
     moteType.setContikiBaseDir(contikiBaseDir.getPath());
     moteType.setContikiCoreDir(contikiCoreDir.getPath());
