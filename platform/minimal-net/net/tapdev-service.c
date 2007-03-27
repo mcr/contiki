@@ -74,7 +74,7 @@ pollhandler(void)
 	 should be sent out on the network, the global variable
 	 uip_len is set to a value > 0. */
       if(uip_len > 0) {
-	tapdev_do_send();
+	tapdev_send();
       }
     }
   }
