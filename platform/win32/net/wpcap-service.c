@@ -40,7 +40,7 @@
 #include <stdlib.h>
 #include <malloc.h>
 
-#pragma comment(lib, "wsock32")
+#pragma comment(lib, "ws2_32")
 #pragma comment(lib, "iphlpapi")
 
 #define htons		  /* Avoid 'redefinition' error. */
