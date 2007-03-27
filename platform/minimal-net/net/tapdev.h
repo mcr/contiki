@@ -32,15 +32,13 @@
  * This file is part of the uIP TCP/IP stack.
  *
  * $Id$
- *
  */
+
 #ifndef __TAPDEV_H__
 #define __TAPDEV_H__
 
-#include "contiki-net.h"
-
 void tapdev_init(void);
-u8_t tapdev_send(void);
 u16_t tapdev_poll(void);
-void tapdev_do_send(void);
+void tapdev_send(void);
+
 #endif /* __TAPDEV_H__ */
