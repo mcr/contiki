@@ -76,7 +76,7 @@ PROCESS_THREAD(ethernode_uip_process, ev, data)
 
 	uip_len = hc_inflate(&uip_buf[UIP_LLH_LEN], uip_len);
 
-	tapdev_send_raw();
+	tapdev_send();
 	/*    if(uip_fw_forward() == UIP_FW_LOCAL)*/ {
 	  /* A frame was avaliable (and is now read into the uip_buf), so
 	     we process it. */
