@@ -37,15 +37,15 @@
 
 #define BUF ((struct uip_eth_hdr *)&uip_buf[0])
 
-static u8_t output(void);
+u8_t tapdev_output(void);
 
-SERVICE(tapdev_service, packet_service, { output });
+SERVICE(tapdev_service, packet_service, { tapdev_output });
 
 PROCESS(tapdev_process, "TAP driver");
 
 /*---------------------------------------------------------------------------*/
-static u8_t
-output(void)
+u8_t
+tapdev_output(void)
 {
   uip_arp_out();
   tapdev_send();

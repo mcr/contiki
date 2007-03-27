@@ -68,9 +68,9 @@
 #include "cmdd.h"
 
 
-u8_t tapdev_send(void);
+u8_t tapdev_output(void);
 static struct uip_fw_netif tapif =
-  {UIP_FW_NETIF(0,0,0,0, 0,0,0,0, tapdev_send)};
+  {UIP_FW_NETIF(0,0,0,0, 0,0,0,0, tapdev_output)};
 
 
 PROCESS(init_process, "Init");
