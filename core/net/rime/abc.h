@@ -1,10 +1,10 @@
 /**
- * \addtogroup rime
+ * \addtogroup rimed
  * @{
  */
 
 /**
- * \defgroup rime_abc Anonymous best-effort local area broadcast (abc)
+ * \defgroup rimeabc Anonymous best-effort local area broadcast (abc)
  * @{
  *
  * The abc module sends packets to all local area neighbors without

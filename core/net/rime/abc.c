@@ -34,7 +34,7 @@
  */
 
 /**
- * \addtogroup rime_abc
+ * \addtogroup rimeabc
  * @{
  */
 
