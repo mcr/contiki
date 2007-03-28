@@ -49,8 +49,6 @@ SENSORS(&button_sensor, &sound_sensor, &vib_sensor,
 PROCINIT(&sensors_process, &ir_process, &etimer_process,
 	 &cfs_eeprom_process);
 
-#define ENABLE_AUTOSTART 0
-
 PROCESS(contiki_esb_main_init_process, "Contiki ESB init process");
 
 PROCESS_THREAD(contiki_esb_main_init_process, ev, data)
