@@ -179,13 +179,13 @@ rxon(void)
   /* Enable the receiver. */
   ME1 |= URXE0;
 
-  /* Turn off receive interrupt. */
+  /* Turn on receive interrupt. */
   IE1 |= URXIE0;
 
 }
 /*---------------------------------------------------------------------------*/
 /*
- * Turn on data reception for the radio tranceiver.
+ * Turn off data reception for the radio tranceiver.
  */
 static void
 rxoff(void)
