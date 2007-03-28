@@ -58,6 +58,7 @@ irq(void)
 static void
 init(void)
 {
+  flags = VIB_ENABLE_EVENT;
   vib = 0;
   VIB_SELECT();
   VIB_MAKE_INPUT();
