@@ -4,7 +4,7 @@
  */
 
 /**
- * \defgroup rime_uibc Unique Identified best effort local area Broadcast
+ * \defgroup rimeuibc Unique Identified best effort local area Broadcast
  * @{
  *
  * Send one packet that is unique within a time interval.

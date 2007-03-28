@@ -1,5 +1,5 @@
 /**
- * \addtogroup rime_uibc
+ * \addtogroup rimeuibc
  * @{
  */
 
