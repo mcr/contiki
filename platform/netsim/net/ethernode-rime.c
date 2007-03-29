@@ -41,12 +41,18 @@
 
 PROCESS(ethernode_rime_process, "Ethernode Rime driver");
 
+#define DEBUG 0
+#if DEBUG
+#include <stdio.h>
+#define PRINTF(...) printf(__VA_ARGS__)
+#else
+#define PRINTF(...)
+#endif
+
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(ethernode_rime_process, ev, data)
 {
   PROCESS_BEGIN();
-
-  /*  printf("ethernode_rime_process\n");*/
   
   while(1) {
     process_poll(&ethernode_rime_process);
@@ -64,8 +70,7 @@ PROCESS_THREAD(ethernode_rime_process, ev, data)
 
 	rimebuf_set_datalen(len);
 	
-	/*	printf("ethernode_rime_process: received len %d\n",
-		len);*/
+	PRINTF("ethernode_rime_process: received len %d\n", len);
 	rime_input();
       }
     }
@@ -77,7 +82,7 @@ PROCESS_THREAD(ethernode_rime_process, ev, data)
 void
 rime_driver_send(void)
 {
-  /*  printf("ethernode_rime: sending %d bytes\n", rimebuf_totlen());*/
+  PRINTF("ethernode_rime: sending %d bytes\n", rimebuf_totlen());
   ethernode_send_buf(rimebuf_hdrptr(), rimebuf_totlen());
 }
 /*---------------------------------------------------------------------------*/
