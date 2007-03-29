@@ -38,7 +38,7 @@
 
 /**
  * \file
- *         A brief description of what this file is.
+ *         Header file for the Rime stack
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
@@ -52,8 +52,6 @@
 #include "net/rime/rimebuf.h"
 #include "net/rime/queuebuf.h"
 #include "net/rime/route.h"
-
-#include "net/rime/rime-debug.h"
 
 /**
  * \brief      Initialize Rime
@@ -92,4 +90,5 @@ void rime_driver_send(void);
 
 #endif /* __RIME_H__ */
 
+/** @} */
 /** @} */
