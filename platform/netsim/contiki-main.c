@@ -62,7 +62,7 @@
 
 u8_t tapdev_output(void);
 static struct uip_fw_netif tapif =
-  {UIP_FW_NETIF(0,0,0,0, 0,0,0,0, tapdev_send)};
+  {UIP_FW_NETIF(0,0,0,0, 0,0,0,0, tapdev_output)};
 static struct uip_fw_netif meshif =
   {UIP_FW_NETIF(172,16,0,0, 255,255,0,0, uip_over_mesh_send)};
 /*static struct uip_fw_netif ethernodeif =
