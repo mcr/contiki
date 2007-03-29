@@ -46,13 +46,21 @@ struct uc_hdr {
   rimeaddr_t receiver;
 };
 
+#define DEBUG 0
+#if DEBUG
+#include <stdio.h>
+#define PRINTF(...) printf(__VA_ARGS__)
+#else
+#define PRINTF(...)
+#endif
+
 /*---------------------------------------------------------------------------*/
 static void
 recv_from_ibc(struct ibc_conn *ibc, rimeaddr_t *from)
 {
   struct uc_conn *c = (struct uc_conn *)ibc;
   struct uc_hdr *hdr = rimebuf_dataptr();
-  DEBUGF(2, "%d: uc: recv_from_ibc, receiver %d %p hdr %p\n",
+  PRINTF("%d: uc: recv_from_ibc, receiver %d %p hdr %p\n",
 	 rimeaddr_node_addr.u16, hdr->receiver.u16, c, hdr);
   if(rimeaddr_cmp(&hdr->receiver, &rimeaddr_node_addr)) {
     rimebuf_hdrreduce(sizeof(struct uc_hdr));
@@ -79,7 +87,7 @@ uc_close(struct uc_conn *c)
 int
 uc_send(struct uc_conn *c, rimeaddr_t *receiver)
 {
-  DEBUGF(2, "%d: uc_send to %d\n", rimeaddr_node_addr.u16, receiver->u16);
+  PRINTF("%d: uc_send to %d\n", rimeaddr_node_addr.u16, receiver->u16);
   if(rimebuf_hdralloc(sizeof(struct uc_hdr))) {
     struct uc_hdr *hdr = rimebuf_hdrptr();
     rimeaddr_copy(&hdr->receiver, receiver);

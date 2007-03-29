@@ -45,6 +45,14 @@
 
 LIST(ctimer_list);
 
+#define DEBUG 0
+#if DEBUG
+#include <stdio.h>
+#define PRINTF(...) printf(__VA_ARGS__)
+#else
+#define PRINTF(...)
+#endif
+
 /*---------------------------------------------------------------------------*/
 PROCESS(ctimer_process, "ctimer process");
 PROCESS_THREAD(ctimer_process, ev, data)
@@ -81,7 +89,7 @@ void
 ctimer_set(struct ctimer *c, clock_time_t t,
 	   void (*f)(void *), void *ptr)
 {
-  DEBUGF(3, "ctimer_set %p %d\n", c, t);
+  PRINTF("ctimer_set %p %d\n", c, t);
   c->p = PROCESS_CURRENT();
   c->f = f;
   c->ptr = ptr;
