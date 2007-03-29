@@ -231,7 +231,7 @@ timeout_handler(void *ptr)
   struct route_discovery_conn *c = ptr;
   PRINTF("route_discovery: timeout, timed out\n");
   if(c->cb->timedout) {
-    /*    c->cb->timedout(c);*/
+    c->cb->timedout(c);
   }
 }
 /*---------------------------------------------------------------------------*/
