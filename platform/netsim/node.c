@@ -59,7 +59,7 @@ node_init(int id, int posx, int posy, int b)
   /*  node.type = NODE_TYPE_NORMAL;*/
 
   if(b) {
-    uip_ipaddr(&addr, 192,168,2,2);
+    uip_ipaddr(&addr, 192,168,1,2);
   } else {
     uip_ipaddr(&addr, 172,16,posx,posy);
 
