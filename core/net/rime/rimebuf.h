@@ -46,12 +46,20 @@
 /**
  * \brief      The size of the rimebuf, in bytes
  */
+#ifdef RIMEBUF_CONF_SIZE
+#define RIMEBUF_SIZE RIMEBUF_CONF_SIZE
+#else
 #define RIMEBUF_SIZE 128
+#endif
 
 /**
  * \brief      The size of the rimebuf header, in bytes
  */
+#ifdef RIMEBUF_CONF_HDR_SIZE
+#define RIMEBUF_HDR_SIZE RIMEBUF_CONF_HDR_SIZE
+#else
 #define RIMEBUF_HDR_SIZE 32
+#endif
 
 /**
  * \brief      Clear and reset the rimebuf

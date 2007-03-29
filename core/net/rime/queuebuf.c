@@ -42,8 +42,17 @@
 
 #include <string.h> /* for memcpy() */
 
+#ifdef QUEUEBUF_CONF_NUM
+#define QUEUEBUF_NUM QUEUEBUF_CONF_NUM
+#else
 #define QUEUEBUF_NUM 2
+#endif
+
+#ifdef QUEUEBUF_CONF_REF_NUM
+#define QUEUEBUF_REF_NUM QUEUEBUF_CONF_REF_NUM
+#else
 #define QUEUEBUF_REF_NUM 2
+#endif
 
 struct queuebuf {
   u16_t len;
