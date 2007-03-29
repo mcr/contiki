@@ -136,6 +136,8 @@ main(void)
   
   /*  beep();*/
 
+  printf("Contiki started.\n");
+
   while(1) {
     /*    watchdog_restart();*/
     while(process_run() > 0);
