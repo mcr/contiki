@@ -4,7 +4,7 @@
  */
 
 /**
- * \defgroup rime-ibc Identified best-effort local area broadcast (ibc)
+ * \defgroup rimeibc Identified best-effort local area broadcast (ibc)
  * @{
  *
  * The ibc module sends packets to all local area neighbors with an a

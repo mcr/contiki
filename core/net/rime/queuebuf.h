@@ -4,7 +4,7 @@
  */
 
 /**
- * \defgroup rime-queuebuf Rime queue buffer management
+ * \defgroup rimequeuebuf Rime queue buffer management
  * @{
  *
  * The Rime queue buffer management handles buffers that are queued.
@@ -69,3 +69,6 @@ int queuebuf_datalen(struct queuebuf *b);
 
 
 #endif /* __QUEUEBUF_H__ */
+
+/** @} */
+/** @} */

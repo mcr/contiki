@@ -4,7 +4,7 @@
  */
 
 /**
- * \defgroup rime-mesh Mesh routing
+ * \defgroup rimemesh Mesh routing
  * @{
  *
  * The abc module sends packets using multi-hop routing to a specified
@@ -115,6 +115,7 @@ void mesh_close(struct mesh_conn *c);
 /**
  * \brief      Send a mesh packet
  * \param c    The mesh connection on which the packet should be sent
+ * \param dest The address of the final destination of the packet
  * \retval     Non-zero if the packet could be queued for sending, zero otherwise
  *
  *             This function sends a mesh packet. The packet must be

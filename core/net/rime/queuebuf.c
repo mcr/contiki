@@ -33,7 +33,7 @@
 
 /**
  * \file
- *         A brief description of what this file is.
+ *         Implementation of the Rime queue buffers
  * \author
  *         Adam Dunkels <adam@sics.se>
  */

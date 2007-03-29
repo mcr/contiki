@@ -4,7 +4,7 @@
 */
 
 /**
- * \defgroup rime-sabc Stubborn Anonymous best-effort local area BroadCast
+ * \defgroup rimesabc Stubborn Anonymous best-effort local area BroadCast
  * @{
  *
  * The sabc module provides stubborn anonymous best-effort local area
@@ -145,4 +145,5 @@ void sabc_set_timer(struct sabc_conn *c, clock_time_t t);
 
 #endif /* __SABC_H__ */
 
+/** @} */
 /** @} */

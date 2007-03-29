@@ -1,5 +1,5 @@
 /**
- * \addtogroup rimed
+ * \addtogroup rime
  * @{
  */
 
@@ -129,6 +129,6 @@ int abc_send(struct abc_conn *c);
  */
 void abc_input_packet(void);
 
-#endif /* __BC_H__ */
+#endif /* __ABC_H__ */
 /** @} */
 /** @} */

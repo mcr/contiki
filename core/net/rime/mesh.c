@@ -1,5 +1,5 @@
 /**
- * \addtogroup rime-mesh
+ * \addtogroup rimemesh
  * @{
  */
 
