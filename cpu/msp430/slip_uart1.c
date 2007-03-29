@@ -79,8 +79,6 @@ putchar(int c)
     debug_frame = 0;
   }
 
-  clock_delay(100);
-
   return c;
 }
 
