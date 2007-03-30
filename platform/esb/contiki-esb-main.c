@@ -136,7 +136,12 @@ main(void)
   
   /*  beep();*/
 
-  printf("Contiki started.\n");
+  printf(CONTIKI_VERSION_STRING " started.\n");
+  if(node_id > 0) {
+    printf("Node %u\n", node_id);
+  } else {
+    printf("Node id is not set.\n");
+  }
 
   while(1) {
     /*    watchdog_restart();*/
