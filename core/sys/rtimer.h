@@ -102,7 +102,7 @@ int rtimer_set(struct rtimer *t, rtimer_clock_t time, rtimer_clock_t duration,
  *             code to execute and schedule the next real-time task.
  *
  */
-void rtimer_next(void);
+void rtimer_run_next(void);
 
 /**
  * \brief      Get the current clock time
