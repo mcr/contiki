@@ -33,7 +33,7 @@
 
 /**
  * \file
- *         A brief description of what this file is.
+ *         Reliable unicast header file
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
@@ -54,12 +54,13 @@ struct ruc_conn {
   struct suc_conn c;
   const struct ruc_callbacks *u;
   u8_t state;
+  u8_t transmissions_left;
 };
 
 void ruc_open(struct ruc_conn *c, u16_t channel,
 	       const struct ruc_callbacks *u);
 void ruc_close(struct ruc_conn *c);
 
-int ruc_send(struct ruc_conn *c, rimeaddr_t *receiver);
+int ruc_send(struct ruc_conn *c, rimeaddr_t *receiver, u8_t max_retransmissions);
 
 #endif /* __RRUC_H__ */
