@@ -47,10 +47,10 @@
 
 #include "cfs/cfs-posix.h"
 
-#include "tapdev-service.h"
+#include "net/tapdev-service.h"
 #include "program-handler.h"
 #include "webserver.h"
-#include "ctk-gtksim-service.h"
+#include "ctk/ctk-gtksim-service.h"
 
 #include "about-dsc.h"
 #include "calc-dsc.h"
