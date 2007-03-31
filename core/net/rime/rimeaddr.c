@@ -1,3 +1,8 @@
+/**
+ * \addtogroup rimeaddr
+ * @{
+ */
+
 /*
  * Copyright (c) 2007, Swedish Institute of Computer Science.
  * All rights reserved.
@@ -33,7 +38,7 @@
 
 /**
  * \file
- *         A brief description of what this file is.
+ *         Functions for manipulating Rime addresses
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
@@ -62,3 +67,4 @@ rimeaddr_set_node_addr(rimeaddr_t *t)
   rimeaddr_copy(&rimeaddr_node_addr, t);
 }
 /*---------------------------------------------------------------------------*/
+/** @} */

@@ -1,3 +1,8 @@
+/**
+ * \addtogroup routediscovery
+ * @{
+ */
+
 /*
  * Copyright (c) 2007, Swedish Institute of Computer Science.
  * All rights reserved.
@@ -244,3 +249,4 @@ route_discovery_discover(struct route_discovery_conn *c, rimeaddr_t *addr,
   send_rreq(c, addr);
 }
 /*---------------------------------------------------------------------------*/
+/** @} */

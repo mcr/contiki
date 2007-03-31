@@ -1,3 +1,8 @@
+/**
+ * \addtogroup rimemh
+ * @{
+ */
+
 /*
  * Copyright (c) 2007, Swedish Institute of Computer Science.
  * All rights reserved.
@@ -33,7 +38,7 @@
 
 /**
  * \file
- *         A mesh routing protocol
+ *         Multihop forwarding
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
@@ -145,3 +150,4 @@ mh_send(struct mh_conn *c, rimeaddr_t *to)
   }
 }
 /*---------------------------------------------------------------------------*/
+/** @} */

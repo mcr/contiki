@@ -1,3 +1,20 @@
+/**
+ * \addtogroup rime
+ * @{
+ */
+
+/**
+ * \defgroup rimesuc Stubborn unicast
+ * @{
+ *
+ * The suc module takes one packet and sends it repetedly.
+ *
+ * \section channels Channels
+ *
+ * The suc module uses 1 channel.
+ *
+ */
+
 /*
  * Copyright (c) 2006, Swedish Institute of Computer Science.
  * All rights reserved.
@@ -33,7 +50,7 @@
 
 /**
  * \file
- *         A brief description of what this file is.
+ *         Stubborn unicast header file
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
@@ -72,3 +89,5 @@ int suc_send(struct suc_conn *c, rimeaddr_t *receiver);
 void suc_set_timer(struct suc_conn *c, clock_time_t t);
 
 #endif /* __SUC_H__ */
+/** @} */
+/** @} */

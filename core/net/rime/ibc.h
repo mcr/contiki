@@ -4,11 +4,16 @@
  */
 
 /**
- * \defgroup rimeibc Identified best-effort local area broadcast (ibc)
+ * \defgroup rimeibc Identified best-effort local area broadcast
  * @{
  *
  * The ibc module sends packets to all local area neighbors with an a
  * header that identifies the sender.
+ *
+ * \section channels Channels
+ *
+ * The ibc module uses 1 channel.
+ *
  */
 
 /*

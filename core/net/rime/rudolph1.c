@@ -1,3 +1,8 @@
+/**
+ * \addtogroup rudolph1
+ * @{
+ */
+
 /*
  * Copyright (c) 2007, Swedish Institute of Computer Science.
  * All rights reserved.
@@ -263,3 +268,4 @@ rudolph1_stop(struct rudolph1_conn *c)
   ctimer_stop(&c->t);
 }
 /*---------------------------------------------------------------------------*/
+/** @} */

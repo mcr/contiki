@@ -1,3 +1,15 @@
+/**
+ * \addtogroup rime
+ * @{
+ */
+
+/**
+ * \defgroup rimebuf Rime buffer management
+ * @{
+ *
+ * The rimebuf module does Rime's buffer management.
+ */
+
 /*
  * Copyright (c) 2006, Swedish Institute of Computer Science.
  * All rights reserved.
@@ -288,3 +300,5 @@ int rimebuf_hdrreduce(int size);
 
 
 #endif /* __RIMEBUF_H__ */
+/** @} */
+/** @} */

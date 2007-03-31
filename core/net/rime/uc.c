@@ -1,3 +1,8 @@
+/**
+ * \addtogroup rimeuc
+ * @{
+ */
+
 /*
  * Copyright (c) 2006, Swedish Institute of Computer Science.
  * All rights reserved.
@@ -33,7 +38,7 @@
 
 /**
  * \file
- *         A brief description of what this file is.
+ *         Single-hop unicast
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
@@ -96,3 +101,4 @@ uc_send(struct uc_conn *c, rimeaddr_t *receiver)
   return 0;
 }
 /*---------------------------------------------------------------------------*/
+/** @} */

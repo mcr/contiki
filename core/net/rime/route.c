@@ -1,3 +1,8 @@
+/**
+ * \addtogroup rimeroute
+ * @{
+ */
+
 /*
  * Copyright (c) 2007, Swedish Institute of Computer Science.
  * All rights reserved.
@@ -33,7 +38,7 @@
 
 /**
  * \file
- *         Routing tables for the mesh routing protocol
+ *         Rime route table
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
@@ -163,3 +168,4 @@ route_set_lifetime(int seconds)
   max_time = seconds;
 }
 /*---------------------------------------------------------------------------*/
+/** @} */

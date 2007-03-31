@@ -1,3 +1,8 @@
+/**
+ * \addtogroup rimeuabc
+ * @{
+ */
+
 /*
  * Copyright (c) 2007, Swedish Institute of Computer Science.
  * All rights reserved.
@@ -118,3 +123,4 @@ uabc_send(struct uabc_conn *c, clock_time_t interval)
   return 0;
 }
 /*---------------------------------------------------------------------------*/
+/** @} */

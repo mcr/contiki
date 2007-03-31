@@ -4,11 +4,16 @@
  */
 
 /**
- * \defgroup rimeabc Anonymous best-effort local area broadcast (abc)
+ * \defgroup rimeabc Anonymous best-effort local area broadcast
  * @{
  *
- * The abc module sends packets to all local area neighbors without
- * any extra headers that idendtify the sender or receiver.
+ * The abc module sends packets to all local area neighbors. The abc
+ * module adds no headers to outgoing packets.
+ *
+ * \section channels Channels
+ *
+ * The abc module uses 1 channel.
+ *
  */
 
 /*

@@ -4,13 +4,17 @@
 */
 
 /**
- * \defgroup rimesabc Stubborn Anonymous best-effort local area BroadCast
+ * \defgroup rimesabc Stubborn anonymous best-effort local area broadcast
  * @{
  *
  * The sabc module provides stubborn anonymous best-effort local area
  * broadcast. A message sent with the sabc module is repeated until
  * either the mssage is canceled or a new message is sent. Messages
  * sent with the sabc module are not identified with a sender ID.
+ *
+ * \section channels Channels
+ *
+ * The sabc module uses 1 channel.
  *
  */
 

@@ -4,10 +4,15 @@
  */
 
 /**
- * \defgroup uabc Unique Anonymous best effort local area BroadCast
+ * \defgroup rimeuabc Unique anonymous best effort local area broadcast
  * @{
  *
- * Send one packet that is unique within a time interval.
+ * The uabc module sends one anonymous packet that is unique within a
+ * time interval.
+ *
+ * \section channels Channels
+ *
+ * The uabc module uses 1 channel.
  *
  */
 

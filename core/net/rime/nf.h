@@ -1,3 +1,20 @@
+/**
+ * \addtogroup rime
+ * @{
+ */
+
+/**
+ * \defgroup rimenf Best-effort network flooding
+ * @{
+ *
+ * The nf module does best-effort flooding.
+ *
+ * \section channels Channels
+ *
+ * The nf module uses 1 channel.
+ *
+ */
+
 /*
  * Copyright (c) 2006, Swedish Institute of Computer Science.
  * All rights reserved.
@@ -72,3 +89,5 @@ void nf_close(struct nf_conn *c);
 int nf_send(struct nf_conn *c);
 
 #endif /* __SIBC_H__ */
+/** @} */
+/** @} */

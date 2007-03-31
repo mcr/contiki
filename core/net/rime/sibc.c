@@ -1,3 +1,8 @@
+/**
+ * \addtogroup rimesibc
+ * @{
+ */
+
 /*
  * Copyright (c) 2006, Swedish Institute of Computer Science.
  * All rights reserved.
@@ -111,3 +116,4 @@ sibc_cancel(struct sibc_conn *c)
   ctimer_stop(&c->t);
 }
 /*---------------------------------------------------------------------------*/
+/** @} */

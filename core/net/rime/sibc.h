@@ -1,3 +1,23 @@
+/**
+ * \addtogroup rime
+ * @{
+ */
+
+/**
+ * \defgroup rimesibc Stubborn identified broadcast
+ * @{
+ *
+ * The sibc module provides stubborn identified best-effort local area
+ * broadcast. A message sent with the sibc module is repeated until
+ * either the mssage is canceled or a new message is sent. Messages
+ * sent with the sibc module are identified with a sender ID.
+ *
+ * \section channels Channels
+ *
+ * The sibc module uses 1 channel.
+ *
+ */
+
 /*
  * Copyright (c) 2006, Swedish Institute of Computer Science.
  * All rights reserved.
@@ -69,3 +89,5 @@ void sibc_cancel(struct sibc_conn *c);
 void sibc_set_timer(struct sibc_conn *c, clock_time_t t);
 
 #endif /* __SIBC_H__ */
+/** @} */
+/** @} */

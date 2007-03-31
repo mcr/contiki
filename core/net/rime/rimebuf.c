@@ -1,3 +1,8 @@
+/**
+ * \addtogroup rimebuf
+ * @{
+ */
+
 /*
  * Copyright (c) 2006, Swedish Institute of Computer Science.
  * All rights reserved.
@@ -219,3 +224,4 @@ rimebuf_totlen(void)
   return rimebuf_hdrlen() + rimebuf_datalen();
 }
 /*---------------------------------------------------------------------------*/
+/** @} */

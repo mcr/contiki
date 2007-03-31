@@ -1,3 +1,8 @@
+/**
+ * \addtogroup rimeneighbor
+ * @{
+ */
+
 /*
  * Copyright (c) 2006, Swedish Institute of Computer Science.
  * All rights reserved.
@@ -221,3 +226,4 @@ neighbor_set_lifetime(int seconds)
   max_time = seconds;
 }
 /*---------------------------------------------------------------------------*/
+/** @} */

@@ -4,10 +4,14 @@
  */
 
 /**
- * \defgroup rimeuibc Unique Identified best effort local area Broadcast
+ * \defgroup rimeuibc Unique identified best effort local area broadcast
  * @{
  *
- * Send one packet that is unique within a time interval.
+ * The uibc module sends one packet that is unique within a time interval.
+ *
+ * \section channels Channels
+ *
+ * The uibc module uses 1 channel.
  *
  */
 

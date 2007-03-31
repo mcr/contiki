@@ -7,7 +7,7 @@
  * \defgroup rimequeuebuf Rime queue buffer management
  * @{
  *
- * The Rime queue buffer management handles buffers that are queued.
+ * The queuebuf module handles buffers that are queued.
  *
  */
 

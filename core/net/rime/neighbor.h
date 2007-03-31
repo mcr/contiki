@@ -1,3 +1,13 @@
+/**
+ * \addtogroup rime
+ * @{
+ */
+/**
+ * \defgroup rimeneighbor Rime neighbor management
+ * @{
+ *
+ * The neighbor module manages the neighbor table.
+ */
 /*
  * Copyright (c) 2006, Swedish Institute of Computer Science.
  * All rights reserved.
@@ -64,3 +74,5 @@ void neighbor_set_lifetime(int seconds);
 
 
 #endif /* __NEIGHBOR_H__ */
+/** @} */
+/** @} */

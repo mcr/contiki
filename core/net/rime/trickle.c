@@ -1,3 +1,8 @@
+/**
+ * \addtogroup trickle
+ * @{
+ */
+
 /*
  * Copyright (c) 2007, Swedish Institute of Computer Science.
  * All rights reserved.
@@ -192,3 +197,4 @@ trickle_send(struct trickle_conn *c, u8_t interval)
   reset_interval(c);
 }
 /*---------------------------------------------------------------------------*/
+/** @} */

@@ -1,3 +1,14 @@
+/**
+ * \addtogroup rime
+ * @{
+ */
+/**
+ * \defgroup rimeroute Rime route table
+ * @{
+ *
+ * The route module handles the route table in Rime.
+ */
+
 /*
  * Copyright (c) 2005, Swedish Institute of Computer Science.
  * All rights reserved.
@@ -33,7 +44,7 @@
 
 /**
  * \file
- *         Routing tables for the micro implementation of the AODV ad hoc routing protocol
+ *         Header file for the Rime route table
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
@@ -62,3 +73,5 @@ void route_flush_all(void);
 void route_set_lifetime(int seconds);
 
 #endif /* __ROUTE_H__ */
+/** @} */
+/** @} */

@@ -1,3 +1,8 @@
+/**
+ * \addtogroup ctimer
+ * @{
+ */
+
 /*
  * Copyright (c) 2006, Swedish Institute of Computer Science.
  * All rights reserved.
@@ -120,3 +125,4 @@ ctimer_stop(struct ctimer *c)
   list_remove(ctimer_list, c);
 }
 /*---------------------------------------------------------------------------*/
+/** @} */

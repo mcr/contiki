@@ -1,3 +1,22 @@
+/**
+ * \addtogroup rime
+ * @{
+ */
+
+/**
+ * \defgroup rudolph0 Single-hop reliable bulk data transfer
+ * @{
+ *
+ * The rudolph0 module implements a single-hop reliable bulk data
+ * transfer mechanism.
+ *
+ * \section channels Channels
+ *
+ * The rudolph0 module uses 2 channels; one for data packets and one
+ * for NACK and repair packets.
+ *
+ */
+
 /*
  * Copyright (c) 2007, Swedish Institute of Computer Science.
  * All rights reserved.
@@ -33,7 +52,7 @@
 
 /**
  * \file
- *         A brief description of what this file is.
+ *         Header file for the single-hop reliable bulk data transfer module
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
@@ -93,3 +112,6 @@ void rudolph0_set_version(struct rudolph0_conn *c, int version);
 int rudolph0_version(struct rudolph0_conn *c);
 
 #endif /* __RUDOLPH0_H__ */
+/** @} */
+/** @} */
+    

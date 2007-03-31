@@ -1,3 +1,8 @@
+/**
+ * \addtogroup rudolph0
+ * @{
+ */
+
 /*
  * Copyright (c) 2007, Swedish Institute of Computer Science.
  * All rights reserved.
@@ -119,10 +124,6 @@ recv(struct sabc_conn *sabc)
   struct rudolph0_conn *c = (struct rudolph0_conn *)sabc;
   struct rudolph0_datapacket *p = rimebuf_dataptr();
 
-  /*  if(rand() & 1) {
-    return;
-    }*/
-  
   if(p->h.type == TYPE_DATA) {
     if(c->current.h.version != p->h.version) {
       PRINTF("rudolph0 new version %d\n", p->h.version);
@@ -229,3 +230,4 @@ rudolph0_set_version(struct rudolph0_conn *c, int version)
   c->current.h.version = version;
 }
 /*---------------------------------------------------------------------------*/
+/** @} */

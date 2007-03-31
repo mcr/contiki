@@ -7,8 +7,15 @@
  * \defgroup rimemesh Mesh routing
  * @{
  *
- * The abc module sends packets using multi-hop routing to a specified
+ * The mesh module sends packets using multi-hop routing to a specified
  * receiver somewhere in the network.
+ *
+ *
+ * \section channels Channels
+ *
+ * The mesh module uses 3 channel; one for the multi-hop forwarding
+ * (\ref rimemh "mh") and two for the route disovery (\ref
+ * routediscovery "route-discovery").
  *
  */
 

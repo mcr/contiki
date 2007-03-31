@@ -1,3 +1,8 @@
+/**
+ * \addtogroup rime
+ * @{
+ */
+
 /*
  * Copyright (c) 2006, Swedish Institute of Computer Science.
  * All rights reserved.
@@ -33,7 +38,7 @@
 
 /**
  * \file
- *         A brief description of what this file is.
+ *         Rime initialization and common code
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
@@ -55,3 +60,4 @@ rime_input(void)
   abc_input_packet();
 }
 /*---------------------------------------------------------------------------*/
+/** @} */
