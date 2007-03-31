@@ -40,6 +40,7 @@
 
 #include <signal.h>
 #include <sys/time.h>
+#include <stddef.h>
 
 #include "sys/rtimer.h"
 #include "sys/clock.h"
