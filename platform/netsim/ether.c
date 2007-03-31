@@ -434,7 +434,15 @@ ether_tick(void)
 	       ((q->x - x) * (q->x - x) +
 		(q->y - y) * (q->y - y) <=
 		ether_strength() * ether_strength())) {
-	      interference = 1;
+
+	      /* If the potentially interfering packets were sent from
+		 the same node, then they don't interfere with each
+		 other. Otherwise they interfere and we sent the
+		 interference flag to 1. */
+	      if(p->x != q->x ||
+		 p->y != q->y) {
+		interference = 1;
+	      }
 	      break;
 	    }
 	  }
