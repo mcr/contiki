@@ -37,15 +37,15 @@
 
 #define BUF ((struct uip_eth_hdr *)&uip_buf[0])
 
-static u8_t output(void);
+u8_t wpcap_output(void);
 
-SERVICE(wpcap_service, packet_service, { output });
+SERVICE(wpcap_service, packet_service, { wpcap_output });
 
 PROCESS(wpcap_process, "WinPcap driver");
 
 /*---------------------------------------------------------------------------*/
-static u8_t
-output(void)
+u8_t
+wpcap_output(void)
 {
   uip_arp_out();
   wpcap_send();
