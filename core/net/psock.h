@@ -34,7 +34,7 @@
  */
 
 /**
- * \addtogroup net
+ * \addtogroup uip
  * @{
  */
 

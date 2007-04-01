@@ -1,5 +1,5 @@
 /**
- * \addtogroup net
+ * \addtogroup uip
  * @{
  */
 
