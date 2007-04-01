@@ -39,7 +39,11 @@
 
 #include "net/uip-fw.h"
 #include "net/hc.h"
+#ifdef __CYGWIN__
+#include "net/wpcap.h"
+#else
 #include "net/tapdev.h"
+#endif
 
 #include "node-id.h"
 
@@ -76,7 +80,11 @@ PROCESS_THREAD(ethernode_uip_process, ev, data)
 
 	uip_len = hc_inflate(&uip_buf[UIP_LLH_LEN], uip_len);
 
+#ifdef __CYGWIN__
+	wpcap_send();
+#else
 	tapdev_send();
+#endif
 	/*    if(uip_fw_forward() == UIP_FW_LOCAL)*/ {
 	  /* A frame was avaliable (and is now read into the uip_buf), so
 	     we process it. */
