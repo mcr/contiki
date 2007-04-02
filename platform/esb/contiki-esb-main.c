@@ -136,9 +136,9 @@ main(void)
   
   /*  beep();*/
 
-  printf(CONTIKI_VERSION_STRING " started.\n");
+  printf(CONTIKI_VERSION_STRING " started. ");
   if(node_id > 0) {
-    printf("Node %u\n", node_id);
+    printf("Node id is set to %u.\n", node_id);
   } else {
     printf("Node id is not set.\n");
   }
