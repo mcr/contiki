@@ -1979,8 +1979,6 @@ public class GUI {
           myGUI.setSimulation(newSim);
 
         } catch (UnsatisfiedLinkError e) {
-          logger.fatal("Could not load libraries: " + e.getMessage());
-
           JOptionPane.showMessageDialog(frame,
               e.getMessage(),
               "Simulation reload error",
@@ -1988,8 +1986,6 @@ public class GUI {
 
           myGUI.doRemoveSimulation(false);
         } catch (SimulationCreationException e) {
-          logger.fatal("Could not reopen simulation: " + e.getMessage());
-
           JOptionPane.showMessageDialog(frame,
               e.getMessage(),
               "Simulation reload error",
@@ -2728,6 +2724,8 @@ public class GUI {
       throw new SimulationCreationException("Configuration file not wellformed: " + e.getMessage());
     } catch (IOException e) {
       throw new SimulationCreationException("No access to configuration file: " + e.getMessage());
+    } catch (MoteTypeCreationException e) {
+      throw new SimulationCreationException("Mote type creation error: " + e.getMessage());
     } catch (Exception e) {
       throw new SimulationCreationException("Unknown error: " + e.getMessage());
     }
