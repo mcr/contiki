@@ -144,7 +144,6 @@ nodes_done(int id)
   }
 
   if(num_done == numnodes) {
-    ether_print_stats();
     exit(0);
   }
 }
