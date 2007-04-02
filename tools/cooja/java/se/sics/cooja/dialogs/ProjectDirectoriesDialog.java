@@ -422,6 +422,16 @@ class ConfigViewer extends JDialog {
     myDialog.setLocationRelativeTo(parentFrame);
     myDialog.setAlwaysOnTop(true);
 
+    Rectangle maxSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+    if (maxSize != null && 
+        (myDialog.getSize().getWidth() > maxSize.getWidth()
+            || myDialog.getSize().getHeight() > maxSize.getHeight())) {
+      Dimension newSize = new Dimension();
+      newSize.height = Math.min((int) maxSize.getHeight(), (int) myDialog.getSize().getHeight());
+      newSize.width = Math.min((int) maxSize.getWidth(), (int) myDialog.getSize().getWidth());
+      myDialog.setSize(newSize);
+    }
+    
     if (myDialog != null) {
       myDialog.setVisible(true);
     }
