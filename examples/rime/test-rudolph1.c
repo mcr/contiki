@@ -160,19 +160,6 @@ PROCESS_THREAD(test_rudolph1_process, ev, data)
   }
   
   while(1) {
-    PROCESS_WAIT_EVENT_UNTIL(ev == sensors_event &&
-			     data == &button_sensor);
-    {
-      int i;
-      
-      fd = cfs_open("hej", CFS_WRITE);
-      for(i = 0; i < FILESIZE; i++) {
-	unsigned char buf = i;
-	cfs_write(fd, &buf, 1);
-      }
-      cfs_close(fd);
-    }
-    rudolph1_send(&rudolph1, CLOCK_SECOND * 2);
 
     PROCESS_WAIT_EVENT_UNTIL(ev == sensors_event &&
 			     data == &button_sensor);
