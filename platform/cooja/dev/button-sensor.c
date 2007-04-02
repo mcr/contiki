@@ -100,9 +100,9 @@ doInterfaceActionsBeforeTick(void)
     if(timer_expired(&debouncetimer)) {
       timer_set(&debouncetimer, CLOCK_SECOND / 10);
       sensors_changed(&button_sensor);
-      simButtonChanged = 0;
     }
   }
+  simButtonChanged = 0;
 }
 /*---------------------------------------------------------------------------*/
 static void
