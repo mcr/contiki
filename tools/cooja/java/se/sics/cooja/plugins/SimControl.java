@@ -125,7 +125,7 @@ public class SimControl extends VisPlugin {
     JPanel controlPanel = new JPanel();
     controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.Y_AXIS));
     
-    setContentPane(controlPanel);
+    getContentPane().add(controlPanel, BorderLayout.NORTH);
 
     // Add control buttons
     smallPanel = new JPanel();
