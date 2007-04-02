@@ -173,11 +173,11 @@ PT_THREAD(recv_tcpthread(struct pt *pt))
   ret = start_program();
   
 #if NETSIM
-  rudolph0_send(&rudolph0);
+  rudolph0_send(&rudolph0, CLOCK_SECOND / 4);
 #else /* NETSIM */
   if(ret == ELFLOADER_OK) {
     /* Propagate program. */
-    rudolph0_send(&rudolph0);
+    rudolph0_send(&rudolph0, CLOCK_SECOND / 4);
   }
 #endif /* NETSIM */
   
