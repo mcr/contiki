@@ -501,6 +501,12 @@ public class GUI {
     });
     menu.add(menuMoteTypes);
 
+    menuItem = new JMenuItem("Remove all motes");
+    menuItem.setActionCommand("remove all motes");
+    menuItem.addActionListener(guiEventHandler);
+
+    menu.add(menuItem);
+
     // Plugins menu
     menuPlugins = new JMenu("Plugins");
     menuPlugins.setMnemonic(KeyEvent.VK_P);
@@ -2373,6 +2379,15 @@ public class GUI {
         Object[] plugins = startedPlugins.toArray();
         for (Object plugin : plugins)
           removePlugin((Plugin) plugin, false);
+      } else if (e.getActionCommand().equals("remove all motes")) {
+        if (getSimulation() != null) {
+          if (getSimulation().isRunning())
+            getSimulation().stopSimulation();
+          
+          while (getSimulation().getMotesCount() > 0) {
+            getSimulation().removeMote(getSimulation().getMote(0));
+          }
+        }
       } else if (e.getActionCommand().equals("manage projects")) {
         Vector<File> newProjects = ProjectDirectoriesDialog.showDialog(frame,
             currentProjectDirs, null);
