@@ -195,7 +195,7 @@ public class MoteInformation extends VisPlugin {
     }
     
     
-    this.setContentPane(new JScrollPane(mainPane,
+    this.getContentPane().add(BorderLayout.NORTH, new JScrollPane(mainPane,
         JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
         JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED));
     pack();
