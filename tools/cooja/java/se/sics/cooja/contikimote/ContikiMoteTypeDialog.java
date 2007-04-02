@@ -2059,7 +2059,11 @@ public class ContikiMoteTypeDialog extends JDialog {
         try {
           myMoteType.doInit(textID.getText());
         } catch (MoteTypeCreationException ex) {
-          logger.fatal("Exception when loading library: " + ex);
+          JOptionPane.showMessageDialog(myDialog,
+              ex.getMessage(),
+              "Mote type creation error",
+              JOptionPane.ERROR_MESSAGE);
+          return;
         }
         myMoteType.setDescription(textDescription.getText());
         myMoteType.setContikiBaseDir(textContikiDir.getText());

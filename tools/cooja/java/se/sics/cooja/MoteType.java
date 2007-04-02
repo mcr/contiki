@@ -149,6 +149,9 @@ public interface MoteType {
       Collection<Element> configXML, boolean visAvailable) throws MoteTypeCreationException;
 
   public class MoteTypeCreationException extends Exception {
+    public MoteTypeCreationException(String message) {
+      super(message);
+    }
   }
 
 }
