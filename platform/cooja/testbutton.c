@@ -29,7 +29,6 @@
  * $Id$
  */
 
-
 #include "contiki.h"
 #include "sys/loader.h"
 
@@ -60,10 +59,10 @@ PROCESS_THREAD(button_test_process, ev, data)
   while(1) {
     PROCESS_WAIT_EVENT();
 
-    if (button_sensor.value(0)) {
+    if (ev == sensors_event && data == &button_sensor && button_sensor.value(0)) {
       custom_counter++;
 
-      sprintf(logMess, "button> Button pressed (counter=%i)\n", custom_counter);
+      sprintf(logMess, "Button pressed (counter=%i)\n", custom_counter);
       log_message(logMess, "");
     }
   }

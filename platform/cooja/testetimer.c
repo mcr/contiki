@@ -59,7 +59,7 @@ PROCESS_THREAD(etimer_test_process, ev, data)
 
   etimer_set(&mytimer, 1111);
 
-  sprintf(logMess, "Starting ETimer test process (counter=%i)\n", custom_counter);
+  sprintf(logMess, "Starting event timer test process (counter=%i)\n", custom_counter);
   log_message(logMess, "");
 
   while(1) {
@@ -67,7 +67,7 @@ PROCESS_THREAD(etimer_test_process, ev, data)
 
     if (etimer_expired(&mytimer)) {
       custom_counter++;
-      sprintf(logMess, "etimer> Timed out(counter=%i)\n", custom_counter);
+      sprintf(logMess, "Timed out (counter=%i)\n", custom_counter);
       log_message(logMess, "");
 
       etimer_restart(&mytimer);
