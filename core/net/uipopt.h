@@ -1,4 +1,9 @@
 /**
+ * \addtogroup uip
+ * @{
+ */
+
+/**
  * \defgroup uipopt Configuration options for uIP
  * @{
  *
@@ -541,4 +546,5 @@ typedef struct httpd_state uip_tcp_appstate_t
 /** @} */
 
 #endif /* __UIPOPT_H__ */
+/** @} */
 /** @} */
