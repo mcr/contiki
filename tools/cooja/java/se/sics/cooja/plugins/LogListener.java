@@ -94,9 +94,15 @@ public class LogListener extends VisPlugin {
         
         outputString = outputString.concat(moteLogInterface.getLastLogMessages());
 
-        logTextArea.append("\n");
-        logTextArea.append(outputString);
-        logTextArea.setCaretPosition(logTextArea.getDocument().getLength());
+        
+        final String str = outputString;
+        SwingUtilities.invokeLater(new Runnable() {
+          public void run() {
+            logTextArea.append("\n");
+            logTextArea.append(str);
+            logTextArea.setCaretPosition(logTextArea.getDocument().getLength());
+          }
+        });
       }
     };
     
