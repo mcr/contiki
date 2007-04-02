@@ -85,6 +85,7 @@ struct rudolph1_conn {
   struct uabc_conn uabc;
   const struct rudolph1_callbacks *cb;
   struct ctimer t;
+  clock_time_t send_interval;
   u16_t chunk;
   u8_t version;
   u8_t trickle_interval;
@@ -94,7 +95,7 @@ struct rudolph1_conn {
 void rudolph1_open(struct rudolph1_conn *c, u16_t channel,
 		   const struct rudolph1_callbacks *cb);
 void rudolph1_close(struct rudolph1_conn *c);
-void rudolph1_send(struct rudolph1_conn *c);
+void rudolph1_send(struct rudolph1_conn *c, clock_time_t send_interval);
 void rudolph1_stop(struct rudolph1_conn *c);
 
 #endif /* __RUDOLPH1_H__ */

@@ -98,6 +98,7 @@ struct rudolph0_conn {
   struct sabc_conn c;
   struct uabc_conn nackc;
   const struct rudolph0_callbacks *cb;
+  clock_time_t send_interval;
   u8_t state;
   struct rudolph0_datapacket current;
 };
@@ -105,7 +106,7 @@ struct rudolph0_conn {
 void rudolph0_open(struct rudolph0_conn *c, u16_t channel,
 		   const struct rudolph0_callbacks *cb);
 void rudolph0_close(struct rudolph0_conn *c);
-void rudolph0_send(struct rudolph0_conn *c);
+void rudolph0_send(struct rudolph0_conn *c, clock_time_t interval);
 void rudolph0_stop(struct rudolph0_conn *c);
 
 void rudolph0_set_version(struct rudolph0_conn *c, int version);
