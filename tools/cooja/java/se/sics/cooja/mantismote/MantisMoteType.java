@@ -134,8 +134,13 @@ public class MantisMoteType implements MoteType {
     
     // Allocate core communicator class
     libraryClassName = CoreComm.getAvailableClassName();
-    myCoreComm = CoreComm.createCoreComm(libraryClassName, libFile);
-    
+    try {
+      myCoreComm = CoreComm.createCoreComm(libraryClassName, libFile);
+    } catch (MoteTypeCreationException e) {
+      logger.fatal("Library creation failed: " + e.getMessage());
+      return false;
+    }
+
     // Parse variable name to addresses mappings using nm
     varAddresses.clear();
     Vector<String> nmData = ContikiMoteType.loadNmData(libFile);
