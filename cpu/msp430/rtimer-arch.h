@@ -33,7 +33,7 @@
 
 /**
  * \file
- *         A brief description of what this file is.
+ *         Header file for the MSP430-specific rtimer code
  * \author
  *         Adam Dunkels <adam@sics.se>
  */

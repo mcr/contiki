@@ -33,7 +33,7 @@
 
 /**
  * \file
- *         Native (non-specific) code for the Contiki real-time module rt
+ *         MSP430-specific rtimer code
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
