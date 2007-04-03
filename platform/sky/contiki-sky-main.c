@@ -115,6 +115,8 @@ main(int argc, char **argv)
   sensors_light_init();
   xmem_init();
   leds_toggle(LEDS_RED | LEDS_GREEN | LEDS_BLUE);
+
+  rtimer_init();
   /*
    * Hardware initialization done!
    */
