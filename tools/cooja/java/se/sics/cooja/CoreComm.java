@@ -34,6 +34,8 @@ import java.lang.reflect.*;
 import java.net.*;
 import java.util.Vector;
 
+import se.sics.cooja.MoteType.MoteTypeCreationException;
+
 /**
  * The purpose of corecomm's is communicating with a compiled Contiki system
  * using Java Native Interface (JNI). Each implemented class (named Lib[number]),
@@ -207,15 +209,15 @@ public abstract class CoreComm {
       p = Runtime.getRuntime().exec(cmd, null, null);
       p.waitFor();
       
+      if (classFile.exists())
+        return true;
+      
     } catch (IOException e) {
       return false;
     } catch (InterruptedException e) {
       return false;
     }
 
-    if (classFile.exists())
-      return true;
-    
     return false;
   }
   
@@ -250,16 +252,17 @@ public abstract class CoreComm {
    *          Native library file
    * @return Core Communicator
    */
-  public static CoreComm createCoreComm(String className, File libFile) {
+  public static CoreComm createCoreComm(String className, File libFile)
+  throws MoteTypeCreationException {
     if (!generateLibSourceFile(className))
-      return null;
+      throw new MoteTypeCreationException("Could not generate library source file: " + className);
     
     if (!compileSourceFile(className))
-      return null;
+      throw new MoteTypeCreationException("Could not compile library: " + className);
 
     Class newCoreCommClass = loadClassFile(className);
     if (newCoreCommClass == null)
-      return null;
+      throw new MoteTypeCreationException("Could not load library class file: " + className);
 
     try {
       Constructor constr = newCoreCommClass.getConstructor(new Class[] { File.class });
@@ -271,13 +274,13 @@ public abstract class CoreComm {
       
       return newCoreComm;
     } catch (NoSuchMethodException e) {
-      return null;
+      throw new MoteTypeCreationException("Error when creating library instance: " + className);
     } catch (InstantiationException e) {
-      return null;
+      throw new MoteTypeCreationException("Error when creating library instance: " + className);
     } catch (InvocationTargetException e) {
-      return null;
+      throw new MoteTypeCreationException("Error when creating library instance: " + className);
     } catch (IllegalAccessException e) {
-      return null;
+      throw new MoteTypeCreationException("Error when creating library instance: " + className);
     }
   }
   
