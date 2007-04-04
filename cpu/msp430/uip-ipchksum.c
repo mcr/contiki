@@ -34,8 +34,6 @@
 /**
  * \file
  *         uIP checksum calculation for MSP430
- * \author
- *         Björn Grönvall <bg@sics.se>
  */
 
 #include "net/uip.h"
