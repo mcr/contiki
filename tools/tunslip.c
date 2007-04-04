@@ -842,7 +842,7 @@ ifconf(const char *tundev, const char *ipaddr, const char *netmask)
 #ifdef mac_something
   ssystem("ifconfig %s inet `hostname` %s up", tundev, ipaddr);
 #else
-  ssystem("ifconfig %s inet up", tundev);
+  ssystem("ifconfig %s inet `hostname` %s up", tundev, ipaddr);
 #endif
   if (strcmp(ipaddr, "0.0.0.0") != 0)
     ssystem("route add -net %s -netmask %s -interface %s",
