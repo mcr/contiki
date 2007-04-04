@@ -35,10 +35,14 @@
 
 #include "net/rime.h"
 
+#include "net/tr1001-rime.h"
+
 void
 init_net(void)
 {
   rimeaddr_t rimeaddr;
+
+  process_start(&tr1001_rime_process, NULL);
 
   rime_init();
   rimeaddr.u8[0] = node_id >> 8;
