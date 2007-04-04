@@ -75,8 +75,7 @@
 /* This is how we force inclusion of the psock library. */
 #include "net/psock.h"
 void *force_psock_inclusion = &psock_init;
-
-void uip_log(char *msg) { puts(msg); }
+void *force_udp_inclusion = &uip_udp_packet_send;
 
 struct uip_fw_netif cc2420if =
 {UIP_FW_NETIF(0,0,0,0, 255,255,255,255, cc2420_send_uaodv)};
