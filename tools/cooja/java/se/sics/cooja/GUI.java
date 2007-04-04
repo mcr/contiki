@@ -2313,7 +2313,19 @@ public class GUI {
   public static void saveExternalToolsUserSettings() {
     try {
       FileOutputStream out = new FileOutputStream(externalToolsUserSettingsFile);
-      currentExternalToolsSettings.store(out, "COOJA User Settings");
+      
+      Properties differingSettings = new Properties();
+      Enumeration keyEnum = currentExternalToolsSettings.keys();
+      while (keyEnum.hasMoreElements()) {
+        String key = (String) keyEnum.nextElement();
+        String defaultSetting = getExternalToolsDefaultSetting(key, "");
+        String currentSetting = getExternalToolsSetting(key, "");
+        if (!defaultSetting.equals(currentSetting)) {
+          differingSettings.setProperty(key, currentSetting);
+        }
+      }
+      
+      differingSettings.store(out, "COOJA External Tools (User specific)");
       out.close();
     } catch (FileNotFoundException ex) {
       // Could not open settings file for writing, aborting
