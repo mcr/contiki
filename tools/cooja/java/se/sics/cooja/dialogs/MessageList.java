@@ -133,9 +133,12 @@ public class MessageList extends JList {
   }
 
   public void addMessage(String message, int type) {
+    boolean scroll = getLastVisibleIndex() >= getModel().getSize() - 1;
     MessageContainer msg = new MessageContainer(message, type);
     ((DefaultListModel) getModel()).addElement(msg);
-    ensureIndexIsVisible(getModel().getSize() - 1);
+    if (scroll) {
+      ensureIndexIsVisible(getModel().getSize() - 1);
+    }
   }
 
   public void clearMessages() {
