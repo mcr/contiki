@@ -119,7 +119,7 @@ process_start(struct process *p, char *arg)
 
   PT_INIT(&p->pt);
   
-  /* Post a synchronous event to the process. */
+  /* Post an asynchronous event to the process. */
   process_post(p, PROCESS_EVENT_INIT, (process_data_t)arg);
 }
 /*---------------------------------------------------------------------------*/
