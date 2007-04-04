@@ -128,6 +128,7 @@ void cc2420_input(const struct hdr_802_15 *hdr, u8_t hdr_len,
 		  const u8_t *payload, u8_t payload_len);
 
 /* Is mac far away? remote=1, local=0, don't know=-1. */
+enum { REMOTE_MAYBE = -1, REMOTE_NO = 0, REMOTE_YES = 1 };
 int cc2420_check_remote(u16_t mac);
 void cc2420_recv_ok(uip_ipaddr_t *from);
 
