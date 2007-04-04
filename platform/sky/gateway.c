@@ -70,6 +70,7 @@
 #include "dev/leds.h"
 #include "dev/light.h"
 #include "dev/xmem.h"
+#include "lib/rand.h"
 
 #include "dev/button.h"
 
@@ -82,8 +83,12 @@
  * device driver.
  */
 #include "net/psock.h"
-void *force_psock_inclusion = &psock_init;
-void *force_button_inclusion = &button_init;
+void *force_inclusion[] = {
+  &psock_init,
+  &button_init,
+  &uip_udp_packet_send,
+  &rand,
+};
 #if 0
 int
 force_float_inclusion()
@@ -96,8 +101,6 @@ force_float_inclusion()
   return __fixsfsi + __floatsisf + __mulsf3 + __subsf3;
 }
 #endif
-
-void uip_log(char *msg) { puts(msg); }
 
 /* We have two IP interfaces. */
 struct uip_fw_netif cc2420if =
