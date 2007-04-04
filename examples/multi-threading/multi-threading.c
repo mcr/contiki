@@ -74,7 +74,7 @@ thread_func(char *str, int len)
   sprintf(buf, "%s\n", str + len);
   mt_yield();
 
-  if (len) {
+  if(len) {
     thread_func(str, len - 1);
     mt_yield();
   }
