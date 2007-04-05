@@ -42,6 +42,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define htonl /* Avoid 'conflicting types' error. */
 #define htons /* Avoid 'conflicting types' error. */
 #include "contiki-net.h"
 #include "wpcap.h"
