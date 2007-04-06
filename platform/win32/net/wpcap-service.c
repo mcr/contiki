@@ -43,7 +43,10 @@
 #pragma comment(lib, "ws2_32")
 #pragma comment(lib, "iphlpapi")
 
-#define htons		  /* Avoid 'redefinition' error. */
+/* Avoid 'redefinition' error. */
+#define htonl
+#define htons
+
 #include "contiki.h"
 #include "contiki-net.h"
 
