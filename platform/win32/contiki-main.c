@@ -42,6 +42,8 @@
 #include "contiki-net.h"
 
 #include "sys/clock.h"
+#include "ctk/ctk.h"
+#include "ctk/ctk-console.h"
 
 #include "../../apps/directory/directory-dsc.h"
 #include "../../apps/webbrowser/www-dsc.h"
@@ -102,8 +104,8 @@ clock_time(void)
   return clock();
 }
 /*-----------------------------------------------------------------------------------*/
-void
-main(int argc)
+int
+main(void)
 {
   process_init();
 

@@ -38,6 +38,7 @@
 #include <stdlib.h>
 
 #include "contiki.h"
+#include "ctk/ctk.h"
 
 #include "ctk-console.h"
 
