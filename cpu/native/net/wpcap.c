@@ -49,7 +49,7 @@
 #include "contiki-net.h"
 #include "wpcap.h"
 
-extern char **__argv[];
+__attribute__((dllimport)) extern char **__argv[];
 
 struct pcap;
 
