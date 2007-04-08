@@ -103,19 +103,19 @@ pollhandler(void)
     return;
   }
 
+  if(packet_header->caplen > UIP_BUFSIZE) {
+    return;
+  }
+
   uip_len = packet_header->caplen;
   CopyMemory(uip_buf, packet, uip_len);
 
   if(BUF->type == HTONS(UIP_ETHTYPE_IP)) {
-    debug_printf("I");
-
-    uip_len -= sizeof(struct uip_eth_hdr);
     tcpip_input();
 
   } else if(BUF->type == HTONS(UIP_ETHTYPE_ARP)) {
-    debug_printf("A");
-
     uip_arp_arpin();
+
     if(uip_len > 0) {
       if(pcap_sendpacket(pcap, uip_buf, uip_len) == -1) {
         error_exit("Error on ARP response\n");
