@@ -224,6 +224,10 @@ wpcap_poll(void)
     return 0;
   }
 
+  if(packet_header->caplen > UIP_BUFSIZE) {
+    return 0;
+  }
+
   CopyMemory(uip_buf, packet, packet_header->caplen);
   return (u16_t)packet_header->caplen;
 }
