@@ -58,6 +58,7 @@ PROCINIT(&etimer_process,
 	 &cfs_win32_process,
 	 &ctk_conio_service_process,
 	 &ctk_process,
+	 &wpcap_service_process,
 	 &tcpip_process,
 	 &resolv_process,
 	 &program_handler_process);
@@ -130,8 +131,6 @@ main(void)
 
     uip_ipaddr(&addr, 192,168,0,1);
     resolv_conf(&addr);
-
-    program_handler_load("wpcap.drv", NULL);
   }
 #endif
 
