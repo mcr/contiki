@@ -306,11 +306,15 @@ public class ProjectDirectoriesDialog extends JDialog {
     button = new JButton("Add manually");
     button.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        String newProjectPath = JOptionPane.showInputDialog(myDialog,
-            "Enter path to project directory", "Enter path",
-            JOptionPane.QUESTION_MESSAGE);
-        if (newProjectPath != null) {
-          addProjectDir(new File(newProjectPath));
+        ProjectDirectoryInputDialog pathDialog = new ProjectDirectoryInputDialog(myParentFrame);
+        pathDialog.pack();
+
+        pathDialog.setLocationRelativeTo(myParentFrame);
+        pathDialog.setVisible(true);
+
+        File projectPath = pathDialog.getProjectDirectory();
+        if (projectPath != null) {
+          addProjectDir(projectPath);
         }
       }
     });
