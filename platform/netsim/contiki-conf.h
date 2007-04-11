@@ -103,7 +103,7 @@ typedef unsigned long clock_time_t;
 #define UIP_CONF_MAX_LISTENPORTS 40
 #define UIP_CONF_BUFFER_SIZE     120
 
-#define UIP_CONF_BYTE_ORDER      LITTLE_ENDIAN
+#define UIP_CONF_BYTE_ORDER      UIP_LITTLE_ENDIAN
 
 #define UIP_CONF_BROADCAST	 1
 
