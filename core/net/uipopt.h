@@ -474,8 +474,8 @@ void uip_log(char *msg);
 /**
  * The byte order of the CPU architecture on which uIP is to be run.
  *
- * This option can be either BIG_ENDIAN (Motorola byte order) or
- * LITTLE_ENDIAN (Intel byte order).
+ * This option can be either UIP_BIG_ENDIAN (Motorola byte order) or
+ * UIP_LITTLE_ENDIAN (Intel byte order).
  *
  * \hideinitializer
  */
