@@ -58,7 +58,7 @@ PROCINIT(&etimer_process,
 	 &cfs_win32_process,
 	 &ctk_conio_service_process,
 	 &ctk_process,
-	 &wpcap_service_process,
+	 &wpcap_process,
 	 &tcpip_process,
 	 &resolv_process,
 	 &program_handler_process);
@@ -87,16 +87,6 @@ void
 log_message(const char *part1, const char *part2)
 {
   debug_printf("%s%s\n", part1, part2);
-}
-/*-----------------------------------------------------------------------------------*/
-void
-error_exit(char *message)
-{
-  debug_printf("Error Exit: %s", message);
-
-  console_exit();
-  console_cputs(message);
-  exit(EXIT_FAILURE);
 }
 /*-----------------------------------------------------------------------------------*/
 clock_time_t
