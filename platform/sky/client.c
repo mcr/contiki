@@ -117,9 +117,10 @@ main(int argc, char **argv)
    * Hardware initialization done!
    */
   
-  printf("MAC %02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x\n",
+  printf("MAC %02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x CHANNEL %d\n",
 	 ds2411_id[0], ds2411_id[1], ds2411_id[2], ds2411_id[3],
-	 ds2411_id[4], ds2411_id[5], ds2411_id[6], ds2411_id[7]);
+	 ds2411_id[4], ds2411_id[5], ds2411_id[6], ds2411_id[7],
+	 RF_CHANNEL);
 
   uip_ipaddr_copy(&uip_hostaddr, &cc2420if.ipaddr);
   uip_ipaddr_copy(&uip_netmask, &cc2420if.netmask);
