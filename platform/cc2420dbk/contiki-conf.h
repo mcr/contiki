@@ -11,8 +11,7 @@
 #define CCIF
 #define CLIF
 
-/* This is still experimental. /bg */
-#define UAODV_BAD_ROUTE
+#define AODV_NUM_RT_ENTRIES 32
 
 /* Helper prototypes that should go somewhere. */
 void *sbrk(int);
@@ -56,8 +55,8 @@ unsigned long clock_seconds(void);
 #define UIP_CONF_RECEIVE_WINDOW  (UIP_CONF_BUFFER_SIZE - 40)
 #define UIP_CONF_MAX_CONNECTIONS 4
 #define UIP_CONF_MAX_LISTENPORTS 8
-#define UIP_CONF_UDP_CONNS       6
-#define UIP_CONF_FWCACHE_SIZE    5
+#define UIP_CONF_UDP_CONNS       12
+#define UIP_CONF_FWCACHE_SIZE    30
 #define UIP_CONF_BROADCAST       1
 //#define UIP_ARCH_IPCHKSUM        1
 #define UIP_CONF_UDP_CHECKSUMS   1
