@@ -133,6 +133,7 @@ nullterminate(char *str)
   return nt;
 }
 /*-----------------------------------------------------------------------------------*/
+#ifdef SHELL_CONF_WITH_PROGRAM_HANDLER
 static void
 runfile(char *str)
 {
@@ -153,6 +154,7 @@ execfile(char *str)
   runfile(str);
   shell_quit(NULL);
 }
+#endif /* SHELL_CONF_WITH_PROGRAM_HANDLER */
 /*-----------------------------------------------------------------------------------*/
 static void
 killproc(char *str)
@@ -179,8 +181,10 @@ static void
 help(char *str)
 {
   shell_output("Available commands:", "");
+#ifdef SHELL_CONF_WITH_PROGRAM_HANDLER
   shell_output("run  - start program", "");
-  shell_output("exec - start program & exit shell", "");  
+  shell_output("exec - start program & exit shell", "");
+#endif
   shell_output("ps   - show processes", "");
   shell_output("kill - kill process", "");
   shell_output("ls   - display directory", "");
@@ -209,8 +213,11 @@ none(char *str)
 }
 /*-----------------------------------------------------------------------------------*/
 static struct ptentry configparsetab[] =
-  {{'e', 'E', execfile},
+  {
+#ifdef SHELL_CONF_WITH_PROGRAM_HANDLER
+   {'e', 'E', execfile},
    {'r', 'R', runfile},
+#endif
    {'k', 'K', killproc},   
    {'p', 'P', processes},
    {'l', 'L', directory},
