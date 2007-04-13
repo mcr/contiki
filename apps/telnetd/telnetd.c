@@ -394,6 +394,3 @@ telnetd_appcall(void *ts)
   }
 }
 /*-----------------------------------------------------------------------------------*/
-void
-program_handler_load(char *name, char *arg)
-{}
