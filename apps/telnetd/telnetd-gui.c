@@ -63,7 +63,7 @@ telnetd_gui_output(char *str1, char *str2)
   }
   memset(&log[(YSIZE - 1) * XSIZE], 0, XSIZE);
 
-  len = strlen(str1);
+  len = (unsigned int)strlen(str1);
 
   strncpy(&log[(YSIZE - 1) * XSIZE], str1, XSIZE);
   if(len < XSIZE) {
