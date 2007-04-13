@@ -186,6 +186,7 @@ PROCESS_THREAD(telnetd_process, ev, data)
     } else if(ev == PROCESS_EVENT_EXIT) {
       telnetd_quit();
     } else {
+      shell_eventhandler(ev, data);
 #if TELNETD_CONF_GUI
       telnetd_gui_eventhandler(ev, data);
 #endif /* TELNETD_CONF_GUI */
