@@ -83,6 +83,12 @@ console_init(void)
 {
   CONSOLE_SCREEN_BUFFER_INFO consoleinfo;
   CONSOLE_CURSOR_INFO cursorinfo = {1, FALSE};
+  static unsigned char done;
+
+  if(done) {
+    return;
+  }
+  done = 1;
 
   stdinhandle  = GetStdHandle(STD_INPUT_HANDLE);
   stdouthandle = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -190,11 +196,15 @@ clrscr(void)
 void
 bgcolor(unsigned char c)
 {
+  /* Presume this to be one the first calls. */
+  console_init();
 }
 /*-----------------------------------------------------------------------------------*/
 void
 bordercolor(unsigned char c)
 {
+  /* Presume this to be one the first calls. */
+  console_init();
 }
 /*-----------------------------------------------------------------------------------*/
 void
