@@ -55,10 +55,10 @@
 #include "program-handler.h"
 
 PROCINIT(&etimer_process,
+	 &wpcap_process,
 	 &cfs_win32_process,
 	 &ctk_conio_service_process,
 	 &ctk_process,
-	 &wpcap_process,
 	 &tcpip_process,
 	 &resolv_process,
 	 &program_handler_process);
@@ -101,8 +101,6 @@ main(void)
   process_init();
 
   procinit_init();
-
-  console_init();
 
   program_handler_add(&directory_dsc, "Directory",   1);
   program_handler_add(&www_dsc,       "Web browser", 1);
