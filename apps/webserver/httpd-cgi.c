@@ -163,7 +163,7 @@ make_tcp_stats(void *arg)
     
   conn = &uip_conns[s->count];
   return sprintf((char *)uip_appdata,
-		 "<tr><td>%d</td><td>%u.%u.%u.%u:%u</td><td>%s</td><td>%u</td><td>%u</td><td>%c %c</td></tr>\r\n",
+		 "<tr align=\"center\"><td>%d</td><td>%u.%u.%u.%u:%u</td><td>%s</td><td>%u</td><td>%u</td><td>%c %c</td></tr>\r\n",
 		 htons(conn->lport),
 		 conn->ripaddr.u8[0],
 		 conn->ripaddr.u8[1],
