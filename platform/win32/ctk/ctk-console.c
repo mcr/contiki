@@ -68,6 +68,16 @@ static unsigned short ypos;
 static unsigned char  button;
 
 /*-----------------------------------------------------------------------------------*/
+static BOOL WINAPI
+ctrlhandler(DWORD ctrltype)
+{
+  if(ctrltype == CTRL_C_EVENT) {
+    exit(EXIT_SUCCESS);
+    return TRUE;
+  }
+  return FALSE;
+}
+/*-----------------------------------------------------------------------------------*/
 void
 console_init(void)
 {
@@ -94,6 +104,7 @@ console_init(void)
   GetConsoleCursorInfo(stdouthandle, &saved_cursorinfo);
   SetConsoleCursorInfo(stdouthandle, &cursorinfo);
 
+  SetConsoleCtrlHandler(ctrlhandler, TRUE);
   atexit(console_exit);
 
   memset(blank, ' ',  sizeof(blank));
