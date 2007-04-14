@@ -89,12 +89,6 @@ log_message(const char *part1, const char *part2)
   debug_printf("%s%s\n", part1, part2);
 }
 /*-----------------------------------------------------------------------------------*/
-clock_time_t
-clock_time(void)
-{
-  return clock();
-}
-/*-----------------------------------------------------------------------------------*/
 int
 main(void)
 {
