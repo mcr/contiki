@@ -133,7 +133,7 @@ nullterminate(char *str)
   return nt;
 }
 /*-----------------------------------------------------------------------------------*/
-#ifdef SHELL_CONF_WITH_PROGRAM_HANDLER
+#if SHELL_CONF_WITH_PROGRAM_HANDLER
 static void
 runfile(char *str)
 {
@@ -181,7 +181,7 @@ static void
 help(char *str)
 {
   shell_output("Available commands:", "");
-#ifdef SHELL_CONF_WITH_PROGRAM_HANDLER
+#if SHELL_CONF_WITH_PROGRAM_HANDLER
   shell_output("run  - start program", "");
   shell_output("exec - start program & exit shell", "");
 #endif
@@ -214,7 +214,7 @@ none(char *str)
 /*-----------------------------------------------------------------------------------*/
 static struct ptentry configparsetab[] =
   {
-#ifdef SHELL_CONF_WITH_PROGRAM_HANDLER
+#if SHELL_CONF_WITH_PROGRAM_HANDLER
    {'e', 'E', execfile},
    {'r', 'R', runfile},
 #endif
