@@ -1639,7 +1639,7 @@ PROCESS_THREAD(ctk_process, ev, data)
 	    
 		  if(mouse_button_changed) {
 		    process_post(window->owner, ctk_signal_pointer_button,
-				 (process_data_t)mouse_button);
+				 (process_data_t)(size_t)mouse_button);
 		    if(mouse_clicked && widget != NULL) {
 		      select_widget(widget);
 		      redraw |= activate(widget);
@@ -1725,7 +1725,7 @@ PROCESS_THREAD(ctk_process, ev, data)
 		  /*	      window->focused = NULL;*/
 		  unfocus_widget(window->focused);
 		  process_post_synch(window->owner, ctk_signal_keypress,
-				     (process_data_t)c);
+				     (process_data_t)(size_t)c);
 		}
 	      }
 	      break;
