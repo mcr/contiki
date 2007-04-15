@@ -33,14 +33,14 @@
  *
  */
 
+#include <string.h>
+#include <ctype.h>
 #include <conio.h>
+
+#include "contiki.h"
 
 #include "ctk/ctk.h"
 #include "ctk-draw.h"
-
-#include "contiki-conf.h"
-#include <string.h>
-#include <ctype.h>
 
 #ifndef NULL
 #define NULL (void *)0
@@ -211,7 +211,7 @@ draw_widget(struct ctk_widget *w,
       }
 #endif /* CTK_CONF_ICON_TEXTMAPS */
   
-      len = strlen(w->widget.icon.title);
+      len = (unsigned char)strlen(w->widget.icon.title);
       if(xpos + len >= sizex) {
 	xpos = sizex - len;
       }
@@ -495,10 +495,10 @@ ctk_draw_menus(struct ctk_menus *menus)
 
   /* Draw desktopmenu */
   if(wherex() + strlen(menus->desktopmenu->title) + 1 >= sizex) {
-    gotoxy(sizex - strlen(menus->desktopmenu->title) - 1, 0);
+    gotoxy(sizex - (unsigned char)strlen(menus->desktopmenu->title) - 1, 0);
   } else {
     cclear(sizex - wherex() -
-	   strlen(menus->desktopmenu->title) - 1);
+	   (unsigned char)strlen(menus->desktopmenu->title) - 1);
   }
   draw_menu(menus->desktopmenu, menus->desktopmenu == menus->open);
 
@@ -517,8 +517,3 @@ ctk_draw_width(void)
   return sizex;
 }
 /*-----------------------------------------------------------------------------------*/
-int
-ctk_arch_isprint(char c)
-{
-  return isprint(c);
-}
