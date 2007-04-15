@@ -62,7 +62,7 @@ void cputsxy(unsigned char x, unsigned char y, char *str);
 void cputcxy(unsigned char x, unsigned char y, char c);
 void textcolor(unsigned char c);
 
-ctk_arch_key_t ctk_arch_getkey(void);
+char ctk_arch_getkey(void);
 unsigned char ctk_arch_keyavail(void);
 
 #endif /* __CTK_CONSOLE_H__ */
