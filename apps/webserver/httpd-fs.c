@@ -106,7 +106,8 @@ httpd_fs_init(void)
 }
 /*-----------------------------------------------------------------------------------*/
 #if HTTPD_FS_STATISTICS
-u16_t httpd_fs_count(char *name)
+u16_t
+httpd_fs_count(char *name)
 {
   struct httpd_fsdata_file_noconst *f;
   u16_t i;
