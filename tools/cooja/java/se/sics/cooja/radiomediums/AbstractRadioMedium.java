@@ -289,11 +289,11 @@ public abstract class AbstractRadioMedium extends RadioMedium {
           logger.fatal("Can't find active connection to forward byte in");
         } else {
           byte b = ((ByteRadio) radio).getLastByteTransmitted();
-          long timestamp = ((ByteRadio) radio).getLastByteTransmittedTimestamp();
+          long delay = ((ByteRadio) radio).getLastByteTransmittedDelay();
 
           for (Radio dstRadio : connection.getDestinations()) {
             if (dstRadio instanceof ByteRadio) {
-              ((ByteRadio) dstRadio).receiveByte(b, timestamp);
+              ((ByteRadio) dstRadio).receiveByte(b, delay);
             }
           }
         }
