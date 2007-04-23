@@ -114,6 +114,10 @@ public abstract class AbstractRadioMedium extends RadioMedium {
    */
   public void forwardPacket(RadioConnection connection, byte[] packetData) {
     Radio sourceRadio = connection.getSource();
+    if (packetData == null || packetData.length == 0) {
+      logger.warn("Trying to forward null packet");
+      return;
+    }
 
     if (sourceRadio instanceof ByteRadio) {
       // Byte radios only forwards packets to packet radios
