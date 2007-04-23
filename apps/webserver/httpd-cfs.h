@@ -32,16 +32,15 @@
  *
  */
 
-#ifndef __HTTPD_H__
-#define __HTTPD_H__
+#ifndef __HTTPD_CFS_H__
+#define __HTTPD_CFS_H__
 
-#include "contiki.h"
-#include "psock.h"
+#include "contiki-net.h"
 
 struct httpd_state {
   struct timer timer;
   struct psock sin, sout;
-  struct pt outputpt, scriptpt;
+  struct pt outputpt;
   char inputbuf[50];
   char outputbuf[UIP_TCP_MSS];
   char filename[20];
@@ -54,4 +53,4 @@ struct httpd_state {
 void httpd_init(void);
 void httpd_appcall(void *state);
 
-#endif /* __HTTPD_H__ */
+#endif /* __HTTPD_CFS_H__ */
