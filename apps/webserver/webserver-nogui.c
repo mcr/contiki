@@ -40,7 +40,7 @@
 #include "sys/log.h"
 
 #include "http-strings.h"
-#include "webserver.h"
+#include "webserver-nogui.h"
 #include "httpd.h"
 
 PROCESS(webserver_nogui_process, "Web server");
@@ -60,7 +60,7 @@ PROCESS_THREAD(webserver_nogui_process, ev, data)
 }
 /*---------------------------------------------------------------------------*/
 void
-httpd_log_file(uip_ipaddr_t *requester, char *file)
+webserver_log_file(uip_ipaddr_t *requester, char *file)
 {
 #if LOG_CONF_ENABLED
   char buf[18];
@@ -73,7 +73,7 @@ httpd_log_file(uip_ipaddr_t *requester, char *file)
 }
 /*---------------------------------------------------------------------------*/
 void
-httpd_log(char *msg)
+webserver_log(char *msg)
 {
   log_message(msg, "");
 }

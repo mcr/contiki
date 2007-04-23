@@ -61,7 +61,4 @@ struct httpd_state {
 void httpd_init(void);
 void httpd_appcall(void *state);
 
-void httpd_log(char *msg);
-void httpd_log_file(uip_ipaddr_t *requester, char *file);
-
 #endif /* __HTTPD_H__ */

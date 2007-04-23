@@ -33,15 +33,15 @@
  *
  */
 
+#include <string.h>
+#include <stdio.h>
+
 #include "contiki.h"
 #include "ctk/ctk.h"
 
 #include "http-strings.h"
 #include "webserver.h"
 #include "httpd.h"
-
-#include <string.h>
-#include <stdio.h>
 
 /* The main window. */
 static struct ctk_window mainwindow;
@@ -60,7 +60,6 @@ static struct ctk_label loglabel =
 /*-----------------------------------------------------------------------------------*/
 PROCESS_THREAD(webserver_process, ev, data)
 {
-
   PROCESS_BEGIN();
   
   ctk_window_new(&mainwindow, LOG_WIDTH, LOG_HEIGHT+1, "Web server");
@@ -89,7 +88,7 @@ PROCESS_THREAD(webserver_process, ev, data)
 }
 /*-----------------------------------------------------------------------------------*/
 void
-httpd_log_file(uip_ipaddr_t *requester, char *file)
+webserver_log_file(uip_ipaddr_t *requester, char *file)
 {
   int size;
   
@@ -112,7 +111,7 @@ httpd_log_file(uip_ipaddr_t *requester, char *file)
 }
 /*-----------------------------------------------------------------------------------*/
 void
-httpd_log(char *msg)
+webserver_log(char *msg)
 {
   /* Scroll previous entries upwards */
   memcpy(log, &log[LOG_WIDTH], LOG_WIDTH * (LOG_HEIGHT - 1));

@@ -35,8 +35,11 @@
 #ifndef __WEBSERVER_NOGUI_H__
 #define __WEBSERVER_NOGUI_H__
 
-#include "contiki.h"
+#include "contiki-net.h"
 
 PROCESS_NAME(webserver_nogui_process);
+
+void webserver_log(char *msg);
+void webserver_log_file(uip_ipaddr_t *requester, char *file);
 
 #endif /* __WEBSERVER_H__ */
