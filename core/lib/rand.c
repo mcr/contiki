@@ -30,6 +30,9 @@
  *
  * @(#)$Id$
  */
+
+#include <stdlib.h>
+
 #include "rand.h"
 
 /*
