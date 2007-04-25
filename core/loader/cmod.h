@@ -33,7 +33,7 @@
 #define CMOD_H
 
 struct cmod_info {
-  cle_addr ram;
+  void * ram;
   /* cle_addr rom; */
   void (*fini)(void);
 };
