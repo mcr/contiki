@@ -90,18 +90,18 @@ cmod_load(unsigned imod,
    */
   h.data = cmod_module[imod].ram;
   h.bss = h.data + h.datasize;
-  h.text = h.bss + h.bsssize;
+  h.text = (cle_addr)h.bss + h.bsssize;
 
   PRINTF("cmod: copy text segment to RAM %p %p\n",
 	 h.text, h.text + h.textsize);
-  ret = pread(h.text, h.textsize, off + h.textoff); 
+  ret = pread((void *)h.text, h.textsize, off + h.textoff); 
   assert(ret > 0);
   if(h.textrelasize > 0) {
     PRINTF("cmod: relocate text in RAM\n");
     ret = cle_relocate(&h,
 		       pread,
 		       off,
-		       h.text,
+		       (void *)h.text,
 		       h.textrelaoff, h.textrelasize);
     if(ret != CLE_OK) {
       strcpy(scratch, h.name);
