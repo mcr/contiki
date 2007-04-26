@@ -90,6 +90,10 @@ cle_lookup(struct cle_info *info,
 	   off_t hdr,		/* Offset to start of file. */
 	   const char *symbol);
 
+struct elf32_rela;		/* Struct forward decl. */
+
+int cle_write_reloc(unsigned char *, const struct elf32_rela *, cle_addr);
+
 /*
  * Error codes that apply in general to linking and loading.
  */
