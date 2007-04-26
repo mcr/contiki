@@ -23,7 +23,7 @@ SRCDIRS = dev  $(TOP)/cpu/msp430 ${addprefix $(TOP)/core/,sys dev net lib loader
 
 MCU=msp430x1611
 
-ARCH=msp430.o minileds.o watchdog.o light.o button.o spi.o ds2411.o rom.o xmem.o i2c.o
+ARCH=msp430.o minileds.o watchdog.o light.o button.o spi.o ds2411.o rom.o xmem.o i2c.o cle_msp430.o
 SYSTEM=process.o procinit.o service.o clock.o etimer.o timer.o \
         cmod.o cle.o sym.o
 UIP=uip.o uiplib.o tcpip.o uip-fw.o uip-fw-service.o uipbuf.o \
