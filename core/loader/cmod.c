@@ -34,6 +34,7 @@
 
 #include "contiki.h"
 
+#include "loader/elf32.h"
 #include "loader/cle.h"
 #include "loader/cmod.h"
 
