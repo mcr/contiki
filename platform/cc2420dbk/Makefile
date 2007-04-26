@@ -32,7 +32,7 @@ UIP=uip.o uiplib.o tcpip.o uip-fw.o uip-fw-service.o uipbuf.o \
 UIPDRIVERS=slip.o slip_uart1.o \
            cc2420.o cc2420_spi.o cc2420_send_ip.o cc2420_send_uaodv.o 
 LIBS=memb.o list.o rand.o assert.o crtk.o
-SYSAPPS=#tcp_loader.o
+SYSAPPS=tcp_loader.o
 LIBFILES=$(SYSTEM) $(ARCH) $(UIP) $(UIPDRIVERS) $(LIBS) $(SYSAPPS)
 
 MKNMLIST=awk -f $(TOP)/tools/mknmlist-ansi
