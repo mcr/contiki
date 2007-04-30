@@ -278,8 +278,9 @@ relay_dhcp_to_client(int slipfd)
       break;
 
     case DHCP_OPTION_DNS_SERVER: /* Only copy first server */
-      memcpy(t, p, 4/**/ + 2);
-      t += 4/**/ + 2;
+      *t++ = p[0];
+      *t++ = 6;
+      memcpy(t, p + 2, 4); t += 4;
       p += p[1] + 2;
       break;
 
