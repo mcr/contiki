@@ -46,7 +46,7 @@ extern u16_t uip_slen;
 
 /*---------------------------------------------------------------------------*/
 void
-uip_udp_packet_send(struct uip_udp_conn *c, char *data, int len)
+uip_udp_packet_send(struct uip_udp_conn *c, const void *data, int len)
 {
   uip_udp_conn = c;
   uip_slen = len;
