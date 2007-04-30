@@ -417,7 +417,6 @@ uip_fw_forward(void)
 #ifdef AODV_COMPLIANCE
 #define udp ((struct uip_udpip_hdr *)&uip_buf[UIP_LLH_LEN])
   if(udp->proto == UIP_PROTO_UDP && udp->destport == HTONS(UAODV_UDPPORT)) {
-    printf("not fwd\n");
     return UIP_FW_LOCAL;
   }
 #endif
