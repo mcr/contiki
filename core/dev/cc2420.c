@@ -56,7 +56,7 @@
 #include "dev/cc2420.h"
 #include "dev/cc2420_const.h"
 
-#define NDEBUG
+//#define NDEBUG
 #include "lib/assert.h"
 
 #ifdef NDEBUG
@@ -525,15 +525,18 @@ PROCESS_THREAD(cc2420_retransmit_process, ev, data)
 	break;
       } else if (seq != last_used_seq)
 	break;			/* Transmitting different packet. */
-      else if (n < MAX_RETRANSMISSIONS) {
-	int ret;
- 	PRINTF("RETRANS %d %d.%d\n", n, last_dst >> 8, last_dst & 0xff);
-	ret = cc2420_resend();
-	if (last_dst == 0xffff && ret == UIP_FW_OK) {
+      else if (last_dst == 0xffff) {
+	n++;
+	if (cc2420_resend() == UIP_FW_OK) {
+	  PRINTF("REBCAST %d\n", n);
 	  etimer_stop(&etimer);
 	  break;
 	}
-	n++;
+      } else if (n < MAX_RETRANSMISSIONS) {
+	if (cc2420_resend() == UIP_FW_OK) {
+	  n++;
+	  PRINTF("RETRANS %d to %d.%d\n", n, last_dst & 0xff, last_dst >> 8);
+	}
       } else {
 	break;
       }
