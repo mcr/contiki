@@ -56,7 +56,7 @@
 #include "dev/cc2420.h"
 #include "dev/cc2420_const.h"
 
-//#define NDEBUG
+#define NDEBUG
 #include "lib/assert.h"
 
 #ifdef NDEBUG
