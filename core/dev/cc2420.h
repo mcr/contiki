@@ -110,6 +110,7 @@ extern struct uip_fw_netif cc2420if;
 
 extern signed char cc2420_last_rssi;
 extern u8_t cc2420_last_correlation;
+extern u8_t cc2420_is_input;
 extern volatile u8_t cc2420_ack_received;
 
 void cc2420_init(void);
