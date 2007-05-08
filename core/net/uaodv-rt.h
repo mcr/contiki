@@ -49,12 +49,13 @@ struct uaodv_rt_entry {
   uip_ipaddr_t nexthop;
   u32_t seqno;
   u8_t hop_count;
-  u8_t unused;
+  u8_t is_bad;			/* one bit used */
 };
 
 struct uaodv_rt_entry *
 uaodv_rt_add(uip_ipaddr_t *dest, uip_ipaddr_t *nexthop,
 	     unsigned hop_count, u32_t seqno);
+struct uaodv_rt_entry *uaodv_rt_lookup_any(uip_ipaddr_t *dest);
 struct uaodv_rt_entry *uaodv_rt_lookup(uip_ipaddr_t *dest);
 void uaodv_rt_remove(struct uaodv_rt_entry *e);
 void uaodv_rt_lru(struct uaodv_rt_entry *e);
