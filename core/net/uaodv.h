@@ -46,6 +46,6 @@
 PROCESS_NAME(uaodv_process);
 
 struct uaodv_rt_entry * uaodv_request_route_to(uip_ipaddr_t *host);
-void uaodv_bad_route(struct uaodv_rt_entry *rt);
+void uaodv_bad_dest(uip_ipaddr_t *);
 
 #endif /* __UAODV_H__ */
