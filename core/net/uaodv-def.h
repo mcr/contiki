@@ -106,6 +106,7 @@ struct uaodv_msg_rrep {
 /* AODV RERR message */
 #define UAODV_RERR_TYPE     3
 #define UAODV_RERR_NODELETE (1 << 7)
+#define UAODV_RERR_UNKNOWN  (1 << 6) /* Non standard extension /bg. */
 
 struct uaodv_msg_rerr {
   u8_t type;
