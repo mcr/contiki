@@ -299,6 +299,11 @@ CCIF void tcpip_input(void);
 void tcpip_output(void);
 void tcpip_set_forwarding(unsigned char f);
 
+/*
+ * Are we at the moment forwarding the contents of uip_buf[]?
+ */
+extern unsigned char tcpip_is_forwarding;
+
 /** @} */
 
 PROCESS_NAME(tcpip_process);
