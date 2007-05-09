@@ -268,13 +268,14 @@ handle_incoming_rreq(void)
   }
     
   /* Check if it is for our address or a fresh route. */
-  if(uip_ipaddr_cmp(&rm->dest_addr, &uip_hostaddr)) {
+  if(uip_ipaddr_cmp(&rm->dest_addr, &uip_hostaddr)
+     || rm->flags & UAODV_RREQ_DESTONLY) {
     fw = NULL;
   } else {
     fw = uaodv_rt_lookup(&rm->dest_addr);
     if(!(rm->flags & UAODV_RREQ_UNKSEQNO)
        && fw != NULL
-       && SCMP32(ntohl(rm->dest_seqno), fw->hseqno) >= 0) {
+       && SCMP32(fw->hseqno, ntohl(rm->dest_seqno)) <= 0) {
       fw = NULL;
     }
   }
