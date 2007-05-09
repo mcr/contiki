@@ -274,13 +274,13 @@ public abstract class CoreComm {
       
       return newCoreComm;
     } catch (NoSuchMethodException e) {
-      throw new MoteTypeCreationException("Error when creating library instance: " + className);
+      throw new MoteTypeCreationException("Error when creating library instance (#1): " + className);
     } catch (InstantiationException e) {
-      throw new MoteTypeCreationException("Error when creating library instance: " + className);
+      throw new MoteTypeCreationException("Error when creating library instance (#2): " + className);
     } catch (InvocationTargetException e) {
-      throw new MoteTypeCreationException("Error when creating library instance: " + className);
+      throw new MoteTypeCreationException("Error when creating library instance (#3): " + className);
     } catch (IllegalAccessException e) {
-      throw new MoteTypeCreationException("Error when creating library instance: " + className);
+      throw new MoteTypeCreationException("Error when creating library instance (#4): " + className);
     }
   }
   
