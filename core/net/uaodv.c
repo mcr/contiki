@@ -248,9 +248,9 @@ handle_incoming_rreq(void)
      return;
    } else if (ret == REMOTE_NO) {
      /* Is neigbour, accept it. */
-   } else if(cc2420_last_rssi <= -38 || cc2420_last_correlation < 100) {
-     print_debug("RREQ drop %d %d\n",
-		 cc2420_last_rssi,cc2420_last_correlation);
+   } else if(cc2420_last_rssi <= -40) {
+     print_debug("RREQ drop %d %d\n", cc2420_last_rssi,
+		 cc2420_last_correlation);
      return;
    }
  }
