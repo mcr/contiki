@@ -67,7 +67,7 @@ uaodv_rt_add(uip_ipaddr_t *dest, uip_ipaddr_t *nexthop,
   struct uaodv_rt_entry *e;
 
   /* Avoid inserting duplicate entries. */
-  e = uaodv_rt_lookup(dest);
+  e = uaodv_rt_lookup_any(dest);
   if(e != NULL) {
     list_remove(route_table, e);    
   } else {
