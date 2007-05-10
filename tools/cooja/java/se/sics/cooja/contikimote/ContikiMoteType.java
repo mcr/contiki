@@ -42,6 +42,8 @@ import org.apache.log4j.Logger;
 import org.jdom.Element;
 
 import se.sics.cooja.*;
+import se.sics.cooja.MoteType.MoteTypeCreationException;
+import se.sics.cooja.dialogs.MessageList;
 
 /**
  * The Contiki mote type holds the native library used to communicate with an
@@ -195,22 +197,26 @@ public class ContikiMoteType implements MoteType {
       try {
         ContikiMoteTypeDialog.generateSourceFile(identifier, sensors, coreInterfaces, processes);
       } catch (Exception e) {
-        throw new MoteTypeCreationException("Error during main source file generation: " + e.getMessage());
+        throw (MoteTypeCreationException) new MoteTypeCreationException(
+            "Error during main source file generation: " + e.getMessage()).initCause(e);
       }
 
       // Compile library
+      MessageList taskOutput = new MessageList();
       boolean compilationSucceded = ContikiMoteTypeDialog.compileLibrary(
           identifier, 
           new File(contikiBaseDir), 
           compilationFiles, 
           hasSystemSymbols, 
-          null, 
-          null);
+          taskOutput.getInputStream(MessageList.NORMAL),
+          taskOutput.getInputStream(MessageList.ERROR));
       if (!libFile.exists() || !depFile.exists() || !mapFile.exists())
         compilationSucceded = false;
 
       if (!compilationSucceded) {
-        throw new MoteTypeCreationException("Error during compilation");
+        MoteTypeCreationException ex = new MoteTypeCreationException("Compilation error");
+        ex.setCompilationOutput(taskOutput);
+        throw ex;
       }
       
       // Load compiled library
@@ -285,7 +291,8 @@ public class ContikiMoteType implements MoteType {
       offsetRelToAbs = getReferenceAbsAddr()
           - getRelVarAddr(mapFileData, "referenceVar");
     } catch (Exception e) {
-      throw new MoteTypeCreationException("JNI call error: " + e.getMessage());
+      throw (MoteTypeCreationException) new MoteTypeCreationException(
+          "JNI call error: " + e.getMessage()).initCause(e);
     }
 
     // Parse addresses of data and BSS memory sections
