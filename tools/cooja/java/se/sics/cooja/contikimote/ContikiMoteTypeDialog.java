@@ -1250,7 +1250,7 @@ public class ContikiMoteTypeDialog extends JDialog {
     String libString = CoreComm.getAvailableClassName();
     if (libString == null) {
       logger.fatal("No more libraries can be loaded!");
-      throw new Exception("Maximum number of mote types already exist");
+      throw new MoteTypeCreationException("Maximum number of mote types already exist");
     }
 
     // GENERATE NEW FILE
@@ -2059,10 +2059,11 @@ public class ContikiMoteTypeDialog extends JDialog {
         try {
           myMoteType.doInit(textID.getText());
         } catch (MoteTypeCreationException ex) {
-          JOptionPane.showMessageDialog(myDialog,
-              ex.getMessage(),
+          GUI.showErrorDialog(
+              myDialog,
               "Mote type creation error",
-              JOptionPane.ERROR_MESSAGE);
+              ex
+          );
           return;
         }
         myMoteType.setDescription(textDescription.getText());
