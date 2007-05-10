@@ -34,6 +34,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import org.jdom.Element;
 
+import se.sics.cooja.dialogs.MessageList;
+
 /**
  * The mote type defines properties common for several motes. These properties
  * may differ between different implementations, but typically includes how a
@@ -149,8 +151,18 @@ public interface MoteType {
       Collection<Element> configXML, boolean visAvailable) throws MoteTypeCreationException;
 
   public class MoteTypeCreationException extends Exception {
+    private MessageList compilationOutput = null;
     public MoteTypeCreationException(String message) {
       super(message);
+    }
+    public boolean hasCompilationOutput() {
+      return compilationOutput != null;
+    }
+    public void setCompilationOutput(MessageList compilationOutput) {
+      this.compilationOutput = compilationOutput;
+    }
+    public MessageList getCompilationOutput() {
+      return compilationOutput;
     }
   }
 
