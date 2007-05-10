@@ -50,7 +50,6 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
-import sun.swing.DefaultLookup;
 
 import se.sics.cooja.MoteType.MoteTypeCreationException;
 import se.sics.cooja.contikimote.*;
@@ -3064,8 +3063,8 @@ public class GUI {
     errorPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
     Box messageBox = Box.createHorizontalBox();
 
-    Icon myIcon = (Icon)DefaultLookup.get(errorPanel, null, "OptionPane.errorIcon");
-    messageBox.add(new JLabel(myIcon));
+//    Icon myIcon = (Icon)DefaultLookup.get(errorPanel, null, "OptionPane.errorIcon");
+//    messageBox.add(new JLabel(myIcon));
     messageBox.add(Box.createHorizontalGlue());
     messageBox.add(new JLabel(message));
     messageBox.add(Box.createHorizontalGlue());
