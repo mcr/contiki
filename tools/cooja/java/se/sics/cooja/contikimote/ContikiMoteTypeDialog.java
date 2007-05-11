@@ -2062,7 +2062,8 @@ public class ContikiMoteTypeDialog extends JDialog {
           GUI.showErrorDialog(
               myDialog,
               "Mote type creation error",
-              ex
+              ex,
+              false
           );
           return;
         }

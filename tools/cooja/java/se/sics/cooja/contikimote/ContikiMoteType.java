@@ -42,7 +42,6 @@ import org.apache.log4j.Logger;
 import org.jdom.Element;
 
 import se.sics.cooja.*;
-import se.sics.cooja.MoteType.MoteTypeCreationException;
 import se.sics.cooja.dialogs.MessageList;
 
 /**
