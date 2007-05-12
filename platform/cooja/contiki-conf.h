@@ -80,6 +80,14 @@ typedef uint16_t u16_t;
 typedef uint32_t u32_t;
 
 /**
+ * The 32-bit signed data type.
+ *
+ * This may have to be tweaked for your particular compiler. "signed
+ * short" works for most compilers.
+ */
+typedef int32_t s32_t;
+
+/**
  * The statistics data type.
  *
  * This datatype determines how high the statistics counters are able
