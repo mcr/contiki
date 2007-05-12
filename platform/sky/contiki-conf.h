@@ -71,9 +71,10 @@ void msp430_cpu_init(void);	/* Rename to cpu_init() later! */
 /* Button sensors. */
 #define IRQ_PORT2 0x02
 
-typedef unsigned char u8_t;
+typedef unsigned char   u8_t;
 typedef unsigned short u16_t;
-typedef unsigned long u32_t;
+typedef unsigned long  u32_t;
+typedef          long  s32_t;
 typedef unsigned short uip_stats_t;
 typedef unsigned short clock_time_t;
 
