@@ -77,10 +77,3 @@ $(PRGS:=.prg):
 	$(LD) -shared $^ contiki-main.$(TARGET).a -o $@
 $(DSCS:=.dsc):
 	$(LD) -shared $^ contiki-main.$(TARGET).a -o $@
-
-### Setup directory search path for source files
-CONTIKI_TARGET_DIRS_CONCAT = ${addprefix $(CONTIKI)/platform/$(TARGET)/, \
-                               $(CONTIKI_TARGET_DIRS)}
-vpath %.c $(PROJECTDIRS) \
-	  $(CONTIKIDIRS) $(APPDIRS) $(CONTIKI_TARGET_DIRS_CONCAT) \
-	  $(CONTIKI_CPU) $(APP_DIRS)
