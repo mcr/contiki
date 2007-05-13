@@ -109,7 +109,7 @@ uaodv_rt_lookup(uip_ipaddr_t *dest)
   struct uaodv_rt_entry *e;
 
   e = uaodv_rt_lookup_any(dest);
-  if(e->is_bad)
+  if(e != NULL && e->is_bad)
     return NULL;
   return e;
 }
