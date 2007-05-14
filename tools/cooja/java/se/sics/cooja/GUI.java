@@ -30,7 +30,6 @@
 package se.sics.cooja;
 
 import java.awt.*;
-import java.awt.Dialog.ModalityType;
 import java.awt.event.*;
 import java.beans.PropertyVetoException;
 import java.io.*;
@@ -3069,9 +3068,9 @@ public class GUI {
       errorDialog = new JDialog((Dialog) parentComponent, title, true);
     else if (parentComponent instanceof Frame)
       errorDialog = new JDialog((Frame) parentComponent, title, true);
-    else if (parentComponent instanceof Window)
-      errorDialog = new JDialog((Window) parentComponent, title,
-          ModalityType.APPLICATION_MODAL);
+//    else if (parentComponent instanceof Window)
+//      errorDialog = new JDialog((Window) parentComponent, title,
+//          ModalityType.APPLICATION_MODAL);
     else {
       logger.fatal("Bad parent for error dialog");
       errorDialog = new JDialog((Frame) null, title + " (Java stack trace)");
