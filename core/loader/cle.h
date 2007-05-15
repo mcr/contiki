@@ -48,7 +48,7 @@ typedef  uint32_t cle_addr;
 typedef uintptr_t cle_addr;
 #endif
 
-typedef unsigned char cle_scratch[32];
+typedef char cle_scratch[32];
 
 struct cle_info {
   cle_addr text;
