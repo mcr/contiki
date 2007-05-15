@@ -61,6 +61,7 @@ int simOutSize;
 
 char simRadioHWOn = 1;
 int simSignalStrength = -200;
+int simLastSignalStrength = 0;
 char simPower = 100;
 int simRadioChannel = 1;
 
@@ -81,7 +82,7 @@ radio_set_channel(int channel)
 int
 radio_sstrength(void)
 {
-  return simSignalStrength;
+  return simLastSignalStrength;
 }
 /*-----------------------------------------------------------------------------------*/
 void
@@ -102,6 +103,7 @@ doInterfaceActionsBeforeTick(void)
   
   // Don't fall asleep while receiving (in main file)
   if (simReceiving) {
+    simLastSignalStrength = simSignalStrength;
     simDontFallAsleep = 1;
     return;
   }
