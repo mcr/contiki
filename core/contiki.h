@@ -44,6 +44,7 @@
 
 #include "sys/timer.h"
 #include "sys/etimer.h"
+#include "sys/rtimer.h"
 
 #include "sys/pt.h"
 
