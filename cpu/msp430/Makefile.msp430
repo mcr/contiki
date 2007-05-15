@@ -42,7 +42,7 @@ BSL      = msp430-bsl
 CFLAGSNO = -I. -I$(CONTIKI)/core -I$(CONTIKI_CPU) \
            -I$(CONTIKI)/platform/$(TARGET) \
            ${addprefix -I,$(APPDIRS)} \
-           -DWITH_UIP -DWITH_ASCII \
+           -DWITH_ASCII \
            -Wall -mmcu=$(MCU) -g
 CFLAGS  += $(CFLAGSNO) -Os
 LDFLAGS += -mmcu=$(MCU) -Wl,-Map=contiki-$(TARGET).map
