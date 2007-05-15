@@ -53,4 +53,6 @@
 
 #include "net/psock.h"
 
+#include "net/rime.h"
+
 #endif /* __CONTIKI_NET_H__ */
