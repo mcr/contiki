@@ -105,6 +105,7 @@ uabc_close(struct uabc_conn *c)
   ctimer_stop(&c->t);
   if(c->q != NULL) {
     queuebuf_free(c->q);
+    c->q = NULL;
   }
 }
 /*---------------------------------------------------------------------------*/
@@ -121,6 +122,16 @@ uabc_send(struct uabc_conn *c, clock_time_t interval)
     return 1;
   }
   return 0;
+}
+/*---------------------------------------------------------------------------*/
+void
+uabc_cancel(struct uabc_conn *c)
+{
+  ctimer_stop(&c->t);
+  if(c->q != NULL) {
+    queuebuf_free(c->q);
+    c->q = NULL;
+  }
 }
 /*---------------------------------------------------------------------------*/
 /** @} */

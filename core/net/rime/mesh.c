@@ -84,7 +84,8 @@ found_route(struct route_discovery_conn *rdc, rimeaddr_t *dest)
   struct mesh_conn *c = (struct mesh_conn *)
     ((char *)rdc - offsetof(struct mesh_conn, route_discovery_conn));
 
-  if(rimeaddr_cmp(dest, &c->queued_data_dest)) {
+  if(c->queued_data != NULL &&
+     rimeaddr_cmp(dest, &c->queued_data_dest)) {
     queuebuf_to_rimebuf(c->queued_data);
     queuebuf_free(c->queued_data);
     c->queued_data = NULL;
@@ -100,6 +101,7 @@ route_timed_out(struct route_discovery_conn *rdc)
 
   if(c->queued_data != NULL) {
     queuebuf_free(c->queued_data);
+    c->queued_data = NULL;
   }
 
   if(c->cb->timedout) {

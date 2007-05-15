@@ -44,6 +44,9 @@
  */
 
 #include "net/rime.h"
+
+static void (* output)(void);
+
 /*---------------------------------------------------------------------------*/
 void
 rime_init(void)
@@ -52,12 +55,29 @@ rime_init(void)
   queuebuf_init();
   route_init();
   rimebuf_clear();
+  output = NULL;
+  neighbor_init();
 }
 /*---------------------------------------------------------------------------*/
 void
 rime_input(void)
 {
   abc_input_packet();
+}
+/*---------------------------------------------------------------------------*/
+void
+rime_set_output(void (*f)(void))
+{
+  output = f;
+}
+/*---------------------------------------------------------------------------*/
+void
+rime_output(void)
+{
+  rimebuf_compact();
+  if(output) {
+    output();
+  }
 }
 /*---------------------------------------------------------------------------*/
 /** @} */

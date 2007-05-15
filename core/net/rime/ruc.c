@@ -74,6 +74,7 @@ sent_by_suc(struct suc_conn *suc)
   c->transmissions_left--;
   if(c->transmissions_left == 0) {
     suc_cancel(&c->c);
+    c->u->timedout(c);
   }
 }
 /*---------------------------------------------------------------------------*/

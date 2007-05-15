@@ -62,7 +62,7 @@
 
 #include "net/rime.h"
 #include "net/rime/sabc.h"
-#include "net/rime/uabc.h"
+#include "net/rime/polite.h"
 #include "contiki-net.h"
 
 struct rudolph0_conn;
@@ -96,7 +96,7 @@ struct rudolph0_datapacket {
 
 struct rudolph0_conn {
   struct sabc_conn c;
-  struct uabc_conn nackc;
+  struct polite_conn nackc;
   const struct rudolph0_callbacks *cb;
   clock_time_t send_interval;
   u8_t state;

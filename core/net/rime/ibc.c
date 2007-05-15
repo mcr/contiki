@@ -43,8 +43,7 @@
  *         Adam Dunkels <adam@sics.se>
  */
 
-#include "net/rime/ibc.h"
-#include "net/rime.h"
+#include "contiki-net.h"
 #include <string.h>
 
 struct ibc_hdr {

@@ -82,10 +82,11 @@ send_rreq(struct route_discovery_conn *c, rimeaddr_t *dest)
   rimebuf_set_datalen(sizeof(struct route_msg));
 
   msg->pad = 0;
-  msg->rreq_id = c->rreq_id++;
+  msg->rreq_id = c->rreq_id;
   rimeaddr_copy(&msg->dest, dest);
 
-  nf_send(&c->rreqconn);
+  nf_send(&c->rreqconn, c->rreq_id);
+  c->rreq_id++;
 }
 /*---------------------------------------------------------------------------*/
 static void

@@ -80,6 +80,7 @@ void uabc_open(struct uabc_conn *c, u16_t channel,
 	       const struct uabc_callbacks *cb);
 void uabc_close(struct uabc_conn *c);
 int  uabc_send(struct uabc_conn *c, clock_time_t interval);
+void uabc_cancel(struct uabc_conn *c);
 
 #endif /* __UABC_H__ */
 

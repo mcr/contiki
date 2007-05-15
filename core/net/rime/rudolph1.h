@@ -82,13 +82,13 @@ struct rudolph1_callbacks {
 
 struct rudolph1_conn {
   struct trickle_conn trickle;
-  struct uabc_conn uabc;
+  struct ipolite_conn ipolite;
   const struct rudolph1_callbacks *cb;
   struct ctimer t;
   clock_time_t send_interval;
   u16_t chunk, highest_chunk_heard;
   u8_t version;
-  u8_t trickle_interval;
+  /*  u8_t trickle_interval;*/
   u8_t nacks;
 };
 

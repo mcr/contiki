@@ -48,6 +48,7 @@ struct ruc_conn;
 struct ruc_callbacks {
   int (* recv)(struct ruc_conn *c, rimeaddr_t *from, u8_t seqno);
   void (* sent)(struct ruc_conn *c);
+  void (* timedout)(struct ruc_conn *c);
 };
 
 struct ruc_conn {

@@ -58,7 +58,6 @@
 #ifndef __ABC_H__
 #define __ABC_H__
 
-#include "contiki-net.h"
 #include "net/rime/rimebuf.h"
 
 struct abc_conn;
@@ -72,9 +71,17 @@ struct abc_callbacks {
   void (* recv)(struct abc_conn *ptr);
 };
 
+#ifdef CHAMELEON
+#include "net/chameleon/chameleon.h"
+#endif /* CHAMELEON */
+
 struct abc_conn {
+#ifdef CHAMELEON
+  struct chameleon_channel channel;
+#else /* CHAMELEON */
   struct abc_conn *next;
   u16_t channel;
+#endif /* CHAMELEON */
   const struct abc_callbacks *u;
 };
 

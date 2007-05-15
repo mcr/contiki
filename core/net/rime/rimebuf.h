@@ -53,7 +53,7 @@
 #ifndef __RIMEBUF_H__
 #define __RIMEBUF_H__
 
-#include "contiki-net.h"
+#include "contiki-conf.h"
 
 /**
  * \brief      The size of the rimebuf, in bytes
@@ -297,7 +297,6 @@ int rimebuf_hdralloc(int size);
  *
  */
 int rimebuf_hdrreduce(int size);
-
 
 #endif /* __RIMEBUF_H__ */
 /** @} */

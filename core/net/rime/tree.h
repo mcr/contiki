@@ -60,7 +60,7 @@
 #ifndef __TREE_H__
 #define __TREE_H__
 
-#include "net/rime/uibc.h"
+#include "net/rime/ipolite.h"
 #include "net/rime/ruc.h"
 
 struct tree_callbacks {
@@ -69,12 +69,13 @@ struct tree_callbacks {
 };
 
 struct tree_conn {
-  struct uibc_conn uibc_conn;
+  struct ipolite_conn ipolite_conn;
   struct ruc_conn ruc_conn;
+  const struct tree_callbacks *cb;
+  struct ctimer t;
   u8_t forwarding;
   u8_t hops_from_sink;
   u8_t seqno;
-  const struct tree_callbacks *cb;
 };
 
 void tree_open(struct tree_conn *c, u16_t channels,
