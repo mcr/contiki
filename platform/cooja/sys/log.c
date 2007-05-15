@@ -33,10 +33,11 @@
 #include "lib/simEnvChange.h"
 #include <string.h>
 
+#define MAX_LOG_LENGTH 1024
 const struct simInterface simlog_interface;
 
 // COOJA variables
-char simLoggedData[1024];
+char simLoggedData[MAX_LOG_LENGTH];
 int simLoggedLength;
 char simLoggedFlag;
 
@@ -53,6 +54,12 @@ log_message(const char *part1, const char *part2)
 void
 simlog(const char *message)
 {
+  if (simLoggedLength + strlen(message) > MAX_LOG_LENGTH) {
+  	/* Dropping message due to buffer overflow */
+  	printf("Warning. Dropping log message due to buffer overflow\n");
+  	return;
+  }
+  
   memcpy(&simLoggedData[0] + simLoggedLength, &message[0], strlen(message));
   simLoggedLength += strlen(message);
   simLoggedFlag = 1;
