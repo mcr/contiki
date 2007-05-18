@@ -896,9 +896,12 @@ public class GUI {
     }
 
     // Compile library
-    logger.info("> Compiling library");
+    logger.info("> Compiling library (uIP comm stack)");
+    // TODO Warning, assuming uIP communication stack
     boolean compilationSucceded = ContikiMoteTypeDialog.compileLibrary(
-        moteTypeID, contikiBaseDir, filesToCompile, false, null, System.err);
+        moteTypeID, contikiBaseDir, filesToCompile, false, 
+        ContikiMoteType.CommunicationStack.UIP,
+        null, System.err);
     if (!libFile.exists() || !depFile.exists() || !mapFile.exists())
       compilationSucceded = false;
 
