@@ -1467,6 +1467,15 @@ public class ContikiMoteTypeDialog extends JDialog {
           "PROJECT_SOURCEFILES=" + sourceFileNames,
           "PATH=" + System.getenv("PATH")};
 
+/*      System.out.print("Full command:\n");
+      System.out.print((new File(".").getAbsolutePath()) + "/> ");
+      for (String s: cmd)
+        System.out.print(s + " ");
+      System.out.println();
+      System.out.println("Environment:\n");
+      for (String s: env)
+        System.out.print(s + "\n");
+*/      
       Process p = Runtime.getRuntime().exec(cmd, env, null);
 
       final BufferedReader input = new BufferedReader(new InputStreamReader(p
