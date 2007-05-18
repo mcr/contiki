@@ -29,9 +29,10 @@
  * $Id$
  */
 
+#include <stdio.h>
+#include <string.h>
 #include "sys/log.h"
 #include "lib/simEnvChange.h"
-#include <string.h>
 
 #define MAX_LOG_LENGTH 1024
 const struct simInterface simlog_interface;
