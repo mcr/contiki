@@ -102,10 +102,15 @@ u16_t
 radio_read(u8_t *buf, u16_t bufsize);
 
 /**
- * This function returns the recevied signal strength of the last
+ * This function returns the signal strength of the last
  * received packet. This function typically is called when a packet
  * has been received.
  */
 int radio_sstrength(void);
+
+/**
+ * This function measures and returns the signal strength.
+ */
+int radio_current_sstrength(void);
 
 #endif /* __COOJA_RADIO_H__ */
