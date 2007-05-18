@@ -534,6 +534,14 @@ public class GUI {
     menuItem.addActionListener(guiEventHandler);
     menu.add(menuItem);
 
+    menu.addSeparator();
+
+    menuItem = new JMenuItem("Java version: "
+        + System.getProperty("java.version") + " ("
+        + System.getProperty("java.vendor") + ")");
+    menuItem.setEnabled(false);
+    menu.add(menuItem);
+
     // Mote plugins popup menu (not available via menu bar)
     menuMotePluginClasses = new Vector<Class<? extends Plugin>>();
     return menuBar;
