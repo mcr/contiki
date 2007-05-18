@@ -75,21 +75,6 @@ struct radio_driver {
   int (* off)(void);
 };
 
-
-/**
- * \brief      Turn radio on.
- *
- *             This function turns the radio hardware on.
- */
-void radio_on(void);
-
-/**
- * \brief      Turn radio off.
- *
- *             This function turns the radio hardware off.
- */
-void radio_off(void);
-
 #endif /* __RADIO_H__ */
 
 /** @} */
