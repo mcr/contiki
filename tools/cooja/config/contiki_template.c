@@ -68,12 +68,10 @@
 
 #include "lib/simEnvChange.h"
 #include "lib/sensors.h"
-#include "net/rime.h"
-#include "net/uip.h"
-#include "dev/radio-arch.h"
 #include "cfs/cfs-cooja.h"
 #include "sys/etimer.h"
 #include "sys/cooja_mt.h"
+#include "net/init-net.h"
 
 /* Declare all initialization processes */
 [PROCESS_DEFINITIONS]
@@ -93,10 +91,6 @@
 
 /* Create simulation interfaces array */
 [INTERFACE_ARRAY]
-
-// Default network interface
-static struct uip_fw_netif simNetworkIF =
-  {UIP_FW_NETIF(0,0,0,0, 0,0,0,0, simDoSend)};
 
 /*
  * referenceVar is used for comparing absolute and process relative memory.
@@ -160,16 +154,9 @@ Java_se_sics_cooja_corecomm_[CLASS_NAME]_init(JNIEnv *env, jobject obj)
   /* Start Contiki processes */
   procinit_init();
 
-  /* Initialize Rime. */
-  rime_init();
-
-  /* Initialize uIP */
-  uip_init();
-  uip_fw_init();
-
-  /* Register network interface */
-  uip_fw_default(&simNetworkIF);
-
+  /* Initialize communication stack */
+  init_net();
+  
   /* Start user applications */
   autostart_start((struct process **) autostart_processes);
   
