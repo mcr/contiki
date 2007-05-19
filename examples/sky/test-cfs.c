@@ -40,14 +40,11 @@
 
 #include "contiki.h"
 #include "cfs/cfs.h"
-/*---------------------------------------------------------------------------*/
-PROCESS(cfs_process, "xmem cfs");
-AUTOSTART_PROCESSES(&cfs_process);
+
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(cfs_process, ev, data)
 {
   PROCESS_BEGIN();
-
 
   {
     int i, j, fd;
@@ -84,7 +81,7 @@ PROCESS_THREAD(cfs_process, ev, data)
     }
     printf("CFS xmem test 1 completed with %d errors\n", errors);
 
-      fd = cfs_open("hej", CFS_WRITE);
+    fd = cfs_open("hej", CFS_WRITE);
     if(fd < 0) {
       printf("could not open file for writing, aborting\n");
     } else {
@@ -112,7 +109,7 @@ PROCESS_THREAD(cfs_process, ev, data)
       }
     }
     printf("CFS xmem test 2 completed with %d errors\n", errors);
-}
+  }
 
   PROCESS_END();
 }
