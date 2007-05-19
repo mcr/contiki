@@ -1910,7 +1910,11 @@ public class GUI {
     progressDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
     loadThread.start();
     if (quick)
-      progressDialog.setVisible(true);
+      SwingUtilities.invokeLater(new Runnable() {
+        public void run() {
+          progressDialog.setVisible(true);
+        }
+      });
   }
   
   /**
