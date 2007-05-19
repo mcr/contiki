@@ -40,15 +40,12 @@
 #include "sys/autostart.h"
 #include "contiki-esb.h"
 
-#include "cfs/cfs-eeprom.h"
-
 SENSORS(&button_sensor, &sound_sensor, &vib_sensor,
 	&pir_sensor, &radio_sensor, &battery_sensor, &ctsrts_sensor,
 	&temperature_sensor);
 
 PROCINIT(&sensors_process, /*&ir_process,*/
-	 &etimer_process,
-	 &cfs_eeprom_process);
+	 &etimer_process);
 
 PROCESS(contiki_esb_main_init_process, "Contiki ESB init process");
 
