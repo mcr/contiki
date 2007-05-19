@@ -75,12 +75,7 @@ CONTIKI_SOURCEFILES += $(CONTIKI_TARGET_SOURCEFILES)
 CONTIKI_CPU=$(CONTIKI)/cpu/x86
 
 ### Compiler arguments
-CFLAGSNO = -I. -I$(CONTIKI_CPU) \
-			$(EXTRA_CC_ARGS) \
-           -I$(COOJA) \
-           -I$(CONTIKI)/core \
-          -DWITH_UIP -DWITH_ASCII \
-          -Wall -g -I. -I/usr/local/include
+CFLAGSNO = $(EXTRA_CC_ARGS) -Wall -g -I/usr/local/include
 CFLAGS   = $(CFLAGSNO)
 
 ### Define custom targets
