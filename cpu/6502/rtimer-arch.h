@@ -34,4 +34,6 @@
 #ifndef __RTIMER_ARCH_H__
 #define __RTIMER_ARCH_H__
 
+#define RTIMER_ARCH_SECOND 0
+
 #endif /* __RTIMER_ARCH_H__ */
