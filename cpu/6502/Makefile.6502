@@ -69,7 +69,7 @@ LD = ld65
 AR = ar65
 
 AFLAGS  = -t $(TARGET)
-CFLAGS += -t $(TARGET) -Or ${addprefix -I,$(SOURCEDIRS)}
+CFLAGS += -t $(TARGET) -Or
 LDFLAGS = -C $(CONTIKI)/platform/$(TARGET)/linker.cfg -m contiki-$(TARGET).map
 AROPTS  = a
 
