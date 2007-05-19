@@ -44,6 +44,7 @@ import org.apache.log4j.Logger;
 
 import se.sics.cooja.*;
 import se.sics.cooja.MoteType.MoteTypeCreationException;
+import se.sics.cooja.contikimote.ContikiMoteType.CommunicationStack;
 import se.sics.cooja.dialogs.MessageList;
 import se.sics.cooja.dialogs.ProjectDirectoriesDialog;
 
@@ -696,9 +697,7 @@ public class ContikiMoteTypeDialog extends JDialog {
     smallPane.setLayout(new BoxLayout(smallPane, BoxLayout.X_AXIS));
     label = new JLabel("Communication stack");
 
-    commStackComboBox = new JComboBox(new Object[] {
-            ContikiMoteType.CommunicationStack.UIP, 
-            ContikiMoteType.CommunicationStack.RIME});
+    commStackComboBox = new JComboBox(CommunicationStack.values());
     commStackComboBox.setSelectedIndex(0);
     
     smallPane.add(label);
@@ -1443,11 +1442,7 @@ public class ContikiMoteTypeDialog extends JDialog {
       }
 
       // Add communication stack source files
-      if (commStack == ContikiMoteType.CommunicationStack.UIP) {
-        sourceFileNames += " cooja-radio.c radio-uip.c init-net-uip.c";
-      } else if (commStack == ContikiMoteType.CommunicationStack.RIME) {
-        sourceFileNames += " cooja-radio.c radio-rime.c init-net-rime.c";
-      }
+      sourceFileNames += commStack.getSourceFilenamesString();
       
       logger.info("-- Compiling --");
       logger.info("Project dirs: " + sourceDirs);
