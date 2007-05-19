@@ -56,7 +56,7 @@ include $(CONTIKI)/cpu/native/Makefile.native
 
 CFLAGS += -DWITH_LOADER_ARCH
 LDFLAGS += -Wl,--out-implib=contiki-main.$(TARGET).a \
-           -u _cfs_find_service -u _uiplib_ipaddrconv
+           -u _cfs_open -u _uiplib_ipaddrconv
 
 ### Generate the module-link prerequisites
 define prg_template

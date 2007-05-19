@@ -49,13 +49,11 @@
 #include "../../apps/webbrowser/www-dsc.h"
 
 #include "sys/etimer.h"
-#include "cfs/cfs-win32.h"
 #include "net/wpcap-service.h"
 #include "program-handler.h"
 
 PROCINIT(&etimer_process,
 	 &wpcap_process,
-	 &cfs_win32_process,
 	 &ctk_process,
 	 &tcpip_process,
 	 &resolv_process,
