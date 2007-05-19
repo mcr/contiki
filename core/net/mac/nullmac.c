@@ -50,7 +50,7 @@ send(void)
 }
 /*---------------------------------------------------------------------------*/
 static void
-input(void)
+input(const struct radio_driver *d)
 {
   int len;
   rimebuf_clear();
