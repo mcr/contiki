@@ -35,7 +35,6 @@
 
 #include "contiki.h"
 
-#include "cfs/cfs-posix.h"
 #include "net/uip.h"
 #ifdef __CYGWIN__
 #include "net/wpcap-service.h"
@@ -44,9 +43,9 @@
 #endif
 
 #ifdef __CYGWIN__
-PROCINIT(&etimer_process, &cfs_posix_process, &tcpip_process, &wpcap_process);
+PROCINIT(&etimer_process, &tcpip_process, &wpcap_process);
 #else
-PROCINIT(&etimer_process, &cfs_posix_process, &tcpip_process, &tapdev_process);
+PROCINIT(&etimer_process, &tcpip_process, &tapdev_process);
 #endif
 
 /*---------------------------------------------------------------------------*/
