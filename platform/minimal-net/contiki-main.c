@@ -37,9 +37,9 @@
 
 #include "net/uip.h"
 #ifdef __CYGWIN__
-#include "net/wpcap-service.h"
+#include "net/wpcap-drv.h"
 #else
-#include "net/tapdev-service.h"
+#include "net/tapdev-drv.h"
 #endif
 
 #ifdef __CYGWIN__
