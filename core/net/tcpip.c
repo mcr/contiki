@@ -66,23 +66,17 @@ enum {
   PACKET_INPUT
 };
 
-static unsigned char forwarding; /* Forwarding enabled. */
+unsigned char tcpip_do_forwarding; /* Forwarding enabled.   */
 unsigned char tcpip_is_forwarding; /* Forwarding right now? */
 
 PROCESS(tcpip_process, "TCP/IP stack");
 
 /*---------------------------------------------------------------------------*/
-void
-tcpip_set_forwarding(unsigned char f)
-{
-  forwarding = f;
-}
-/*---------------------------------------------------------------------------*/
 static void
 packet_input(void)
 {
   if(uip_len > 0) {
-    if(forwarding) {
+    if(tcpip_do_forwarding) {
       tcpip_is_forwarding = 1;
       if(uip_fw_forward() == UIP_FW_LOCAL) {
 	tcpip_is_forwarding = 0;

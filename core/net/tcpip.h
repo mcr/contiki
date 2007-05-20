@@ -297,12 +297,18 @@ CCIF extern process_event_t tcpip_event;
 CCIF void tcpip_input(void);
 
 void tcpip_output(void);
-void tcpip_set_forwarding(unsigned char f);
+
+/*
+ * Is forwarding generally enabled?
+ */
+extern unsigned char tcpip_do_forwarding;
 
 /*
  * Are we at the moment forwarding the contents of uip_buf[]?
  */
 extern unsigned char tcpip_is_forwarding;
+
+#define tcpip_set_forwarding(forwarding) tcpip_do_forwarding = (forwarding)
 
 /** @} */
 
