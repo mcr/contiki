@@ -30,17 +30,14 @@
  * 
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: packet-service.h,v 1.1 2006/06/17 22:41:18 adamdunkels Exp $
+ * $Id: uip-fw-drv.h,v 1.1 2007/05/20 21:29:40 oliverschmidt Exp $
  */
-#ifndef __PACKET_SERVICE_H__
-#define __PACKET_SERVICE_H__
+#ifndef __UIP_FW_DRV_H__
+#define __UIP_FW_DRV_H__
 
 #include "contiki.h"
+#include "net/uip-fw.h"
 
-#define packet_service_name "Packet driver"
+PROCESS_NAME(uip_fw_process);
 
-SERVICE_INTERFACE(packet_service, {
-  u8_t (* output)(void);
-});
-
-#endif /* __PACKET_SERVICE_H__ */
+#endif /* __UIP_FW_DRV_H__ */

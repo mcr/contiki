@@ -30,16 +30,10 @@
  *
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: uip-fw-service.c,v 1.1 2006/06/17 22:41:19 adamdunkels Exp $
+ * $Id: uip-fw-drv.c,v 1.1 2007/05/20 21:29:40 oliverschmidt Exp $
  */
 
-#include "net/packet-service.h"
-
 #include "net/uip-fw.h"
-
-SERVICE(uip_fw_service, packet_service, { uip_fw_output });
-
-/*---------------------------------------------------------------------------*/
 
 PROCESS(uip_fw_process, "IP forwarding");
 
@@ -50,13 +44,12 @@ PROCESS_THREAD(uip_fw_process, ev, data)
 
   PROCESS_SET_FLAGS(PROCESS_NO_BROADCAST);
 
-  SERVICE_REGISTER(uip_fw_service);
+  uip_fw_init();
 
-  PROCESS_WAIT_UNTIL(ev == PROCESS_EVENT_EXIT ||
-		     ev == PROCESS_EVENT_SERVICE_REMOVED);
+  tcpip_set_outputfunc(uip_fw_output);
 
-  SERVICE_REMOVE(uip_fw_service);
-  
+  PROCESS_WAIT_UNTIL(ev == PROCESS_EVENT_EXIT);
+
   PROCESS_END();
 }
 /*---------------------------------------------------------------------------*/
