@@ -296,7 +296,10 @@ CCIF extern process_event_t tcpip_event;
  */
 CCIF void tcpip_input(void);
 
-void tcpip_output(void);
+/*
+ * This function is called on IP packet output.
+ */
+extern u8_t (* tcpip_output)(void);
 
 /*
  * Is forwarding generally enabled?
@@ -308,6 +311,7 @@ extern unsigned char tcpip_do_forwarding;
  */
 extern unsigned char tcpip_is_forwarding;
 
+#define tcpip_set_outputfunc(outputfunc) tcpip_output        = (outputfunc)
 #define tcpip_set_forwarding(forwarding) tcpip_do_forwarding = (forwarding)
 
 /** @} */

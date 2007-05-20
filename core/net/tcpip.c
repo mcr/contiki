@@ -33,10 +33,8 @@
  * $Id$
  */
 
-#include "contiki-conf.h"
 #include "contiki-net.h"
 
-#include "net/packet-service.h"
 #include "net/uip-split.h"
 
 #include <string.h>
@@ -65,6 +63,8 @@ enum {
   UDP_POLL,
   PACKET_INPUT
 };
+
+u8_t (* tcpip_output)(void); /* Called on IP packet output. */
 
 unsigned char tcpip_do_forwarding; /* Forwarding enabled.   */
 unsigned char tcpip_is_forwarding; /* Forwarding right now? */
@@ -101,12 +101,6 @@ packet_input(void)
       }
     }
   }
-}
-/*---------------------------------------------------------------------------*/
-void
-tcpip_output(void)
-{
-  SERVICE_CALL(packet_service, output());
 }
 /*---------------------------------------------------------------------------*/
 struct uip_conn *
