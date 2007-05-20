@@ -40,9 +40,9 @@
 #include "net/rime.h"
 
 #ifdef __CYGWIN__
-#include "net/wpcap-service.h"
+#include "net/wpcap-drv.h"
 #else
-#include "net/tapdev-service.h"
+#include "net/tapdev-drv.h"
 #endif
 #include "net/ethernode-uip.h"
 #include "net/ethernode-rime.h"
@@ -62,11 +62,9 @@
 #include "dev/leds.h"
 
 #ifdef __CYGWIN__
-u8_t wpcap_output(void);
 static struct uip_fw_netif extif =
   {UIP_FW_NETIF(0,0,0,0, 0,0,0,0, wpcap_output)};
 #else
-u8_t tapdev_output(void);
 static struct uip_fw_netif extif =
   {UIP_FW_NETIF(0,0,0,0, 0,0,0,0, tapdev_output)};
 #endif
