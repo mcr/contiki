@@ -101,7 +101,7 @@ fwc_lookup(const uip_ipaddr_t *orig, const u32_t *id)
 static CC_INLINE void
 fwc_add(const uip_ipaddr_t *orig, const u32_t *id)
 {
-  unsigned n = orig->u8[3] % NFWCACHE;
+  unsigned n = (orig->u8[2] + orig->u8[3]) % NFWCACHE;
   fwcache[n].id = *id;
   fwcache[n].orig = *orig;
 }
