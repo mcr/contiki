@@ -45,7 +45,7 @@ CONTIKI_TARGET_MAIN = ${addprefix $(OBJECTDIR)/,contiki-main.o}
 CONTIKI_TARGET_SOURCEFILES = contiki-main.c clock.c cfs-win32.c \
                              ctk-console.c dll-loader.c
 
-CONTIKI_SOURCEFILES += $(CTK) ctk-conio.c wpcap.c wpcap-service.c \
+CONTIKI_SOURCEFILES += $(CTK) ctk-conio.c wpcap.c wpcap-drv.c \
                        $(CONTIKI_TARGET_SOURCEFILES)
 
 .SUFFIXES:
