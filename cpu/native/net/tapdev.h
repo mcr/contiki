@@ -40,5 +40,6 @@
 void tapdev_init(void);
 u16_t tapdev_poll(void);
 void tapdev_send(void);
+void tapdev_exit(void);
 
 #endif /* __TAPDEV_H__ */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007, Swedish Institute of Computer Science
+ * Copyright (c) 2005, Swedish Institute of Computer Science
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,23 +32,19 @@
  */
 
 #include "contiki-net.h"
-#include "wpcap.h"
+#include "tapdev.h"
 #include "net/uip-neighbor.h"
 
 #define BUF ((struct uip_eth_hdr *)&uip_buf[0])
 
-u8_t wpcap_output(void);
-
-SERVICE(wpcap_service, packet_service, { wpcap_output });
-
-PROCESS(wpcap_process, "WinPcap driver");
+PROCESS(tapdev_process, "TAP driver");
 
 /*---------------------------------------------------------------------------*/
 u8_t
-wpcap_output(void)
+tapdev_output(void)
 {
   uip_arp_out();
-  wpcap_send();
+  tapdev_send();
   
   return 0;
 }
@@ -56,8 +52,8 @@ wpcap_output(void)
 static void
 pollhandler(void)
 {
-  process_poll(&wpcap_process);
-  uip_len = wpcap_poll();
+  process_poll(&tapdev_process);
+  uip_len = tapdev_poll();
 
   if(uip_len > 0) {
 #if UIP_CONF_IPV6
@@ -67,6 +63,7 @@ pollhandler(void)
     } else
 #endif /* UIP_CONF_IPV6 */
     if(BUF->type == htons(UIP_ETHTYPE_IP)) {
+      uip_len -= sizeof(struct uip_eth_hdr);
       tcpip_input();
     } else if(BUF->type == htons(UIP_ETHTYPE_ARP)) {
       uip_arp_arpin();
@@ -74,29 +71,33 @@ pollhandler(void)
 	 should be sent out on the network, the global variable
 	 uip_len is set to a value > 0. */
       if(uip_len > 0) {
-	wpcap_send();
+	tapdev_send();
       }
     }
   }
 }
 /*---------------------------------------------------------------------------*/
-PROCESS_THREAD(wpcap_process, ev, data)
+static void
+exithandler(void)
 {
+  tapdev_exit();
+}
+/*---------------------------------------------------------------------------*/
+PROCESS_THREAD(tapdev_process, ev, data)
+{
+  PROCESS_POLLHANDLER(pollhandler());
+  PROCESS_EXITHANDLER(exithandler());
+
   PROCESS_BEGIN();
 
-  wpcap_init();
-  
-  SERVICE_REGISTER(wpcap_service);
+  tapdev_init();
 
-  process_poll(&wpcap_process);
-  
-  while(1) {
-    PROCESS_YIELD();
-    if(ev == PROCESS_EVENT_POLL) {
-      pollhandler();
-    }
-  }
-  
+  tcpip_set_outputfunc(tapdev_output);
+
+  process_poll(&tapdev_process);
+
+  PROCESS_WAIT_UNTIL(ev == PROCESS_EVENT_EXIT);
+
   PROCESS_END();
 }
 /*---------------------------------------------------------------------------*/

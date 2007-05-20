@@ -39,5 +39,6 @@
 void wpcap_init(void);
 u16_t wpcap_poll(void);
 void wpcap_send(void);
+void wpcap_exit(void);
 
 #endif /* __WPCAP_H__ */
