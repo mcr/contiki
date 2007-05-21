@@ -68,7 +68,6 @@
 
 #include "lib/simEnvChange.h"
 #include "lib/sensors.h"
-#include "cfs/cfs-cooja.h"
 #include "sys/etimer.h"
 #include "sys/cooja_mt.h"
 #include "net/init-net.h"
