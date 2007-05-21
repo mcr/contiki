@@ -44,7 +44,7 @@ PROCESS_THREAD(uip_fw_process, ev, data)
 
   PROCESS_SET_FLAGS(PROCESS_NO_BROADCAST);
 
-  uip_fw_init();
+  //uip_fw_init();
 
   tcpip_set_outputfunc(uip_fw_output);
 
