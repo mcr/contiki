@@ -148,8 +148,9 @@ init_ports(void)
   P2IE = 0;
 }
 /*---------------------------------------------------------------------------*/
-/* __bss_end is int but msp430-ld may align it incorrectly. Fix below. */
-static char *cur_break = (char *)(&__bss_end + 1);
+/* msp430-ld may align _end incorrectly. Workaround in cpu_init. */
+extern int _end;		/* Not in sys/unistd.h */
+static char *cur_break = (char *)&_end;
 
 void
 msp430_cpu_init(void)
