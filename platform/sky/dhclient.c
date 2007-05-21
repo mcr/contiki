@@ -57,7 +57,7 @@
 #include "contiki.h"
 
 /* Also IP output. */
-#include "net/uip-fw-service.h"
+#include "net/uip-fw-drv.h"
 #include "net/uaodv.h"
 #include "net/dhcpc.h"
 #include "dev/slip.h"
