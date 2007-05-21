@@ -668,9 +668,9 @@ cc2420_check_remote(u16_t mac)
 
   t = lookup(mac);
   if (t->mac != mac)
-    return -1;			/* unknown */
+    return REMOTE_MAYBE;	/* unknown */
   else if (t->nretrans >= SCALE_RETRANS_THRESHOLD)
-    return +1;			/* remote */
+    return REMOTE_YES;		/* remote */
   else
-    return  0;			/* local */
+    return  REMOTE_NO;		/* local */
 }
