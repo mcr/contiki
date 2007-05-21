@@ -34,7 +34,7 @@
 #include "contiki.h"
 #include "net/uip.h"
 #include "net/uip-fw.h"
-#include "net/uip-fw-service.h"
+#include "net/uip-fw-drv.h"
 #include "net/radio-uip.h"
 #include "dev/cooja-radio.h"
 

@@ -34,10 +34,11 @@
 #include "contiki.h"
 #include "net/uip.h"
 #include "net/uip-fw.h"
-#include "net/uip-fw-service.h"
+#include "net/uip-fw-drv.h"
 #include "net/radio-uip-uaodv.h"
 #include "dev/cooja-radio.h"
 #include "net/uaodv.h"
+#include "net/uaodv-rt.h"
 
 /* Default network interface */
 static struct uip_fw_netif radioif =
