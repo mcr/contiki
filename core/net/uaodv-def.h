@@ -95,7 +95,7 @@ struct uaodv_msg_rreq {
 struct uaodv_msg_rrep {
   u8_t type;
   u8_t flags;
-  u8_t reserved;
+  u8_t prefix_sz;		/* prefix_sz:5 */
   u8_t hop_count;
   uip_ipaddr_t dest_addr;
   u32_t dest_seqno;
