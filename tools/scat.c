@@ -148,6 +148,8 @@ main(int argc, char **argv)
     err(1, "usage: scat device-file");
   siodev = argv[1];
 
+  setvbuf(stdout, NULL, _IOLBF, 0); /* Line buffered output. */
+
   slipfd = open(siodev, O_RDWR);
   if (slipfd == -1) err(1, "can't open '%s'", siodev);
   stty_telos(slipfd);
