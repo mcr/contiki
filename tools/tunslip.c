@@ -865,6 +865,8 @@ main(int argc, char **argv)
 
   ip_id = getpid() * time(NULL);
 
+  setvbuf(stdout, NULL, _IOLBF, 0); /* Line buffered output. */
+
   while ((c = getopt(argc, argv, "B:D:hs:t:")) != -1) {
     switch (c) {
     case 'B':
