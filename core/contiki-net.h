@@ -41,15 +41,13 @@
 
 #include "net/uip.h"
 #include "net/uip-fw.h"
-#include "net/uip-fw-service.h"
+#include "net/uip-fw-drv.h"
 #include "net/uip_arp.h"
 #include "net/uipbuf.h"
 #include "net/uiplib.h"
 #include "net/uip-udp-packet.h"
 
 #include "net/resolv.h"
-
-#include "net/packet-service.h"
 
 #include "net/psock.h"
 
