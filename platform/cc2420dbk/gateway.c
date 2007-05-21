@@ -60,7 +60,7 @@
 #include "contiki.h"
 
 /* Also IP output. */
-#include "net/uip-fw-service.h"
+#include "net/uip-fw-drv.h"
 #include "net/uaodv.h"
 #include "dev/slip.h"
 #include "dev/cc2420.h"
