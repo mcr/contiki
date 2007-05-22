@@ -55,6 +55,8 @@
 #ifndef __RADIO_H__
 #define __RADIO_H__
 
+#include "contiki-net.h"
+
 /**
  * The structure of a device driver for a radio in Contiki.
  */
