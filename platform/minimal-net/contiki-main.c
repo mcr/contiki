@@ -33,6 +33,10 @@
  *
  */
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
 #include "contiki.h"
 
 #include "net/uip.h"
@@ -48,6 +52,16 @@ PROCINIT(&etimer_process, &tcpip_process, &wpcap_process);
 PROCINIT(&etimer_process, &tcpip_process, &tapdev_process);
 #endif
 
+/*-----------------------------------------------------------------------------------*/
+void
+exit_handler(void)
+{
+#ifdef __CYGWIN__
+  process_post_synch(&wpcap_process, PROCESS_EVENT_EXIT, NULL);
+#else
+  process_post_synch(&tapdev_process, PROCESS_EVENT_EXIT, NULL);
+#endif
+}
 /*---------------------------------------------------------------------------*/
 int
 main(void)
@@ -68,6 +82,8 @@ main(void)
 
   uip_ipaddr(&addr, 255,255,255,0);
   uip_setnetmask(&addr);
+
+  atexit(exit_handler);
 
   while(1) {
     int n;
