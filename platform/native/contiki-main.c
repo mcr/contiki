@@ -33,6 +33,9 @@
  *
  */
 
+#include <stdio.h>
+#include <unistd.h>
+
 #include "contiki.h"
 
 #include "net/uip.h"
