@@ -82,7 +82,7 @@ void tree_open(struct tree_conn *c, u16_t channels,
 	       const struct tree_callbacks *callbacks);
 void tree_close(struct tree_conn *c);
 
-void tree_send(struct tree_conn *c);
+void tree_send(struct tree_conn *c, int rexmits);
 
 void tree_set_sink(struct tree_conn *c, int should_be_sink);
 
