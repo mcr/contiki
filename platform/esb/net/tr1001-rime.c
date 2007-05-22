@@ -46,6 +46,8 @@ PROCESS_THREAD(tr1001_rime_process, ev, data)
 
   tr1001_init(&tr1001_rime_process);
 
+  rime_set_output(rime_driver_send);
+  
   while(1) {
     int len;
 
