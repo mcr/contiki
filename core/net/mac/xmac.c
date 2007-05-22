@@ -184,7 +184,8 @@ powercycle(struct rtimer *t, void *ptr)
       radio->off();
       radio_is_on = 0;
       LEDS_OFF(LEDS_RED);
-      if(rtimer_set(t, RTIMER_TIME(t) + OFF_TIME, 1, powercycle, ptr)) {
+      if(rtimer_set(t, RTIMER_TIME(t) + OFF_TIME, 1,
+		    (void (*)(struct rtimer *, void *))powercycle, ptr)) {
 	PRINTF("xmac: could not set long off rtimer\n");
       }
       long_off = 0;
