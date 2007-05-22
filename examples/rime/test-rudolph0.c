@@ -45,8 +45,6 @@
 
 #include "dev/leds.h"
 
-#include "cfs/cfs-ram.h"
-
 #include <stdio.h>
 
 #define FILESIZE 200
