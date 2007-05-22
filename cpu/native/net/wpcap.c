@@ -77,6 +77,8 @@ struct pcap_pkthdr {
   DWORD len;
 };
 
+HMODULE wpcap;
+
 static struct pcap *pcap;
 
 static int (* pcap_findalldevs)(struct pcap_if **, char *);
@@ -193,7 +195,6 @@ void
 wpcap_init(void)
 {
   struct in_addr addr;
-  HMODULE wpcap;
 
 #ifdef __CYGWIN__
   addr.s_addr = inet_addr((*__argv)[1]);
@@ -252,5 +253,6 @@ wpcap_send(void)
 void
 wpcap_exit(void)
 {
+  FreeLibrary(wpcap);
 }
 /*---------------------------------------------------------------------------*/
