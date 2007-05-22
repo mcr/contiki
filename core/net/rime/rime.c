@@ -62,6 +62,7 @@ rime_init(void)
 void
 rime_input(void)
 {
+  RIMESTATS_ADD(rx);
   abc_input_packet();
 }
 /*---------------------------------------------------------------------------*/
@@ -74,6 +75,7 @@ rime_set_output(void (*f)(void))
 void
 rime_output(void)
 {
+  RIMESTATS_ADD(tx);
   rimebuf_compact();
   if(output) {
     output();
