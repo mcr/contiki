@@ -136,12 +136,15 @@ slip_arch_init(unsigned long ubr)
 interrupt(UART1RX_VECTOR)
 __uart1_intr()
 {
+  ENERGEST_ON(ENERGEST_TYPE_IRQ);
   /* Check status register for receive errors. */
-  if (URCTL1 & RXERR) {
+  if(URCTL1 & RXERR) {
     volatile unsigned dummy;
     dummy = RXBUF1;   /* Clear error flags by forcing a dummy read. */
   } else {
-    if(slip_input_byte(RXBUF1))
+    if(slip_input_byte(RXBUF1)) {
       LPM4_EXIT;
+    }
   }
+  ENERGEST_OFF(ENERGEST_TYPE_IRQ);
 }
