@@ -79,7 +79,7 @@ active(void)
 static unsigned int
 value(int type)
 {
-  return battery_value;
+  return ADC12MEM6/*battery_value*/;
 }
 /*---------------------------------------------------------------------------*/
 static int
