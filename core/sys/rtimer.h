@@ -9,7 +9,7 @@
 
 /**
  * \file
- *         Header file for the real-time module.
+ *         Header file for the real-time timer module.
  * \author
  *         Adam Dunkels <adam@sics.se>
  *
