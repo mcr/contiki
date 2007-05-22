@@ -36,6 +36,7 @@
 #include <io.h>
 #include <signal.h>
 
+#include "lib/energest.h"
 #include "dev/uart1.h"
 
 /*---------------------------------------------------------------------------*/
@@ -110,6 +111,7 @@ uart1_init(unsigned long ubr)
 interrupt(UART1RX_VECTOR)
 uart1_interrupt(void)
 {
+  ENERGEST_ON(ENERGEST_TYPE_IRQ);
   /* Check status register for receive errors. */
   if(URCTL1 & RXERR) {
     volatile unsigned dummy;
@@ -119,5 +121,6 @@ uart1_interrupt(void)
       LPM4_EXIT;
       }*/
   }
+  ENERGEST_OFF(ENERGEST_TYPE_IRQ);
 }
 /*---------------------------------------------------------------------------*/
