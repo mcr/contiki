@@ -33,7 +33,7 @@
 
 /**
  * \file
- *         A brief description of what this file is.
+ *         Implementation of the energy estimation module
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
@@ -43,6 +43,7 @@
 
 #if ENERGEST_CONF_ON
 
+int energest_total_count;
 energest_t energest_total_time[ENERGEST_TYPE_MAX];
 energest_t energest_current_time[ENERGEST_TYPE_MAX];
 
@@ -62,7 +63,14 @@ energest_type_time(int type)
   return energest_total_time[type].current;
 }
 /*---------------------------------------------------------------------------*/
+void
+energest_type_set(int type, unsigned long val)
+{
+  energest_total_time[type].current = val;
+}
+/*---------------------------------------------------------------------------*/
 #else /* ENERGEST_CONF_ON */
+void energest_type_set(int type, unsigned long val) {}
 void energest_init(void) {}
 unsigned long energest_type_time(int type) { return 0; }
 #endif /* ENERGEST_CONF_ON */
