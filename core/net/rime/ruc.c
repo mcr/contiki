@@ -53,7 +53,7 @@ struct ruc_hdr {
   u8_t seqno;
 };
 
-#define DEBUG 1
+#define DEBUG 0
 #if DEBUG
 #include <stdio.h>
 #define PRINTF(...) printf(__VA_ARGS__)
