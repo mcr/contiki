@@ -113,7 +113,7 @@ PROCESS_THREAD(test_tree_process, ev, data)
 	rimebuf_clear();
 	rimebuf_set_datalen(sprintf(rimebuf_dataptr(),
 				    "%d", pir_sensor.value(0)));
-	tree_send(&tc);
+	tree_send(&tc, 10);
       }
 
       if(data == &button_sensor) {
