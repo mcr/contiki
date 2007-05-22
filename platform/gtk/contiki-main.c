@@ -33,6 +33,8 @@
  *
  */
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <gdk/gdktypes.h>
 #include <gtk/gtk.h>
 
@@ -44,7 +46,7 @@
 #include "ctk/ctk-vncserver.h"
 #include "ctk/ctk-termtelnet.h"
 
-#include "net/tapdev-service.h"
+#include "net/tapdev-drv.h"
 #include "program-handler.h"
 #include "webserver.h"
 #include "ctk/ctk-gtksim-service.h"
@@ -64,10 +66,8 @@
 
 #include "cmdd.h"
 
-u8_t tapdev_output(void);
 static struct uip_fw_netif tapif =
   {UIP_FW_NETIF(0,0,0,0, 0,0,0,0, tapdev_output)};
-
 
 PROCESS(init_process, "Init");
 
@@ -111,7 +111,6 @@ PROCESS_THREAD(init_process, ev, data)
   PROCESS_END();
 }
 
-
 PROCINIT(&tcpip_process, &ctk_process, &tapdev_process,
 	 &ctk_gtksim_service_process, &resolv_process,
 	 &program_handler_process,
@@ -125,11 +124,16 @@ idle_callback(gpointer data)
   return TRUE;
 }
 /*-----------------------------------------------------------------------------------*/
+void
+exit_handler(void)
+{
+  process_post_synch(&tapdev_process, PROCESS_EVENT_EXIT, NULL);
+}
+/*-----------------------------------------------------------------------------------*/
 int
 main(int argc, char **argv)
 {
   uip_ipaddr_t addr;
-  
 
   gtk_init(&argc, &argv);
   
@@ -162,10 +166,11 @@ main(int argc, char **argv)
 
   uip_fw_default(&tapif);
   
+  atexit(exit_handler);
+
   gtk_timeout_add(20, idle_callback, NULL);
   gtk_main();
-    
-    
+
   return 0;
 
   argv = argv;
