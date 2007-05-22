@@ -47,5 +47,4 @@
 
 void xmac_init(const struct radio_driver *d);
 
-
 #endif /* __XMAC_H__ */
