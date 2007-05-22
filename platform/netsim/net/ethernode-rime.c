@@ -39,8 +39,6 @@
 
 #include "net/rime.h"
 
-PROCESS(ethernode_rime_process, "Ethernode Rime driver");
-
 #define DEBUG 0
 #if DEBUG
 #include <stdio.h>
@@ -50,39 +48,31 @@ PROCESS(ethernode_rime_process, "Ethernode Rime driver");
 #endif
 
 /*---------------------------------------------------------------------------*/
-PROCESS_THREAD(ethernode_rime_process, ev, data)
+static void
+receiver(void)
 {
-  PROCESS_BEGIN();
-  
-  while(1) {
-    process_poll(&ethernode_rime_process);
-    PROCESS_WAIT_EVENT();
-    
-    /* Poll Ethernet device to see if there is a frame avaliable. */
-    {
-      u16_t len;
+  u8_t len;
 
-      rimebuf_clear();
-      
-      len = ethernode_read(rimebuf_dataptr(), RIMEBUF_SIZE);
+  rimebuf_clear();
 
-      if(len > 0) {
+  len = ethernode_read(rimebuf_dataptr(), RIMEBUF_SIZE);
 
-	rimebuf_set_datalen(len);
-	
-	PRINTF("ethernode_rime_process: received len %d\n", len);
-	rime_input();
-      }
-    }
+  if(len > 0) {
+    rimebuf_set_datalen(len);
+    rime_input();
   }
-  PROCESS_END();
-    
 }
 /*---------------------------------------------------------------------------*/
 void
-rime_driver_send(void)
+ethernode_rime_send(void)
 {
-  PRINTF("ethernode_rime: sending %d bytes\n", rimebuf_totlen());
   ethernode_send_buf(rimebuf_hdrptr(), rimebuf_totlen());
+}
+/*---------------------------------------------------------------------------*/
+void
+ethernode_rime_init(void)
+{
+  ethernode_set_receiver(receiver);
+  rime_set_output(ethernode_rime_send);
 }
 /*---------------------------------------------------------------------------*/
