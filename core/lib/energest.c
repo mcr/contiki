@@ -45,7 +45,7 @@
 
 int energest_total_count;
 energest_t energest_total_time[ENERGEST_TYPE_MAX];
-energest_t energest_current_time[ENERGEST_TYPE_MAX];
+unsigned short energest_current_time[ENERGEST_TYPE_MAX];
 
 /*---------------------------------------------------------------------------*/
 void
