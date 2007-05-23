@@ -34,7 +34,6 @@
  */
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <gdk/gdktypes.h>
 #include <gtk/gtk.h>
 
@@ -124,12 +123,6 @@ idle_callback(gpointer data)
   return TRUE;
 }
 /*-----------------------------------------------------------------------------------*/
-void
-exit_handler(void)
-{
-  process_post_synch(&tapdev_process, PROCESS_EVENT_EXIT, NULL);
-}
-/*-----------------------------------------------------------------------------------*/
 int
 main(int argc, char **argv)
 {
@@ -166,8 +159,6 @@ main(int argc, char **argv)
 
   uip_fw_default(&tapif);
   
-  atexit(exit_handler);
-
   gtk_timeout_add(20, idle_callback, NULL);
   gtk_main();
 
