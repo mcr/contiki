@@ -79,16 +79,9 @@ pollhandler(void)
   }
 }
 /*---------------------------------------------------------------------------*/
-static void
-exithandler(void)
-{
-  wpcap_exit();
-}
-/*---------------------------------------------------------------------------*/
 PROCESS_THREAD(wpcap_process, ev, data)
 {
   PROCESS_POLLHANDLER(pollhandler());
-  PROCESS_EXITHANDLER(exithandler());
 
   PROCESS_BEGIN();
 
@@ -99,6 +92,8 @@ PROCESS_THREAD(wpcap_process, ev, data)
   process_poll(&wpcap_process);
 
   PROCESS_WAIT_UNTIL(ev == PROCESS_EVENT_EXIT);
+
+  wpcap_exit();
 
   PROCESS_END();
 }

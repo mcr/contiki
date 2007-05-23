@@ -77,12 +77,6 @@ pollhandler(void)
   }
 }
 /*---------------------------------------------------------------------------*/
-static void
-exithandler(void)
-{
-  tapdev_exit();
-}
-/*---------------------------------------------------------------------------*/
 PROCESS_THREAD(tapdev_process, ev, data)
 {
   PROCESS_POLLHANDLER(pollhandler());
@@ -97,6 +91,8 @@ PROCESS_THREAD(tapdev_process, ev, data)
   process_poll(&tapdev_process);
 
   PROCESS_WAIT_UNTIL(ev == PROCESS_EVENT_EXIT);
+
+  tapdev_exit();
 
   PROCESS_END();
 }
