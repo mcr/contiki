@@ -400,9 +400,6 @@ CCIF void process_exit(struct process *p);
 #define PROCESS_CURRENT() process_current
 CCIF extern struct process *process_current;
 
-#define PROCESS_SET_FLAGS(flags)
-#define PROCESS_NO_BROADCAST
-
 /**
  * Switch context to another process
  *
