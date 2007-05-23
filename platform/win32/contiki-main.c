@@ -36,7 +36,6 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <stdio.h>
-#include <stdlib.h>
 
 #include "contiki-net.h"
 
@@ -84,12 +83,6 @@ log_message(const char *part1, const char *part2)
   debug_printf("%s%s\n", part1, part2);
 }
 /*-----------------------------------------------------------------------------------*/
-void
-exit_handler(void)
-{
-  process_post_synch(&wpcap_process, PROCESS_EVENT_EXIT, NULL);
-}
-/*-----------------------------------------------------------------------------------*/
 int
 main(void)
 {
@@ -99,8 +92,6 @@ main(void)
 
   program_handler_add(&directory_dsc, "Directory",   1);
   program_handler_add(&www_dsc,       "Web browser", 1);
-
-  atexit(exit_handler);
 
 #if 1
   {
