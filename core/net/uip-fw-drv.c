@@ -42,8 +42,6 @@ PROCESS_THREAD(uip_fw_process, ev, data)
 {
   PROCESS_BEGIN();
 
-  PROCESS_SET_FLAGS(PROCESS_NO_BROADCAST);
-
   tcpip_set_outputfunc(uip_fw_output);
 
   PROCESS_WAIT_UNTIL(ev == PROCESS_EVENT_EXIT);
