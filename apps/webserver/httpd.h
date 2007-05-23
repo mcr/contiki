@@ -50,11 +50,10 @@ struct httpd_state {
   int len;
   char *scriptptr;
   int scriptlen;
-  
   union {
     unsigned short count;
     void *ptr;
-  };
+  } u;
 };
 
 
