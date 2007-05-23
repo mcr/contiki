@@ -552,10 +552,15 @@ public class GUI {
     // Make sure we have nice window decorations.
     JFrame.setDefaultLookAndFeelDecorated(true);
     JDialog.setDefaultLookAndFeelDecorated(true);
+    Rectangle maxSize = GraphicsEnvironment.getLocalGraphicsEnvironment()
+        .getMaximumWindowBounds();
 
     // Create and set up the window.
     frame = new JFrame("COOJA Simulator");
+    if (maxSize != null)
+      frame.setMaximizedBounds(maxSize);
     frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+    logger.debug(frame.getPreferredSize());
 
     // Create and set up the content pane.
     JDesktopPane desktop = new JDesktopPane();
@@ -565,7 +570,7 @@ public class GUI {
     JComponent newContentPane = gui.getDesktopPane();
     newContentPane.setOpaque(true);
     frame.setContentPane(newContentPane);
-
+    
     frame.setSize(700, 700);
     frame.setLocationRelativeTo(null);
     frame.addWindowListener(gui.guiEventHandler);
@@ -579,6 +584,15 @@ public class GUI {
       if (framePosX >= 0 && framePosY >= 0 && frameWidth > 0 && frameHeight > 0) {
         frame.setLocation(framePosX, framePosY);
         frame.setSize(frameWidth, frameHeight);
+
+        // Assume window was maximized if loaded size matches maximum bounds
+        if (maxSize != null 
+            && framePosX == 0 
+            && framePosY == 0 
+            && frameWidth == maxSize.width 
+            && frameHeight == maxSize.height) {
+          frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        }
       }
     }
 
