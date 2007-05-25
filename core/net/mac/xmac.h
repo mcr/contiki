@@ -41,9 +41,10 @@
 #ifndef __XMAC_H__
 #define __XMAC_H__
 
-#include "contiki-net.h"
-
+#include "net/mac/mac.h"
 #include "dev/radio.h"
+
+extern const struct mac_driver xmac_driver;
 
 void xmac_init(const struct radio_driver *d);
 

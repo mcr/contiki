@@ -41,10 +41,11 @@
 #ifndef __NULLMAC_H__
 #define __NULLMAC_H__
 
-#include "contiki-net.h"
-
+#include "net/mac/mac.h"
 #include "dev/radio.h"
 
-void nullmac_init(const struct radio_driver *d);
+extern const struct mac_driver nullmac_driver;
+
+void nullmac_init(const struct radio_driver *r);
 
 #endif /* __NULLMAC_H__ */
