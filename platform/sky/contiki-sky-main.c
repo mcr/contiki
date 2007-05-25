@@ -157,21 +157,19 @@ main(int argc, char **argv)
   process_start(&etimer_process, NULL);
   process_start(&sensors_process, NULL);
 
-  simple_cc2420_init();
-
-  simple_cc2420_on();
-  rime_init();
   set_rime_addr();
 
-  //nullmac_init(&simple_cc2420_driver);
+  simple_cc2420_init();
+/*   nullmac_init(&simple_cc2420_driver); */
+/*   rime_init(&nullmac_driver); */
   xmac_init(&simple_cc2420_driver);
+  rime_init(&xmac_driver);
 
   /*  rimeaddr_set_node_addr*/
 #if WITH_UIP
   process_start(&tcpip_process, NULL);
   process_start(&uip_fw_process, NULL);	/* Start IP output */
   process_start(&slip_process, NULL);
-  /*  process_start(&tcp_loader_process, NULL);*/
 #endif /* WITH_UIP */
 
   button_sensor.activate();
