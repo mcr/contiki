@@ -54,13 +54,14 @@
 #include "net/rime/ruc.h"
 #include "net/rime/sibc.h"
 
+#include "net/mac/mac.h"
 /**
  * \brief      Initialize Rime
  *
  *             This function should be called from the system boot up
  *             code to initialize Rime.
  */
-void rime_init(void);
+void rime_init(const struct mac_driver *);
 
 /**
  * \brief      Send an incoming packet to Rime
