@@ -80,7 +80,6 @@ pollhandler(void)
 PROCESS_THREAD(tapdev_process, ev, data)
 {
   PROCESS_POLLHANDLER(pollhandler());
-  PROCESS_EXITHANDLER(exithandler());
 
   PROCESS_BEGIN();
 
