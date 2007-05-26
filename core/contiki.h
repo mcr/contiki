@@ -40,7 +40,6 @@
 
 #include "sys/process.h"
 #include "sys/autostart.h"
-#include "sys/service.h"
 
 #include "sys/timer.h"
 #include "sys/etimer.h"
