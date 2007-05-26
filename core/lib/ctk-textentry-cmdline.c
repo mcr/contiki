@@ -43,7 +43,6 @@ ctk_textentry_cmdline_input(ctk_arch_key_t c,
 			    struct ctk_textentry *t)
 {
   if(c == CH_ENTER) {
-    /*    ek_post(t->window->owner, ctk_signal_widget_activate, t);*/
     process_post(t->window->owner, ctk_signal_widget_activate, t);
     return 1;
   }
