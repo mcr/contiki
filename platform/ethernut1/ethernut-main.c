@@ -43,7 +43,7 @@
 #include <avr/io.h>
 #include <avr/pgmspace.h>
 
-PROCINIT(&etimer_process, &tcpip_process, &rtl8019_drv_process);
+PROCINIT(&etimer_process, &tcpip_process, &rtl8019_process);
 
 static const struct uip_eth_addr ethaddr = {{0x00,0x06,0x98,0x01,0x02,0x29}};
 
