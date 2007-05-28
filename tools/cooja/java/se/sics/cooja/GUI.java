@@ -2716,7 +2716,9 @@ public class GUI {
       // No GUI start-up
       javax.swing.SwingUtilities.invokeLater(new Runnable() {
         public void run() {
-          new GUI(null);
+          JDesktopPane desktop = new JDesktopPane();
+          desktop.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
+          new GUI(desktop);
         }
       });
 
