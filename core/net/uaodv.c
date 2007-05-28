@@ -55,7 +55,7 @@
 #endif
 
 /* This implementation never expires routes!!! */
-#define MY_ROUTE_TIMEOUT ((u16_t)~0u)
+#define MY_ROUTE_TIMEOUT ((u32_t)~0ul)
 
 PROCESS(uaodv_process, "uAODV");
 
