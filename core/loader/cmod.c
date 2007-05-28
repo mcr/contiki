@@ -113,7 +113,7 @@ cmod_load(unsigned imod,
   PRINTF("cmod: copy data segment to RAM %p %p\n",
 	 h.data, h.data + h.datasize);
   ret = pread(h.data, h.datasize, off + h.dataoff); 
-  assert(ret > 0);
+  assert(ret >= 0);
   if(h.datarelasize > 0) {
     PRINTF("cmod: relocate data segment\n");
     ret = cle_relocate(&h,
