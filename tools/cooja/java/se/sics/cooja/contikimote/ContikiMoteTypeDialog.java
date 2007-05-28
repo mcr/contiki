@@ -1369,7 +1369,7 @@ public class ContikiMoteTypeDialog extends JDialog {
     if (!contikiDir.exists()) {
       if (errorStream != null)
         errorStream.println("Bad Contiki OS path");
-      logger.fatal("Contiki path does not exist");
+      logger.fatal("Contiki path does not exist: " + contikiDir.getAbsolutePath());
       return false;
     }
     if (!contikiDir.isDirectory()) {
@@ -1420,6 +1420,12 @@ public class ContikiMoteTypeDialog extends JDialog {
       String sourceDirs = System.getProperty("PROJECTDIRS", "");
       String sourceFileNames = "";
       String ccFlags = GUI.getExternalToolsSetting("COMPILER_ARGS", "");
+      
+      // Replace Java home references
+      if (ccFlags.contains("$(JAVA_HOME)")) {
+        String javaHome = (String) System.getenv().get("JAVA_HOME");
+        ccFlags = ccFlags.replace("$(JAVA_HOME)", javaHome);
+      }
 
       for (File sourceFile : sourceFiles) {
         if (sourceFile.isDirectory()) {
