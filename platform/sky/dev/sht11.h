@@ -33,8 +33,19 @@
 #define SHT11_H
 
 void sht11_init(void);
+void sht11_off(void);
 
 unsigned sht11_temp(void);
 unsigned sht11_humidity(void);
+unsigned sht11_sreg(void);
+int      sht11_set_sreg(unsigned);
+
+/*
+ * Relative Humidity in percent (h in 12 bits resolution)
+ * RH = -4 + 0.0405*h - 2.8e-6*(h*h)
+ *
+ * Temperature in Celsius (t in 14 bits resolution at 3 Volts)
+ * T = -39.60 + 0.01*t
+ */
 
 #endif /* SHT11_H */
