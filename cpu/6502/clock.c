@@ -37,6 +37,7 @@
 
 #include "contiki.h"
 
+/*-----------------------------------------------------------------------------------*/
 clock_time_t
 clock_time(void)
 {
@@ -49,7 +50,7 @@ clock_time(void)
    * needs to be defined at least as 2.
    * The value 2 works out especially nicely as it allows us to implement the
    * clock frequency devider below purely in (32 bit) integer arithmetic based
-   * on the educated guess of CLK_TCK being an even value.
-   */
+   * on the educated guess of CLK_TCK being an even value. */
   return clock() / (CLK_TCK / CLOCK_CONF_SECOND);
 }
+/*-----------------------------------------------------------------------------------*/
