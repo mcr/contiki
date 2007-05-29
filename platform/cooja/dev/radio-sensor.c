@@ -33,7 +33,7 @@
 
 #include "lib/sensors.h"
 #include "dev/radio-sensor.h"
-#include "dev/radio-arch.h"
+#include "dev/cooja-radio.h"
 #include "lib/simEnvChange.h"
 
 const struct sensors_sensor radio_sensor;
