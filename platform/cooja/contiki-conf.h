@@ -250,6 +250,7 @@ architecture specific files to work). */
 
 
 /*------------------------------------------------------------------------------*/
+#define AODV_COMPLIANCE
 
 #define UIP_CONF_MAX_CONNECTIONS 4
 #define UIP_CONF_MAX_LISTENPORTS 4
