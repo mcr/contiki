@@ -35,21 +35,10 @@
 
 #include <stdio.h>
 
-#include "contiki.h"
 #include "contiki-net.h"
 
-#include "sys/clock.h"
-#include "sys/etimer.h"
-
 PROCINIT(&etimer_process,
-	 &tcpip_process,
-	 &resolv_process);
-
-#if CTK_CONF_MOUSE_SUPPORT
-#define TICK_COUNT 2800
-#else
-#define TICK_COUNT 4200
-#endif
+	 &tcpip_process);
 
 /*-----------------------------------------------------------------------------------*/
 void
@@ -64,22 +53,6 @@ log_message(const char *part1, const char *part2)
   fprintf(stderr, "%s%s\n", part1, part2);
 }
 /*-----------------------------------------------------------------------------------*/
-clock_time_t
-clock_time(void)
-{
-  static clock_time_t count, clock;
-
-//  count += tick;
-  count += 1;
-
-  if(count == TICK_COUNT) {
-    count = 0;
-    ++clock;
-  }
-
-  return clock;
-}
-/*-----------------------------------------------------------------------------------*/
 void
 main(void)
 {
@@ -92,7 +65,7 @@ main(void)
 #if 1
   {
     uip_ipaddr_t addr;
-    uip_ipaddr(&addr, 192,168,0,222);
+    uip_ipaddr(&addr, 192,168,0,128);
     uip_sethostaddr(&addr);
 
     uip_ipaddr(&addr, 255,255,255,0);
