@@ -348,13 +348,13 @@ public class ContikiRadio extends Radio implements ContikiMoteInterface,
     if (!isTransmitting && myMoteMemory.getByteValueOf("simTransmitting") == 1) {
       int size = myMoteMemory.getIntValueOf("simOutSize");
       if (size <= 0) {
-        logger.warn("Skipping zero sized Contiki packet");
+        logger.warn("Skipping zero sized Contiki packet (no size)");
         myMoteMemory.setByteValueOf("simTransmitting", (byte) 0);
         return;
       }
       packetFromMote = myMoteMemory.getByteArray("simOutDataBuffer", size);
       if (packetFromMote == null || packetFromMote.length == 0) {
-        logger.warn("Skipping zero sized Contiki packet");
+        logger.warn("Skipping zero sized Contiki packet (no buffer)");
         myMoteMemory.setByteValueOf("simTransmitting", (byte) 0);
         return;
       }
