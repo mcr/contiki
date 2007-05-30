@@ -256,4 +256,8 @@ public class DisturberRadio extends Radio implements PacketRadio {
         logger.fatal("Read unknown configuration: " + name);
     }
   }
+  
+  public Mote getMote() {
+    return myMote;
+  }
 }
