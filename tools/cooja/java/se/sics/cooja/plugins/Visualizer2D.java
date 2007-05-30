@@ -88,6 +88,7 @@ public abstract class Visualizer2D extends VisPlugin {
   private Observer moteHighligtObserver = null;
   private Mote highlightedMote = null;
   private Color highlightColor = Color.GRAY;
+  private Timer highlightTimer = null;
   
   public interface MoteMenuAction {
     public boolean isEnabled(Mote mote);
@@ -189,14 +190,17 @@ public abstract class Visualizer2D extends VisPlugin {
       public void update(Observable obs, Object obj) {
         if (!(obj instanceof Mote))
           return;
-          
+        
+        if (highlightTimer != null && highlightTimer.isRunning())
+          highlightTimer.stop();
+        
+        highlightTimer = new Timer(100, null);
         highlightedMote = (Mote) obj;
-        final Timer timer = new Timer(100, null);
-        timer.addActionListener(new ActionListener() {
+        highlightTimer.addActionListener(new ActionListener() {
           public void actionPerformed(ActionEvent e) {
             // Decrease delay
-            if (timer.getDelay() < 90) {
-              timer.stop();
+            if (highlightTimer.getDelay() < 90) {
+              highlightTimer.stop();
               highlightedMote = null;
               repaint();
               return;
@@ -207,11 +211,11 @@ public abstract class Visualizer2D extends VisPlugin {
               highlightColor = Color.CYAN;
             else
               highlightColor = Color.GRAY; 
-            timer.setDelay(timer.getDelay()-1);
+            highlightTimer.setDelay(highlightTimer.getDelay()-1);
             repaint();
           }
         });
-        timer.start();          
+        highlightTimer.start();          
       }
     });
 
