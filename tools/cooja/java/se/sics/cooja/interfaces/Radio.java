@@ -148,5 +148,13 @@ public abstract class Radio extends MoteInterface {
    * @return Radio position
    */
   public abstract Position getPosition();
+
+  /**
+   * This is a convenience function.
+   * It returns the mote, if any, that holds this radio.
+   * 
+   * @return Mote
+   */
+  public abstract Mote getMote();
   
 }

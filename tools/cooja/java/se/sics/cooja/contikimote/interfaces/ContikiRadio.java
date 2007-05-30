@@ -452,4 +452,7 @@ public class ContikiRadio extends Radio implements ContikiMoteInterface,
   public void setConfigXML(Collection<Element> configXML, boolean visAvailable) {
   }
 
+  public Mote getMote() {
+    return myMote;
+  }
 }

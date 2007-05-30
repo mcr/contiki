@@ -313,4 +313,8 @@ public class ApplicationRadio extends Radio implements PacketRadio {
 
   public void setConfigXML(Collection<Element> configXML, boolean visAvailable) {
   }
+  
+  public Mote getMote() {
+    return myMote;
+  }
 }
