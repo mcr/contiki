@@ -207,7 +207,7 @@ public class RadioLogger extends VisPlugin {
     destColumn.setCellEditor(new DefaultCellEditor(comboBox));
 
     final JScrollPane scrollPane = new JScrollPane(dataTable);
-    dataTable.setFillsViewportHeight(true);
+//    dataTable.setFillsViewportHeight(true);
 
     add(scrollPane);
 
