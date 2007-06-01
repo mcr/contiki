@@ -59,7 +59,7 @@ int
 rand()
 {
   rand_state = (16807*rand_state) % 2147483647ul;
-  return rand_state & RAND_MAX;
+  return (rand_state ^ (rand_state >> 16)) & RAND_MAX;
 }
 
 void
