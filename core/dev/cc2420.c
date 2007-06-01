@@ -527,6 +527,7 @@ PROCESS_THREAD(cc2420_retransmit_process, ev, data)
   case PROCESS_EVENT_TIMER:
     if (last_dst == 0xffff) {
       n++;
+      clock_delay(1 + (rand() & (2048 - 1)));
       if (cc2420_resend() == UIP_FW_OK) {
 	PRINTF("REBCAST %d\n", n);
 	return PT_WAITING;	/* Final transmission attempt. */
