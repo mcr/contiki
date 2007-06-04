@@ -87,7 +87,6 @@ void *force_inclusion[] = {
   &psock_init,
   &button_init,
   &uip_udp_packet_send,
-  &rand,
 };
 #if 0
 int
@@ -148,6 +147,10 @@ main(int argc, char **argv)
   printf("IP %d.%d.%d.%d netmask %d.%d.%d.%d\n",
 	 ip2quad(&uip_hostaddr), ip2quad(&uip_netmask));
   cc2420_set_chan_pan_addr(RF_CHANNEL, panId, uip_hostaddr.u16[1], ds2411_id);
+
+  srand(rand() +
+	(ds2411_id[3]<<8) + (ds2411_id[4]<<6) + (ds2411_id[5]<<4) +
+	(ds2411_id[6]<<2) +  ds2411_id[7]);
 
   /*
    * Initialize Contiki and our processes.
