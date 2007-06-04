@@ -66,7 +66,9 @@ void (*elfloader_fini)(void);
 unsigned char *datamemory;
 
 #ifdef __AVR__
-#define TEXTMEMORY ((cle_addr)96*1024)
+extern int __data_load_end;
+#define TEXTMEMORY (((cle_addr)(&__data_load_end) + ROM_ERASE_UNIT_SIZE) \
+		    & ~(ROM_ERASE_UNIT_SIZE - 1))
 #else
 #include <sys/unistd.h>
 #define TEXTMEMORY \
