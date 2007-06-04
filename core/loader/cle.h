@@ -92,7 +92,10 @@ cle_lookup(struct cle_info *info,
 
 struct elf32_rela;		/* Struct forward decl. */
 
-int cle_write_reloc(unsigned char *, const struct elf32_rela *, cle_addr);
+int cle_write_reloc(void *,
+		    const struct elf32_rela *,
+		    cle_addr,
+		    const struct cle_info *);
 
 /*
  * Error codes that apply in general to linking and loading.
