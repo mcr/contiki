@@ -54,9 +54,10 @@
  * specific!
  */
 int
-cle_write_reloc(unsigned char *pos,
+cle_write_reloc(void *pos,
 		const struct elf32_rela *rela,
-		cle_addr addr)
+		cle_addr addr,
+		const struct cle_info *info)
 {
   memcpy(pos, &addr, 2);	/* Write reloc */
   return CLE_OK;
