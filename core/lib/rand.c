@@ -33,6 +33,13 @@
 
 #include <stdlib.h>
 
+#include "lib/assert.h"
+
+#ifdef RAND_MAX
+/* Use rand() from libc if this breaks! */
+CTASSERT(RAND_MAX == 0x7fff);
+#endif
+
 #include "rand.h"
 
 /*
