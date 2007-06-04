@@ -260,7 +260,7 @@ cle_relocate(struct cle_info *info,
 
     addr += rela.r_addend;
 
-    ret = cle_write_reloc(segmem + rela.r_offset, &rela, addr);
+    ret = cle_write_reloc(segmem + rela.r_offset, &rela, addr, info);
     if(ret != CLE_OK) {
       return ret;
     }
