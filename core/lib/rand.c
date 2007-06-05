@@ -33,6 +33,10 @@
 
 #include <stdlib.h>
 
+#if defined(__GNUC__) && defined(__MSP430__)
+#undef RAND_MAX			/* Broken header files! */
+#endif
+
 #include "lib/assert.h"
 
 #ifdef RAND_MAX
