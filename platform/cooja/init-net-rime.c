@@ -33,15 +33,15 @@
 
 #include "contiki.h"
 #include "net/rime.h"
-#include "net/radio-rime.h"
-#include "dev/cooja-radio.h"
 #include "dev/radio.h"
+#include "dev/cooja-radio.h"
+#include "net/mac/nullmac.h"
 
 void
 init_net(void)
 {
-  rime_init();
-  radio_rime_init(&cooja_driver);
+  nullmac_init(&cooja_driver);
+  rime_init(&nullmac_driver);
   
   /* TODO Rime node ID */
 }
