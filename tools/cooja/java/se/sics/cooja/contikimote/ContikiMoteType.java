@@ -112,7 +112,7 @@ public class ContikiMoteType implements MoteType {
       if (this == UIP_UAODV)
         return " cooja-radio.c radio-uip-uaodv.c init-net-uip-uaodv.c";
       if (this == RIME)
-        return " cooja-radio.c radio-rime.c init-net-rime.c";
+        return " cooja-radio.c init-net-rime.c";
       return " ";
     }
 
