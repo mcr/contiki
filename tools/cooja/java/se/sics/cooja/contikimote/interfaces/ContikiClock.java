@@ -83,13 +83,20 @@ public class ContikiClock extends Clock implements ContikiMoteInterface {
     moteMem.setIntValueOf("simCurrentTime", newTime);
   }
 
+  public void setDrift(int timeDrift) {
+    this.timeDrift = timeDrift;
+  }
+
   public int getTime() {
     return moteMem.getIntValueOf("simCurrentTime");
   }
 
   public void doActionsBeforeTick() {
     // Update core time to correspond with the simulation time
-    setTime((int) mote.getSimulation().getSimulationTime() + timeDrift);
+    int moteTime = mote.getSimulation().getSimulationTime() + timeDrift;
+    
+    if (moteTime > 0)
+      setTime(moteTime);
   }
 
   public void doActionsAfterTick() {
