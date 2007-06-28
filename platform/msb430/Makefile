@@ -11,11 +11,4 @@ core:
 CONTIKI=../..
 TARGET=msb430
 
-blinker.cm: blinker.co blinker2.co
-
-ifdef ENABLE_BACNET
-APPS += bacnet
-APPDIRS += apps/bacnet
-endif
-
 include $(CONTIKI)/Makefile.include
