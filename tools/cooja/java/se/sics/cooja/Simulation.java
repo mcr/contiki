@@ -304,6 +304,11 @@ public class Simulation extends Observable implements Runnable {
     element.setText(Integer.toString(tickTime));
     config.add(element);
 
+    // Random seed
+    element = new Element("randomseed");
+    element.setText(Long.toString(randomSeed));
+    config.add(element);
+
     // Radio Medium
     element = new Element("radiomedium");
     element.setText(currentRadioMedium.getClass().getName());
@@ -370,6 +375,12 @@ public class Simulation extends Observable implements Runnable {
       // Tick time
       if (element.getName().equals("ticktime")) {
         tickTime = Integer.parseInt(element.getText());
+      }
+
+      // Random seed
+      if (element.getName().equals("randomseed")) {
+        randomSeed = Long.parseLong(element.getText());
+        delayMotesRandom.setSeed(randomSeed);
       }
 
       // Radio medium
@@ -492,7 +503,6 @@ public class Simulation extends Observable implements Runnable {
     } else
       motes.add(mote);
 
-    tickListRandom.setSeed(randomSeed);
     if (maxDelayedStartupTime > 0 && mote instanceof ContikiMote) {
       ((ContikiClock) mote.getInterfaces().getClock()).setDrift(-delayMotesRandom.nextInt(maxDelayedStartupTime));
     }
