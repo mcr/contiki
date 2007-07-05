@@ -34,6 +34,6 @@
 #ifndef DMA_H
 #define DMA_H
 
-void dma_transfer(char *, unsigned);
+void dma_transfer(unsigned char *, unsigned);
 
 #endif
