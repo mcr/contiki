@@ -279,6 +279,13 @@ public class Simulation extends Observable implements Runnable {
   }
 
   /**
+   * @return Current simulation random seed
+   */
+  public long getRandomSeed() {
+    return randomSeed;
+  }
+  
+  /**
    * Returns the current simulation config represented by XML elements. This
    * config also includes the current radio medium, all mote types and motes.
    * 
