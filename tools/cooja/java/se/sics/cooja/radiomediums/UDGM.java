@@ -245,6 +245,9 @@ public class UDGM extends AbstractRadioMedium {
       if (moteRadio == null)
         return new Color[] { Color.GRAY };
 
+      if (mote.getState() == Mote.State.DEAD)
+        return new Color[] { Color.GRAY };
+
       if (selectedMote != null && mote == selectedMote)
         return new Color[] { Color.CYAN };
 

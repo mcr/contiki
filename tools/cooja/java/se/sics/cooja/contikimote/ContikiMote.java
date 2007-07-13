@@ -116,6 +116,10 @@ public class ContikiMote implements Mote {
       myState = newState;
       stateObservable.stateChanged();
     }
+    
+    if (myState == State.DEAD) {
+      mySim.getRadioMedium().unregisterMote(this, mySim);
+    }
   }
 
   public State getState() {
