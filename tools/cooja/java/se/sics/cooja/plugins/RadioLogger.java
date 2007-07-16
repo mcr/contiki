@@ -194,6 +194,12 @@ public class RadioLogger extends VisPlugin {
       }
     };
 
+    // Set data column width greedy
+    dataTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+    dataTable.getColumnModel().getColumn(COLUMN_TIME).setPreferredWidth(55);
+    dataTable.getColumnModel().getColumn(COLUMN_FROM).setPreferredWidth(130);
+    dataTable.getColumnModel().getColumn(COLUMN_TO).setPreferredWidth(100);
+
     dataTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     dataTable.getSelectionModel().addListSelectionListener(
         new ListSelectionListener() {
