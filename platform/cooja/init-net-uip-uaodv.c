@@ -49,6 +49,7 @@ init_net(void)
 {
   uip_init();
   uip_fw_init();
+  tcpip_set_forwarding(1);
   
   process_start(&tcpip_process, NULL);
   process_start(&uip_fw_process, NULL);
