@@ -265,6 +265,7 @@ architecture specific files to work). */
 #define UIP_CONF_LOGGING         0
 
 #define UIP_CONF_UDP_CHECKSUMS   0
+#define UIP_CONF_FWCACHE_SIZE    100
 
 
 /*------------------------------------------------------------------------------*/
