@@ -249,9 +249,8 @@ cc2420_resend(void)
   unsigned i;
   
   if (FIFOP_IS_1 && !FIFO_IS_1) {
-    /* RXFIFO overflow, send on retransmit. */
+    process_poll(&cc2420_process);
     PRINTF("rxfifo overflow!\n");
-    //    return UIP_FW_DROPPED;
   }
 
   /* The TX FIFO can only hold one packet! Make sure to not overrun
