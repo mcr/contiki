@@ -61,7 +61,7 @@ interrupt(UART1RX_VECTOR)
   if(!(URCTL1 & RXERR) && input_handler != NULL) {
 
     if(input_handler(RXBUF1)) {
-      LPM_AWAKE();
+      LPM4_EXIT;
     }
   } else {
     /* Else read out the char to clear the I-flags, etc. */
