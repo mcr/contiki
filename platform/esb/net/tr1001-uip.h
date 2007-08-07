@@ -33,7 +33,7 @@
 #ifndef __TR1001_UIP_H__
 #define __TR1001_UIP_H__
 
-PROCESS_NAME(tr1001_uip_process);
+void tr1001_uip_init();
 u8_t tr1001_uip_send(void);
 
 #endif /* __TR1001_UIP_H__ */
