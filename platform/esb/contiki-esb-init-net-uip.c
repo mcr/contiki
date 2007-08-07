@@ -58,8 +58,9 @@ init_net(void)
 
   process_start(&tcpip_process, NULL);
   process_start(&slip_process, NULL);
-  process_start(&tr1001_uip_process, NULL);
   process_start(&uip_fw_process, NULL);
+
+  tr1001_uip_init();
 
   if (NODE_ID > 0) {
     /* node id is set, construct an ip address based on the node id */
