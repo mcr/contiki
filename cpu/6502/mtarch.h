@@ -38,11 +38,10 @@
 
 #define MTARCH_CPUSTACKSIZE 256
 #define MTARCH_CSTACKSIZE   256
-#define MTARCH_ZPSIZE       32
+#define MTARCH_ZPSIZE       26 // see <cc65 source>/asminc/zeropage.inc
 
 struct mtarch_thread {
   unsigned char spreg;
-  unsigned char *sp;
   unsigned char cpustack[MTARCH_CPUSTACKSIZE];
   unsigned char cstack  [MTARCH_CSTACKSIZE];
   unsigned char zp      [MTARCH_ZPSIZE];
