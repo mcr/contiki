@@ -35,6 +35,8 @@
 #include "tapdev.h"
 #include "net/uip-neighbor.h"
 
+#include "tapdev-drv.h"
+
 #define BUF ((struct uip_eth_hdr *)&uip_buf[0])
 
 PROCESS(tapdev_process, "TAP driver");
