@@ -34,6 +34,12 @@
 #ifndef DMA_H
 #define DMA_H
 
+#define DMA_LINES	2
+
+void dma_init(void);
+int dma_subscribe(int, struct process *);
 void dma_transfer(unsigned char *, unsigned);
+
+extern process_event_t dma_event;
 
 #endif
