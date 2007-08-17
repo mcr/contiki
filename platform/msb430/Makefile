@@ -1,12 +1,12 @@
 # $Id$
 
-all: core
-upload: core core.u
+all: test-abc
+upload: test-abc test-abc.u
 
-core:
-	$(MAKE) core.firmware && \
-	$(MAKE) core.firmware && \
-	$(MAKE) core.firmware
+test-abc:
+	$(MAKE) test-abc.firmware && \
+	$(MAKE) test-abc.firmware && \
+	$(MAKE) test-abc.firmware
 
 CONTIKI=../..
 TARGET=msb430
