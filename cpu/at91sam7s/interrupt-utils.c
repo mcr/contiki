@@ -26,7 +26,7 @@ static inline unsigned __get_cpsr(void)
 
 static inline void __set_cpsr(unsigned val)
 {
-  asm volatile (" msr  cpsr, %0" : /* no outputs */ : "r" (val)  );
+  asm volatile (" msr  cpsr_c, %0" : /* no outputs */ : "r" (val)  );
 }
 
 unsigned disableIRQ(void)
