@@ -111,9 +111,9 @@ start_process_run_loop(void *data)
 		/* Always pretend we have processes left while inside process_run() */
 		simProcessRunValue = 1;
 
-		if (simDoTcpipInput) {
-		  simDoTcpipInput = 0;
-		  tcpip_input();
+		if (simDoReceiverCallback) {
+		  simDoReceiverCallback = 0;
+		  radio_call_receiver();
 		}
 
 		simProcessRunValue = process_run();
