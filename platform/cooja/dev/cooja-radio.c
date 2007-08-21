@@ -148,7 +148,7 @@ doInterfaceActionsBeforeTick(void)
   // ** Good place to add explicit manchester/gcr-encoding
   
   if(receiver_callback != NULL && !simInPolled) {
-    receiver_callback(&cooja_driver);
+    simDoReceiverCallback = 1;
     simInPolled = 1;
   } else {
     simInPolled = 0;
@@ -250,6 +250,11 @@ radio_send(const u8_t *payload, u16_t payload_len)
     
   inSendFunction = 0;
   return COOJA_RADIO_OK;
+}
+/*-----------------------------------------------------------------------------------*/
+void radio_call_receiver()
+{
+  receiver_callback(&cooja_driver);
 }
 /*-----------------------------------------------------------------------------------*/
 SIM_INTERFACE(radio_interface,

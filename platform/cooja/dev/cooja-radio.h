@@ -113,4 +113,9 @@ int radio_sstrength(void);
  */
 int radio_current_sstrength(void);
 
+/**
+ * Internal COOJA function, calls the current receiver function.
+ */
+void radio_call_receiver(void);
+
 #endif /* __COOJA_RADIO_H__ */
