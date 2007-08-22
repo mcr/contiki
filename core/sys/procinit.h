@@ -37,7 +37,7 @@
 
 #if ! CC_NO_VA_ARGS
 #define PROCINIT(...)					\
-const struct process *procinit[] = {__VA_ARGS__, NULL};
+const struct process *procinit[] = {__VA_ARGS__, NULL}
 #endif 
 
 void procinit_init(void);

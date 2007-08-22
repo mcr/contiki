@@ -277,9 +277,9 @@ static PT_THREAD(process_thread_##name(struct pt *process_pt,	\
 				       process_data_t data))
 
 #if PROCESS_LOADABLE
-#define PROCESS_LOAD(name) const struct process *process_load = &name;
+#define PROCESS_LOAD(name) const struct process *process_load = &name
 #else  /* PROCESS_LOADABLE */
-#define PROCESS_LOAD(name)
+#define PROCESS_LOAD(name) extern int _dummy
 #endif /* PROCESS_LOADABLE */
 CLIF extern const struct process *process_load;
 
@@ -296,7 +296,7 @@ CLIF extern const struct process *process_load;
 #define PROCESS_NOLOAD(name, strname)			\
   PROCESS_THREAD(name, ev, data);			\
   struct process name = { NULL, strname,		\
-                          process_thread_##name };
+                          process_thread_##name }
 /**
  * Declare a process.
  *
