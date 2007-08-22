@@ -294,7 +294,7 @@ newdata(void)
   
   while(len > 0 && s.bufptr < sizeof(s.buf)) {
     c = *(char *)uip_appdata;
-    ++((char *)uip_appdata);
+    uip_appdata = (char *)uip_appdata + 1;
     --len;
     switch(s.state) {
     case STATE_IAC:
