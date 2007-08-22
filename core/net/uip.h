@@ -907,7 +907,9 @@ struct uip_udp_conn *uip_udp_new(const uip_ipaddr_t *ripaddr, u16_t rport);
  *
  * \hideinitializer
  */
-#define uip_ipaddr_copy(dest, src) ((*dest) = (*src))
+#ifndef uip_ipaddr_copy
+#define uip_ipaddr_copy(dest, src) (*(dest) = *(src))
+#endif
 
 /**
  * Compare two IP addresses
