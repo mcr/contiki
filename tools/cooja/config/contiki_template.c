@@ -106,7 +106,22 @@ static struct cooja_mt_thread process_run_thread;
 static void
 start_process_run_loop(void *data)
 {
-	while(1)
+    /* Initialize random generator */
+    random_init(0);
+
+    /* Start process handler */
+    process_init();
+
+    /* Start Contiki processes */
+    procinit_init();
+
+    /* Initialize communication stack */
+    init_net();
+  
+    /* Start user applications */
+    autostart_start((struct process **) autostart_processes);
+  
+    while(1)
 	{
 		/* Always pretend we have processes left while inside process_run() */
 		simProcessRunValue = 1;
@@ -144,21 +159,6 @@ extern unsigned long _end;
 JNIEXPORT void JNICALL
 Java_se_sics_cooja_corecomm_[CLASS_NAME]_init(JNIEnv *env, jobject obj)
 {
-  /* Initialize random generator */
-  random_init(0);
-
-  /* Start process handler */
-  process_init();
-
-  /* Start Contiki processes */
-  procinit_init();
-
-  /* Initialize communication stack */
-  init_net();
-  
-  /* Start user applications */
-  autostart_start((struct process **) autostart_processes);
-  
   /* Prepare thread that will do the process_run()-loop */
   cooja_mt_start(&process_run_thread, &start_process_run_loop, NULL);
  }
