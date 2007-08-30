@@ -310,6 +310,7 @@ struct ctk_textentry {
  * \param bitmap A pointer to the icon's bitmap image.
  * \param textmap A pointer to the icon's text version of the bitmap.
  */
+#if CTK_CONF_ICONS
 #define CTK_ICON(title, bitmap, textmap) \
  NULL, NULL, 0, 0, CTK_WIDGET_ICON, 2, 4, CTK_WIDGET_FLAG_INITIALIZER(0) \
  title, PROCESS_NONE, \
@@ -362,7 +363,7 @@ struct ctk_textmap {
   char *textmap;
   unsigned char state;
 };
-
+#endif /* CTK_CONF_ICONS */
 
 /**
  * \internal The CTK button widget structure.

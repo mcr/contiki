@@ -35,7 +35,7 @@
 
 #include "sys/dsc.h"
 
-extern struct ctk_icon telnet_icon;
+extern static struct ctk_icon telnet_icon;
 /*-----------------------------------------------------------------------------------*/
 DSC(telnet_dsc,
     "A simple Telnet client",

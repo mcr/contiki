@@ -219,6 +219,9 @@ send(void)
   int strobes;
   struct xmac_hdr *hdr;
   int got_ack = 0;
+  struct xmac_hdr msg;
+  rtimer_clock_t t;
+  int len;
 
   we_are_sending = 1;
 
@@ -248,9 +251,6 @@ send(void)
   strobes = 0;
 
   do {
-    struct xmac_hdr msg;
-    rtimer_clock_t t;
-    int len;
 
     t = RTIMER_NOW();
     

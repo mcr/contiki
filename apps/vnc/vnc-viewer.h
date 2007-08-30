@@ -163,7 +163,7 @@ struct vnc_viewer_state {
   u8_t buffer[VNC_BUFFERSIZE];
 };
 
-extern struct vnc_viewer_state vnc_viewer_state;
+extern static struct vnc_viewer_state vnc_viewer_state;
 
 /* Definitions of the RFB (Remote Frame Buffer) protocol
    structures and constants. */

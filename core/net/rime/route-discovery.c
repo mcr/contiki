@@ -210,7 +210,7 @@ rreq_packet_received(struct nf_conn *nf, rimeaddr_t *from,
 }
 /*---------------------------------------------------------------------------*/
 static const struct uc_callbacks rrep_callbacks = {rrep_packet_received};
-static const struct nf_callbacks rreq_callbacks = {rreq_packet_received, NULL};
+static const struct nf_callbacks rreq_callbacks = {rreq_packet_received, NULL, NULL};
 /*---------------------------------------------------------------------------*/
 void
 route_discovery_open(struct route_discovery_conn *c,

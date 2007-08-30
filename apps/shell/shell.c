@@ -52,7 +52,7 @@ struct ptentry {
 
 /*-----------------------------------------------------------------------------------*/
 static void
-parse(register char *str, struct ptentry *t)
+parse(CC_REGISTER_ARG char *str, struct ptentry *t)
 {
   register struct ptentry *p;
   char *sstr;
@@ -85,7 +85,7 @@ parse(register char *str, struct ptentry *t)
 }
 /*-----------------------------------------------------------------------------------*/
 static void
-inttostr(register char *str, unsigned int i)
+inttostr(CC_REGISTER_ARG char *str, unsigned int i)
 {
   str[0] = '0' + i / 100;
   if(str[0] == '0') {

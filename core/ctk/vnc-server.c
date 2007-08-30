@@ -245,7 +245,7 @@ vnc_pointer_event(struct vnc_server_state *vs)
 }
 /*-----------------------------------------------------------------------------------*/
 static u8_t
-vnc_read_data(register struct vnc_server_state *vs)
+vnc_read_data(CC_REGISTER_ARG struct vnc_server_state *vs)
 {
   u8_t *appdata;
   u16_t len;
@@ -392,7 +392,7 @@ vnc_read_data(register struct vnc_server_state *vs)
 }
 /*-----------------------------------------------------------------------------------*/
 static void
-vnc_new(register struct vnc_server_state *vs)
+vnc_new(CC_REGISTER_ARG struct vnc_server_state *vs)
 {
   vs->counter = 0;
   vs->readlen = 0;
@@ -409,7 +409,7 @@ vnc_new(register struct vnc_server_state *vs)
 }
 /*-----------------------------------------------------------------------------------*/
 static void
-vnc_acked(register struct vnc_server_state *vs)
+vnc_acked(CC_REGISTER_ARG struct vnc_server_state *vs)
 {
   switch(vs->state) {
   case VNC_VERSION:

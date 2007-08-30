@@ -35,7 +35,7 @@
 
 #include "sys/dsc.h"
 
-extern struct ctk_icon dhcp_icon;
+extern static struct ctk_icon dhcp_icon;
 /*-----------------------------------------------------------------------------------*/
 DSC(dhcp_dsc,
     "Obtain IP address automatically",

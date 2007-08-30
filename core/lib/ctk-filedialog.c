@@ -42,7 +42,11 @@
 
 #define MAX_NUMFILES 40
 #define FILES_WIDTH 17
+#if FILES_CONF_HEIGHT
+#define FILES_HEIGHT FILES_CONF_HEIGHT
+#else
 #define FILES_HEIGHT 14
+#endif
 
 static struct ctk_window dialog;
 static char leftptr[FILES_HEIGHT];
@@ -94,13 +98,13 @@ showptr(void)
 }
 /*---------------------------------------------------------------------------*/
 void
-ctk_filedialog_init(register struct ctk_filedialog_state *s)
+ctk_filedialog_init(CC_REGISTER_ARG struct ctk_filedialog_state *s)
 {
   state = STATE_CLOSED;
 }
 /*---------------------------------------------------------------------------*/
 void
-ctk_filedialog_open(register struct ctk_filedialog_state *s,
+ctk_filedialog_open(CC_REGISTER_ARG struct ctk_filedialog_state *s,
 		    const char *buttontext, process_event_t event)
 {
   ctk_dialog_new(&dialog, 20, 5 + FILES_HEIGHT);

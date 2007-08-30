@@ -94,5 +94,6 @@ CUSTOM_RULE_C_TO_CO = 1
 	@$(AS) $(AFLAGS) $(@:.co=.s) -o $@
 	@rm -f $(@:.co=.s)
 
-$(OBJECTDIR)/%.o: %.S
-	$(AS) $(AFLAGS) $< -o $@
+#moved to Makefile.include
+#$(OBJECTDIR)/%.o: %.S
+#	$(AS) $(AFLAGS) $< -o $@

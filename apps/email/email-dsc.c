@@ -35,7 +35,7 @@
 
 #include "sys/dsc.h"
 
-extern struct ctk_icon email_icon;
+extern static struct ctk_icon email_icon;
 /*-----------------------------------------------------------------------------------*/
 DSC(email_dsc,
     "Unfinished e-mail client",

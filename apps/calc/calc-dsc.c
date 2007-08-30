@@ -35,7 +35,7 @@
 
 #include "sys/dsc.h"
 
-extern struct ctk_icon calc_icon;
+extern static struct ctk_icon calc_icon;
 /*-----------------------------------------------------------------------------------*/
 DSC(calc_dsc,
     "Simple calculator",

@@ -35,7 +35,7 @@
 
 #include "sys/dsc.h"
 
-extern struct ctk_icon vnc_icon;
+extern static struct ctk_icon vnc_icon;
 /*-----------------------------------------------------------------------------------*/
 DSC(vnc_dsc,
     "Remote control your PC using Contiki",

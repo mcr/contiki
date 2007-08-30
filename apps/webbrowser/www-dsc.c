@@ -35,7 +35,7 @@
 
 #include "sys/dsc.h"
 
-extern struct ctk_icon www_icon;
+extern static struct ctk_icon www_icon;
 /*-----------------------------------------------------------------------------------*/
 DSC(www_dsc,
     "The Contiki web browser",

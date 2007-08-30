@@ -35,7 +35,7 @@
 
 #include "sys/dsc.h"
 
-extern struct ctk_icon processes_icon;
+extern static struct ctk_icon processes_icon;
 /*-----------------------------------------------------------------------------------*/
 DSC(processes_dsc,
     "Process information",

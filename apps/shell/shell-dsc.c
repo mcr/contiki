@@ -35,7 +35,7 @@
 
 #include "sys/dsc.h"
 
-extern struct ctk_icon shell_icon;
+extern static struct ctk_icon shell_icon;
 /*-----------------------------------------------------------------------------------*/
 DSC(shell_dsc,
     "The Contiki command shell",

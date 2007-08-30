@@ -49,7 +49,7 @@
 
 static struct queuebuf *queued_packet;
 static rimeaddr_t queued_receiver;
-static struct route_discovery_conn route_discovery;;
+static struct route_discovery_conn route_discovery;
 static struct uc_conn dataconn;
 
 #define DEBUG 0

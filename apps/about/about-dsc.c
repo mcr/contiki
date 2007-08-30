@@ -35,7 +35,7 @@
 
 #include "sys/dsc.h"
 
-extern struct ctk_icon about_icon;
+extern static struct ctk_icon about_icon;
 /*-----------------------------------------------------------------------------------*/
 DSC(about_dsc,
     "About Contiki",

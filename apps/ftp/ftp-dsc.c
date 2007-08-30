@@ -35,7 +35,7 @@
 
 #include "sys/dsc.h"
 
-extern struct ctk_icon ftp_icon;
+extern static struct ctk_icon ftp_icon;
 /*-----------------------------------------------------------------------------------*/
 DSC(ftp_dsc,
     "FTP client",

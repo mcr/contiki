@@ -78,8 +78,8 @@ uipbuf_bufdata(struct uipbuf_buffer *buf, u16_t len,
 }
 /*---------------------------------------------------------------------------*/
 u8_t
-uipbuf_bufto(register struct uipbuf_buffer *buf, u8_t endmarker,
-	     register u8_t **dataptr, register u16_t *datalen)
+uipbuf_bufto(CC_REGISTER_ARG struct uipbuf_buffer *buf, u8_t endmarker,
+	     CC_REGISTER_ARG u8_t **dataptr, CC_REGISTER_ARG u16_t *datalen)
 {
   u8_t c;
   /*

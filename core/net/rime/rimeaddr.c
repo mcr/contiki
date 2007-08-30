@@ -46,7 +46,7 @@
 #include "net/rime/rimeaddr.h"
 
 rimeaddr_t rimeaddr_node_addr;
-const rimeaddr_t rimeaddr_null;
+const rimeaddr_t rimeaddr_null = { { 0, 0 } };
 
 /*---------------------------------------------------------------------------*/
 void

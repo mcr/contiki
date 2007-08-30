@@ -179,7 +179,7 @@ recv_nack(struct polite_conn *polite)
   }
 }
 /*---------------------------------------------------------------------------*/
-static const struct polite_callbacks polite = { recv_nack, NULL, NULL };
+static const struct polite_callbacks polite = { recv_nack, 0, 0 };
 static const struct sabc_callbacks sabc = { recv, sent };
 /*---------------------------------------------------------------------------*/
 void

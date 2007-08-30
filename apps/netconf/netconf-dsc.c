@@ -35,7 +35,7 @@
 
 #include "sys/dsc.h"
 
-extern struct ctk_icon netconf_icon;
+extern static struct ctk_icon netconf_icon;
 /*-----------------------------------------------------------------------------------*/
 DSC(netconf_dsc,
     "Network configuration",

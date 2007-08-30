@@ -150,7 +150,7 @@ PT_THREAD(file_stats(struct httpd_state *s, char *ptr))
 {
   PSOCK_BEGIN(&s->sout);
 
-  PSOCK_GENERATOR_SEND(&s->sout, generate_file_stats, strchr(ptr, ' ') + 1);
+  PSOCK_GENERATOR_SEND(&s->sout, generate_file_stats, (void *) (strchr(ptr, ' ') + 1));
   
   PSOCK_END(&s->sout);
 }
@@ -203,7 +203,7 @@ make_processes(void *p)
   return sprintf((char *)uip_appdata,
 		 "<tr align=\"center\"><td>%p</td><td>%s</td><td>%p</td><td>%s</td></tr>\r\n",
 		 p, name,
-		 ((struct process *)p)->thread,
+		 (char *)((struct process *)p)->thread,
 		 states[9 + ((struct process *)p)->state]);
 }
 /*---------------------------------------------------------------------------*/

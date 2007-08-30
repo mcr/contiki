@@ -35,7 +35,7 @@
 
 #include "sys/dsc.h"
 
-extern struct ctk_icon irc_icon;
+extern static struct ctk_icon irc_icon;
 /*-----------------------------------------------------------------------------------*/
 DSC(irc_dsc,
     "Internet Relay Chat client",

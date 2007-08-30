@@ -35,7 +35,7 @@
 
 #include "sys/dsc.h"
 
-extern struct ctk_icon directory_icon;
+extern static struct ctk_icon directory_icon;
 /*-----------------------------------------------------------------------------------*/
 DSC(directory_dsc,
     "Directory reader",
