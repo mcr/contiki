@@ -52,16 +52,16 @@ static struct ctk_label processidlabels[MAX_PROCESSLABELS];
 static struct ctk_label processnamelabels[MAX_PROCESSLABELS];
 
 static struct ctk_label killlabel =
-  {CTK_LABEL(0, PROCESSLIST_CONF_HEIGHT - 2, 12, 1, "Kill process")};
+  {CTK_LABEL(0, PROCESSLIST_HEIGHT - 2, 12, 1, "Kill process")};
 static char killprocnum[3];
 static struct ctk_textentry killtextentry =
-  {CTK_TEXTENTRY(13, PROCESSLIST_CONF_HEIGHT - 2, 2, 1, killprocnum, 2)};
+  {CTK_TEXTENTRY(13, PROCESSLIST_HEIGHT - 2, 2, 1, killprocnum, 2)};
 static struct ctk_button killbutton =
-  {CTK_BUTTON(19, PROCESSLIST_CONF_HEIGHT - 2, 2, "Ok")};
+  {CTK_BUTTON(19, PROCESSLIST_HEIGHT - 2, 2, "Ok")};
 static struct ctk_button processupdatebutton =
-  {CTK_BUTTON(0, PROCESSLIST_CONF_HEIGHT - 1, 6, "Update")};
+  {CTK_BUTTON(0, PROCESSLIST_HEIGHT - 1, 6, "Update")};
 static struct ctk_button processclosebutton =
-  {CTK_BUTTON(19, PROCESSLIST_CONF_HEIGHT - 1, 5, "Close")};
+  {CTK_BUTTON(19, PROCESSLIST_HEIGHT - 1, 5, "Close")};
 
 PROCESS(processes_process, "Process listing");
 
