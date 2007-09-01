@@ -46,5 +46,5 @@ int strcasecmp(const char *str1, const char *str2)
     str1++;
     str2++;
   }
-  return tolower(*(unsigned char *) str1) - tolower(*(unsigned char *) str2);
+  return tolower(*(unsigned char *)str1) - tolower(*(unsigned char *)str2);
 }
