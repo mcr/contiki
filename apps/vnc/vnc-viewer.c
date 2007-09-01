@@ -84,7 +84,7 @@ vnc_viewer_connect(u16_t *server, u8_t display)
   vnc_draw_init();
 
   memset(vs, 0, sizeof(struct vnc_viewer_state));
-  conn = uip_connect((uip_ipaddr_t *) server, htons(5900 + display));
+  conn = uip_connect((uip_ipaddr_t *)server, htons(5900 + display));
   if(conn == NULL) {
     return;
   }
