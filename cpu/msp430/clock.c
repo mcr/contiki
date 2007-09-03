@@ -120,8 +120,6 @@ clock_init(void)
 
   count = 0;
 
-  BCSCTL1 &= ~(DIVA1 + DIVA0);   /* remove /8 divisor from ACLK again    */
-
   /* Enable interrupts. */
   eint();
 
