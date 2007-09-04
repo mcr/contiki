@@ -50,7 +50,7 @@
  * Comm. of the ACM, V. 31. No. 10, pp 1192-1201
  */
 
-extern s32_t rand_state;
+extern int32_t rand_state;
 
 int rand(void);
 
