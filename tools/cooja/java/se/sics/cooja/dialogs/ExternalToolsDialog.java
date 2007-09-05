@@ -113,9 +113,9 @@ public class ExternalToolsDialog extends JDialog {
     Box explanations = Box.createVerticalBox();
     explanations.add(new JLabel("Special variables used in COMPILER_ARGS, LINK_COMMAND_1 and LINK_COMMAND_2:"));
     explanations.add(new JLabel("  $(JAVA_HOME) maps to the environment Java home: " + System.getenv().get("JAVA_HOME").replace(File.separatorChar, '/')));
-    explanations.add(new JLabel("  $(LIBFILE) maps to the current library file being created (\"mtyp1.library\")"));
-    explanations.add(new JLabel("  $(MAPFILE) maps to the current map file being created (\"mtyp1.map\")"));
-    explanations.add(new JLabel("  $(ARFILE) maps to the current archive file being created (\"mtyp1.a\")"));
+    explanations.add(new JLabel("  $(LIBFILE) maps to the current library file being created (\"mtype1.library\")"));
+    explanations.add(new JLabel("  $(MAPFILE) maps to the current map file being created (\"mtype1.map\")"));
+    explanations.add(new JLabel("  $(ARFILE) maps to the current archive file being created (\"mtype1.a\")"));
     explanations.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
     // MAIN PART
