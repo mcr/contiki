@@ -33,12 +33,21 @@
  * Machine dependent MSP430 UART1 code.
  */
 
+#include <stdlib.h>
 #include <io.h>
 #include <signal.h>
 
 #include "lib/energest.h"
 #include "dev/uart1.h"
 
+static void (*uart1_input_handler)(unsigned char c);
+
+/*---------------------------------------------------------------------------*/
+void
+uart1_set_input(void (*input)(unsigned char c))
+{
+  uart1_input_handler = input;
+}
 /*---------------------------------------------------------------------------*/
 void
 uart1_writeb(unsigned char c)
@@ -117,9 +126,10 @@ uart1_interrupt(void)
     volatile unsigned dummy;
     dummy = RXBUF1;   /* Clear error flags by forcing a dummy read. */
   } else {
-    /*    if(slip_input_byte(RXBUF1)) {
-      LPM4_EXIT;
-      }*/
+      if (uart1_input_handler != NULL) {
+	uart1_input_handler(RXBUF1);
+	LPM4_EXIT;
+      }
   }
   ENERGEST_OFF(ENERGEST_TYPE_IRQ);
 }
