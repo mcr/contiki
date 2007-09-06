@@ -55,6 +55,7 @@ typedef unsigned short u16_t;      /* 16 bit type */
 typedef unsigned long  u32_t;      /* 32 bit type */
 typedef   signed long  s32_t;      /* 32 bit type */
 typedef unsigned short uip_stats_t;
+typedef   signed long  int32_t;    /* 32 bit type */
 #ifndef _SIZE_T_DEFINED
 #define _SIZE_T_DEFINED
 typedef unsigned int size_t;
