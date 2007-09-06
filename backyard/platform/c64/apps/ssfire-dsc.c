@@ -35,13 +35,6 @@
 
 #include "sys/dsc.h"
 
-extern struct ctk_icon ssfire_icon;
-/*-----------------------------------------------------------------------------------*/
-DSC(ssfire_dsc,
-    "Screensaver with two fires",
-    "ssfire.sav",
-    ssfire_init,
-    &ssfire_icon);
 /*-----------------------------------------------------------------------------------*/
 #if CTK_CONF_ICON_BITMAPS
 static unsigned char ssfireicon_bitmap[3*3*8] = {
@@ -71,4 +64,10 @@ static char ssfireicon_textmap[9] = {
 static struct ctk_icon ssfire_icon =
   {CTK_ICON("Fire", ssfireicon_bitmap, ssfireicon_textmap)};
 #endif /* CTK_CONF_ICONS */
+/*-----------------------------------------------------------------------------------*/
+DSC(ssfire_dsc,
+    "Screensaver with two fires",
+    "ssfire.sav",
+    ssfire_init,
+    &ssfire_icon);
 /*-----------------------------------------------------------------------------------*/

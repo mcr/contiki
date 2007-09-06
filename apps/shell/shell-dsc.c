@@ -35,13 +35,6 @@
 
 #include "sys/dsc.h"
 
-extern static struct ctk_icon shell_icon;
-/*-----------------------------------------------------------------------------------*/
-DSC(shell_dsc,
-    "The Contiki command shell",
-    "shell.prg",
-    shell_gui_process,
-    &shell_icon);
 /*-----------------------------------------------------------------------------------*/
 #if CTK_CONF_ICON_BITMAPS
 static unsigned char shellicon_bitmap[3*3*8] = {
@@ -71,4 +64,10 @@ static char shellicon_textmap[9] = {
 static struct ctk_icon shell_icon =
   {CTK_ICON("Command shell", shellicon_bitmap, shellicon_textmap)};
 #endif /* CTK_CONF_ICONS */
+/*-----------------------------------------------------------------------------------*/
+DSC(shell_dsc,
+    "The Contiki command shell",
+    "shell.prg",
+    shell_gui_process,
+    &shell_icon);
 /*-----------------------------------------------------------------------------------*/

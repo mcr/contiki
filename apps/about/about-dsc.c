@@ -35,13 +35,6 @@
 
 #include "sys/dsc.h"
 
-extern static struct ctk_icon about_icon;
-/*-----------------------------------------------------------------------------------*/
-DSC(about_dsc,
-    "About Contiki",
-    "about.prg",
-    about_process,
-    &about_icon);
 /*-----------------------------------------------------------------------------------*/
 #if CTK_CONF_ICON_BITMAPS
 static unsigned char abouticon_bitmap[3*3*8] = {
@@ -71,4 +64,10 @@ static char abouticon_textmap[9] = {
 static struct ctk_icon about_icon =
   {CTK_ICON("About Contiki", abouticon_bitmap, abouticon_textmap)};
 #endif /* CTK_CONF_ICONS */
+/*-----------------------------------------------------------------------------------*/
+DSC(about_dsc,
+    "About Contiki",
+    "about.prg",
+    about_process,
+    &about_icon);
 /*-----------------------------------------------------------------------------------*/

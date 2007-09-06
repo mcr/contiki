@@ -35,13 +35,6 @@
 
 #include "sys/dsc.h"
 
-extern static struct ctk_icon vnc_icon;
-/*-----------------------------------------------------------------------------------*/
-DSC(vnc_dsc,
-    "Remote control your PC using Contiki",
-    "vnc.prg",
-    vnc_process,
-    &vnc_icon);
 /*-----------------------------------------------------------------------------------*/
 #if CTK_CONF_ICON_BITMAPS
 static unsigned char vncicon_bitmap[3*3*8] = {
@@ -71,4 +64,10 @@ static char vncicon_textmap[9] = {
 static struct ctk_icon vnc_icon =
   {CTK_ICON("VNC viewer", vncicon_bitmap, vncicon_textmap)};
 #endif /* CTK_CONF_ICONS */
+/*-----------------------------------------------------------------------------------*/
+DSC(vnc_dsc,
+    "Remote control your PC using Contiki",
+    "vnc.prg",
+    vnc_process,
+    &vnc_icon);
 /*-----------------------------------------------------------------------------------*/

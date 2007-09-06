@@ -35,13 +35,6 @@
 
 #include "sys/dsc.h"
 
-extern static struct ctk_icon calc_icon;
-/*-----------------------------------------------------------------------------------*/
-DSC(calc_dsc,
-    "Simple calculator",
-    "calc.prg",
-    calc_process,
-    &calc_icon);
 /*-----------------------------------------------------------------------------------*/
 #if CTK_CONF_ICON_BITMAPS
 static unsigned char calcicon_bitmap[3*3*8] = {
@@ -71,4 +64,10 @@ static char calcicon_textmap[9] = {
 static struct ctk_icon calc_icon =
   {CTK_ICON("Calculator", calcicon_bitmap, calcicon_textmap)};
 #endif /* CTK_CONF_ICONS */
+/*-----------------------------------------------------------------------------------*/
+DSC(calc_dsc,
+    "Simple calculator",
+    "calc.prg",
+    calc_process,
+    &calc_icon);
 /*-----------------------------------------------------------------------------------*/

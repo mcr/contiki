@@ -35,13 +35,6 @@
 
 #include "sys/dsc.h"
 
-extern struct ctk_icon wget_icon;
-/*-----------------------------------------------------------------------------------*/
-DSC(wget_dsc,
-    "Downloads files or D64 disks from the web",
-    "wget.prg",
-    wget_init,
-    &wget_icon);
 /*-----------------------------------------------------------------------------------*/
 #if CTK_CONF_ICON_BITMAPS
 static unsigned char wgeticon_bitmap[3*3*8] = {
@@ -71,4 +64,10 @@ static char wgeticon_textmap[9] = {
 static struct ctk_icon wget_icon =
   {CTK_ICON("Web downloader", wgeticon_bitmap, wgeticon_textmap)};
 #endif /* CTK_CONF_ICONS */
+/*-----------------------------------------------------------------------------------*/
+DSC(wget_dsc,
+    "Downloads files or D64 disks from the web",
+    "wget.prg",
+    wget_init,
+    &wget_icon);
 /*-----------------------------------------------------------------------------------*/

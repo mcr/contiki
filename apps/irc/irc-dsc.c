@@ -35,13 +35,6 @@
 
 #include "sys/dsc.h"
 
-extern static struct ctk_icon irc_icon;
-/*-----------------------------------------------------------------------------------*/
-DSC(irc_dsc,
-    "Internet Relay Chat client",
-    "irc.prg",
-    irc_process,
-    &irc_icon);
 /*-----------------------------------------------------------------------------------*/
 #if CTK_CONF_ICON_BITMAPS
 static unsigned char irc_icon_bitmap[3*3*8] = {
@@ -71,4 +64,10 @@ static char irc_icon_textmap[9] = {
 static struct ctk_icon irc_icon =
   {CTK_ICON("IRC client", irc_icon_bitmap, irc_icon_textmap)};
 #endif /* CTK_CONF_ICONS */
+/*-----------------------------------------------------------------------------------*/
+DSC(irc_dsc,
+    "Internet Relay Chat client",
+    "irc.prg",
+    irc_process,
+    &irc_icon);
 /*-----------------------------------------------------------------------------------*/

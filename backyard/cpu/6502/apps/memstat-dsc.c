@@ -35,13 +35,6 @@
 
 #include "sys/dsc.h"
 
-extern struct ctk_icon memstat_icon;
-/*-----------------------------------------------------------------------------------*/
-DSC(memstat_dsc,
-    "Memory stats",
-    "memstat.prg",
-    memstat_init,
-    &memstat_icon);
 /*-----------------------------------------------------------------------------------*/
 #if CTK_CONF_ICON_BITMAPS
 static unsigned char memstaticon_bitmap[3*3*8] = {
@@ -71,4 +64,10 @@ static char memstaticon_textmap[9] = {
 static struct ctk_icon memstat_icon =
   {CTK_ICON("Memory stats", memstaticon_bitmap, memstaticon_textmap)};
 #endif /* CTK_CONF_ICONS */
+/*-----------------------------------------------------------------------------------*/
+DSC(memstat_dsc,
+    "Memory stats",
+    "memstat.prg",
+    memstat_init,
+    &memstat_icon);
 /*-----------------------------------------------------------------------------------*/

@@ -35,13 +35,6 @@
 
 #include "sys/dsc.h"
 
-extern struct ctk_icon cgterm_icon;
-/*-----------------------------------------------------------------------------------*/
-DSC(cgterm_dsc,
-    "Program for connecting to C64 Telnet BBSes",
-    "cgterm.prg",
-    cgterm_init,
-    &cgterm_icon);
 /*-----------------------------------------------------------------------------------*/
 #if CTK_CONF_ICON_BITMAPS
 static unsigned char cgtermicon_bitmap[3*3*8] = {
@@ -71,4 +64,10 @@ static char cgtermicon_textmap[9] = {
 static struct ctk_icon cgterm_icon =
   {CTK_ICON("C/G terminal", cgtermicon_bitmap, cgtermicon_textmap)};
 #endif /* CTK_CONF_ICONS */
+/*-----------------------------------------------------------------------------------*/
+DSC(cgterm_dsc,
+    "Program for connecting to C64 Telnet BBSes",
+    "cgterm.prg",
+    cgterm_init,
+    &cgterm_icon);
 /*-----------------------------------------------------------------------------------*/

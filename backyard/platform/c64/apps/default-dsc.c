@@ -35,13 +35,6 @@
 
 #include "sys/dsc.h"
 
-extern struct ctk_icon default_icon;
-/*-----------------------------------------------------------------------------------*/
-DSC(default_dsc,
-    "Default CTK theme",
-    "default.prg",
-    default_init,
-    &default_icon);
 /*-----------------------------------------------------------------------------------*/
 #if CTK_CONF_ICON_BITMAPS
 static unsigned char defaulticon_bitmap[3*3*8] = {
@@ -69,4 +62,10 @@ static char defaulticon_textmap[9] = {
 static struct ctk_icon default_icon =
   {CTK_ICON("Default", defaulticon_bitmap, defaulticon_textmap)};
 #endif /* CTK_CONF_ICONS */
+/*-----------------------------------------------------------------------------------*/
+DSC(default_dsc,
+    "Default CTK theme",
+    "default.prg",
+    default_init,
+    &default_icon);
 /*-----------------------------------------------------------------------------------*/

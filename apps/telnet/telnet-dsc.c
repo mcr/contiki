@@ -35,13 +35,6 @@
 
 #include "sys/dsc.h"
 
-extern static struct ctk_icon telnet_icon;
-/*-----------------------------------------------------------------------------------*/
-DSC(telnet_dsc,
-    "A simple Telnet client",
-    "telnet.prg",
-    simpletelnet_process,
-    &telnet_icon);
 /*-----------------------------------------------------------------------------------*/
 #if CTK_CONF_ICON_BITMAPS
 static unsigned char telneticon_bitmap[3*3*8] = {
@@ -71,4 +64,10 @@ static char telneticon_textmap[9] = {
 static struct ctk_icon telnet_icon =
   {CTK_ICON("Telnet", telneticon_bitmap, telneticon_textmap)};
 #endif /* CTK_CONF_ICONS */
+/*-----------------------------------------------------------------------------------*/
+DSC(telnet_dsc,
+    "A simple Telnet client",
+    "telnet.prg",
+    simpletelnet_process,
+    &telnet_icon);
 /*-----------------------------------------------------------------------------------*/

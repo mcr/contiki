@@ -35,13 +35,6 @@
 
 #include "sys/dsc.h"
 
-extern struct ctk_icon lan91c96_icon;
-/*-----------------------------------------------------------------------------------*/
-DSC(lan91c96_dsc,
-    "IDE64/ETH64 driver",
-    "lan91c96.drv",
-    lan91c96_init,
-    &lan91c96_icon);
 /*-----------------------------------------------------------------------------------*/
 #if CTK_CONF_ICON_BITMAPS
 static unsigned char lan91c96icon_bitmap[3*3*8] = {
@@ -71,4 +64,10 @@ static char lan91c96icon_textmap[9] = {
 static struct ctk_icon lan91c96_icon =
   {CTK_ICON("ETH64 driver", lan91c96icon_bitmap, lan91c96icon_textmap)};
 #endif /* CTK_CONF_ICONS */
+/*-----------------------------------------------------------------------------------*/
+DSC(lan91c96_dsc,
+    "IDE64/ETH64 driver",
+    "lan91c96.drv",
+    lan91c96_init,
+    &lan91c96_icon);
 /*-----------------------------------------------------------------------------------*/
