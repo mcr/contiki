@@ -60,6 +60,8 @@
 
 #include "contiki-conf.h"
 
+#define CLOCK_LT(a,b)     ((signed short)((a)-(b)) < 0)
+
 /**
  * Initialize the clock library.
  *
