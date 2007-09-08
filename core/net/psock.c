@@ -306,7 +306,9 @@ PT_THREAD(psock_readbuf(CC_REGISTER_ARG struct psock *psock))
   do {
     if(psock->readlen == 0) {
       PT_WAIT_UNTIL(&psock->psockpt, psock_newdata(psock));
+#if LOG_CONF_ENABLED
       printf("Waited for newdata\n");
+#endif
       psock->state = STATE_READ;
       psock->readptr = (u8_t *)uip_appdata;
       psock->readlen = uip_datalen();
