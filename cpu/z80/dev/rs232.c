@@ -37,29 +37,35 @@
  * 	Takahide Matsutsuka <markn@markn.org>
  */
 
-#ifndef __RS_232C_H__
-#define __RS_232C_H__
+#include "contiki.h"
+#include "serial.h"
+#include "rs232.h"
+#include "log.h"
 
-/*
- * Implement the following methods for each platform.
- */
+PROCESS(rs232_process, "RS-232C polling process");
+/*---------------------------------------------------------------------------*/
+PROCESS_THREAD(rs232_process, ev, data)
+{
+  static struct etimer timer;
+  char ch;
+  PROCESS_BEGIN();
 
-/*
- * RS-232C initialize.
- */
-void rs232_arch_init(void);
+  rs232_arch_init();
+  etimer_set(&timer, CLOCK_SECOND / 16);
 
-/*
- * RS-232C polling.
- * @return character, zero if no input.
- */
-unsigned char rs232_arch_poll(void);
+  while(1) {
+    PROCESS_WAIT_EVENT();
 
-/*
- * RS-232C write a byte.
- */
-void rs232_arch_writeb(u8_t ch);
+    if (etimer_expired(&timer)) {
+      ch = rs232_arch_poll();
+      if (ch != 0) {
+	/* We have an input data */
+	serial_input_byte(ch);
+      }
+      etimer_reset(&timer);
+    }
+  }
 
-PROCESS_NAME(rs232_process);
-
-#endif /* __RS_232C_H__ */
+  PROCESS_END();
+}
+/*---------------------------------------------------------------------------*/

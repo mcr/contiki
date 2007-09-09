@@ -21,7 +21,7 @@ AROPTS   = -a
 
 CONTIKI_CPU_DIRS = . dev lib
 CONTIKI_SOURCEFILES += strcasecmp.c mtarch.c uip_arch.c \
-	log-conio.c libconio_arch.c rs-232.c
+	libconio_arch.c log-conio.c rs232.c
 CONTIKI_ASMFILES += uip_arch-asm.S
 
 contiki-$(TARGET).o: $(CONTIKI_OBJECTFILES) $(PROJECT_OBJECTFILES) $(CONTIKI_ASMOBJECTFILES)
