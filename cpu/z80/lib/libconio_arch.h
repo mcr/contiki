@@ -34,7 +34,7 @@
   * \file
   * 	Arcitecture-depend libconio module, which supposes
   *     the machine has character VRAM and optional attribute VRAM
-  *     on memory.
+  *     on the main memory.
   * \author
   * 	Takahide Matsutsuka <markn@markn.org>
   */

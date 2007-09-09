@@ -39,6 +39,7 @@
 
 #include "contiki.h"
 #include "libconio.h"
+#include "log.h"
 
 #if LOG_CONF_ENABLED
 void
