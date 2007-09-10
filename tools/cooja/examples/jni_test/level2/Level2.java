@@ -34,15 +34,14 @@ import java.io.*;
 public class Level2 {
 
   static {
-    System.err.println("JAVA Level2 static> loading library now");
+    System.out.println("Loading library now");
     System.load(new File("level2.library").getAbsolutePath());
-    System.err.println("JAVA Level2 static> done loading library");
   }
 
   private native void test();
 
   public Level2() {
-    System.err.println("JAVA Level2 constructor()> running native test function");
+    System.err.println("Calling native test function");
     test();
   }
 

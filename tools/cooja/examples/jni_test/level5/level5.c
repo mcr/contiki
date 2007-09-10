@@ -41,8 +41,8 @@ int uninitialized_counter;
 JNIEXPORT void JNICALL
 Java_Level5_doCount(JNIEnv *env, jobject obj)
 {
- fprintf(stderr, ">> DATA_counter=\t%i\tBSS_counter=\t%i\n", ++initialized_counter, ++uninitialized_counter);
- fflush(stderr);
+ printf(">> DATA_counter=\t%i\tBSS_counter=\t%i\n", ++initialized_counter, ++uninitialized_counter);
+ fflush(stdout);
 }
 JNIEXPORT jint JNICALL
 Java_Level5_getRefAddress(JNIEnv *env, jobject obj)
@@ -50,13 +50,10 @@ Java_Level5_getRefAddress(JNIEnv *env, jobject obj)
   return (jint) &ref_var;
 }
 
-JNIEXPORT jbyteArray JNICALL
-Java_Level5_getMemory(JNIEnv *env, jobject obj, jint start, jint length)
+JNIEXPORT void JNICALL
+Java_Level5_getMemory(JNIEnv *env, jobject obj, jint start, jint length, jbyteArray mem_arr)
 {
-  jbyteArray ret=(*env)->NewByteArray(env, length);
-  (*env)->SetByteArrayRegion(env, ret, 0, (size_t) length, (jbyte *) start);
-
-  return (ret);
+  (*env)->SetByteArrayRegion(env, mem_arr, 0, (size_t) length, (jbyte *) start);
 }
 
 JNIEXPORT void JNICALL

@@ -40,8 +40,8 @@ int uninitialized_counter;
 JNIEXPORT void JNICALL
 Java_Level4_doCount(JNIEnv *env, jobject obj)
 {
- fprintf(stderr, ">> DATA_counter=\t%i\tBSS_counter=\t%i\n", initialized_counter++, uninitialized_counter++);
- fflush(stderr);
+ printf(">> DATA_counter=\t%i\tBSS_counter=\t%i\n", initialized_counter++, uninitialized_counter++);
+ fflush(stdout);
 }
 JNIEXPORT jint JNICALL
 Java_Level4_getRefAddress(JNIEnv *env, jobject obj)

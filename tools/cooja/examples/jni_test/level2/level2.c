@@ -35,6 +35,6 @@
 JNIEXPORT void JNICALL
 Java_Level2_test(JNIEnv *env, jobject obj)
 {
- fprintf(stderr, "C test()> Level 2 OK!\n");
+ fprintf(stderr, "Level 2 OK!\n");
  fflush(stderr);
 }
