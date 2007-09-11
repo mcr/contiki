@@ -129,6 +129,10 @@ PROCESS_THREAD(mt_process, ev, data)
 	toggle++;
       }
       etimer_set(&timer, CLOCK_SECOND / 2);
+    } else if(ev == ctk_signal_window_close || ev == PROCESS_EVENT_EXIT) {
+      ctk_window_close(&window);
+      process_exit(&mt_process);
+      LOADER_UNLOAD();
     }
   }
   
