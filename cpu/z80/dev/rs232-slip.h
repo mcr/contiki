@@ -37,41 +37,9 @@
  * 	Takahide Matsutsuka <markn@markn.org>
  */
 
-#ifndef __RS232_H__
-#define __RS232_H__
+#ifndef __RS232_SLIP_H__
+#define __RS232_SLIP_H__
 
-/*
- * Implement the following methods for each platform.
- */
+PROCESS_NAME(rs232sl_process);
 
-/*
- * An architecture-depend implementation of RS-232C initialization.
- */
-void rs232_arch_init(unsigned long ubr);
-
-/*
- * An architecture-depend implementation of RS-232C polling.
- * @return character, zero if no input.
- */
-unsigned char rs232_arch_poll(void);
-
-/*
- * An architecture-depend implementation of RS-232C writing a byte.
- */
-void rs232_arch_writeb(u8_t ch);
-
-PROCESS_NAME(rs232_process);
-
-#ifdef RS232_CONF_BUFISZE
-#define RS232_BUFSIZE RS232_CONF_BUFISZE
-#else /* RS232_CONF_BUFISZE */
-#define RS232_BUFSIZE 64
-#endif /* RS232_CONF_BUFISZE */
-
-#ifdef RS232_CONF_BAUD_RATE
-#define RS232_BAUD_RATE RS232_CONF_BAUD_RATE
-#else /* RS232_CONF_BAUD_RATE */
-#define RS232_BAUD_RATE 9600
-#endif /* RS232_CONF_BAUD_RATE */
-
-#endif /* __RS232_H__ */
+#endif /* __RS232_SLIP_H__ */
