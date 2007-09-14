@@ -139,10 +139,13 @@ int
 mtarch_stack_usage(struct mt_thread *t)
 {
   int i;
+
   for(i = 0; i < MTARCH_STACKSIZE; ++i) {
     if(t->thread.stack[i] != (unsigned short)i) {
       return MTARCH_STACKSIZE - i;
     }
   }
+
+  return MTARCH_STACKSIZE;
 }
 /*--------------------------------------------------------------------------*/
