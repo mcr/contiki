@@ -33,12 +33,14 @@
  * $Id$
  */
 
-#ifndef __NODE_ID_H__
-#define __NODE_ID_H__
+#ifndef NODE_ID_H
+#define NODE_ID_H
+
+#include "contiki-conf.h"
 
 void node_id_restore(void);
-void node_id_burn(unsigned short node_id);
+void node_id_burn(uint16_t node_id);
 
-extern unsigned short node_id;
+extern uint16_t node_id;
 
-#endif /* __NODE_ID_H__ */
+#endif /* !NODE_ID_H */
