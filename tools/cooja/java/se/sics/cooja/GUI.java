@@ -2581,12 +2581,14 @@ public class GUI {
         return callingObject.getClass().getClassLoader().loadClass(className)
             .asSubclass(classType);
       } catch (ClassNotFoundException e) {
+      } catch (UnsupportedClassVersionError e) {
       }
     }
 
     try {
       return Class.forName(className).asSubclass(classType);
     } catch (ClassNotFoundException e) {
+    } catch (UnsupportedClassVersionError e) {
     }
 
     try {
@@ -2595,6 +2597,7 @@ public class GUI {
             classType);
       }
     } catch (ClassNotFoundException e) {
+    } catch (UnsupportedClassVersionError e) {
     }
 
     return null;
