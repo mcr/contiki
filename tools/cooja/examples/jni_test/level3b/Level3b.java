@@ -49,9 +49,8 @@ public class Level3b {
     GUI.loadExternalToolsDefaultSettings();
     GUI.loadExternalToolsUserSettings();
 
-    System.out.println("Using nm settings: \n" +
-        "\tPATH_NM = "+ GUI.getExternalToolsSetting("PATH_NM") +
-        "\tNM_ARGS = "+ GUI.getExternalToolsSetting("NM_ARGS"));
+    System.out.println("Using parse command settings: \n" +
+        "\tPARSE_COMMAND = "+ GUI.getExternalToolsSetting("PARSE_COMMAND"));
 
     System.out.println("Locating library file");
     File libFile = new File("level3b.library");
@@ -60,24 +59,24 @@ public class Level3b {
       System.exit(1);
     }
 
-    System.out.println("Loading nm data");
-    Vector<String> nmData = ContikiMoteType.loadNmData(libFile);
-    if (nmData == null) {
-      System.err.println("No nm data could be loaded");
+    System.out.println("Loading command data");
+    Vector<String> commandData = ContikiMoteType.loadCommandData(libFile);
+    if (commandData == null) {
+      System.err.println("No command data could be loaded");
       System.exit(1);
     }
 
-    System.out.println("Parsing nm data");
+    System.out.println("Parsing command data");
     Properties addresses = new Properties();
-    boolean parseOK = ContikiMoteType.parseNmData(nmData, addresses);
+    boolean parseOK = ContikiMoteType.parseCommandData(commandData, addresses);
     if (!parseOK) {
-      System.err.println("Nm data parsing failed");
+      System.err.println("Command data parsing failed");
       System.exit(1);
     }
-    int relDataSectionAddr = ContikiMoteType.loadNmRelDataSectionAddr(nmData);
-    int dataSectionSize = ContikiMoteType.loadNmDataSectionSize(nmData);
-    int relBssSectionAddr = ContikiMoteType.loadNmRelBssSectionAddr(nmData);
-    int bssSectionSize = ContikiMoteType.loadNmBssSectionSize(nmData);
+    int relDataSectionAddr = ContikiMoteType.loadCommandRelDataSectionAddr(commandData);
+    int dataSectionSize = ContikiMoteType.loadCommandDataSectionSize(commandData);
+    int relBssSectionAddr = ContikiMoteType.loadCommandRelBssSectionAddr(commandData);
+    int bssSectionSize = ContikiMoteType.loadCommandBssSectionSize(commandData);
 
     System.out.println("Found relative data section address: 0x" + Integer.toHexString(relDataSectionAddr));
     System.out.println("Found data section size: 0x" + Integer.toHexString(dataSectionSize));
