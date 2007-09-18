@@ -1462,9 +1462,13 @@ public class ContikiMoteTypeDialog extends JDialog {
       link2 = link2.replace("$(ARFILE)", arFile.getPath().replace(File.separatorChar, '/'));
       ccFlags = ccFlags.replace("$(DEPFILE)", arFile.getPath().replace(File.separatorChar, '/'));
 
-      link1 = link1.replace("$(JAVA_HOME)", System.getenv().get("JAVA_HOME"));
-      link2 = link2.replace("$(JAVA_HOME)", System.getenv().get("JAVA_HOME"));
-      ccFlags = ccFlags.replace("$(JAVA_HOME)", System.getenv().get("JAVA_HOME"));
+      String javaHome = System.getenv().get("JAVA_HOME");
+      if (javaHome == null) {
+        javaHome = "";
+      }
+      link1 = link1.replace("$(JAVA_HOME)", javaHome);
+      link2 = link2.replace("$(JAVA_HOME)", javaHome);
+      ccFlags = ccFlags.replace("$(JAVA_HOME)", javaHome);
 
       for (File sourceFile : sourceFiles) {
         if (sourceFile.isDirectory()) {
@@ -1570,6 +1574,7 @@ public class ContikiMoteTypeDialog extends JDialog {
       }
     } catch (Exception e) {
       logger.fatal("Error while compiling library: " + e);
+      e.printStackTrace();
       return false;
     }
     return true;
