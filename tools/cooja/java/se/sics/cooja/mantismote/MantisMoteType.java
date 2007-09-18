@@ -143,8 +143,8 @@ public class MantisMoteType implements MoteType {
 
     // Parse variable name to addresses mappings using nm
     varAddresses.clear();
-    Vector<String> nmData = ContikiMoteType.loadNmData(libFile);
-    if (nmData == null || !ContikiMoteType.parseNmData(nmData, varAddresses)) {
+    Vector<String> nmData = ContikiMoteType.loadCommandData(libFile);
+    if (nmData == null || !ContikiMoteType.parseCommandData(nmData, varAddresses)) {
       logger.fatal("Nm response parsing failed");
       return false;
     }
