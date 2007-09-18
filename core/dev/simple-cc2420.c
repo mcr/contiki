@@ -282,6 +282,7 @@ simple_cc2420_send(const u8_t *payload, u16_t payload_len)
   if(FIFOP_IS_1 && !FIFO_IS_1) {
     /* RXFIFO overflow, send on retransmit. */
     PRINTF("rxfifo overflow!\n");
+    ENERGEST_OFF(ENERGEST_TYPE_TRANSMIT);
     RELEASE_LOCK();
     return -4;
   }
@@ -315,6 +316,8 @@ simple_cc2420_send(const u8_t *payload, u16_t payload_len)
   }
 
   PRINTF("simple_cc2420: do_send() transmission never started\n");
+
+  ENERGEST_OFF(ENERGEST_TYPE_TRANSMIT);
   RELEASE_LOCK();
   return -3;			/* Transmission never started! */
 }
