@@ -263,7 +263,6 @@ simple_cc2420_send(const u8_t *payload, u16_t payload_len)
   /* Write packet to TX FIFO, appending FCS if AUTOCRC is enabled. */
   strobe(CC2420_SFLUSHTX); /* Cancel send that never started. */
 
-  ENERGEST_ON(ENERGEST_TYPE_TRANSMIT);
   
   {
     u8_t total_len = /*2 +*/ payload_len + 2; /* 2 bytes time stamp,
@@ -282,7 +281,6 @@ simple_cc2420_send(const u8_t *payload, u16_t payload_len)
   if(FIFOP_IS_1 && !FIFO_IS_1) {
     /* RXFIFO overflow, send on retransmit. */
     PRINTF("rxfifo overflow!\n");
-    ENERGEST_OFF(ENERGEST_TYPE_TRANSMIT);
     RELEASE_LOCK();
     return -4;
   }
@@ -304,10 +302,10 @@ simple_cc2420_send(const u8_t *payload, u16_t payload_len)
     if(SFD_IS_1) {
       /*      PRINTF("simple_cc2420: do_send() transmission has started\n");*/
       
+      ENERGEST_ON(ENERGEST_TYPE_TRANSMIT);
       do {
 	spiStatusByte = status();
       } while(spiStatusByte & BV(CC2420_TX_ACTIVE));
-
       ENERGEST_OFF(ENERGEST_TYPE_TRANSMIT);
       
       RELEASE_LOCK();     
@@ -316,8 +314,6 @@ simple_cc2420_send(const u8_t *payload, u16_t payload_len)
   }
 
   PRINTF("simple_cc2420: do_send() transmission never started\n");
-
-  ENERGEST_OFF(ENERGEST_TYPE_TRANSMIT);
   RELEASE_LOCK();
   return -3;			/* Transmission never started! */
 }
