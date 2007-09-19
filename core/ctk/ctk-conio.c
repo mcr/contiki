@@ -35,7 +35,7 @@
 
 #include <string.h>
 #include <ctype.h>
-#include <conio.h>
+#include "lib/libconio.h"
 
 #include "contiki.h"
 
