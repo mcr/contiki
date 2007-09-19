@@ -42,12 +42,18 @@
 
 /* devices */
 #include "dev/serial.h"
-#include "dev/rs232.h"
 #include "lib/libconio.h"
 #include "log.h"
 
-PROCESS(stest_process, "Serial test process");
+#undef RS232_INTR
+#ifdef RS232_INTR
+void rs232_arch_writeb(u8_t ch);
+void rs232_arch_init(int (* callback)(unsigned char), unsigned long ubr);
+#else
+#include "dev/rs232.h"
+#endif
 
+PROCESS(stest_process, "Serial test process");
 /*---------------------------------------------------------------------------*/
 static void
 rs232_print(char* str) {
@@ -63,6 +69,9 @@ PROCESS_THREAD(stest_process, ev, data)
 
   clrscr();
   gotoxy(0, 0);
+#ifdef RS232_INTR
+  rs232_arch_init(serial_input_byte, 0);
+#endif
 
   etimer_set(&timer, CLOCK_SECOND);
 
@@ -93,7 +102,9 @@ main(void)
   /* start services */
   process_start(&etimer_process, NULL);
   process_start(&serial_process, NULL);
+#ifndef RS232_INTR
   process_start(&rs232_process, NULL);
+#endif
   process_start(&stest_process, NULL);
 
   while(1) {

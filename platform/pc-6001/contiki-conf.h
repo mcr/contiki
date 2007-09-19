@@ -129,15 +129,20 @@ typedef unsigned long clock_time_t;
 #endif
 
 /* uIP configuration */
-#define UIP_CONF_MAX_CONNECTIONS	10
-#define UIP_CONF_MAX_LISTENPORTS	10
-#define UIP_CONF_BUFFER_SIZE		300
+#define UIP_CONF_MAX_CONNECTIONS	2
+#define UIP_CONF_MAX_LISTENPORTS	2
+#define UIP_CONF_BUFFER_SIZE		200
 #define UIP_CONF_BYTE_ORDER		LITTLE_ENDIAN
 //#define UIP_CONF_TCP_SPLIT		1
 #define UIP_CONF_TCP_SPLIT		0
 #define UIP_CONF_LOGGING		0
 //#define UIP_CONF_UDP_CHECKSUMS	1
 #define UIP_CONF_UDP_CHECKSUMS		0
+
+/* uses SLIP */
+#define UIP_CONF_UDP			1
+#define UIP_CONF_LLH_LEN		0
+#define UIP_CONF_BROADCAST		0
 
 /* Web sever configuration */
 #undef WEBSERVER_CONF_LOG_ENABLED
