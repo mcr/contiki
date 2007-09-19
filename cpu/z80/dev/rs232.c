@@ -48,7 +48,7 @@ PROCESS_THREAD(rs232_process, ev, data)
 {
   static struct etimer timer;
   char ch;
-  unsigned char i;
+  unsigned char i, stat;
   PROCESS_BEGIN();
 
   rs232_arch_init(RS232_BAUD_RATE);
@@ -59,8 +59,8 @@ PROCESS_THREAD(rs232_process, ev, data)
 
     if (etimer_expired(&timer)) {
       for (i = 0; i < RS232_BUFSIZE; i++) {
-	ch = rs232_arch_poll();
-	if (ch == 0) {
+	ch = rs232_arch_poll(&stat);
+	if (stat == 0) {
 	  break;
 	}
 	/* We have an input data */

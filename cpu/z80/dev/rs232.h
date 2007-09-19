@@ -51,9 +51,9 @@ void rs232_arch_init(unsigned long ubr);
 
 /*
  * An architecture-depend implementation of RS-232C polling.
- * @return character, zero if no input.
+ * @return character, stat == zero if no input.
  */
-unsigned char rs232_arch_poll(void);
+unsigned char rs232_arch_poll(unsigned char* stat);
 
 /*
  * An architecture-depend implementation of RS-232C writing a byte.
