@@ -19,6 +19,8 @@
 #define CCIF
 #define CLIF
 
+#define CC_CONF_INLINE inline
+
 #define AODV_COMPLIANCE
 #define AODV_NUM_RT_ENTRIES 32
 
