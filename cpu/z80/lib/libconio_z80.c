@@ -42,7 +42,7 @@
 #include "contiki.h"
 #include "sys/log.h"
 #include "libconio.h"
-#include "libconio_arch.h"
+#include "libconio_z80.h"
 
 /*---------------------------------------------------------------------------*/
 static void scroll() {
