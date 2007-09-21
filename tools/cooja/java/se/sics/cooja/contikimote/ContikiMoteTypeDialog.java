@@ -2393,8 +2393,30 @@ public class ContikiMoteTypeDialog extends JDialog {
             ContikiMoteType.class, "MOTE_INTERFACES");
         Vector<Class<? extends MoteInterface>> moteIntfClasses = new Vector<Class<? extends MoteInterface>>();
 
-        ClassLoader classLoader = myGUI
-            .createProjectDirClassLoader(moteTypeProjectDirs);
+        ClassLoader classLoader;
+        try {
+          classLoader = myGUI.createProjectDirClassLoader(moteTypeProjectDirs);
+        } catch (GUI.ClassLoaderCreationException e2) {
+          logger.fatal("Error when creating class loader: " + e2.getMessage());
+          e2.printStackTrace();
+          if (myGUI.isVisualized()) {
+            JOptionPane.showMessageDialog(ContikiMoteTypeDialog.this,
+                "Error when creating class loader.\nStack trace printed to console.",
+                "Error", JOptionPane.ERROR_MESSAGE);
+          }
+          return;
+        } catch (GUI.ParseProjectsException e2) {
+          logger.fatal("Error when loading projects: " + e2.getMessage());
+          e2.printStackTrace();
+          if (myGUI.isVisualized()) {
+            JOptionPane.showMessageDialog(ContikiMoteTypeDialog.this,
+                "Error when loading projects.\nStack trace printed to console.",
+                "Error", JOptionPane.ERROR_MESSAGE);
+          }
+          return;
+        }
+
+
 
         // Find and load the mote interface classes
         for (String moteInterface : moteInterfaces) {
