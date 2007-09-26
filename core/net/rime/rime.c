@@ -44,6 +44,8 @@
  */
 
 #include "net/rime.h"
+#include "net/rime/neighbor.h"
+#include "net/rime/route.h"
 #include "net/mac/mac.h"
 
 static const struct mac_driver *mac;
