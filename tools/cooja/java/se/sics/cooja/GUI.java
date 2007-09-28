@@ -148,6 +148,7 @@ public class GUI {
       "PATH_SHELL",
       "PATH_C_COMPILER", "COMPILER_ARGS",
       "PATH_LINKER", "LINK_COMMAND_1", "LINK_COMMAND_2",
+      "PATH_AR", "AR_COMMAND_1", "AR_COMMAND_2",
       "PATH_OBJDUMP", "OBJDUMP_ARGS",
       "PATH_JAVAC",
 

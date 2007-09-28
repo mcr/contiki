@@ -111,7 +111,7 @@ public class ExternalToolsDialog extends JDialog {
 
     // Some explanations
     Box explanations = Box.createVerticalBox();
-    explanations.add(new JLabel("Special variables used in COMPILER_ARGS, LINK_COMMAND_1 and LINK_COMMAND_2:"));
+    explanations.add(new JLabel("Special variables used in COMPILER_ARGS, LINK_COMMAND_[12] and AR_COMMAND_[12]:"));
     String javaHome = System.getenv().get("JAVA_HOME");
     if (javaHome != null) {
       javaHome = javaHome.replace(File.separatorChar, '/');
