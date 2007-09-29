@@ -43,7 +43,7 @@
 #include "ctk/ctk.h"
 #include "ctk/ctk-draw.h"
 #include "contiki-conf.h"
-#include "ctk/ctk-arch.h"
+#include "ctk/ctk_arch.h"
 #include <string.h>
 
 #ifndef NULL
@@ -176,7 +176,7 @@ draw_widget(struct ctk_widget *w,
     cputsn(w->widget.button.text, w->w);
     cputc(']');
   } else if (w->type == CTK_WIDGET_HYPERLINK) {
-    cputsn(w->widget.button.text, w->w);
+    cputsn(w->widget.hyperlink.text, w->w);
   } else if (w->type == CTK_WIDGET_TEXTENTRY) {
     text = w->widget.textentry.text;
     xscroll = 0;

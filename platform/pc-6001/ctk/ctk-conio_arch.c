@@ -68,6 +68,10 @@ const u8_t off_widget_textentry_ypos  = offsetof(struct ctk_widget, widget) +
   offsetof(struct ctk_widget_textentry, ypos);
 const u8_t off_widget_textentry_state = offsetof(struct ctk_widget, widget) +
   offsetof(struct ctk_widget_textentry, state);
+#if CTK_CONF_HYPERLINK
+const u8_t off_widget_hyperlink_text = offsetof(struct ctk_widget, widget) +
+  offsetof(struct ctk_widget_hyperlink, text);
+#endif CTK_CONF_HYPERLINK
 
 #if CTK_CONF_ICONS
 const u8_t off_widget_icon_title      = offsetof(struct ctk_widget, widget) +
