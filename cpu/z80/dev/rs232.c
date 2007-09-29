@@ -39,6 +39,7 @@
  */
 
 #include "contiki.h"
+#include "dev/slip.h"
 #include "dev/serial.h"
 #include "dev/rs232.h"
 
@@ -64,7 +65,7 @@ PROCESS_THREAD(rs232_process, ev, data)
 	  break;
 	}
 	/* We have an input data */
-	serial_input_byte(ch);
+	RS232_CALLBACK(ch);
       }
       etimer_reset(&timer);
     }
