@@ -38,7 +38,7 @@
  *         Adam Dunkels <adam@sics.se>
  */
 
-
+#if UIP_UDP
 #include <stdio.h>
 #include <stdarg.h>
 
@@ -626,3 +626,4 @@ PROCESS_THREAD(uaodv_process, ev, data)
   PROCESS_END();
 }
 /*---------------------------------------------------------------------------*/
+#endif /* UIP_UDP */

@@ -63,6 +63,7 @@
 
 #include "net/tcpip.h"
 #include "net/resolv.h"
+#if UIP_UDP
 
 #include <string.h>
 
@@ -500,6 +501,7 @@ resolv_found(char *name, u16_t *ipaddr)
   process_post(PROCESS_BROADCAST, resolv_event_found, name);
 }
 /*-----------------------------------------------------------------------------------*/
+#endif /* UIP_UDP */
 
 /** @} */
 /** @} */

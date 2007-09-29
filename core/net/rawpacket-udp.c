@@ -38,6 +38,7 @@
  *         Adam Dunkels <adam@sics.se>
  */
 
+#if UIP_UDP
 #include "contiki-net.h"
 
 #include "net/rawpacket-udp.h"
@@ -69,3 +70,4 @@ rawpacket_received(struct rawpacket_conn *c)
   return uip_newdata() && (struct uip_udp_conn *)c == uip_udp_conn;
 }
 /*---------------------------------------------------------------------------*/
+#endif /* UIP_UDP */
