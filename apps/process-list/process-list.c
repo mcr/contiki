@@ -53,7 +53,7 @@ static struct ctk_label processnamelabels[MAX_PROCESSLABELS];
 
 static struct ctk_label killlabel =
   {CTK_LABEL(0, PROCESSLIST_HEIGHT - 2, 12, 1, "Kill process")};
-static char killprocnum[3] = "";
+static char killprocnum[3];
 static struct ctk_textentry killtextentry =
   {CTK_TEXTENTRY(13, PROCESSLIST_HEIGHT - 2, 2, 1, killprocnum, 2)};
 static struct ctk_button killbutton =
