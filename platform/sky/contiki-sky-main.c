@@ -140,8 +140,6 @@ main(int argc, char **argv)
 	 ds2411_id[0], ds2411_id[1], ds2411_id[2], ds2411_id[3],
 	 ds2411_id[4], ds2411_id[5], ds2411_id[6], ds2411_id[7]);
 
-  simple_cc2420_set_chan_pan_addr(RF_CHANNEL, panId, 0 /*XXX*/, ds2411_id);
-
 #if WITH_UIP
   uip_init();
   uip_sethostaddr(&slipif.ipaddr);
@@ -160,6 +158,7 @@ main(int argc, char **argv)
   set_rime_addr();
 
   simple_cc2420_init();
+  simple_cc2420_set_chan_pan_addr(RF_CHANNEL, panId, 0 /*XXX*/, ds2411_id);
 /*   nullmac_init(&simple_cc2420_driver); */
 /*   rime_init(&nullmac_driver); */
   xmac_init(&simple_cc2420_driver);
