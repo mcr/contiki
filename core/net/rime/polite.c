@@ -45,7 +45,7 @@
 
 #include "net/rime.h"
 #include "net/rime/polite.h"
-#include "lib/rand.h"
+#include "lib/random.h"
 
 #include <string.h>
 
