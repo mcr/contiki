@@ -53,8 +53,6 @@ PROCESS_THREAD(test_sht11_process, ev, data)
 
   PROCESS_BEGIN();
 
-  etimer_set(&et, CLOCK_SECOND);
-
   for (etimer_set(&et, CLOCK_SECOND);; etimer_reset(&et)) {
     PROCESS_YIELD();
     printf("Temperature:   %u degrees Celsius\n",
