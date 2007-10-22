@@ -94,7 +94,14 @@ PROCESS(radio_uip_process, "radio uIP uAODV process");
 
 static const struct radio_driver *radio;
 
+
+
 /*---------------------------------------------------------------------------*/
+static void receiver(const struct radio_driver *d);
+u8_t radio_uip_uaodv_send(void);
+void radio_uip_uaodv_init(const struct radio_driver *d);
+int radio_uip_handle_ack(u8_t *buf, int len);
+u16_t radio_uip_calc_crc(u8_t *buf, int len);
 int radio_uip_buffer_outgoing_packet(u8_t *buf, int len, uip_ipaddr_t *dest, int max_sends);
 int radio_uip_is_ack(u8_t *buf, int len);
 int radio_uip_uaodv_add_header(u8_t *buf, int len, uip_ipaddr_t *addr);
