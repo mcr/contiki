@@ -42,17 +42,6 @@
 #include <string.h>
 #include <stdio.h>
 
-/*
-{ // DEBUG OUTPUT - DEBUG OUTPUT - DEBUG OUTPUT - DEBUG OUTPUT - DEBUG OUTPUT - DEBUG OUTPUT
-  uip_ipaddr_t *DEST = &packet->finaldest;
-  printf("%d.%d.%d.%d: XXXXX radio_uip_uaodv.c bad dest due to no ack %d.%d.%d.%d\n", 
-    uip_ipaddr1(&uip_hostaddr), uip_ipaddr2(&uip_hostaddr), uip_ipaddr3(&uip_hostaddr), uip_ipaddr4(&uip_hostaddr), 
-    uip_ipaddr1(DEST), uip_ipaddr2(DEST), uip_ipaddr3(DEST), uip_ipaddr4(DEST));
-  fflush(stdout);
-} // DEBUG OUTPUT - DEBUG OUTPUT - DEBUG OUTPUT - DEBUG OUTPUT - DEBUG OUTPUT - DEBUG OUTPUT
-*/
-
-
 /* Packet buffer size and retransmission settings */
 #define MAX_BUFFERED_PACKETS 10
 #define MAX_RETRANSMISSIONS_RREP 16
@@ -369,7 +358,9 @@ radio_uip_handle_ack(u8_t *buf, int len)
 int
 radio_uip_uaodv_add_header(u8_t *buf, int len, uip_ipaddr_t *addr)
 {
-  memcpy(&buf[FWD_PACKET_LENGTH], buf, len);
+  u8_t tempbuf[len];
+  memcpy(tempbuf, buf, len);
+  memcpy(&buf[FWD_PACKET_LENGTH], tempbuf, len);
   memcpy(buf, FWD_ID, FWD_ID_LENGTH);
   memcpy(&buf[FWD_NEXT_IP], (char*)addr, 4);
   return FWD_PACKET_LENGTH + len;     
@@ -378,8 +369,10 @@ radio_uip_uaodv_add_header(u8_t *buf, int len, uip_ipaddr_t *addr)
 int
 radio_uip_uaodv_remove_header(u8_t *buf, int len)
 {
-  memcpy(buf, &buf[FWD_PACKET_LENGTH], len);
-  return len - FWD_PACKET_LENGTH; /* TODO XXX Why doesn't this work!? */
+  u8_t tempbuf[len];
+  memcpy(tempbuf, &buf[FWD_PACKET_LENGTH], len);
+  memcpy(buf, tempbuf, len);
+  return len - FWD_PACKET_LENGTH;
 }
 /*---------------------------------------------------------------------------*/
 void
