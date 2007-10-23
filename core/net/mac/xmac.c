@@ -426,19 +426,6 @@ read(void)
   return 0;
 }
 /*---------------------------------------------------------------------------*/
-void
-xmac_init(const struct radio_driver *d)
-{
-  radio_is_on = 0;
-  should_be_awake = 0;
-  PT_INIT(&pt);
-  rtimer_set(&rt, RTIMER_NOW() + OFF_TIME, 1,
-	     (void (*)(struct rtimer *, void *))powercycle, NULL);
-
-  radio = d;
-  radio->set_receive_function(input);
-}
-/*---------------------------------------------------------------------------*/
 static int
 on(void)
 {
@@ -459,3 +446,18 @@ const struct mac_driver xmac_driver =
     on,
     off
   };
+/*---------------------------------------------------------------------------*/
+const struct mac_driver *
+xmac_init(const struct radio_driver *d)
+{
+  radio_is_on = 0;
+  should_be_awake = 0;
+  PT_INIT(&pt);
+  rtimer_set(&rt, RTIMER_NOW() + OFF_TIME, 1,
+	     (void (*)(struct rtimer *, void *))powercycle, NULL);
+
+  radio = d;
+  radio->set_receive_function(input);
+  return &xmac_driver;
+}
+/*---------------------------------------------------------------------------*/
