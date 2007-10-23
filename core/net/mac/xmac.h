@@ -46,6 +46,6 @@
 
 extern const struct mac_driver xmac_driver;
 
-void xmac_init(const struct radio_driver *d);
+const struct mac_driver *xmac_init(const struct radio_driver *d);
 
 #endif /* __XMAC_H__ */
