@@ -58,7 +58,7 @@ energest_arch_current_estimate(void)
     energest_type_time(ENERGEST_TYPE_LED_RED)    * DEC2FIX(3,69) +
     energest_type_time(ENERGEST_TYPE_SENSORS)    * DEC2FIX(3,76) +
     energest_type_time(ENERGEST_TYPE_TRANSMIT)   * DEC2FIX(5,1) +
-    energest_type_time(ENERGEST_TYPE_RECEIVE)    * DEC2FIX(4,8);
+    energest_type_time(ENERGEST_TYPE_LISTEN)     * DEC2FIX(4,8);
 }
 /*---------------------------------------------------------------------------*/
 unsigned short

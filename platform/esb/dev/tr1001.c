@@ -241,7 +241,7 @@ tr1001_off(void)
   rxoff();
   rxclear();
 
-  ENERGEST_OFF(ENERGEST_TYPE_RECEIVE);
+  ENERGEST_OFF(ENERGEST_TYPE_LISTEN);
   return 1;
 }
 /*---------------------------------------------------------------------------*/
@@ -256,7 +256,7 @@ tr1001_on(void)
     return 1;
   }
 
-  ENERGEST_ON(ENERGEST_TYPE_RECEIVE);
+  ENERGEST_ON(ENERGEST_TYPE_LISTEN);
 
   onoroff = ON;
   rxon();

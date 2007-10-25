@@ -112,7 +112,7 @@ status(void)
 static void
 on(void)
 {
-  ENERGEST_ON(ENERGEST_TYPE_RECEIVE);
+  ENERGEST_ON(ENERGEST_TYPE_LISTEN);
   PRINTF("on\n");
   receive_on = 1;
   
@@ -134,7 +134,7 @@ off(void)
   
   strobe(CC2420_SRFOFF);
   DISABLE_FIFOP_INT();
-  ENERGEST_OFF(ENERGEST_TYPE_RECEIVE);
+  ENERGEST_OFF(ENERGEST_TYPE_LISTEN);
 }
 /*---------------------------------------------------------------------------*/
 static u8_t locked, lock_on, lock_off;
