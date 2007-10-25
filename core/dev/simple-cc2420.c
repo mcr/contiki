@@ -301,12 +301,14 @@ simple_cc2420_send(const u8_t *payload, u16_t payload_len)
   for(i = LOOP_20_SYMBOLS; i > 0; i--) {
     if(SFD_IS_1) {
       /*      PRINTF("simple_cc2420: do_send() transmission has started\n");*/
-      
+
+      ENERGEST_OFF(ENERGEST_TYPE_LISTEN);
       ENERGEST_ON(ENERGEST_TYPE_TRANSMIT);
       do {
 	spiStatusByte = status();
       } while(spiStatusByte & BV(CC2420_TX_ACTIVE));
       ENERGEST_OFF(ENERGEST_TYPE_TRANSMIT);
+      ENERGEST_ON(ENERGEST_TYPE_LISTEN);
       
       RELEASE_LOCK();     
       return 0;			/* Transmission has started. */
