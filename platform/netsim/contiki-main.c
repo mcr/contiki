@@ -96,7 +96,8 @@ contiki_main(int flag)
 
   uip_init();
   
-  rime_init();
+  rime_init(nullmac_init(&ethernode_driver));
+
   uip_over_mesh_init(0);
   
   if(flag == 1) {
@@ -116,8 +117,6 @@ contiki_main(int flag)
 
   rtimer_init();
   
-  ethernode_rime_init();
-
   autostart_start(autostart_processes);
   
   while(1) {
