@@ -232,7 +232,7 @@ void rimebuf_compact(void);
  *             copied into the rimbuf is returned.
  *
  */
-int rimebuf_copyfrom(u8_t *from, u16_t len);
+int rimebuf_copyfrom(const u8_t *from, u16_t len);
 
 /**
  * \brief      Copy the entire rimebuf to an external buffer

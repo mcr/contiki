@@ -75,7 +75,7 @@ rimebuf_clear(void)
 }
 /*---------------------------------------------------------------------------*/
 int
-rimebuf_copyfrom(u8_t *from, u16_t len)
+rimebuf_copyfrom(const u8_t *from, u16_t len)
 {
   u16_t l;
 
