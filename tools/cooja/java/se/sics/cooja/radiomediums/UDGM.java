@@ -89,8 +89,6 @@ public class UDGM extends AbstractRadioMedium {
 
   private Simulation mySimulation;
 
-  private boolean usingRandom = false;
-
   private Random random = new Random();
 
 
@@ -397,8 +395,6 @@ public class UDGM extends AbstractRadioMedium {
     // Register this radio medium's plugins
     simulation.getGUI().registerTemporaryPlugin(VisUDGM.class);
 
-    usingRandom = false;
-
     myRadioMedium = this;
     mySimulation = simulation;
   }
@@ -415,7 +411,7 @@ public class UDGM extends AbstractRadioMedium {
         * (0.01 * sendingRadio.getCurrentOutputPowerIndicator());
 
     // If in random state, check if transmission fails
-    if (usingRandom && random.nextDouble() > SUCCESS_RATIO) {
+    if (SUCCESS_RATIO < 1.0 && random.nextDouble() > SUCCESS_RATIO) {
       return newConnection;
     }
 
@@ -542,10 +538,6 @@ public class UDGM extends AbstractRadioMedium {
     element.setText(Double.toString(INTERFERENCE_RANGE));
     config.add(element);
 
-    element = new Element("using_random");
-    element.setText("" + usingRandom);
-    config.add(element);
-
     element = new Element("success_ratio");
     element.setText("" + SUCCESS_RATIO);
     config.add(element);
@@ -562,13 +554,6 @@ public class UDGM extends AbstractRadioMedium {
 
       if (element.getName().equals("interference_range")) {
         INTERFERENCE_RANGE = Double.parseDouble(element.getText());
-      }
-
-      if (element.getName().equals("using_random")) {
-        usingRandom = Boolean.parseBoolean(element.getText());
-        if (usingRandom) {
-          random.setSeed(mySimulation.getRandomSeed());
-        }
       }
 
       if (element.getName().equals("success_ratio")) {
