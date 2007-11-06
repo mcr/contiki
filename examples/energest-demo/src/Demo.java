@@ -77,8 +77,8 @@ public class Demo extends JPanel {
   public static final int TOTAL_HEIGHT = 300;
   public static final int TOTAL_WIDTH = 900;
 
-  public static final String SERIALDUMP_WINDOWS = "../../../tools/sky/serialdump-windows.exe";
-  public static final String SERIALDUMP_LINUX = "../../../tools/sky/serialdump-linux";
+  public static final String SERIALDUMP_WINDOWS = "./tools/sky/serialdump-windows.exe";
+  public static final String SERIALDUMP_LINUX = "./tools/sky/serialdump-linux";
 
   public static final int HISTORY_MAX_SECONDS = 120;
 
