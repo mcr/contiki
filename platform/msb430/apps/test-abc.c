@@ -40,11 +40,6 @@
 
 #include "contiki.h"
 #include "net/rime.h"
-#include "node-id.h"
-
-#include "dev/cc1020.h"
-#include "dev/leds.h"
-#include "dev/sht11.h"
 
 #include <stdio.h>
 
@@ -76,7 +71,6 @@ PROCESS_THREAD(test_abc_process, ev, data)
   static struct etimer et;
   static int len;
   static char buf[32];
-  static unsigned h;
 
   PROCESS_EXITHANDLER(abc_close(&abc);)
     
