@@ -7,7 +7,9 @@
 #define HAVE_STDINT_H
 #include "msp430def.h"
 
+#ifndef RF_CHANNEL
 #define RF_CHANNEL              26
+#endif /* RF_CHANNEL */
 
 #define ELFLOADER_CONF_DATAMEMORY_SIZE 0x1800
 #define ELFLOADER_CONF_TEXTMEMORY_SIZE 0x1000
