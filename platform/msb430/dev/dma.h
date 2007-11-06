@@ -38,7 +38,7 @@
 
 void dma_init(void);
 int dma_subscribe(int, struct process *);
-void dma_transfer(unsigned char *, unsigned);
+void dma_transfer(unsigned char *, unsigned char *, unsigned);
 
 extern process_event_t dma_event;
 
