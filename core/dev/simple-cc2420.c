@@ -311,7 +311,7 @@ simple_cc2420_send(const u8_t *payload, u16_t payload_len)
       return 0;			/* Transmission has started. */
     }
   }
-
+  RIMESTATS_ADD(contentiondrop);
   PRINTF("simple_cc2420: do_send() transmission never started\n");
   RELEASE_LOCK();
   return -3;			/* Transmission never started! */
