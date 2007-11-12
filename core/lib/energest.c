@@ -53,7 +53,7 @@ energest_init(void)
 {
   int i;
   for(i = 0; i < ENERGEST_TYPE_MAX; ++i) {
-    energest_total_time[i].current = 0;
+    energest_total_time[i].current = energest_current_time[i] = 0;
   }
 }
 /*---------------------------------------------------------------------------*/
