@@ -42,7 +42,8 @@ void spi_init(void);
 
 #define FASTSPI_TX_MANY(p,c)\
 	do {\
-		for (u8_t spiCnt = 0; spiCnt < (c); spiCnt++) {\
+        u8_t spiCnt;\
+        for (spiCnt = 0; spiCnt < (c); spiCnt++) {\
 			FASTSPI_TX(((u8_t*)(p))[spiCnt]);\
 		}\
 	} while(0)
