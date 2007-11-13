@@ -88,6 +88,12 @@ suc_close(struct suc_conn *c)
   }
 }
 /*---------------------------------------------------------------------------*/
+rimeaddr_t *
+suc_receiver(struct suc_conn *c)
+{
+  return &c->receiver;
+}
+/*---------------------------------------------------------------------------*/
 static void
 send(void *ptr)
 {

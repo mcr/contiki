@@ -89,6 +89,8 @@ int suc_send(struct suc_conn *c, rimeaddr_t *receiver);
 
 void suc_set_timer(struct suc_conn *c, clock_time_t t);
 
+rimeaddr_t *suc_receiver(struct suc_conn *c);
+
 #endif /* __SUC_H__ */
 /** @} */
 /** @} */
