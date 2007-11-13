@@ -47,8 +47,8 @@ struct ruc_conn;
 
 struct ruc_callbacks {
   int (* recv)(struct ruc_conn *c, rimeaddr_t *from, u8_t seqno);
-  void (* sent)(struct ruc_conn *c);
-  void (* timedout)(struct ruc_conn *c);
+  void (* sent)(struct ruc_conn *c, rimeaddr_t *to, u8_t retransmissions);
+  void (* timedout)(struct ruc_conn *c, rimeaddr_t *to, u8_t retransmissions);
 };
 
 struct ruc_conn {
@@ -65,4 +65,4 @@ void ruc_close(struct ruc_conn *c);
 
 int ruc_send(struct ruc_conn *c, rimeaddr_t *receiver, u8_t max_retransmissions);
 
-#endif /* __RRUC_H__ */
+#endif /* __RUC_H__ */
