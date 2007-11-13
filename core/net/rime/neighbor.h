@@ -53,24 +53,30 @@
 
 #include "net/rime/rimeaddr.h"
 
+#define NEIGHBOR_ETX_SCALE 16
+#define NEIGHBOR_NUM_ETXS 8
+
 struct neighbor {
-  u16_t signal;
-  u16_t time;
+  uint16_t time;
   rimeaddr_t addr;
-  u8_t hopcount;
+  uint8_t rtmetric;
+  uint8_t etxptr;
+  uint8_t etxs[NEIGHBOR_NUM_ETXS];
 };
 
 void neighbor_init(void);
 /*void neighbor_periodic(int max_time);*/
 
-void neighbor_add(rimeaddr_t *addr, u8_t hopcount, u16_t signal);
-void neighbor_update(struct neighbor *n, u8_t hopcount, u16_t signal);
-
+void neighbor_add(rimeaddr_t *addr, u8_t rtmetric, u8_t etx);
+void neighbor_update(struct neighbor *n, u8_t rtmetric, u8_t etx);
+void neighbor_update_etx(struct neighbor *n, u8_t etx);
+void neighbor_timedout_etx(struct neighbor *n, u8_t etx);
 void neighbor_remove(rimeaddr_t *addr);
-
 struct neighbor *neighbor_find(rimeaddr_t *addr);
 struct neighbor *neighbor_best(void);
 void neighbor_set_lifetime(int seconds);
+
+uint8_t neighbor_etx(struct neighbor *n);
 
 
 #endif /* __NEIGHBOR_H__ */
