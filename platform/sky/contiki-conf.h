@@ -4,6 +4,9 @@
 #ifndef CONTIKI_CONF_H
 #define CONTIKI_CONF_H
 
+#define PROFILE_CONF_ON 1
+#define ENERGEST_CONF_ON 1
+
 #define HAVE_STDINT_H
 #include "msp430def.h"
 
