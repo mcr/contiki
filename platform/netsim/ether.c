@@ -224,10 +224,8 @@ ether_client_init(int port)
 int
 ether_client_poll(void)
 {
-  int ret, len;
   fd_set fdset;
   struct timeval tv;
-  struct ether_hdr *hdr = (struct ether_hdr *)rxbuffer;
 
   FD_ZERO(&fdset);
   FD_SET(sc, &fdset);
@@ -530,7 +528,8 @@ void
 ether_set_leds(int leds)
 {
   struct ether_hdr hdr;
-  
+
+  memset(&hdr, 0, sizeof (hdr));  
   hdr.srcx = node.x;
   hdr.srcy = node.y;
   hdr.type = PTYPE_LEDS;
