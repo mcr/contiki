@@ -96,6 +96,7 @@ contiki_main(int flag)
 
   uip_init();
   
+  ctimer_init();
   rime_init(nullmac_init(&ethernode_driver));
 
   uip_over_mesh_init(0);

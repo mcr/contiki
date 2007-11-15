@@ -43,6 +43,8 @@ init_net(void)
 {
   rimeaddr_t rimeaddr;
 
+  ctimer_init();
+
   nullmac_init(&cooja_driver);
   rime_init(&nullmac_driver);
 

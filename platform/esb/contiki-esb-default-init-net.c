@@ -41,9 +41,10 @@ init_net(void)
 {
   rimeaddr_t rimeaddr;
 
+  ctimer_init();
+
   tr1001_init();
-  nullmac_init(&tr1001_driver);
-  rime_init(&nullmac_driver);
+  rime_init(nullmac_init(&tr1001_driver));
   rimeaddr.u8[0] = node_id >> 8;
   rimeaddr.u8[1] = node_id & 0xff;
   rimeaddr_set_node_addr(&rimeaddr);
