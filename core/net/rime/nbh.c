@@ -52,6 +52,8 @@
 
 #include "dev/radio-sensor.h"
 
+#include "lib/random.h"
+
 #if NETSIM
 #include "ether.h"
 #endif
@@ -101,7 +103,7 @@ adv_packet_received(struct ibc_conn *ibc, rimeaddr_t *from)
 {
   struct nbh_conn *c = (struct nbh_conn *)ibc;
   struct adv_msg *msg = rimebuf_dataptr();
-  struct neighbor *n;
+/*   struct neighbor *n; */
 
   PRINTF("%d.%d: adv_packet_received from %d.%d with val %d\n",
 	 rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1],
