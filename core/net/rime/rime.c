@@ -64,7 +64,6 @@ input(const struct mac_driver *r)
 void
 rime_init(const struct mac_driver *m)
 {
-  ctimer_init();
   queuebuf_init();
   route_init();
   rimebuf_clear();
