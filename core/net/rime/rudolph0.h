@@ -80,7 +80,11 @@ struct rudolph0_callbacks {
 		     int maxsize);
 };
 
+#ifdef RUDOLPH0_CONF_DATASIZE
+#define RUDOLPH0_DATASIZE RUDOLPH0_CONF_DATASIZE
+#else
 #define RUDOLPH0_DATASIZE 64
+#endif
 
 struct rudolph0_hdr {
   u8_t type;
