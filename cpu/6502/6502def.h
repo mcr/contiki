@@ -36,12 +36,7 @@
 #ifndef __6502DEF_H__
 #define __6502DEF_H__
 
-typedef   signed char    int8_t;
-typedef unsigned char   uint8_t;
-typedef   signed short  int16_t;
-typedef unsigned short uint16_t;
-typedef   signed long   int32_t;
-typedef unsigned long  uint32_t;
+#include <stdint.h>
 
 /* These names are deprecated, use C99 names. */
 typedef unsigned char   u8_t;
