@@ -51,6 +51,11 @@
 
 #include <stdio.h>
 
+#if NETSIM
+#include "ether.h"
+#include "node.h"
+#endif /* NETSIM */
+
 #define FILESIZE 2000
 
 /*---------------------------------------------------------------------------*/
@@ -59,7 +64,7 @@ AUTOSTART_PROCESSES(&test_rudolph1_process);
 /*---------------------------------------------------------------------------*/
 static void
 write_chunk(struct rudolph1_conn *c, int offset, int flag,
-	    char *data, int datalen)
+	    uint8_t *data, int datalen)
 {
   int fd;
 #if NETSIM
@@ -111,7 +116,7 @@ write_chunk(struct rudolph1_conn *c, int offset, int flag,
   }
 }
 static int
-read_chunk(struct rudolph1_conn *c, int offset, char *to, int maxsize)
+read_chunk(struct rudolph1_conn *c, int offset, uint8_t *to, int maxsize)
 {
   int fd;
   int ret;
