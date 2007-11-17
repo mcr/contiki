@@ -44,7 +44,7 @@
 #include "dev/light.h"
 #include "dev/xmem.h"
 #include "dev/simple-cc2420.h"
-
+#include "dev/watchdog.h"
 #include "dev/slip.h"
 #include "dev/uart1.h"
 
@@ -197,6 +197,7 @@ main(int argc, char **argv)
    */
   printf("process_run()...\n");
   ENERGEST_ON(ENERGEST_TYPE_CPU);
+  watchdog_start();
   while (1) {
     int r;
 #if PROFILE_CONF_ON
@@ -204,6 +205,7 @@ main(int argc, char **argv)
 #endif /* PROFILE_CONF_ON */
     do {
       /* Reset watchdog. */
+      watchdog_periodic();
       r = process_run();
     } while(r > 0);
 #if PROFILE_CONF_ON
@@ -225,7 +227,7 @@ main(int argc, char **argv)
 	 are asleep, so we discard the processing time done when we
 	 were awake. */
       energest_type_set(ENERGEST_TYPE_IRQ, irq_energest);
-      
+      watchdog_stop();
       _BIS_SR(GIE | SCG0 | /*SCG1 |*/ CPUOFF); /* LPM3 sleep. This
 						  statement will block
 						  until the CPU is
@@ -239,6 +241,7 @@ main(int argc, char **argv)
       dint();
       irq_energest = energest_type_time(ENERGEST_TYPE_IRQ);
       eint();
+      watchdog_start();
       ENERGEST_OFF(ENERGEST_TYPE_LPM);
       ENERGEST_ON(ENERGEST_TYPE_CPU);
 #if PROFILE_CONF_ON
