@@ -198,7 +198,7 @@ PT_THREAD(recv_tcpthread(struct pt *pt))
 /*---------------------------------------------------------------------*/
 static void
 write_chunk(struct rudolph0_conn *c, int offset, int flag,
-	    char *data, int datalen)
+	    uint8_t *data, int datalen)
 {
   int fd;
 
@@ -234,7 +234,7 @@ write_chunk(struct rudolph0_conn *c, int offset, int flag,
   }
 }
 static int
-read_chunk(struct rudolph0_conn *c, int offset, char *to, int maxsize)
+read_chunk(struct rudolph0_conn *c, int offset, uint8_t *to, int maxsize)
 {
   int fd;
   int ret;
@@ -304,8 +304,8 @@ dummy(void)
   /* Make sure that all Rime modules are present in the core */
   tree_close(NULL);
   mesh_close(NULL);
-  uibc_close(NULL);
-  uabc_close(NULL);
+  ipolite_close(NULL);
+  polite_close(NULL);
   ruc_close(NULL);
   sibc_close(NULL);
   rudolph0_close(NULL);
