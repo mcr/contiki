@@ -360,7 +360,9 @@ u8_t
 uip_fw_output(void)
 {
   struct uip_fw_netif *netif;
+#if UIP_BROADCAST
   const struct uip_udpip_hdr *udp = (void *)BUF;
+#endif /* UIP_BROADCAST */
 
   if(uip_len == 0) {
     return UIP_FW_ZEROLEN;
