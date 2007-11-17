@@ -68,7 +68,7 @@ read_data(struct rucb_conn *c)
 }
 /*---------------------------------------------------------------------------*/
 static void
-acked(struct ruc_conn *ruc)
+acked(struct ruc_conn *ruc, rimeaddr_t *to, u8_t retransmissions)
 {
   struct rucb_conn *c = (struct rucb_conn *)ruc;
   PRINTF("acked\n");
@@ -79,7 +79,7 @@ acked(struct ruc_conn *ruc)
 }
 /*---------------------------------------------------------------------------*/
 static void
-timedout(struct ruc_conn *ruc)
+timedout(struct ruc_conn *ruc, rimeaddr_t *to, u8_t retransmissions)
 {
   struct rucb_conn *c = (struct rucb_conn *)ruc;
   PRINTF("timedout\n");
