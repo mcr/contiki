@@ -44,7 +44,7 @@
 #include <stdio.h>
 
 struct aggregate {
-  const unsigned char *ptr;
+  const char *ptr;
   unsigned short episodes;
   unsigned long cycles;
 };
