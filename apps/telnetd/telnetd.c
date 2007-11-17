@@ -276,7 +276,7 @@ sendopt(u8_t option, u8_t value)
   char *line;
   line = alloc_line();
   if(line != NULL) {
-    line[0] = TELNET_IAC;
+    line[0] = (char)TELNET_IAC;
     line[1] = option;
     line[2] = value;
     line[3] = 0;
