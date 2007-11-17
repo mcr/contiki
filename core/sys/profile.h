@@ -56,7 +56,7 @@
 #endif
 
 struct profile_timestamp {
-  const unsigned char *ptr;
+  const char *ptr;
   rtimer_clock_t time;
 };
 

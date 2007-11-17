@@ -87,6 +87,7 @@ find_aggregate_category(const uint16_t cat)
   return &aggregates[aggregates_list_ptr++];
 }
 /*---------------------------------------------------------------------------*/
+#if DETAILED_AGGREGATES
 static struct aggregate *
 find_aggregate(const unsigned char *ptr)
 {
@@ -102,6 +103,7 @@ find_aggregate(const unsigned char *ptr)
 
   return &aggregates[aggregates_list_ptr++];
 }
+#endif /* DETAILED_AGGREGATES */
 /*---------------------------------------------------------------------------*/
 void
 profile_aggregates_print(void)
@@ -130,6 +132,7 @@ profile_aggregates_print(void)
 	 sizeof(struct aggregate) * aggregates_list_ptr);
 }
 /*---------------------------------------------------------------------------*/
+#if DETAILED_AGGREGATES
 static void
 detailed_profile_aggregates_compute(void)
 {
@@ -167,6 +170,7 @@ detailed_profile_aggregates_compute(void)
 
   /* print_aggregates();*/
 }
+#endif /* DETAILED_AGGREGATES */
 /*---------------------------------------------------------------------------*/
 static void
 category_profile_aggregates_compute(void)
