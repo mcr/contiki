@@ -43,4 +43,6 @@
 
 #define RTIMER_ARCH_SECOND 1000
 
+rtimer_clock_t rtimer_arch_now(void);
+
 #endif /* __RTIMER_ARCH_H__ */
