@@ -33,7 +33,7 @@
 #include <io.h>
 #include <signal.h>
 #include <sys/unistd.h>
-
+#include "dev/watchdog.h"
 #include "net/uip.h"
 
 /*---------------------------------------------------------------------------*/
@@ -53,7 +53,6 @@ msp430_init_dco(void)
   BCSCTL2 = 0x00; /* Init FLL to desired frequency using the 32762Hz
 		     crystal DCO frquenzy = 2,4576 MHz  */
 
-  WDTCTL = WDTPW + WDTHOLD;             /* Stop WDT */
   BCSCTL1 |= DIVA1 + DIVA0;             /* ACLK = LFXT1CLK/8 */
   for(i = 0xffff; i > 0; i--);          /* Delay for XTAL to settle */
 
@@ -156,6 +155,7 @@ void
 msp430_cpu_init(void)
 {
   dint();
+  watchdog_stop();
   init_ports();
   msp430_init_dco();
   eint();
