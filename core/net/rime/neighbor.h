@@ -68,7 +68,7 @@ void neighbor_init(void);
 /*void neighbor_periodic(int max_time);*/
 
 void neighbor_add(rimeaddr_t *addr, u8_t rtmetric, u8_t etx);
-void neighbor_update(struct neighbor *n, u8_t rtmetric, u8_t etx);
+void neighbor_update(struct neighbor *n, u8_t rtmetric);
 void neighbor_update_etx(struct neighbor *n, u8_t etx);
 void neighbor_timedout_etx(struct neighbor *n, u8_t etx);
 void neighbor_remove(rimeaddr_t *addr);

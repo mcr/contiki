@@ -108,12 +108,11 @@ neighbor_find(rimeaddr_t *addr)
 }
 /*---------------------------------------------------------------------------*/
 void
-neighbor_update(struct neighbor *n, u8_t rtmetric, u8_t etx)
+neighbor_update(struct neighbor *n, u8_t rtmetric)
 {
   if(n != NULL) {
     n->rtmetric = rtmetric;
     n->time = 0;
-    neighbor_update_etx(n, etx);
   }
 }
 /*---------------------------------------------------------------------------*/

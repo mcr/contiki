@@ -46,7 +46,7 @@
 struct nbh_conn;
 
 struct nbh_callbacks {
-  int (* recv)(struct nbh_conn *c, rimeaddr_t *from, uint16_t val);
+  void (* recv)(struct nbh_conn *c, rimeaddr_t *from, uint16_t val);
   void (* sent)(struct nbh_conn *c);
 };
 
