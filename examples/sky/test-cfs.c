@@ -41,6 +41,10 @@
 #include "contiki.h"
 #include "cfs/cfs.h"
 
+#include <stdio.h>
+
+PROCESS(cfs_process, "Test CFS process");
+AUTOSTART_PROCESSES(&cfs_process);
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(cfs_process, ev, data)
 {
