@@ -110,9 +110,9 @@ queuebuf_new_from_rimebuf(void)
 #if QUEUEBUF_STATS
       ++queuebuf_ref_len;
 #if NETSIM
-      node_log("%d %d\n",
+      /*      node_log("%d %d\n",
 	       queuebuf_len,
-	       queuebuf_ref_len);
+	       queuebuf_ref_len);*/
 #endif /* NETSIM */
 #endif /* QUEUEBUF_STATS */
       rbuf->len = rimebuf_datalen();
@@ -133,9 +133,9 @@ queuebuf_new_from_rimebuf(void)
 	return NULL;
       }
 #if NETSIM
-      node_log("%d %d\n",
+      /*      node_log("%d %d\n",
 	       queuebuf_len,
-	       queuebuf_ref_len);
+	       queuebuf_ref_len);*/
 #endif /* NETSIM */
 #endif /* QUEUEBUF_STATS */
       buf->len = rimebuf_copyto(buf->data);
@@ -154,9 +154,9 @@ queuebuf_free(struct queuebuf *buf)
 #if QUEUEBUF_STATS
     --queuebuf_len;
 #if NETSIM
-    node_log("%d %d\n",
+    /*    node_log("%d %d\n",
 	     queuebuf_len,
-	     queuebuf_ref_len);
+	     queuebuf_ref_len);*/
 #endif /* NETSIM */
 #endif /* QUEUEBUF_STATS */
   } else if(memb_inmemb(&refbufmem, buf)) {
@@ -164,9 +164,9 @@ queuebuf_free(struct queuebuf *buf)
 #if QUEUEBUF_STATS
     --queuebuf_ref_len;
 #if NETSIM
-    node_log("%d %d\n",
+    /*    node_log("%d %d\n",
 	     queuebuf_len,
-	     queuebuf_ref_len);
+	     queuebuf_ref_len);*/
 #endif /* NETSIM */
 #endif /* QUEUEBUF_STATS */
   }

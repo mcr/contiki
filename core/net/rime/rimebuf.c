@@ -75,7 +75,7 @@ rimebuf_clear(void)
 }
 /*---------------------------------------------------------------------------*/
 int
-rimebuf_copyfrom(const u8_t *from, u16_t len)
+rimebuf_copyfrom(const void *from, u16_t len)
 {
   u16_t l;
 
@@ -117,7 +117,7 @@ rimebuf_copyto_hdr(u8_t *to)
 }
 /*---------------------------------------------------------------------------*/
 int
-rimebuf_copyto(u8_t *to)
+rimebuf_copyto(void *to)
 {
 #if DEBUG_LEVEL > 0
   {
@@ -139,7 +139,7 @@ rimebuf_copyto(u8_t *to)
   }
 #endif /* DEBUG_LEVEL */
   memcpy(to, rimebuf + hdrptr, RIMEBUF_HDR_SIZE - hdrptr);
-  memcpy(to + RIMEBUF_HDR_SIZE - hdrptr, rimebufptr + bufptr,
+  memcpy((u8_t *)to + RIMEBUF_HDR_SIZE - hdrptr, rimebufptr + bufptr,
 	 buflen);
   return RIMEBUF_HDR_SIZE - hdrptr + buflen;
 }

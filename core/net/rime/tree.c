@@ -139,7 +139,7 @@ update_rtmetric(struct tree_conn *tc)
     if(tc->local_rtmetric == RTMETRIC_MAX) {
       strcpy(buf, " ");
     } else {
-      snprintf(buf, sizeof(buf), "%d", tc->local_rtmetric);
+      sprintf(buf, "%d", tc->local_rtmetric);
     }
     ether_set_text(buf);
   }

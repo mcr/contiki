@@ -75,8 +75,8 @@ enum {
 
 struct rudolph0_callbacks {
   void (* write_chunk)(struct rudolph0_conn *c, int offset, int flag,
-		       char *data, int len);
-  int (* read_chunk)(struct rudolph0_conn *c, int offset, char *to,
+		       uint8_t *data, int len);
+  int (* read_chunk)(struct rudolph0_conn *c, int offset, uint8_t *to,
 		     int maxsize);
 };
 

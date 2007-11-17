@@ -86,7 +86,7 @@ enum {
 
 /*---------------------------------------------------------------------------*/
 static int
-read_data(struct rudolph1_conn *c, char *dataptr, int chunk)
+read_data(struct rudolph1_conn *c, uint8_t *dataptr, int chunk)
 {
   int len = 0;
 

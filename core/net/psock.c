@@ -171,7 +171,7 @@ data_acked(CC_REGISTER_ARG struct psock *s)
   return 0;
 }
 /*---------------------------------------------------------------------------*/
-PT_THREAD(psock_send(CC_REGISTER_ARG struct psock *s, const char *buf,
+PT_THREAD(psock_send(CC_REGISTER_ARG struct psock *s, const uint8_t *buf,
 		     unsigned int len))
 {
   PT_BEGIN(&s->psockpt);
@@ -322,7 +322,8 @@ PT_THREAD(psock_readbuf(CC_REGISTER_ARG struct psock *psock))
 }
 /*---------------------------------------------------------------------------*/
 void
-psock_init(CC_REGISTER_ARG struct psock *psock, char *buffer, unsigned int buffersize)
+psock_init(CC_REGISTER_ARG struct psock *psock,
+	   uint8_t *buffer, unsigned int buffersize)
 {
   psock->state = STATE_NONE;
   psock->readlen = 0;

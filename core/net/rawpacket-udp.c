@@ -1,4 +1,4 @@
-/*
+c/*
  * Copyright (c) 2006, Swedish Institute of Computer Science.
  * All rights reserved.
  *
@@ -38,7 +38,7 @@
  *         Adam Dunkels <adam@sics.se>
  */
 
-#if UIP_UDP
+#include "contiki.h"
 #include "contiki-net.h"
 
 #include "net/rawpacket-udp.h"
@@ -70,4 +70,3 @@ rawpacket_received(struct rawpacket_conn *c)
   return uip_newdata() && (struct uip_udp_conn *)c == uip_udp_conn;
 }
 /*---------------------------------------------------------------------------*/
-#endif /* UIP_UDP */
