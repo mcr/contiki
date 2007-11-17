@@ -122,7 +122,6 @@ static void
 recv(rimeaddr_t *originator, u8_t seqno, u8_t hops)
 {
   struct sky_treeroute_msg *msg;
-  int lptr;
   
   msg = rimebuf_dataptr();
   printf("%u %u %u %u %u %u %u %u %u %u %u %lu %lu %lu %lu %lu ",
