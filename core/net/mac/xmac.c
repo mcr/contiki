@@ -124,6 +124,9 @@ static const struct radio_driver *radio;
 #include <stdio.h>
 #define PRINTF(...) printf(__VA_ARGS__)
 #else
+#undef LEDS_ON
+#undef LEDS_OFF
+#undef LEDS_TOGGLE
 #define LEDS_ON(x)
 #define LEDS_OFF(x)
 #define LEDS_TOGGLE(x)
