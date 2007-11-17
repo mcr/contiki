@@ -61,7 +61,7 @@ main(void)
 
   procinit_init();
   
-  autostart_start(autostart_processes);
+  autostart_start((struct process **)autostart_processes);
   
   uip_ipaddr(&addr, 192,168,2,2);
   uip_sethostaddr(&addr);
