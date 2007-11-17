@@ -47,7 +47,7 @@
 #define STATE_WAITING 0
 #define STATE_OUTPUT  1
 
-#define SEND_STRING(s, str) PSOCK_SEND(s, str, (unsigned int)strlen(str))
+#define SEND_STRING(s, str) PSOCK_SEND(s, (uint8_t *)str, (unsigned int)strlen(str))
 MEMB(conns, struct httpd_state, 4);
 
 #define ISO_nl      0x0a
@@ -93,7 +93,7 @@ PT_THREAD(send_part_of_file(struct httpd_state *s))
 {
   PSOCK_BEGIN(&s->sout);
 
-  PSOCK_SEND(&s->sout, s->file.data, s->len);
+  PSOCK_SEND(&s->sout, (uint8_t *)s->file.data, s->len);
   
   PSOCK_END(&s->sout);
 }
@@ -298,8 +298,8 @@ httpd_appcall(void *state)
       return;
     }
     tcp_markconn(uip_conn, s);
-    PSOCK_INIT(&s->sin, s->inputbuf, sizeof(s->inputbuf) - 1);
-    PSOCK_INIT(&s->sout, s->inputbuf, sizeof(s->inputbuf) - 1);
+    PSOCK_INIT(&s->sin, (uint8_t *)s->inputbuf, sizeof(s->inputbuf) - 1);
+    PSOCK_INIT(&s->sout, (uint8_t *)s->inputbuf, sizeof(s->inputbuf) - 1);
     PT_INIT(&s->outputpt);
     s->state = STATE_WAITING;
     /*    timer_set(&s->timer, CLOCK_SECOND * 100);*/
