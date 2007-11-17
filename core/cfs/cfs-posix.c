@@ -117,7 +117,6 @@ cfs_readdir(struct cfs_dir *p, struct cfs_dirent *e)
 {
   struct cfs_posix_dir *dir = (struct cfs_posix_dir *)p;
   struct dirent *res;
-  int ret;
 
   if(dir->dirp == NULL) {
     return 1;
