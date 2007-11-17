@@ -185,6 +185,7 @@ send_nack(struct rudolph2_conn *c)
   polite_send(&c->c, NACK_TIMEOUT, POLITE_HEADER);
 }
 /*---------------------------------------------------------------------------*/
+#if 0 /* Function below not currently used in the code */
 static void
 send_next(struct rudolph2_conn *c)
 {
@@ -212,6 +213,7 @@ send_next(struct rudolph2_conn *c)
   }
   c->nacks = 0;
 }
+#endif /* 0 */
 /*---------------------------------------------------------------------------*/
 static void
 sent(struct polite_conn *polite)
