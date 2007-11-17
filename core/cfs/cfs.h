@@ -62,11 +62,11 @@
 #include "contiki.h"
 
 struct cfs_dir {
-  unsigned char dummy_space[32];
+  char dummy_space[32];
 };
 
 struct cfs_dirent {
-  unsigned char name[32];
+  char name[32];
   unsigned int size;
 };
 
