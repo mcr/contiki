@@ -203,7 +203,7 @@ make_processes(void *p)
   return sprintf((char *)uip_appdata,
 		 "<tr align=\"center\"><td>%p</td><td>%s</td><td>%p</td><td>%s</td></tr>\r\n",
 		 p, name,
-		 (char *)((struct process *)p)->thread,
+		 *((char **)&(((struct process *)p)->thread)),
 		 states[9 + ((struct process *)p)->state]);
 }
 /*---------------------------------------------------------------------------*/
