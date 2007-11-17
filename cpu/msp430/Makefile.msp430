@@ -39,7 +39,7 @@ NM       = msp430-nm
 OBJCOPY  = msp430-objcopy
 STRIP    = msp430-strip
 BSL      = msp430-bsl
-CFLAGSNO = -Wall -mmcu=$(MCU) -g
+CFLAGSNO = -Wall -Werror -mmcu=$(MCU) -g
 CFLAGS  += $(CFLAGSNO) -Os
 LDFLAGS += -mmcu=$(MCU) -Wl,-Map=contiki-$(TARGET).map
 
