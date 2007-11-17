@@ -40,6 +40,7 @@
 #include <signal.h>
 
 #include "dev/flash.h"
+#include "dev/watchdog.h"
 
 #define FLASH_TIMEOUT 30
 #define FLASH_REQ_TIMEOUT 150
@@ -57,7 +58,7 @@ flash_setup(void)
   IFG1 = 0;
 
   /* Stop watchdog. */
-  WDTCTL = 0x5A80;    
+  watchdog_stop();
   
   /* DCO(SMCLK) is 2,4576MHz, /6 = 409600 Hz
      select SMCLK for flash timing, divider 5+1 */
@@ -80,7 +81,8 @@ flash_done(void)
   /* Enable interrupts. */
   IE1 = ie1;
   IE2 = ie2;
-  _EINT();  
+  _EINT();
+  watchdog_start();
 }
 /*---------------------------------------------------------------------------*/
 void
