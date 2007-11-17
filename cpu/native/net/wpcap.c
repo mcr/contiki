@@ -41,8 +41,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <malloc.h>
+#ifdef __CYGWIN__
 #include <alloca.h>
+#else
+#include <malloc.h>
+#endif
 
 /* Avoid 'conflicting types' errors. */
 #define htonl
