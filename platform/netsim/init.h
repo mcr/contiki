@@ -33,6 +33,8 @@
 #ifndef __INIT_H__
 #define __INIT_H__
 
+#include "ether.h"
+
 void init(void);
 
 int main_add_node(int x, int y);

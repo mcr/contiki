@@ -145,8 +145,8 @@ ethernode_poll(void)
   return ether_client_poll();
 }
 /*-------------------------------------------------------------------------------*/
-u16_t
-ethernode_read(u8_t *buf, u16_t bufsize)
+int
+ethernode_read(void *buf, unsigned short bufsize)
 {
   int len;
   u8_t tmpbuf[2048];
@@ -216,7 +216,7 @@ ethernode_send(void)
 }
 /*-------------------------------------------------------------------------------*/
 int
-ethernode_send_buf(const u8_t *buf, u16_t len)
+ethernode_send_buf(const void *buf, unsigned short len)
 {
   char tmpbuf[2048];
   struct hdr *hdr = (struct hdr *)tmpbuf;

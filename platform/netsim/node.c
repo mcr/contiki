@@ -76,7 +76,7 @@ node_init(int id, int posx, int posy, int b)
     
 
 
-  drift = random() % 95726272;
+  drift = rand() % 95726272;
 
   init_node_log();
 }
@@ -141,9 +141,9 @@ node_log(const char *fmt, ...)
   char buf[4096];
   int len;
 
-  len = snprintf(buf, sizeof(buf), "Node %d (%d, %d): ", node.id, node.x, node.y);
+  len = sprintf(buf, "Node %d (%d, %d): ", node.id, node.x, node.y);
   va_start(ap, fmt);
-  vsnprintf(&buf[len], sizeof(buf) - len, fmt, ap);
+  vsprintf(&buf[len], fmt, ap);
   write(fd, buf, strlen(buf));
   va_end(ap);
 }

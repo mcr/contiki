@@ -60,6 +60,8 @@
 #include <stdio.h>
 #include <sys/wait.h>
 
+void netsim_init(void);
+
 static int main_process = 0;
 
 /*---------------------------------------------------------------------------*/
@@ -118,7 +120,7 @@ start_node(int x, int y, int b)
     /* This is the sensor process. */
     main_process = 0;
     
-    srandom(getpid());
+    srand(getpid());
 
     usleep(1000 * (rand() % 1000));
     

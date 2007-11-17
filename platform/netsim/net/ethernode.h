@@ -40,9 +40,9 @@
 #include "dev/radio.h"
 
 void ethernode_init(int port);
-u16_t ethernode_read(u8_t *buf, u16_t bufsize);
+int ethernode_read(void *buf, unsigned short bufsize);
 u8_t ethernode_send(void);
-int ethernode_send_buf(const u8_t *buf, u16_t len);
+int ethernode_send_buf(const void *buf, unsigned short len);
 void ethernode_periodic(void);
 void ethernode_set_receiver(void (* recv)(const struct radio_driver *));
 

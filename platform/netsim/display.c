@@ -41,6 +41,7 @@
 
 #include <gtk/gtk.h>
 
+#include <stdlib.h>
 #include <stdio.h>
 
 static GdkPixmap *pixmap = NULL;
@@ -87,12 +88,10 @@ static struct nodes_node *marked_node;
 void
 display_redraw(void)
 {
-  int i, j;
-  struct nodes_node *n, *m;
-  char string[20];
+  int i;
+  struct nodes_node *n;
   int x, y;
   struct dot *d;
-  GdkGC *color;
 
   if(!window_is_open) {
     return;
@@ -503,7 +502,7 @@ display_init(void (* idlefunc)(void), int time, int with_gui)
   gtk_init(NULL, NULL);
   
   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_title(window, "Contiki simulation display");
+  gtk_window_set_title(GTK_WINDOW(window), "Contiki simulation display");
 
   vbox = gtk_vbox_new(FALSE, 0);
   gtk_container_add(GTK_CONTAINER (window), vbox);

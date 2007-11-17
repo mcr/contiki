@@ -67,6 +67,8 @@ void ether_put(char *packet, int len, int src_x, int src_y);
 void ether_send_sensor_data(struct sensor_data *d, int srcx, int srcy, int strength);
 
 
+int ether_client_poll(void);
+
 struct ether_packet * ether_packets(void);
 
 clock_time_t ether_time(void);
@@ -78,6 +80,6 @@ void ether_set_strength(int s);
 void ether_set_collisions(int c);
 void ether_set_drop_probability(double p);
 
-int ether_print_stats(void);
+void ether_print_stats(void);
 
 #endif /* __ETHER_H__ */

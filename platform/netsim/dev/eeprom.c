@@ -49,7 +49,7 @@ eeprom_write(eeprom_addr_t addr, unsigned char *buf, int size)
   int f;
   char name[400];
 
-  snprintf(name, sizeof(name), "eeprom.%d.%d", node_x(), node_y());
+  sprintf(name, "eeprom.%d.%d", node_x(), node_y());
   f = open(name, O_WRONLY | O_APPEND | O_CREAT, 0644);
   lseek(f, addr, SEEK_SET);
   write(f, buf, size);
