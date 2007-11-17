@@ -146,7 +146,7 @@ CCIF void cfs_close(int fd);
  *             buffer. The file must have first been opened with
  *             cfs_open() and the CFS_READ flag.
  */
-CCIF int cfs_read(int fd, char *buf, unsigned int len);
+CCIF int cfs_read(int fd, void *buf, unsigned int len);
 
 /**
  * \brief      Write data to an open file.
@@ -159,7 +159,7 @@ CCIF int cfs_read(int fd, char *buf, unsigned int len);
  *             an open file. The file must have been opened with
  *             cfs_open() and the CFS_WRITE flag.
  */
-CCIF int cfs_write(int fd, char *buf, unsigned int len);
+CCIF int cfs_write(int fd, void *buf, unsigned int len);
 
 /**
  * \brief      Seek to a specified position in an open file.
