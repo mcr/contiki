@@ -208,10 +208,14 @@ wpcap_init(void)
   log_message("wpcap_init: cmdline address: ", inet_ntoa(addr));
 
   wpcap = LoadLibrary("wpcap.dll");
-  pcap_findalldevs = (int (*)(struct pcap_if **, char *))GetProcAddress(wpcap, "pcap_findalldevs");
-  pcap_open_live   = (struct pcap *(*)(char *, int, int, int, char *))GetProcAddress(wpcap, "pcap_open_live");
-  pcap_next_ex     = (int (*)(struct pcap *, struct pcap_pkthdr **, unsigned char **))GetProcAddress(wpcap, "pcap_next_ex");
-  pcap_sendpacket  = (int (*)(struct pcap *, unsigned char *, int))GetProcAddress(wpcap, "pcap_sendpacket");
+  pcap_findalldevs = (int (*)(struct pcap_if **, char *))
+		     GetProcAddress(wpcap, "pcap_findalldevs");
+  pcap_open_live   = (struct pcap *(*)(char *, int, int, int, char *))
+		     GetProcAddress(wpcap, "pcap_open_live");
+  pcap_next_ex     = (int (*)(struct pcap *, struct pcap_pkthdr **, unsigned char **))
+		     GetProcAddress(wpcap, "pcap_next_ex");
+  pcap_sendpacket  = (int (*)(struct pcap *, unsigned char *, int))
+		     GetProcAddress(wpcap, "pcap_sendpacket");
 
   if(pcap_findalldevs == NULL || pcap_open_live  == NULL ||
      pcap_next_ex     == NULL || pcap_sendpacket == NULL) {
