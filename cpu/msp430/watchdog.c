@@ -33,22 +33,34 @@
 #include <io.h>
 #include "dev/watchdog.h"
 
-/*------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
 void
 watchdog_init(void)
 {
-  WDTCTL = WDT_ARST_1000 + WDTNMI + WDTNMIES;
+  /* The MSP430 watchdog is enabled at boot-up, so we stop it during
+     initialization. */
+  watchdog_stop();
 }
-/*------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
 void
-watchdog_restart(void)
+watchdog_start(void)
 {
-  WDTCTL = WDT_ARST_1000 + WDTNMI + WDTNMIES;
+  /* We setup the watchdog to reset the device after one second,
+     unless watchdog_periodic() is called. */
+  WDTCTL = WDTPW | WDTCNTCL | WDT_ARST_1000;
 }
-/*------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+void
+watchdog_periodic(void)
+{
+  /* This function is called periodically to restart the watchdog
+     timer. */
+  WDTCTL = (WDTCTL & 0xff) | WDTPW | WDTCNTCL;
+}
+/*---------------------------------------------------------------------------*/
 void
 watchdog_stop(void)
 {
-  WDTCTL = WDTPW + WDTHOLD + WDTNMI + WDTNMIES;
+  WDTCTL = WDTPW | WDTHOLD;
 }
-/*------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
