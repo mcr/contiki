@@ -44,7 +44,7 @@ int
 dll_loader_load(char *name, char *arg)
 {
   HMODULE handle;
-  struct process **p;
+  FARPROC p;
 
   /* Load and link the program. */
   handle = LoadLibrary(name);
@@ -55,15 +55,15 @@ dll_loader_load(char *name, char *arg)
   } 
 
   /* Find the main process of the loaded program. */
-  p = (struct process **)GetProcAddress(handle, "process_load");
+  p = GetProcAddress(handle, "process_load");
   if(p == NULL) {
     debug_printf("dll_loader_load: could not find process startpoint 'process_load'\n");
     return LOADER_ERR_READ;
   }
 
   /* Start the process. */
-  debug_printf("Starting '%s'\n", (*p)->name);
-  process_start(*p, arg);
+  debug_printf("Starting '%s'\n", (**(struct process***)&p)->name);
+  process_start(**(struct process***)&p, arg);
 
   return LOADER_OK;
 }
@@ -79,8 +79,8 @@ struct dsc *
 dll_loader_load_dsc(char *name)
 {
   HMODULE handle;
+  FARPROC d;
   char symbol[24];
-  struct dsc *d;
 
   handle = LoadLibrary(name);
 
@@ -92,13 +92,13 @@ dll_loader_load_dsc(char *name)
   strcpy(symbol, name);
   *strchr(symbol, '.') = '_';
 
-  d = (struct dsc *)GetProcAddress(handle, symbol);
+  d = GetProcAddress(handle, symbol);
   if(d == NULL) {
     debug_printf("dll_loader_load_dsc: could not find symbol '%s'\n", symbol);
     return NULL;
   }
 
-  return d;
+  return *(struct dsc **)&d;
 }
 /*---------------------------------------------------------------------------*/
 void __stdcall
