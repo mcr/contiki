@@ -584,7 +584,7 @@ PROCESS_THREAD(uaodv_process, ev, data)
 
   PROCESS_BEGIN();
 
-  printf("uaodv_process starting %lu\n", my_hseqno);
+  printf("uaodv_process starting %lu\n", (unsigned long) my_hseqno);
 
   bcastconn = udp_broadcast_new(HTONS(UAODV_UDPPORT), NULL);
   unicastconn = udp_broadcast_new(HTONS(UAODV_UDPPORT), NULL);
