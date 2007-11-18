@@ -62,8 +62,8 @@ dll_loader_load(char *name, char *arg)
   }
 
   /* Start the process. */
-  debug_printf("Starting '%s'\n", (**(struct process***)&p)->name);
-  process_start(**(struct process***)&p, arg);
+  debug_printf("Starting '%s'\n", (**(struct process ***)&p)->name);
+  process_start(**(struct process ***)&p, arg);
 
   return LOADER_OK;
 }
