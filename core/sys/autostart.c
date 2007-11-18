@@ -50,7 +50,7 @@
 
 /*---------------------------------------------------------------------------*/
 void
-autostart_start(struct process *processes[])
+autostart_start(struct process * const processes[])
 {
   int i;
   
@@ -61,7 +61,7 @@ autostart_start(struct process *processes[])
 }
 /*---------------------------------------------------------------------------*/
 void
-autostart_exit(struct process *processes[])
+autostart_exit(struct process * const processes[])
 {
   int i;
   

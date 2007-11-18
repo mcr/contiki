@@ -128,8 +128,8 @@ profile_aggregates_print(void)
 #endif
 
   printf("Memory for aggregates: %d * %d = %d\n",
-	 sizeof(struct aggregate), aggregates_list_ptr,
-	 sizeof(struct aggregate) * aggregates_list_ptr);
+	 (int)sizeof(struct aggregate), aggregates_list_ptr,
+	 (int)sizeof(struct aggregate) * aggregates_list_ptr);
 }
 /*---------------------------------------------------------------------------*/
 #if DETAILED_AGGREGATES

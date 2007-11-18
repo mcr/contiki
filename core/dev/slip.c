@@ -228,7 +228,7 @@ PROCESS_THREAD(slip_process, ev, data)
     uip_len = slip_poll_handler(&uip_buf[UIP_LLH_LEN],
 				UIP_BUFSIZE - UIP_LLH_LEN);
 
-    if(uip_len == 4 && strncmp(&uip_buf[UIP_LLH_LEN], "?IPA", 4) == 0) {
+    if(uip_len == 4 && strncmp((char*)&uip_buf[UIP_LLH_LEN], "?IPA", 4) == 0) {
       char buf[8];
       memcpy(&buf[0], "=IPA", 4);
       memcpy(&buf[4], &uip_hostaddr, 4);
