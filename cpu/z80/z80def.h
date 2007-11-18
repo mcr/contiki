@@ -77,8 +77,6 @@ typedef unsigned int size_t;
 
 #define CC_CONF_ASSIGN_AGGREGATE(dest, src)	\
     memcpy(dest, src, sizeof(*dest))
-#define CC_CONF_INC_CAST_POINTER(type, data)	\
-    data = ((type)data) + 1
 
 #define uip_ipaddr_copy(dest, src)		\
     memcpy(dest, src, sizeof(*dest))
