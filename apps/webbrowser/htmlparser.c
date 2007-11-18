@@ -171,7 +171,7 @@ struct htmlparser_state {
 static struct htmlparser_state s;
 
 /*-----------------------------------------------------------------------------------*/
-static char last[1] = {0xff};
+static char last[1] = {(char)0xff};
 
 static const char *tags[] = {
 #define TAG_FIRST       0
