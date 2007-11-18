@@ -160,9 +160,8 @@ webclient_get(char *host, u16_t port, char *file)
   return 1;
 }
 /*-----------------------------------------------------------------------------------*/
-static unsigned char * CC_FASTCALL
-copy_string(unsigned char *dest,
-	    const unsigned char *src, unsigned char len)
+static char * CC_FASTCALL
+copy_string(char *dest, const char *src, unsigned char len)
 {
   return strcpy(dest, src) + len;
 }
@@ -219,7 +218,7 @@ parse_statusline(u16_t len)
   
   while(len > 0 && s.httpheaderlineptr < sizeof(s.httpheaderline)) {
     s.httpheaderline[s.httpheaderlineptr] = *(char *)uip_appdata;
-    CC_INC_CAST_POINTER(char *, uip_appdata);
+    uip_appdata = (char *)uip_appdata + 1;
     --len;
     if(s.httpheaderline[s.httpheaderlineptr] == ISO_nl) {
 
@@ -287,7 +286,7 @@ parse_headers(u16_t len)
   
   while(len > 0 && s.httpheaderlineptr < sizeof(s.httpheaderline)) {
     s.httpheaderline[s.httpheaderlineptr] = *(char *)uip_appdata;
-    CC_INC_CAST_POINTER(char *, uip_appdata);
+    uip_appdata = (char *)uip_appdata + 1;
     --len;
     if(s.httpheaderline[s.httpheaderlineptr] == ISO_nl) {
       /* We have an entire HTTP header line in s.httpheaderline, so
