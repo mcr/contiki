@@ -46,7 +46,7 @@ override telnetd_src = telnetd.c telnetd-gui.c memb.c shell.c
 
 # Use webserver.c instead of webserver-nogui.c to get CTK support
 override webserver_src = webserver.c httpd.c http-strings.c psock.c \
-			 uipbuf.c memb.c httpd-fs.c httpd-cgi.c
+			 memb.c httpd-fs.c httpd-cgi.c
                 
 CONTIKI = ../..
 APPS = program-handler ${call appname,$(PRGS)}
