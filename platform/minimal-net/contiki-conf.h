@@ -63,4 +63,7 @@ typedef unsigned long clock_time_t;
 
 #define LOG_CONF_ENABLED 1
 
+/* Not part of C99 but actually present */
+int strcasecmp(const char*, const char*);
+
 #endif /* __CONTIKI_CONF_H__ */
