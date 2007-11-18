@@ -40,7 +40,7 @@
 
 #include "sys/profile.h"
 
-#include <stdlib.h> /* For NULL */
+#include <stddef.h> /* For NULL */
 
 unsigned int profile_timestamp_ptr;
 struct profile_timestamp profile_timestamps[PROFILE_LIST_LENGTH];
