@@ -114,7 +114,7 @@ void tr1001_set_numrexmit(unsigned char acks);
  * This function should normally not be called from user
  * programs. Rather, the uIP TCP/IP stack should be used.
  */
-int tr1001_send(const u8_t *packet, u16_t len);
+int tr1001_send(const void *packet, unsigned short len);
 
 /**
  * Check if an incoming packet has been received.
@@ -126,7 +126,7 @@ int tr1001_send(const u8_t *packet, u16_t len);
  * \return The length of the received packet, or 0 if no packet has
  * been received.
  */
-u16_t tr1001_read(u8_t *buf, u16_t bufsize);
+int tr1001_read(void *buf, unsigned short bufsize);
 
 extern unsigned char tr1001_rxbuf[];
 extern volatile unsigned char tr1001_rxstate;
