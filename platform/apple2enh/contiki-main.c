@@ -88,7 +88,7 @@ main(void)
 
   clock_init();
 
-  printf("Contiki initiated, now starting process scheduling\n");
+  printf("Contiki up and running ...\n");
   
   while(1) {
 
