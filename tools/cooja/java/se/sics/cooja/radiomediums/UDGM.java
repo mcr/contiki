@@ -397,6 +397,7 @@ public class UDGM extends AbstractRadioMedium {
 
     myRadioMedium = this;
     mySimulation = simulation;
+    random.setSeed(simulation.getRandomSeed());
   }
 
   public RadioConnection createConnections(Radio sendingRadio) {
@@ -560,6 +561,7 @@ public class UDGM extends AbstractRadioMedium {
         SUCCESS_RATIO = Double.parseDouble(element.getText());
       }
     }
+    random.setSeed(mySimulation.getRandomSeed());
     return true;
   }
 
