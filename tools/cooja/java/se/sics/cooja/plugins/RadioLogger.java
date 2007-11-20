@@ -261,6 +261,7 @@ public class RadioLogger extends VisPlugin {
           rowData.add(data);
         }
         model.fireTableRowsInserted(rowData.size() - newConnections.length + 1, rowData.size());
+        setTitle("Radio Logger: " + rowData.size() + " packets");
       }
     });
 
