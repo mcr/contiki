@@ -32,10 +32,10 @@
  *
  * $Id$
  */
-#include "contiki.h"
+
+#include <string.h>
 
 #include "cfs/cfs.h"
-#include <string.h>
 
 struct filestate {
   int flag;
@@ -120,7 +120,7 @@ cfs_write(int f, void *buf, unsigned int len)
   }
 }
 /*---------------------------------------------------------------------------*/
-int
+unsigned int
 cfs_seek(int f, unsigned int o)
 {
   if(f == 1) {
@@ -137,18 +137,17 @@ cfs_seek(int f, unsigned int o)
 int
 cfs_opendir(struct cfs_dir *p, const char *n)
 {
-  return 1;
+  return -1;
 }
 /*---------------------------------------------------------------------------*/
 int
 cfs_readdir(struct cfs_dir *p, struct cfs_dirent *e)
 {
-  return 1;
+  return -1;
 }
 /*---------------------------------------------------------------------------*/
-int
+void
 cfs_closedir(struct cfs_dir *p)
 {
-  return 1;
 }
 /*---------------------------------------------------------------------------*/
