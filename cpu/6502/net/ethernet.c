@@ -74,7 +74,7 @@ ethernet_init(struct ethernet_config *config)
   u8_t byte;
 
   module_control.callerdata = open(config->name, O_RDONLY);
-  if(module_control.callerdata == -1) {
+  if(module_control.callerdata < 0) {
     fprintf(stderr, "%s: %s\n", config->name, strerror(errno));
     error_exit();
   }
