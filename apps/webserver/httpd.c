@@ -266,7 +266,7 @@ PT_THREAD(handle_input(struct httpd_state *s))
 
     if(strncmp(s->inputbuf, http_referer, 8) == 0) {
       s->inputbuf[PSOCK_DATALEN(&s->sin) - 2] = 0;
-      webserver_log(&s->inputbuf[9]);
+      webserver_log(s->inputbuf);
     }
   }
   
