@@ -119,7 +119,7 @@ init:
 
 	; Fixup address at location
 :	lda reg
-	eor (ptr),y		; Use XOR to support C64 RRNet
+	eor (ptr),y		; Use XOR to support C64 RR-Net
 	sta (ptr),y
 	iny
 	lda reg+1
