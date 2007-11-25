@@ -88,7 +88,7 @@ main(void)
 
 #if 1
   {
-    static struct ethernet_config config = {0xDE08, "CS8900A.ETH"};
+    static struct ethernet_config config = {0xDE08, "cs8900a.eth"};
     uip_ipaddr_t addr;
 
     process_start((struct process *)&ethernet_process, (char *)&config);
