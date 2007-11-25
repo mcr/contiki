@@ -42,28 +42,26 @@ char simLoggedData[MAX_LOG_LENGTH];
 int simLoggedLength;
 char simLoggedFlag;
 
-void simlog(const char *message);
-
+/*-----------------------------------------------------------------------------------*/
+void
+simlog(const char *message)
+{
+  if (simLoggedLength + strlen(message) > MAX_LOG_LENGTH) {
+    /* Dropping message due to buffer overflow */
+    printf("Warning. Dropping log message due to buffer overflow\n");
+    return;
+  }
+  
+  memcpy(&simLoggedData[0] + simLoggedLength, &message[0], strlen(message));
+  simLoggedLength += strlen(message);
+  simLoggedFlag = 1;
+}
 /*-----------------------------------------------------------------------------------*/
 void
 log_message(const char *part1, const char *part2)
 {
   simlog(part1);
   simlog(part2);
-}
-/*-----------------------------------------------------------------------------------*/
-void
-simlog(const char *message)
-{
-  if (simLoggedLength + strlen(message) > MAX_LOG_LENGTH) {
-  	/* Dropping message due to buffer overflow */
-  	printf("Warning. Dropping log message due to buffer overflow\n");
-  	return;
-  }
-  
-  memcpy(&simLoggedData[0] + simLoggedLength, &message[0], strlen(message));
-  simLoggedLength += strlen(message);
-  simLoggedFlag = 1;
 }
 /*-----------------------------------------------------------------------------------*/
 static void
@@ -78,5 +76,5 @@ doInterfaceActionsAfterTick(void)
 /*-----------------------------------------------------------------------------------*/
 
 SIM_INTERFACE(simlog_interface,
-	      doInterfaceActionsBeforeTick,
-	      doInterfaceActionsAfterTick);
+          doInterfaceActionsBeforeTick,
+          doInterfaceActionsAfterTick);
