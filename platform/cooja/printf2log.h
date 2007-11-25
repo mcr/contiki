@@ -38,6 +38,16 @@
 
 #include "sys/log.h"
 
-#define printf(...) { char printf2log_buf[200]; sprintf(printf2log_buf, __VA_ARGS__); log_message(printf2log_buf, ""); }
+void simlog(const char *message);
+
+#define MAX_SIZE 256
+
+#define printf(...)                                  \
+  {                                                  \
+    char printf2log_buf[MAX_SIZE];                   \
+    int c = sprintf(printf2log_buf, __VA_ARGS__);    \
+    printf2log_buf[c] = 0;                           \
+    simlog(printf2log_buf);                          \
+  }
 
 #endif /* __PRINTF2LOG_H__ */

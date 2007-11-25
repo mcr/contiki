@@ -31,13 +31,6 @@
  * $Id$
  */
 
-/**
- * \file
- *         Native (non-specific) code for the Contiki real-time module rt
- * \author
- *         Adam Dunkels <adam@sics.se>
- */
-
 #include <signal.h>
 #include <sys/time.h>
 #include <stddef.h>
