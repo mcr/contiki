@@ -239,8 +239,11 @@ HTTPD_CGI_CALL(proc, "processes", processes);
 void
 httpd_cgi_init(void)
 {
+  petsciiconv_toascii((char *)file.name, strlen(file.name));
   httpd_cgi_add(&file);
+  petsciiconv_toascii((char *)tcp.name, strlen(tcp.name));
   httpd_cgi_add(&tcp);
+  petsciiconv_toascii((char *)proc.name, strlen(proc.name));
   httpd_cgi_add(&proc);
 }
 /*---------------------------------------------------------------------------*/
