@@ -91,8 +91,8 @@ main(void)
     static struct ethernet_config config = {0xDE08, "cs8900a.eth"};
     uip_ipaddr_t addr;
 
-    process_start((struct process *)&ethernet_process, (char *)&config);
     printf("Eth. Driver: %s at $%X\n", config.name, config.addr);
+    process_start((struct process *)&ethernet_process, (char *)&config);
 
     uip_ipaddr(&addr, 192,168,0,128);
     printf("IP Address:  %d.%d.%d.%d\n", uip_ipaddr_to_quad(&addr));
