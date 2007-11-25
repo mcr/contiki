@@ -36,8 +36,8 @@
 
 /**
  * \file
- *         C code template for generating contiki source code files from COOJA
- *         Simulator. This file should not be compiled directly.
+ *         C code template for generating Contiki main startup files from
+ *         inside the COOJA Simulator. This file should not be compiled directly.
  * \author
  *         Fredrik Osterlind <fros@sics.se>
  */
@@ -68,6 +68,7 @@
 
 #include "lib/simEnvChange.h"
 #include "lib/sensors.h"
+#include "dev/cooja-radio.h"
 #include "sys/etimer.h"
 #include "sys/cooja_mt.h"
 #include "net/init-net.h"
