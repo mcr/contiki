@@ -102,7 +102,7 @@ cfs_write(int f, void *buf, unsigned int len)
   }
 }
 /*---------------------------------------------------------------------------*/
-int
+unsigned int
 cfs_seek(int f, unsigned int o)
 {
   if(f == FLAG_FILE_OPEN) {
@@ -125,10 +125,9 @@ cfs_readdir(struct cfs_dir *p, struct cfs_dirent *e)
   return 1;
 }
 /*---------------------------------------------------------------------------*/
-int
+void
 cfs_closedir(struct cfs_dir *p)
 {
-  return 1;
 }
 /*---------------------------------------------------------------------------*/
 static void
