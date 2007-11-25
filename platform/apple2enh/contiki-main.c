@@ -79,15 +79,19 @@ main(void)
     process_start((struct process *)&ethernet_process, (char *)&config);
 
     uip_ipaddr(&addr, 192,168,0,128);
+    printf("IP Address:  %d.%d.%d.%d\n", uip_ipaddr_to_quad(&addr));
     uip_sethostaddr(&addr);
 
     uip_ipaddr(&addr, 255,255,255,0);
+    printf("Subnet Mask: %d.%d.%d.%d\n", uip_ipaddr_to_quad(&addr));
     uip_setnetmask(&addr);
 
     uip_ipaddr(&addr, 192,168,0,1);
+    printf("Def. Router: %d.%d.%d.%d\n", uip_ipaddr_to_quad(&addr));
     uip_setdraddr(&addr);
 
     uip_ipaddr(&addr, 192,168,0,1);
+    printf("DNS Server:  %d.%d.%d.%d\n", uip_ipaddr_to_quad(&addr));
     resolv_conf(&addr);
   }
 #endif
