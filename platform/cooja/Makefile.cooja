@@ -82,6 +82,7 @@ CFLAGS   = $(CFLAGSNO)
 $(LIBFILE): $(MAINFILE) $(PROJECT_OBJECTFILES) $(ARFILE)
 ifdef SYMBOLS
 	# Recreate symbols file and relink with final memory layout (twice)
+	${CONTIKI}/tools/make-symbols-nm $(LIBFILE)
 	$(CC) $(CFLAGS) -c symbols.c -o $(OBJECTDIR)/symbols.o
 	$(LINK_COMMAND_1) $^ $(LINK_COMMAND_2)
 	${CONTIKI}/tools/make-symbols-nm $(LIBFILE)
