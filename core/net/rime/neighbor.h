@@ -78,6 +78,8 @@ void neighbor_set_lifetime(int seconds);
 
 uint8_t neighbor_etx(struct neighbor *n);
 
+int neighbor_num(void);
+struct neighbor *neighbor_get(int num);
 
 #endif /* __NEIGHBOR_H__ */
 /** @} */
