@@ -45,4 +45,6 @@
 #define UIP_CONF_UDP_CHECKSUMS 1
 #define UIP_CONF_LOGGING       1
 
+#define WEBSERVER_CONF_CGI_CONNS UIP_CONNS
+
 #endif /* __CONTIKI_CONF_H__ */
