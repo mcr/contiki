@@ -55,9 +55,17 @@
 #ifndef __RIMEADDR_H__
 #define __RIMEADDR_H__
 
+#include "contiki-conf.h"
+
+#ifdef RIMEADDR_CONF_SIZE
+#define RIMEADDR_SIZE RIMEADDR_CONF_SIZE
+#else /* RIMEADDR_SIZE */
+#define RIMEADDR_SIZE 2
+#endif /* RIMEADDR_SIZE */
+
 typedef union {
-  unsigned char u8[2];
-  unsigned short u16[1];
+  unsigned char u8[RIMEADDR_SIZE];
+  unsigned short u16[RIMEADDR_SIZE / 2];
 } rimeaddr_t;
 
 
