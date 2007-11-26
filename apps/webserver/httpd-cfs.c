@@ -44,11 +44,17 @@
 
 #include "httpd-cfs.h"
 
+#ifndef WEBSERVER_CONF_CFS_CONNS
+#define CONNS 4
+#else /* WEBSERVER_CONF_CFS_CONNS */
+#define CONNS WEBSERVER_CONF_CFS_CONNS
+#endif /* WEBSERVER_CONF_CFS_CONNS */
+
 #define STATE_WAITING 0
 #define STATE_OUTPUT  1
 
 #define SEND_STRING(s, str) PSOCK_SEND(s, (uint8_t *)str, strlen(str))
-MEMB(conns, struct httpd_state, 3);
+MEMB(conns, struct httpd_state, CONNS);
 
 #define ISO_nl      0x0a
 #define ISO_space   0x20
