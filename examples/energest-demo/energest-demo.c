@@ -90,7 +90,7 @@ static struct energy_time last;
 static struct energy_time diff;
 
 // FIXME: workaround to turn on/off radio. Rime should export an MAC on/off interface to avoid forcing the user to do this explicitly
-static struct mac_driver *mac = &nullmac_driver;
+static const struct mac_driver *mac = &nullmac_driver;
 
 static clock_time_t sleep_cycles;
 static const char send_string[] = "I am a sending string.";
