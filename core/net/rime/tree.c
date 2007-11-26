@@ -249,9 +249,7 @@ adv_received(struct nbh_conn *c, rimeaddr_t *from, uint16_t rtmetric)
   n = neighbor_find(from);
 
   if(n == NULL) {
-    if(rtmetric < tc->local_rtmetric) {
-      neighbor_add(from, rtmetric, 1);
-    }
+    neighbor_add(from, rtmetric, 1);
   } else {
     neighbor_update(n, rtmetric);
     PRINTF("%d.%d: updating neighbor %d.%d, etx %d, hops %d\n",
