@@ -55,6 +55,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <unistd.h>
 
 #include "dev/button-sensor.h"
@@ -124,11 +125,15 @@ contiki_main(int flag)
   
   while(1) {
     int n;
+    struct timespec ts;
+
     n = process_run();
     /*    if(n > 0) {
       printf("%d processes in queue\n");
       }*/
-    usleep(1);
+    ts.tv_sec = 0;
+    ts.tv_nsec = 1000;
+    nanosleep(&ts, NULL);
     etimer_request_poll();
   }
 
