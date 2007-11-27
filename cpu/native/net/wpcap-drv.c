@@ -32,10 +32,10 @@
  */
 
 #include "contiki-net.h"
-#include "wpcap.h"
 #include "net/uip-neighbor.h"
+#include "net/wpcap.h"
 
-#include "wpcap-drv.h"
+#include "net/wpcap-drv.h"
 
 #define BUF ((struct uip_eth_hdr *)&uip_buf[0])
 

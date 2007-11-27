@@ -53,7 +53,8 @@
 
 #include "contiki-net.h"
 #include "sys/log.h"
-#include "wpcap.h"
+
+#include "net/wpcap.h"
 
 #ifdef __CYGWIN__
 __attribute__((dllimport)) extern char **__argv[];
