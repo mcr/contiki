@@ -44,18 +44,6 @@ PROCINIT(&etimer_process,
 void clock_update(void);
 
 /*-----------------------------------------------------------------------------------*/
-void
-uip_log(char *message)
-{
-  fprintf(stderr, "%s\n", message);
-}
-/*-----------------------------------------------------------------------------------*/
-void
-log_message(const char *part1, const char *part2)
-{
-  fprintf(stderr, "%s%s\n", part1, part2);
-}
-/*-----------------------------------------------------------------------------------*/
 long int
 lseek(void)
 {
