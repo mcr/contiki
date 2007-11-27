@@ -63,7 +63,7 @@ struct data_hdr {
 #endif
 
 /*---------------------------------------------------------------------------*/
-static int
+static void
 received(struct ruc_conn *uc, rimeaddr_t *from, u8_t seqno)
 {
   struct rmh_conn *c = (struct rmh_conn *)uc;
@@ -90,10 +90,8 @@ received(struct ruc_conn *uc, rimeaddr_t *from, u8_t seqno)
       PRINTF("forwarding to %d\n", rt->nexthop.u16[0]);
       msg->hops++;
       ruc_send(&c->c, nexthop, c->num_rexmit);
-      
     }
   }
-  return 1;
 }
 /*---------------------------------------------------------------------------*/
 static void
