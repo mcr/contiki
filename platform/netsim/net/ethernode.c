@@ -210,9 +210,8 @@ ethernode_send(void)
 
   dest = ID_BROADCAST;
   ts.tv_sec = 0;
-  ts.tv_nsec = 1000;
+  ts.tv_nsec = 1000 * (random_rand() % 1000);
   nanosleep(&ts, NULL);
-  usleep(1000 * (random_rand() % 1000));
 
   do_send(TYPE_DATA, dest, hdr, len);
 
