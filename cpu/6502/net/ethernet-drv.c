@@ -34,10 +34,10 @@
 #include <stdio.h>
 
 #include "contiki-net.h"
-#include "ethernet.h"
+#include "net/ethernet.h"
 #include "net/uip-neighbor.h"
 
-#include "ethernet-drv.h"
+#include "net/ethernet-drv.h"
 
 #define BUF ((struct uip_eth_hdr *)&uip_buf[0])
 
