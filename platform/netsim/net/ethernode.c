@@ -51,6 +51,7 @@
 #include "lib/random.h"
 
 #include <stdio.h>
+#include <time.h>
 #include <unistd.h>
 
 #define BUF ((uip_tcpip_hdr *)&uip_buf[HDR_LEN])
