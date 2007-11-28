@@ -204,18 +204,19 @@ main(int argc, char **argv)
 #endif /* WITH_UIP */
 
   button_sensor.activate();
+
+  energest_init();
+  ENERGEST_ON(ENERGEST_TYPE_CPU);
   
 /*   printf("Autostarting processes\n"); */
   print_processes((struct process **) autostart_processes);
   autostart_start((struct process **) autostart_processes);
-
-  energest_init();
   
   /*
    * This is the scheduler loop.
    */
   printf("process_run()...\n");
-  ENERGEST_ON(ENERGEST_TYPE_CPU);
+
   watchdog_start();
   while (1) {
     int r;
