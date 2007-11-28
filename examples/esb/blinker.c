@@ -98,5 +98,6 @@ PROCESS_THREAD(blinker_process, ev, data)
   }
 
  exit:
+  leds_off(LEDS_ALL);
   PROCESS_END();
 }
