@@ -34,7 +34,7 @@
  */
 
 #include <stdio.h>
-#include <time.h>
+#include <sys/select.h>
 
 #include "contiki.h"
 
@@ -73,12 +73,12 @@ main(void)
   
   while(1) {
     int n;
-    struct timespec ts;
+    struct timeval tv;
     
     n = process_run();
-    ts.tv_sec = 0;
-    ts.tv_nsec = 1000;
-    nanosleep(&ts, NULL);
+    tv.tv_sec = 0;
+    tv.tv_usec = 1;
+    select(0, NULL, NULL, NULL, &tv);
     etimer_request_poll();
   }
   

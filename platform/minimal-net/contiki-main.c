@@ -78,16 +78,16 @@ main(void)
 
   while(1) {
     int n;
-    struct timespec ts;
+    struct timeval tv;
     
     n = process_run();
     /*    if(n > 0) {
       printf("%d processes in queue\n");
       }*/
 
-    ts.tv_sec = 0;
-    ts.tv_nsec = 1000;
-    nanosleep(&ts, NULL);
+    tv.tv_sec = 0;
+    tv.tv_usec = 1;
+    select(0, NULL, NULL, NULL, &tv);
     etimer_request_poll();
   }
   
