@@ -45,8 +45,6 @@
 #include "net/uaodv-def.h"
 #include "net/uaodv-rt.h"
 
-#if UIP_UDP
-
 #define NDEBUG
 #include "lib/assert.h"
 
@@ -626,5 +624,4 @@ PROCESS_THREAD(uaodv_process, ev, data)
   printf("uaodv_process exiting\n");
   PROCESS_END();
 }
-#endif /* UIP_UDP */
 /*---------------------------------------------------------------------------*/
