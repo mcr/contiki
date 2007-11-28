@@ -51,9 +51,9 @@ void cvline_arch(unsigned char length);
 void clip_arch(unsigned char clip1, unsigned char clip2);
 void clearto_arch(unsigned char to);
 void revers_arch(unsigned char reversed);
+void gotoxy_arch(unsigned char x, unsigned char y);
 #endif /* LIBCONIO_CONF_EXPORT */
 unsigned char wherex_arch();
 unsigned char wherey_arch();
-void gotoxy_arch(unsigned char x, unsigned char y);
 
 #endif /* __LIBCONIO_ARCH_H__ */
