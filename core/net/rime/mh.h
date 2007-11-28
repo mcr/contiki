@@ -61,14 +61,18 @@
 #ifndef __MH_H__
 #define __MH_H__
 
-#include "net/rime/abc.h"
+#include "net/rime/uc.h"
 #include "net/rime/rimeaddr.h"
 
 struct mh_conn;
 
 struct mh_callbacks {
   void (* recv)(struct mh_conn *ptr, rimeaddr_t *sender);
-  int (* forwarding)(struct mh_conn *ptr);
+  rimeaddr_t *(* forward)(struct mh_conn *ptr,
+			  rimeaddr_t *originator,
+			  rimeaddr_t *dest,
+			  rimeaddr_t *prevhop,
+			  u8_t hops);
 };
 
 struct mh_conn {
