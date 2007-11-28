@@ -61,7 +61,7 @@
 #ifndef __RMH_H__
 #define __RMH_H__
 
-#include "net/rime/abc.h"
+#include "net/rime/ruc.h"
 #include "net/rime/rimeaddr.h"
 
 struct rmh_conn;
