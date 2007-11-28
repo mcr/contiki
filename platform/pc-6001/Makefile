@@ -17,8 +17,15 @@ APPS_NETWORK_SERVER = cmdd telnetd shell www
 PLATFORM_APPS_DESKTOP = multithread tinysample
 PLATFORM_APPS_NETWORK = webserver-mini
 
-APPS = $(APPS_DESKTOP)
 PLATFORM_APPS=$(PLATFORM_APPS_DESKTOP)
+
+ifeq ($(MAKECMDGOALS),client)
+  APPS = $(APPS_NETWORK_CLIENT)
+else ifeq ($(MAKECMDGOALS),server)
+  APPS = $(APPS_NETWORK_SERVER)
+else
+  APPS = $(APPS_DESKTOP)
+endif
 
 all	: p6
 
