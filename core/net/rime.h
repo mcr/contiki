@@ -53,7 +53,8 @@
 #include "net/rime/queuebuf.h"
 #include "net/rime/ruc.h"
 #include "net/rime/sibc.h"
-
+#include "net/rime/mh.h"
+#include "net/rime/rmh.h"
 #include "net/mac/mac.h"
 /**
  * \brief      Initialize Rime
