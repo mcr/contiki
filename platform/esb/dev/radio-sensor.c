@@ -85,7 +85,7 @@ value(int type)
     return tr1001_sstrength();
   case RADIO_SENSOR_LAST_VALUE:
   default:
-    return radio_sensor_signal;
+    return ADC12MEM5; /* radio_sensor_signal; */
   }
 }
 /*---------------------------------------------------------------------------*/
