@@ -49,7 +49,6 @@
 #include "dev/uart1.h"
 
 #include "net/mac/xmac.h"
-#include "net/mac/cxmac.h"
 #include "net/mac/nullmac.h"
 
 #include "node-id.h"
