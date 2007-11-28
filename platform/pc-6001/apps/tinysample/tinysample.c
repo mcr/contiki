@@ -41,7 +41,7 @@
  */
 
 #include "contiki.h"
-#include "libconio.h"
+#include "libconio_arch-small.h"
 
 PROCESS(tiny_process, "Tiny Sample");
 
@@ -53,14 +53,13 @@ PROCESS_THREAD(tiny_process, ev, data)
 
   PROCESS_BEGIN();
 
-  clrscr();
-  gotoxy(0, 0);
+  clrscr_arch();
 
   while(1) {
     etimer_set(&timer, CLOCK_SECOND / 32);
     PROCESS_WAIT_EVENT();
     if(etimer_expired(&timer)) {
-      cputs(ch);
+      libputs_arch(ch);
       ch[0]++;
     }
   }
