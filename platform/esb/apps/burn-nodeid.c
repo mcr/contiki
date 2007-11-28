@@ -57,6 +57,7 @@ PROCESS_THREAD(burn_process, ev, data)
   node_id_restore();
   printf("Restored node id %d\n", node_id);
 #else
+#error "burn-nodeid must be compiled with nodeid=<the ID of the node>"
   node_id_restore();
   printf("Restored node id %d\n", node_id);
 #endif
