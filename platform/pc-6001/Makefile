@@ -9,7 +9,7 @@ CONTIKI = ../..
 TARGET=pc-6001
 APPS_DESKTOP = program-handler calc process-list shell about
 APPS_NETWORK_CLIENT = $(APPS_DESKTOP) netconf webbrowser email telnet ftp irc
-APPS_NETWORK_SERVER = cmdd telnetd shell www
+APPS_NETWORK_SERVER = program-handler cmdd telnetd shell
 #	editor netconf dhcp webbrowser ftp irc email telnet telnetd
 #	cmdd codeprop webserver vnc
 #	directory
