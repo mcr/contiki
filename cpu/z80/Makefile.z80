@@ -29,12 +29,14 @@ AROPTS   = -a
 CLEAN += *.lnk *.sym *.lib contiki.ihx
 
 ### CPU-dependent directories
-CONTIKI_CPU_DIRS = . dev lib
+CONTIKI_CPU_DIRS = . dev lib loader
 
 ### CPU-dependent source files
 CONTIKI_SOURCEFILES += strcasecmp.c mtarch.c uip_arch.c \
-	libconio_z80.c log-conio.c rs232.c
-CONTIKI_ASMFILES += uip_arch-asm.S crt0.S
+	libconio_z80.c log-conio.c rs232.c \
+	mef.c
+CONTIKI_ASMFILES += uip_arch-asm.S crt0.S 
+#crt-prg.S
 
 
 CONTIKI_CASMOBJECTFILES = ${addprefix $(OBJECTDIR)/,$(CONTIKI_CASMFILES:.cS=.o)}
@@ -66,3 +68,13 @@ contiki-$(TARGET).lib: $(CONTIKI_OBJECTFILES) $(PROJECT_OBJECTFILES) $(CONTIKI_A
 contiki.ihx: contiki-$(TARGET).lib $(OBJECTDIR)/crt0.o
 	$(CC) $(LDFLAGS)  -o $@ $(OBJECTDIR)/crt0.o -lcontiki-$(TARGET).lib
 	$(LD) -nf contiki
+
+LDPFLAGS = -mz80 --out-fmt-ihx --no-std-crt0 --code-loc 0 --data-loc 0
+
+test.ihx: contiki-$(TARGET).lib $(OBJECTDIR)/crt-prg.o
+	$(CC) $(LDPFLAGS)  -o $@ $(OBJECTDIR)/crt-prg.o -lcontiki-$(TARGET).lib
+	$(LD) -nf test
+
+%.ihx: contiki-$(TARGET).lib $(OBJECTDIR)/%*.o
+	$(CC) $(LDPFLAGS)  -o $@ $(OBJECTDIR)/$*.o -lcontiki-$(TARGET).lib
+	$(LD) -nf $*
