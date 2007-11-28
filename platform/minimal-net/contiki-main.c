@@ -35,6 +35,7 @@
 
 #include <stdio.h>
 #include <time.h>
+#include <sys/select.h>
 #include <unistd.h>
 
 #include "contiki.h"
