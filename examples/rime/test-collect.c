@@ -43,7 +43,6 @@
 #include "net/rime/collect.h"
 #include "net/rime/neighbor.h"
 #include "dev/leds.h"
-#include "dev/pir-sensor.h"
 #include "dev/button-sensor.h"
 
 #include <stdio.h>
