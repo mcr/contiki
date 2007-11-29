@@ -33,6 +33,6 @@
 all: contiki-main
 
 CONTIKI=../..
-APPS=program-handler calc dhcp webbrowser editor ftp process-list shell irc netconf about vnc cmdd
+APPS=program-handler calc dhcp webbrowser editor ftp process-list shell irc netconf about cmdd
 TARGET=gtk
 -include $(CONTIKI)/Makefile.include

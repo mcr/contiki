@@ -58,7 +58,6 @@
 #include "netconf-dsc.h"
 #include "process-list-dsc.h"
 #include "shell-dsc.h"
-#include "vnc-dsc.h"
 #include "www-dsc.h"
 
 #include "cmdd.h"
