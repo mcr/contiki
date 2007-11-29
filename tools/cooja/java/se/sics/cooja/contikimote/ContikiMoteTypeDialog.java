@@ -2593,10 +2593,10 @@ public class ContikiMoteTypeDialog extends JDialog {
         }
 
         if (!processWasSelected || sourceFilename == null) {
-          return;
+          createButton.setEnabled(libraryCreatedOK = false);
+        } else {
+          autoSelectDependencyProcesses(processName, sourceFilename, true);
         }
-
-        autoSelectDependencyProcesses(processName, sourceFilename, true);
 
       } else {
         logger.warn("Unhandled action: " + e.getActionCommand());
