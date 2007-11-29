@@ -72,7 +72,7 @@ $(OBJECTDIR)/%.o: %.c
 	$(OBJCOPY) $^ -O ihex $@
 
 # Add a namelist to the kernel
-%.out: 	%.co $(PROJECT_OBJECTFILES) contiki-$(TARGET).a
+%.out: %.co $(PROJECT_OBJECTFILES) contiki-$(TARGET).a
 	$(CONTIKI)/tools/make-empty-symbols
 	$(CC) $(LDFLAGS) $(CFLAGS) -o $@ $^ $(LIBC) symbols.c
 ifdef SYMBOLS
