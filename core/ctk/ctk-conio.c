@@ -438,6 +438,7 @@ ctk_draw_clear(unsigned char y1, unsigned char y2)
   }
 }
 /*-----------------------------------------------------------------------------------*/
+#if CTK_CONF_MENUS
 static void
 draw_menu(struct ctk_menu *m, unsigned char open)
 {
@@ -504,6 +505,7 @@ ctk_draw_menus(struct ctk_menus *menus)
 
   revers(0);
 }
+#endif /* CTK_CONF_MENUS */
 /*-----------------------------------------------------------------------------------*/
 unsigned char
 ctk_draw_height(void)
