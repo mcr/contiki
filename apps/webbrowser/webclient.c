@@ -33,11 +33,12 @@
  *
  */
 
+#include <string.h>
+
 #include "contiki-net.h"
+#include "www.h"
 
 #include "webclient.h"
-
-#include <string.h>
 
 #define WEBCLIENT_TIMEOUT 100
 

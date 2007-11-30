@@ -61,12 +61,13 @@ G * (<br>, <p>, <h>), the <li> tag (but does not even try to
  *
  */
 
+#include <string.h>
+
+#include "contiki.h"
+#include "html-strings.h"
+#include "www.h"
 
 #include "htmlparser.h"
-#include "html-strings.h"
-#include "contiki.h"
-
-#include <string.h>
 
 #if 1
 #define PRINTF(x)
