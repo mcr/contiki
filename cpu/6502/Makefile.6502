@@ -49,7 +49,7 @@ ifndef LD65_OBJ
   ${error LD65_OBJ not defined! You must specify where the cc65 objects reside!}
 endif
 
-all: cs8900a.eth
+all: cs8900a.eth lan91c96.eth
 
 CONTIKI_TARGET_DIRS = .
 CONTIKI_CPU_DIRS    = . lib net sys
