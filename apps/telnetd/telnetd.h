@@ -37,7 +37,6 @@
 
 #include "contiki.h"
 
-
 PROCESS_NAME(telnetd_process);
 
 void telnetd_gui_eventhandler(process_event_t ev, process_data_t data);
