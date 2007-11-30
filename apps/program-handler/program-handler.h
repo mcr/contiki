@@ -41,13 +41,12 @@
 
 extern char program_handler_screensaver[];
 
+PROCESS_NAME(program_handler_process);
+
 void program_handler_init(void);
 CCIF void program_handler_load(char *name, char *arg);
 void program_handler_setscreensaver(char *name);
-
 void program_handler_add(struct dsc *dsc, char *menuname,
 			 unsigned char desktop);
-
-PROCESS_NAME(program_handler_process);
 
 #endif /* __PROGRAM_HANDLER_H__ */
