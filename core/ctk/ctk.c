@@ -98,7 +98,6 @@ static unsigned char iconx, icony;
 unsigned char ctk_arch_isprint(char c);
 #endif /* ctk_arch_isprint */
 
-
 PROCESS(ctk_process, "CTK Contiki GUI");
 
 /**
@@ -162,7 +161,6 @@ process_event_t ctk_signal_screensaver_stop,
 
 /** @} */
 
-
 #if CTK_CONF_MOUSE_SUPPORT
 unsigned short mouse_x, mouse_y, mouse_button;
 #endif /* CTK_CONF_MOUSE_SUPPORT */
@@ -176,6 +174,7 @@ static struct timer timer;
 static void CC_FASTCALL
 textentry_input(ctk_arch_key_t c,
 		CC_REGISTER_ARG struct ctk_textentry *t);
+
 #if CTK_CONF_MENUS
 /*---------------------------------------------------------------------------*/
 /**
@@ -455,7 +454,6 @@ make_windowbuttons(CC_REGISTER_ARG struct ctk_window *window)
 		window->titlelen, 1, window->title);
 #endif /* CTK_CONF_WINDOWMOVE */
   CTK_WIDGET_ADD(window, &window->titlebutton);
-
 
 #if CTK_CONF_WINDOWCLOSE
   CTK_BUTTON_NEW(&window->closebutton, window->w - 3, placement,
