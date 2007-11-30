@@ -35,6 +35,6 @@
 #ifndef __WWW_H__
 #define __WWW_H__
 
-void www_init(void);
+PROCESS_NAME(www_process);
 
 #endif /* __WWW_H__ */
