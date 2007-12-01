@@ -364,11 +364,9 @@ fixup36:sta ethdata
 	; The packet contains 3 extra words
 	lda len
 	adc #$05		; Actually 5 or 6 depending on carry
-	sta len
 fixup37:sta ethdata
 	lda len+1
 	adc #$00
-	sta len+1
 fixup38:sta ethdata
 
 	; Send the packet
