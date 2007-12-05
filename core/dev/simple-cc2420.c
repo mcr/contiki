@@ -356,6 +356,20 @@ simple_cc2420_on(void)
 }
 /*---------------------------------------------------------------------------*/
 void
+simple_cc2420_set_channel(int channel)
+{
+  u16_t f = channel;
+  
+  f = 5 * (f - 11) + 357 + 0x4000;
+  /*
+   * Writing RAM requires crystal oscillator to be stable.
+   */
+  while(!(status() & (BV(CC2420_XOSC16M_STABLE))));
+  
+  setreg(CC2420_FSCTRL, f);
+}
+/*---------------------------------------------------------------------------*/
+void
 simple_cc2420_set_chan_pan_addr(unsigned channel, /* 11 - 26 */
 				unsigned pan,
 				unsigned addr,
@@ -523,5 +537,27 @@ simple_cc2420_set_txpower(u8_t power)
   reg = (reg & 0xffe0) | (power & 0x1f);
   setreg(CC2420_TXCTRL, reg);
   RELEASE_LOCK();
+}
+/*---------------------------------------------------------------------------*/
+int
+simple_cc2420_rssi(void)
+{
+  int rssi;
+  int radio_was_off = 0;
+  
+  if(!receive_on) {
+    radio_was_off = 1;
+    simple_cc2420_on();
+  }
+  while(!(status() & BV(CC2420_RSSI_VALID))) {
+    /*    printf("simple_cc2420_rssi: RSSI not valid.\n");*/
+  }
+
+  rssi = (int)((signed char)getreg(CC2420_RSSI));
+
+  if(radio_was_off) {
+    simple_cc2420_off();
+  }
+  return rssi;
 }
 /*---------------------------------------------------------------------------*/
