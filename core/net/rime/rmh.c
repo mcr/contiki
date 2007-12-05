@@ -131,6 +131,11 @@ rmh_send(struct rmh_conn *c, rimeaddr_t *to, u8_t num_rexmit, u8_t max_hops)
   struct data_hdr *hdr;
   
   c->num_rexmit = num_rexmit;
+  
+  if(c->cb->forward == NULL) {
+    return 0;
+  }
+  
   nexthop = c->cb->forward(c, &rimeaddr_node_addr, to, NULL, 0);
   if(nexthop == NULL) {
     PRINTF("rmh_send: no route\n");
