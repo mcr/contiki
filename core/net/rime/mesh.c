@@ -85,7 +85,15 @@ data_packet_forward(struct mh_conn *mh, rimeaddr_t *originator,
   struct mesh_conn *c = (struct mesh_conn *)
     ((char *)mh - offsetof(struct mesh_conn, mh));
 
-  return route_lookup(dest);
+  struct route_entry *rt;
+
+  rt = route_lookup(dest);
+
+  if(rt == NULL) {
+    return NULL;
+  }
+  
+  return &rt->nexthop;
 }
 /*---------------------------------------------------------------------------*/
 static void
