@@ -65,7 +65,7 @@ mtarch_start(struct mtarch_thread *thread,
   memset(thread->cstack,   0, sizeof(thread->cstack));
   
   /* Copy current zero page content as template. */
-  mtarch_asm_threadzp = &(thread->zp);
+  mtarch_asm_threadzp = thread->zp;
   mtarch_asm_start();
 
   /* Create a CPU stack frame with the appropriate values. */
