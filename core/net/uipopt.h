@@ -240,7 +240,11 @@
  *
  * \hideinitializer
  */
+#ifndef UIP_CONF_ACTIVE_OPEN
 #define UIP_ACTIVE_OPEN 1
+#else /* UIP_CONF_ACTIVE_OPEN */
+#define UIP_ACTIVE_OPEN UIP_CONF_ACTIVE_OPEN
+#endif /* UIP_CONF_ACTIVE_OPEN */
 
 /**
  * The maximum number of simultaneously open TCP connections.
