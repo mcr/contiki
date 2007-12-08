@@ -51,7 +51,7 @@ endif
 
 all: cs8900a.eth lan91c96.eth
 
-CONTIKI_TARGET_DIRS = .
+CONTIKI_TARGET_DIRS = . lib
 CONTIKI_CPU_DIRS    = . lib net sys
 CONTIKI_TARGET_MAIN = ${addprefix $(OBJECTDIR)/,contiki-main.o}
 
