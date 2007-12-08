@@ -45,9 +45,11 @@ uip_log(char *message)
   fprintf(stderr, "%s\n", message);
 }
 /*-----------------------------------------------------------------------------------*/
+#if LOG_CONF_ENABLED
 void
 log_message(const char *part1, const char *part2)
 {
   fprintf(stderr, "%s%s\n", part1, part2);
 }
+#endif /* LOG_CONF_ENABLED */
 /*-----------------------------------------------------------------------------------*/
