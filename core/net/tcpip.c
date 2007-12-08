@@ -103,6 +103,7 @@ packet_input(void)
   }
 }
 /*---------------------------------------------------------------------------*/
+#if UIP_ACTIVE_OPEN
 struct uip_conn *
 tcp_connect(uip_ipaddr_t *ripaddr, u16_t port, void *appstate)
 {
@@ -120,6 +121,7 @@ tcp_connect(uip_ipaddr_t *ripaddr, u16_t port, void *appstate)
   
   return c;
 }
+#endif /* UIP_ACTIVE_OPEN */
 /*---------------------------------------------------------------------------*/
 void
 tcp_unlisten(u16_t port)
