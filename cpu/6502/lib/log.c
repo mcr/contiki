@@ -39,11 +39,13 @@
 #include "sys/log.h"
 
 /*-----------------------------------------------------------------------------------*/
+#if UIP_LOGGING
 void
 uip_log(char *message)
 {
   fprintf(stderr, "%s\n", message);
 }
+#endif /* UIP_LOGGING */
 /*-----------------------------------------------------------------------------------*/
 #if LOG_CONF_ENABLED
 void
