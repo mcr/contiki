@@ -115,6 +115,7 @@ PT_THREAD(handle_output(struct httpd_state *s))
 
   petsciiconv_topetscii(s->filename, sizeof(s->filename));
   s->fd = cfs_open(s->filename, CFS_READ);
+  petsciiconv_toascii(s->filename, sizeof(s->filename));
   if(s->fd < 0) {
     s->fd = cfs_open("404.html", CFS_READ);
     if(s->fd < 0) {
@@ -159,7 +160,9 @@ PT_THREAD(handle_input(struct httpd_state *s))
     strncpy(s->filename, &s->inputbuf[1], sizeof(s->filename));
   }
 
+  petsciiconv_topetscii(s->filename, sizeof(s->filename));
   webserver_log_file(&uip_conn->ripaddr, s->filename);
+  petsciiconv_toascii(s->filename, sizeof(s->filename));
   s->state = STATE_OUTPUT;
 
   while(1) {
