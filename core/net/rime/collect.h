@@ -62,7 +62,7 @@
 
 #include "net/rime/ipolite.h"
 #include "net/rime/ruc.h"
-#include "net/rime/nbh.h"
+#include "net/rime/neighbor-discovery.h"
 
 struct collect_callbacks {
   void (* recv)(rimeaddr_t *originator, u8_t seqno,
@@ -70,12 +70,12 @@ struct collect_callbacks {
 };
 
 struct collect_conn {
-  struct nbh_conn nbh_conn;
+  struct neighbor_discovery_conn neighbor_discovery_conn;
   struct ruc_conn ruc_conn;
   const struct collect_callbacks *cb;
   struct ctimer t;
+  u16_t rtmetric;
   u8_t forwarding;
-  u8_t local_rtmetric;
   u8_t seqno;
 };
 
