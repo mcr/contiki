@@ -49,10 +49,11 @@
 #include "contiki.h"
 #include "net/rime/neighbor.h"
 #include "net/rime/ctimer.h"
+#include "net/rime/collect.h"
 
 #define MAX_NEIGHBORS 5
 
-#define RTMETRIC_MAX 64
+#define RTMETRIC_MAX COLLECT_MAX_DEPTH
 
 static struct neighbor neighbors[MAX_NEIGHBORS];
 
