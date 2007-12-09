@@ -59,7 +59,7 @@
 struct neighbor {
   uint16_t time;
   rimeaddr_t addr;
-  uint8_t rtmetric;
+  uint16_t rtmetric;
   uint8_t etxptr;
   uint8_t etxs[NEIGHBOR_NUM_ETXS];
 };
