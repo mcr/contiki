@@ -38,6 +38,12 @@
 
 #define RTIMER_ARCH_SECOND (8192)
 
+/* Handle that not all AVRs have TCNT3 - this should be configuratble
+   in contiki-conf later! */
+#ifdef TCNT3
 #define rtimer_arch_now() (TCNT3)
+#else
+#define rtimer_arch_now() (0)
+#endif
 
 #endif /* __RTIMER_ARCH_H__ */

@@ -32,6 +32,10 @@
 #ifndef AVRDEF_H
 #define AVRDEF_H
 
+/* SREG is defined in this file */
+#include <avr/io.h>
+#include <avr/interrupt.h>
+
 #ifdef HAVE_STDINT_H
 #include <stdint.h>
 #else
