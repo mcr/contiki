@@ -42,6 +42,7 @@
 #define __UAODV_H__
 
 #include "contiki.h"
+#include "uaodv-rt.h"
 
 PROCESS_NAME(uaodv_process);
 
