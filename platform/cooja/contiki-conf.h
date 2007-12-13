@@ -39,6 +39,8 @@
 
 #define COOJA 1
 
+#define QUEUEBUF_CONF_NUM 10
+
 #define CC_CONF_REGISTER_ARGS          1
 #define CC_CONF_FUNCTION_POINTER_ARGS  1
 #define CC_CONF_FASTCALL
