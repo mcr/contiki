@@ -523,10 +523,17 @@ struct ctk_window {
   struct ctk_label titlebutton;
 #endif /* CTK_CONF_WINDOWMOVE */
 
+#if CTK_CONF_WINDOWS
   unsigned char x,             /**< The x coordinate of the window, in
 				  characters. */
     y;                         /**< The y coordinate of the window, in
 				  characters. */
+#else /* CTK_CONF_WINDOWS */
+  signed char x,               /**< The x coordinate of the window, in
+				  characters. */
+    y;                         /**< The y coordinate of the window, in
+				  characters. */
+#endif /* CTK_CONF_WINDOWS */
   unsigned char w,             /**< The width of the window, excluding
 				  window borders. */
     h;                         /**< The height of the window,
