@@ -91,6 +91,7 @@ static struct ctk_button quitnobutton =
 #endif /* QUIT_MENU */
 
 #if WITH_LOADER_ARCH
+
 /* "Run..." window */
 static struct ctk_window runwindow;
 static unsigned char runmenuitem;
@@ -118,7 +119,6 @@ static struct ctk_label errortype =
   {CTK_LABEL(4, 5, 16, 1, "")};
 static struct ctk_button errorokbutton =
   {CTK_BUTTON(9, 7, 2, "Ok")};
-
 
 #endif /* WITH_LOADER_ARCH */
 
