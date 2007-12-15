@@ -226,7 +226,7 @@ PROCESS_THREAD(directory_process, ev, data)
   PROCESS_BEGIN();
   
   width = ctk_draw_width() - 2;
-  height = ctk_draw_height() - 3;
+  height = ctk_draw_height() - 2 - CTK_CONF_MENUS;
   
   ctk_window_new(&window, width, height, "Directory");
   
