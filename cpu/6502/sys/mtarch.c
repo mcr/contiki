@@ -35,7 +35,7 @@
 
 #include <string.h>
 
-#include "mtarch.h"
+#include "sys/mtarch.h"
 
 unsigned char  mtarch_asm_threadspreg;
 unsigned char *mtarch_asm_threadzp;
