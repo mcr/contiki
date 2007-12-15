@@ -48,7 +48,9 @@
 
 #include "sys/etimer.h"
 #include "net/wpcap-drv.h"
+#ifdef PLATFORM_BUILD
 #include "program-handler.h"
+#endif  /* PLATFORM_BUILD */
 
 PROCINIT(&etimer_process,
 	 &wpcap_process,
