@@ -39,10 +39,10 @@
 #include <stdint.h>
 
 /* These names are deprecated, use C99 names. */
-typedef unsigned char   u8_t;
-typedef unsigned short u16_t;
-typedef unsigned long  u32_t;
-typedef          long  s32_t;
+typedef uint8_t   u8_t;
+typedef uint16_t u16_t;
+typedef uint32_t u32_t;
+typedef int32_t  s32_t;
 
 typedef unsigned short uip_stats_t;
 
