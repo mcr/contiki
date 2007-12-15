@@ -196,14 +196,14 @@ clrscr(void)
 void
 bgcolor(unsigned char c)
 {
-  /* Presume this to be one the first calls. */
+  /* Presume this to be one of the first calls. */
   console_init();
 }
 /*-----------------------------------------------------------------------------------*/
 void
 bordercolor(unsigned char c)
 {
-  /* Presume this to be one the first calls. */
+  /* Presume this to be one of the first calls. */
   console_init();
 }
 /*-----------------------------------------------------------------------------------*/
