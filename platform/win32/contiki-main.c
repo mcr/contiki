@@ -53,9 +53,11 @@
 PROCINIT(&etimer_process,
 	 &wpcap_process,
 	 &ctk_process,
+#ifdef PLATFORM_BUILD
+	 &program_handler_process,
+#endif  /* PLATFORM_BUILD */
 	 &tcpip_process,
-	 &resolv_process,
-	 &program_handler_process);
+	 &resolv_process);
 
 /*-----------------------------------------------------------------------------------*/
 void
@@ -90,8 +92,12 @@ main(void)
 
   procinit_init();
 
+#ifdef PLATFORM_BUILD
   program_handler_add(&directory_dsc, "Directory",   1);
   program_handler_add(&www_dsc,       "Web browser", 1);
+#else /* PLATFORM_BUILD */
+  autostart_start((struct process **)autostart_processes);
+#endif /* PLATFORM_BUILD */
 
 #if 1
   {
