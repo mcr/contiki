@@ -1,3 +1,9 @@
+/**
+ * \addtogroup rimeruc
+ * @{
+ */
+
+
 /*
  * Copyright (c) 2006, Swedish Institute of Computer Science.
  * All rights reserved.
@@ -201,3 +207,4 @@ ruc_send(struct ruc_conn *c, rimeaddr_t *receiver, u8_t max_retransmissions)
   return 0;
 }
 /*---------------------------------------------------------------------------*/
+/** @} */

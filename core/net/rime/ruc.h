@@ -1,3 +1,20 @@
+/**
+ * \addtogroup rime
+ * @{
+ */
+
+/**
+ * \defgroup rimeruc Single-hop reliable unicast
+ * @{
+ *
+ * The ruc module implements a single-hop reliable unicast mechanism.
+ *
+ * \section channels Channels
+ *
+ * The ruc module uses 1 channel.
+ *
+ */
+
 /*
  * Copyright (c) 2006, Swedish Institute of Computer Science.
  * All rights reserved.
@@ -66,3 +83,5 @@ void ruc_close(struct ruc_conn *c);
 int ruc_send(struct ruc_conn *c, rimeaddr_t *receiver, u8_t max_retransmissions);
 
 #endif /* __RUC_H__ */
+/** @} */
+/** @} */
