@@ -51,6 +51,8 @@
 #include "net/mac/xmac.h"
 #include "net/mac/nullmac.h"
 
+#include "sys/timesynch.h"
+
 #include "node-id.h"
 
 #include "sys/profile.h"
@@ -193,7 +195,12 @@ main(int argc, char **argv)
   simple_cc2420_init();
   simple_cc2420_set_chan_pan_addr(RF_CHANNEL, panId, 0 /*XXX*/, ds2411_id);
 /*  rime_init(nullmac_init(&simple_cc2420_driver));*/
-  rime_init(xmac_init(&simple_cc2420_driver));
+/*  rime_init(xmac_init(&simple_cc2420_driver));*/
+/*  rime_init(timesynch_init(nullmac_init(&simple_cc2420_driver)));*/
+  rime_init(timesynch_init(xmac_init(&simple_cc2420_driver)));
+
+
+  timesynch_set_authority_level(node_id);
 
   /*  rimeaddr_set_node_addr*/
 #if WITH_UIP
