@@ -33,9 +33,9 @@
  * $Id$
  */
 
-#include <conio.h>
-#include <stdio.h>
 #include <stdlib.h>
+
+#include "sys/log.h"
 
 #include "lib/error.h"
 
@@ -43,8 +43,8 @@
 void
 error_exit(void)
 {
-  fprintf(stderr, "Press any key to continue ...\n");
-  cgetc();
+  log_message("Press any key to continue ...", "");
+  ctk_arch_getkey();
   exit(EXIT_FAILURE);
 }
 /*-----------------------------------------------------------------------------------*/
