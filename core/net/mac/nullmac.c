@@ -53,7 +53,9 @@ send(void)
 static void
 input(const struct radio_driver *d)
 {
-  receiver_callback(&nullmac_driver);
+  if(receiver_callback) {
+    receiver_callback(&nullmac_driver);
+  }
 }
 /*---------------------------------------------------------------------------*/
 static int
