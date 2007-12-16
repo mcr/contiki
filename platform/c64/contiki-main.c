@@ -33,9 +33,8 @@
  * $Id$
  */
 
-#include <stdio.h>
-
 #include "contiki-net.h"
+#include "sys/log.h"
 #include "lib/config.h"
 #include "net/ethernet-drv.h"
 
@@ -87,29 +86,24 @@ main(void)
     uip_ipaddr_t addr;
 
     uip_ipaddr(&addr, 192,168,0,128);
-    fprintf(stderr, "IP Address:  %d.%d.%d.%d\n", uip_ipaddr_to_quad(&addr));
     uip_sethostaddr(&addr);
 
     uip_ipaddr(&addr, 255,255,255,0);
-    fprintf(stderr, "Subnet Mask: %d.%d.%d.%d\n", uip_ipaddr_to_quad(&addr));
     uip_setnetmask(&addr);
 
     uip_ipaddr(&addr, 192,168,0,1);
-    fprintf(stderr, "Def. Router: %d.%d.%d.%d\n", uip_ipaddr_to_quad(&addr));
     uip_setdraddr(&addr);
 
     uip_ipaddr(&addr, 192,168,0,1);
-    fprintf(stderr, "DNS Server:  %d.%d.%d.%d\n", uip_ipaddr_to_quad(&addr));
     resolv_conf(&addr);
 
-    fprintf(stderr, "Eth. Driver: %s at $%X\n", config.name, config.addr);
     ethernet_config = &config;
   }
 #endif
 
   process_start((struct process *)&ethernet_process, (char *)ethernet_config);
 
-  fprintf(stderr, "Contiki up and running ...\n");
+  log_message("Contiki up and running ...", "");
   
   while(1) {
 
