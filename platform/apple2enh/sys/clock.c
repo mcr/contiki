@@ -33,10 +33,10 @@
  * $Id$
  */
 
-#include <stdio.h>
 #include <apple2.h>
 
 #include "contiki.h"
+#include "sys/log.h"
 
 /* The enhanced Apple//e doesn't have a hardware clock whatsoever. Therefore the
  * cc65 C-library for this target doesn't include an implementation of clock().
@@ -53,7 +53,7 @@ clock_init(void)
     if(*(signed char *)0xC036 < 0) {
       /* 5 / 14 = 1.0MHz / 2.8MHz */
       tick = 5;
-      fprintf(stderr, "Assuming 2.8 MHz ...\n");
+      log_message("Assuming 2.8 MHz ...", "");
     }
   }
 }
