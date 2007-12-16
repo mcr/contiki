@@ -125,9 +125,6 @@ read(void)
 		  simple_cc2420_time_for_transmission,
 		  simple_cc2420_time_of_arrival);
     if(simple_cc2420_authority_level_of_sender + 1 != authority_level) {
-      printf("New authority %d, previous %d\n",
-	     simple_cc2420_authority_level_of_sender + 1,
-	     authority_level);
       authority_level = simple_cc2420_authority_level_of_sender + 1;
     }
 
