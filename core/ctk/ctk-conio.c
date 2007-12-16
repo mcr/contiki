@@ -35,7 +35,6 @@
 
 #include <string.h>
 #include <ctype.h>
-#include "lib/libconio.h"
 
 #include "contiki.h"
 
@@ -101,12 +100,14 @@ draw_widget(struct ctk_widget *w,
       (void)textcolor(WIDGETCOLOR_FOCUS);
       wfocus = 1;
     }
+#if CTK_CONF_WINDOWS
   } else if(focus & CTK_FOCUS_DIALOG) {
     (void)textcolor(WIDGETCOLOR_DIALOG);
     if(focus & CTK_FOCUS_WIDGET) {
       (void)textcolor(WIDGETCOLOR_FOCUS);
       wfocus = 1;
     }
+#endif /* CTK_CONF_WINDOWS */
   } else {
     (void)textcolor(WIDGETCOLOR);
   }
