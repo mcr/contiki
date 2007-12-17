@@ -60,10 +60,8 @@
 #ifndef __RUDOLPH1_H__
 #define __RUDOLPH1_H__
 
-#include "net/rime.h"
 #include "net/rime/trickle.h"
-#include "net/rime/uabc.h"
-#include "contiki-net.h"
+#include "net/rime/ipolite.h"
 
 struct rudolph1_conn;
 

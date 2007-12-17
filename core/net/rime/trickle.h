@@ -58,7 +58,6 @@
 #ifndef __TRICKLE_H__
 #define __TRICKLE_H__
 
-#include "net/rime.h"
 #include "net/rime/nf.h"
 
 struct trickle_conn;

@@ -55,6 +55,13 @@
 #include "net/rime/sibc.h"
 #include "net/rime/mh.h"
 #include "net/rime/rmh.h"
+#include "net/rime/polite.h"
+#include "net/rime/ipolite.h"
+#include "net/rime/nf.h"
+#include "net/rime/route-discovery.h"
+#include "net/rime/neighbor-discovery.h"
+#include "net/rime/collect.h"
+#include "net/rime/mesh.h"
 #include "net/mac/mac.h"
 /**
  * \brief      Initialize Rime

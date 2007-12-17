@@ -59,7 +59,9 @@
 #ifndef __IPOLITE_H__
 #define __IPOLITE_H__
 
-#include "net/rime.h"
+#include "net/rime/ibc.h"
+#include "net/rime/ctimer.h"
+#include "net/rime/queuebuf.h"
 
 struct ipolite_conn;
 

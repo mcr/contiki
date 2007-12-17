@@ -60,10 +60,7 @@
 #ifndef __RUDOLPH2_H__
 #define __RUDOLPH2_H__
 
-#include "net/rime.h"
-#include "net/rime/sabc.h"
 #include "net/rime/polite.h"
-#include "contiki-net.h"
 
 struct rudolph2_conn;
 

@@ -59,7 +59,9 @@
 #ifndef __POLITE_H__
 #define __POLITE_H__
 
-#include "net/rime.h"
+#include "net/rime/abc.h"
+#include "net/rime/queuebuf.h"
+#include "net/rime/ctimer.h"
 
 struct polite_conn;
 

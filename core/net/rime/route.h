@@ -52,8 +52,7 @@
 #ifndef __ROUTE_H__
 #define __ROUTE_H__
 
-#include "contiki-net.h"
-#include "net/rime.h"
+#include "net/rime/rimeaddr.h"
 
 struct route_entry {
   struct route_entry *next;

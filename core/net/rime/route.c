@@ -45,6 +45,9 @@
 
 #include <stdio.h>
 
+#include "lib/list.h"
+#include "lib/memb.h"
+#include "net/rime/ctimer.h"
 #include "net/rime/route.h"
 
 #define NUM_RT_ENTRIES 8

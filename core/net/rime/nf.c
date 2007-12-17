@@ -44,7 +44,6 @@
  */
 
 #include "net/rime/nf.h"
-#include "net/rime.h"
 #include "lib/rand.h"
 #include <string.h>
 

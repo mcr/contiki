@@ -58,7 +58,7 @@
 #ifndef __ROUTE_DISCOVERY_H__
 #define __ROUTE_DISCOVERY_H__
 
-#include "net/rime.h"
+#include "net/rime/uc.h"
 #include "net/rime/nf.h"
 
 struct route_discovery_conn;

@@ -62,7 +62,7 @@
 #ifndef __MESH_H__
 #define __MESH_H__
 
-#include "net/rime.h"
+#include "net/rime/queuebuf.h"
 #include "net/rime/mh.h"
 #include "net/rime/route-discovery.h"
 
