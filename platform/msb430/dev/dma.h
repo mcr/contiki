@@ -37,7 +37,7 @@
 #define DMA_LINES	2
 
 void dma_init(void);
-int dma_subscribe(int, struct process *);
+int dma_subscribe(int, void (*)(void));
 void dma_transfer(unsigned char *, unsigned char *, unsigned);
 
 extern process_event_t dma_event;
