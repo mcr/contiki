@@ -85,6 +85,20 @@ PROCINIT(&sensors_process, &etimer_process, &tcpip_process,
 	 &uip_fw_process);
 
 /*---------------------------------------------------------------------------*/
+#ifdef __CYGWIN__
+static void
+remove_route(int s)
+{
+  char buf[1024];
+
+  snprintf(buf, sizeof(buf), "route delete %d.%d.%d.%d",
+	                     uip_ipaddr_to_quad(&meshif.ipaddr));
+  printf("%s\n", buf);
+  system(buf);
+  _exit(0);
+}
+#endif
+/*---------------------------------------------------------------------------*/
 void
 contiki_main(int flag)
 {
@@ -107,6 +121,17 @@ contiki_main(int flag)
   if(flag == 1) {
 #ifdef __CYGWIN__
     process_start(&wpcap_process, NULL);
+    {
+      char buf[1024];
+
+      snprintf(buf, sizeof(buf), "route add %d.%d.%d.%d mask %d.%d.%d.%d %d.%d.%d.%d",
+	                         uip_ipaddr_to_quad(&meshif.ipaddr),
+				 uip_ipaddr_to_quad(&meshif.netmask),
+				 uip_ipaddr_to_quad(&uip_hostaddr));
+      printf("%s\n", buf);
+      system(buf);
+      signal(SIGTERM, remove_route);
+    }
 #else
     process_start(&tapdev_process, NULL);
 #endif
