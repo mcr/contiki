@@ -45,7 +45,8 @@ init_net(void)
 
   tr1001_init();
   rime_init(nullmac_init(&tr1001_driver));
-  rimeaddr.u16[0] = node_id;
+  rimeaddr.u8[0] = node_id & 0xff;
+  rimeaddr.u8[1] = node_id >> 8;
   rimeaddr_set_node_addr(&rimeaddr);
 
   rs232_set_input(serial_input_byte);
