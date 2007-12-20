@@ -44,6 +44,7 @@
 #include "net/ethernet-drv.h"
 
 /*-----------------------------------------------------------------------------------*/
+#if LOG_CONF_ENABLED
 static char *
 ipaddrtoa(uip_ipaddr_t *ipaddr, char *buffer)
 {
@@ -58,6 +59,7 @@ ipaddrtoa(uip_ipaddr_t *ipaddr, char *buffer)
 
   return buffer + 1;
 }
+#endif /* LOG_CONF_ENABLED */
 /*-----------------------------------------------------------------------------------*/
 struct ethernet_config *
 config_read(char *filename)
