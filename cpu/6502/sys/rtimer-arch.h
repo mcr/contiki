@@ -35,5 +35,6 @@
 #define __RTIMER_ARCH_H__
 
 #define RTIMER_ARCH_SECOND 0
+#define rtimer_arch_now() (0)
 
 #endif /* __RTIMER_ARCH_H__ */
