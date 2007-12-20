@@ -56,7 +56,11 @@
 #define CTK_CONF_ICONS            0
 #define CTK_CONF_MENUS            0
 #define CTK_CONF_SCREENSAVER      0
-#define CTK_CONF_MOUSE_SUPPORT    0
+#define CTK_CONF_MOUSE_SUPPORT    1
+
+#define MOUSE_CONF_DRIVER  "a2e.stdmou.mou"
+#define MOUSE_CONF_XTOC(x) ((x) * 2 / 7)
+#define MOUSE_CONF_YTOC(y) ((y) / 8)
 
 #define WEBSERVER_CONF_CGI_CONNS UIP_CONNS
 #define WEBSERVER_CONF_CFS_CONNS 3
