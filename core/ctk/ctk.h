@@ -528,11 +528,6 @@ struct ctk_window {
 				  characters. */
     y;                         /**< The y coordinate of the window, in
 				  characters. */
-#else /* CTK_CONF_WINDOWS */
-  signed char x,               /**< The x coordinate of the window, in
-				  characters. */
-    y;                         /**< The y coordinate of the window, in
-				  characters. */
 #endif /* CTK_CONF_WINDOWS */
   unsigned char w,             /**< The width of the window, excluding
 				  window borders. */
