@@ -38,6 +38,7 @@ CONTIKI_SOURCEFILES += strcasecmp.c mtarch.c uip_arch.c \
 CONTIKI_ASMFILES += uip_arch-asm.S crt0.S 
 #crt-prg.S
 
+CONTIKI_ASMOBJECTFILES = ${addprefix $(OBJECTDIR)/,$(CONTIKI_ASMFILES:.S=.o)}
 
 CONTIKI_CASMOBJECTFILES = ${addprefix $(OBJECTDIR)/,$(CONTIKI_CASMFILES:.cS=.o)}
 
