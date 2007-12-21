@@ -56,7 +56,7 @@ struct {
 } *module;
 
 /*---------------------------------------------------------------------------*/
-void
+void CC_FASTCALL
 ethernet_init(struct ethernet_config *config)
 {
   static const char signature[4] = {0x65, 0x74, 0x68, 0x01};
