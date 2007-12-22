@@ -321,7 +321,7 @@
 /**
  * The size of the advertised receiver's window.
  *
- * Should be set low (i.e., to the size of the uip_buf buffer) is the
+ * Should be set low (i.e., to the size of the uip_buf buffer) if the
  * application is slow to process incoming data, or high (32768 bytes)
  * if the application processes data quickly.
  *
