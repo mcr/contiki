@@ -43,7 +43,7 @@
 int
 cfs_open(const char *n, int f)
 {
-  return open(n, f == CFS_READ? O_RDONLY: O_CREAT|O_RDWR);
+  return open(n, f == CFS_READ? O_RDONLY: O_CREAT|O_TRUNC|O_RDWR);
 }
 /*---------------------------------------------------------------------------*/
 void
