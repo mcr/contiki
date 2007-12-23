@@ -384,7 +384,7 @@
  * The size of the uIP packet buffer.
  *
  * The uIP packet buffer should not be smaller than 60 bytes, and does
- * not need to be larger than 1500 bytes. Lower size results in lower
+ * not need to be larger than 1514 bytes. Lower size results in lower
  * TCP throughput, larger size results in higher TCP throughput.
  *
  * \hideinitializer
