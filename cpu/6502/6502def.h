@@ -60,6 +60,18 @@ typedef unsigned short uip_stats_t;
 #define UIP_ARCH_ADD32  1
 #define UIP_ARCH_CHKSUM 1
 
+#if MTU_SIZE
+#define UIP_CONF_BUFFER_SIZE (UIP_LLH_LEN + MTU_SIZE)
+#else /* MTU_SIZE */
+#define UIP_CONF_BUFFER_SIZE (UIP_LLH_LEN + 1500)
+#endif /* MTU_SIZE */
+
+#if WITH_BOOST
+#define UIP_CONF_TCP_SPLIT 1
+#else /* WITH_BOOST */
+#define UIP_CONF_TCP_SPLIT 0
+#endif /* WITH_BOOST */
+
 #if WITH_CLIENT
 #define UIP_CONF_ACTIVE_OPEN 1
 #else /* WITH_CLIENT */
