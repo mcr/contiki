@@ -128,6 +128,7 @@ main(void)
 
     memcpy((void*)0x0340, mouse_sprite, sizeof(mouse_sprite));
     *(u8_t*)0x07F8 = 0x0340 / 64;
+    VIC.spr0_color = COLOR_WHITE;
   }
 #endif /* WITH_GUI && WITH_MOUSE */
 
