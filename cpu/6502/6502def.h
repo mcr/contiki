@@ -62,6 +62,12 @@ typedef unsigned short uip_stats_t;
 #define UIP_ARCH_ADD32  1
 #define UIP_ARCH_CHKSUM 1
 
+#if WITH_LOGGING
+#define LOG_CONF_ENABLED 1
+#else /* WITH_LOGGING */
+#define LOG_CONF_ENABLED 0
+#endif /* WITH_LOGGING */
+
 #if MTU_SIZE
 #define UIP_CONF_BUFFER_SIZE (UIP_LLH_LEN + MTU_SIZE)
 #else /* MTU_SIZE */
