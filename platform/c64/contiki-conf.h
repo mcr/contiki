@@ -38,8 +38,6 @@
 
 #include "6502def.h"
 
-#define LOG_CONF_ENABLED 1
-
 #define UIP_CONF_LOGGING 0
 
 #define CTK_CONF_MENU_KEY         CH_F1
