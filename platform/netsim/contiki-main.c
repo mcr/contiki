@@ -161,7 +161,6 @@ contiki_main(int flag)
     select(0, NULL, NULL, NULL, &tv);
     etimer_request_poll();
   }
-
 }
 /*---------------------------------------------------------------------------*/
 process_event_t codeprop_event_quit;
