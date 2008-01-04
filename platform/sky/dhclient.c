@@ -228,15 +228,13 @@ PROCESS_THREAD(dhclient_process, ev, data)
 
 static char is_configured;
 
-#define ip2quad(p) uip_ipaddr1(p),uip_ipaddr2(p),uip_ipaddr3(p),uip_ipaddr4(p)
-
 void
 dhcpc_configured(const struct dhcpc_state *s)
 {
   if(is_configured)
-    printf("dhcp reconfigure %d.%d.%d.%d\n", ip2quad(&s->ipaddr));
+    printf("dhcp reconfigure %d.%d.%d.%d\n", uip_ipaddr_to_quad(&s->ipaddr));
   else {
-    printf("dhcpc_configured %d.%d.%d.%d\n", ip2quad(&s->ipaddr));
+    printf("dhcpc_configured %d.%d.%d.%d\n", uip_ipaddr_to_quad(&s->ipaddr));
     leds_toggle(LEDS_GREEN);
     is_configured = 1;
     process_start(&uaodv_process, NULL);
