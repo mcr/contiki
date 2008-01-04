@@ -286,10 +286,7 @@ senddata(struct ftp_connection *c)
     break;
   case STATE_SEND_PORT:
     len = sprintf(uip_appdata, "PORT %d,%d,%d,%d,%d,%d\n",
-		  uip_ipaddr1(&uip_hostaddr),
-		  uip_ipaddr2(&uip_hostaddr),
-		  uip_ipaddr3(&uip_hostaddr),
-		  uip_ipaddr4(&uip_hostaddr),
+		  uip_ipaddr_to_quad(&uip_hostaddr),
 		  (c->dataconn.port) >> 8,
 		  (c->dataconn.port) & 0xff);
     uip_send(uip_appdata, len);
