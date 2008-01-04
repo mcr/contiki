@@ -43,9 +43,9 @@
 #include <stdlib.h>
 #ifdef __CYGWIN__
 #include <alloca.h>
-#else
+#else /* __CYGWIN__ */
 #include <malloc.h>
-#endif
+#endif /* __CYGWIN__ */
 
 /* Avoid 'conflicting types' errors. */
 #define htonl
@@ -58,7 +58,7 @@
 
 #ifdef __CYGWIN__
 __attribute__((dllimport)) extern char **__argv[];
-#endif
+#endif /* __CYGWIN__ */
 
 struct pcap;
 
@@ -203,9 +203,9 @@ wpcap_init(void)
 
 #ifdef __CYGWIN__
   addr.s_addr = inet_addr((*__argv)[1]);
-#else
+#else /* __CYGWIN__ */
   addr.s_addr = inet_addr(__argv[1]);
-#endif
+#endif /* __CYGWIN__ */
   if(addr.s_addr == INADDR_NONE) {
     error_exit("usage: <program> <ip addr of ethernet card to share>\n");
   }
