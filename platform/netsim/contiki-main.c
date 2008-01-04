@@ -137,7 +137,7 @@ contiki_main(int flag)
 #endif /* __CYGWIN__ */
     uip_fw_register(&meshif);
     uip_fw_default(&extif);
-    printf("uip_hostaddr %02x%02x\n", uip_hostaddr.u16[0], uip_hostaddr.u16[1]);
+    printf("uip_hostaddr %d.%d.%d.%d\n", uip_ipaddr_to_quad(&uip_hostaddr));
   } else {
     uip_fw_default(&meshif);
   }
