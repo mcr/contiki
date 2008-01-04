@@ -43,15 +43,15 @@
 #include "net/uip.h"
 #ifdef __CYGWIN__
 #include "net/wpcap-drv.h"
-#else
+#else /* __CYGWIN__ */
 #include "net/tapdev-drv.h"
-#endif
+#endif /* __CYGWIN__ */
 
 #ifdef __CYGWIN__
 PROCINIT(&etimer_process, &tcpip_process, &wpcap_process);
-#else
+#else /* __CYGWIN__ */
 PROCINIT(&etimer_process, &tcpip_process, &tapdev_process);
-#endif
+#endif /* __CYGWIN__ */
 
 /*---------------------------------------------------------------------------*/
 int
@@ -65,7 +65,7 @@ main(void)
   
   autostart_start((struct process **)autostart_processes);
   
-  uip_ipaddr(&addr, 192,168,2,2);
+  uip_ipaddr(&addr, 10,10,0,11);
   printf("IP Address:  %d.%d.%d.%d\n", uip_ipaddr_to_quad(&addr));
   uip_sethostaddr(&addr);
 
