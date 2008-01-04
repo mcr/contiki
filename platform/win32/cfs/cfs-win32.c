@@ -41,13 +41,13 @@
 #include <fcntl.h>
 #ifdef __CYGWIN__
 #include <unistd.h>
-#else
+#else /* __CYGWIN__ */
 #define open   _open
 #define close  _close
 #define read   _read
 #define write  _write
 #define lseek  _lseek
-#endif
+#endif /* __CYGWIN__ */
 
 #include "contiki.h"
 
