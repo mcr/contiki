@@ -87,7 +87,7 @@ send(void *ptr)
     c->q = NULL;
     ibc_send(&c->c);
     if(c->cb->sent) {
-	c->cb->sent(c);
+      c->cb->sent(c);
     }
   }
 }
@@ -123,9 +123,13 @@ ipolite_send(struct ipolite_conn *c, clock_time_t interval, u8_t hdrsize)
   c->hdrsize = hdrsize;
   c->q = queuebuf_new_from_rimebuf();
   if(c->q != NULL) {
-    ctimer_set(&c->t,
-	       interval / 2 + (random_rand() % (interval / 2)),
-	       send, c);
+    if(interval == 0) {
+      ctimer_set(&c->t, 0, send, c);
+    } else {
+      ctimer_set(&c->t,
+		 interval / 2 + (random_rand() % (interval / 2)),
+		 send, c);
+    }
     return 1;
   }
   return 0;
