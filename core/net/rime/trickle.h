@@ -77,7 +77,7 @@ struct trickle_conn {
 };
 
 void trickle_open(struct trickle_conn *c, clock_time_t interval,
-		  u16_t channel, const struct trickle_callbacks *cb);
+		  uint16_t channel, const struct trickle_callbacks *cb);
 void trickle_close(struct trickle_conn *c);
 
 void trickle_send(struct trickle_conn *c);
