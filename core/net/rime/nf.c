@@ -169,7 +169,7 @@ nf_send(struct nf_conn *c, u8_t seqno)
     PRINTF("%d.%d: nf sending '%s'\n",
 	   rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1],
 	   (char *)rimebuf_dataptr());
-    return send(c);
+    return ipolite_send(&c->c, 0, 4);
   }
   return 0;
 }
