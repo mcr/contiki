@@ -79,7 +79,7 @@ struct collect_conn {
   u8_t seqno;
 };
 
-void collect_open(struct collect_conn *c, u16_t channels,
+void collect_open(struct collect_conn *c, uint16_t channels,
 	       const struct collect_callbacks *callbacks);
 void collect_close(struct collect_conn *c);
 
