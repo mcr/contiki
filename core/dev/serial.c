@@ -33,11 +33,10 @@
 #include "serial.h"
 #include <string.h> /* for memcpy() */
 
-
 #ifdef SERIAL_CONF_BUFSIZE
 #define BUFSIZE SERIAL_CONF_BUFSIZE
 #else /* SERIAL_CONF_BUFSIZE */
-#define BUFSIZE 40
+#define BUFSIZE 80
 #endif /* SERIAL_CONF_BUFSIZE */
 
 #define IGNORE_CHAR(c) (c == 0x0d)
@@ -50,6 +49,7 @@ static volatile char buffer_full = 0;
 PROCESS(serial_process, "Serial driver");
 
 process_event_t serial_event_message;
+
 
 /*---------------------------------------------------------------------------*/
 int
