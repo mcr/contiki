@@ -55,12 +55,11 @@ interrupt(TIMERA1_VECTOR) timera1 (void) {
   ENERGEST_ON(ENERGEST_TYPE_IRQ);
   if(TAIV == 2) {
     /* Make sure interrupt time is future */
-    do
-    {
+    do {
       TACCR1 += INTERVAL;
       ++count;
-    }
-    while ((TACCR1 - TAR) > INTERVAL);
+    } while((TACCR1 - TAR) > INTERVAL);
+
     last_tar = TAR;
 
     if(etimer_pending()
