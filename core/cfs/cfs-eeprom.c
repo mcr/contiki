@@ -57,7 +57,17 @@ cfs_open(const char *n, int f)
 {
   if(file.flag == FLAG_FILE_CLOSED) {
     file.flag = FLAG_FILE_OPEN;
-    file.fileptr = 0;
+    if(f & CFS_READ) {
+      file.fileptr = 0;
+    }
+    if(f & CFS_WRITE){
+      if(f & CFS_APPEND) {
+	file.fileptr = file.filesize;
+      } else {
+	file.fileptr = 0;
+	file.filesize = 0;
+      }
+    }
     return 1;
   } else {
     return -1;

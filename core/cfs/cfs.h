@@ -115,7 +115,7 @@ struct cfs_dirent {
 /**
  * \brief      Open a file.
  * \param name The name of the file.
- * \param flags CFS_READ, or CFS_WRITE, or both.
+ * \param flags CFS_READ, or CFS_WRITE/CFS_APPEND, or both.
  * \return     A file descriptor, if the file could be opened, or -1 if
  *             the file could not be opened.
  *

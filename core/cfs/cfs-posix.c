@@ -43,7 +43,23 @@
 int
 cfs_open(const char *n, int f)
 {
-  return open(n, f == CFS_READ? O_RDONLY: O_CREAT|O_TRUNC|O_RDWR);
+  int s = 0;
+  if(f == CFS_READ) {
+    s = O_RDONLY;
+  } else if(f & CFS_WRITE) {
+    s = O_CREAT;
+    if(f & CFS_READ) {
+      s |= O_RDWR;
+    } else {
+      s |= O_WRONLY;
+    }
+    if(f & CFS_APPEND) {
+      s |= O_APPEND;
+    } else {
+      s |= O_TRUNC;
+    }
+  }
+  return open(n, s);
 }
 /*---------------------------------------------------------------------------*/
 void
