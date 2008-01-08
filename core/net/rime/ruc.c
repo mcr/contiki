@@ -73,7 +73,7 @@ sent_by_suc(struct suc_conn *suc)
 {
   struct ruc_conn *c = (struct ruc_conn *)suc;
 
-  if(c->rxmit) {
+  if(c->rxmit != 0) {
     RIMESTATS_ADD(rexmit);
     PRINTF("%d.%d: ruc: packet %u resent %u\n",
 	   rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1],
@@ -84,7 +84,9 @@ sent_by_suc(struct suc_conn *suc)
   if(c->rxmit >= c->max_rxmit) {
     RIMESTATS_ADD(timedout);
     suc_cancel(&c->c);
-    c->u->timedout(c, suc_receiver(&c->c), c->rxmit);
+    if(c->u->timedout) {
+      c->u->timedout(c, suc_receiver(&c->c), c->rxmit);
+    }
     PRINTF("%d.%d: ruc: packet %d timed out\n",
 	   rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1],
 	   c->sndnxt);
