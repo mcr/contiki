@@ -347,6 +347,7 @@ public class EventListener extends VisPlugin {
             JCheckBox checkBox = (JCheckBox) comp;
             if (checkBox.getText().equals(element.getText())) {
               checkBox.setSelected(true);
+              generalCheckBoxListener.actionPerformed(new ActionEvent(checkBox, ActionEvent.ACTION_PERFORMED, ""));
             }
           }
         }
@@ -359,6 +360,7 @@ public class EventListener extends VisPlugin {
             JCheckBox checkBox = (JCheckBox) comp;
             if (checkBox.getText().equals(element.getText())) {
               checkBox.setSelected(true);
+              interfaceCheckBoxListener.actionPerformed(new ActionEvent(checkBox, ActionEvent.ACTION_PERFORMED, ""));
             }
           }
         }
