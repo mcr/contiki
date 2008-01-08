@@ -68,13 +68,13 @@ struct data_hdr {
 
 /*---------------------------------------------------------------------------*/
 static void
-data_packet_received(struct mh_conn *mh, rimeaddr_t *from)
+data_packet_received(struct mh_conn *mh, rimeaddr_t *from, u8_t hops)
 {
   struct mesh_conn *c = (struct mesh_conn *)
     ((char *)mh - offsetof(struct mesh_conn, mh));
 
   if(c->cb->recv) {
-    c->cb->recv(c, from);
+    c->cb->recv(c, from, hops);
   }
 }
 /*---------------------------------------------------------------------------*/
@@ -82,9 +82,6 @@ static rimeaddr_t *
 data_packet_forward(struct mh_conn *mh, rimeaddr_t *originator,
 		    rimeaddr_t *dest, rimeaddr_t *prevhop, u8_t hops)
 {
-  struct mesh_conn *c = (struct mesh_conn *)
-    ((char *)mh - offsetof(struct mesh_conn, mh));
-
   struct route_entry *rt;
 
   rt = route_lookup(dest);

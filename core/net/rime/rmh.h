@@ -67,7 +67,7 @@
 struct rmh_conn;
 
 struct rmh_callbacks {
-  void (* recv)(struct rmh_conn *ptr, rimeaddr_t *sender);
+  void (* recv)(struct rmh_conn *ptr, rimeaddr_t *sender, u8_t hops);
   rimeaddr_t *(* forward)(struct rmh_conn *ptr,
 			  rimeaddr_t *originator,
 			  rimeaddr_t *dest,

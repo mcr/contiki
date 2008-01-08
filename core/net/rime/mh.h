@@ -67,7 +67,7 @@
 struct mh_conn;
 
 struct mh_callbacks {
-  void (* recv)(struct mh_conn *ptr, rimeaddr_t *sender);
+  void (* recv)(struct mh_conn *ptr, rimeaddr_t *sender, u8_t hops);
   rimeaddr_t *(* forward)(struct mh_conn *ptr,
 			  rimeaddr_t *originator,
 			  rimeaddr_t *dest,
