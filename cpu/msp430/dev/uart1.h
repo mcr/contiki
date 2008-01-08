@@ -45,7 +45,7 @@
 
 #define UART1_BAUD2UBR(baud) ((MSP430_CPU_SPEED)/(baud))
 
-void uart1_set_input(void (*input)(unsigned char c));
+void uart1_set_input(int (*input)(unsigned char c));
 void uart1_writeb(unsigned char c);
 void uart1_init(unsigned long ubr);
 
