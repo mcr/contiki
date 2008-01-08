@@ -71,6 +71,9 @@ void route_remove(struct route_entry *e);
 void route_flush_all(void);
 void route_set_lifetime(int seconds);
 
+int route_num(void);
+struct route_entry *route_get(int num);
+
 #endif /* __ROUTE_H__ */
 /** @} */
 /** @} */
