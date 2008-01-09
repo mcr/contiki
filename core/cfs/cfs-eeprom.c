@@ -41,6 +41,7 @@ struct filestate {
 #define FLAG_FILE_CLOSED 0
 #define FLAG_FILE_OPEN   1
   eeprom_addr_t fileptr;
+  eeprom_addr_t filesize;
 };
 
 static struct filestate file;
