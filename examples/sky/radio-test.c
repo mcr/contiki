@@ -38,9 +38,9 @@
  * Simple application to indicate connectivity between two nodes:
  *
  * - Red led indicates a packet sent via radio (one packet sent each second)
- * - Yellow led indicates that this node can hear the other node but not
+ * - Green led indicates that this node can hear the other node but not
  *   necessary vice versa (unidirectional communication).
- * - Green led indicates that both nodes can communicate with each
+ * - Blue led indicates that both nodes can communicate with each
  *   other (bidirectional communication)
  */
 
@@ -161,7 +161,7 @@ PROCESS_THREAD(radio_test_process, ev, data)
 	leds_blink();
       }
       simple_cc2420_set_txpower(txpower);
-      printf("Set txpower to %u\n", txpower);
+      printf("txpower set to %u\n", txpower);
     }
   }
   PROCESS_END();
