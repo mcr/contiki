@@ -61,6 +61,7 @@
 #define __NEIGHBOR_DISCOVERY_H__
 
 #include "net/rime/ibc.h"
+#include "net/rime/ipolite.h"
 
 struct neighbor_discovery_conn;
 
@@ -70,7 +71,8 @@ struct neighbor_discovery_callbacks {
 };
 
 struct neighbor_discovery_conn {
-  struct ibc_conn c;
+  /*  struct ibc_conn c;*/
+  struct ipolite_conn c;
   const struct neighbor_discovery_callbacks *u;
   struct ctimer t;
   uint16_t val;
