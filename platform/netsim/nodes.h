@@ -63,4 +63,6 @@ struct nodes_node {
 
 #define NODES_PORTBASE 5000
 
+extern int nodes_base_node_port;
+
 #endif /* __NODES_H__ */

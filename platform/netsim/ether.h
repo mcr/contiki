@@ -51,6 +51,7 @@ void ether_send_done(void);
 u8_t ether_send(char *data, int len);
 void ether_set_leds(int leds);
 void ether_set_text(char *text);
+void ether_send_serial(char *text);
 
 
 void ether_poll(void);

@@ -44,6 +44,7 @@ static int numnodes;
 
 static struct nodes_node nodes[2000];
 
+int nodes_base_node_port = 0;
 /*---------------------------------------------------------------------------*/
 void
 nodes_init(void)

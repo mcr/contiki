@@ -247,8 +247,7 @@ PROCESS_THREAD(ethernode_process, ev, data)
   PROCESS_BEGIN();
 
   while(1) {
-    process_poll(&ethernode_process);
-    PROCESS_WAIT_EVENT();
+    PROCESS_PAUSE();
 
     if(ethernode_poll()) {
       if(receiver_callback) {
