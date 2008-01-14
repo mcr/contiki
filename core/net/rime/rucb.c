@@ -71,7 +71,8 @@ static void
 acked(struct ruc_conn *ruc, rimeaddr_t *to, u8_t retransmissions)
 {
   struct rucb_conn *c = (struct rucb_conn *)ruc;
-  PRINTF("acked\n");
+  PRINTF("%d.%d: rucb acked\n",
+	 rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1]);
   c->chunk++;
   if(read_data(c) > 0) {
     ruc_send(&c->c, &c->receiver, MAX_TRANSMISSIONS);
@@ -82,7 +83,8 @@ static void
 timedout(struct ruc_conn *ruc, rimeaddr_t *to, u8_t retransmissions)
 {
   struct rucb_conn *c = (struct rucb_conn *)ruc;
-  PRINTF("timedout\n");
+  PRINTF("%d.%d: rucb timedout\n",
+	 rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1]);
   if(c->u->timedout) {
     c->u->timedout(c);
   }
