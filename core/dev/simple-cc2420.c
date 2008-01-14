@@ -56,7 +56,7 @@
 #define CRC_LEN 2
 
 #if SIMPLE_CC2420_CONF_TIMESTAMPS
-#include "sys/timesynch.h"
+#include "net/rime/timesynch.h"
 #define TIMESTAMP_LEN 3
 #else /* SIMPLE_CC2420_CONF_TIMESTAMPS */
 #define TIMESTAMP_LEN 0

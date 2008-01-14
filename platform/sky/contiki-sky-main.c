@@ -52,7 +52,7 @@
 #include "net/mac/xmac.h"
 #include "net/mac/nullmac.h"
 
-#include "sys/timesynch.h"
+#include "net/rime/timesynch.h"
 
 #include "node-id.h"
 
