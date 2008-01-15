@@ -600,7 +600,7 @@ simple_cc2420_set_txpower(u8_t power)
 }
 /*---------------------------------------------------------------------------*/
 int
-simple_cc2420_get_txpower()
+simple_cc2420_get_txpower(void)
 {
   return (int)(getreg(CC2420_TXCTRL) & 0x001f);
 }

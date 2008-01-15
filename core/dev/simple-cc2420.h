@@ -66,6 +66,7 @@ extern const struct radio_driver simple_cc2420_driver;
  * \param power Between 1 and 31.
  */
 void simple_cc2420_set_txpower(u8_t power);
+int simple_cc2420_get_txpower(void);
 #define SIMPLE_CC2420_TXPOWER_MAX  31
 #define SIMPLE_CC2420_TXPOWER_MIN   0
 
