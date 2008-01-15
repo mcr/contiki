@@ -327,10 +327,6 @@ simple_cc2420_send(const void *payload, unsigned short payload_len)
 
       ENERGEST_OFF(ENERGEST_TYPE_LISTEN);
       ENERGEST_ON(ENERGEST_TYPE_TRANSMIT);
-      /* add time for power level also */
-#ifdef ENERGEST_CONF_LEVELDEVICE_LEVELS 
-      ENERGEST_ON_LEVEL(ENERGEST_TYPE_TRANSMIT,simple_cc2420_get_txpower());
-#endif
       do {
 	spiStatusByte = status();
       } while(spiStatusByte & BV(CC2420_TX_ACTIVE));
