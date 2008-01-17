@@ -283,7 +283,7 @@ simple_cc2420_send(const void *payload, unsigned short payload_len)
   /* Wait for previous transmission to finish and RSSI. */
   do {
     spiStatusByte = status();
-  } while(spiStatusByte & BV(CC2420_TX_ACTIVE) &&
+  } while(spiStatusByte & BV(CC2420_TX_ACTIVE) ||
 	  !(spiStatusByte & BV(CC2420_RSSI_VALID)));
 
   /* Write packet to TX FIFO. */
