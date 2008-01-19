@@ -284,9 +284,6 @@ main(int argc, char **argv)
       watchdog_start();
       ENERGEST_OFF(ENERGEST_TYPE_LPM);
       ENERGEST_ON(ENERGEST_TYPE_CPU);
-#if PROFILE_CONF_ON
-      profile_clear_timestamps();
-#endif /* PROFILE_CONF_ON */
     }
   }
 
