@@ -251,10 +251,13 @@ xmem_erase(long size, off_t addr)
     return -1;
   }
 
+  watchdog_stop();
+
   for (; addr < end; addr += XMEM_ERASE_UNIT_SIZE) {
-    watchdog_periodic();
     erase_sector(addr);
   }
+
+  watchdog_start();
 
   return size;
 }
