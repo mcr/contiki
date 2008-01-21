@@ -103,6 +103,8 @@ extern energest_t energest_leveldevice_current_leveltime[ENERGEST_CONF_LEVELDEVI
 #define ENERGEST_OFF_LEVEL(type,level) do { } while(0)
 #endif /* ENERGEST_CONF_ON */
 
+#define ENERGEST_SECOND RTIMER_ARCH_SECOND
+
 unsigned long energest_arch_current_estimate(void);
 unsigned short energest_arch_now(void);
 
