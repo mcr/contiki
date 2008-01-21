@@ -33,6 +33,7 @@
 #include <io.h>
 #include "dev/watchdog.h"
 
+static int stopped = 0;
 /*---------------------------------------------------------------------------*/
 void
 watchdog_init(void)
@@ -48,6 +49,7 @@ watchdog_start(void)
   /* We setup the watchdog to reset the device after one second,
      unless watchdog_periodic() is called. */
   WDTCTL = WDTPW | WDTCNTCL | WDT_ARST_1000;
+  stopped = 0;
 }
 /*---------------------------------------------------------------------------*/
 void
@@ -55,13 +57,16 @@ watchdog_periodic(void)
 {
   /* This function is called periodically to restart the watchdog
      timer. */
-  WDTCTL = (WDTCTL & 0xff) | WDTPW | WDTCNTCL;
+  if(!stopped) {
+    WDTCTL = (WDTCTL & 0xff) | WDTPW | WDTCNTCL;
+  }
 }
 /*---------------------------------------------------------------------------*/
 void
 watchdog_stop(void)
 {
   WDTCTL = WDTPW | WDTHOLD;
+  stopped = 1;
 }
 /*---------------------------------------------------------------------------*/
 void
