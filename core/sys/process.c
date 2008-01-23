@@ -49,8 +49,6 @@
 #include "sys/process.h"
 #include "sys/arg.h"
 
-PROCESS_NAME(simple_cc2420_process);
-
 /*
  * Pointer to the currently running process structure.
  */
