@@ -80,6 +80,12 @@ timesynch_time_to_rtimer(rtimer_clock_t synched_time)
 }
 /*---------------------------------------------------------------------------*/
 rtimer_clock_t
+timesynch_rtimer_to_time(rtimer_clock_t rtimer_time)
+{
+  return rtimer_time + offset;
+}
+/*---------------------------------------------------------------------------*/
+rtimer_clock_t
 timesynch_offset(void)
 {
   return offset;
