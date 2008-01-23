@@ -105,11 +105,10 @@ abc_input_packet(void)
 
   hdr = rimebuf_dataptr();
 
-  PRINTF("%d.%d: abc: abc_input_packet on channel %d\n",
-	 rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1],
-	 hdr->channel);
-  
   if(rimebuf_hdrreduce(sizeof(struct abc_hdr))) {
+    PRINTF("%d.%d: abc: abc_input_packet on channel %d\n",
+	   rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1],
+	   hdr->channel);
 
     for(c = list_head(channels); c != NULL; c = c->next) {
       if(c->channel == hdr->channel) {

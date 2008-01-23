@@ -69,8 +69,9 @@ recv_from_abc(struct abc_conn *bc)
   rimeaddr_copy(&sender, &hdr->sender);
   
   rimebuf_hdrreduce(sizeof(struct ibc_hdr));
-  PRINTF("%d.%d: ibc: recv_from_bc\n",
-	 rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1]);
+  PRINTF("%d.%d: ibc: from %d.%d\n",
+	 rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1],
+	 sender.u8[0], sender.u8[1]);
   c->u->recv(c, &sender);
 }
 /*---------------------------------------------------------------------------*/
