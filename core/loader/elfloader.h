@@ -151,7 +151,7 @@ int elfloader_load(int fd);
 /**
  * A pointer to the processes loaded with elfloader_load().
  */
-extern struct process **elfloader_autostart_processes;
+extern struct process * const * elfloader_autostart_processes;
 
 /**
  * If elfloader_load() could not find a specific symbol, it is copied

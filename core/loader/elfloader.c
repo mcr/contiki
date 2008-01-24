@@ -133,7 +133,7 @@ struct relevant_section {
 
 char elfloader_unknown[30];	/* Name that caused link error. */
 
-struct process **elfloader_autostart_processes;
+struct process * const * elfloader_autostart_processes;
 
 static struct relevant_section bss, data, rodata, text;
 
