@@ -94,7 +94,7 @@ cfs_read(int f, void *buf, unsigned int len)
 }
 /*---------------------------------------------------------------------------*/
 int
-cfs_write(int f, void *buf, unsigned int len)
+cfs_write(int f, const void *buf, unsigned int len)
 {
   if(f == 1) {
     eeprom_write(CFS_EEPROM_OFFSET + file.fileptr, buf, len);

@@ -106,7 +106,7 @@ cfs_read(int f, void *buf, unsigned int len)
 }
 /*---------------------------------------------------------------------------*/
 int
-cfs_write(int f, void *buf, unsigned int len)
+cfs_write(int f, const void *buf, unsigned int len)
 {
   printf("write file.fileptr %d len %d filesize %d\n",
 	 file.fileptr, len, file.filesize);

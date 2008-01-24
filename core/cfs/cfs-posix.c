@@ -75,7 +75,7 @@ cfs_read(int f, void *b, unsigned int l)
 }
 /*---------------------------------------------------------------------------*/
 int
-cfs_write(int f, void *b, unsigned int l)
+cfs_write(int f, const void *b, unsigned int l)
 {
   return write(f, b, l);
 }
