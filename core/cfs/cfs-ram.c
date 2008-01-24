@@ -86,8 +86,6 @@ cfs_close(int f)
 int
 cfs_read(int f, void *buf, unsigned int len)
 {
-  printf("read file.fileptr %d len %d filesize %d\n",
-	 file.fileptr, len, file.filesize);
   if(file.fileptr + len > sizeof(filemem)) {
     len = sizeof(filemem) - file.fileptr;
   }
@@ -108,9 +106,6 @@ cfs_read(int f, void *buf, unsigned int len)
 int
 cfs_write(int f, const void *buf, unsigned int len)
 {
-  printf("write file.fileptr %d len %d filesize %d\n",
-	 file.fileptr, len, file.filesize);
-
   if(file.fileptr >= sizeof(filemem)) {
     return 0;
   }
