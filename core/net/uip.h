@@ -1497,6 +1497,7 @@ struct uip_icmpip_hdr {
   u16_t icmpchksum;
 #if !UIP_CONF_IPV6
   u16_t id, seqno;
+  u8_t payload[1];
 #else /* !UIP_CONF_IPV6 */
   u8_t flags, reserved1, reserved2, reserved3;
   u8_t icmp6data[16];
