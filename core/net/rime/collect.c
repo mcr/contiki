@@ -138,7 +138,7 @@ update_rtmetric(struct collect_conn *tc)
     if(tc->rtmetric == RTMETRIC_MAX) {
       strcpy(buf, " ");
     } else {
-      sprintf(buf, "%d", tc->rtmetric);
+      sprintf(buf, "%.1f", (float)tc->rtmetric / NEIGHBOR_ETX_SCALE);
     }
     ether_set_text(buf);
   }
