@@ -33,51 +33,113 @@
 
 /**
  * \file
- *         Testing the abc layer in Rime
+ *         Testing the rucb code in Rime
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
 
 #include "contiki.h"
-#include "net/rime.h"
+#include "net/rime/rucb.h"
 
 #include "dev/button-sensor.h"
 
 #include "dev/leds.h"
 
+#include "cfs/cfs.h"
+#include "lib/print-stats.h"
+#include "sys/profile.h"
+
 #include <stdio.h>
+
+#if NETSIM
+#include "ether.h"
+#include "node.h"
+#endif /* NETSIM */
+
+#define FILESIZE 40000
+
+static unsigned long bytecount;
+static clock_time_t start_time;
+
+extern int profile_max_queuelen;
+
 /*---------------------------------------------------------------------------*/
-PROCESS(test_abc_process, "ABC test");
-AUTOSTART_PROCESSES(&test_abc_process);
+PROCESS(example_rucb_process, "Rucb example");
+AUTOSTART_PROCESSES(&example_rucb_process);
 /*---------------------------------------------------------------------------*/
 static void
-abc_recv(struct abc_conn *c)
+write_chunk(struct rucb_conn *c, int offset, int flag,
+	    char *data, int datalen)
 {
-  printf("abc message received '%s'\n", (char *)rimebuf_dataptr());
+#if NETSIM
+  {
+    char buf[100];
+    printf("received %d; %d\n", offset, datalen);
+    sprintf(buf, "%d%%", (100 * (offset + datalen)) / FILESIZE);
+    ether_set_text(buf);
+  }
+#endif /* NETSIM */
+
 }
-static const struct abc_callbacks abc_call = {abc_recv};
-static struct abc_conn abc;
-/*---------------------------------------------------------------------------*/
-PROCESS_THREAD(test_abc_process, ev, data)
+static int
+read_chunk(struct rucb_conn *c, int offset, char *to, int maxsize)
 {
-  PROCESS_EXITHANDLER(abc_close(&abc);)
-    
-  PROCESS_BEGIN();
+  int size;
+  size = maxsize;
+  if(bytecount + maxsize >= FILESIZE) {
+    size = FILESIZE - bytecount;
+  }
+  bytecount += size;
 
-  abc_open(&abc, 128, &abc_call);
-
-  while(1) {
-    static struct etimer et;
-    
-    etimer_set(&et, CLOCK_SECOND);
-    
-    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
-
-    rimebuf_copyfrom("Hej", 4);
-    abc_send(&abc);
-
+  if(bytecount == FILESIZE) {
+    printf("Completion time %lu / %u\n", (unsigned long)clock_time() - start_time, CLOCK_SECOND);
+    /*     profile_aggregates_print(); */
+/*     profile_print_stats(); */
+    print_stats();
   }
 
+  /*  printf("bytecount %lu\n", bytecount);*/
+  return size;
+}
+const static struct rucb_callbacks rucb_call = {write_chunk, read_chunk,
+						NULL};
+static struct rucb_conn rucb;
+/*---------------------------------------------------------------------------*/
+#include "node-id.h"
+
+PROCESS_THREAD(example_rucb_process, ev, data)
+{
+  PROCESS_EXITHANDLER(rucb_close(&rucb);)
+  PROCESS_BEGIN();
+
+  PROCESS_PAUSE();
+
+  
+  rucb_open(&rucb, 128, &rucb_call);
+  button_sensor.activate();
+
+  PROCESS_PAUSE();
+  
+  if(rimeaddr_node_addr.u8[0] == 51 &&
+     rimeaddr_node_addr.u8[1] == 0) {
+    rimeaddr_t recv;
+    
+    recv.u8[0] = 52;
+    recv.u8[1] = 0;
+    start_time = clock_time();
+    rucb_send(&rucb, &recv);
+#if NETSIM
+    ether_send_done();
+#endif /* NETSIM */
+  }
+  
+  while(1) {
+
+    PROCESS_WAIT_EVENT_UNTIL(ev == sensors_event &&
+			     data == &button_sensor);
+    /*rucb_stop(&rucb);*/
+
+  }
   PROCESS_END();
 }
 /*---------------------------------------------------------------------------*/

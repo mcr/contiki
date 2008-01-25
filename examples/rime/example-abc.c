@@ -33,77 +33,51 @@
 
 /**
  * \file
- *         A brief description of what this file is.
+ *         Testing the abc layer in Rime
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
 
 #include "contiki.h"
 #include "net/rime.h"
-#include "net/rime/mesh.h"
 
 #include "dev/button-sensor.h"
 
 #include "dev/leds.h"
 
 #include <stdio.h>
-
-static struct mesh_conn mesh;
 /*---------------------------------------------------------------------------*/
-PROCESS(test_mesh_process, "Mesh test");
-AUTOSTART_PROCESSES(&test_mesh_process);
+PROCESS(example_abc_process, "ABC example");
+AUTOSTART_PROCESSES(&example_abc_process);
 /*---------------------------------------------------------------------------*/
 static void
-sent(struct mesh_conn *c)
+abc_recv(struct abc_conn *c)
 {
-  printf("packet sent\n");
+  printf("abc message received '%s'\n", (char *)rimebuf_dataptr());
 }
-static void
-timedout(struct mesh_conn *c)
-{
-  printf("packet timedout\n");
-}
-static void
-recv(struct mesh_conn *c, rimeaddr_t *from)
-{
-  printf("Data received from %d: %.*s (%d)\n", from->u16[0],
-	 rimebuf_datalen(), (char *)rimebuf_dataptr(), rimebuf_datalen());
-
-  rimebuf_copyfrom("Hopp", 4);
-  mesh_send(&mesh, from);
-}
-
-const static struct mesh_callbacks callbacks = {recv, sent, timedout};
+static const struct abc_callbacks abc_call = {abc_recv};
+static struct abc_conn abc;
 /*---------------------------------------------------------------------------*/
-PROCESS_THREAD(test_mesh_process, ev, data)
+PROCESS_THREAD(example_abc_process, ev, data)
 {
-  PROCESS_EXITHANDLER(mesh_close(&mesh);)
+  PROCESS_EXITHANDLER(abc_close(&abc);)
+    
   PROCESS_BEGIN();
 
-  mesh_open(&mesh, 128, &callbacks);
-
-  button_sensor.activate();
+  abc_open(&abc, 128, &abc_call);
 
   while(1) {
-    rimeaddr_t addr;
     static struct etimer et;
-
-    /*    etimer_set(&et, CLOCK_SECOND * 4);*/
-    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et) ||
-			     (ev == sensors_event && data == &button_sensor));
-
-    printf("Button\n");
-
-    /*
-     * Send a message containing "Hej" (3 characters) to node number
-     * 6.
-     */
     
-    rimebuf_copyfrom("Hej", 3);
-    addr.u8[0] = 161;
-    addr.u8[1] = 161;
-    mesh_send(&mesh, &addr);
+    etimer_set(&et, CLOCK_SECOND);
+    
+    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
+
+    rimebuf_copyfrom("Hello", 6);
+    abc_send(&abc);
+
   }
+
   PROCESS_END();
 }
 /*---------------------------------------------------------------------------*/

@@ -33,113 +33,56 @@
 
 /**
  * \file
- *         Testing the rucb code in Rime
+ *         Best-effort single-hop unicast example
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
 
 #include "contiki.h"
-#include "net/rime/rucb.h"
+#include "net/rime.h"
 
 #include "dev/button-sensor.h"
 
 #include "dev/leds.h"
 
-#include "cfs/cfs.h"
-#include "lib/print-stats.h"
-#include "sys/profile.h"
-
 #include <stdio.h>
 
-#if NETSIM
-#include "ether.h"
-#include "node.h"
-#endif /* NETSIM */
-
-#define FILESIZE 40000
-
-static unsigned long bytecount;
-static clock_time_t start_time;
-
-extern int profile_max_queuelen;
-
 /*---------------------------------------------------------------------------*/
-PROCESS(test_rucb_process, "Rucb test");
-AUTOSTART_PROCESSES(&test_rucb_process);
+PROCESS(test_uc_process, "uc test");
+AUTOSTART_PROCESSES(&test_uc_process);
 /*---------------------------------------------------------------------------*/
 static void
-write_chunk(struct rucb_conn *c, int offset, int flag,
-	    char *data, int datalen)
+recv_uc(struct uc_conn *c, rimeaddr_t *from)
 {
-#if NETSIM
-  {
-    char buf[100];
-    printf("received %d; %d\n", offset, datalen);
-    sprintf(buf, "%d%%", (100 * (offset + datalen)) / FILESIZE);
-    ether_set_text(buf);
-  }
-#endif /* NETSIM */
-
+  printf("uc message received from %d.%d\n",
+	 from->u8[0], from->u8[1]);
 }
-static int
-read_chunk(struct rucb_conn *c, int offset, char *to, int maxsize)
-{
-  int size;
-  size = maxsize;
-  if(bytecount + maxsize >= FILESIZE) {
-    size = FILESIZE - bytecount;
-  }
-  bytecount += size;
-
-  if(bytecount == FILESIZE) {
-    printf("Completion time %lu / %u\n", (unsigned long)clock_time() - start_time, CLOCK_SECOND);
-    /*     profile_aggregates_print(); */
-/*     profile_print_stats(); */
-    print_stats();
-  }
-
-  /*  printf("bytecount %lu\n", bytecount);*/
-  return size;
-}
-const static struct rucb_callbacks rucb_call = {write_chunk, read_chunk,
-						NULL};
-static struct rucb_conn rucb;
+static const struct uc_callbacks uc_callbacks = {recv_uc};
+static struct uc_conn uc;
 /*---------------------------------------------------------------------------*/
-#include "node-id.h"
-
-PROCESS_THREAD(test_rucb_process, ev, data)
+PROCESS_THREAD(test_uc_process, ev, data)
 {
-  PROCESS_EXITHANDLER(rucb_close(&rucb);)
+  PROCESS_EXITHANDLER(uc_close(&uc);)
+    
   PROCESS_BEGIN();
 
-  PROCESS_PAUSE();
+  uc_open(&uc, 128, &uc_callbacks);
 
-  
-  rucb_open(&rucb, 128, &rucb_call);
-  button_sensor.activate();
-
-  PROCESS_PAUSE();
-  
-  if(rimeaddr_node_addr.u8[0] == 51 &&
-     rimeaddr_node_addr.u8[1] == 0) {
-    rimeaddr_t recv;
-    
-    recv.u8[0] = 52;
-    recv.u8[1] = 0;
-    start_time = clock_time();
-    rucb_send(&rucb, &recv);
-#if NETSIM
-    ether_send_done();
-#endif /* NETSIM */
-  }
-  
   while(1) {
+    static struct etimer et;
+    rimeaddr_t addr;
+    
+    etimer_set(&et, CLOCK_SECOND);
+    
+    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
 
-    PROCESS_WAIT_EVENT_UNTIL(ev == sensors_event &&
-			     data == &button_sensor);
-    /*rucb_stop(&rucb);*/
+    rimebuf_copyfrom("Hello", 5);
+    addr.u8[0] = 41;
+    addr.u8[1] = 41;
+    uc_send(&uc, &addr);
 
   }
+
   PROCESS_END();
 }
 /*---------------------------------------------------------------------------*/

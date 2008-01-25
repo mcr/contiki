@@ -33,19 +33,21 @@
 
 /**
  * \file
- *         Testing the rudolph2 code in Rime
+ *         Testing the rudolph1 code in Rime
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
 
 #include "contiki.h"
-#include "net/rime/rudolph2.h"
+#include "net/rime/rudolph1.h"
 
 #include "dev/button-sensor.h"
 
 #include "dev/leds.h"
 
 #include "cfs/cfs.h"
+
+#include "sys/rtimer.h"
 
 #include <stdio.h>
 
@@ -57,11 +59,11 @@
 #define FILESIZE 2000
 
 /*---------------------------------------------------------------------------*/
-PROCESS(test_rudolph2_process, "Rudolph2 test");
-AUTOSTART_PROCESSES(&test_rudolph2_process);
+PROCESS(example_rudolph1_process, "Rudolph1 example");
+AUTOSTART_PROCESSES(&example_rudolph1_process);
 /*---------------------------------------------------------------------------*/
 static void
-write_chunk(struct rudolph2_conn *c, int offset, int flag,
+write_chunk(struct rudolph1_conn *c, int offset, int flag,
 	    uint8_t *data, int datalen)
 {
   int fd;
@@ -73,8 +75,8 @@ write_chunk(struct rudolph2_conn *c, int offset, int flag,
   }
 #endif /* NETSIM */
 
-  if(flag == RUDOLPH2_FLAG_NEWFILE) {
-    /*printf("+++ rudolph2 new file incoming at %lu\n", clock_time());*/
+  if(flag == RUDOLPH1_FLAG_NEWFILE) {
+    /*printf("+++ rudolph1 new file incoming at %lu\n", clock_time());*/
     leds_on(LEDS_RED);
     fd = cfs_open("codeprop.out", CFS_WRITE);
   } else {
@@ -89,9 +91,9 @@ write_chunk(struct rudolph2_conn *c, int offset, int flag,
 
   cfs_close(fd);
 
-  if(flag == RUDOLPH2_FLAG_LASTCHUNK) {
+  if(flag == RUDOLPH1_FLAG_LASTCHUNK) {
     int i;
-    printf("+++ rudolph2 entire file received at %d, %d\n",
+    printf("+++ rudolph1 entire file received at %d, %d\n",
 	   rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1]);
     leds_off(LEDS_RED);
     leds_on(LEDS_YELLOW);
@@ -114,7 +116,7 @@ write_chunk(struct rudolph2_conn *c, int offset, int flag,
   }
 }
 static int
-read_chunk(struct rudolph2_conn *c, int offset, uint8_t *to, int maxsize)
+read_chunk(struct rudolph1_conn *c, int offset, uint8_t *to, int maxsize)
 {
   int fd;
   int ret;
@@ -129,24 +131,40 @@ read_chunk(struct rudolph2_conn *c, int offset, uint8_t *to, int maxsize)
   cfs_close(fd);
   return ret;
 }
-const static struct rudolph2_callbacks rudolph2_call = {write_chunk,
+const static struct rudolph1_callbacks rudolph1_call = {write_chunk,
 							read_chunk};
-static struct rudolph2_conn rudolph2;
+static struct rudolph1_conn rudolph1;
 /*---------------------------------------------------------------------------*/
-#include "node-id.h"
+static void
+log_queuelen(struct rtimer *t, void *ptr)
+{
+#if NETSIM
+  extern u8_t queuebuf_len, queuebuf_ref_len;
+  node_log("%d %d\n",
+	   queuebuf_len,
+	   queuebuf_ref_len);
+  rtimer_set(t, RTIMER_TIME(t) + RTIMER_ARCH_SECOND, 1,
+	     log_queuelen, ptr);
+#endif /* NETSIM */
+}
+/*---------------------------------------------------------------------------*/
 
-PROCESS_THREAD(test_rudolph2_process, ev, data)
+PROCESS_THREAD(example_rudolph1_process, ev, data)
 {
   static int fd;
-  PROCESS_EXITHANDLER(rudolph2_close(&rudolph2);)
+  static struct rtimer t;
+  PROCESS_EXITHANDLER(rudolph1_close(&rudolph1);)
   PROCESS_BEGIN();
 
   PROCESS_PAUSE();
 
   
-  rudolph2_open(&rudolph2, 128, &rudolph2_call);
+  rudolph1_open(&rudolph1, 128, &rudolph1_call);
   button_sensor.activate();
 
+  rtimer_set(&t, RTIMER_NOW() + RTIMER_ARCH_SECOND, 1,
+	     log_queuelen, NULL);
+  
   PROCESS_PAUSE();
   
   if(rimeaddr_node_addr.u8[0] == 1 &&
@@ -161,7 +179,7 @@ PROCESS_THREAD(test_rudolph2_process, ev, data)
       }
       cfs_close(fd);
     }
-    rudolph2_send(&rudolph2, CLOCK_SECOND * 2);
+    rudolph1_send(&rudolph1, CLOCK_SECOND * 2);
 #if NETSIM
     ether_send_done();
 #endif /* NETSIM */
@@ -172,7 +190,7 @@ PROCESS_THREAD(test_rudolph2_process, ev, data)
 
     PROCESS_WAIT_EVENT_UNTIL(ev == sensors_event &&
 			     data == &button_sensor);
-    rudolph2_stop(&rudolph2);
+    rudolph1_stop(&rudolph1);
 
   }
   PROCESS_END();

@@ -33,47 +33,117 @@
 
 /**
  * \file
- *         Testing the trickle code in Rime
+ *         Testing the rudolph0 code in Rime
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
 
 #include "contiki.h"
-#include "net/rime/trickle.h"
+#include "cfs/cfs.h"
+#include "net/rime/rudolph0.h"
 
 #include "dev/button-sensor.h"
 
 #include "dev/leds.h"
 
 #include <stdio.h>
+
+#define FILESIZE 200
+
 /*---------------------------------------------------------------------------*/
-PROCESS(test_trickle_process, "TRICKLE test");
-AUTOSTART_PROCESSES(&test_trickle_process);
+PROCESS(example_rudolph0_process, "Rudolph0 example");
+AUTOSTART_PROCESSES(&example_rudolph0_process);
 /*---------------------------------------------------------------------------*/
 static void
-trickle_recv(struct trickle_conn *c)
+write_chunk(struct rudolph0_conn *c, int offset, int flag,
+	    uint8_t *data, int datalen)
 {
-  printf("%d.%d: trickle message received '%s'\n",
-	 rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1],
-	 (char *)rimebuf_dataptr());
+  int fd;
+  
+  if(flag == RUDOLPH0_FLAG_NEWFILE) {
+    /*    printf("+++ rudolph0 new file incoming at %lu\n", clock_time());*/
+    leds_on(LEDS_RED);
+    fd = cfs_open("codeprop.out", CFS_WRITE);
+  } else {
+    fd = cfs_open("codeprop.out", CFS_WRITE + CFS_APPEND);
+  }
+  
+  if(datalen > 0) {
+    int ret;
+    cfs_seek(fd, offset);
+    ret = cfs_write(fd, data, datalen);
+    /*    printf("write_chunk wrote %d bytes at %d, %d\n", ret, offset, (unsigned char)data[0]);*/
+  }
+
+  cfs_close(fd);
+
+  if(flag == RUDOLPH0_FLAG_LASTCHUNK) {
+    int i;
+    /*    printf("+++ rudolph0 entire file received at %lu\n", clock_time());*/
+    leds_off(LEDS_RED);
+    leds_on(LEDS_YELLOW);
+    fd = cfs_open("hej", CFS_READ);
+    for(i = 0; i < FILESIZE; ++i) {
+      unsigned char buf;
+      cfs_read(fd, &buf, 1);
+      if(buf != (unsigned char)i) {
+	printf("error: diff at %d, %d != %d\n", i, i, buf);
+	break;
+      }
+    }
+    cfs_close(fd);
+  }
 }
-const static struct trickle_callbacks trickle_call = {trickle_recv};
-static struct trickle_conn trickle;
-/*---------------------------------------------------------------------------*/
-PROCESS_THREAD(test_trickle_process, ev, data)
+static int
+read_chunk(struct rudolph0_conn *c, int offset, uint8_t *to, int maxsize)
 {
-  PROCESS_EXITHANDLER(trickle_close(&trickle);)
+  int fd;
+  int ret;
+  
+  fd = cfs_open("hej", CFS_READ);
+
+  cfs_seek(fd, offset);
+  ret = cfs_read(fd, to, maxsize);
+  /*  printf("read_chunk %d bytes at %d, %d\n", ret, offset, (unsigned char)to[0]);*/
+  cfs_close(fd);
+  return ret;
+}
+const static struct rudolph0_callbacks rudolph0_call = {write_chunk,
+							read_chunk};
+static struct rudolph0_conn rudolph0;
+/*---------------------------------------------------------------------------*/
+PROCESS_THREAD(example_rudolph0_process, ev, data)
+{
+  static int fd;
+
+  PROCESS_EXITHANDLER(rudolph0_close(&rudolph0);)
+      
   PROCESS_BEGIN();
 
-  trickle_open(&trickle, CLOCK_SECOND, 128, &trickle_call);
+  PROCESS_PAUSE();
+
+  
+  rudolph0_open(&rudolph0, 128, &rudolph0_call);
   button_sensor.activate();
 
   while(1) {
     PROCESS_WAIT_EVENT_UNTIL(ev == sensors_event &&
 			     data == &button_sensor);
+    {
+      int i;
+      
+      fd = cfs_open("hej", CFS_WRITE);
+      for(i = 0; i < FILESIZE; i++) {
+	unsigned char buf = i;
+	cfs_write(fd, &buf, 1);
+      }
+      cfs_close(fd);
+    }
+    rudolph0_send(&rudolph0, CLOCK_SECOND / 4);
 
-    rimebuf_copyfrom("Hello, world", 13);
-    trickle_send(&trickle);
+    PROCESS_WAIT_EVENT_UNTIL(ev == sensors_event &&
+			     data == &button_sensor);
+    rudolph0_stop(&rudolph0);
 
   }
   PROCESS_END();

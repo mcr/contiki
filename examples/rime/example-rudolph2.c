@@ -33,35 +33,49 @@
 
 /**
  * \file
- *         Testing the rudolph0 code in Rime
+ *         Testing the rudolph2 code in Rime
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
 
 #include "contiki.h"
-#include "cfs/cfs.h"
-#include "net/rime/rudolph0.h"
+#include "net/rime.h"
+#include "net/rime/rudolph2.h"
 
 #include "dev/button-sensor.h"
 
 #include "dev/leds.h"
 
+#include "cfs/cfs.h"
+
 #include <stdio.h>
 
-#define FILESIZE 200
+#if NETSIM
+#include "ether.h"
+#include "node.h"
+#endif /* NETSIM */
+
+#define FILESIZE 2000
 
 /*---------------------------------------------------------------------------*/
-PROCESS(test_rudolph0_process, "Rudolph0 test");
-AUTOSTART_PROCESSES(&test_rudolph0_process);
+PROCESS(example_rudolph2_process, "Rudolph2 example");
+AUTOSTART_PROCESSES(&example_rudolph2_process);
 /*---------------------------------------------------------------------------*/
 static void
-write_chunk(struct rudolph0_conn *c, int offset, int flag,
+write_chunk(struct rudolph2_conn *c, int offset, int flag,
 	    uint8_t *data, int datalen)
 {
   int fd;
-  
-  if(flag == RUDOLPH0_FLAG_NEWFILE) {
-    /*    printf("+++ rudolph0 new file incoming at %lu\n", clock_time());*/
+#if NETSIM
+  {
+    char buf[100];
+    sprintf(buf, "%d%%", (100 * (offset + datalen)) / FILESIZE);
+    ether_set_text(buf);
+  }
+#endif /* NETSIM */
+
+  if(flag == RUDOLPH2_FLAG_NEWFILE) {
+    /*printf("+++ rudolph2 new file incoming at %lu\n", clock_time());*/
     leds_on(LEDS_RED);
     fd = cfs_open("codeprop.out", CFS_WRITE);
   } else {
@@ -72,30 +86,36 @@ write_chunk(struct rudolph0_conn *c, int offset, int flag,
     int ret;
     cfs_seek(fd, offset);
     ret = cfs_write(fd, data, datalen);
-    /*    printf("write_chunk wrote %d bytes at %d, %d\n", ret, offset, (unsigned char)data[0]);*/
   }
 
   cfs_close(fd);
 
-  if(flag == RUDOLPH0_FLAG_LASTCHUNK) {
+  if(flag == RUDOLPH2_FLAG_LASTCHUNK) {
     int i;
-    /*    printf("+++ rudolph0 entire file received at %lu\n", clock_time());*/
+    printf("+++ rudolph2 entire file received at %d, %d\n",
+	   rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1]);
     leds_off(LEDS_RED);
     leds_on(LEDS_YELLOW);
+
     fd = cfs_open("hej", CFS_READ);
     for(i = 0; i < FILESIZE; ++i) {
       unsigned char buf;
       cfs_read(fd, &buf, 1);
       if(buf != (unsigned char)i) {
-	printf("error: diff at %d, %d != %d\n", i, i, buf);
+	printf("%d.%d: error: diff at %d, %d != %d\n",
+	       rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1],
+	       i, i, buf);
 	break;
       }
     }
+#if NETSIM
+    ether_send_done();
+#endif
     cfs_close(fd);
   }
 }
 static int
-read_chunk(struct rudolph0_conn *c, int offset, uint8_t *to, int maxsize)
+read_chunk(struct rudolph2_conn *c, int offset, uint8_t *to, int maxsize)
 {
   int fd;
   int ret;
@@ -104,34 +124,37 @@ read_chunk(struct rudolph0_conn *c, int offset, uint8_t *to, int maxsize)
 
   cfs_seek(fd, offset);
   ret = cfs_read(fd, to, maxsize);
-  /*  printf("read_chunk %d bytes at %d, %d\n", ret, offset, (unsigned char)to[0]);*/
+  /*  printf("%d.%d: read_chunk %d bytes at %d, %d\n",
+	 rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1],
+	 ret, offset, (unsigned char)to[0]);*/
   cfs_close(fd);
   return ret;
 }
-const static struct rudolph0_callbacks rudolph0_call = {write_chunk,
+const static struct rudolph2_callbacks rudolph2_call = {write_chunk,
 							read_chunk};
-static struct rudolph0_conn rudolph0;
+static struct rudolph2_conn rudolph2;
 /*---------------------------------------------------------------------------*/
-PROCESS_THREAD(test_rudolph0_process, ev, data)
+#include "node-id.h"
+
+PROCESS_THREAD(example_rudolph2_process, ev, data)
 {
   static int fd;
-
-  PROCESS_EXITHANDLER(rudolph0_close(&rudolph0);)
-      
+  PROCESS_EXITHANDLER(rudolph2_close(&rudolph2);)
   PROCESS_BEGIN();
 
   PROCESS_PAUSE();
 
   
-  rudolph0_open(&rudolph0, 128, &rudolph0_call);
+  rudolph2_open(&rudolph2, 128, &rudolph2_call);
   button_sensor.activate();
 
-  while(1) {
-    PROCESS_WAIT_EVENT_UNTIL(ev == sensors_event &&
-			     data == &button_sensor);
+  PROCESS_PAUSE();
+  
+  if(rimeaddr_node_addr.u8[0] == 1 &&
+     rimeaddr_node_addr.u8[1] == 1) {
     {
       int i;
-      
+ 
       fd = cfs_open("hej", CFS_WRITE);
       for(i = 0; i < FILESIZE; i++) {
 	unsigned char buf = i;
@@ -139,11 +162,18 @@ PROCESS_THREAD(test_rudolph0_process, ev, data)
       }
       cfs_close(fd);
     }
-    rudolph0_send(&rudolph0, CLOCK_SECOND / 4);
+    rudolph2_send(&rudolph2, CLOCK_SECOND * 2);
+#if NETSIM
+    ether_send_done();
+#endif /* NETSIM */
+
+  }
+  
+  while(1) {
 
     PROCESS_WAIT_EVENT_UNTIL(ev == sensors_event &&
 			     data == &button_sensor);
-    rudolph0_stop(&rudolph0);
+    rudolph2_stop(&rudolph2);
 
   }
   PROCESS_END();

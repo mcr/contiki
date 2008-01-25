@@ -40,92 +40,70 @@
 
 #include "contiki.h"
 #include "net/rime.h"
-#include "net/rime/collect.h"
-#include "net/rime/neighbor.h"
-#include "dev/leds.h"
+#include "net/rime/mesh.h"
+
 #include "dev/button-sensor.h"
+
+#include "dev/leds.h"
 
 #include <stdio.h>
 
-static struct collect_conn tc;
-
+static struct mesh_conn mesh;
 /*---------------------------------------------------------------------------*/
-PROCESS(test_collect_process, "Test collect process");
-PROCESS(depth_blink_process, "Depth indicator");
-AUTOSTART_PROCESSES(&test_collect_process, &depth_blink_process);
-/*---------------------------------------------------------------------------*/
-PROCESS_THREAD(depth_blink_process, ev, data)
-{
-  static struct etimer et;
-  static int count;
-
-  PROCESS_BEGIN();
-
-  while(1) {
-    etimer_set(&et, CLOCK_SECOND * 1);
-    PROCESS_WAIT_UNTIL(etimer_expired(&et));
-    count = collect_depth(&tc);
-    if(count == COLLECT_MAX_DEPTH) {
-      leds_on(LEDS_RED);
-    } else {
-      leds_off(LEDS_RED);
-      count /= NEIGHBOR_ETX_SCALE;
-      while(count > 0) {
-	leds_on(LEDS_RED);
-	etimer_set(&et, CLOCK_SECOND / 16);
-	PROCESS_WAIT_UNTIL(etimer_expired(&et));
-	leds_off(LEDS_RED);
-	etimer_set(&et, CLOCK_SECOND / 4);
-	PROCESS_WAIT_UNTIL(etimer_expired(&et));
-	--count;
-      }
-    }
-  }
-  
-  PROCESS_END();
-}
+PROCESS(example_mesh_process, "Mesh example");
+AUTOSTART_PROCESSES(&example_mesh_process);
 /*---------------------------------------------------------------------------*/
 static void
-recv(rimeaddr_t *originator, u8_t seqno, u8_t hops)
+sent(struct mesh_conn *c)
 {
-  printf("Sink got message from %d.%d, seqno %d, hops %d: len %d '%s'\n",
-	 originator->u8[0], originator->u8[1],
-	 seqno, hops,
-	 rimebuf_datalen(),
-	 (char *)rimebuf_dataptr());
-
+  printf("packet sent\n");
 }
-/*---------------------------------------------------------------------------*/
-static const struct collect_callbacks callbacks = { recv };
-/*---------------------------------------------------------------------------*/
-PROCESS_THREAD(test_collect_process, ev, data)
+static void
+timedout(struct mesh_conn *c)
 {
+  printf("packet timedout\n");
+}
+static void
+recv(struct mesh_conn *c, rimeaddr_t *from)
+{
+  printf("Data received from %d: %.*s (%d)\n", from->u16[0],
+	 rimebuf_datalen(), (char *)rimebuf_dataptr(), rimebuf_datalen());
+
+  rimebuf_copyfrom("Hopp", 4);
+  mesh_send(&mesh, from);
+}
+
+const static struct mesh_callbacks callbacks = {recv, sent, timedout};
+/*---------------------------------------------------------------------------*/
+PROCESS_THREAD(example_mesh_process, ev, data)
+{
+  PROCESS_EXITHANDLER(mesh_close(&mesh);)
   PROCESS_BEGIN();
 
-  collect_open(&tc, 128, &callbacks);
-  
+  mesh_open(&mesh, 128, &callbacks);
+
+  button_sensor.activate();
+
   while(1) {
+    rimeaddr_t addr;
     static struct etimer et;
 
-    etimer_set(&et, CLOCK_SECOND * 10);
-    PROCESS_WAIT_EVENT();
+    /*    etimer_set(&et, CLOCK_SECOND * 4);*/
+    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et) ||
+			     (ev == sensors_event && data == &button_sensor));
 
-    if(etimer_expired(&et)) {
-      rimebuf_clear();
-      rimebuf_set_datalen(sprintf(rimebuf_dataptr(),
-				  "%s", "Hello") + 1);
-      collect_send(&tc, 4);
-    }
+    printf("Button\n");
 
-    if(ev == sensors_event) {
-      if(data == &button_sensor) {
-	printf("Button\n");
-	collect_set_sink(&tc, 1);
-      }
-    }
+    /*
+     * Send a message containing "Hej" (3 characters) to node number
+     * 6.
+     */
     
+    rimebuf_copyfrom("Hej", 3);
+    addr.u8[0] = 161;
+    addr.u8[1] = 161;
+    mesh_send(&mesh, &addr);
   }
-  
   PROCESS_END();
 }
 /*---------------------------------------------------------------------------*/
