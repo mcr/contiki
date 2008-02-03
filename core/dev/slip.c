@@ -245,8 +245,9 @@ PROCESS_THREAD(slip_process, ev, data)
 	nid = htons(nid);
 	nid = ~nid;		/* negate */
 	BUF->ipchksum += nid;	/* add */
-	if (BUF->ipchksum < nid) /* 1-complement overflow? */
+	if(BUF->ipchksum < nid) { /* 1-complement overflow? */
 	  BUF->ipchksum++;
+	}
       }
       tcpip_input();
     } else {
