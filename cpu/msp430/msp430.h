@@ -41,6 +41,12 @@
 #ifndef __MSP430_H__
 #define __MSP430_H__
 
+#include "contiki-conf.h"
+
+#ifdef F_CPU
+#define MSP430_CPU_SPEED F_CPU
+#else
 #define MSP430_CPU_SPEED 2457600UL
+#endif
 
 #endif /* __MSP430_H__ */
