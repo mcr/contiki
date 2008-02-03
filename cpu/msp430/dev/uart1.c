@@ -39,8 +39,8 @@
 
 #include "lib/energest.h"
 #include "dev/uart1.h"
-
 #include "dev/leds.h"
+#include "dev/watchdog.h"
 
 static int (*uart1_input_handler)(unsigned char c);
 
@@ -54,6 +54,7 @@ uart1_set_input(int (*input)(unsigned char c))
 void
 uart1_writeb(unsigned char c)
 {
+  watchdog_periodic();
   /* Loop until the transmission buffer is available. */
   while((IFG2 & UTXIFG1) == 0);
 
@@ -61,12 +62,14 @@ uart1_writeb(unsigned char c)
   TXBUF1 = c;
 }
 /*---------------------------------------------------------------------------*/
+#if ! WITH_UIP /* If WITH_UIP is defined, putchar() is defined by the SLIP driver */
 int
 putchar(int c)
 {
   uart1_writeb((char)c);
   return c;
 }
+#endif /* ! WITH_UIP */
 /*---------------------------------------------------------------------------*/
 /**
  * Initalize the RS232 port.
