@@ -63,6 +63,11 @@ struct rrep_hdr {
   rimeaddr_t originator;
 };
 
+#if NETSIM
+#include "ether.h"
+#endif
+
+
 #define DEBUG 0
 #if DEBUG
 #include <stdio.h>
@@ -124,6 +129,10 @@ insert_route(rimeaddr_t *originator, rimeaddr_t *last_hop, u8_t hops)
 	   last_hop->u8[0], last_hop->u8[1],
 	   hops);
     route_add(originator, last_hop, hops, 0);
+#if NETSIM
+    ether_set_line(last_hop->u8[0], last_hop->u8[1]);
+#endif
+
   }
 }
 /*---------------------------------------------------------------------------*/
