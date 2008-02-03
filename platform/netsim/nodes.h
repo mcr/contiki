@@ -44,6 +44,7 @@ void nodes_add(int pid, int x, int y, int port, int id);
 void nodes_kill(void);
 void nodes_set_leds(int x, int y, int leds);
 void nodes_set_text(int x, int y, char *text);
+void nodes_set_line(int x, int y, int linex, int liney);
 
 void nodes_done(int id);
 
@@ -58,6 +59,7 @@ struct nodes_node {
   int port;
   int leds;
   int done;
+  int linex, liney;
   char text[NODES_TEXTLEN];
 };
 

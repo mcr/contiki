@@ -116,6 +116,20 @@ nodes_set_text(int x, int y, char *text)
   }
 }
 /*---------------------------------------------------------------------------*/
+void
+nodes_set_line(int x, int y, int linex, int liney)
+{
+  int i;
+
+  for(i = numnodes; i >= 0; --i) {
+    if(nodes[i].x == x && nodes[i].y == y) {
+      nodes[i].linex = linex;
+      nodes[i].liney = liney;
+      return;
+    }
+  }
+}
+/*---------------------------------------------------------------------------*/
 struct nodes_node *
 nodes_find_pid(pid_t pid)
 {

@@ -207,6 +207,21 @@ display_redraw(void)
 			   y * SCALE + 2,
 			   4, 4);
       }
+      if(n->linex != 0 && n->liney != 0) {
+	gdk_draw_line(pixmap,
+		      green,
+		      x * SCALE,
+		      y * SCALE,
+		      n->linex * SCALE,
+		      n->liney * SCALE);
+	gdk_draw_rectangle(pixmap,
+			   green,
+			   TRUE,
+			   n->linex * SCALE - 2,
+			   n->liney * SCALE - 2,
+			   4, 4);
+      }
+
     }
 
   }

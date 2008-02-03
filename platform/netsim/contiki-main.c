@@ -37,6 +37,7 @@
 #include "contiki-net.h"
 #include "contiki-lib.h"
 
+#include "dev/serial.h"
 #include "net/rime.h"
 
 #ifdef __CYGWIN__
@@ -54,6 +55,10 @@
 #include "ether.h"
 
 #include <stdio.h>
+#ifndef HAVE_SNPRINTF
+int snprintf(char *str, size_t size, const char *format, ...);
+#endif /* HAVE_SNPRINTF */
+
 #include <stdlib.h>
 #include <sys/select.h>
 #include <unistd.h>

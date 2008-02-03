@@ -83,4 +83,7 @@ void ether_set_drop_probability(double p);
 
 void ether_print_stats(void);
 
+void ether_set_line(int x, int y);
+
+
 #endif /* __ETHER_H__ */
