@@ -57,6 +57,7 @@
 #define NEIGHBOR_NUM_ETXS 8
 
 struct neighbor {
+  struct neighbor *next;
   uint16_t time;
   rimeaddr_t addr;
   uint16_t rtmetric;
