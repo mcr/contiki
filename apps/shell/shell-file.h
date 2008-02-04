@@ -38,76 +38,11 @@
  *         Adam Dunkels <adam@sics.se>
  */
 
-#ifndef __SHELL_H__
-#define __SHELL_H__
+#ifndef __SHELL_FILE_H__
+#define __SHELL_FILE_H__
 
-#include "sys/process.h"
+#include "shell.h"
 
-struct shell_command {
-  struct shell_command *next;
-  char *command;
-  char *description;
-  struct process *process;
-  struct shell_command *child;
-};
+void shell_file_init(void);
 
-void shell_init(void);
-
-void shell_input(char *commandline, int commandline_len);
-int shell_start_command(char *commandline, int commandline_len,
-			struct shell_command *child,
-			struct process **started_process);
-void shell_output(struct shell_command *c,
-		  void *data1, int size1,
-		  const void *data2, int size2);
-void shell_output_str(struct shell_command *c,
-		      char *str1, const char *str2);
-
-void shell_default_output(const char *text1, int len1,
-			  const char *text2, int len2);
-
-void shell_prompt(char *prompt);
-
-void shell_register_command(struct shell_command *c);
-void shell_unregister_command(struct shell_command *c);
-
-unsigned long shell_strtolong(const char *str, const char **retstr);
-
-unsigned long shell_time(void);
-void shell_set_time(unsigned long seconds);
-
-#define SHELL_COMMAND(name, command, description, process) \
-static struct shell_command name = { NULL, command, \
-                                     description, process }
-
-enum {
-  SHELL_FOREGROUND,
-  SHELL_BACKGROUND,
-  SHELL_NOTHING,
-};
-
-extern int shell_event_input;
-
-struct shell_input {
-  char *data1;
-  const char *data2;
-  int len1, len2;
-};
-
-#include "shell-blink.h"
-#include "shell-exec.h"
-#include "shell-file.h"
-#include "shell-netfile.h"
-#include "shell-ps.h"
-#include "shell-reboot.h"
-#include "shell-rime.h"
-#include "shell-rime-ping.h"
-#include "shell-rime-sniff.h"
-#include "shell-rsh.h"
-#include "shell-sendtest.h"
-#include "shell-sky.h"
-#include "shell-text.h"
-#include "shell-time.h"
-#include "shell-vars.h"
-
-#endif /* __SHELL_H__ */
+#endif /* __SHELL_FILE_H__ */

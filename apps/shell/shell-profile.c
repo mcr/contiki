@@ -38,76 +38,57 @@
  *         Adam Dunkels <adam@sics.se>
  */
 
-#ifndef __SHELL_H__
-#define __SHELL_H__
+#include "contiki.h"
+#include "contiki-conf.h"
+#include "shell-profile.h"
 
-#include "sys/process.h"
+#include "loader/symbols.h"
 
-struct shell_command {
-  struct shell_command *next;
-  char *command;
-  char *description;
-  struct process *process;
-  struct shell_command *child;
-};
+#include <stdio.h>
+#include <string.h>
 
-void shell_init(void);
+/*---------------------------------------------------------------------------*/
+PROCESS(shell_profile_process, "Shell 'profile' command");
+SHELL_COMMAND(profile_command,
+	      "profile",
+	      "profile: show aggregate profiling information",
+	      &shell_profile_process);
+/*---------------------------------------------------------------------------*/
+PROCESS_THREAD(shell_profile_process, ev, data)
+{
+  int i;
+  char buf[100];
+  PROCESS_BEGIN();
 
-void shell_input(char *commandline, int commandline_len);
-int shell_start_command(char *commandline, int commandline_len,
-			struct shell_command *child,
-			struct process **started_process);
-void shell_output(struct shell_command *c,
-		  void *data1, int size1,
-		  const void *data2, int size2);
-void shell_output_str(struct shell_command *c,
-		      char *str1, const char *str2);
+#if DETAILED_AGGREGATES
+  for(i = 0; i < aggregates_list_ptr; ++i) {
+    sprintf(buf, "-- %s: %lu / %u = %lu", aggregates[i].ptr,
+	   aggregates[i].cycles,
+	   aggregates[i].episodes,
+	   aggregates[i].cycles / aggregates[i].episodes);
+    shell_output(buf, "");
+  }
+#else
+  for(i = 0; i < aggregates_list_ptr; ++i) {
+    sprintf(buf, "-- %c%c: %lu / %u = %lu",
+	   aggregates[i].ptr[0], aggregates[i].ptr[1],
+	   aggregates[i].cycles,
+	   aggregates[i].episodes,
+	   aggregates[i].cycles / aggregates[i].episodes);
+    shell_output(buf, "");
+  }
+#endif
 
-void shell_default_output(const char *text1, int len1,
-			  const char *text2, int len2);
-
-void shell_prompt(char *prompt);
-
-void shell_register_command(struct shell_command *c);
-void shell_unregister_command(struct shell_command *c);
-
-unsigned long shell_strtolong(const char *str, const char **retstr);
-
-unsigned long shell_time(void);
-void shell_set_time(unsigned long seconds);
-
-#define SHELL_COMMAND(name, command, description, process) \
-static struct shell_command name = { NULL, command, \
-                                     description, process }
-
-enum {
-  SHELL_FOREGROUND,
-  SHELL_BACKGROUND,
-  SHELL_NOTHING,
-};
-
-extern int shell_event_input;
-
-struct shell_input {
-  char *data1;
-  const char *data2;
-  int len1, len2;
-};
-
-#include "shell-blink.h"
-#include "shell-exec.h"
-#include "shell-file.h"
-#include "shell-netfile.h"
-#include "shell-ps.h"
-#include "shell-reboot.h"
-#include "shell-rime.h"
-#include "shell-rime-ping.h"
-#include "shell-rime-sniff.h"
-#include "shell-rsh.h"
-#include "shell-sendtest.h"
-#include "shell-sky.h"
-#include "shell-text.h"
-#include "shell-time.h"
-#include "shell-vars.h"
-
-#endif /* __SHELL_H__ */
+  sprintf(buf, "Memory for aggregates: %d * %d = %d\n",
+	  (int)sizeof(struct aggregate), aggregates_list_ptr,
+	  (int)sizeof(struct aggregate) * aggregates_list_ptr);
+  shell_output(buf, "");
+  PROCESS_END();
+}
+/*---------------------------------------------------------------------------*/
+void
+shell_profile_init(void)
+{
+  shell_register_command(&profile_command);
+}
+/*---------------------------------------------------------------------------*/
