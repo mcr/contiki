@@ -71,11 +71,11 @@ struct uc_conn {
   const struct uc_callbacks *u;
 };
 
-void uc_open(struct uc_conn *c, u16_t channel,
+void uc_open(struct uc_conn *c, uint16_t channel,
 	      const struct uc_callbacks *u);
 void uc_close(struct uc_conn *c);
 
-int uc_send(struct uc_conn *c, rimeaddr_t *receiver);
+int uc_send(struct uc_conn *c, const rimeaddr_t *receiver);
 
 #endif /* __UC_H__ */
 /** @} */

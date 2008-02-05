@@ -96,7 +96,7 @@ uc_close(struct uc_conn *c)
 }
 /*---------------------------------------------------------------------------*/
 int
-uc_send(struct uc_conn *c, rimeaddr_t *receiver)
+uc_send(struct uc_conn *c, const rimeaddr_t *receiver)
 {
   PRINTF("%d.%d: uc_send to %d.%d\n",
 	 rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1],
