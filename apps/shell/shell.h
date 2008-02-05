@@ -101,6 +101,7 @@ struct shell_input {
 #include "shell-ps.h"
 #include "shell-reboot.h"
 #include "shell-rime.h"
+#include "shell-rime-netcmd.h"
 #include "shell-rime-ping.h"
 #include "shell-rime-sniff.h"
 #include "shell-rsh.h"
