@@ -62,14 +62,13 @@
 typedef union uip_ip4addr_t {
   u8_t  u8[4];			/* Initializer, must come first!!! */
   u16_t u16[2];
-#if 0
-  u32_t u32;
-#endif
+  u32_t u32[1];
 } uip_ip4addr_t;
 
 typedef union uip_ip6addr_t {
   u8_t  u8[16];			/* Initializer, must come first!!! */
   u16_t u16[8];
+  u32_t u32[4];
 } uip_ip6addr_t;
 
 #if UIP_CONF_IPV6
@@ -1584,7 +1583,7 @@ CCIF extern const uip_ipaddr_t uip_hostaddr, uip_netmask, uip_draddr;
 CCIF extern uip_ipaddr_t uip_hostaddr, uip_netmask, uip_draddr;
 #endif /* UIP_FIXEDADDR */
 CCIF extern const uip_ipaddr_t uip_broadcast_addr;
-CCIF extern const uip_ipaddr_t all_zeroes_addr;
+CCIF extern const uip_ipaddr_t uip_all_zeroes_addr;
 
 
 /**
