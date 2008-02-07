@@ -53,10 +53,10 @@ dlloader_load(char *path, char *arg)
     return LOADER_ERR_FMT;
   } 
 
-  /* Find the main process of the loaded program. */
-  p = dlsym(handle, "process_load");
+  /* Find the processes to be started from the loaded program. */
+  p = dlsym(handle, "autostart_processes");
   if(p == NULL) {
-    printf("dlloader_load: could not find process startpoint 'process_load'\n");
+    printf("dlloader_load: could not find symbol 'autostart_processes'\n");
     return LOADER_ERR_FMT;
   }
 

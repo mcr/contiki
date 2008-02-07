@@ -165,7 +165,7 @@ elfloader_load(off_t eepromaddr)
 
   /* Find _init, _fini, and loaded_process. */
   elfloader_loaded_process = cle_lookup(&h, xmem_pread, eepromaddr,
-					"process_load");
+					"autostart_processes");
   elfloader_fini = cle_lookup(&h, xmem_pread, eepromaddr, "_fini");
   elfloader_init = cle_lookup(&h, xmem_pread, eepromaddr, "_init");
 
