@@ -147,43 +147,43 @@ public class EventListener extends VisPlugin {
     mySimulation = simulationToControl;
     myPlugin = this;
 
-    // Create selectable interfaces list (only supports Contiki mote types)
-    Vector<Class<? extends MoteInterface>> allMoteTypes = new Vector<Class<? extends MoteInterface>>();
-    Vector<Class<? extends MoteInterface>> allMoteTypesDups = new Vector<Class<? extends MoteInterface>>();
+    /* Create selectable interfaces list (only supports Contiki mote types) */
+    Vector<Class<? extends MoteInterface>> allInterfaces = new Vector<Class<? extends MoteInterface>>();
+    Vector<Class<? extends MoteInterface>> allInterfacesDups = new Vector<Class<? extends MoteInterface>>();
 
     // Add standard interfaces
-    allMoteTypesDups.add(Button.class);
-    allMoteTypesDups.add(LED.class);
-    allMoteTypesDups.add(Log.class);
-    allMoteTypesDups.add(PIR.class);
-    allMoteTypesDups.add(Position.class);
-    allMoteTypesDups.add(Radio.class);
+    allInterfacesDups.add(Button.class);
+    allInterfacesDups.add(LED.class);
+    allInterfacesDups.add(Log.class);
+    allInterfacesDups.add(PIR.class);
+    allInterfacesDups.add(Position.class);
+    allInterfacesDups.add(Radio.class);
 
     for (MoteType moteType : simulationToControl.getMoteTypes()) {
       if (moteType instanceof ContikiMoteType) {
-        allMoteTypesDups.addAll(((ContikiMoteType) moteType)
+        allInterfacesDups.addAll(((ContikiMoteType) moteType)
             .getMoteInterfaces());
       }
     }
-    for (Class<? extends MoteInterface> moteTypeClass : allMoteTypesDups) {
-      if (!allMoteTypes.contains(moteTypeClass)) {
-        allMoteTypes.add(moteTypeClass);
+    for (Class<? extends MoteInterface> moteTypeClass : allInterfacesDups) {
+      if (!allInterfaces.contains(moteTypeClass)) {
+        allInterfaces.add(moteTypeClass);
       }
     }
 
     interfacePanel = new JPanel();
     interfacePanel.setLayout(new BoxLayout(interfacePanel, BoxLayout.Y_AXIS));
     interfacePanel.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 5));
-    for (Class<? extends MoteInterface> moteTypeClass : allMoteTypes) {
-      JCheckBox checkBox = new JCheckBox(GUI.getDescriptionOf(moteTypeClass),
+    for (Class<? extends MoteInterface> interfaceClass : allInterfaces) {
+      JCheckBox checkBox = new JCheckBox(GUI.getDescriptionOf(interfaceClass),
           false);
-      checkBox.setToolTipText(moteTypeClass.getName());
-      checkBox.putClientProperty("interface_class", moteTypeClass);
+      checkBox.setToolTipText(interfaceClass.getName());
+      checkBox.putClientProperty("interface_class", interfaceClass);
       checkBox.addActionListener(interfaceCheckBoxListener);
 
       interfacePanel.add(checkBox);
     }
-    if (allMoteTypes.isEmpty()) {
+    if (allInterfaces.isEmpty()) {
       interfacePanel.add(new JLabel("No used interface classes detected"));
     }
 
