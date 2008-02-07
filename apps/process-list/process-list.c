@@ -65,6 +65,10 @@ static struct ctk_button processclosebutton =
 
 PROCESS(processes_process, "Process listing");
 
+#if SELFSTART_PROCESS
+AUTOSTART_PROCESSES(&processes_process);
+#endif /* SELFSTART_PROCESS */
+
 enum {
   EVENT_UPDATE
 };
