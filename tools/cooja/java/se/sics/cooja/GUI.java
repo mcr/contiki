@@ -2725,7 +2725,7 @@ public class GUI {
     for (int j = projectDirs.size() - 1; j >= 0; j--) {
       File projectDir = projectDirs.get(j);
       try {
-        urls.add((new File(projectDir, "java")).toURL());
+        urls.add((new File(projectDir, "java")).toURI().toURL());
 
         // Read configuration to check if any JAR files should be loaded
         ProjectConfig projectConfig = new ProjectConfig(false);
@@ -2738,7 +2738,7 @@ public class GUI {
             if (jarpath == null) {
               throw new FileNotFoundException(jarfile);
             }
-            urls.add(jarpath.toURL());
+            urls.add(jarpath.toURI().toURL());
           }
         }
 
@@ -2750,8 +2750,8 @@ public class GUI {
       }
     }
 
-    return new URLClassLoader(urls.toArray(new URL[urls.size()]),
-        parent);
+    URL[] urlsArray = urls.toArray(new URL[urls.size()]);
+    return new URLClassLoader(urlsArray, parent);
   }
 
   /**
