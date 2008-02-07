@@ -41,6 +41,7 @@ import org.jdom.Element;
 import se.sics.cooja.*;
 
 @ClassDescription("Dummy Mote Type")
+@AbstractionLevelDescription("Application level")
 public class DummyMoteType implements MoteType {
   private static Logger logger = Logger.getLogger(DummyMoteType.class);
 
@@ -59,9 +60,9 @@ public class DummyMoteType implements MoteType {
   public Mote generateMote(Simulation simulation) {
     return new DummyMote(this, simulation);
   }
-  
+
   public boolean configureAndInit(JFrame parentFrame, Simulation simulation, boolean visAvailable) {
- 
+
     if (identifier == null) {
       // Create unique identifier
       int counter = 0;
@@ -80,7 +81,7 @@ public class DummyMoteType implements MoteType {
           }
         }
       }
-      
+
       if (description == null) {
         // Create description
         description = "Dummy Mote Type #" + counter;
