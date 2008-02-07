@@ -95,7 +95,7 @@ endif
 	$(STRIP) --strip-unneeded -g -x $@
 
 #%.ce: %.c
-#	$(CC) $(CFLAGS) -DPROCESS_LOADABLE -c $< -o $@
+#	$(CC) $(CFLAGS) -c $< -o $@
 #	$(STRIP) --strip-unneeded -g -x $@
 
 #%.ce: 	%.co
