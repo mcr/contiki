@@ -54,10 +54,10 @@ dll_loader_load(char *name, char *arg)
     return LOADER_ERR_OPEN;
   } 
 
-  /* Find the main process of the loaded program. */
-  p = GetProcAddress(handle, "process_load");
+  /* Find the processes to be started from the loaded program. */
+  p = GetProcAddress(handle, "autostart_processes");
   if(p == NULL) {
-    debug_printf("dll_loader_load: could not find process startpoint 'process_load'\n");
+    debug_printf("dll_loader_load: could not find symbol 'autostart_processes'\n");
     return LOADER_ERR_READ;
   }
 
