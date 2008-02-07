@@ -113,7 +113,7 @@ CCIF void etimer_set(struct etimer *et, clock_time_t interval);
  *
  * \sa etimer_restart()
  */
-void etimer_reset(struct etimer *et);
+CCIF void etimer_reset(struct etimer *et);
 
 /**
  * \brief      Restart an event timer from the current point in time

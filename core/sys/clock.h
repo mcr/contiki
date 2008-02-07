@@ -78,7 +78,7 @@ void clock_init(void);
  *
  * \return The current clock time, measured in system ticks.
  */
-clock_time_t clock_time(void);
+CCIF clock_time_t clock_time(void);
 
 void clock_delay(unsigned int);
 
