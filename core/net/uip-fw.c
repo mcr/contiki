@@ -227,8 +227,9 @@ static void
 time_exceeded(void)
 {
 
-  /* We don't send out ICMP errors for ICMP messages. */
-  if(ICMPBUF->proto == UIP_PROTO_ICMP) {
+  /* We don't send out ICMP errors for ICMP messages (unless they are pings). */
+  if(ICMPBUF->proto == UIP_PROTO_ICMP &&
+     ICMPBUF->type != ICMP_ECHO) {
     uip_len = 0;
     return;
   }
