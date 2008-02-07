@@ -60,6 +60,10 @@
 
 PROCESS(irc_process, "IRC client");
 
+#if SELFSTART_PROCESS
+AUTOSTART_PROCESSES(&irc_process);
+#endif /* SELFSTART_PROCESS */
+
 static struct ctk_window window;
 static char log[LOG_WIDTH * LOG_HEIGHT];
 static char line[LOG_WIDTH*2];
