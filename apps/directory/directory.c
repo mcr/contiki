@@ -76,6 +76,10 @@ static struct ctk_button reloadbutton =
 
 PROCESS(directory_process, "Directory browser");
 
+#if SELFSTART_PROCESS
+AUTOSTART_PROCESSES(&directory_process);
+#endif /* SELFSTART_PROCESS */
+
 static unsigned char width, height;
 
 #define LOADING_DIR 1
