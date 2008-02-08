@@ -105,6 +105,7 @@ struct shell_input {
 #include "shell-rime-ping.h"
 #include "shell-rime-sniff.h"
 #include "shell-rsh.h"
+#include "shell-run.h"
 #include "shell-sendtest.h"
 #include "shell-sky.h"
 #include "shell-text.h"
