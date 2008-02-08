@@ -124,9 +124,7 @@ static struct ctk_button errorokbutton =
 
 PROCESS(program_handler_process, "Program handler");
 
-#if SELFSTART_PROCESS
 AUTOSTART_PROCESSES(&program_handler_process);
-#endif /* SELFSTART_PROCESS */
 
 static const char * const errormsgs[] = {
   "Ok",
