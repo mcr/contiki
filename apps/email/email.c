@@ -157,9 +157,7 @@ static struct ctk_button setupokbutton =
 
 PROCESS(email_process, "E-mail client");
 
-#if SELFSTART_PROCESS
 AUTOSTART_PROCESSES(&email_process);
-#endif /* SELFSTART_PROCESS */
 
 /*-----------------------------------------------------------------------------------*/
 static void
