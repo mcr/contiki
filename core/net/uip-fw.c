@@ -421,7 +421,7 @@ uip_fw_forward(void)
   /* If we use ping IP address configuration, and our IP address is
      not yet configured, we should intercept all ICMP echo packets. */
 #if UIP_PINGADDRCONF
-  if(uip_ipaddr_cmp(&uip_hostaddr, &all_zeroes_addr) &&
+  if(uip_ipaddr_cmp(&uip_hostaddr, &uip_all_zeroes_addr) &&
      BUF->proto == UIP_PROTO_ICMP &&
      ICMPBUF->type == ICMP_ECHO) {
     return UIP_FW_LOCAL;
