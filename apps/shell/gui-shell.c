@@ -64,9 +64,7 @@ static struct ctk_textentry commandentry =
 
 PROCESS(shell_gui_process, "Command shell");
 
-#if SELFSTART_PROCESS
 AUTOSTART_PROCESSES(&shell_gui_process);
-#endif /* SELFSTART_PROCESS */
 
 /*-----------------------------------------------------------------------------------*/
 void
