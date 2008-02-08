@@ -91,9 +91,7 @@ static char sendline[31+2];
 
 PROCESS(simpletelnet_process, "Telnet client");
 
-#if SELFSTART_PROCESS
 AUTOSTART_PROCESSES(&simpletelnet_process);
-#endif /* SELFSTART_PROCESS */
 
 /*-----------------------------------------------------------------------------------*/
 static void
