@@ -164,9 +164,7 @@ static char receivingmsgs[4][23] = {
 
 PROCESS(www_process, "Web browser");
 
-#if SELFSTART_PROCESS
 AUTOSTART_PROCESSES(&www_process);
-#endif /* SELFSTART_PROCESS */
 
 static void formsubmit(struct formattribs *attribs);
 
