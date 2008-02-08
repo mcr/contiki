@@ -52,9 +52,7 @@
 
 PROCESS(ftp_process, "FTP client");
 
-#if SELFSTART_PROCESS
 AUTOSTART_PROCESSES(&ftp_process);
-#endif /* SELFSTART_PROCESS */
 
 static void *connection;
 
