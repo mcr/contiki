@@ -67,9 +67,7 @@ static struct ctk_button tcpipclosebutton =
 
 PROCESS(netconf_process, "Network configurator");
 
-#if SELFSTART_PROCESS
 AUTOSTART_PROCESSES(&netconf_process);
-#endif /* SELFSTART_PROCESS */
 
 static void makestrings(void);
 
