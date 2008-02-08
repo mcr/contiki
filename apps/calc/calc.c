@@ -82,9 +82,7 @@ static struct ctk_button calcbutton =
 
 PROCESS(calc_process, "Calculator");
 
-#if SELFSTART_PROCESS
 AUTOSTART_PROCESSES(&calc_process);
-#endif /* SELFSTART_PROCESS */
 
 static unsigned long operand1, operand2;
 static unsigned char op;
