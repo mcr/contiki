@@ -51,9 +51,7 @@ static struct ctk_label message =
 
 PROCESS(webserver_process, "Web server");
 
-#if SELFSTART_PROCESS
 AUTOSTART_PROCESSES(&webserver_process);
-#endif /* SELFSTART_PROCESS */
 
 #define LOG_WIDTH  38
 #define LOG_HEIGHT 16
