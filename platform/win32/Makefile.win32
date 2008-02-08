@@ -75,7 +75,7 @@ ${foreach DSC,$(DSCS),${eval ${call dsc_template,$(DSC),${call appname,$(DSC)}}}
 ### (The *.d files contain the full module-compile prerequisites)
 ${sort ${foreach PRG,$(PRGS), ${addprefix $(OBJECTDIR)/, \
                                 $(${call appname,$(PRG)_src:.c=.o})}}}:
-	$(CC) $(CFLAGS) -DAUTOSTART_ENABLE -DSELFSTART_PROCESS -D_USRDLL -c $< -o $@
+	$(CC) $(CFLAGS) -DAUTOSTART_ENABLE -D_USRDLL -c $< -o $@
 $(PRGS:=.prg):
 	$(LD) -shared $^ contiki-main.$(TARGET).a -o $@
 $(DSCS:=.dsc):
