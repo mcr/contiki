@@ -54,20 +54,20 @@ static struct ctk_label loglabel =
 
 /*-----------------------------------------------------------------------------------*/
 void
-telnetd_gui_output(char *str1, char *str2)
+telnetd_gui_output(const char *str1, int len1, const char *str2, int len2)
 {
-  static unsigned int len, i;
+  static unsigned int i;
   
   for(i = 1; i < YSIZE; ++i) {
     memcpy(&log[(i - 1) * XSIZE], &log[i * XSIZE], XSIZE);
   }
-  memset(&log[(YSIZE - 1) * XSIZE], 0, XSIZE);
-
-  len = (unsigned int)strlen(str1);
 
   strncpy(&log[(YSIZE - 1) * XSIZE], str1, XSIZE);
-  if(len < XSIZE) {
-    strncpy(&log[(YSIZE - 1) * XSIZE] + len, str2, XSIZE - len);
+  if(len1 < XSIZE) {
+    strncpy(&log[(YSIZE - 1) * XSIZE] + len1, str2, XSIZE - len1);
+    if(len1 + len2 < XSIZE) {
+      log[(YSIZE - 1) * XSIZE + len1 + len2] = 0;
+    }
   }
   
   CTK_WIDGET_REDRAW(&loglabel);
