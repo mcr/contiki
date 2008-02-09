@@ -44,8 +44,8 @@
 #define ISO_nl       0x0a
 #define ISO_cr       0x0d
 
-#define XSIZE 36
-#define YSIZE 12
+#define XSIZE 78
+#define YSIZE 30
 
 static struct ctk_window window;
 static char log[XSIZE * YSIZE];

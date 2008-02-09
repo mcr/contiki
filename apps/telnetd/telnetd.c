@@ -52,10 +52,10 @@ PROCESS(telnetd_process, "Shell server");
 AUTOSTART_PROCESSES(&telnetd_process);
 
 #ifndef TELNETD_CONF_LINELEN
-#define TELNETD_CONF_LINELEN 40
+#define TELNETD_CONF_LINELEN 80
 #endif
 #ifndef TELNETD_CONF_NUMLINES
-#define TELNETD_CONF_NUMLINES 16
+#define TELNETD_CONF_NUMLINES 25
 #endif
 
 struct telnetd_line {
