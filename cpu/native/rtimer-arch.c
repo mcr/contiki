@@ -85,9 +85,3 @@ rtimer_arch_schedule(rtimer_clock_t t)
   setitimer(ITIMER_REAL, &val, NULL);
 }
 /*---------------------------------------------------------------------------*/
-rtimer_clock_t
-rtimer_arch_now(void)
-{
-  return clock_time();
-}
-/*---------------------------------------------------------------------------*/
