@@ -92,12 +92,12 @@ main(void)
 
   procinit_init();
 
-  autostart_start((struct process **)autostart_processes);
-
 #ifdef PLATFORM_BUILD
   program_handler_add(&directory_dsc, "Directory",   1);
   program_handler_add(&www_dsc,       "Web browser", 1);
 #endif /* PLATFORM_BUILD */
+
+  autostart_start((struct process **)autostart_processes);
 
 #if 1
   {
