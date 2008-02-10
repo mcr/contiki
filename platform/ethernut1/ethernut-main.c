@@ -82,7 +82,7 @@ main(void)
   
   procinit_init();
   
-  autostart_start((struct process **) autostart_processes);
+  autostart_start(autostart_processes);
 
   rs232_print("Initialized\n");
   
