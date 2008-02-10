@@ -63,9 +63,9 @@ main(void)
 
   procinit_init();
   
-  autostart_start((struct process **)autostart_processes);
+  autostart_start(autostart_processes);
   
-  uip_ipaddr(&addr, 10,10,0,11);
+  uip_ipaddr(&addr, 192,168,2,2);
   printf("IP Address:  %d.%d.%d.%d\n", uip_ipaddr_to_quad(&addr));
   uip_sethostaddr(&addr);
 
