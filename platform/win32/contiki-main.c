@@ -97,7 +97,7 @@ main(void)
   program_handler_add(&www_dsc,       "Web browser", 1);
 #endif /* PLATFORM_BUILD */
 
-  autostart_start((struct process **)autostart_processes);
+  autostart_start(autostart_processes);
 
 #if 1
   {
