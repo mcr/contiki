@@ -183,7 +183,7 @@ main(int argc, char **argv)
   button_sensor.activate();
   
   printf("Autostarting processes\n");
-  autostart_start((struct process **) autostart_processes);
+  autostart_start(autostart_processes);
 
   energest_init();
   
