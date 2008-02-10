@@ -136,7 +136,7 @@ PROCESS_THREAD(shell_gui_process, ev, data)
     
     if(ev == ctk_signal_widget_activate &&
        data == (process_data_t)&commandentry) {
-      int command_len = strlen(command);
+      int command_len = (int)strlen(command);
       shell_default_output("> ", 2, command, command_len);
       shell_input(command, command_len);
       if(shell_gui_process.state) {
