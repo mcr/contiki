@@ -59,7 +59,7 @@ main(void)
 
   procinit_init();
   
-  autostart_start((struct process **)autostart_processes);
+  autostart_start(autostart_processes);
 
   /* Make standard output unbuffered. */
   setvbuf(stdout, (char *)NULL, _IONBF, 0);
