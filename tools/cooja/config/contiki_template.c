@@ -120,7 +120,7 @@ start_process_run_loop(void *data)
     init_net();
   
     /* Start user applications */
-    autostart_start((struct process **) autostart_processes);
+    autostart_start(autostart_processes);
   
     while(1)
 	{
