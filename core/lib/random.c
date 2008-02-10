@@ -61,7 +61,7 @@ random_rand(void)
 
   rv = tv = 0;
 
-  tv = time + clock_time();
+  tv = (unsigned short)(time + clock_time());
   rv = tv ^ key;
 
   key = ~tv + 4711;
