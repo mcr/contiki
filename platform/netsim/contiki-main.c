@@ -161,7 +161,7 @@ contiki_main(int flag)
 
   rtimer_init();
   
-  autostart_start((struct process **)autostart_processes);
+  autostart_start(autostart_processes);
   
   while(1) {
     int n;
