@@ -77,7 +77,7 @@ PROCESS_THREAD(contiki_esb_main_init_process, ev, data)
   PROCESS_PAUSE();
 
   print_processes((struct process **) autostart_processes);
-  autostart_start((struct process **) autostart_processes);
+  autostart_start(autostart_processes);
 
   beep_spinup();
   leds_on(LEDS_RED);
