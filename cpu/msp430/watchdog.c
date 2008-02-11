@@ -40,6 +40,7 @@ watchdog_init(void)
 {
   /* The MSP430 watchdog is enabled at boot-up, so we stop it during
      initialization. */
+  stopped = 0;
   watchdog_stop();
 }
 /*---------------------------------------------------------------------------*/
@@ -48,8 +49,10 @@ watchdog_start(void)
 {
   /* We setup the watchdog to reset the device after one second,
      unless watchdog_periodic() is called. */
-  WDTCTL = WDTPW | WDTCNTCL | WDT_ARST_1000;
-  stopped = 0;
+  stopped--;
+  if(!stopped) {
+    WDTCTL = WDTPW | WDTCNTCL | WDT_ARST_1000;
+  }
 }
 /*---------------------------------------------------------------------------*/
 void
@@ -66,7 +69,7 @@ void
 watchdog_stop(void)
 {
   WDTCTL = WDTPW | WDTHOLD;
-  stopped = 1;
+  stopped++;
 }
 /*---------------------------------------------------------------------------*/
 void
