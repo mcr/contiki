@@ -153,8 +153,8 @@ main(int argc, char **argv)
   leds_on(LEDS_RED);
 
 #if WITH_UIP
-  uart1_init(BAUD2UBR(57600)); /* Must come before first printf */
-  slip_arch_init(BAUD2UBR(57600));
+  uart1_init(BAUD2UBR(115200)); /* Must come before first printf */
+  slip_arch_init(BAUD2UBR(115200));
 #else
   uart1_init(BAUD2UBR(115200)); /* Must come before first printf */
 #endif /* WITH_UIP */
