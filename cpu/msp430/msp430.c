@@ -159,14 +159,13 @@ void
 msp430_cpu_init(void)
 {
   dint();
-  watchdog_stop();
+  watchdog_init();
   init_ports();
   msp430_init_dco();
   eint();
   if((uintptr_t)cur_break & 1) { /* Workaround for msp430-ld bug! */
     cur_break++;
   }
-  watchdog_start();
 }
 /*---------------------------------------------------------------------------*/
 #define asmv(arg) __asm__ __volatile__(arg)
