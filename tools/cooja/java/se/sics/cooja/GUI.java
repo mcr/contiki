@@ -3438,8 +3438,8 @@ public class GUI {
       JButton retryButton = new JButton("Retry");
       retryButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          errorDialog.dispose();
           errorDialog.setTitle("-RETRY-");
+          errorDialog.dispose();
         }
       });
       buttonBox.add(retryButton);
