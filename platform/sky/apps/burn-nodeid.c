@@ -39,6 +39,7 @@
  */
 
 #include "dev/leds.h"
+#include "dev/watchdog.h"
 #include "node-id.h"
 #include "contiki.h"
 
@@ -50,6 +51,8 @@ AUTOSTART_PROCESSES(&burn_process);
 PROCESS_THREAD(burn_process, ev, data)
 {
   PROCESS_BEGIN();
+
+  watchdog_stop();
   leds_on(LEDS_RED);
 #if NODEID
   printf("Burning node id %d\n", NODEID);
@@ -63,6 +66,7 @@ PROCESS_THREAD(burn_process, ev, data)
   printf("Restored node id %d\n", node_id);
 #endif
   leds_off(LEDS_RED + LEDS_BLUE);
+  watchdog_start();
   while(1) {
     PROCESS_WAIT_EVENT();
   }
