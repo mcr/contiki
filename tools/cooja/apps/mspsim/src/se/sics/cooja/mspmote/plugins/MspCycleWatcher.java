@@ -84,7 +84,7 @@ public class MspCycleWatcher extends VisPlugin {
 
     JPanel controlPanel = new JPanel(new GridLayout(2,3,5,5));
     controlPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-    controlPanel.add(new JLabel("Total cycles:"));
+    controlPanel.add(new JLabel("Cycle counter:"));
     controlPanel.add(cycleTextField);
     controlPanel.add(updateButton);
     controlPanel.add(new JLabel("Since reset:"));
