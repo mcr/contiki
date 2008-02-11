@@ -37,6 +37,8 @@
 #include <stdio.h>
 #include "sys/log.h"
 
+void simlog(char*);
+
 #define PRINTF2LOG_SIZE 128
 
 #define printf(...)                                         \
