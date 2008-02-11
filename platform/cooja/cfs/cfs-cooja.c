@@ -88,7 +88,7 @@ cfs_read(int f, void *buf, unsigned int len)
 }
 /*---------------------------------------------------------------------------*/
 int
-cfs_write(int f, void *buf, unsigned int len)
+cfs_write(int f, const void *buf, unsigned int len)
 {
   if(f == FLAG_FILE_OPEN) {
 	// TODO Should yield a few times?
