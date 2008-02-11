@@ -93,7 +93,7 @@ public class ContikiMoteType implements MoteType {
    * Communication stacks in Contiki.
    */
   public enum CommunicationStack {
-    UIP, UIP_UAODV, RIME;
+    RIME, UIP, UIP_UAODV;
 
     public String toString() {
       if (this == UIP) {
@@ -160,7 +160,7 @@ public class ContikiMoteType implements MoteType {
 
   private boolean hasSystemSymbols = false;
 
-  private CommunicationStack commStack = CommunicationStack.UIP;
+  private CommunicationStack commStack = CommunicationStack.RIME;
 
   // Simulation holding this mote type
   private Simulation mySimulation = null;
