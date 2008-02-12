@@ -31,6 +31,7 @@
 
 package se.sics.cooja.mspmote;
 
+import java.awt.Container;
 import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.Toolkit;
@@ -60,14 +61,14 @@ public class ESBMoteType extends MspMoteType {
     Toolkit toolkit = Toolkit.getDefaultToolkit();
     URL imageURL = this.getClass().getClassLoader().getResource("images/esb.jpg");
     Image image = toolkit.getImage(imageURL);
-    MediaTracker tracker = new MediaTracker(GUI.frame);
+    MediaTracker tracker = new MediaTracker(GUI.getTopParentContainer());
     tracker.addImage(image, 1);
     try {
       tracker.waitForAll();
     } catch (InterruptedException ex) {
     }
-    if (image.getHeight(GUI.frame) > 0 && image.getWidth(GUI.frame) > 0) {
-      image = image.getScaledInstance((100*image.getWidth(GUI.frame)/image.getHeight(GUI.frame)), 100, Image.SCALE_DEFAULT);
+    if (image.getHeight(GUI.getTopParentContainer()) > 0 && image.getWidth(GUI.getTopParentContainer()) > 0) {
+      image = image.getScaledInstance((100*image.getWidth(GUI.getTopParentContainer())/image.getHeight(GUI.getTopParentContainer())), 100, Image.SCALE_DEFAULT);
       return new ImageIcon(image);
     }
 
@@ -78,9 +79,9 @@ public class ESBMoteType extends MspMoteType {
     return new ESBMote(this, simulation);
   }
 
-  public boolean configureAndInit(JFrame parentFrame, Simulation simulation,
+  public boolean configureAndInit(Container parentContainer, Simulation simulation,
       boolean visAvailable) throws MoteTypeCreationException {
-    return configureAndInitMspType(parentFrame, simulation, visAvailable, target, targetNice);
+    return configureAndInitMspType(parentContainer, simulation, visAvailable, target, targetNice);
   }
 
 }
