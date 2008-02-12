@@ -183,15 +183,15 @@ public class CreateSimDialog extends JDialog {
   }
 
   private CreateSimDialog(Dialog dialog, GUI gui) {
-    super(dialog, "Create new simulation", ModalityType.TOOLKIT_MODAL);
+    super(dialog, "Create new simulation", ModalityType.APPLICATION_MODAL);
     setupDialog(gui);
   }
   private CreateSimDialog(Window window, GUI gui) {
-    super(window, "Create new simulation", ModalityType.TOOLKIT_MODAL);
+    super(window, "Create new simulation", ModalityType.APPLICATION_MODAL);
     setupDialog(gui);
   }
   private CreateSimDialog(Frame frame, GUI gui) {
-    super(frame, "Create new simulation", ModalityType.TOOLKIT_MODAL);
+    super(frame, "Create new simulation", ModalityType.APPLICATION_MODAL);
     setupDialog(gui);
   }
 

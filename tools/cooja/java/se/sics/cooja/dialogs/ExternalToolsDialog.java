@@ -85,15 +85,15 @@ public class ExternalToolsDialog extends JDialog {
   }
 
   private ExternalToolsDialog(Dialog dialog) {
-    super(dialog, "Edit Settings", ModalityType.TOOLKIT_MODAL);
+    super(dialog, "Edit Settings", ModalityType.APPLICATION_MODAL);
     setupDialog();
   }
   private ExternalToolsDialog(Window window) {
-    super(window, "Edit Settings", ModalityType.TOOLKIT_MODAL);
+    super(window, "Edit Settings", ModalityType.APPLICATION_MODAL);
     setupDialog();
   }
   private ExternalToolsDialog(Frame frame) {
-    super(frame, "Edit Settings", ModalityType.TOOLKIT_MODAL);
+    super(frame, "Edit Settings", ModalityType.APPLICATION_MODAL);
     setupDialog();
   }
 

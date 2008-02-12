@@ -439,15 +439,15 @@ public class ContikiMoteTypeDialog extends JDialog {
   }
 
   private ContikiMoteTypeDialog(Dialog dialog) {
-    super(dialog, "Add Mote Type", ModalityType.TOOLKIT_MODAL);
+    super(dialog, "Add Mote Type", ModalityType.APPLICATION_MODAL);
     setupDialog();
   }
   private ContikiMoteTypeDialog(Window window) {
-    super(window, "Add Mote Type", ModalityType.TOOLKIT_MODAL);
+    super(window, "Add Mote Type", ModalityType.APPLICATION_MODAL);
     setupDialog();
   }
   private ContikiMoteTypeDialog(Frame frame) {
-    super(frame, "Add Mote Type", ModalityType.TOOLKIT_MODAL);
+    super(frame, "Add Mote Type", ModalityType.APPLICATION_MODAL);
     setupDialog();
   }
 

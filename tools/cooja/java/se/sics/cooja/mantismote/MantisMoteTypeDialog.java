@@ -195,15 +195,15 @@ public class MantisMoteTypeDialog extends JDialog {
   }
 
   private MantisMoteTypeDialog(Dialog dialog) {
-    super(dialog, "Configure Mantis Mote Type", ModalityType.TOOLKIT_MODAL);
+    super(dialog, "Configure Mantis Mote Type", ModalityType.APPLICATION_MODAL);
     setupDialog();
   }
   private MantisMoteTypeDialog(Window window) {
-    super(window, "Configure Mantis Mote Type", ModalityType.TOOLKIT_MODAL);
+    super(window, "Configure Mantis Mote Type", ModalityType.APPLICATION_MODAL);
     setupDialog();
   }
   private MantisMoteTypeDialog(Frame frame) {
-    super(frame, "Configure Mantis Mote Type", ModalityType.TOOLKIT_MODAL);
+    super(frame, "Configure Mantis Mote Type", ModalityType.APPLICATION_MODAL);
     setupDialog();
   }
 
