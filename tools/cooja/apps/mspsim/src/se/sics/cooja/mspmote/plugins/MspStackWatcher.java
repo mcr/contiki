@@ -53,7 +53,6 @@ public class MspStackWatcher extends VisPlugin {
   private MSP430 cpu;
   private Simulation simulation;
   private Observer stackObserver = null;
-  private Observer logObserver = null;
   private JButton startButton;
   private JButton stopButton;
 
