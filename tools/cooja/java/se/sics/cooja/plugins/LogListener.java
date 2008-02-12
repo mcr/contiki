@@ -155,7 +155,7 @@ public class LogListener extends VisPlugin {
       public void actionPerformed(ActionEvent ev) {
         JFileChooser fc = new JFileChooser();
 
-        int returnVal = fc.showSaveDialog(GUI.frame);
+        int returnVal = fc.showSaveDialog(GUI.getTopParentContainer());
         if (returnVal == JFileChooser.APPROVE_OPTION) {
           File saveFile = fc.getSelectedFile();
 
@@ -163,9 +163,8 @@ public class LogListener extends VisPlugin {
             String s1 = "Overwrite";
             String s2 = "Cancel";
             Object[] options = { s1, s2 };
-            int n = JOptionPane
-            .showOptionDialog(
-                GUI.frame,
+            int n = JOptionPane.showOptionDialog(
+                GUI.getTopParentContainer(),
                 "A file with the same name already exists.\nDo you want to remove it?",
                 "Overwrite existing file?", JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE, null, options, s1);
