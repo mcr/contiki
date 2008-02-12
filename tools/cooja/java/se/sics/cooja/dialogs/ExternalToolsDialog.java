@@ -61,21 +61,43 @@ public class ExternalToolsDialog extends JDialog {
   /**
    * Creates a dialog for viewing/editing external tools settings.
    *
-   * @param parentFrame
-   *          Parent frame for dialog
+   * @param parentContainer
+   *          Parent container for dialog
    */
-  public static void showDialog(Frame parentFrame) {
-    ExternalToolsDialog myDialog = new ExternalToolsDialog(parentFrame);
-    myDialog.setLocationRelativeTo(parentFrame);
+  public static void showDialog(Container parentContainer) {
+
+    ExternalToolsDialog myDialog = null;
+    if (parentContainer instanceof Window) {
+      myDialog = new ExternalToolsDialog((Window) parentContainer);
+    } else if (parentContainer instanceof Dialog) {
+      myDialog = new ExternalToolsDialog((Dialog) parentContainer);
+    } else if (parentContainer instanceof Frame) {
+      myDialog = new ExternalToolsDialog((Frame) parentContainer);
+    } else {
+      logger.fatal("Unknown parent container type: " + parentContainer);
+      return;
+    }
+    myDialog.setLocationRelativeTo(parentContainer);
 
     if (myDialog != null) {
       myDialog.setVisible(true);
     }
   }
 
+  private ExternalToolsDialog(Dialog dialog) {
+    super(dialog, "Edit Settings", ModalityType.TOOLKIT_MODAL);
+    setupDialog();
+  }
+  private ExternalToolsDialog(Window window) {
+    super(window, "Edit Settings", ModalityType.TOOLKIT_MODAL);
+    setupDialog();
+  }
   private ExternalToolsDialog(Frame frame) {
-    super(frame, "Edit Settings", true);
+    super(frame, "Edit Settings", ModalityType.TOOLKIT_MODAL);
+    setupDialog();
+  }
 
+  private void setupDialog() {
     myDialog = this;
 
     JLabel label;
