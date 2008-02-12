@@ -470,7 +470,7 @@ public class Simulation extends Observable implements Runnable {
         // Show configure simulation dialog
         boolean createdOK = false;
         if (visAvailable) {
-          createdOK = CreateSimDialog.showDialog(GUI.frame, this);
+          createdOK = CreateSimDialog.showDialog(GUI.getTopParentContainer(), this);
         } else {
           createdOK = true;
         }
