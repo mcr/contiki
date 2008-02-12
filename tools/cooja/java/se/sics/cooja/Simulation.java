@@ -315,7 +315,7 @@ public class Simulation extends Observable implements Runnable {
   }
 
   /**
-   * @param nrTickLists Maximum mote startup delay
+   * @param maxMoteStartupDelay Maximum mote startup delay
    */
   public void setDelayedMoteStartupTime(int maxMoteStartupDelay) {
     this.maxMoteStartupDelay = Math.max(0, maxMoteStartupDelay);

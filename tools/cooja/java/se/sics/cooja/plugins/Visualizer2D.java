@@ -186,7 +186,7 @@ public abstract class Visualizer2D extends VisPlugin {
     simObserver.update(null, null);
 
     // Detect mote highligts
-    myGUI.addMoteHighligtObserver(moteHighligtObserver = new Observer() {
+    myGUI.addMoteHighlightObserver(moteHighligtObserver = new Observer() {
       public void update(Observable obs, Object obj) {
         if (!(obj instanceof Mote)) {
           return;
@@ -614,7 +614,7 @@ public abstract class Visualizer2D extends VisPlugin {
 
   public void closePlugin() {
     if (moteHighligtObserver != null) {
-      myGUI.deleteMoteHighligtObserver(moteHighligtObserver);
+      myGUI.deleteMoteHighlightObserver(moteHighligtObserver);
     }
 
     if (simObserver != null) {

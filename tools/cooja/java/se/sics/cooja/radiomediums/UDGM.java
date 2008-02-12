@@ -59,7 +59,8 @@ import se.sics.cooja.plugins.Visualizer2D;
  * The radio output power indicator (0-100) is used in a very simple way; the
  * total transmission (and interfering) range is multiplied with [power_ind]%.
  *
- * @see #SS_OK
+ * @see #SS_OK_BEST
+ * @see #SS_OK_WORST
  * @see #SS_NOISE
  * @see #SS_NOTHING
  *
