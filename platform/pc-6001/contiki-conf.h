@@ -131,7 +131,7 @@ typedef unsigned long clock_time_t;
 #define slip_arch_writeb(c)             rs232_arch_writeb(c)
 
 #ifdef WITH_LOADER_ARCH
-//#define PROCESS_LOADABLE                1
+//#define AUTOSTART_ENABLE                1
 #define LOADER_CONF_ARCH                "loader_arch.h"
 #endif /* WITH_LOADER_ARCH */
 
