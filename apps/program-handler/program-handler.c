@@ -120,12 +120,6 @@ static struct ctk_label errortype =
 static struct ctk_button errorokbutton =
   {CTK_BUTTON(9, 7, 2, "Ok")};
 
-#endif /* WITH_LOADER_ARCH */
-
-PROCESS(program_handler_process, "Program handler");
-
-AUTOSTART_PROCESSES(&program_handler_process);
-
 static const char * const errormsgs[] = {
   "Ok",
   "Read error",
@@ -137,8 +131,14 @@ static const char * const errormsgs[] = {
   "No loader"
 };
 
+#endif /* WITH_LOADER_ARCH */
+
 #define LOADER_EVENT_LOAD 1
 #define LOADER_EVENT_DISPLAY_NAME 2
+
+PROCESS(program_handler_process, "Program handler");
+
+AUTOSTART_PROCESSES(&program_handler_process);
 
 static char *displayname;
 
