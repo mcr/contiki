@@ -54,6 +54,9 @@ typedef int32_t  s32_t;
 #define CCIF
 #define CLIF
 
+#define HAVE_SNPRINTF
+#define snprintf(buf, len, ...) sprintf(buf, __VA_ARGS__)
+
 #define CLOCK_CONF_SECOND 2
 typedef unsigned short clock_time_t;
 
