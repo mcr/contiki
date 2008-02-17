@@ -83,10 +83,6 @@ main(void)
 
   process_init();
 
-  procinit_init();
-
-  autostart_start(autostart_processes);
-
 #if 1
 
   ethernet_config = config_read("contiki.cfg");
@@ -112,8 +108,6 @@ main(void)
   }
 #endif
 
-  process_start((struct process *)&ethernet_process, (char *)ethernet_config);
-
 #if (WITH_GUI && WITH_MOUSE)
   {
     static const u8_t mouse_sprite[64] = {
@@ -131,6 +125,12 @@ main(void)
     VIC.spr0_color = COLOR_WHITE;
   }
 #endif /* WITH_GUI && WITH_MOUSE */
+
+  procinit_init();
+
+  process_start((struct process *)&ethernet_process, (char *)ethernet_config);
+
+  autostart_start(autostart_processes);
 
   log_message("Contiki up and running ...", "");
   
