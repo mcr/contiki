@@ -66,10 +66,6 @@ main(void)
 
   process_init();
 
-  procinit_init();
-
-  autostart_start(autostart_processes);
-
 #if 1
 
   ethernet_config = config_read("contiki.cfg");
@@ -95,7 +91,11 @@ main(void)
   }
 #endif
 
+  procinit_init();
+
   process_start((struct process *)&ethernet_process, (char *)ethernet_config);
+
+  autostart_start(autostart_processes);
 
   log_message("Contiki up and running ...", "");
   
