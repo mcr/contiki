@@ -65,6 +65,9 @@ public class ExternalToolsDialog extends JDialog {
    *          Parent container for dialog
    */
   public static void showDialog(Container parentContainer) {
+    if (GUI.isVisualizedInApplet()) {
+      return;
+    }
 
     ExternalToolsDialog myDialog = null;
     if (parentContainer instanceof Window) {

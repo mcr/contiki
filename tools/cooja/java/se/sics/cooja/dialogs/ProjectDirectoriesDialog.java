@@ -81,6 +81,9 @@ public class ProjectDirectoriesDialog extends JDialog {
    */
   public static Vector<File> showDialog(Container parentContainer,
       Vector<File> changableProjects, Vector<File> fixedProjects) {
+    if (GUI.isVisualizedInApplet()) {
+      return null;
+    }
 
     ProjectDirectoriesDialog myDialog = null;
     if (parentContainer instanceof Window) {
