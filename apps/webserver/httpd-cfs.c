@@ -117,11 +117,11 @@ PT_THREAD(handle_output(struct httpd_state *s))
   s->fd = cfs_open(s->filename, CFS_READ);
   petsciiconv_toascii(s->filename, sizeof(s->filename));
   if(s->fd < 0) {
-    s->fd = cfs_open("404.html", CFS_READ);
+    s->fd = cfs_open("notfound.html", CFS_READ);
     if(s->fd < 0) {
       uip_abort();
       memb_free(&conns, s);
-      webserver_log_file(&uip_conn->ripaddr, "reset (no 404.html)");
+      webserver_log_file(&uip_conn->ripaddr, "reset (no notfound.html)");
       PT_EXIT(&s->outputpt);
     }
     PT_WAIT_THREAD(&s->outputpt,
