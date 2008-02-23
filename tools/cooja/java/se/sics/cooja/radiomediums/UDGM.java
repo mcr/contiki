@@ -40,6 +40,7 @@ import org.jdom.Element;
 import org.apache.log4j.Logger;
 
 import se.sics.cooja.*;
+import se.sics.cooja.contikimote.interfaces.ContikiRadio;
 import se.sics.cooja.interfaces.*;
 import se.sics.cooja.plugins.Visualizer2D;
 
@@ -315,15 +316,19 @@ public class UDGM extends AbstractRadioMedium {
     public Color[] getColorOf(Mote mote) {
       Radio moteRadio = mote.getInterfaces().getRadio();
       if (moteRadio == null) {
-        return new Color[] { Color.GRAY };
+        return new Color[] { Color.BLACK };
       }
 
       if (mote.getState() == Mote.State.DEAD) {
-        return new Color[] { Color.GRAY };
+        return new Color[] { Color.BLACK };
       }
 
       if (selectedMote != null && mote == selectedMote) {
         return new Color[] { Color.CYAN };
+      }
+
+      if (moteRadio instanceof ContikiRadio && !((ContikiRadio) moteRadio).isOn()) {
+        return new Color[] { Color.GRAY };
       }
 
       if (moteRadio.isTransmitting()) {
