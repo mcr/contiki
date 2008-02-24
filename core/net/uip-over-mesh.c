@@ -52,7 +52,7 @@ static rimeaddr_t queued_receiver;
 static struct route_discovery_conn route_discovery;
 static struct uc_conn dataconn;
 
-#define DEBUG 1
+#define DEBUG 0
 #if DEBUG
 #include <stdio.h>
 #define PRINTF(...) printf(__VA_ARGS__)
@@ -157,15 +157,19 @@ uip_over_mesh_send(void)
     receiver.u8[1] = BUF->destipaddr.u8[3];
   } else {
     if(rimeaddr_cmp(&gateway, &rimeaddr_node_addr)) {
-      PRINTF("I am gateway, should forward over a local interface\n");
+      PRINTF("uip_over_mesh_send: I am gateway, packet to %d.%d.%d.%d to local interface\n",
+	     uip_ipaddr_to_quad(&BUF->destipaddr));
       if(gw_netif != NULL) {
 	return gw_netif->output();
       }
       return UIP_FW_DROPPED;
     } else if(rimeaddr_cmp(&gateway, &rimeaddr_null)) {
-      PRINTF("No gateway setup, dropping packet\n");
+      PRINTF("uip_over_mesh_send: No gateway setup, dropping packet\n");
       return UIP_FW_OK;
     } else {
+      PRINTF("uip_over_mesh_send: forwarding packet to %d.%d.%d.%d towards gateway %d.%d\n",
+	     uip_ipaddr_to_quad(&BUF->destipaddr),
+	     gateway.u8[0], gateway.u8[1]);
       rimeaddr_copy(&receiver, &gateway);
     }
   }
