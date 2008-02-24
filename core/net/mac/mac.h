@@ -58,7 +58,7 @@ struct mac_driver {
   int (* on)(void);
 
   /** Turn the MAC layer off. */
-  int (* off)(void);
+  int (* off)(int keep_radio_on);
 };
 
 
