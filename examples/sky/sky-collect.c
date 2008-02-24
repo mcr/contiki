@@ -47,6 +47,7 @@
 
 #include "dev/light.h"
 #include "dev/sht11.h"
+#include "dev/simple-cc2420.h"
 #include "sys/timesynch.h"
 #include <stdio.h>
 #include <string.h>
@@ -130,11 +131,9 @@ static int
 do_rssi(void)
 {
   static int sample;
-  int rssi_max;
-  int channel, i;
-  rtimer_clock_t r;
+  int channel;
   
-  rime_mac->off();
+  rime_mac->off(0);
 
   simple_cc2420_on();
   for(channel = 11; channel <= 26; ++channel) {
