@@ -79,7 +79,7 @@ struct sibc_conn {
   const struct sibc_callbacks *u;
 };
 
-void sibc_open(struct sibc_conn *c, u16_t channel,
+void sibc_open(struct sibc_conn *c, uint16_t channel,
 		const struct sibc_callbacks *u);
 void sibc_close(struct sibc_conn *c);
 

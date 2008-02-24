@@ -78,7 +78,7 @@ recv_from_abc(struct abc_conn *bc)
 static const struct abc_callbacks ibc = {recv_from_abc};
 /*---------------------------------------------------------------------------*/
 void
-ibc_open(struct ibc_conn *c, u16_t channel,
+ibc_open(struct ibc_conn *c, uint16_t channel,
 	  const struct ibc_callbacks *u)
 {
   abc_open(&c->c, channel, &ibc);

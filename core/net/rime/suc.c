@@ -71,7 +71,7 @@ recv_from_uc(struct uc_conn *uc, rimeaddr_t *from)
 static const struct uc_callbacks suc = {recv_from_uc};
 /*---------------------------------------------------------------------------*/
 void
-suc_open(struct suc_conn *c, u16_t channel,
+suc_open(struct suc_conn *c, uint16_t channel,
 	  const struct suc_callbacks *u)
 {
   uc_open(&c->c, channel, &suc);

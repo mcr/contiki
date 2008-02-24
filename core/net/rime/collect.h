@@ -65,8 +65,8 @@
 #include "net/rime/neighbor-discovery.h"
 
 struct collect_callbacks {
-  void (* recv)(rimeaddr_t *originator, u8_t seqno,
-		u8_t hops);
+  void (* recv)(rimeaddr_t *originator, uint8_t seqno,
+		uint8_t hops);
 };
 
 struct collect_conn {
@@ -74,9 +74,9 @@ struct collect_conn {
   struct ruc_conn ruc_conn;
   const struct collect_callbacks *cb;
   struct ctimer t;
-  u16_t rtmetric;
-  u8_t forwarding;
-  u8_t seqno;
+  uint16_t rtmetric;
+  uint8_t forwarding;
+  uint8_t seqno;
 };
 
 void collect_open(struct collect_conn *c, uint16_t channels,

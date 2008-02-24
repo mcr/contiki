@@ -63,24 +63,24 @@
 struct ruc_conn;
 
 struct ruc_callbacks {
-  void (* recv)(struct ruc_conn *c, rimeaddr_t *from, u8_t seqno);
-  void (* sent)(struct ruc_conn *c, rimeaddr_t *to, u8_t retransmissions);
-  void (* timedout)(struct ruc_conn *c, rimeaddr_t *to, u8_t retransmissions);
+  void (* recv)(struct ruc_conn *c, rimeaddr_t *from, uint8_t seqno);
+  void (* sent)(struct ruc_conn *c, rimeaddr_t *to, uint8_t retransmissions);
+  void (* timedout)(struct ruc_conn *c, rimeaddr_t *to, uint8_t retransmissions);
 };
 
 struct ruc_conn {
   struct suc_conn c;
   const struct ruc_callbacks *u;
-  u8_t sndnxt;
-  u8_t rxmit;
-  u8_t max_rxmit;
+  uint8_t sndnxt;
+  uint8_t rxmit;
+  uint8_t max_rxmit;
 };
 
-void ruc_open(struct ruc_conn *c, u16_t channel,
+void ruc_open(struct ruc_conn *c, uint16_t channel,
 	       const struct ruc_callbacks *u);
 void ruc_close(struct ruc_conn *c);
 
-int ruc_send(struct ruc_conn *c, rimeaddr_t *receiver, u8_t max_retransmissions);
+int ruc_send(struct ruc_conn *c, rimeaddr_t *receiver, uint8_t max_retransmissions);
 
 #endif /* __RUC_H__ */
 /** @} */

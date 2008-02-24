@@ -80,7 +80,7 @@ struct abc_conn {
   struct chameleon_channel channel;
 #else /* CHAMELEON */
   struct abc_conn *next;
-  u16_t channel;
+  uint16_t channel;
 #endif /* CHAMELEON */
   const struct abc_callbacks *u;
 };
@@ -101,7 +101,7 @@ struct abc_conn {
  *             when a packet arrives on the channel.
  *
  */
-void abc_open(struct abc_conn *c, u16_t channel,
+void abc_open(struct abc_conn *c, uint16_t channel,
 	       const struct abc_callbacks *u);
 
 /**

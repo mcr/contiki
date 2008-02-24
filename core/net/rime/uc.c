@@ -82,7 +82,7 @@ recv_from_ibc(struct ibc_conn *ibc, rimeaddr_t *from)
 static const struct ibc_callbacks uc = {recv_from_ibc};
 /*---------------------------------------------------------------------------*/
 void
-uc_open(struct uc_conn *c, u16_t channel,
+uc_open(struct uc_conn *c, uint16_t channel,
 	 const struct uc_callbacks *u)
 {
   ibc_open(&c->c, channel, &uc);

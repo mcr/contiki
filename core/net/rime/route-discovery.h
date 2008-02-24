@@ -75,13 +75,13 @@ struct route_discovery_conn {
   struct uc_conn rrepconn;
   struct ctimer t;
   rimeaddr_t last_rreq_originator;
-  u16_t last_rreq_id;
-  u16_t rreq_id;
+  uint16_t last_rreq_id;
+  uint16_t rreq_id;
   const struct route_discovery_callbacks *cb;
 };
 
 void route_discovery_open(struct route_discovery_conn *c, clock_time_t time,
-			  u16_t channels,
+			  uint16_t channels,
 			  const struct route_discovery_callbacks *callbacks);
 void route_discovery_discover(struct route_discovery_conn *c, rimeaddr_t *dest,
 			      clock_time_t timeout);

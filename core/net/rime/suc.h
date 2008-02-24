@@ -77,7 +77,7 @@ struct suc_conn {
   rimeaddr_t receiver;
 };
 
-void suc_open(struct suc_conn *c, u16_t channel,
+void suc_open(struct suc_conn *c, uint16_t channel,
 	       const struct suc_callbacks *u);
 void suc_close(struct suc_conn *c);
 

@@ -72,8 +72,8 @@ struct trickle_conn {
   struct ctimer t;
   struct queuebuf *q;
   clock_time_t interval;
-  u8_t seqno;
-  u8_t interval_scaling;
+  uint8_t seqno;
+  uint8_t interval_scaling;
 };
 
 void trickle_open(struct trickle_conn *c, clock_time_t interval,

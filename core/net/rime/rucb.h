@@ -65,11 +65,11 @@ struct rucb_conn {
   struct ruc_conn c;
   const struct rucb_callbacks *u;
   rimeaddr_t receiver, sender;
-  u16_t chunk;
-  u8_t last_seqno;
+  uint16_t chunk;
+  uint8_t last_seqno;
 };
 
-void rucb_open(struct rucb_conn *c, u16_t channel,
+void rucb_open(struct rucb_conn *c, uint16_t channel,
 	      const struct rucb_callbacks *u);
 void rucb_close(struct rucb_conn *c);
 

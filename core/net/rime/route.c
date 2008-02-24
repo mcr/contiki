@@ -97,7 +97,7 @@ route_init(void)
 /*---------------------------------------------------------------------------*/
 int
 route_add(rimeaddr_t *dest, rimeaddr_t *nexthop,
-	  u8_t hop_count, u8_t seqno)
+	  uint8_t hop_count, uint8_t seqno)
 {
   struct route_entry *e;
 

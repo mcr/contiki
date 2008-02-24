@@ -78,7 +78,7 @@ send(void *ptr)
 /*---------------------------------------------------------------------------*/
 static int
 recv(struct nf_conn *nf, rimeaddr_t *from,
-     rimeaddr_t *originator, u8_t seqno, u8_t hops)
+     rimeaddr_t *originator, uint8_t seqno, uint8_t hops)
 {
   struct trickle_conn *c = (struct trickle_conn *)nf;
 
@@ -122,7 +122,7 @@ static const struct nf_callbacks nf = {recv,
 /*---------------------------------------------------------------------------*/
 void
 trickle_open(struct trickle_conn *c, clock_time_t interval,
-	     u16_t channel, const struct trickle_callbacks *cb)
+	     uint16_t channel, const struct trickle_callbacks *cb)
 {
   nf_open(&c->c, interval, channel, &nf);
   c->cb = cb;

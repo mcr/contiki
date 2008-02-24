@@ -94,7 +94,7 @@ struct ibc_conn {
  *             when a packet arrives on the channel.
  *
  */
-void ibc_open(struct ibc_conn *c, u16_t channel,
+void ibc_open(struct ibc_conn *c, uint16_t channel,
 	       const struct ibc_callbacks *u);
 
 /**

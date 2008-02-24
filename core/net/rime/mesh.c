@@ -63,7 +63,7 @@
 /*---------------------------------------------------------------------------*/
 static void
 data_packet_received(struct mh_conn *mh, rimeaddr_t *from,
-		     rimeaddr_t *prevhop, u8_t hops)
+		     rimeaddr_t *prevhop, uint8_t hops)
 {
   struct mesh_conn *c = (struct mesh_conn *)
     ((char *)mh - offsetof(struct mesh_conn, mh));
@@ -75,7 +75,7 @@ data_packet_received(struct mh_conn *mh, rimeaddr_t *from,
 /*---------------------------------------------------------------------------*/
 static rimeaddr_t *
 data_packet_forward(struct mh_conn *mh, rimeaddr_t *originator,
-		    rimeaddr_t *dest, rimeaddr_t *prevhop, u8_t hops)
+		    rimeaddr_t *dest, rimeaddr_t *prevhop, uint8_t hops)
 {
   struct route_entry *rt;
 
@@ -125,7 +125,7 @@ static const struct route_discovery_callbacks route_discovery_callbacks =
   { found_route, route_timed_out };
 /*---------------------------------------------------------------------------*/
 void
-mesh_open(struct mesh_conn *c, u16_t channels,
+mesh_open(struct mesh_conn *c, uint16_t channels,
 	  const struct mesh_callbacks *callbacks)
 {
   mh_open(&c->mh, channels, &data_callbacks);

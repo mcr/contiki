@@ -95,7 +95,7 @@ send(void *ptr)
 static const struct abc_callbacks abc = { recv };
 /*---------------------------------------------------------------------------*/
 void
-polite_open(struct polite_conn *c, u16_t channel,
+polite_open(struct polite_conn *c, uint16_t channel,
 	  const struct polite_callbacks *cb)
 {
   abc_open(&c->c, channel, &abc);
@@ -114,7 +114,7 @@ polite_close(struct polite_conn *c)
 }
 /*---------------------------------------------------------------------------*/
 int
-polite_send(struct polite_conn *c, clock_time_t interval, u8_t hdrsize)
+polite_send(struct polite_conn *c, clock_time_t interval, uint8_t hdrsize)
 {
   if(c->q != NULL) {
     /* If we are already about to send a packet, we cancel the old one. */

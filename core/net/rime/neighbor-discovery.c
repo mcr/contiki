@@ -63,7 +63,7 @@
 #include <stddef.h>
 
 struct adv_msg {
-  u16_t val;
+  uint16_t val;
 };
 
 #define SINK 0

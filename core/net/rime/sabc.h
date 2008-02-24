@@ -100,7 +100,7 @@ struct sabc_conn {
  *             that operates on the connection is called.
  *
  */
-void sabc_open(struct sabc_conn *c, u16_t channel,
+void sabc_open(struct sabc_conn *c, uint16_t channel,
 		const struct sabc_callbacks *u);
 void sabc_close(struct sabc_conn *c);
 
