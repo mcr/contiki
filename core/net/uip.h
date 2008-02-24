@@ -62,9 +62,9 @@
 typedef union uip_ip4addr_t {
   u8_t  u8[4];			/* Initializer, must come first!!! */
   u16_t u16[2];
-#if 0
+#if UIP_CONF_UIP_IP4ADDR_T_WITH_U32
   u32_t u32[1];			/* Might cause 32-bit alignment !!! */
-#endif
+#endif /* UIP_CONF_UIP_IP4ADDR_T_WITH_U32 */
 } uip_ip4addr_t;
 
 typedef union uip_ip6addr_t {
