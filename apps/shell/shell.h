@@ -53,6 +53,8 @@ struct shell_command {
 
 void shell_init(void);
 
+void shell_start(void);
+
 void shell_input(char *commandline, int commandline_len);
 int shell_start_command(char *commandline, int commandline_len,
 			struct shell_command *child,
