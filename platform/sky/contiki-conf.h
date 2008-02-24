@@ -54,7 +54,7 @@
 
 #define UIP_CONF_DHCP_LIGHT
 #define UIP_CONF_LLH_LEN         0
-#define UIP_CONF_BUFFER_SIZE     116
+#define UIP_CONF_BUFFER_SIZE     110
 #define UIP_CONF_RECEIVE_WINDOW  (UIP_CONF_BUFFER_SIZE - 40)
 #define UIP_CONF_MAX_CONNECTIONS 4
 #define UIP_CONF_MAX_LISTENPORTS 8
@@ -65,6 +65,8 @@
 #define UIP_CONF_UDP_CHECKSUMS   1
 #define UIP_CONF_PINGADDRCONF    0
 #define UIP_CONF_LOGGING         0
+
+#define UIP_CONF_TCP_SPLIT       0
 
 /*
  * Definitions below are dictated by the hardware and not really
