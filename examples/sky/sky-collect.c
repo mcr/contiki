@@ -164,7 +164,7 @@ do_rssi(void)
 }
 /*---------------------------------------------------------------------------*/
 static void
-recv(rimeaddr_t *originator, u8_t seqno, u8_t hops)
+recv(rimeaddr_t *originator, uint8_t seqno, uint8_t hops)
 {
   struct sky_collect_msg *msg;
   
