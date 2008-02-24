@@ -68,14 +68,14 @@
 
 /* Buffers */
 #define NUM_PACKETS 8
-u8_t lastqueued = 0;
-u8_t nextsend = 0;
-u8_t freeslot = 0;
+uint8_t lastqueued = 0;
+uint8_t nextsend = 0;
+uint8_t freeslot = 0;
 struct queuebuf* data[NUM_PACKETS];
 int id[NUM_PACKETS];
 
 static struct ctimer ctimer;
-u8_t timer_on = 0;
+uint8_t timer_on = 0;
 
 static const struct radio_driver *radio;
 static void (* receiver_callback)(const struct mac_driver *);
