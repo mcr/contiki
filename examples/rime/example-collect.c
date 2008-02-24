@@ -86,7 +86,7 @@ PROCESS_THREAD(depth_blink_process, ev, data)
 }
 /*---------------------------------------------------------------------------*/
 static void
-recv(rimeaddr_t *originator, u8_t seqno, u8_t hops)
+recv(rimeaddr_t *originator, uint8_t seqno, uint8_t hops)
 {
   printf("Sink got message from %d.%d, seqno %d, hops %d: len %d '%s'\n",
 	 originator->u8[0], originator->u8[1],

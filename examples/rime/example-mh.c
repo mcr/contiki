@@ -57,7 +57,7 @@ recv(struct mh_conn *c, rimeaddr_t *sender)
 }
 static rimeaddr_t *
 forward(struct mh_conn *c, rimeaddr_t *originator, rimeaddr_t *dest,
-	rimeaddr_t *prevhop, u8_t hops)
+	rimeaddr_t *prevhop, uint8_t hops)
 {
   printf("Forwarding message '%s'\n", (char *)rimebuf_dataptr());
   return NULL;

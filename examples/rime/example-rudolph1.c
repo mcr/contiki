@@ -139,7 +139,7 @@ static void
 log_queuelen(struct rtimer *t, void *ptr)
 {
 #if NETSIM
-  extern u8_t queuebuf_len, queuebuf_ref_len;
+  extern uint8_t queuebuf_len, queuebuf_ref_len;
   node_log("%d %d\n",
 	   queuebuf_len,
 	   queuebuf_ref_len);
