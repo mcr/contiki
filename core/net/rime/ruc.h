@@ -62,6 +62,9 @@
 
 struct ruc_conn;
 
+#define RUC_ATTRIBUTES  { RIMEBUF_ATTR_PACKET_TYPE, RIMEBUF_ATTR_BIT }, \
+                        { RIMEBUF_ATTR_PACKET_ID, RIMEBUF_ATTR_BIT * 2 }, \
+                        SUC_ATTRIBUTES
 struct ruc_callbacks {
   void (* recv)(struct ruc_conn *c, rimeaddr_t *from, uint8_t seqno);
   void (* sent)(struct ruc_conn *c, rimeaddr_t *to, uint8_t retransmissions);

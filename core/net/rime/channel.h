@@ -1,22 +1,5 @@
-/**
- * \addtogroup rime
- * @{
- */
-
-/**
- * \defgroup rimeuc Single-hop unicast
- * @{
- *
- * The uc module sends a packet to a single receiver.
- *
- * \section channels Channels
- *
- * The uc module uses 1 channel.
- *
- */
-
 /*
- * Copyright (c) 2006, Swedish Institute of Computer Science.
+ * Copyright (c) 2007, Swedish Institute of Computer Science.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -50,36 +33,33 @@
 
 /**
  * \file
- *         Header file for Rime's single-hop unicast
+ *         Header file for Rime's channel abstraction
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
 
-#ifndef __UC_H__
-#define __UC_H__
+#ifndef __CHANNEL_H__
+#define __CHANNEL_H__
 
-#include "net/rime/ibc.h"
+struct channel;
 
-struct uc_conn;
+#include "contiki-conf.h"
+#include "net/rime/rimebuf.h"
+#include "net/rime/chameleon.h"
 
-#define UC_ATTRIBUTES   { RIMEBUF_ADDR_RECEIVER, RIMEBUF_ADDRSIZE }, \
-                        IBC_ATTRIBUTES
-
-struct uc_callbacks {
-  void (* recv)(struct uc_conn *c, rimeaddr_t *from);
+struct channel {
+  struct channel *next;
+  uint16_t channelno;
+  const struct rimebuf_attrlist *attrlist;
+  uint8_t hdrsize;
 };
 
-struct uc_conn {
-  struct ibc_conn c;
-  const struct uc_callbacks *u;
-};
+struct channel *channel_lookup(uint16_t channelno);
 
-void uc_open(struct uc_conn *c, uint16_t channel,
-	      const struct uc_callbacks *u);
-void uc_close(struct uc_conn *c);
+void channel_set_attributes(uint16_t channelno,
+			    const struct rimebuf_attrlist attrlist[]);
+void channel_open(struct channel *c, uint16_t channelno);
+void channel_close(struct channel *c);
+void channel_init(void);
 
-int uc_send(struct uc_conn *c, const rimeaddr_t *receiver);
-
-#endif /* __UC_H__ */
-/** @} */
-/** @} */
+#endif /* __CHANNEL_H__ */

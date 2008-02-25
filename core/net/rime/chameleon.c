@@ -1,11 +1,5 @@
-
-/**
- * \addtogroup rimeuc
- * @{
- */
-
 /*
- * Copyright (c) 2006, Swedish Institute of Computer Science.
+ * Copyright (c) 2007, Swedish Institute of Computer Science.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -39,20 +33,19 @@
 
 /**
  * \file
- *         Single-hop unicast
+ *         Chameleon, Rime's header processing module
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
 
+#include "net/rime/chameleon.h"
+#include "net/rime/channel.h"
 #include "net/rime.h"
-#include "net/rime/uc.h"
-#include <string.h>
+#include "lib/list.h"
 
-static const struct rimebuf_attrlist attributes[] =
-  {
-    UC_ATTRIBUTES
-    RIMEBUF_ATTR_LAST
-  };
+#include <stdio.h>
+
+static const struct chameleon_module *header_module;
 
 #define DEBUG 0
 #if DEBUG
@@ -63,45 +56,92 @@ static const struct rimebuf_attrlist attributes[] =
 #endif
 
 /*---------------------------------------------------------------------------*/
-static void
-recv_from_ibc(struct ibc_conn *ibc, rimeaddr_t *from)
+void
+chameleon_init(const struct chameleon_module *m)
 {
-  struct uc_conn *c = (struct uc_conn *)ibc;
+  header_module = m;
+  channel_init();
+}
+/*---------------------------------------------------------------------------*/
+static void
+printbin(int n, int digits)
+{
+  int i;
+  char output[128];
 
-  PRINTF("%d.%d: uc: recv_from_ibc, receiver %d.%d\n",
-	 rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1],
-	 rimebuf_addr(RIMEBUF_ADDR_RECEIVER)->u8[0],
-	 rimebuf_addr(RIMEBUF_ADDR_RECEIVER)->u8[1]);
-  if(rimeaddr_cmp(rimebuf_addr(RIMEBUF_ADDR_RECEIVER), &rimeaddr_node_addr)) {
-    c->u->recv(c, from);
+  for(i = 0; i < digits; ++i) {
+    output[digits - i - 1] = (n & 1) + '0';
+    n >>= 1;
+  }
+  output[i] = 0;
+
+  printf(output);
+}
+
+static void
+printhdr(uint8_t *hdr, int len)
+{
+  int i, j;
+
+  j = 0;
+  for(i = 0; i < len; ++i) {
+    printbin(hdr[i], 8);
+    printf(" (0x%0x), ", hdr[i]);
+    ++j;
+    if(j == 10) {
+      printf("\n");
+      j = 0;
+    }
+  }
+
+  if(j != 0) {
+    printf("\n");
   }
 }
 /*---------------------------------------------------------------------------*/
-static const struct ibc_callbacks uc = {recv_from_ibc};
-/*---------------------------------------------------------------------------*/
 void
-uc_open(struct uc_conn *c, uint16_t channel,
-	 const struct uc_callbacks *u)
+chameleon_input(void)
 {
-  ibc_open(&c->c, channel, &uc);
-  c->u = u;
-  channel_set_attributes(channel, attributes);
-}
-/*---------------------------------------------------------------------------*/
-void
-uc_close(struct uc_conn *c)
-{
-  ibc_close(&c->c);
+  struct channel *c;
+  PRINTF("%d.%d: chameleon_input\n",
+	 rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1]);
+  printhdr(rimebuf_dataptr(), rimebuf_datalen());
+  c = header_module->input();
+  if(c != NULL) {
+    PRINTF("%d.%d: chameleon_input channel %d\n",
+	   rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1],
+	   c->channelno);
+    abc_input(c);
+  } else {
+    PRINTF("%d.%d: chameleon_input channel not found for incoming packet\n",
+	   rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1]);
+  }
 }
 /*---------------------------------------------------------------------------*/
 int
-uc_send(struct uc_conn *c, const rimeaddr_t *receiver)
+chameleon_output(struct channel *c)
 {
-  PRINTF("%d.%d: uc_send to %d.%d\n",
+  int ret;
+
+  PRINTF("%d.%d: chameleon_output channel %d\n",
 	 rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1],
-	 receiver->u8[0], receiver->u8[1]);
-  rimebuf_set_addr(RIMEBUF_ADDR_RECEIVER, receiver);
-  return ibc_send(&c->c);
+	 c->channelno);
+    
+  ret = header_module->output(c);
+
+  rimebuf_set_attr(RIMEBUF_ATTR_CHANNEL, c->channelno);
+  
+  printhdr(rimebuf_hdrptr(), rimebuf_hdrlen());
+  if(ret) {
+    rime_output();
+    return 1;
+  }
+  return 0;
 }
 /*---------------------------------------------------------------------------*/
-/** @} */
+int
+chameleon_hdrsize(const struct rimebuf_attrlist attrlist[])
+{
+  return header_module->hdrsize(attrlist);
+}
+/*---------------------------------------------------------------------------*/

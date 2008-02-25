@@ -64,6 +64,9 @@
 
 struct ibc_conn;
 
+#define IBC_ATTRIBUTES  { RIMEBUF_ADDR_SENDER, RIMEBUF_ADDRSIZE }, \
+                        ABC_ATTRIBUTES
+
 /**
  * \brief     Callback structure for ibc
  *

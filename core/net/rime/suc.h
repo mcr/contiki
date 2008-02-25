@@ -64,6 +64,8 @@
 
 struct suc_conn;
 
+#define SUC_ATTRIBUTES  UC_ATTRIBUTES
+
 struct suc_callbacks {
   void (* recv)(struct suc_conn *c, rimeaddr_t *from);
   void (* sent)(struct suc_conn *c);

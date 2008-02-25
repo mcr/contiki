@@ -111,6 +111,9 @@ void rudolph0_close(struct rudolph0_conn *c);
 void rudolph0_send(struct rudolph0_conn *c, clock_time_t interval);
 void rudolph0_stop(struct rudolph0_conn *c);
 
+/* Force the sender to restart sending the file from the start. */
+void rudolph0_force_restart(struct rudolph0_conn *c);
+
 void rudolph0_set_version(struct rudolph0_conn *c, int version);
 int rudolph0_version(struct rudolph0_conn *c);
 

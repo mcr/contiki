@@ -44,6 +44,7 @@
  */
 
 #include "net/rime.h"
+#include "net/rime/chameleon.h"
 #include "net/rime/neighbor.h"
 #include "net/rime/route.h"
 #include "net/mac/mac.h"
@@ -80,7 +81,7 @@ input(const struct mac_driver *r)
       }
     }
     RIMESTATS_ADD(rx);
-    abc_input_packet();
+    chameleon_input();
   }
 }
 /*---------------------------------------------------------------------------*/
@@ -93,6 +94,8 @@ rime_init(const struct mac_driver *m)
   neighbor_init();
   rime_mac = m;
   rime_mac->set_receive_function(input);
+
+  chameleon_init(&chameleon_bitopt);
 }
 /*---------------------------------------------------------------------------*/
 void
@@ -108,7 +111,6 @@ rime_output(void)
       s->output_callback();
     }
   }
-  
   if(rime_mac) {
     rime_mac->send();
   }

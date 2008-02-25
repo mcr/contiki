@@ -216,6 +216,13 @@ rudolph0_send(struct rudolph0_conn *c, clock_time_t send_interval)
 }
 /*---------------------------------------------------------------------------*/
 void
+rudolph0_force_restart(struct rudolph0_conn *c)
+{
+  c->current.h.chunk = 0;
+  send_nack(c);
+}
+/*---------------------------------------------------------------------------*/
+void
 rudolph0_stop(struct rudolph0_conn *c)
 {
   sabc_cancel(&c->c);

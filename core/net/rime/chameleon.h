@@ -1,22 +1,5 @@
-/**
- * \addtogroup rime
- * @{
- */
-
-/**
- * \defgroup rimeuc Single-hop unicast
- * @{
- *
- * The uc module sends a packet to a single receiver.
- *
- * \section channels Channels
- *
- * The uc module uses 1 channel.
- *
- */
-
 /*
- * Copyright (c) 2006, Swedish Institute of Computer Science.
+ * Copyright (c) 2007, Swedish Institute of Computer Science.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -50,36 +33,30 @@
 
 /**
  * \file
- *         Header file for Rime's single-hop unicast
+ *         Header file for Chameleon, Rime's header processing module
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
 
-#ifndef __UC_H__
-#define __UC_H__
+#ifndef __CHAMELEON_H__
+#define __CHAMELEON_H__
 
-#include "net/rime/ibc.h"
 
-struct uc_conn;
+#include "net/rime/channel.h"
+#include "net/rime/chameleon-bitopt.h"
+#include "net/rime/chameleon-raw.h"
 
-#define UC_ATTRIBUTES   { RIMEBUF_ADDR_RECEIVER, RIMEBUF_ADDRSIZE }, \
-                        IBC_ATTRIBUTES
-
-struct uc_callbacks {
-  void (* recv)(struct uc_conn *c, rimeaddr_t *from);
+struct chameleon_module {
+  struct channel *(* input)(void);
+  int (* output)(struct channel *);
+  int (* hdrsize)(const struct rimebuf_attrlist *);
+  void (* init)(void);
 };
 
-struct uc_conn {
-  struct ibc_conn c;
-  const struct uc_callbacks *u;
-};
+void chameleon_init(const struct chameleon_module *header_processing_module);
 
-void uc_open(struct uc_conn *c, uint16_t channel,
-	      const struct uc_callbacks *u);
-void uc_close(struct uc_conn *c);
+int chameleon_hdrsize(const struct rimebuf_attrlist attrlist[]);
+void chameleon_input(void);
+int chameleon_output(struct channel *c);
 
-int uc_send(struct uc_conn *c, const rimeaddr_t *receiver);
-
-#endif /* __UC_H__ */
-/** @} */
-/** @} */
+#endif /* __CHAMELEON_H__ */

@@ -46,9 +46,10 @@
 #include "contiki-net.h"
 #include <string.h>
 
-struct ibc_hdr {
-  rimeaddr_t sender;
-};
+static const struct rimebuf_attrlist attributes[] =
+  {
+    IBC_ATTRIBUTES RIMEBUF_ATTR_LAST
+  };
 
 #define DEBUG 0
 #if DEBUG
@@ -64,11 +65,9 @@ recv_from_abc(struct abc_conn *bc)
 {
   rimeaddr_t sender;
   struct ibc_conn *c = (struct ibc_conn *)bc;
-  struct ibc_hdr *hdr = rimebuf_dataptr();
 
-  rimeaddr_copy(&sender, &hdr->sender);
+  rimeaddr_copy(&sender, rimebuf_addr(RIMEBUF_ADDR_SENDER));
   
-  rimebuf_hdrreduce(sizeof(struct ibc_hdr));
   PRINTF("%d.%d: ibc: from %d.%d\n",
 	 rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1],
 	 sender.u8[0], sender.u8[1]);
@@ -83,6 +82,7 @@ ibc_open(struct ibc_conn *c, uint16_t channel,
 {
   abc_open(&c->c, channel, &ibc);
   c->u = u;
+  channel_set_attributes(channel, attributes);
 }
 /*---------------------------------------------------------------------------*/
 void
@@ -96,12 +96,8 @@ ibc_send(struct ibc_conn *c)
 {
   PRINTF("%d.%d: ibc_send\n",
 	 rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1]);
-  if(rimebuf_hdralloc(sizeof(struct ibc_hdr))) {
-    struct ibc_hdr *hdr = rimebuf_hdrptr();
-    rimeaddr_copy(&hdr->sender, &rimeaddr_node_addr);
-    return abc_send(&c->c);
-  }
-  return 0;
+  rimebuf_set_addr(RIMEBUF_ADDR_SENDER, &rimeaddr_node_addr);
+  return abc_send(&c->c);
 }
 /*---------------------------------------------------------------------------*/
 /** @} */

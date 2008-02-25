@@ -45,6 +45,10 @@
 
 #include "net/rime/trickle.h"
 
+#if NETSIM
+#include "ether.h"
+#endif
+
 #define INTERVAL_MIN 1
 #define INTERVAL_MAX 4
 
@@ -92,6 +96,9 @@ recv(struct nf_conn *nf, rimeaddr_t *from,
     c->interval_scaling = 0;
     send(c);
   } else { /* hdr->seqno > c->seqno */
+#if NETSIM
+    /*    ether_set_line(from->u8[0], from->u8[1]);*/
+#endif /* NETSIM */
     c->seqno = seqno;
     /* Store the incoming data in the queuebuf */
     if(c->q != NULL) {
