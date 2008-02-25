@@ -166,7 +166,9 @@ main(int argc, char **argv)
   set_rime_addr();
 
   simple_cc2420_init();
-  simple_cc2420_set_chan_pan_addr(RF_CHANNEL, panId, 0 /*XXX*/, ds2411_id);
+  simple_cc2420_set_pan_addr(panId, 0 /*XXX*/, ds2411_id);
+  simple_cc2420_set_channel(RF_CHANNEL);
+
   simple_cc2420_set_txpower(31);
   nullmac_init(&simple_cc2420_driver);
   rime_init(&nullmac_driver);
