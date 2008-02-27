@@ -105,7 +105,7 @@ chameleon_input(void)
   struct channel *c;
   PRINTF("%d.%d: chameleon_input\n",
 	 rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1]);
-  printhdr(rimebuf_dataptr(), rimebuf_datalen());
+  /*printhdr(rimebuf_dataptr(), rimebuf_datalen());*/
   c = header_module->input();
   if(c != NULL) {
     PRINTF("%d.%d: chameleon_input channel %d\n",
@@ -131,7 +131,7 @@ chameleon_output(struct channel *c)
 
   rimebuf_set_attr(RIMEBUF_ATTR_CHANNEL, c->channelno);
   
-  printhdr(rimebuf_hdrptr(), rimebuf_hdrlen());
+  /*printhdr(rimebuf_hdrptr(), rimebuf_hdrlen());*/
   if(ret) {
     rime_output();
     return 1;
