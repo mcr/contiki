@@ -1918,7 +1918,7 @@ uip_send(const void *data, int len)
   int copylen;
 #define MIN(a,b) ((a) < (b)? (a): (b))
   copylen = MIN(len, UIP_BUFSIZE - UIP_LLH_LEN - UIP_TCPIP_HLEN -
-		((char *)uip_sappdata - (char *)&uip_buf[UIP_LLH_LEN + UIP_TCPIP_HLEN]));
+		(int)((char *)uip_sappdata - (char *)&uip_buf[UIP_LLH_LEN + UIP_TCPIP_HLEN]));
   if(copylen > 0) {
     uip_slen = copylen;
     if(data != uip_sappdata) {
