@@ -81,12 +81,16 @@ main(void)
 {
   struct ethernet_config *ethernet_config;
 
+  close(STDIN_FILENO);
+  close(STDOUT_FILENO);
+#if !UIP_LOGGING && !LOG_CONF_ENABLED
+  close(STDERR_FILENO);
+#endif /* !WITH_PFS */
+
   process_init();
 
 #if 1
-
   ethernet_config = config_read("contiki.cfg");
-
 #else
   {
     static struct ethernet_config config = {0xDE08, "cs8900a.eth"};
