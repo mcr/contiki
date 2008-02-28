@@ -101,11 +101,10 @@ command_kill(struct shell_command *c)
   }
 }
 /*---------------------------------------------------------------------------*/
-PROCESS_THREAD(shell_killall_process, ev, data)
+static void
+killall(void)
 {
   struct shell_command *c;
-  PROCESS_BEGIN();
-
   for(c = list_head(commands);
       c != NULL;
       c = c->next) {
@@ -113,6 +112,14 @@ PROCESS_THREAD(shell_killall_process, ev, data)
       command_kill(c);
     }
   }
+}
+/*---------------------------------------------------------------------------*/
+PROCESS_THREAD(shell_killall_process, ev, data)
+{
+
+  PROCESS_BEGIN();
+
+  killall();
   
   PROCESS_END();
 }
@@ -517,5 +524,13 @@ shell_start(void)
   shell_output_str(NULL, "Contiki command shell", "");
   shell_output_str(NULL, "Type '?' and return for help", "");
   shell_prompt("Contiki> ");
+}
+/*---------------------------------------------------------------------------*/
+void
+shell_quit(void)
+{
+  killall();
+  process_exit(&shell_process);
+  process_exit(&shell_server_process);
 }
 /*---------------------------------------------------------------------------*/

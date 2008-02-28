@@ -78,6 +78,9 @@ unsigned long shell_strtolong(const char *str, const char **retstr);
 unsigned long shell_time(void);
 void shell_set_time(unsigned long seconds);
 
+void shell_quit(void);
+
+
 #define SHELL_COMMAND(name, command, description, process) \
 static struct shell_command name = { NULL, command, \
                                      description, process }
