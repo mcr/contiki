@@ -101,7 +101,7 @@ timetable_init(void)
 {
   char dummy1, dummy2;
 #define temp_size 4
-  TIMETABLE_NONSTATIC(temp);
+  TIMETABLE_STATIC(temp);
   
   timetable_clear(&temp);
 
