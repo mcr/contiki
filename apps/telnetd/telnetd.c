@@ -152,7 +152,7 @@ telnetd_quit(void)
 void
 shell_prompt(char *str)
 {
-  buf_append(&buf, str, strlen(str));
+  buf_append(&buf, str, (int)strlen(str));
 }
 /*---------------------------------------------------------------------------*/
 void
