@@ -60,7 +60,7 @@ static const uint8_t bitmask[9] = { 0x00, 0x80, 0xc0, 0xe0, 0xf0,
 #endif
 
 /*---------------------------------------------------------------------------*/
-uint8_t inline
+uint8_t CC_INLINE
 get_bits_in_byte(uint8_t *from, int bitpos, int vallen)
 {
   uint16_t shifted_val;
@@ -132,7 +132,7 @@ header_size(const struct rimebuf_attrlist *a)
   return size;
 }
 /*---------------------------------------------------------------------------*/
-void inline
+void CC_INLINE
 set_bits_in_byte(uint8_t *target, int bitpos, uint8_t val, int vallen)
 {
   unsigned short shifted_val;
