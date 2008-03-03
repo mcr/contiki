@@ -45,6 +45,13 @@
 #include <stdio.h>
 #include <string.h>
 
+#if NETSIM
+#include "ether.h"
+#endif /* NETSIM */
+#ifndef HAVE_SNPRINTF
+int snprintf(char *str, size_t size, const char *format, ...);
+#endif /* HAVE_SNPRINTF */
+
 /*---------------------------------------------------------------------------*/
 PROCESS(shell_sendtest_process, "sendtest");
 SHELL_COMMAND(sendtest_command,
@@ -63,7 +70,7 @@ write_chunk(struct rucb_conn *c, int offset, int flag,
   {
     char buf[100];
     printf("received %d; %d\n", offset, datalen);
-    sprintf(buf, "%d%%", (100 * (offset + datalen)) / filesize);
+    sprintf(buf, "%lu%%", (100 * (offset + datalen)) / filesize);
     ether_set_text(buf);
   }
 #endif /* NETSIM */
