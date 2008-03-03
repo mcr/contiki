@@ -137,11 +137,14 @@ contiki_main(int flag)
       process_start(&wpcap_process, NULL);
       {
 	char buf[1024];
+	uip_ipaddr_t ifaddr;
+	
+	ifaddr.u32[0] = inet_addr(__argv[1]);
 	
 	snprintf(buf, sizeof(buf), "route add %d.%d.%d.%d mask %d.%d.%d.%d %d.%d.%d.%d",
 		 uip_ipaddr_to_quad(&meshif.ipaddr),
 		 uip_ipaddr_to_quad(&meshif.netmask),
-		 uip_ipaddr_to_quad(&uip_hostaddr));
+		 uip_ipaddr_to_quad(&ifaddr));
 	printf("%s\n", buf);
 	system(buf);
 	signal(SIGTERM, remove_route);
