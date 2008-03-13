@@ -115,6 +115,16 @@ timetable_aggregate_print_detailed(struct timetable_aggregate *a)
 }
 /*---------------------------------------------------------------------------*/
 void
+timetable_aggregate_reset(struct timetable_aggregate *a)
+{
+  int i;
+  for(i = 0; i < a->ptr; ++i) {
+    a->entries[i].time = 0;
+    a->entries[i].episodes = 0;
+  }
+}
+/*---------------------------------------------------------------------------*/
+void
 timetable_aggregate_print_categories(struct timetable_aggregate *a)
 {
   int i;

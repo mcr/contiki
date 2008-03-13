@@ -81,6 +81,8 @@ void timetable_aggregate_print_detailed(struct timetable_aggregate *a);
 
 void timetable_aggregate_print_categories(struct timetable_aggregate *a);
 
+void timetable_aggregate_reset(struct timetable_aggregate *a);
+
 void timetable_aggregate_compute_detailed(struct timetable_aggregate *a,
 					  struct timetable *timetable);
 void timetable_aggregate_compute_categories(struct timetable_aggregate *a,
