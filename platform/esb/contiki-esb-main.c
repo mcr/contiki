@@ -118,6 +118,15 @@ main(void)
 
   ctimer_init();
 
+#if PROFILE_CONF_ON
+  profile_init();
+#endif /* PROFILE_CONF_ON */
+
+#if ENERGEST_CONF_ON
+  energest_init();
+  ENERGEST_ON(ENERGEST_TYPE_CPU);
+#endif /* ENERGEST_CONF_ON */
+
   init_net();
 
   printf(CONTIKI_VERSION_STRING " started. ");
@@ -131,15 +140,6 @@ main(void)
   leds_on(LEDS_RED);
   clock_delay(100);
   leds_off(LEDS_RED);
-
-#if PROFILE_CONF_ON
-  profile_init();
-#endif /* PROFILE_CONF_ON */
-
-#if ENERGEST_CONF_ON
-  energest_init();
-  ENERGEST_ON(ENERGEST_TYPE_CPU);
-#endif /* ENERGEST_CONF_ON */
 
   init_apps();
   print_processes(autostart_processes);
