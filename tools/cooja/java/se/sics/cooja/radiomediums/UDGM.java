@@ -536,8 +536,12 @@ public class UDGM extends AbstractRadioMedium {
       for (Radio intfRadio : conn.getInterfered()) {
         double dist = conn.getSource().getPosition().getDistanceTo(intfRadio.getPosition());
         double distFactor = dist/TRANSMITTING_RANGE;
-        double signalStrength = SS_STRONG + distFactor*(SS_WEAK - SS_STRONG);
-        intfRadio.setCurrentSignalStrength(signalStrength);
+        if (distFactor < 1) {
+          double signalStrength = SS_STRONG + distFactor*(SS_WEAK - SS_STRONG);
+          intfRadio.setCurrentSignalStrength(signalStrength);
+        } else {
+          intfRadio.setCurrentSignalStrength(SS_WEAK);
+        }
 
         if (!intfRadio.isInterfered()) {
           // Set to interfered again
