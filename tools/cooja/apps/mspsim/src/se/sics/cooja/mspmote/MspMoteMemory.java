@@ -43,7 +43,7 @@ public class MspMoteMemory implements MoteMemory, AddressMemory {
 
   private MSP430 cpu;
 
-  public MspMoteMemory(ArrayList<MapEntry> allEntries, MSP430 cpu) {
+  public MspMoteMemory(MapEntry[] allEntries, MSP430 cpu) {
     this.mapEntries = new ArrayList<MapEntry>();
 
     for (MapEntry entry: allEntries) {

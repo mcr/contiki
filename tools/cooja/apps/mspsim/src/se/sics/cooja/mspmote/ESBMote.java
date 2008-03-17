@@ -52,14 +52,14 @@ public class ESBMote extends MspMote {
   }
 
   public ESBMote(MoteType moteType, Simulation sim) {
-    super((ESBMoteType) moteType, sim);
+    super((MspMoteType) moteType, sim);
   }
 
   protected boolean initEmulator(File fileELF) {
     try {
-      createCPUAndMemory(fileELF);
-
-      esbNode = new ESBNode(getCPU());
+      esbNode = new ESBNode();
+      esbNode.setupNodePorts();
+      prepareMote(fileELF, esbNode.getCPU());
 
     } catch (Exception e) {
       logger.fatal("Error when creating ESB mote: " + e);
@@ -70,6 +70,7 @@ public class ESBMote extends MspMote {
 
   protected MoteInterfaceHandler createMoteInterfaceHandler() {
     MoteInterfaceHandler moteInterfaceHandler = new MoteInterfaceHandler();
+
     // Add position interface
     Position motePosition = new Position(this);
     Random random = new Random();
