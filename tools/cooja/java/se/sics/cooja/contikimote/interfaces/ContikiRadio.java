@@ -257,6 +257,10 @@ public class ContikiRadio extends Radio implements ContikiMoteInterface,
     return 1.5;
   }
 
+  public int getOutputPowerIndicatorMax() {
+    return 100;
+  }
+
   public int getCurrentOutputPowerIndicator() {
     return myMoteMemory.getByteValueOf("simPower");
   }
