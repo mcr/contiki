@@ -543,6 +543,7 @@ public class Simulation extends Observable implements Runnable {
    *          Mote to remove
    */
   public void removeMote(Mote mote) {
+
     if (isRunning()) {
       stopSimulation();
       motes.remove(mote);
@@ -551,7 +552,9 @@ public class Simulation extends Observable implements Runnable {
       motes.remove(mote);
     }
 
+    myGUI.closeMotePlugins(mote);
     currentRadioMedium.unregisterMote(mote, this);
+
     this.setChanged();
     this.notifyObservers(this);
   }

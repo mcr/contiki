@@ -1648,6 +1648,32 @@ public class GUI {
   }
 
   /**
+   * Close all mote plugins for given mote.
+   *
+   * @param mote Mote
+   */
+  public void closeMotePlugins(Mote mote) {
+    Vector<Plugin> pluginsToRemove = new Vector<Plugin>();
+
+    for (Plugin startedPlugin : startedPlugins) {
+      int pluginType = startedPlugin.getClass().getAnnotation(PluginType.class).value();
+
+      if (pluginType != PluginType.MOTE_PLUGIN) {
+        continue;
+      }
+
+      Mote pluginMote = (Mote) startedPlugin.getTag();
+      if (pluginMote == mote) {
+        pluginsToRemove.add(startedPlugin);
+      }
+    }
+
+    for (Plugin pluginToRemove: pluginsToRemove) {
+      removePlugin(pluginToRemove, false);
+    }
+  }
+
+  /**
    * Remove a plugin from working area.
    *
    * @param plugin
