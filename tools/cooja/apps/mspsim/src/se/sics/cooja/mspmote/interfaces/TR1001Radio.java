@@ -357,6 +357,10 @@ public class TR1001Radio extends Radio implements USARTListener, ByteRadio {
     return 1.5;
   }
 
+  public int getOutputPowerIndicatorMax() {
+    return 100;
+  }
+
   public int getCurrentOutputPowerIndicator() {
     // TODO Implement output power indicator
     return 100;
