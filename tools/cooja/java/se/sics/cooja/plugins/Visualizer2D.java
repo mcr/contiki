@@ -122,6 +122,18 @@ public abstract class Visualizer2D extends VisPlugin {
     }
   };
 
+  private class DeleteMoteMenuAction implements MoteMenuAction {
+    public boolean isEnabled(Mote mote) {
+      return true;
+    }
+    public String getDescription(Mote mote) {
+      return "Delete " + mote;
+    }
+    public void doAction(Mote mote) {
+      simulation.removeMote(mote);
+    }
+  };
+
   private Vector<MoteMenuAction> menuActions = new Vector<MoteMenuAction>();
 
   /**
@@ -289,6 +301,9 @@ public abstract class Visualizer2D extends VisPlugin {
 
     // Add menu action for clicking mote button
     addMoteMenuAction(new ButtonClickMoteMenuAction());
+
+    // Add menu action for deleting mote
+    addMoteMenuAction(new DeleteMoteMenuAction());
 
     try {
       setSelected(true);
