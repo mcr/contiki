@@ -337,6 +337,7 @@ public class SkyRadio extends Radio implements CustomDataRadio {
 
     this.deleteObserver(observer);
   }
+
   public Mote getMote() {
     return myMote;
   }
