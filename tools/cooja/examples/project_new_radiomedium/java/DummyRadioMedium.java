@@ -84,10 +84,6 @@ public class DummyRadioMedium extends RadioMedium {
     return null;
   }
 
-  public void setConnectionLogger(ConnectionLogger connection) {
-    // Do nothing
-  }
-
   public Collection<Element> getConfigXML() {
     return null;
   }
