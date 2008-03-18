@@ -46,8 +46,8 @@ public class CRCCoder {
    * Updates given accumulated CRC16 checksum with given byte.
    *
    * @param b Byte to be added to CRC
-   * @param crc Accumulated CRC that is to be updated
-   * @return
+   * @param acc Accumulated CRC that is to be updated
+   * @return New accumulated CRC
    */
   public static short crc16Add(byte b, short acc) {
     acc ^= 0xff & b;
