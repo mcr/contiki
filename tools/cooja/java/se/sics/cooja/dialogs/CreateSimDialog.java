@@ -469,12 +469,6 @@ public class CreateSimDialog extends JDialog {
           }
         }
 
-/*        if (logCheckBox.isSelected()) {
-          ConnectionLogger connLogger = new ConnectionLogger(new File(logFilename.getText()));
-          mySimulation.getRadioMedium().setConnectionLogger(connLogger);
-        }
-*/
-
         mySimulation.setRandomSeed(((Number) randomSeed.getValue()).longValue());
         mySimulation.setNrTickLists(((Number) tickLists.getValue()).intValue());
         mySimulation.setDelayedMoteStartupTime(((Number) delayedStartup.getValue()).intValue());
