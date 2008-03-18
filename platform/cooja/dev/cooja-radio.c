@@ -60,7 +60,7 @@ char simRadioHWOn = 1;
 int simSignalStrength = SS_NOTHING;
 int simLastSignalStrength = SS_NOTHING;
 char simPower = 100;
-int simRadioChannel = 1;
+int simRadioChannel = 26;
 int inSendFunction = 0;
 
 static void (* receiver_callback)(const struct radio_driver *);
