@@ -231,7 +231,7 @@ public abstract class AbstractRadioMedium extends RadioMedium {
         radioMediumObservable.setRadioMediumChanged();
 
       } else if (event == Radio.RadioEvent.CUSTOM_DATA_TRANSMITTED) {
-        /* Forward custom data */
+        /* Forward custom data, if any */
 
         // Find corresponding connection of radio
         RadioConnection connection = null;
@@ -241,21 +241,25 @@ public abstract class AbstractRadioMedium extends RadioMedium {
             break;
           }
         }
-
         if (connection == null) {
-          logger.fatal("Can't find active connection to forward byte in");
-        } else {
-          Object data = ((CustomDataRadio) radio).getLastCustomDataTransmitted();
+          logger.fatal("Can't find active connection to forward custom data in");
+          return;
+        }
 
-          for (Radio dstRadio : connection.getDestinations()) {
-            if (dstRadio instanceof CustomDataRadio) {
-              ((CustomDataRadio) dstRadio).receiveCustomData(data);
-            }
+        Object data = ((CustomDataRadio) radio).getLastCustomDataTransmitted();
+        if (data == null) {
+          logger.fatal("Custom data object is null");
+          return;
+        }
+
+        for (Radio dstRadio : connection.getDestinations()) {
+          if (dstRadio instanceof CustomDataRadio) {
+            ((CustomDataRadio) dstRadio).receiveCustomData(data);
           }
         }
 
       } else if (event == Radio.RadioEvent.PACKET_TRANSMITTED) {
-        /* Forward packet */
+        /* Forward packet, if any */
 
         // Find corresponding connection of radio
         RadioConnection connection = null;
@@ -265,17 +269,21 @@ public abstract class AbstractRadioMedium extends RadioMedium {
             break;
           }
         }
-
         if (connection == null) {
-          logger.fatal("Can't find active connection to forward byte in");
-        } else {
-          byte[] packetData = radio.getLastPacketTransmitted().getPacketData();
+          logger.fatal("Can't find active connection to forward packet in");
+          return;
+        }
 
-          Radio srcRadio = connection.getSource();
-          for (Radio dstRadio : connection.getDestinations()) {
-            if (!(srcRadio instanceof CustomDataRadio) || !(dstRadio instanceof CustomDataRadio)) {
-              dstRadio.setReceivedPacket(new COOJARadioPacket(packetData));
-            }
+        RadioPacket packet = radio.getLastPacketTransmitted();
+        if (packet == null) {
+          logger.fatal("Radio packet is null");
+          return;
+        }
+
+        Radio srcRadio = connection.getSource();
+        for (Radio dstRadio : connection.getDestinations()) {
+          if (!(srcRadio instanceof CustomDataRadio) || !(dstRadio instanceof CustomDataRadio)) {
+            dstRadio.setReceivedPacket(packet);
           }
         }
 
@@ -308,7 +316,7 @@ public abstract class AbstractRadioMedium extends RadioMedium {
         return;
       }
 
-      // Log any new finished connections
+      // Log any newly finished connections
       if (finishedConnections.size() > 0) {
         lastTickConnections = new RadioConnection[finishedConnections.size()];
         for (int i = 0; i < finishedConnections.size(); i++) {
