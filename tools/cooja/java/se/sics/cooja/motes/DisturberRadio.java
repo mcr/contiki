@@ -52,7 +52,7 @@ public class DisturberRadio extends Radio {
 
   private static Logger logger = Logger.getLogger(DisturberRadio.class);
 
-  private RadioPacket packetFromMote = new COOJARadioPacket(new byte[] { 1, 2, 3, 4, 5 });
+  private final RadioPacket packetFromMote = new COOJARadioPacket(new byte[] { 1, 2, 3, 4, 5 });
 
   private boolean transmitting = false;
 
