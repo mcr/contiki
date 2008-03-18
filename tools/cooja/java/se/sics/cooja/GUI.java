@@ -1571,9 +1571,6 @@ public class GUI {
     // Register radio mediums
     String[] radioMediumsClassNames = projectConfig.getStringArrayValue(
         GUI.class, "RADIOMEDIUMS");
-    for (String s: radioMediumsClassNames) {
-      System.out.println(">>>: " + s);
-    }
     if (radioMediumsClassNames != null) {
       for (String radioMediumClassName : radioMediumsClassNames) {
         Class<? extends RadioMedium> radioMediumClass = tryLoadClass(this,
