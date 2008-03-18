@@ -94,7 +94,9 @@ public class MRM extends AbstractRadioMedium {
       if (sendingRadio == listeningRadio) {
         continue;
       }
-      if (sendingRadio.getChannel() != listeningRadio.getChannel()) {
+      if (sendingRadio.getChannel() >= 0 &&
+          listeningRadio.getChannel() >= 0 &&
+          sendingRadio.getChannel() != listeningRadio.getChannel()) {
         continue;
       }
 
