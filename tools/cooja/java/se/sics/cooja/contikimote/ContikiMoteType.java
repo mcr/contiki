@@ -1159,6 +1159,56 @@ public class ContikiMoteType implements MoteType {
   }
 
   /**
+   * Generates a unique Contiki mote type ID.
+   *
+   * @param existingTypes Already existing mote types, may be null
+   * @param reservedIdentifiers Already reserved identifiers, may be null
+   * @return Unique mote type ID.
+   */
+  public static String generateUniqueMoteTypeID(Collection<MoteType> existingTypes, Collection reservedIdentifiers) {
+    int counter = 0;
+    String testID = "";
+    boolean okID = false;
+
+    while (!okID) {
+      counter++;
+      testID = ContikiMoteTypeDialog.ID_PREFIX + counter;
+      okID = true;
+
+      // Check if identifier is reserved
+      if (reservedIdentifiers != null && reservedIdentifiers.contains(testID)) {
+        okID = false;
+      }
+
+      if (!okID) {
+        continue;
+      }
+
+      // Check if identifier is used
+      if (existingTypes != null) {
+        for (MoteType existingMoteType : existingTypes) {
+          if (existingMoteType.getIdentifier().equals(testID)) {
+            okID = false;
+            break;
+          }
+        }
+      }
+
+      if (!okID) {
+        continue;
+      }
+
+      // Check if identifier library has been loaded
+      File libraryFile = new File(ContikiMoteType.tempOutputDirectory, testID + ContikiMoteType.librarySuffix);
+      if (CoreComm.hasLibraryFileBeenLoaded(libraryFile)) {
+        okID = false;
+      }
+    }
+
+    return testID;
+  }
+
+  /**
    * Returns a panel with interesting data for this mote type.
    *
    * @return Mote type visualizer

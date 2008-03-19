@@ -157,35 +157,8 @@ public class ContikiMoteTypeDialog extends JDialog {
       myDialog.setTitle("Recompile Mote Type");
     } else {
       // Suggest new identifier
-      int counter = 0;
-      String testIdentifier = "";
-      boolean identifierOK = false;
-      while (!identifierOK) {
-        counter++;
-        testIdentifier = ID_PREFIX + counter;
-        identifierOK = true;
-
-        // Check if identifier is already used by some other type
-        for (MoteType existingMoteType : myDialog.allOtherTypes) {
-          if (existingMoteType != myDialog.myMoteType
-              && existingMoteType.getIdentifier().equals(testIdentifier)) {
-            identifierOK = false;
-            break;
-          }
-        }
-
-        // Check if library file with given identifier has already been loaded
-        if (identifierOK
-            && CoreComm.hasLibraryFileBeenLoaded(new File(
-                ContikiMoteType.tempOutputDirectory,
-                    testIdentifier
-                    + ContikiMoteType.librarySuffix))) {
-          identifierOK = false;
-        }
-      }
-
-      myDialog.textID.setText(testIdentifier);
-
+      String suggestedID = ContikiMoteType.generateUniqueMoteTypeID(myDialog.allOtherTypes, null);
+      myDialog.textID.setText(suggestedID);
     }
 
     // Set preset description of mote type
