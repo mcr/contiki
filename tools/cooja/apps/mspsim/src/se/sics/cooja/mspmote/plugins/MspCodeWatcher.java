@@ -639,7 +639,7 @@ public class MspCodeWatcher extends VisPlugin {
   }
 
   private File[] getAllSourceFileNames() {
-    String[] sourceFiles = mspMote.getELF().debug.getSourceFiles();
+    String[] sourceFiles = mspMote.getELF().getDebug().getSourceFiles();
     Vector<File> files = new Vector<File>();
 
     for (String sourceFile: sourceFiles) {
@@ -669,7 +669,7 @@ public class MspCodeWatcher extends VisPlugin {
   private Hashtable<File, Hashtable<Integer, Integer>> getFirmwareDebugInfo() {
 
     /* Fetch all executable addresses */
-    ArrayList<Integer> addresses = mspMote.getELF().debug.getExecutableAddresses();
+    ArrayList<Integer> addresses = mspMote.getELF().getDebug().getExecutableAddresses();
 
     Hashtable<File, Hashtable<Integer, Integer>> fileToLineHash =
       new Hashtable<File, Hashtable<Integer, Integer>>();
