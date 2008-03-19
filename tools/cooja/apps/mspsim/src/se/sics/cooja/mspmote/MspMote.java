@@ -60,6 +60,7 @@ public abstract class MspMote implements Mote {
   private MspMoteType myMoteType = null;
   private MspMoteMemory myMemory = null;
   private MoteInterfaceHandler myMoteInterfaceHandler = null;
+  public ELF myELFModule = null;
 
   protected TR1001Radio myRadio = null; /* TODO Only used by ESB (TR1001) */
 
@@ -174,7 +175,7 @@ public abstract class MspMote implements Mote {
 
     int[] memory = myCpu.getMemory();
 
-    ELF myELFModule = ELF.readELF(fileELF.getPath());
+    myELFModule = ELF.readELF(fileELF.getPath());
     myELFModule.loadPrograms(memory);
     MapTable map = myELFModule.getMap();
     myCpu.getDisAsm().setMap(map);
