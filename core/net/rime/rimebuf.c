@@ -264,7 +264,7 @@ rimebuf_attr_clear(void)
   }
   for(i = 0; i < RIMEBUF_NUM_ADDRS; ++i) {
     rimebuf_addrs[i].type = RIMEBUF_ATTR_NONE;
-    rimebuf_addrs[i].addr = rimeaddr_null;
+    rimeaddr_copy(&rimebuf_addrs[i].addr, &rimeaddr_null);
   }
 }
 /*---------------------------------------------------------------------------*/
