@@ -1,4 +1,3 @@
-
 /*
 Copyright 2007, Freie Universitaet Berlin. All rights reserved.
 
@@ -53,7 +52,6 @@ Berlin, 2007
  * $Id$
  */
 
-
 /**
  * @addtogroup	libsd
  * @{
@@ -64,45 +62,27 @@ Berlin, 2007
 unsigned int
 sd_read_cid(struct sd_cid *pCID)
 {
-
   return _sd_read_register(pCID, SD_CMD_SEND_CID, sizeof (struct sd_cid));
-
 }
 
 unsigned long
-
-sd_get_size()
+sd_get_size(void)
 {
-
   uint32_t size = 0;
 
-
   if (uart_lock(UART_MODE_SPI)) {
-
     struct sd_csd csd;
 
-
     if (_sd_read_register(&csd, SD_CMD_SEND_CSD, sizeof (struct sd_csd))) {
-
       size = SD_CSD_C_SIZE(csd) + 1;
-
       size <<= SD_CSD_C_MULT(csd);
-
       size <<= 2;
-
       size <<= sd_state.MaxBlockLen_bit;
-
     }
-
     uart_unlock(UART_MODE_SPI);
-
   }
 
-
   return size;
-
 }
-
-
 
 /** @} */

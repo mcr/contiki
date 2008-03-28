@@ -1,4 +1,3 @@
-
 /*
 Copyright 2007, Freie Universitaet Berlin. All rights reserved.
 

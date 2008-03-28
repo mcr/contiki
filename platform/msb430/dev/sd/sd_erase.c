@@ -1,4 +1,3 @@
-
 /*
 Copyright 2007, Freie Universitaet Berlin. All rights reserved.
 
@@ -52,7 +51,6 @@ Berlin, 2007
  *
  * $Id$
  */
-
 
 /**
  * @addtogroup	libsd
