@@ -73,11 +73,20 @@ rs232_send(char c)
      before using it.
   */
 
+  putchar(c);
+}
+/*---------------------------------------------------------------------------*/
+int
+putchar(int c)
+{
   if (uart_get_mode() == UART_MODE_RS232) {
     /* Loop until the transmission buffer is available. */
     UART_WAIT_TX();
     /* Transmit the data. */
     UART_TX = c;
+    return c;
+  } else {
+    return -1;
   }
 }
 /*---------------------------------------------------------------------------*/
