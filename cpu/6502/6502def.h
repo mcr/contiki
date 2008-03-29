@@ -83,6 +83,12 @@ typedef unsigned short uip_stats_t;
 #define UIP_CONF_TCP_SPLIT 0
 #endif /* WITH_BOOST */
 
+#if WITH_FORWARDING
+#define UIP_CONF_TCP_FORWARD 1
+#else /* WITH_BOOST */
+#define UIP_CONF_TCP_FORWARD 0
+#endif /* WITH_BOOST */
+
 #if WITH_CLIENT
 #define UIP_CONF_ACTIVE_OPEN 1
 #else /* WITH_CLIENT */
