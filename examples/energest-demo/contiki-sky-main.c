@@ -152,7 +152,6 @@ main(int argc, char **argv)
   uip_sethostaddr(&slipif.ipaddr);
   uip_setnetmask(&slipif.netmask);
   uip_fw_default(&slipif);	/* Point2point, no default router. */
-  tcpip_set_forwarding(0);
 #endif /* WITH_UIP */
 
   /*
