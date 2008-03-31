@@ -57,6 +57,7 @@ Berlin, 2007
  * @addtogroup	libsd
  * @{
  */
+#include "sd.h"
 #include "sd_internals.h"
 
 #if SD_CACHE
@@ -100,7 +101,7 @@ sd_cache_read_block(const uint32_t * pblAdr)
     sd_state.Cache->address = *pblAdr;
     if (!sd_read_block(sd_state.Cache->buffer, *pblAdr)) {
       SD_FREE_LOCK(sd_state.Cache);
-      return false;
+      return NULL;
     }
   }
   return sd_state.Cache;
