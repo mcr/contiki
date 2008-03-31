@@ -59,6 +59,8 @@ Berlin, 2007
 #ifndef __SD_H__
 #define __SD_H__
 
+#include "contiki-conf.h"
+
 #define SD_BLOCKLENGTH_INVALID		0xFF
 #define	SD_WRITE_BLOCKLENGTH_BIT	9
 #define SD_WRITE_BLOCKLENGTH		0x200
