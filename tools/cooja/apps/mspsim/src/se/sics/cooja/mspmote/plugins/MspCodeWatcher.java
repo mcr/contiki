@@ -91,6 +91,11 @@ public class MspCodeWatcher extends VisPlugin {
 
     Hashtable<File, Hashtable<Integer, Integer>> debuggingInfo = getFirmwareDebugInfo();
     breakpoints = new Breakpoints(debuggingInfo, mspMote);
+    breakpoints.addBreakpointListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        updateInfo();
+      }
+    });
 
     getContentPane().setLayout(new BorderLayout());
 
