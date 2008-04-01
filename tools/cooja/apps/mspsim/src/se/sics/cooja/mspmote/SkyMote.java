@@ -82,6 +82,10 @@ public class SkyMote extends MspMote {
     Clock moteClock = new MspClock(this);
     moteInterfaceHandler.addActiveInterface(moteClock);
 
+    // Add Flash interface
+    SkyFlash moteFlash = new SkyFlash(this);
+    moteInterfaceHandler.addActiveInterface(moteFlash);
+
     // Add ID interface
     MoteID moteID = new MspMoteID(this);
     moteInterfaceHandler.addActiveInterface(moteID);
