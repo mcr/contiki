@@ -52,13 +52,15 @@ const rimeaddr_t rimeaddr_null = { { 0, 0 } };
 void
 rimeaddr_copy(rimeaddr_t *dest, const rimeaddr_t *src)
 {
-  dest->u16[0] = src->u16[0];
+  dest->u8[0] = src->u8[0];
+  dest->u8[1] = src->u8[1];
 }
 /*---------------------------------------------------------------------------*/
 int
 rimeaddr_cmp(const rimeaddr_t *addr1, const rimeaddr_t *addr2)
 {
-  return addr1->u16[0] == addr2->u16[0];
+  return addr1->u8[0] == addr2->u8[0] &&
+    addr1->u8[1] == addr2->u8[1];
 }
 /*---------------------------------------------------------------------------*/
 void
