@@ -174,7 +174,6 @@ public class LogListener extends VisPlugin {
           }
 
           if (!saveFile.exists() || saveFile.canWrite()) {
-            logger.debug("SAVING NOW!");
             try {
               BufferedWriter outStream = new BufferedWriter(
                   new OutputStreamWriter(
@@ -193,6 +192,11 @@ public class LogListener extends VisPlugin {
         }
       }
     });
+
+    if (gui.isVisualizedInApplet()) {
+      saveButton.setToolTipText("Not available in applet");
+      saveButton.setEnabled(false);
+    }
 
     getContentPane().add(BorderLayout.CENTER, new JScrollPane(logTextArea));
     getContentPane().add(BorderLayout.SOUTH, new JScrollPane(filterPanel));
