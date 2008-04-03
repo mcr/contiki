@@ -59,7 +59,7 @@ public class SkyMote extends MspMote {
   protected boolean initEmulator(File fileELF) {
     try {
       skyNode = new SkyNode();
-      skyNode.setupNodePorts();
+      skyNode.setupNodePorts(false);
       prepareMote(fileELF, skyNode.getCPU());
 
     } catch (Exception e) {
