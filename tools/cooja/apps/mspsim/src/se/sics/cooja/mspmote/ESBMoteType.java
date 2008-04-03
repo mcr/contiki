@@ -35,6 +35,7 @@ import java.awt.Container;
 import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.Toolkit;
+import java.io.File;
 import java.net.URL;
 import javax.swing.*;
 import org.apache.log4j.Logger;
@@ -81,6 +82,21 @@ public class ESBMoteType extends MspMoteType {
 
   public boolean configureAndInit(Container parentContainer, Simulation simulation,
       boolean visAvailable) throws MoteTypeCreationException {
+    if (GUI.isVisualizedInApplet()) {
+      String firmware = GUI.getExternalToolsSetting("ESB_FIRMWARE", "");
+      if (!firmware.equals("")) {
+        setELFFile(new File(firmware));
+        JOptionPane.showMessageDialog(GUI.getTopParentContainer(),
+            "Creating mote type from precompiled firmware: " + firmware,
+            "Compiled firmware file available", JOptionPane.INFORMATION_MESSAGE);
+      } else {
+        JOptionPane.showMessageDialog(GUI.getTopParentContainer(),
+            "No precompiled firmware found",
+            "Compiled firmware file not available", JOptionPane.ERROR_MESSAGE);
+        return false;
+      }
+    }
+
     return configureAndInitMspType(parentContainer, simulation, visAvailable, target, targetNice);
   }
 
