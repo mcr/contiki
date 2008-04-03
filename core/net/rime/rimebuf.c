@@ -100,6 +100,7 @@ rimebuf_clear(void)
   hdrptr = RIMEBUF_HDR_SIZE;
 
   rimebufptr = &rimebuf[RIMEBUF_HDR_SIZE];
+  rimebuf_attr_clear();
 }
 /*---------------------------------------------------------------------------*/
 int
