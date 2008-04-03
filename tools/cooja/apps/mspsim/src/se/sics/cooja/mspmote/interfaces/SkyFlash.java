@@ -96,6 +96,12 @@ public class SkyFlash extends MoteInterface {
     final JButton downloadButton = new JButton("Store to file");
     panel.add(downloadButton);
 
+    if (GUI.isVisualizedInApplet()) {
+      uploadButton.setEnabled(false);
+      uploadButton.setToolTipText("Not available in applet mode");
+      downloadButton.setEnabled(false);
+      downloadButton.setToolTipText("Not available in applet mode");
+    }
 
     uploadButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
