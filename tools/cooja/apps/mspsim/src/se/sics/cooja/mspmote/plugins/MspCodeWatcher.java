@@ -761,6 +761,7 @@ public class MspCodeWatcher extends VisPlugin {
       try {
         /* Replace Contiki parent path with web server code base */
         path = contikiWebPath + '/' + path.substring(contikiBuildPath.length());
+        path = path.replace('\\', '/');
         URL url = new URL(GUI.getAppletCodeBase(), path);
         return readTextFile(url);
       } catch (MalformedURLException e) {
