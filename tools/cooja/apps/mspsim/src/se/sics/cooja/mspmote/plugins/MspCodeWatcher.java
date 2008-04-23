@@ -374,7 +374,7 @@ public class MspCodeWatcher extends VisPlugin {
      * Breakpoint wrapper class.
      * May contain breakpoint meta data such source code file and line number.
      *
-     * @author Fredrik Österlind
+     * @author Fredrik Osterlind
      */
     class Breakpoint {
       private CPUMonitor cpuMonitor = null;
