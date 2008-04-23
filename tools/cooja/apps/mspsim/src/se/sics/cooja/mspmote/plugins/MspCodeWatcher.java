@@ -231,7 +231,7 @@ public class MspCodeWatcher extends VisPlugin {
   /**
    * Contains currently active breakpoints.
    *
-   * @author Fredrik Österlind
+   * @author Fredrik Osterlind
    */
   static class Breakpoints {
     private Hashtable<File, Hashtable<Integer, Integer>> debuggingInfo = null;

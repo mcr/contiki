@@ -50,7 +50,7 @@ import se.sics.mspsim.extutil.highlight.TokenTypes;
 /**
  * Displays source code and allows a user to add and remove breakpoints.
  *
- * @author Fredrik Österlind
+ * @author Fredrik Osterlind
  */
 public class CodeUI extends JPanel {
   private static Logger logger = Logger.getLogger(CodeUI.class);
