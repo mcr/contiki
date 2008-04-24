@@ -120,12 +120,14 @@ PROCESS_THREAD(example_rucb_process, ev, data)
 
   PROCESS_PAUSE();
   
-  if(rimeaddr_node_addr.u8[0] == 51 &&
-     rimeaddr_node_addr.u8[1] == 0) {
+  /*  if(rimeaddr_node_addr.u8[0] == 51 &&
+       rimeaddr_node_addr.u8[1] == 0) { */
+  if(rimeaddr_node_addr.u16[0] == 2) {
     rimeaddr_t recv;
     
-    recv.u8[0] = 52;
-    recv.u8[1] = 0;
+    recv.u16[0] = 1;
+    /*recv.u8[0] = 52;
+    recv.u8[1] = 0;*/
     start_time = clock_time();
     rucb_send(&rucb, &recv);
 #if NETSIM
