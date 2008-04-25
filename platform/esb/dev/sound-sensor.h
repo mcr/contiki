@@ -38,5 +38,10 @@
 extern const struct sensors_sensor sound_sensor;
 
 #define SOUND_SENSOR "Sound"
+#define SOUND_SET_BUFFER_PTR 1
+#define SOUND_SET_BUFFER_SIZE 2
+#define SOUND_START_SAMPLE 3
+#define SOUND_SET_DIV 4
+#define SOUND_SAMPLING 1
 
 #endif /* __SOUND_SENSOR_H__ */
