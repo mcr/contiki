@@ -57,6 +57,7 @@ PROCESS_THREAD(fft_process, ev, data)
   static int i = 0;
   static int mode = 0;
   static int16_t fftBuf[FFT_TEST_SIZE];
+  static int16_t tmpBuf[FFT_TEST_SIZE];
   static int max_value = 0;
   static int max_pos = 0;
 
@@ -92,7 +93,7 @@ PROCESS_THREAD(fft_process, ev, data)
 	if (mode) {
 	  /* Calculate fft, print result, and find index of
              highest energy level */
-	  ifft(fftBuf, FFT_TEST_SIZE);
+	  ifft(fftBuf, tmpBuf, FFT_TEST_SIZE);
 	  max_value = 0;
 	  max_pos = 0;
 	  for (i = 0; i < FFT_TEST_SIZE/2; i++) {

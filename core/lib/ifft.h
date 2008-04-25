@@ -53,6 +53,6 @@
    FFT:s since to large sample arrays might cause it to overflow during
    calculations.
 */
-void ifft(int16_t xre[], uint16_t n);
+void ifft(int16_t xre[], int16_t xim[], uint16_t n);
 
 #endif /* IFFT_H */
