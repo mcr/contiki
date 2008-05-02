@@ -152,7 +152,7 @@ public class ExternalToolsDialog extends JDialog {
     // MAIN PART
     textFields = new JTextField[GUI.getExternalToolsSettingsCount()];
     for (int i = 0; i < GUI.getExternalToolsSettingsCount(); i++) {
-      // Add text fields for every changable property
+      // Add text fields for every changeable property
       smallPane = new JPanel();
       smallPane.setAlignmentX(Component.LEFT_ALIGNMENT);
       smallPane.setLayout(new BoxLayout(smallPane, BoxLayout.X_AXIS));
