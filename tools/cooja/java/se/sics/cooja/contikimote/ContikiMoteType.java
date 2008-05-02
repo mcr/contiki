@@ -1336,14 +1336,14 @@ public class ContikiMoteType implements MoteType {
     // User project directory
     for (File projectDir : projectDirs) {
       element = new Element("projectdir");
-      element.setText(projectDir.getPath());
+      element.setText(projectDir.getPath().replace('\\', '/'));
       config.add(element);
     }
 
     // Compilation files
     for (File compileFile : compilationFiles) {
       element = new Element("compilefile");
-      element.setText(compileFile.getPath());
+      element.setText(compileFile.getPath().replace('\\', '/'));
       config.add(element);
     }
 
