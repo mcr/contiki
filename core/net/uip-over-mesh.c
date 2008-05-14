@@ -133,7 +133,7 @@ uip_over_mesh_init(u16_t channels)
   uc_open(&dataconn, channels, &data_callbacks);
   route_discovery_open(&route_discovery, CLOCK_SECOND / 4,
 		       channels + 1, &rdc);
-  tcpip_set_forwarding(1);
+  /*  tcpip_set_forwarding(1);*/
 
 }
 /*---------------------------------------------------------------------------*/
