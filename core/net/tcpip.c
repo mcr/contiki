@@ -66,9 +66,9 @@ enum {
 
 u8_t (* tcpip_output)(void); /* Called on IP packet output. */
 
-#if UIP_CONF_TCP_FORWARD
+#if UIP_CONF_IP_FORWARD
 unsigned char tcpip_is_forwarding; /* Forwarding right now? */
-#endif /* UIP_CONF_TCP_FORWARD */
+#endif /* UIP_CONF_IP_FORWARD */
 
 PROCESS(tcpip_process, "TCP/IP stack");
 
@@ -76,7 +76,7 @@ PROCESS(tcpip_process, "TCP/IP stack");
 static void
 packet_input(void)
 {
-#if UIP_CONF_TCP_FORWARD
+#if UIP_CONF_IP_FORWARD
   if(uip_len > 0) {
     tcpip_is_forwarding = 1;
     if(uip_fw_forward() == UIP_FW_LOCAL) {
@@ -92,7 +92,7 @@ packet_input(void)
     }
     tcpip_is_forwarding = 0;
   }
-#else /* UIP_CONF_TCP_FORWARD */
+#else /* UIP_CONF_IP_FORWARD */
   if(uip_len > 0) {
     uip_input();
     if(uip_len > 0) {
@@ -103,7 +103,7 @@ packet_input(void)
 #endif /* UIP_CONF_TCP_SPLIT */
     }
   }
-#endif /* UIP_CONF_TCP_FORWARD */
+#endif /* UIP_CONF_IP_FORWARD */
 }
 /*---------------------------------------------------------------------------*/
 #if UIP_ACTIVE_OPEN
@@ -287,9 +287,9 @@ eventhandler(process_event_t ev, process_data_t data)
 	    }
 	  }
 	}
-#if UIP_CONF_TCP_FORWARD
+#if UIP_CONF_IP_FORWARD
 	uip_fw_periodic();
-#endif /* UIP_CONF_TCP_FORWARD */
+#endif /* UIP_CONF_IP_FORWARD */
       }
     }
     break;

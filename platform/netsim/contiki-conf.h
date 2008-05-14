@@ -122,6 +122,8 @@ typedef unsigned long clock_time_t;
 
 #define UIP_CONF_BROADCAST	 1
 
+#define UIP_CONF_IP_FORWARD      1
+
 /* TCP splitting does not work well with multi hop routing. */
 #define UIP_CONF_TCP_SPLIT       0
 

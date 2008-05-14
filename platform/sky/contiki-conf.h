@@ -54,6 +54,7 @@
 
 #define UIP_CONF_ICMP_DEST_UNREACH 1
 
+#define UIP_CONF_IP_FORWARD      1
 #define UIP_CONF_DHCP_LIGHT
 #define UIP_CONF_LLH_LEN         0
 #define UIP_CONF_BUFFER_SIZE     110
