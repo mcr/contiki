@@ -177,7 +177,7 @@ main(int argc, char **argv)
     printf("usage: %s <ip addr of ethernet card to share> "
 	   "<ip addr of netsim gateway>\n", argv[0]);
     exit(1);
-  } else if(argc == 2) {
+  } else if(argc >= 2) {
     gwaddr = inet_addr(argv[2]);
   }
 #endif /* __CYGWIN__ */

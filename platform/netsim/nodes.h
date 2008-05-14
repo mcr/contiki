@@ -45,6 +45,7 @@ void nodes_kill(void);
 void nodes_set_leds(int x, int y, int leds);
 void nodes_set_text(int x, int y, char *text);
 void nodes_set_line(int x, int y, int linex, int liney);
+void nodes_set_radio_status(int x, int y, int radio_status);
 
 void nodes_done(int id);
 
@@ -60,6 +61,7 @@ struct nodes_node {
   int leds;
   int done;
   int linex, liney;
+  int radio_status;
   char text[NODES_TEXTLEN];
 };
 

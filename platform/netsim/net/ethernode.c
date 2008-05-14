@@ -75,8 +75,20 @@ struct hdr {
   u8_t seqno;
 };
 
-static int ethernode_on(void) {return 0;}
-static int ethernode_safe_off(void) {return 0;}
+static int radio_is_on = 1;
+
+static int
+ethernode_on(void)
+{
+  radio_is_on = 1;
+  ether_set_radio_status(radio_is_on);
+}
+static int
+ethernode_safe_off(void)
+{
+  radio_is_on = 0;
+  ether_set_radio_status(radio_is_on);
+}
 
 #include "net/ethernode.h"
 
@@ -157,7 +169,11 @@ ethernode_read(void *buf, unsigned short bufsize)
   if(len == 0) {
     return 0;
   }
-  
+
+  if(radio_is_on == 0) {
+    /* Drop the incoming packet if the simulated radio is switched off. */
+    return 0;
+  }
   /*  printf("ethernode_poll: received data packet with len %d type %d\n", len, hdr->type);*/
 
   switch(hdr->type) {

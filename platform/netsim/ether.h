@@ -43,6 +43,7 @@ struct ether_packet {
   char data[1500];
   int len;
   int x, y;
+  int destx, desty;
 };
 
 
@@ -51,6 +52,8 @@ void ether_send_done(void);
 u8_t ether_send(char *data, int len);
 void ether_set_leds(int leds);
 void ether_set_text(char *text);
+
+void ether_set_radio_status(int onoroff);
 void ether_send_serial(char *text);
 
 
