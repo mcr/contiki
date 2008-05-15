@@ -81,7 +81,7 @@ static struct ctimer timer;
 
 static struct queuebuf *queued_packet;
 
-#define LISTEN_TIME CLOCK_SECOND / 128
+#define LISTEN_TIME CLOCK_SECOND / 64
 #define OFF_TIME CLOCK_SECOND / 2
 
 #define DUMP_QUEUED_PACKET 1
