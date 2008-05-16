@@ -187,8 +187,7 @@ send_packet(void)
   rimebuf_compact();
   PRINTF("queueing packet type %d\n", hdr->type);
 
-  if(rimebuf_attr_isset(RIMEBUF_ATTR_PACKET_TYPE) &&
-     rimebuf_attr(RIMEBUF_ATTR_PACKET_TYPE) == RIMEBUF_ATTR_PACKET_TYPE_ACK) {
+  if(rimebuf_attr(RIMEBUF_ATTR_PACKET_TYPE) == RIMEBUF_ATTR_PACKET_TYPE_ACK) {
     /* Immediately send ACKs - we're assuming that the other node is
        listening. */
     /*    printf("Immediately sending ACK\n");*/
