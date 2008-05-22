@@ -33,10 +33,6 @@
 # $Id$
 #
 
-ifndef CONTIKI
-  ${error CONTIKI not defined! You must specify where CONTIKI resides!}
-endif
-
 TARGET_LIBFILES = /lib/w32api/libws2_32.a /lib/w32api/libiphlpapi.a
 
 CONTIKI_TARGET_DIRS = . cfs ctk loader
