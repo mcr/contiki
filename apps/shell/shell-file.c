@@ -173,7 +173,7 @@ PROCESS_THREAD(shell_read_process, ev, data)
 
   if(fd <= 0) {
     shell_output_str(&write_command,
-		     "Could not open file for writing: ", data);
+		     "Could not open file for reading: ", data);
   }
   
 
