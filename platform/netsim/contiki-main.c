@@ -51,6 +51,7 @@
 #include "net/uip-over-mesh.h"
 
 #include "net/mac/nullmac.h"
+#include "net/mac/lpp.h"
 
 #include "ether.h"
 
