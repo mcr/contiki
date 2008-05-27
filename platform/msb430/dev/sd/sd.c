@@ -645,7 +645,7 @@ _sd_send_cmd(const uint8_t command,
     if ((data & 0x80) == 0) {
       goto _sd_send_cmd_response;
     }
-  } while (i);
+  } while (i--);
 
   goto sd_send_cmd_fail;
 
