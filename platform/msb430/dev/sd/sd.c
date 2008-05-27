@@ -56,6 +56,7 @@ Berlin, 2007
 
 #include "sd_internals.h"
 #include "sd.h"
+#include "sdspi.h"
 
 volatile sd_state_t sd_state;
 
