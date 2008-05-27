@@ -479,7 +479,6 @@ _sd_write_block(const uint32_t * pAddress, const void *pBuffer, int increment)
 		pAddress, &r1);
   if (!ret | r1) {
     uart_unlock(UART_MODE_SPI);
-printf("r1 = %u\n", r1);
     SD_LED_WRITE_OFF;
     return SD_WRITE_COMMAND_ERR;
   }
