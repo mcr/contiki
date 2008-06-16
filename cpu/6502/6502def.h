@@ -128,7 +128,7 @@ typedef unsigned short uip_stats_t;
 #define cfs_write pfs_write
 #else /* WITH_PFS */
 #define CFS_READ  (O_RDONLY)
-#define CFS_WRITE (O_CREAT | O_TRUNC | O_RDWR)
+#define CFS_WRITE (O_CREAT | O_TRUNC | O_WRONLY)
 #define cfs_open  open
 #define cfs_close close
 #define cfs_read  read
