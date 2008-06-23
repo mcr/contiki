@@ -38,6 +38,7 @@
 #include "net/wpcap-drv.h"
 
 #define BUF ((struct uip_eth_hdr *)&uip_buf[0])
+#define IPBUF ((struct uip_tcpip_hdr *)&uip_buf[UIP_LLH_LEN])
 
 PROCESS(wpcap_process, "WinPcap driver");
 
