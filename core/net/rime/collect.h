@@ -83,7 +83,7 @@ void collect_open(struct collect_conn *c, uint16_t channels,
 	       const struct collect_callbacks *callbacks);
 void collect_close(struct collect_conn *c);
 
-void collect_send(struct collect_conn *c, int rexmits);
+int collect_send(struct collect_conn *c, int rexmits);
 
 void collect_set_sink(struct collect_conn *c, int should_be_sink);
 
