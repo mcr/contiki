@@ -34,7 +34,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: uc.c,v 1.14 2008/02/25 02:14:35 adamdunkels Exp $
+ * $Id: unicast.c,v 1.1 2008/06/26 11:19:22 adamdunkels Exp $
  */
 
 /**
@@ -45,12 +45,12 @@
  */
 
 #include "net/rime.h"
-#include "net/rime/uc.h"
+#include "net/rime/unicast.h"
 #include <string.h>
 
 static const struct rimebuf_attrlist attributes[] =
   {
-    UC_ATTRIBUTES
+    UNICAST_ATTRIBUTES
     RIMEBUF_ATTR_LAST
   };
 
@@ -64,11 +64,11 @@ static const struct rimebuf_attrlist attributes[] =
 
 /*---------------------------------------------------------------------------*/
 static void
-recv_from_ibc(struct ibc_conn *ibc, rimeaddr_t *from)
+recv_from_broadcast(struct broadcast_conn *broadcast, rimeaddr_t *from)
 {
-  struct uc_conn *c = (struct uc_conn *)ibc;
+  struct unicast_conn *c = (struct unicast_conn *)broadcast;
 
-  PRINTF("%d.%d: uc: recv_from_ibc, receiver %d.%d\n",
+  PRINTF("%d.%d: uc: recv_from_broadcast, receiver %d.%d\n",
 	 rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1],
 	 rimebuf_addr(RIMEBUF_ADDR_RECEIVER)->u8[0],
 	 rimebuf_addr(RIMEBUF_ADDR_RECEIVER)->u8[1]);
@@ -77,31 +77,31 @@ recv_from_ibc(struct ibc_conn *ibc, rimeaddr_t *from)
   }
 }
 /*---------------------------------------------------------------------------*/
-static const struct ibc_callbacks uc = {recv_from_ibc};
+static const struct broadcast_callbacks uc = {recv_from_broadcast};
 /*---------------------------------------------------------------------------*/
 void
-uc_open(struct uc_conn *c, uint16_t channel,
-	 const struct uc_callbacks *u)
+unicast_open(struct unicast_conn *c, uint16_t channel,
+	     const struct unicast_callbacks *u)
 {
-  ibc_open(&c->c, channel, &uc);
+  broadcast_open(&c->c, channel, &uc);
   c->u = u;
   channel_set_attributes(channel, attributes);
 }
 /*---------------------------------------------------------------------------*/
 void
-uc_close(struct uc_conn *c)
+unicast_close(struct unicast_conn *c)
 {
-  ibc_close(&c->c);
+  broadcast_close(&c->c);
 }
 /*---------------------------------------------------------------------------*/
 int
-uc_send(struct uc_conn *c, const rimeaddr_t *receiver)
+unicast_send(struct unicast_conn *c, const rimeaddr_t *receiver)
 {
-  PRINTF("%d.%d: uc_send to %d.%d\n",
+  PRINTF("%d.%d: unicast_send to %d.%d\n",
 	 rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1],
 	 receiver->u8[0], receiver->u8[1]);
   rimebuf_set_addr(RIMEBUF_ADDR_RECEIVER, receiver);
-  return ibc_send(&c->c);
+  return broadcast_send(&c->c);
 }
 /*---------------------------------------------------------------------------*/
 /** @} */
