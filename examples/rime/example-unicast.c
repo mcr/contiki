@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: example-uc.c,v 1.1 2008/01/25 18:00:51 adamdunkels Exp $
+ * $Id: example-unicast.c,v 1.1 2008/06/26 11:20:22 adamdunkels Exp $
  */
 
 /**
@@ -48,25 +48,25 @@
 #include <stdio.h>
 
 /*---------------------------------------------------------------------------*/
-PROCESS(test_uc_process, "uc test");
-AUTOSTART_PROCESSES(&test_uc_process);
+PROCESS(example_unicast_process, "Example unicast");
+AUTOSTART_PROCESSES(&example_unicast_process);
 /*---------------------------------------------------------------------------*/
 static void
-recv_uc(struct uc_conn *c, rimeaddr_t *from)
+recv_uc(struct unicast_conn *c, rimeaddr_t *from)
 {
-  printf("uc message received from %d.%d\n",
+  printf("unicast message received from %d.%d\n",
 	 from->u8[0], from->u8[1]);
 }
-static const struct uc_callbacks uc_callbacks = {recv_uc};
-static struct uc_conn uc;
+static const struct unicast_callbacks unicast_callbacks = {recv_uc};
+static struct unicast_conn uc;
 /*---------------------------------------------------------------------------*/
-PROCESS_THREAD(test_uc_process, ev, data)
+PROCESS_THREAD(example_unicast_process, ev, data)
 {
-  PROCESS_EXITHANDLER(uc_close(&uc);)
+  PROCESS_EXITHANDLER(unicast_close(&uc);)
     
   PROCESS_BEGIN();
 
-  uc_open(&uc, 128, &uc_callbacks);
+  unicast_open(&uc, 128, &unicast_callbacks);
 
   while(1) {
     static struct etimer et;
@@ -79,7 +79,7 @@ PROCESS_THREAD(test_uc_process, ev, data)
     rimebuf_copyfrom("Hello", 5);
     addr.u8[0] = 41;
     addr.u8[1] = 41;
-    uc_send(&uc, &addr);
+    unicast_send(&uc, &addr);
 
   }
 
