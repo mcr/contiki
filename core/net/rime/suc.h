@@ -58,13 +58,13 @@
 #ifndef __SUC_H__
 #define __SUC_H__
 
-#include "net/rime/uc.h"
+#include "net/rime/unicast.h"
 #include "net/rime/ctimer.h"
 #include "net/rime/queuebuf.h"
 
 struct suc_conn;
 
-#define SUC_ATTRIBUTES  UC_ATTRIBUTES
+#define SUC_ATTRIBUTES  UNICAST_ATTRIBUTES
 
 struct suc_callbacks {
   void (* recv)(struct suc_conn *c, rimeaddr_t *from);
@@ -72,7 +72,7 @@ struct suc_callbacks {
 };
 
 struct suc_conn {
-  struct uc_conn c;
+  struct unicast_conn c;
   struct ctimer t;
   struct queuebuf *buf;
   const struct suc_callbacks *u;

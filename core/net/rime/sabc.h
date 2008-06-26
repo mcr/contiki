@@ -61,7 +61,7 @@
 #ifndef __SABC_H__
 #define __SABC_H__
 
-#include "net/rime/uc.h"
+#include "net/rime/abc.h"
 #include "net/rime/ctimer.h"
 #include "net/rime/queuebuf.h"
 

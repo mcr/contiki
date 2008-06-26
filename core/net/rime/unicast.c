@@ -1,5 +1,6 @@
+
 /**
- * \addtogroup rimeibc
+ * \addtogroup rimeuc
  * @{
  */
 
@@ -38,17 +39,19 @@
 
 /**
  * \file
- *         Identified best-effort local area broadcast (ibc)
+ *         Single-hop unicast
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
 
-#include "contiki-net.h"
+#include "net/rime.h"
+#include "net/rime/unicast.h"
 #include <string.h>
 
 static const struct rimebuf_attrlist attributes[] =
   {
-    IBC_ATTRIBUTES RIMEBUF_ATTR_LAST
+    UNICAST_ATTRIBUTES
+    RIMEBUF_ATTR_LAST
   };
 
 #define DEBUG 0
@@ -61,43 +64,44 @@ static const struct rimebuf_attrlist attributes[] =
 
 /*---------------------------------------------------------------------------*/
 static void
-recv_from_abc(struct abc_conn *bc)
+recv_from_broadcast(struct broadcast_conn *broadcast, rimeaddr_t *from)
 {
-  rimeaddr_t sender;
-  struct ibc_conn *c = (struct ibc_conn *)bc;
+  struct unicast_conn *c = (struct unicast_conn *)broadcast;
 
-  rimeaddr_copy(&sender, rimebuf_addr(RIMEBUF_ADDR_SENDER));
-  
-  PRINTF("%d.%d: ibc: from %d.%d\n",
-	 rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1],
-	 sender.u8[0], sender.u8[1]);
-  c->u->recv(c, &sender);
+  PRINTF("%d.%d: uc: recv_from_broadcast, receiver %d.%d\n",
+	 rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1],
+	 rimebuf_addr(RIMEBUF_ADDR_RECEIVER)->u8[0],
+	 rimebuf_addr(RIMEBUF_ADDR_RECEIVER)->u8[1]);
+  if(rimeaddr_cmp(rimebuf_addr(RIMEBUF_ADDR_RECEIVER), &rimeaddr_node_addr)) {
+    c->u->recv(c, from);
+  }
 }
 /*---------------------------------------------------------------------------*/
-static const struct abc_callbacks ibc = {recv_from_abc};
+static const struct broadcast_callbacks uc = {recv_from_broadcast};
 /*---------------------------------------------------------------------------*/
 void
-ibc_open(struct ibc_conn *c, uint16_t channel,
-	  const struct ibc_callbacks *u)
+unicast_open(struct unicast_conn *c, uint16_t channel,
+	     const struct unicast_callbacks *u)
 {
-  abc_open(&c->c, channel, &ibc);
+  broadcast_open(&c->c, channel, &uc);
   c->u = u;
   channel_set_attributes(channel, attributes);
 }
 /*---------------------------------------------------------------------------*/
 void
-ibc_close(struct ibc_conn *c)
+unicast_close(struct unicast_conn *c)
 {
-  abc_close(&c->c);
+  broadcast_close(&c->c);
 }
 /*---------------------------------------------------------------------------*/
 int
-ibc_send(struct ibc_conn *c)
+unicast_send(struct unicast_conn *c, const rimeaddr_t *receiver)
 {
-  PRINTF("%d.%d: ibc_send\n",
-	 rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1]);
-  rimebuf_set_addr(RIMEBUF_ADDR_SENDER, &rimeaddr_node_addr);
-  return abc_send(&c->c);
+  PRINTF("%d.%d: unicast_send to %d.%d\n",
+	 rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1],
+	 receiver->u8[0], receiver->u8[1]);
+  rimebuf_set_addr(RIMEBUF_ADDR_RECEIVER, receiver);
+  return broadcast_send(&c->c);
 }
 /*---------------------------------------------------------------------------*/
 /** @} */

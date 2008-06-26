@@ -61,7 +61,7 @@
 #ifndef __MH_H__
 #define __MH_H__
 
-#include "net/rime/uc.h"
+#include "net/rime/unicast.h"
 #include "net/rime/rimeaddr.h"
 
 struct mh_conn;
@@ -79,7 +79,7 @@ struct mh_callbacks {
 };
 
 struct mh_conn {
-  struct uc_conn c;
+  struct unicast_conn c;
   const struct mh_callbacks *cb;
 };
 

@@ -61,7 +61,7 @@
 #ifndef __SIBC_H__
 #define __SIBC_H__
 
-#include "net/rime/uc.h"
+#include "net/rime/broadcast.h"
 #include "net/rime/ctimer.h"
 #include "net/rime/queuebuf.h"
 
@@ -73,7 +73,7 @@ struct sibc_callbacks {
 };
 
 struct sibc_conn {
-  struct ibc_conn c;
+  struct broadcast_conn c;
   struct ctimer t;
   struct queuebuf *buf;
   const struct sibc_callbacks *u;

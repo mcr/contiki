@@ -59,7 +59,7 @@
 #ifndef __IPOLITE_H__
 #define __IPOLITE_H__
 
-#include "net/rime/ibc.h"
+#include "net/rime/broadcast.h"
 #include "net/rime/ctimer.h"
 #include "net/rime/queuebuf.h"
 
@@ -72,7 +72,7 @@ struct ipolite_callbacks {
 };
 
 struct ipolite_conn {
-  struct ibc_conn c;
+  struct broadcast_conn c;
   const struct ipolite_callbacks *cb;
   struct ctimer t;
   struct queuebuf *q;
