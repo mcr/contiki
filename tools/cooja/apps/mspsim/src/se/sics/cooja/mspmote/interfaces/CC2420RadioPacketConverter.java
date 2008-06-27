@@ -54,7 +54,11 @@ public class CC2420RadioPacketConverter {
    * @return CC2420 radio packet
    */
   public static CC2420RadioPacket fromCoojaToCC24240(RadioPacket coojaPacket) {
-    return new CC2420RadioPacket(coojaPacket.getPacketData());
+    byte[] data = coojaPacket.getPacketData();
+    byte[] cc2420Data = new byte[data.length + 3];
+    cc2420Data[0] = (byte) ((data.length + 2) & 0xff);
+    System.arraycopy(data, 0, cc2420Data, 1, data.length);
+    return new CC2420RadioPacket(cc2420Data);
   }
 
   /**
@@ -64,7 +68,10 @@ public class CC2420RadioPacketConverter {
    * @return COOJA radio packet
    */
   public static COOJARadioPacket fromCC2420ToCooja(CC2420RadioPacket cc2420RadioPacket) {
-    return new COOJARadioPacket(cc2420RadioPacket.getPacketData());
+    byte[] cc2420Data = cc2420RadioPacket.getPacketData();
+    byte[] data = new byte[cc2420Data.length - 3];
+    System.arraycopy(cc2420Data, 1, data, 0, data.length);
+    return new COOJARadioPacket(data);
   }
 
 }
