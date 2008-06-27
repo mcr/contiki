@@ -37,13 +37,10 @@ import java.net.URLConnection;
 import java.util.*;
 import org.apache.log4j.Logger;
 import org.jdom.Element;
-
 import se.sics.cooja.*;
 import se.sics.cooja.mspmote.interfaces.TR1001Radio;
 import se.sics.mspsim.core.MSP430;
-import se.sics.mspsim.util.ELF;
-import se.sics.mspsim.util.MapEntry;
-import se.sics.mspsim.util.MapTable;
+import se.sics.mspsim.util.*;
 
 /**
  * @author Fredrik Osterlind
@@ -92,9 +89,13 @@ public abstract class MspMote implements Mote {
   public MspMote(MspMoteType moteType, Simulation simulation) {
     myMoteType = moteType;
     mySimulation = simulation;
-    initEmulator(myMoteType.getELFFile());
+  }
 
-    myMoteInterfaceHandler = createMoteInterfaceHandler();
+  protected void initMote() {
+    if (myMoteType != null) {
+      initEmulator(myMoteType.getELFFile());
+      myMoteInterfaceHandler = createMoteInterfaceHandler();
+    }
   }
 
   /**

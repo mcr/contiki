@@ -35,14 +35,14 @@ import java.awt.*;
 import java.awt.Dialog.ModalityType;
 import java.awt.event.*;
 import java.io.*;
-import java.util.*;
+import java.util.Collection;
+import java.util.Vector;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileFilter;
 import org.apache.log4j.Logger;
 import org.jdom.Element;
-
 import se.sics.cooja.*;
 import se.sics.cooja.dialogs.MessageList;
 
@@ -128,6 +128,14 @@ public abstract class MspMoteType implements MoteType {
   public File getSourceFile() {
     return fileSource;
   }
+
+  public final Mote generateMote(Simulation simulation) {
+    MspMote mote = createMote(simulation);
+    mote.initMote();
+    return mote;
+  }
+
+  protected abstract MspMote createMote(Simulation simulation);
 
   /**
    * Configures and initialized Msp mote types.

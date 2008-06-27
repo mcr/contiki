@@ -32,9 +32,10 @@
 package se.sics.cooja.mspmote;
 
 import java.io.File;
-import java.util.*;
+import java.util.Random;
 import org.apache.log4j.Logger;
-import se.sics.cooja.*;
+import se.sics.cooja.MoteInterfaceHandler;
+import se.sics.cooja.Simulation;
 import se.sics.cooja.interfaces.*;
 import se.sics.cooja.mspmote.interfaces.*;
 import se.sics.mspsim.platform.esb.ESBNode;
@@ -51,8 +52,8 @@ public class ESBMote extends MspMote {
     super();
   }
 
-  public ESBMote(MoteType moteType, Simulation sim) {
-    super((MspMoteType) moteType, sim);
+  public ESBMote(MspMoteType moteType, Simulation sim) {
+    super(moteType, sim);
   }
 
   protected boolean initEmulator(File fileELF) {
@@ -62,7 +63,7 @@ public class ESBMote extends MspMote {
       prepareMote(fileELF, esbNode.getCPU());
 
     } catch (Exception e) {
-      logger.fatal("Error when creating ESB mote: " + e);
+      logger.fatal("Error when creating ESB mote:", e);
       return false;
     }
     return true;
@@ -105,12 +106,12 @@ public class ESBMote extends MspMote {
   }
 
   public String toString() {
-    if (getInterfaces().getMoteID() != null) {
-      return "ESB Mote, ID=" + getInterfaces().getMoteID().getMoteID();
+    MoteID moteID = getInterfaces() != null ? getInterfaces().getMoteID() : null;
+    if (moteID != null) {
+      return "ESB Mote, ID=" + moteID.getMoteID();
     } else {
       return "ESB Mote, ID=null";
     }
   }
 
 }
-
