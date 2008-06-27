@@ -35,14 +35,11 @@ import java.util.Collection;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Vector;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
 import org.apache.log4j.Logger;
 import org.jdom.Element;
-
-import se.sics.cooja.*;
+import se.sics.cooja.Mote;
 import se.sics.cooja.AddressMemory.UnknownVariableException;
 import se.sics.cooja.interfaces.MoteID;
 import se.sics.cooja.mspmote.MspMote;
@@ -85,7 +82,9 @@ public class MspMoteID extends MoteID {
     /* Write node ID to flash */
     if (GENERATE_ID_HEADER) {
       SkyFlash flash = mote.getInterfaces().getInterfaceOfType(SkyFlash.class);
-      flash.writeIDheader(newID);
+      if (flash != null) {
+        flash.writeIDheader(newID);
+      }
     }
 
     try {
