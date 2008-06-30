@@ -64,6 +64,13 @@
 #include "net/rime/ruc.h"
 #include "net/rime/neighbor-discovery.h"
 
+#define COLLECT_ATTRIBUTES  { RIMEBUF_ADDR_ESENDER,    RIMEBUF_ADDRSIZE }, \
+                            { RIMEBUF_ATTR_EPACKET_ID, RIMEBUF_ATTR_BIT * 2 }, \
+                            { RIMEBUF_ATTR_TTL,        RIMEBUF_ATTR_BIT * 4 }, \
+                            { RIMEBUF_ATTR_HOPS,       RIMEBUF_ATTR_BIT * 4 }, \
+                            { RIMEBUF_ATTR_MAX_REXMIT, RIMEBUF_ATTR_BIT * 3 }, \
+                            RUC_ATTRIBUTES
+
 struct collect_callbacks {
   void (* recv)(rimeaddr_t *originator, uint8_t seqno,
 		uint8_t hops);
