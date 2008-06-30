@@ -46,7 +46,6 @@
 #ifndef __RIME_H__
 #define __RIME_H__
 
-#include "net/rime/announcement.h"
 #include "net/rime/collect.h"
 #include "net/rime/ctimer.h"
 #include "net/rime/ipolite.h"
