@@ -60,7 +60,7 @@
 #ifndef __RUDOLPH0_H__
 #define __RUDOLPH0_H__
 
-#include "net/rime/sabc.h"
+#include "net/rime/stbroadcast.h"
 #include "net/rime/polite.h"
 
 struct rudolph0_conn;
@@ -97,7 +97,7 @@ struct rudolph0_datapacket {
 };
 
 struct rudolph0_conn {
-  struct sabc_conn c;
+  struct stbroadcast_conn c;
   struct polite_conn nackc;
   const struct rudolph0_callbacks *cb;
   clock_time_t send_interval;
