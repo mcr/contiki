@@ -45,6 +45,8 @@
  * The structure of a device driver for a radio in Contiki.
  */
 struct mac_driver {
+  char *name;
+  
   /** Send a packet from the Rime buffer  */
   int (* send)(void);
 
