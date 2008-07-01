@@ -33,7 +33,7 @@
 
 #include "lib/sensors.h"
 #include "dev/irq.h"
-#include "dev/simple-cc2420.h"
+#include "dev/cc2420.h"
 #include "dev/radio-sensor.h"
 
 const struct sensors_sensor radio_sensor;

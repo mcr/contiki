@@ -47,7 +47,7 @@
 
 #include "dev/leds.h"
 #include "dev/spi.h"
-#include "dev/simple-cc2420.h"
+#include "dev/cc2420.h"
 #include "dev/cc2420_const.h"
 
 #include "net/rime/rimestats.h"

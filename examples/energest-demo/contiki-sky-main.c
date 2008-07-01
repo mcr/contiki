@@ -43,7 +43,7 @@
 #include "dev/leds.h"
 #include "dev/light.h"
 #include "dev/xmem.h"
-#include "dev/simple-cc2420.h"
+#include "dev/cc2420.h"
 
 #include "dev/slip.h"
 #include "dev/uart1.h"
@@ -223,7 +223,7 @@ main(int argc, char **argv)
       eint();
       ENERGEST_OFF(ENERGEST_TYPE_LPM);
       ENERGEST_ON(ENERGEST_TYPE_CPU);
-    } 
+    }
     }
   }
 

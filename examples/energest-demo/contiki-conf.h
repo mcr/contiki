@@ -98,7 +98,6 @@ typedef unsigned long off_t;
 
 #define CFS_RAM_CONF_SIZE 4096
 
-#define CC2420_RADIO
 /*
  * SPI bus configuration for the TMote Sky.
  */

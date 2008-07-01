@@ -13,7 +13,7 @@
  * synchronization messages are sent: the module relies on the
  * underlying network device driver to timestamp all radio messages,
  * both outgoing and incoming. The code currently only works on the
- * Tmote Sky platform and the simple-cc2420 driver.
+ * Tmote Sky platform and the cc2420 driver.
  *
  * Every node has an authority level, which is included in every
  * outgoing packet. If a message is received from a node with higher

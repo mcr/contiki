@@ -47,7 +47,7 @@
 #include "net/rime/timesynch.h"
 #include "net/rime/rimebuf.h"
 #include "net/rime.h"
-#include "dev/simple-cc2420.h"
+#include "dev/cc2420.h"
 
 #include <stdio.h>
 

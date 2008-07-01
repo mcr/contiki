@@ -43,7 +43,7 @@
 #include "dev/light.h"
 #include "dev/serial.h"
 #include "dev/sht11.h"
-#include "dev/simple-cc2420.h"
+#include "dev/cc2420.h"
 #include "dev/slip.h"
 #include "dev/uart1.h"
 #include "dev/watchdog.h"

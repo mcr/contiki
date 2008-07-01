@@ -44,7 +44,7 @@
 #include "net/mac/nullmac.h"
 #include "dev/button-sensor.h"
 
-#include "dev/simple-cc2420.h"
+#include "dev/cc2420.h"
 
 #include "dev/leds.h"
 #include "node-id.h"

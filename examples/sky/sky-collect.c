@@ -46,9 +46,8 @@
 #include "dev/button-sensor.h"
 
 #include "dev/light.h"
+#include "dev/cc2420.h"
 #include "dev/sht11.h"
-#include "dev/simple-cc2420.h"
-#include "sys/timesynch.h"
 #include <stdio.h>
 #include <string.h>
 #include "contiki-net.h"
@@ -138,9 +137,7 @@ do_rssi(void)
   simple_cc2420_on();
   for(channel = 11; channel <= 26; ++channel) {
     simple_cc2420_set_channel(channel);
-    //    simple_cc2420_on();
     rssi_samples[sample].channel[channel - 11] = simple_cc2420_rssi() + 53;
-    //    simple_cc2420_off();
   }
   
   rime_mac->on();

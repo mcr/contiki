@@ -3,8 +3,8 @@
 
 ARCH=msp430.c leds.c watchdog.c light.c spi.c ds2411.c \
      xmem.c i2c.c sht11.c battery-sensor.c \
-     simple-cc2420.c simple-cc2420-arch.c irq.c energest-arch.c \
-     node-id.c sensors.c button-sensor.c cfs-xmem.c \
+     cc2420.c cc2420-arch.c irq.c energest-arch.c \
+     node-id.c sensors.c button-sensor.c cfs-coffee.c \
      radio-sensor.c uart1.c uip-ipchksum.c \
      #slip.c slip_uart1.c
 
