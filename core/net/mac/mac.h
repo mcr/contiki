@@ -42,7 +42,7 @@
 #define __MAC_H__
 
 /**
- * The structure of a device driver for a radio in Contiki.
+ * The structure of a MAC protocol driver in Contiki.
  */
 struct mac_driver {
   char *name;
