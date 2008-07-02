@@ -8,12 +8,10 @@
 ;;; \author
 ;;;     Takahide Matsutsuka <markn@markn.org>
 ;;; 
+;;; $Id$
+;;; 
         .module crt0
        	.globl	_main
-
- 	.area	_HEADER (ABS)
-	.org 	0
-	jp	init
 
 	;; Ordering of segments for the linker.
 	.area	_HOME
