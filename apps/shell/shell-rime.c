@@ -158,14 +158,16 @@ PROCESS_THREAD(shell_mac_process, ev, data)
   PROCESS_BEGIN();
   onoroff = shell_strtolong((char *)data, &next);
   if(next == data) {
-    shell_output_str(&mac_command, "usage: ", mac_command.description);
+    shell_output_str(&mac_command, "mac: current MAC layer: ", rime_mac->name);
+    shell_output_str(&mac_command, "mac usage: ", mac_command.description);
   } else {
     if(onoroff) {
       rime_mac->on();
-      shell_output_str(&mac_command, "mac: turned MAC on", "");
+      shell_output_str(&mac_command, "mac: turned MAC on: ", rime_mac->name);
     } else {
       rime_mac->off(1);
-      shell_output_str(&mac_command, "mac: turned MAC off (keeping radio on)", "");
+      shell_output_str(&mac_command, "mac: turned MAC off (keeping radio on): ",
+		       rime_mac->name);
     }
   }
   PROCESS_END();
