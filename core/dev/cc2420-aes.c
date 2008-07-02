@@ -79,7 +79,7 @@ cipher16(uint8_t *data, int len)
 }
 /*---------------------------------------------------------------------------*/
 void
-cc2420_aes_cihper(uint8_t *data, int len, int key_index)
+cc2420_aes_cipher(uint8_t *data, int len, int key_index)
 {
   int i;
   uint16_t secctrl0;

@@ -70,7 +70,7 @@ void cc2420_aes_set_key(uint8_t *key, int index);
  *             function overwrites the data with the encrypted data.
  *
  */
-void cc2420_aes_cihper(uint8_t *data, int len, int key_index);
+void cc2420_aes_cipher(uint8_t *data, int len, int key_index);
 
 
 #endif /* __CC2420_AES_H__ */
