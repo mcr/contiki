@@ -67,7 +67,7 @@ PROJECT_OBJECTFILES += ${addprefix $(OBJECTDIR)/,$(CONTIKI_TARGET_MAIN:.c=.o)}
 %.firmware:	%.co $(PROJECT_OBJECTFILES) contiki-$(TARGET).a
 	$(CC) $(LDFLAGS) $(CFLAGS) -o $@ $(filter-out %.a,$^) $(filter %.a,$^)
 
-%.ihex: %.firmware
+%.ihex: %.$(TARGET)
 	$(OBJCOPY) $^ -O ihex $@
 
 core-labels.o: core.firmware
