@@ -125,8 +125,8 @@ do_sending(void)
 {
   int i;
 
-  simple_cc2420_set_channel(11);
-  simple_cc2420_set_txpower(1);
+  cc2420_set_channel(11);
+  cc2420_set_txpower(1);
 
   for(i = 0;i < send_amount; i++) {
     rimebuf_copyfrom(send_string, send_length);
@@ -135,8 +135,8 @@ do_sending(void)
     abc_send(&abc);
     mac->off(0);
   }
-  simple_cc2420_set_txpower(31);
-  simple_cc2420_set_channel(RF_CHANNEL);
+  cc2420_set_txpower(31);
+  cc2420_set_channel(RF_CHANNEL);
 }
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(output_process, ev, data)

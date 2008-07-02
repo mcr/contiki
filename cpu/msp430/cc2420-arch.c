@@ -40,17 +40,17 @@
 
 /*---------------------------------------------------------------------------*/
 interrupt(PORT1_VECTOR)
-simple_cc24240_port1_interrupt(void)
+cc24240_port1_interrupt(void)
 {
   ENERGEST_ON(ENERGEST_TYPE_IRQ);
-  if(simple_cc2420_interrupt()) {
+  if(cc2420_interrupt()) {
     LPM4_EXIT;
   }
   ENERGEST_OFF(ENERGEST_TYPE_IRQ);
 }
 /*---------------------------------------------------------------------------*/
 void
-simple_cc2420_arch_init(void)
+cc2420_arch_init(void)
 {
   spi_init();
 

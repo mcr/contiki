@@ -71,10 +71,10 @@ value(int type)
 {
   switch(type) {
   case RADIO_SENSOR_LAST_PACKET:
-    return simple_cc2420_last_correlation;
+    return cc2420_last_correlation;
   case RADIO_SENSOR_LAST_VALUE:
   default:
-    return simple_cc2420_last_rssi;
+    return cc2420_last_rssi;
   }
 }
 /*---------------------------------------------------------------------------*/

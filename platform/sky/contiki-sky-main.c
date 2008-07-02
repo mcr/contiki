@@ -232,13 +232,13 @@ main(int argc, char **argv)
   process_start(&sensors_process, NULL);
   ctimer_init();
 
-  simple_cc2420_init();
-  simple_cc2420_set_pan_addr(panId, 0 /*XXX*/, ds2411_id);
-  simple_cc2420_set_channel(RF_CHANNEL);
+  cc2420_init();
+  cc2420_set_pan_addr(panId, 0 /*XXX*/, ds2411_id);
+  cc2420_set_channel(RF_CHANNEL);
 #if WITH_NULLMAC
-  rime_init(nullmac_init(&simple_cc2420_driver));
+  rime_init(nullmac_init(&cc2420_driver));
 #else
-  rime_init(xmac_init(&simple_cc2420_driver));
+  rime_init(xmac_init(&cc2420_driver));
 #endif
   
   printf(CONTIKI_VERSION_STRING " started. ");
