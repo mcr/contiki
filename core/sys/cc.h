@@ -78,6 +78,15 @@
 #endif /* CC_CONF_FASTCALL */
 
 /**
+ * Configure if the C compiler have problems with const function pointers
+ */
+#ifdef CC_CONF_CONST_FUNCTION_BUG
+#define CC_CONST_FUNCTION
+#else /* CC_CONF_FASTCALL */
+#define CC_CONST_FUNCTION const
+#endif /* CC_CONF_FASTCALL */
+
+/**
  * Configure work-around for unsigned char bugs with sdcc.
  */
 #if CC_CONF_UNSIGNED_CHAR_BUGS
