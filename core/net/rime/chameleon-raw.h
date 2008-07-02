@@ -41,6 +41,6 @@
 #ifndef __CHAMELEON_RAW_H__
 #define __CHAMELEON_RAW_H__
 
-extern const struct chameleon_module chameleon_raw;
+extern CC_CONST_FUNCTION struct chameleon_module chameleon_raw;
 
 #endif /* __CHAMELEON_RAW_H__ */

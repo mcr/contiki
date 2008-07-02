@@ -33,12 +33,12 @@
 
 /*
  * \file
- *	This file contains a set of configuration for using SDCC as a compiler. 
- * 
+ *	This file contains a set of configuration for using SDCC as a compiler.
+ *
  * \author
  *	Takahide Matsutsuka <markn@markn.org>
  */
- 
+
 #ifndef __Z80_DEF_H__
 #define __Z80_DEF_H__
 
@@ -69,6 +69,7 @@ typedef unsigned int size_t;
 /* Compiler configurations */
 #define CCIF
 #define CLIF
+#define CC_CONF_CONST_FUNCTION_BUG
 
 /*
  * Enable architecture-depend checksum calculation
