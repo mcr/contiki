@@ -72,7 +72,7 @@
                             RUC_ATTRIBUTES
 
 struct collect_callbacks {
-  void (* recv)(rimeaddr_t *originator, uint8_t seqno,
+  void (* recv)(const rimeaddr_t *originator, uint8_t seqno,
 		uint8_t hops);
 };
 
