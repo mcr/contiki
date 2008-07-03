@@ -251,7 +251,7 @@ PROCESS_THREAD(shell_repeat_process, ev, data)
       reps, period, command);*/
 
   etimer_set(&etimer, CLOCK_SECOND * period);
-  for(i = 0; i < reps; ++i) {
+  for(i = 0; reps == 0 || i < reps; ++i) {
 
     process_start(&shell_repeat_server_process, command);
     process_post(&shell_repeat_server_process,
