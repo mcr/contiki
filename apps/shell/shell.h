@@ -100,15 +100,16 @@ struct shell_input {
 };
 
 #include "shell-blink.h"
+#include "shell-coffee.h"
 #include "shell-exec.h"
 #include "shell-file.h"
 #include "shell-netfile.h"
 #include "shell-ps.h"
 #include "shell-reboot.h"
-#include "shell-rime.h"
 #include "shell-rime-netcmd.h"
 #include "shell-rime-ping.h"
 #include "shell-rime-sniff.h"
+#include "shell-rime.h"
 #include "shell-rsh.h"
 #include "shell-run.h"
 #include "shell-sendtest.h"
