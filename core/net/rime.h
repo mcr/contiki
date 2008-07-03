@@ -62,7 +62,7 @@
 #include "net/rime/rmh.h"
 #include "net/rime/route-discovery.h"
 #include "net/rime/route.h"
-#include "net/rime/ruc.h"
+#include "net/rime/runicast.h"
 #include "net/rime/rucb.h"
 #include "net/rime/timesynch.h"
 #include "net/rime/trickle.h"

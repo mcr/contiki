@@ -41,7 +41,7 @@
 #ifndef __RUCB_H__
 #define __RUCB_H__
 
-#include "net/rime/ruc.h"
+#include "net/rime/runicast.h"
 
 struct rucb_conn;
 
@@ -62,7 +62,7 @@ struct rucb_callbacks {
 #define RUCB_DATASIZE 64
 
 struct rucb_conn {
-  struct ruc_conn c;
+  struct runicast_conn c;
   const struct rucb_callbacks *u;
   rimeaddr_t receiver, sender;
   uint16_t chunk;
