@@ -126,8 +126,8 @@ PROCESS_THREAD(shell_netfile_process, ev, data)
     strcpy(filename, data);
   }
   fd = cfs_open(filename, CFS_READ);
-  if(fd <= 0) {
-    shell_output_str(&netfile_command, "Could not open file ", filename);
+  if(fd < 0) {
+    shell_output_str(&netfile_command, "netfile: could not open file ", filename);
   } else {
     cfs_close(fd);
   }
