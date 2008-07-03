@@ -41,7 +41,7 @@
 #include "lib/print-stats.h"
 
 #include "net/rime.h"
-#include "lib/energest.h"
+#include "sys/energest.h"
 
 #include <stdio.h>
 

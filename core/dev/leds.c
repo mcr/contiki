@@ -33,7 +33,7 @@
 
 #include "dev/leds.h"
 #include "sys/clock.h"
-#include "lib/energest.h"
+#include "sys/energest.h"
 
 static unsigned char leds, invert;
 /*---------------------------------------------------------------------------*/
