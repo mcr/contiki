@@ -215,22 +215,32 @@ start_command(char *commandline, struct shell_command *child)
   int command_len;
   struct shell_command *c;
 
+  /* Shave off any leading spaces. */
   while(*commandline == ' ') {
     commandline++;
   }
-  
+
+  /* Find the next command in a pipeline and start it. */
   next = find_pipe(commandline);
   if(next != NULL) {
     *next = 0;
     child = start_command(next + 1, child);
   }
 
+  /* Separate the command arguments, and remove braces. */
   replace_braces(commandline);
   args = strchr(commandline, ' ');
   if(args != NULL) {
     args++;
   }
 
+  /* Shave off any trailing spaces. */
+  command_len = (int)strlen(commandline);
+  while(command_len > 0 && commandline[command_len - 1] == ' ') {
+    commandline[command_len - 1] = 0;
+    command_len--;
+  }
+  
   if(args == NULL) {
     command_len = (int)strlen(commandline);
     args = &commandline[command_len];
@@ -509,6 +519,7 @@ shell_strtolong(const char *str, const char **retstr)
 unsigned long
 shell_time(void)
 {
+  /* XXX todo: fix process to avoid wrap-around */
   return clock_time() / CLOCK_SECOND + time_offset;
 }
 /*---------------------------------------------------------------------------*/
