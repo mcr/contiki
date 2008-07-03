@@ -183,4 +183,5 @@ hdrsize(const struct rimebuf_attrlist *a)
   return size / 8;
 }
 /*---------------------------------------------------------------------------*/
-CC_CONST_FUNCTION struct chameleon_module chameleon_raw = { input, output, hdrsize, NULL };
+CC_CONST_FUNCTION struct chameleon_module chameleon_raw = { input, output,
+							    hdrsize, NULL };
