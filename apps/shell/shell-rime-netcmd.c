@@ -53,8 +53,6 @@
 
 #include "net/rime/timesynch.h"
 
-#define WITH_DEBUG_COMMANDS 0
-
 #if NETSIM
 #include "ether.h"
 #endif /* NETSIM */
@@ -118,7 +116,7 @@ PROCESS_THREAD(shell_netcmd_process, ev, data)
     
     rimebuf_clear();
     msg = rimebuf_dataptr();
-    rimebuf_set_datalen(len + 1);
+    rimebuf_set_datalen(len + 2);
     strcpy(msg->netcmd, data);
     /*    printf("netcmd sending '%s'\n", msg->netcmd);*/
     trickle_send(&trickle);
@@ -141,7 +139,7 @@ recv_trickle(struct trickle_conn *c)
      is should be already). */
   
   msg->netcmd[rimebuf_datalen() - 2] = 0;
-  
+    
   /* Start the server process with the incoming command. */
   process_start(&shell_netcmd_server_process, msg->netcmd);
 }
