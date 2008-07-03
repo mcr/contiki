@@ -37,7 +37,7 @@
 #include <io.h>
 #include <signal.h>
 
-#include "lib/energest.h"
+#include "sys/energest.h"
 #include "dev/uart1.h"
 #include "dev/leds.h"
 #include "dev/watchdog.h"

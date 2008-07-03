@@ -37,7 +37,7 @@
 
 #include "contiki-conf.h"
 
-#include "lib/energest.h"
+#include "sys/energest.h"
 #include "sys/clock.h"
 #include "sys/etimer.h"
 
@@ -108,6 +108,7 @@ clock_init(void)
 
   /* Select SMCLK (2.4576MHz), clear TAR */
   /* TACTL = TASSEL1 | TACLR | ID_3; */
+  
   /* Select ACLK 32768Hz clock, divide by 8 */
   TACTL = TASSEL0 | TACLR | ID_3;
 
