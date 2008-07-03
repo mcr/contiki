@@ -50,7 +50,7 @@
 #include "net/rime/ctimer.h"
 #include "net/rime/ipolite.h"
 #include "net/rime/mesh.h"
-#include "net/rime/mh.h"
+#include "net/rime/multihop.h"
 #include "net/rime/neighbor-discovery.h"
 #include "net/rime/neighbor.h"
 #include "net/rime/netflood.h"

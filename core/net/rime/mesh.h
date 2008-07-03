@@ -14,7 +14,7 @@
  * \section channels Channels
  *
  * The mesh module uses 3 channel; one for the multi-hop forwarding
- * (\ref rimemh "mh") and two for the route disovery (\ref
+ * (\ref rimemultihop "multihop") and two for the route disovery (\ref
  * routediscovery "route-discovery").
  *
  */
@@ -63,7 +63,7 @@
 #define __MESH_H__
 
 #include "net/rime/queuebuf.h"
-#include "net/rime/mh.h"
+#include "net/rime/multihop.h"
 #include "net/rime/route-discovery.h"
 
 struct mesh_conn;
@@ -81,7 +81,7 @@ struct mesh_callbacks {
 };
 
 struct mesh_conn {
-  struct mh_conn mh;
+  struct multihop_conn multihop;
   struct route_discovery_conn route_discovery_conn;
   struct queuebuf *queued_data;
   rimeaddr_t queued_data_dest;

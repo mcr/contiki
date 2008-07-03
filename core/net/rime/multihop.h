@@ -1,5 +1,25 @@
+/**
+ * \addtogroup rime
+ * @{
+ */
+
+/**
+ * \defgroup rimemultihop Best-effort multihop forwarding
+ * @{
+ *
+ * The multihop module implements a multihop forwarding mechanism. Routes
+ * must have already been setup with the route_add() function. Setting
+ * up routes is done with another Rime module such as the \ref
+ * routediscovery "route-discovery module".
+ *
+ * \section channels Channels
+ *
+ * The multihop module uses 1 channel.
+ *
+ */
+
 /*
- * Copyright (c) 2007, Swedish Institute of Computer Science.
+ * Copyright (c) 2006, Swedish Institute of Computer Science.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,61 +53,41 @@
 
 /**
  * \file
- *         Testing the multihop forwarding layer (mh) in Rime
+ *         Multihop forwarding header file
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
 
-#include "contiki.h"
-#include "net/rime.h"
+#ifndef __MULTIHOP_H__
+#define __MULTIHOP_H__
 
-#include "dev/button-sensor.h"
+#include "net/rime/unicast.h"
+#include "net/rime/rimeaddr.h"
 
-#include "dev/leds.h"
+struct multihop_conn;
 
-#include <stdio.h>
-/*---------------------------------------------------------------------------*/
-PROCESS(example_mh_process, "mh example");
-AUTOSTART_PROCESSES(&example_mh_process);
-/*---------------------------------------------------------------------------*/
-static void
-recv(struct mh_conn *c, rimeaddr_t *sender)
-{
-  printf("mh message received '%s'\n", (char *)rimebuf_dataptr());
-}
-static rimeaddr_t *
-forward(struct mh_conn *c, rimeaddr_t *originator, rimeaddr_t *dest,
-	rimeaddr_t *prevhop, uint8_t hops)
-{
-  printf("Forwarding message '%s'\n", (char *)rimebuf_dataptr());
-  return NULL;
-}
-static const struct mh_callbacks mh_call = {recv, forward};
-static struct mh_conn mh;
-/*---------------------------------------------------------------------------*/
-PROCESS_THREAD(example_mh_process, ev, data)
-{
-  PROCESS_EXITHANDLER(mh_close(&mh);)
-    
-  PROCESS_BEGIN();
+struct multihop_callbacks {
+  void (* recv)(struct multihop_conn *ptr,
+		rimeaddr_t *sender,
+		rimeaddr_t *prevhop,
+		uint8_t hops);
+  rimeaddr_t *(* forward)(struct multihop_conn *ptr,
+			  rimeaddr_t *originator,
+			  rimeaddr_t *dest,
+			  rimeaddr_t *prevhop,
+			  uint8_t hops);
+};
 
-  mh_open(&mh, 128, &mh_call);
+struct multihop_conn {
+  struct unicast_conn c;
+  const struct multihop_callbacks *cb;
+};
 
-  while(1) {
-    static struct etimer et;
-    rimeaddr_t to;
-    
-    etimer_set(&et, CLOCK_SECOND);
-    
-    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
+void multihop_open(struct multihop_conn *c, uint16_t channel,
+	     const struct multihop_callbacks *u);
+void multihop_close(struct multihop_conn *c);
+int multihop_send(struct multihop_conn *c, rimeaddr_t *to);
 
-    rimebuf_copyfrom("Hej", 4);
-    to.u8[0] = 161;
-    to.u8[1] = 161;
-    mh_send(&mh, &to);
-
-  }
-
-  PROCESS_END();
-}
-/*---------------------------------------------------------------------------*/
+#endif /* __MULTIHOP_H__ */
+/** @} */
+/** @} */
