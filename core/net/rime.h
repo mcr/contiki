@@ -53,7 +53,7 @@
 #include "net/rime/mh.h"
 #include "net/rime/neighbor-discovery.h"
 #include "net/rime/neighbor.h"
-#include "net/rime/nf.h"
+#include "net/rime/netflood.h"
 #include "net/rime/polite.h"
 #include "net/rime/queuebuf.h"
 #include "net/rime/rimeaddr.h"

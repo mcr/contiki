@@ -58,7 +58,7 @@
 #ifndef __TRICKLE_H__
 #define __TRICKLE_H__
 
-#include "net/rime/nf.h"
+#include "net/rime/netflood.h"
 
 struct trickle_conn;
 
@@ -67,7 +67,7 @@ struct trickle_callbacks {
 };
 
 struct trickle_conn {
-  struct nf_conn c;
+  struct netflood_conn c;
   const struct trickle_callbacks *cb;
   struct ctimer t;
   struct queuebuf *q;
