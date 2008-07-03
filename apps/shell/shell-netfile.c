@@ -121,15 +121,16 @@ PROCESS_THREAD(shell_netfile_process, ev, data)
 
   PROCESS_BEGIN();
 
-  rudolph0_send(&rudolph0_conn, CLOCK_SECOND);
   if(data != NULL) {
-    strcpy(filename, data);
-  }
-  fd = cfs_open(filename, CFS_READ);
-  if(fd < 0) {
-    shell_output_str(&netfile_command, "netfile: could not open file ", filename);
-  } else {
-    cfs_close(fd);
+    rudolph0_send(&rudolph0_conn, CLOCK_SECOND);
+    
+    strncpy(filename, data, FILENAME_LEN);
+    fd = cfs_open(filename, CFS_READ);
+    if(fd < 0) {
+      shell_output_str(&netfile_command, "netfile: could not open file ", filename);
+    } else {
+      cfs_close(fd);
+    }
   }
 
   PROCESS_END();
