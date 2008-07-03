@@ -150,6 +150,11 @@ chameleon_output(struct channel *c)
 int
 chameleon_hdrsize(const struct rimebuf_attrlist attrlist[])
 {
-  return header_module->hdrsize(attrlist);
+  if(header_module != NULL &&
+     header_module->hdrsize != NULL) {
+    return header_module->hdrsize(attrlist);
+  } else {
+    return 0;
+  }
 }
 /*---------------------------------------------------------------------------*/
