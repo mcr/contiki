@@ -41,6 +41,8 @@
 #ifndef __CHAMELEON_BITOPT_H__
 #define __CHAMELEON_BITOPT_H__
 
-extern const struct chameleon_module chameleon_bitopt;
+#include "sys/cc.h"
+
+extern CC_CONST_FUNCTION struct chameleon_module chameleon_bitopt;
 
 #endif /* __CHAMELEON_BITOPT_H__ */

@@ -334,7 +334,7 @@ unpack_header(void)
   return c;
 }
 /*---------------------------------------------------------------------------*/
-const struct chameleon_module chameleon_bitopt = {
+CC_CONST_FUNCTION struct chameleon_module chameleon_bitopt = {
   unpack_header,
   pack_header,
   header_size,
