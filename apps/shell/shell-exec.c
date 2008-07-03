@@ -49,7 +49,7 @@
 PROCESS(shell_exec_process, "exec");
 SHELL_COMMAND(exec_command,
 	      "exec",
-	      "exec: load and execute an ELF file",
+	      "exec <filename>: load and execute the ELF file filename",
 	      &shell_exec_process);
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(shell_exec_process, ev, data)
