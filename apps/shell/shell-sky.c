@@ -49,6 +49,8 @@
 #include "dev/light.h"
 #include "dev/sht11.h"
 
+#include "cfs/cfs-coffee.h"
+
 #include "net/rime/timesynch.h"
 
 #include <stdio.h>
@@ -390,7 +392,7 @@ PROCESS_THREAD(shell_powerconv_process, ev, data)
 static void
 printpowergraph(struct power_msg *msg)
 {
-  int i, j;
+  int i;
   unsigned long avg_power;
   unsigned long time;
   char buf[MAX_POWERGRAPH];

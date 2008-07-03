@@ -505,7 +505,7 @@ static const struct uc_callbacks uc_callbacks = {recv_uc};
 #endif /* WITH_DEBUG_COMMANDS */
 /*---------------------------------------------------------------------------*/
 static void
-recv_collect(rimeaddr_t *originator, u8_t seqno, u8_t hops)
+recv_collect(const rimeaddr_t *originator, u8_t seqno, u8_t hops)
 {
   struct collect_msg *collect_msg;
   rtimer_clock_t latency;
