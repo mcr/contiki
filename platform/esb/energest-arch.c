@@ -38,9 +38,8 @@
  *         Adam Dunkels <adam@sics.se>
  */
 
-#include "lib/energest.h"
-
 #include "sys/clock.h"
+#include "sys/energest.h"
 #include "sys/rtimer.h"
 
 #define DEC2FIX(h,d) ((h << 6) + (unsigned long)(0.64 * d))
