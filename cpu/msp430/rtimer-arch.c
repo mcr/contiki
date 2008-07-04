@@ -41,7 +41,7 @@
 #include <io.h>
 #include <signal.h>
 
-#include "lib/energest.h"
+#include "sys/energest.h"
 #include "sys/rtimer.h"
 
 #define DEBUG 0
@@ -69,6 +69,7 @@ rtimer_arch_init(void)
   /* Select SMCLK (2.4576MHz), clear TAR; This makes the rtimer count
      the number of processor cycles executed by the CPU. */
   //TBCTL = TBSSEL1 | TBCLR;
+  
   /* Select ACLK 32768Hz clock, divide by 8 */
   TBCTL = TBSSEL0 | TBCLR | ID_3;
 
