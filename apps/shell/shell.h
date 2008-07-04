@@ -99,6 +99,8 @@ struct shell_input {
   int len1, len2;
 };
 
+#include "serial-shell.h"
+
 #include "shell-blink.h"
 #include "shell-coffee.h"
 #include "shell-exec.h"
@@ -106,6 +108,7 @@ struct shell_input {
 #include "shell-netfile.h"
 #include "shell-ps.h"
 #include "shell-reboot.h"
+#include "shell-rime-debug.h"
 #include "shell-rime-netcmd.h"
 #include "shell-rime-ping.h"
 #include "shell-rime-sniff.h"
