@@ -181,7 +181,7 @@ PROCESS_THREAD(shell_read_process, ev, data)
     if(next == NULL) {
       strncpy(filename, data, sizeof(filename));
     } else {
-      len = next - (char *)data;
+      len = (int)(next - (char *)data);
       if(len <= 0) {
 	shell_output_str(&read_command,
 		       "read: filename too short: ", data);
