@@ -35,7 +35,11 @@
 
 #include <stdio.h>
 #include <fcntl.h>
+#ifdef _MSC_VER
+#include <io.h>
+#else
 #include <unistd.h>
+#endif
 
 #include "cfs/cfs.h"
 
