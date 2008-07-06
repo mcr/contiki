@@ -62,7 +62,7 @@ PROCINIT(&etimer_process,
 off_t __fastcall__
 lseek(int, off_t, int)
 {
-  return 0;
+  return -1;
 }
 /*-----------------------------------------------------------------------------------*/
 void * __fastcall__
