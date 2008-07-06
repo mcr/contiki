@@ -37,17 +37,6 @@
 #include <windows.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <io.h>
-#include <fcntl.h>
-#ifdef __CYGWIN__
-#include <unistd.h>
-#else /* __CYGWIN__ */
-#define open   _open
-#define close  _close
-#define read   _read
-#define write  _write
-#define lseek  _lseek
-#endif /* __CYGWIN__ */
 
 #include "contiki.h"
 
@@ -59,36 +48,6 @@ struct cfs_win32_dir {
   unsigned int size;
 };
 
-/*---------------------------------------------------------------------------*/
-int
-cfs_open(const char *n, int f)
-{
-  return open(n, f == CFS_READ? O_RDONLY: O_CREAT|O_RDWR);
-}
-/*---------------------------------------------------------------------------*/
-void
-cfs_close(int f)
-{
-  close(f);
-}
-/*---------------------------------------------------------------------------*/
-int
-cfs_read(int f, void *b, unsigned int l)
-{
-  return read(f, b, l);
-}
-/*---------------------------------------------------------------------------*/
-int
-cfs_write(int f, const void *b, unsigned int l)
-{
-  return write(f, b, l);
-}
-/*---------------------------------------------------------------------------*/
-unsigned int
-cfs_seek(int f, unsigned int o)
-{
-  return lseek(f, o, SEEK_SET);
-}
 /*---------------------------------------------------------------------------*/
 int
 cfs_opendir(struct cfs_dir *p, const char *n)
