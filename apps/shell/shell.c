@@ -520,13 +520,13 @@ unsigned long
 shell_time(void)
 {
   /* XXX todo: fix process to avoid wrap-around */
-  return clock_time() / CLOCK_SECOND + time_offset;
+  return clock_seconds() + time_offset;
 }
 /*---------------------------------------------------------------------------*/
 void
 shell_set_time(unsigned long seconds)
 {
-  time_offset = seconds - clock_time() / CLOCK_SECOND;
+  time_offset = seconds - clock_seconds();
 }
 /*---------------------------------------------------------------------------*/
 void
