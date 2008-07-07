@@ -230,6 +230,9 @@ main(int argc, char **argv)
   process_init();
   process_start(&etimer_process, NULL);
   process_start(&sensors_process, NULL);
+  
+  sensors_light_init();
+  
   ctimer_init();
 
   cc2420_init();
