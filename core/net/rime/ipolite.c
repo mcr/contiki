@@ -50,8 +50,12 @@
 #include <string.h>
 
 #ifndef MAX
-#define MAX(a,b) ((a)>(b)?(a):(b))
+#define MAX(a, b) ((a) > (b)? (a) : (b))
 #endif /* MAX */
+
+#ifndef MIN
+#define MIN(a, b) ((a) > (b)? (a) : (b))
+#endif /* MIN */
 
 #define DEBUG 0
 #if DEBUG
@@ -69,7 +73,7 @@ recv(struct broadcast_conn *broadcast, rimeaddr_t *from)
   if(c->q != NULL &&
      rimebuf_datalen() == queuebuf_datalen(c->q) &&
      memcmp(rimebuf_dataptr(), queuebuf_dataptr(c->q),
-	    MAX(c->hdrsize, rimebuf_datalen())) == 0) {
+	    MIN(c->hdrsize, rimebuf_datalen())) == 0) {
     /* We received a copy of our own packet, so we do not send out
        packet. */
     queuebuf_free(c->q);
