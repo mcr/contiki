@@ -44,6 +44,7 @@
 
 #include "dev/leds.h"
 
+#include "lib/crc16.h"
 #include "lib/random.h"
 
 #include "net/rime.h"
@@ -74,9 +75,10 @@ struct trickle_msg {
   uint8_t type;
 };
 
-#define COLLECT_MSG_HDRSIZE 2
+#define COLLECT_MSG_HDRSIZE 4
 struct collect_msg {
   uint16_t timestamp;
+  uint16_t crc;
   uint8_t data[1];
 };
 
@@ -376,6 +378,7 @@ PROCESS_THREAD(shell_send_process, ev, data)
 #else
       msg->timestamp = 0;
 #endif
+      msg->crc = crc16_data(msg->data, len, 0);
       /*      printf("Sending %d bytes\n", len);*/
       collect_send(&collect, COLLECT_REXMITS);
     }
@@ -388,6 +391,7 @@ recv_collect(const rimeaddr_t *originator, u8_t seqno, u8_t hops)
 {
   struct collect_msg *collect_msg;
   rtimer_clock_t latency;
+  int len;
   
   collect_msg = rimebuf_dataptr();
   
@@ -406,17 +410,22 @@ recv_collect(const rimeaddr_t *originator, u8_t seqno, u8_t hops)
       uint16_t latency;
     } msg;
 
-    
-    msg.len = 5 + (rimebuf_datalen() - COLLECT_MSG_HDRSIZE) / 2;
-    rimeaddr_copy((rimeaddr_t *)&msg.originator, originator);
-    msg.seqno = seqno;
-    msg.hops = hops;
-    msg.latency = latency;
-    /*    printf("recv_collect datalen %d\n", rimebuf_datalen());*/
-    
-    shell_output(&collect_command,
-		 &msg, sizeof(msg),
-		 collect_msg->data, rimebuf_datalen() - COLLECT_MSG_HDRSIZE);
+    if(rimebuf_datalen() >= COLLECT_MSG_HDRSIZE) {
+      len = rimebuf_datalen() - COLLECT_MSG_HDRSIZE;
+
+      if(collect_msg->crc == crc16_data(collect_msg->data, len, 0)) {
+	msg.len = 5 + (rimebuf_datalen() - COLLECT_MSG_HDRSIZE) / 2;
+	rimeaddr_copy((rimeaddr_t *)&msg.originator, originator);
+	msg.seqno = seqno;
+	msg.hops = hops;
+	msg.latency = latency;
+	/*    printf("recv_collect datalen %d\n", rimebuf_datalen());*/
+	
+	shell_output(&collect_command,
+		     &msg, sizeof(msg),
+		     collect_msg->data, rimebuf_datalen() - COLLECT_MSG_HDRSIZE);
+      }
+    }
   } else if(waiting_for_nodes) {
     char buf[40];
     snprintf(buf, sizeof(buf), "%d.%d, %d hops, latency %lu ms",
