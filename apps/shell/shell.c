@@ -519,7 +519,6 @@ shell_strtolong(const char *str, const char **retstr)
 unsigned long
 shell_time(void)
 {
-  /* XXX todo: fix process to avoid wrap-around */
   return clock_seconds() + time_offset;
 }
 /*---------------------------------------------------------------------------*/
