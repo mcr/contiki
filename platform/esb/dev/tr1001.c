@@ -520,7 +520,7 @@ PT_THREAD(tr1001_default_rxhandler_pt(unsigned char incoming_byte))
       PT_WAIT_UNTIL(&rxhandler_pt, tr1001_rxstate != RXSTATE_FULL);
 
     } else {
-      LOG("Incorrect CRC");
+      LOG("Incorrect CRC\n");
       beep_beep(1000);
       RIMESTATS_ADD(badcrc);
     }
@@ -581,7 +581,7 @@ prepare_transmission(int synchbytes)
 }
 /*---------------------------------------------------------------------------*/
 int
-tr1001_send(const uint8_t *packet, uint16_t len)
+tr1001_send(const void *packet, unsigned short len)
 {
   int i;
   uint16_t crc16;
@@ -601,7 +601,7 @@ tr1001_send(const uint8_t *packet, uint16_t len)
 
   /* Send packet data. */
   for(i = 0; i < len; ++i) {
-    crc16 = send2_crc16(packet[i], crc16);
+    crc16 = send2_crc16(((uint8_t *)packet)[i], crc16);
   }
 
   /* Send CRC */
@@ -629,8 +629,8 @@ tr1001_send(const uint8_t *packet, uint16_t len)
   return 0;
 }
 /*---------------------------------------------------------------------------*/
-uint16_t
-tr1001_read(uint8_t *buf, uint16_t bufsize)
+int
+tr1001_read(void *buf, unsigned short bufsize)
 {
   unsigned short tmplen;
 
