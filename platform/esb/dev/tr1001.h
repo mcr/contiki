@@ -140,22 +140,4 @@ extern volatile unsigned char tr1001_rxstate;
  */
 unsigned short tr1001_sstrength(void);
 
-#ifdef TR1001_CONF_STATISTICS
-#define TR1001_STATISTICS TR1001_CONF_STATISTICS
-#else
-#define TR1001_STATISTICS 1
-#endif
-
-#if TR1001_STATISTICS
-#define TR1001_SSTRENGTH_DROPPED 1
-#define TR1001_SSTRENGTH_MAX	 2
-#define TR1001_SSTRENGTH_MIN	 3
-unsigned short tr1001_packets_ok(void);
-unsigned short tr1001_packets_dropped(void);
-void tr1001_clear_packets(void);
-unsigned short tr1001_sstrength_value(unsigned int type);
-unsigned char tr1001_active(void);
-void tr1001_clear_active(void);
-#endif /* TR1001_STATISTICS */
-
 #endif /* __TR1001_H__ */
