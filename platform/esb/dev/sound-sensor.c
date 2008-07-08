@@ -153,7 +153,7 @@ configure(int type, void *c)
   } else if (type == SOUND_SET_BUFFER_SIZE) {
     buffer_size = (int) c;
   } else if (type == SOUND_SET_DIV) {
-    sample_div = (int8_t) c;
+    sample_div = (int) c & 0xff;
   } else if(type == SOUND_START_SAMPLE) {
     if(buffer_size > 0) {
       leds_on(LEDS_RED);
