@@ -232,6 +232,7 @@ main(int argc, char **argv)
   process_start(&sensors_process, NULL);
   
   sensors_light_init();
+  sht11_init();
   
   ctimer_init();
 
