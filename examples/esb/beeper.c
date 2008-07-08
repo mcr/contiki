@@ -81,5 +81,6 @@ PROCESS_THREAD(beeper_process, ev, data)
     
   }
  exit:
+  ;
   PROCESS_END();
 }
