@@ -55,6 +55,7 @@ SENSORS(&pir_sensor, &vib_sensor, &button_sensor);
 int
 main(void)
 {
+  printf("Starting Contiki\n");
   process_init();
 
   procinit_init();
@@ -63,8 +64,6 @@ main(void)
 
   /* Make standard output unbuffered. */
   setvbuf(stdout, (char *)NULL, _IONBF, 0);
-  
-  printf("Contiki started\n");
   
   while(1) {
     fd_set fds;
