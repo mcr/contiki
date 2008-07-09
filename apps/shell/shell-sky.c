@@ -268,6 +268,8 @@ PROCESS_THREAD(shell_power_process, ev, data)
   struct power_msg msg;
 
   PROCESS_BEGIN();
+
+  energest_flush();
   
   msg.len = 8;
   msg.cpu = energest_type_time(ENERGEST_TYPE_CPU) - last_cpu;
@@ -290,6 +292,8 @@ PROCESS_THREAD(shell_energy_process, ev, data)
   struct power_msg msg;
 
   PROCESS_BEGIN();
+
+  energest_flush();
   
   msg.len = 8;
   msg.cpu = energest_type_time(ENERGEST_TYPE_CPU);
