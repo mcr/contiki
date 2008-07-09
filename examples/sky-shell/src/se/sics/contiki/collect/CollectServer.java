@@ -475,7 +475,9 @@ public class CollectServer {
       }
 
     };
-    serialConnection.open(comPort);
+    if (comPort != null) {
+      serialConnection.open(comPort);
+    }
   }
 
   private void exit() {
