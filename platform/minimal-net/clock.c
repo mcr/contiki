@@ -53,6 +53,17 @@ clock_time(void)
   return tv.tv_sec * 1000 + tv.tv_usec / 1000;
 }
 /*---------------------------------------------------------------------------*/
+unsigned long
+clock_seconds(void)
+{
+  struct timeval tv;
+  struct timezone tz;
+   
+  gettimeofday(&tv, &tz);
+ 
+  return tv.tv_sec;
+}
+/*---------------------------------------------------------------------------*/
 void
 clock_delay(unsigned int d)
 {
