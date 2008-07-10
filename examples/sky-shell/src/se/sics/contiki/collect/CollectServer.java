@@ -272,7 +272,7 @@ public class CollectServer {
             dataset.addValue(data.getValue(SensorData.HOPS), categories[0], data.getNode().getName());
           }
         },
-        new TimeChartPanel(this, "Latency", "Latency", "Time", "Milliseconds") {
+        new TimeChartPanel(this, "Latency", "Latency", "Time", "Seconds") {
           protected double getSensorDataValue(SensorData data) {
             return data.getLatency();
           }
