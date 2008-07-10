@@ -99,8 +99,6 @@ struct shell_input {
   int len1, len2;
 };
 
-#include "serial-shell.h"
-
 #include "shell-blink.h"
 #include "shell-coffee.h"
 #include "shell-exec.h"
