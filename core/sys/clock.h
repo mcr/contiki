@@ -96,7 +96,7 @@ void clock_delay(unsigned int);
 int clock_fine_max(void);
 unsigned short clock_fine(void);
 
-unsigned long clock_seconds(void);
+CCIF unsigned long clock_seconds(void);
 
 
 #endif /* __CLOCK_H__ */
