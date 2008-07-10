@@ -207,6 +207,11 @@ public class CollectServer {
         mapPanel,
         new BarChartPanel(this, "Instantaneous Power", "Instantaneous Power Consumption", null, "Power (mW)",
             new String[] { "LPM", "CPU", "Radio listen", "Radio transmit" }) {
+	  {
+            ValueAxis axis = chart.getCategoryPlot().getRangeAxis();
+            axis.setLowerBound(0.0);
+            axis.setUpperBound(75.0);
+	  }
           protected void addSensorData(SensorData data) {
             Node node = data.getNode();
             String nodeName = node.getName();
@@ -214,9 +219,6 @@ public class CollectServer {
             dataset.addValue(data.getCPUPower(), categories[1], nodeName);
             dataset.addValue(data.getListenPower(), categories[2], nodeName);
             dataset.addValue(data.getTransmitPower(), categories[3], nodeName);
-            ValueAxis axis = chart.getCategoryPlot().getRangeAxis();
-            axis.setLowerBound(0.0);
-	    axis.setUpperBound(75.0);
           }
         },
         new TimeChartPanel(this, "Power History", "Historical Power Consumption", "Time", "mW") {
