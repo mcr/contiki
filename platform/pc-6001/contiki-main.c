@@ -71,7 +71,7 @@ main(void)
 #else
   program_handler_add(&processes_dsc, "Processes", 1);
   program_handler_add(&mttest_dsc, "Multithread", 1);
-//  program_handler_add(&calc_dsc, "Calculator", 1);
+  program_handler_add(&calc_dsc, "Calculator", 1);
   program_handler_add(&about_dsc, "About", 1);
 //  program_handler_add(&shell_dsc, "Command shell", 1);
 #endif
