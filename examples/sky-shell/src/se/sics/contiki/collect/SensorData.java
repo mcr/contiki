@@ -86,7 +86,7 @@ public class SensorData {
   public SensorData(Node node, int[] values) {
     this.node = node;
     this.values = values;
-    this.time = ((values[TIMESTAMP1] << 16) + values[TIMESTAMP2]) * 1000;
+    this.time = ((values[TIMESTAMP1] << 16) + values[TIMESTAMP2]) * 1000L;
   }
 
   public Node getNode() {
@@ -176,16 +176,26 @@ public class SensorData {
     return -39.6 + 0.01 * values[TEMPERATURE];
   }
 
+  public double getRadioIntensity() {
+    return values[RSSI];
+  }
+
   public double getLatency() {
     return values[LATENCY] / 4096.0;
   }
 
   public double getHumidity() {
+    double v;
 //    double v = values[HUMIDITY];
 //    double humidity = -4.0 + 0.0405 * v + -0.0000028 * v * v;
 //    // Correct humidity using temperature compensation
 //    return (getTemperature() - 25) * (0.01 + 0.00008*v + humidity);
-    return -4.0 + 405.0 * values[HUMIDITY] / 10000.0;
+    v = -4.0 + 405.0 * values[HUMIDITY] / 10000.0;
+    if(v > 100) {
+      return 100;
+    } else {
+      return v;
+    }
   }
 
   public double getLight1() {
