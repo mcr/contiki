@@ -158,7 +158,7 @@ CC_CONST_FUNCTION static struct mesh_callbacks mesh_callbacks = { recv_mesh,
 void
 shell_rime_ping_init(void)
 {
-  mesh_open(&mesh, 19, &mesh_callbacks);
+  mesh_open(&mesh, SHELL_RIME_CHANNEL_PING, &mesh_callbacks);
 
   shell_register_command(&ping_command);
 }

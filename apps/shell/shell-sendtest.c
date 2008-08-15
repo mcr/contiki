@@ -170,7 +170,7 @@ PROCESS_THREAD(shell_sendtest_process, ev, data)
 void
 shell_sendtest_init(void)
 {
-  rucb_open(&rucb, 22, &rucb_callbacks);
+  rucb_open(&rucb, SHELL_RIME_CHANNEL_SENDTEST, &rucb_callbacks);
   shell_register_command(&sendtest_command);
 }
 /*---------------------------------------------------------------------------*/

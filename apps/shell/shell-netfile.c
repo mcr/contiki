@@ -167,6 +167,7 @@ shell_netfile_init(void)
   shell_register_command(&netfile_command);
   shell_register_command(&recvnetfile_command);
 
-  rudolph0_open(&rudolph0_conn, 26, &rudolph0_callbacks);
+  rudolph0_open(&rudolph0_conn, SHELL_RIME_CHANNEL_NETFILE,
+		&rudolph0_callbacks);
 }
 /*---------------------------------------------------------------------------*/
