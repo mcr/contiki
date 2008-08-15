@@ -138,9 +138,13 @@ recv(struct broadcast_conn *bc, rimeaddr_t *from)
   struct trickle_conn *c = (struct trickle_conn *)bc;
   uint16_t seqno = rimebuf_attr(RIMEBUF_ATTR_EPACKET_ID);
 
-  PRINTF("%d.%d: trickle recv seqno %d our %d\n",
+  PRINTF("%d.%d: trickle recv seqno %d from %d.%d our %d data len %d channel %d\n",
 	 rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1],
-	 seqno, c->seqno);
+	 seqno,
+	 from->u8[0], from->u8[1],
+	 c->seqno,
+	 rimebuf_datalen(),
+	 rimebuf_attr(RIMEBUF_ATTR_CHANNEL));
 
   if(seqno == c->seqno) {
     /*    c->cb->recv(c);*/
