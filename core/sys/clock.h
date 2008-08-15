@@ -60,7 +60,16 @@
 
 #include "contiki-conf.h"
 
-#define CLOCK_LT(a,b)     ((signed short)((a)-(b)) < 0)
+/**
+ * Check if a clock time value is less than another clock time value.
+ *
+ * This macro checks if a clock time value is less than another clock
+ * time value. This macro is needed to correctly handle wrap-around of
+ * clock time values.
+ *
+ */
+#define CLOCK_LT(a, b) ((clock_time_t)((a) - (b)) < \
+                       ((clock_time_t)(~((clock_time_t)0)) >> 1))
 
 /**
  * Initialize the clock library.
