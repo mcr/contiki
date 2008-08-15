@@ -263,8 +263,9 @@ PROCESS_THREAD(ethernode_process, ev, data)
   PROCESS_BEGIN();
 
   while(1) {
-    PROCESS_PAUSE();
-
+    process_post(PROCESS_CURRENT(), PROCESS_EVENT_CONTINUE, NULL);
+    PROCESS_WAIT_EVENT_UNTIL(ev == PROCESS_EVENT_CONTINUE);
+    
     if(ethernode_poll()) {
       if(receiver_callback) {
 	receiver_callback(&ethernode_driver);
