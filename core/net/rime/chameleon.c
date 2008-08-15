@@ -116,6 +116,7 @@ chameleon_input(void)
       PRINTF("%d.%d: chameleon_input channel %d\n",
 	     rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1],
 	     c->channelno);
+      rimebuf_set_attr(RIMEBUF_ATTR_CHANNEL, c->channelno);
       abc_input(c);
     } else {
       PRINTF("%d.%d: chameleon_input channel not found for incoming packet\n",
