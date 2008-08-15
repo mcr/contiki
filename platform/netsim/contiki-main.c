@@ -173,7 +173,7 @@ contiki_main(int flag)
 
     n = process_run();
     /*    if(n > 0) {
-      printf("%d processes in queue\n");
+      printf("%d processes in queue\n", n);
       }*/
     tv.tv_sec = 0;
     tv.tv_usec = 1;
