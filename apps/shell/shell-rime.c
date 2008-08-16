@@ -453,8 +453,9 @@ send_collect(void *dummy)
   collect_send(&collect, COLLECT_REXMITS);
 }
 /*---------------------------------------------------------------------------*/
-static void
-recv_netflood(struct netflood_conn *c)
+static int
+recv_netflood(struct netflood_conn *c, rimeaddr_t *from,
+	      rimeaddr_t *originator, uint8_t seqno, uint8_t hops)
 {
   struct netflood_msg *msg;
   
@@ -463,6 +464,7 @@ recv_netflood(struct netflood_conn *c)
     ctimer_set(&ctimer, random_rand() % (CLOCK_SECOND * 8),
 	       send_collect, NULL);
   }
+  return 1;
 }
 const static struct netflood_callbacks netflood_callbacks = { recv_netflood,
 							      NULL, NULL };
