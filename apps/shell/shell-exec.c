@@ -73,7 +73,7 @@ PROCESS_THREAD(shell_exec_process, ev, data)
 
   
   fd = cfs_open(name, CFS_READ);
-  if(fd <= 0) {
+  if(fd < 0) {
     shell_output_str(&exec_command,
 		     "exec: could not open ", name);
   } else {
