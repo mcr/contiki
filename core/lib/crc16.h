@@ -87,7 +87,7 @@ unsigned short crc16_add(unsigned char b, unsigned short crc);
  *             well as a table-driven algorithm when checksumming an
  *             entire data block.
  */
-unsigned short crc16_data(unsigned char *data, int datalen,
+unsigned short crc16_data(const unsigned char *data, int datalen,
 			  unsigned short acc);
 
 #endif /* __CRC16_H__ */
