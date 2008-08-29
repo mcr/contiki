@@ -168,9 +168,9 @@ public class Node implements Comparable<Node> {
     if (sensorDataList.size() > 0) {
       SensorData last = sensorDataList.get(sensorDataList.size() - 1);
       // TODO should check seqno!
-      if (data.getTime() <= last.getTime()) {
+      if (data.getNodeTime() <= last.getNodeTime()) {
         // Sensor data already added
-        System.out.println("SensorData: ignoring (time " + (data.getTime() - last.getTime())
+        System.out.println("SensorData: ignoring (time " + (data.getNodeTime() - last.getNodeTime())
             + "msec): " + data);
         return false;
       }
