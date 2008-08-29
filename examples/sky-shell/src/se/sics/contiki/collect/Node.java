@@ -47,6 +47,7 @@ import java.util.Hashtable;
  */
 public class Node implements Comparable<Node> {
 
+  private SensorDataAggregator sensorDataAggregator;
   private ArrayList<SensorData> sensorDataList = new ArrayList<SensorData>();
   private ArrayList<Link> links = new ArrayList<Link>();
 
@@ -62,6 +63,7 @@ public class Node implements Comparable<Node> {
   public Node(String nodeID) {
     this.id = nodeID;
     this.name = "Node " + nodeID;
+    sensorDataAggregator = new SensorDataAggregator(this);
   }
 
   public final String getID() {
@@ -141,13 +143,17 @@ public class Node implements Comparable<Node> {
   // SensorData
   // -------------------------------------------------------------------
 
+  public SensorDataAggregator getSensorDataAggregator() {
+    return sensorDataAggregator;
+  }
+
   public SensorData[] getAllSensorData() {
     return sensorDataList.toArray(new SensorData[sensorDataList.size()]);
   }
 
-
   public void removeAllSensorData() {
     sensorDataList.clear();
+    sensorDataAggregator.clear();
   }
 
   public SensorData getSensorData(int index) {
@@ -170,6 +176,7 @@ public class Node implements Comparable<Node> {
       }
     }
     sensorDataList.add(data);
+    sensorDataAggregator.addSensorData(data);
     return true;
   }
 
