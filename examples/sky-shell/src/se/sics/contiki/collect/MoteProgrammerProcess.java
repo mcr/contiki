@@ -51,7 +51,6 @@ public class MoteProgrammerProcess {
   public static final String BSL_WINDOWS = "./tools/msp430-bsl-windows.exe";
   public static final String BSL_LINUX = "./tools/msp430-bsl-linux";
 
-  private final int mote;
   private final String moteID;
   private final String firmwareFile;
   private final String[][] commandSet;
@@ -62,9 +61,8 @@ public class MoteProgrammerProcess {
   private boolean isRunning;
   private boolean hasError;
 
-  public MoteProgrammerProcess(int mote, String firmwareFile) {
-    this.mote = mote;
-    this.moteID = "" + (mote - 1);
+  public MoteProgrammerProcess(String moteID, String firmwareFile) {
+    this.moteID = moteID;
     this.firmwareFile = firmwareFile;
     String osName = System.getProperty("os.name").toLowerCase();
     String bslCommand;
@@ -80,8 +78,8 @@ public class MoteProgrammerProcess {
     };
   }
 
-  public int getMote() {
-    return mote;
+  public String getMoteID() {
+    return moteID;
   }
 
   public String getFirmwareFile() {
@@ -208,9 +206,9 @@ public class MoteProgrammerProcess {
 
   protected void logLine(String line, boolean stderr, Throwable e) {
     if (stderr) {
-      System.err.println("Programmer@" + mote + "> " + line);
+      System.err.println("Programmer@" + moteID + "> " + line);
     } else {
-      System.out.println("Programmer@" + mote + "> " + line);
+      System.out.println("Programmer@" + moteID + "> " + line);
     }
     if (e != null) {
       e.printStackTrace();

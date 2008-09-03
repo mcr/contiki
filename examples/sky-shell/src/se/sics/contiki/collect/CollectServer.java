@@ -999,7 +999,7 @@ public class CollectServer {
         mp.setParentComponent(window);
         mp.setFirmwareFile(FIRMWARE_FILE);
         mp.searchForMotes();
-        int[] motes = mp.getMotes();
+        String[] motes = mp.getMotes();
         if (motes == null || motes.length == 0) {
           JOptionPane.showMessageDialog(window, "Could not find any connected Sky nodes", "Error", JOptionPane.ERROR_MESSAGE);
           return;

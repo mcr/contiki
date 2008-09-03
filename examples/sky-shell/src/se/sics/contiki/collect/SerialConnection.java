@@ -115,8 +115,10 @@ public abstract class SerialConnection {
           } catch (IOException e) {
             lastError = "Error when reading from serialdump process: " + e;
             System.err.println(lastError);
-            e.printStackTrace();
-            closeConnection();
+            if (!isClosed) {
+              e.printStackTrace();
+              closeConnection();
+            }
           }
         }
       }, "read input stream thread");
@@ -136,8 +138,10 @@ public abstract class SerialConnection {
             }
             err.close();
           } catch (IOException e) {
-            System.err.println("Error when reading from serialdump process: " + e);
-            e.printStackTrace();
+            if (!isClosed) {
+              System.err.println("Error when reading from serialdump process: " + e);
+              e.printStackTrace();
+            }
           }
         }
       }, "read error stream thread");
