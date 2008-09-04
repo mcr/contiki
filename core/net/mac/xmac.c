@@ -380,7 +380,7 @@ send_packet(void)
     TIMETABLE_TIMESTAMP(xmac_timetable, "send got ack");
 #endif
     on(); /* Wait for possible ACK packet */
-  } else {
+  } else if(!is_broadcast) {
 #if WITH_TIMETABLE
     TIMETABLE_TIMESTAMP(xmac_timetable, "send no ack received");
 #endif
