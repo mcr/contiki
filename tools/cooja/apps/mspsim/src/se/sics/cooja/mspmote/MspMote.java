@@ -53,6 +53,7 @@ public abstract class MspMote implements Mote {
 
   /* Cycle counter */
   public long cycleCounter = 0;
+  public int cycleDrift = 0;
 
   private Simulation mySimulation = null;
   private MSP430 myCpu = null;
@@ -276,7 +277,7 @@ public abstract class MspMote implements Mote {
     }
 
     long maxSimTimeCycles = NR_CYCLES_PER_MSEC*(simTime+1);
-    if (maxSimTimeCycles <= cycleCounter) {
+    if (maxSimTimeCycles <= cycleCounter - cycleDrift) {
       return false;
     }
 

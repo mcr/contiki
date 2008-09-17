@@ -61,11 +61,12 @@ public class MspClock extends Clock {
   }
 
   public int getTime() {
-    return (int) (cpu.cycles / MspMote.NR_CYCLES_PER_MSEC);
+    int time = (int) ((cpu.cycles + myMote.cycleDrift) / MspMote.NR_CYCLES_PER_MSEC);
+    return time > 0 ? time : 0;
   }
 
   public void setDrift(int drift) {
-    myMote.cycleCounter = -MspMote.NR_CYCLES_PER_MSEC * drift;
+    myMote.cycleDrift = MspMote.NR_CYCLES_PER_MSEC * drift;
   }
 
   public void doActionsBeforeTick() {
