@@ -99,8 +99,9 @@ public class LogScriptEngine {
             scriptedLogObserver.update(obs, obj);
           }
         } catch (UndeclaredThrowableException e) {
+          e.printStackTrace();
           JOptionPane.showMessageDialog(GUI.getTopParentContainer(),
-              e.getMessage(),
+              "See console for more information.",
               "Script error", JOptionPane.ERROR_MESSAGE);
           unregisterLogObserver();
         }
@@ -111,8 +112,9 @@ public class LogScriptEngine {
     try {
       createScriptEngine(scriptCode);
     } catch (ScriptException e) {
+      e.printStackTrace();
       JOptionPane.showMessageDialog(GUI.getTopParentContainer(),
-          e.getMessage(),
+          "See console for more information.",
           "Script error", JOptionPane.ERROR_MESSAGE);
       unregisterLogObserver();
     }
@@ -195,6 +197,9 @@ public class LogScriptEngine {
         }
       }
     });
+
+    Hashtable<Object, Object> hash = new Hashtable<Object, Object>();
+    engine.put("global", hash);
 
     /* TODO Test script */
     logObserver.update(null, null);
