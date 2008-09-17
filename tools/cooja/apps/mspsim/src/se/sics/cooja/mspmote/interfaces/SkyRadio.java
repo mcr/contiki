@@ -91,7 +91,8 @@ public class SkyRadio extends Radio implements CustomDataRadio {
 
   public SkyRadio(SkyMote mote) {
     this.myMote = mote;
-    this.cc2420Wrapped = new RadioWrapper(mote.skyNode.radio);
+    this.cc2420 = mote.skyNode.radio;
+    this.cc2420Wrapped = new RadioWrapper(this.cc2420);
 
     cc2420Wrapped.setPacketListener(new PacketListener() {
       public void transmissionStarted() {
