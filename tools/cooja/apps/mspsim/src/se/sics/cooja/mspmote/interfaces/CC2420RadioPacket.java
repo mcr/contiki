@@ -39,6 +39,13 @@ public class CC2420RadioPacket implements RadioPacket {
     this.data = data;
   }
 
+  public CC2420RadioPacket(int[] intData) {
+    this.data = new byte[intData.length];
+    for (int i=0; i < intData.length; i++) {
+      this.data[i] = (byte) intData[i];
+    }
+  }
+
   public byte[] getPacketData() {
     return data;
   }
