@@ -280,6 +280,8 @@ public abstract class MspMote implements Mote {
       return false;
     }
 
+    myMoteInterfaceHandler.doActiveActionsBeforeTick();
+
     // Leave control to emulated CPU
     cycleCounter += 1;
 
