@@ -465,7 +465,8 @@ public class MspCodeWatcher extends VisPlugin {
 
         if (codeFile != null) {
           element = new Element("codefile");
-          element.setText(codeFile.getAbsolutePath());
+          codeFile = GUI.stripAbsoluteContikiPath(codeFile);
+          element.setText(codeFile.getPath());
           config.add(element);
         }
 
