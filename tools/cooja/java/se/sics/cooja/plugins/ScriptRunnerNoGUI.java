@@ -170,10 +170,13 @@ public class ScriptRunnerNoGUI implements Plugin {
       /* Start simulation and leave control to script */
       sim.startSimulation();
     } catch (IOException e) {
+      logger.fatal("Error when running script: " + e);
       return false;
     } catch (UnsatisfiedLinkError e) {
+      logger.fatal("Error when running script: " + e);
       return false;
     } catch (SimulationCreationException e) {
+      logger.fatal("Error when running script: " + e);
       return false;
     }
 

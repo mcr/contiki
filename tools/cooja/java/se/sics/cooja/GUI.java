@@ -3112,6 +3112,7 @@ public class GUI extends Observable {
 
             /* Activate test */
             scriptPlugin.activateTest(configFile, scriptFile, logFile);
+            System.exit(1);
           }
         }
       });
