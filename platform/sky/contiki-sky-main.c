@@ -41,6 +41,7 @@
 #include "dev/ds2411.h"
 #include "dev/leds.h"
 #include "dev/light.h"
+#include "dev/battery-sensor.h"
 #include "dev/serial.h"
 #include "dev/sht11.h"
 #include "dev/cc2420.h"
@@ -234,6 +235,7 @@ main(int argc, char **argv)
    * Initialize light and humitity/temp sensors.
    */
   sensors_light_init();
+  battery_sensor.activate();
   sht11_init();
   
   ctimer_init();
