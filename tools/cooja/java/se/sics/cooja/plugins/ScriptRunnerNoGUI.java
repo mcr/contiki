@@ -122,6 +122,7 @@ public class ScriptRunnerNoGUI implements Plugin {
       /* Load simulation */
       final Simulation sim = gui.loadSimulationConfig(config, true);
       if (sim == null) {
+        System.exit(1);
         return false;
       }
       gui.setSimulation(sim);
@@ -171,11 +172,14 @@ public class ScriptRunnerNoGUI implements Plugin {
       sim.startSimulation();
     } catch (IOException e) {
       logger.fatal("Error when running script: " + e);
+      System.exit(1);
       return false;
     } catch (UnsatisfiedLinkError e) {
       logger.fatal("Error when running script: " + e);
+      System.exit(1);
       return false;
     } catch (SimulationCreationException e) {
+      System.exit(1);
       logger.fatal("Error when running script: " + e);
       return false;
     }
