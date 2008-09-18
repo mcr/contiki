@@ -956,6 +956,7 @@ public abstract class MspMoteType implements MoteType {
     // Source file
     if (fileSource != null) {
       element = new Element("source");
+      fileSource = GUI.stripAbsoluteContikiPath(fileSource);
       element.setText(fileSource.getPath());
       config.add(element);
       element = new Element("command");
@@ -964,6 +965,7 @@ public abstract class MspMoteType implements MoteType {
     } else {
       // ELF file
       element = new Element("elf");
+      fileELF = GUI.stripAbsoluteContikiPath(fileELF);
       element.setText(fileELF.getPath());
       config.add(element);
     }
