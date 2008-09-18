@@ -352,7 +352,7 @@ main(int argc, char **argv)
 	 were awake. */
       energest_type_set(ENERGEST_TYPE_IRQ, irq_energest);
       watchdog_stop();
-      _BIS_SR(GIE | SCG0 | /*SCG1 | */CPUOFF); /* LPM3 sleep. This
+      _BIS_SR(GIE | SCG0 | SCG1 | CPUOFF); /* LPM3 sleep. This
 					      statement will block
 					      until the CPU is
 					      woken up by an
