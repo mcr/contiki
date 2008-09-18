@@ -236,6 +236,8 @@ public abstract class MspMoteType implements MoteType {
               "Mote type creation failed: " + e.getMessage());
           newException = (MoteTypeCreationException) newException.initCause(e);
           newException.setCompilationOutput(compilationOutput);
+
+          logger.fatal("Compilation error: " + e.getMessage());
           throw newException;
         }
 
@@ -439,7 +441,7 @@ public abstract class MspMoteType implements MoteType {
 
       final String command = getCompileCommand(filenameNoExtension);
       logger.info("-- Compiling MSP430 Firmware --");
-      logger.info("command: " + command);
+      logger.info("Compilation command: " + command);
 
       compilationOutput.clearMessages();
 
