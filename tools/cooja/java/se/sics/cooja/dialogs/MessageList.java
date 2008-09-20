@@ -50,7 +50,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
 
 public class MessageList extends JList {
 
@@ -100,27 +99,22 @@ public class MessageList extends JList {
       PipedInputStream input = new PipedInputStream();
       PipedOutputStream output = new PipedOutputStream(input);
       final BufferedReader stringInput = new BufferedReader(new InputStreamReader(input));
-      
+
       Thread readThread = new Thread(new Runnable() {
         public void run() {
           String readLine;
           try {
             while ((readLine = stringInput.readLine()) != null) {
-	      final String line = readLine;
-	      SwingUtilities.invokeLater(new Runnable() {
-		  public void run() {
-		    addMessage(line, type);
-		  }
-		});
+              addMessage(readLine, type);
             }
           } catch (IOException e) {
             // Occurs when write end closes pipe - die quietly
           }
         }
-        
+
       });
       readThread.start();
-      
+
       return new PrintStream(output);
     } catch (Exception e) {
       System.out.println("Exception: "+ e);
