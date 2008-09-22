@@ -74,7 +74,8 @@ public class MoteInterfaceHandler {
   private Radio myRadio;
 
   private Vector<MoteInterface> myActiveInterfaces = new Vector<MoteInterface>();
-
+  private MoteInterface[] activeCache = null;
+  
   private Vector<MoteInterface> myPassiveInterfaces = new Vector<MoteInterface>();
 
   /**
@@ -283,8 +284,15 @@ public class MoteInterfaceHandler {
    * tick before the mote software is executed.
    */
   public void doActiveActionsBeforeTick() {
-    for (int i = 0; i < myActiveInterfaces.size(); i++)
-      myActiveInterfaces.get(i).doActionsBeforeTick();
+	  // Assuming only one caller!!!
+    if (activeCache == null) {
+	  activeCache = (MoteInterface[]) myActiveInterfaces.toArray(new MoteInterface[myActiveInterfaces.size()]);
+	}
+//    for (int i = 0; i < myActiveInterfaces.size(); i++)
+//      myActiveInterfaces.get(i).doActionsBeforeTick();
+    for (int i = 0, n = activeCache.length; i < n; i++) {
+      activeCache[i].doActionsBeforeTick();
+    }
   }
 
   /**
@@ -352,6 +360,7 @@ public class MoteInterfaceHandler {
    */
   public void addActiveInterface(MoteInterface newInterface) {
     myActiveInterfaces.add(newInterface);
+    activeCache = null;
   }
 
   /**

@@ -65,6 +65,8 @@ public class LogScriptEngine {
 
   private String scriptCode;
 
+  private ScriptMote scriptMote;
+
   private interface ScriptLog {
     public void log(String log);
   }
@@ -180,6 +182,7 @@ public class LogScriptEngine {
         "  mote = obj;" +
         "  id = mote.getInterfaces().getMoteID().getMoteID();" +
         "  msg = mote.getInterfaces().getLog().getLastLogMessages();" +
+        "  node.setMoteMsg(mote, msg);" +
         "} else {" +
         "  return;" +
         "} " +
@@ -200,6 +203,9 @@ public class LogScriptEngine {
 
     Hashtable<Object, Object> hash = new Hashtable<Object, Object>();
     engine.put("global", hash);
+
+    scriptMote = new ScriptMote();
+    engine.put("node", scriptMote);
 
     /* TODO Test script */
     logObserver.update(null, null);
