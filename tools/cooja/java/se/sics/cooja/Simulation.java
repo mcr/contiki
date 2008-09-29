@@ -82,7 +82,7 @@ public class Simulation extends Observable implements Runnable {
 
   private int nrTickLists = 1;
 
-  private int maxMoteStartupDelay = 0;
+  private int maxMoteStartupDelay = 1000;
 
   private Random tickListRandom = new Random();
 
@@ -216,20 +216,14 @@ public class Simulation extends Observable implements Runnable {
 
     }
     } catch (InterruptedException e) {
-        isRunning = false;
-        thread = null;
-//        break;
-      } catch (IllegalArgumentException e) {
-        logger.warn("llegalArgumentException:" + e);
-        isRunning = false;
-        thread = null;
-//        break;
-      } catch (IllegalMonitorStateException e) {
-        logger.warn("IllegalMonitorStateException:" + e);
-        isRunning = false;
-        thread = null;
-//        break;
-      }
+      logger.warn("InterruptedException:" + e);
+    } catch (IllegalArgumentException e) {
+      logger.warn("llegalArgumentException:" + e);
+    } catch (IllegalMonitorStateException e) {
+      logger.warn("IllegalMonitorStateException:" + e);
+    } catch (RuntimeException e) {
+      logger.warn("Simulation stop requested");
+    }
     isRunning = false;
     thread = null;
     stopSimulation = false;
