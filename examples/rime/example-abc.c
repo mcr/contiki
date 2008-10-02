@@ -61,21 +61,21 @@ static struct abc_conn abc;
 PROCESS_THREAD(example_abc_process, ev, data)
 {
   PROCESS_EXITHANDLER(abc_close(&abc);)
-    
+
   PROCESS_BEGIN();
 
   abc_open(&abc, 128, &abc_call);
 
   while(1) {
     static struct etimer et;
-    
-    etimer_set(&et, CLOCK_SECOND);
-    
+
+    etimer_set(&et, 2*CLOCK_SECOND);
+
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
 
     rimebuf_copyfrom("Hello", 6);
     abc_send(&abc);
-
+    printf("abc message sent\n");
   }
 
   PROCESS_END();
