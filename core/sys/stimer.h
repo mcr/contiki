@@ -71,8 +71,6 @@
 
 #include "sys/clock.h"
 
-typedef unsigned long clock_second_t;
-
 /**
  * A timer.
  *
@@ -82,15 +80,15 @@ typedef unsigned long clock_second_t;
  * \hideinitializer
  */
 struct stimer {
-  clock_second_t start;
-  clock_second_t interval;
+  unsigned long start;
+  unsigned long interval;
 };
 
-void stimer_set(struct stimer *t, clock_second_t interval);
+void stimer_set(struct stimer *t, unsigned long interval);
 void stimer_reset(struct stimer *t);
 void stimer_restart(struct stimer *t);
 int stimer_expired(struct stimer *t);
-clock_second_t stimer_remaining(struct stimer *t);
+unsigned long stimer_remaining(struct stimer *t);
 
 
 #endif /* __STIMER_H__ */
