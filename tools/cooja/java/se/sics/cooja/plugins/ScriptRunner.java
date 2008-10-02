@@ -467,9 +467,9 @@ public class ScriptRunner extends VisPlugin {
 
       progressDialog.getContentPane().add(progressPanel);
       progressDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-      progressDialog.pack();
 
       progressDialog.getRootPane().setDefaultButton(button);
+      progressDialog.setSize(500, 300);
       progressDialog.setLocationRelativeTo(ScriptRunner.this);
       progressDialog.setVisible(true);
 
