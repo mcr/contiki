@@ -485,8 +485,8 @@ public abstract class MspMoteType implements MoteType {
         final BufferedReader processError = new BufferedReader(
             new InputStreamReader(compileProcess.getErrorStream()));
 
+        final File ELFFile = new File(parentDirectory, firmware);
         if (firmware != null) {
-          final File ELFFile = new File(parentDirectory, firmware);
           if (ELFFile.exists()) {
             ELFFile.delete();
             if (ELFFile.exists()) {
