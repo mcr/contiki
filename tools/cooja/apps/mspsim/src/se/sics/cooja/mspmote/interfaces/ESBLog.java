@@ -63,7 +63,7 @@ public class ESBLog extends Log implements USARTListener {
     }
   }
 
-  public String getLastLogMessages() {
+  public String getLastLogMessage() {
     return lastLogMessage;
   }
 
@@ -80,16 +80,16 @@ public class ESBLog extends Log implements USARTListener {
     logTextPane.setOpaque(false);
     logTextPane.setEditable(false);
 
-    if (getLastLogMessages() == null) {
+    if (getLastLogMessage() == null) {
       logTextPane.setText("");
     } else {
-      logTextPane.append(getLastLogMessages());
+      logTextPane.append(getLastLogMessage());
     }
 
     Observer observer;
     this.addObserver(observer = new Observer() {
       public void update(Observable obs, Object obj) {
-        logTextPane.append(getLastLogMessages());
+        logTextPane.append(getLastLogMessage());
         logTextPane.setCaretPosition(logTextPane.getDocument().getLength());
       }
     });

@@ -98,7 +98,7 @@ public class SkySerial extends Log implements SerialPort, USARTListener {
     }
   }
 
-  public String getLastLogMessages() {
+  public String getLastLogMessage() {
     return lastLogMessage;
   }
 
@@ -150,16 +150,16 @@ public class SkySerial extends Log implements SerialPort, USARTListener {
     logTextPane.setOpaque(false);
     logTextPane.setEditable(false);
 
-    if (getLastLogMessages() == null) {
+    if (getLastLogMessage() == null) {
       logTextPane.setText("");
     } else {
-      logTextPane.append(getLastLogMessages());
+      logTextPane.append(getLastLogMessage());
     }
 
     Observer observer;
     this.addObserver(observer = new Observer() {
       public void update(Observable obs, Object obj) {
-        logTextPane.append("< " + getLastLogMessages() + "\n");
+        logTextPane.append("< " + getLastLogMessage() + "\n");
         logTextPane.setCaretPosition(logTextPane.getDocument().getLength());
       }
     });
