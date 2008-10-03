@@ -2017,8 +2017,11 @@ public class GUI extends Observable {
     }
 
     // Add mote type to simulation
-    if (newMoteType != null && moteTypeOK) {
+    if (moteTypeOK) {
       mySimulation.addMoteType(newMoteType);
+
+      /* Allow user to immediately add motes */
+      doAddMotes(newMoteType);
     }
   }
 
