@@ -212,9 +212,6 @@ public class Simulation extends Observable implements Runnable {
 
     }
     } catch (InterruptedException e) {
-      if (isRunning) {
-        logger.warn("InterruptedException:" + e);
-      }
     } catch (IllegalArgumentException e) {
       logger.warn("llegalArgumentException:" + e);
     } catch (IllegalMonitorStateException e) {
