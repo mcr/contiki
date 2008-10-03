@@ -109,7 +109,7 @@ public class MspStackWatcher extends VisPlugin {
     /*if (logObserver == null && mspMote.getInterfaces().getLog() != null) {
       mspMote.getInterfaces().getLog().addObserver(logObserver = new Observer() {
         public void update(Observable obs, Object obj) {
-          stackUI.addNote(mspMote.getInterfaces().getLog().getLastLogMessages());
+          stackUI.addNote(mspMote.getInterfaces().getLog().getLastLogMessage());
         }
       });
     }*/

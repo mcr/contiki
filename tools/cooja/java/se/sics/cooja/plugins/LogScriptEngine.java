@@ -181,7 +181,7 @@ public class LogScriptEngine {
         "if (obj != null) {" +
         "  mote = obj;" +
         "  id = mote.getInterfaces().getMoteID().getMoteID();" +
-        "  msg = mote.getInterfaces().getLog().getLastLogMessages();" +
+        "  msg = mote.getInterfaces().getLog().getLastLogMessage();" +
         "  node.setMoteMsg(mote, msg);" +
         "} else {" +
         "  return;" +

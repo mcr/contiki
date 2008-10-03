@@ -60,7 +60,7 @@ import se.sics.cooja.interfaces.Log;
  * <p>
  * This observable is changed and notifies observers whenever a log message has
  * been received from the core (checked after each tick). The public method
- * getLastLogMessages gives access to the last log message(s).
+ * getLastLogMessage gives access to the last log message.
  *
  * @author      Fredrik Osterlind
  */
