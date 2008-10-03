@@ -50,7 +50,7 @@ import se.sics.cooja.interfaces.Log;
  * @author Fredrik Osterlind, Niclas Finne
  */
 @ClassDescription("Log Listener")
-@PluginType(PluginType.SIM_PLUGIN)
+@PluginType(PluginType.SIM_STANDARD_PLUGIN)
 public class LogListener extends VisPlugin {
   private static final long serialVersionUID = 1L;
   private static Logger logger = Logger.getLogger(LogListener.class);
@@ -166,7 +166,7 @@ public class LogListener extends VisPlugin {
         if (!filterText.equals(oldFilterText) && logCache.length > 1) {
           // Update from log cache
           StringBuilder sb = new StringBuilder();
-          synchronized(logCache) { 
+          synchronized(logCache) {
             int pos = logPos;
             int count;
             if(logCache[pos] != null) {
@@ -247,6 +247,8 @@ public class LogListener extends VisPlugin {
 
     setTitle("Log Listener - Listening on " + nrLogs + " mote logs");
     pack();
+    setSize(gui.getDesktopPane().getWidth(), getHeight());
+    setLocation(0, gui.getDesktopPane().getHeight() - getHeight());
 
     try {
       setSelected(true);
