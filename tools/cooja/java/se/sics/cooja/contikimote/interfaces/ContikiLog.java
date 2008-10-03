@@ -113,7 +113,7 @@ public class ContikiLog extends Log implements ContikiMoteInterface {
     }
   }
 
-  public String getLastLogMessages() {
+  public String getLastLogMessage() {
     return lastLogMessage;
   }
 

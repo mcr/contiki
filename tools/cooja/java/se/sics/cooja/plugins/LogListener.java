@@ -84,7 +84,7 @@ public class LogListener extends VisPlugin {
 
         Mote mote = (Mote) obj;
         Log moteLogInterface = (Log) obs;
-        String lastMessage = moteLogInterface.getLastLogMessages();
+        String lastMessage = moteLogInterface.getLastLogMessage();
         if (lastMessage.length() > 0 && lastMessage.charAt(lastMessage.length() - 1) == '\n') {
           lastMessage = lastMessage.substring(0, lastMessage.length() - 1);
         }

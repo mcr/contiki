@@ -36,15 +36,15 @@ import se.sics.cooja.*;
 /**
  * A Log represents a mote logging output. An implementation should notify all
  * observers whenever new logging output is available.
- * 
+ *
  * @author Fredrik Osterlind
  */
 @ClassDescription("Log Output")
 public abstract class Log extends MoteInterface {
 
   /**
-   * @return Last log messages available
+   * @return Last log message. Note that several messages may appear during one tick.
    */
-  public abstract String getLastLogMessages();
-  
+  public abstract String getLastLogMessage();
+
 }
