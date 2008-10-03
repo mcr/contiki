@@ -2132,9 +2132,7 @@ public class ContikiMoteTypeDialog extends JDialog {
 
     // Check that all project directories are valid
     for (File projectDir : moteTypeProjectDirs) {
-      File userProjectConfig = new File(projectDir.getPath(),
-          GUI.PROJECT_CONFIG_FILENAME);
-      if (!userProjectConfig.exists()) {
+      if (!projectDir.exists()) {
         textProjectDirs.setBackground(Color.RED);
         textProjectDirs.setToolTipText("Invalid project directory: "
             + projectDir);
