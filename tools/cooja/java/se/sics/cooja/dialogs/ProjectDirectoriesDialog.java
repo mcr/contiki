@@ -588,6 +588,16 @@ class ConfigViewer extends JDialog {
     contentPane.add(buttonPane, BorderLayout.SOUTH);
 
     pack();
+
+    /* Respect screen size */
+    Rectangle maxSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+    if (maxSize != null && (getSize().width > maxSize.width)) {
+      setSize(maxSize.width, getSize().height);
+    }
+    if (maxSize != null && (getSize().height > maxSize.height)) {
+      setSize(getSize().width, maxSize.height);
+    }
+
   }
 
 }
