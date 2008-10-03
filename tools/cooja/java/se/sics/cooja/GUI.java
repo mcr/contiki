@@ -1612,11 +1612,13 @@ public class GUI extends Observable {
     }
 
     // Set location if not already visible
-    if (!plugin.isVisible()) {
-      plugin.setLocation((nrFrames + 1) * FRAME_NEW_OFFSET, (nrFrames + 1)
-          * FRAME_NEW_OFFSET);
-      plugin.setVisible(true);
+    if (plugin.getLocation().x <= 0 && plugin.getLocation().y <= 0) {
+      plugin.setLocation(
+          nrFrames * FRAME_NEW_OFFSET,
+          nrFrames * FRAME_NEW_OFFSET);
     }
+
+    plugin.setVisible(true);
 
     // Deselect all other plugins before selecting the new one
     try {
