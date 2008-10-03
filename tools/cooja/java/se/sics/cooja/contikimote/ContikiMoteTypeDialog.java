@@ -1607,7 +1607,7 @@ public class ContikiMoteTypeDialog extends JDialog {
           String readLine;
           try {
             while ((readLine = input.readLine()) != null) {
-              if (outputStream != null && readLine != null) {
+              if (outputStream != null) {
                 outputStream.println(readLine);
               }
             }
@@ -1622,8 +1622,12 @@ public class ContikiMoteTypeDialog extends JDialog {
           String readLine;
           try {
             while ((readLine = err.readLine()) != null) {
-              if (errorStream != null && readLine != null) {
+              if (errorStream != null) {
                 errorStream.println(readLine);
+
+                if (!GUI.isVisualized()) {
+                  logger.warn("COMPILATION OUTPUT: " + readLine);
+                }
               }
             }
           } catch (IOException e) {
