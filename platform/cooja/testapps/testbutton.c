@@ -33,7 +33,6 @@
 #include "dev/button-sensor.h"
 
 #include <stdio.h>
-#include "printf2log.h" /* COOJA specific: Transforms printf() to log_message() */
 
 PROCESS(test_button_process, "Test button process");
 AUTOSTART_PROCESSES(&test_button_process);

@@ -35,7 +35,6 @@
 #include "dev/leds.h"
 
 #include <stdio.h>
-#include "printf2log.h" /* COOJA specific: Transforms printf() to log_message() */
 
 #define COOJA_PORT 1234
 

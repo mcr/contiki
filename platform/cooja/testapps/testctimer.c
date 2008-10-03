@@ -33,7 +33,6 @@
 #include "net/rime/ctimer.h"
 
 #include <stdio.h>
-#include "printf2log.h" /* COOJA specific: Transforms printf() to log_message() */
 
 PROCESS(test_ctimer_process, "Callback timer test process");
 AUTOSTART_PROCESSES(&test_ctimer_process);

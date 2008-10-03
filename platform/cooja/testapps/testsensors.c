@@ -36,7 +36,6 @@
 #include "dev/radio-sensor.h"
 
 #include <stdio.h>
-#include "printf2log.h" /* COOJA specific: Transforms printf() to log_message() */
 
 PROCESS(test_sensors_process, "Test sensors process");
 AUTOSTART_PROCESSES(&test_sensors_process);
@@ -50,7 +49,7 @@ PROCESS_THREAD(test_sensors_process, ev, data)
   pir_sensor.activate();
   vib_sensor.activate();
   radio_sensor.activate();
-  
+
   while(1) {
     PROCESS_WAIT_EVENT();
 

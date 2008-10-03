@@ -33,7 +33,6 @@
 #include "sys/etimer.h"
 
 #include <stdio.h>
-#include "printf2log.h" /* COOJA specific: Transforms printf() to log_message() */
 
 PROCESS(test_etimer_process, "Event timer test process");
 AUTOSTART_PROCESSES(&test_etimer_process);
