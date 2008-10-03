@@ -314,6 +314,7 @@ public class CreateSimDialog extends JDialog {
     numberField = new JFormattedTextField(integerFormat);
     numberField.setValue(new Integer(0));
     numberField.setColumns(4);
+    numberField.setEnabled(false); /* Disabled: Almost never used */
     simulationTime = numberField;
 
     horizBox.add(label);
@@ -334,6 +335,7 @@ public class CreateSimDialog extends JDialog {
     numberField = new JFormattedTextField(integerFormat);
     numberField.setValue(new Integer(1));
     numberField.setColumns(4);
+    numberField.setEnabled(false); /* Disabled: Almost never used */
     tickTime = numberField;
 
     horizBox.add(label);
@@ -418,6 +420,7 @@ public class CreateSimDialog extends JDialog {
     numberField = new JFormattedTextField(integerFormat);
     numberField.setValue(new Integer(1));
     numberField.setColumns(4);
+    numberField.setEnabled(false); /* Disabled: Almost never used */
     tickLists = numberField;
 
     horizBox.add(label);
