@@ -1067,34 +1067,26 @@ public class GUI extends Observable {
       logger.info("> Scanning for user processes");
       userProcesses = new Vector<String>();
       Vector<String> autostartProcesses = new Vector<String>();
-      Vector<String[]> scannedProcessInfo = ContikiMoteTypeDialog
-          .scanForProcesses(contikiCoreDir);
+      Vector<ContikiProcess> scannedProcesses = ContikiMoteTypeDialog.scanForProcesses(contikiCoreDir);
       for (String projectDir : projectDirs) {
-        // project directories
-        scannedProcessInfo.addAll(ContikiMoteTypeDialog
-            .scanForProcesses(new File(projectDir)));
+        scannedProcesses.addAll(ContikiMoteTypeDialog.scanForProcesses(new File(projectDir)));
       }
 
-      for (String[] processInfo : scannedProcessInfo) {
-        if (processInfo[0].equals(mainProcessFile.getName())) {
-          logger.info(">> Found and added: " + processInfo[1] + " ("
-              + processInfo[0] + ")");
-          userProcesses.add(processInfo[1]);
+      for (ContikiProcess processInfo : scannedProcesses) {
+        if (processInfo.getSourceFile().equals(mainProcessFile)) {
+          logger.info(">> Found and added: " + processInfo);
+          userProcesses.add(processInfo.getProcessName());
 
           if (addAutostartProcesses) {
             // Parse any autostart processes
             try {
-              // logger.info(">>> Parsing " + processInfo[0] + " for autostart
-              // processes");
-              Vector<String> autostarters = ContikiMoteTypeDialog
-                  .parseAutostartProcesses(mainProcessFile);
+              // logger.info(">>> Parsing " + processInfo.getProcessName() + " for autostart processes");
+              Vector<String> autostarters = ContikiMoteTypeDialog.parseAutostartProcesses(mainProcessFile);
               if (autostarters != null) {
                 autostartProcesses.addAll(autostarters);
               }
             } catch (Exception e) {
-              logger
-                  .fatal(">>> Error when parsing autostart processes, aborting: "
-                      + e);
+              logger.fatal(">>> Error when parsing autostart processes, aborting: " + e);
               return false;
             }
           }
