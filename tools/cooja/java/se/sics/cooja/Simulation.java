@@ -207,16 +207,14 @@ public class Simulation extends Observable implements Runnable {
         }
 
         if (stopSimulation) {
-          // We should only tick once (and we just did), so abort now
-          stopSimulation = false;
           isRunning = false;
-          thread = null;
         }
-
 
     }
     } catch (InterruptedException e) {
-      logger.warn("InterruptedException:" + e);
+      if (isRunning) {
+        logger.warn("InterruptedException:" + e);
+      }
     } catch (IllegalArgumentException e) {
       logger.warn("llegalArgumentException:" + e);
     } catch (IllegalMonitorStateException e) {
