@@ -1067,7 +1067,7 @@ public class GUI extends Observable {
       logger.info("> Scanning for user processes");
       userProcesses = new Vector<String>();
       Vector<String> autostartProcesses = new Vector<String>();
-      Vector<ContikiProcess> scannedProcesses = ContikiMoteTypeDialog.scanForProcesses(contikiCoreDir);
+      Vector<ContikiProcess> scannedProcesses = new Vector<ContikiProcess>();
       for (String projectDir : projectDirs) {
         scannedProcesses.addAll(ContikiMoteTypeDialog.scanForProcesses(new File(projectDir)));
       }
