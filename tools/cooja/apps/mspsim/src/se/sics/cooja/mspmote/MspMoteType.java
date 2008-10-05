@@ -963,7 +963,6 @@ public abstract class MspMoteType implements MoteType {
     smallPane = new JPanel(new BorderLayout());
     label = new JLabel("Source file");
     smallPane.add(BorderLayout.WEST, label);
-    logger.debug(">>>> " + getSourceFile());
     if (getSourceFile() != null) {
       label = new JLabel(getSourceFile().getName());
       label.setToolTipText(getSourceFile().getPath());
