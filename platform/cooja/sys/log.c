@@ -35,7 +35,7 @@
 #include "sys/log.h"
 #include "lib/simEnvChange.h"
 
-#define IMPLEMENT_PUTCHAR 1
+#define IMPLEMENT_PRINTF 1
 #define MAX_LOG_LENGTH 1024
 
 const struct simInterface simlog_interface;
@@ -87,17 +87,9 @@ doInterfaceActionsBeforeTick(void)
 static void
 doInterfaceActionsAfterTick(void)
 {
-  fflush(stdout);
 }
 /*-----------------------------------------------------------------------------------*/
-#if IMPLEMENT_PUTCHAR
-int
-putc(int c, FILE *f)
-{
-  simlog_char(c);
-  return c;
-}
-/*-----------------------------------------------------------------------------------*/
+#if IMPLEMENT_PRINTF
 int
 putchar(int c)
 {
@@ -125,7 +117,7 @@ printf(const char *fmt, ...)
   simlog(buf);
   return res;
 }
-#endif /* IMPLEMENTS_PUTCHAR */
+#endif /* IMPLEMENT_PRINTF */
 /*-----------------------------------------------------------------------------------*/
 
 SIM_INTERFACE(simlog_interface,
