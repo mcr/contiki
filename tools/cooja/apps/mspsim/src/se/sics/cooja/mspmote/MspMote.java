@@ -261,25 +261,23 @@ public abstract class MspMote implements Mote {
    */
   protected abstract boolean initEmulator(File ELFFile);
 
-  private int currentSimTime = -1;
-  
   /* return false when done - e.g. true means more work to do before finished with this tick */
+  private boolean firstTick = true;
   public boolean tick(int simTime) {
     if (stopNextInstruction) {
       stopNextInstruction = false;
       throw new RuntimeException("Request simulation stop");
     }
 
-    if (currentSimTime < 0) {
-      currentSimTime = simTime;
+    /* Nodes may be added in an ongoing simulation:
+     * Update cycle drift to current simulation time */
+    if (firstTick) {
+      firstTick = false;
+      cycleDrift += (-NR_CYCLES_PER_MSEC*simTime);
     }
 
-    if (currentSimTime != simTime) {
-      currentSimTime = simTime;
-    }
-
-    long maxSimTimeCycles = NR_CYCLES_PER_MSEC*(simTime+1);
-    if (maxSimTimeCycles <= cycleCounter - cycleDrift) {
+    long maxSimTimeCycles = NR_CYCLES_PER_MSEC*(simTime+1) + cycleDrift;
+    if (maxSimTimeCycles <= cycleCounter) {
       return false;
     }
 
@@ -292,7 +290,7 @@ public abstract class MspMote implements Mote {
       return true;
     }
     myMoteInterfaceHandler.doActiveActionsBeforeTick();
-    
+
     cpu.step(cycleCounter);
 
     /* Check if radio has pending incoming bytes */
