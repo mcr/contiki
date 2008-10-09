@@ -95,7 +95,9 @@ public class SkyMote extends MspMote {
     moteInterfaceHandler.addActiveInterface(moteID);
 
     // Add radio interface
-    SkyRadio moteRadio = new SkyRadio(this);
+//  SkyRadio moteRadio = new SkyRadio(this);
+//  moteInterfaceHandler.addActiveInterface(moteRadio);
+    SkyByteRadio moteRadio = new SkyByteRadio(this);
     moteInterfaceHandler.addActiveInterface(moteRadio);
 
     // Add serial interface
