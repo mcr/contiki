@@ -148,11 +148,14 @@ public class MspMoteID extends MoteID {
       }
       moteMem.setIntValueOf("node_id", newID);
       moteMem.setIntValueOf("TOS_NODE_ID", newID);
+      moteMem.setIntValueOf("ActiveMessageAddressC$addr", newID);
+
       return;
     }
 
     if (location == ID_LOCATION.VARIABLE_TOS_NODE_ID) {
       moteMem.setIntValueOf("TOS_NODE_ID", newID);
+      moteMem.setIntValueOf("ActiveMessageAddressC$addr", newID);
       return;
     }
 
