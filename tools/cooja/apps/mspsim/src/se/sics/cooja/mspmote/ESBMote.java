@@ -59,8 +59,7 @@ public class ESBMote extends MspMote {
   protected boolean initEmulator(File fileELF) {
     try {
       esbNode = new ESBNode();
-      esbNode.setupNodePorts();
-      prepareMote(fileELF, esbNode.getCPU());
+      prepareMote(fileELF, esbNode);
 
     } catch (Exception e) {
       logger.fatal("Error when creating ESB mote:", e);
