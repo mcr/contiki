@@ -77,7 +77,7 @@
 #include "radio.h"
 #include "frame.h"
 //#include "mac_event.h"
-#include "mac.h"
+#include "zmac.h"
 #include "process.h"
 #include "sicslowmac.h"
 
