@@ -89,14 +89,17 @@ enum {
  * \brief      Post a real-time task.
  * \param task A pointer to the task variable previously declared with RTIMER_TASK().
  * \param time The time when the task is to be executed.
+ * \param duration Unused argument.
+ * \param func A function to be called when the task is executed.
+ * \param ptr An opaque pointer that will be supplied as an argument to the callback function.
  * \return     Non-zero (true) if the task could be scheduled, zero
  *             (false) if the task could not be scheduled.
  *
- *             This function schedules a real-time task a specified
+ *             This function schedules a real-time task at a specified
  *             time in the future.
  *
  */
-int rtimer_set(struct rtimer *t, rtimer_clock_t time,
+int rtimer_set(struct rtimer *task, rtimer_clock_t time,
 	       rtimer_clock_t duration, rtimer_callback_t func, void *ptr);
 
 /**
