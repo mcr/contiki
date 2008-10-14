@@ -54,6 +54,4 @@ void httpd_cgi_add(struct httpd_cgi_call *c);
 static struct httpd_cgi_call name = {NULL, str, function}
 
 void httpd_cgi_init(void);
-void web_set_temp(char *s);
-
 #endif /* __HTTPD_CGI_H__ */
