@@ -96,7 +96,7 @@ struct dsc {
 };
 
 /**
- * Intantiating macro for the DSC structure.
+ * Instantiating macro for the DSC structure.
  *
  * \param dscname The name of the C variable which is to contain the
  * DSC.

@@ -259,7 +259,7 @@ struct pt {
 /**
  * Schedule a protothread.
  *
- * This function shedules a protothread. The return value of the
+ * This function schedules a protothread. The return value of the
  * function is non-zero if the protothread is running or zero if the
  * protothread has exited.
  *

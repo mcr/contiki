@@ -2,7 +2,7 @@
  * \defgroup rt Real-time task scheduling
  *
  * The real-time module handles the scheduling and execution of
- * real-time tasks (with predictible execution times).
+ * real-time tasks (with predictable execution times).
  *
  * @{
  */
@@ -66,7 +66,7 @@ struct rtimer;
 typedef void (* rtimer_callback_t)(struct rtimer *t, void *ptr);
 
 /**
- * \brief      Repressentation of a real-time task
+ * \brief      Representation of a real-time task
  *
  *             This structure represents a real-time task and is used
  *             by the real-time module and the architecture specific

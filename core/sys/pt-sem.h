@@ -48,7 +48,7 @@
  * checks the semaphore counter and blocks the thread if the counter
  * is zero. The "signal" operation increases the semaphore counter but
  * does not block. If another thread has blocked waiting for the
- * semaphore that is signalled, the blocked thread will become
+ * semaphore that is signaled, the blocked thread will become
  * runnable again.
  *
  * Semaphores can be used to implement other, more structured,

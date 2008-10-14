@@ -44,7 +44,7 @@
 #include "sys/rtimer.h"
 
 typedef struct {
-  /*  unsigned long cummulative[2];*/
+  /*  unsigned long cumulative[2];*/
   unsigned long current;
 } energest_t;
 
