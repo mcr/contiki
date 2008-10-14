@@ -59,8 +59,8 @@ typedef unsigned short uip_stats_t;
 #define UIP_CONF_LOGGING              0
 #define UIP_CONF_UDP_CHECKSUMS        0
 
-#define UIP_CONF_UDP                  0
-#define UIP_CONF_TCP                  0
+#define UIP_CONF_UDP                  1
+#define UIP_CONF_TCP                  1
 #define UIP_CONF_IPV6                 1
 #define UIP_CONF_IPV6_QUEUE_PKT       1
 #define UIP_CONF_IPV6_CHECKS          1
