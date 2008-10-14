@@ -53,7 +53,6 @@
 #include "net/rime.h"
 #include "net/sicslowpan.h"
 
-
 #define DEBUG 0
 #if DEBUG
 u8_t p;
@@ -1049,15 +1048,6 @@ send_packet(rimeaddr_t *dest)
   if(mac != NULL) {
   /** \todo: Fix sending delays so they aren't blocking, or even better would
    *         be to figure out how to get rid of delays entirely */
-
-  
-#if DEBUG
-    #warning "*************************************************************"
-    #warning "Debug code enabled in sicslowpan.c, you MUST enable debug    "
-	#warning "code in sicslowmac.c as well, and ALL nodes on network must  "
-	#warning "have debug code in sicslowmac.c enabled. See documentation   "
-    #warning "*************************************************************"
-#endif
     mac->send();
   }
 }

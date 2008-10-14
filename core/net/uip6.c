@@ -71,6 +71,8 @@
  * the packet back to the peer.
  */
 
+#include "net/uip.h"
+#include "net/uipopt.h"
 #include "net/uip-icmp6.h"
 #include "net/uip-nd6.h"
 #include "net/uip-netif.h"

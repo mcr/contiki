@@ -46,6 +46,7 @@ extern u16_t uip_slen;
 
 #include <string.h>
 
+
 /*---------------------------------------------------------------------------*/
 void
 uip_udp_packet_send(struct uip_udp_conn *c, const void *data, int len)
@@ -55,9 +56,13 @@ uip_udp_packet_send(struct uip_udp_conn *c, const void *data, int len)
   uip_slen = len;
   memcpy(&uip_buf[UIP_LLH_LEN + UIP_IPUDPH_LEN], data, len > UIP_BUFSIZE? UIP_BUFSIZE: len);
   uip_process(UIP_UDP_SEND_CONN);
+#if UIP_CONF_IPV6 //math
+  tcpip_ipv6_output();
+#else
   if(uip_len > 0) {
-    tcpip_output();
+     tcpip_output();
   }
+#endif
   uip_slen = 0;
 #endif /* UIP_UDP */
 }

@@ -60,6 +60,16 @@ typedef unsigned short uip_stats_t;
 #define UIP_CONF_LOGGING         0
 #define UIP_CONF_UDP_CHECKSUMS   1
 
+#define UIP_CONF_IPV6            1
+#define UIP_CONF_IPV6_CHECKS     1
+#define UIP_CONF_IPV6_QUEUE_PKT  1
+#define UIP_CONF_IPV6_REASSEMBLY 0
+#define UIP_CONF_NETIF_MAX_ADDRESSES  3
+#define UIP_CONF_ND6_MAX_PREFIXES     3
+#define UIP_CONF_ND6_MAX_NEIGHBORS    4
+#define UIP_CONF_ND6_MAX_DEFROUTERS   2
+#define UIP_CONF_ICMP6           1
+
 typedef unsigned long clock_time_t;
 #define CLOCK_CONF_SECOND 1000
 
