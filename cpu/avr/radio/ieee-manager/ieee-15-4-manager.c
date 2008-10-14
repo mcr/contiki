@@ -45,7 +45,7 @@
  *         Mike Vidales <mavida404@gmail.com>
  */
 
-#include "mac.h"
+#include "zmac.h"
 #include "radio.h"
 #include "ieee-15-4-manager.h"
 
