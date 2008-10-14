@@ -38,6 +38,7 @@
 #include "contiki-net.h"
 
 PROCESS_NAME(webserver_nogui_process);
+PROCESS_NAME(raven_lcd_process);
 
 void webserver_log(char *msg);
 void webserver_log_file(uip_ipaddr_t *requester, char *file);

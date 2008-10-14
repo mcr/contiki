@@ -39,6 +39,8 @@
 
 #define HTTPD_FS_STATISTICS 1
 
+#include <avr/pgmspace.h>
+
 struct httpd_fs_file {
   char *data;
   int len;
@@ -55,5 +57,9 @@ u16_t httpd_fs_count(char *name);
 #endif /* HTTPD_FS_STATISTICS */
 
 void httpd_fs_init(void);
+
+#define httpd_fs_cpy                    memcpy_P
+#define httpd_fs_strchr                 strchr_P
+#define httpd_fs_getchar(x)     pgm_read_byte(x)
 
 #endif /* __HTTPD_FS_H__ */
