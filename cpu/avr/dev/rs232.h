@@ -40,8 +40,12 @@
 #include <avr/pgmspace.h>
 #include "contiki-conf.h"
 
-#if MCU == atmega128
+#if defined (__AVR_ATmega128__)
 #include "dev/rs232_atmega128.h"
+#elif defined (__AVR_ATmega1284P__)
+#include "dev/rs232_atmega1284.h"
+#elif defined (__AVR_AT90USB1287__)
+#include "dev/rs232_at90usb1287.h"
 #else
 #error "Please implement a rs232 header for your MCU (or set the MCU type \
 in contiki-conf.h)."
