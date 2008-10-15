@@ -33,7 +33,7 @@
  *
  */
 
-/* This file contains a naive and non-stanrdards compliant
+/* This file contains a naive and non-standards compliant
    implementation of strncasecmp() for systems that don't implement
    the function. It works with Contiki, but should most probably not
    be used anywhere else.

@@ -37,7 +37,7 @@
 #define __LIBCONIO_H__
 
 /* This function must be implemented specifically for the
-   architecure: */
+   architecture: */
 void ctk_arch_draw_char(char c,
 			unsigned char xpos,
 			unsigned char ypos,

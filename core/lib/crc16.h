@@ -2,12 +2,12 @@
  * @{ */
 
 /**
- * \defgroup crc16 Cyclic Redundancy Check 16 (CRC16) calculcation
+ * \defgroup crc16 Cyclic Redundancy Check 16 (CRC16) calculation
  *
  * The Cyclic Redundancy Check 16 is a hash function that produces a
  * checksum that is used to detect errors in transmissions. The CRC16
  * calculation module is an iterative CRC calculator that can be used
- * to cummulatively update a CRC checksum for every incoming byte.
+ * to cumulatively update a CRC checksum for every incoming byte.
  *
  * @{
  */
