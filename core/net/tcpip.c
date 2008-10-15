@@ -666,12 +666,14 @@ PROCESS_THREAD(tcpip_process, ev, data)
   PROCESS_BEGIN();
 
 #if UIP_TCP
-  static unsigned char i;
-
-  for(i = 0; i < UIP_LISTENPORTS; ++i) {
-    s.listenports[i].port = 0;
-  }
-  s.p = PROCESS_CURRENT();
+ {
+   static unsigned char i;
+   
+   for(i = 0; i < UIP_LISTENPORTS; ++i) {
+     s.listenports[i].port = 0;
+   }
+   s.p = PROCESS_CURRENT();
+ }
 #endif
   
   tcpip_event = process_alloc_event();
