@@ -76,6 +76,12 @@
 #include "net/uip_arp.h"
 #include "net/uip_arch.h"
 
+#if !UIP_CONF_IPV6 /* If UIP_CONF_IPV6 is defined, we compile the
+		      uip6.c file instead of this one. Therefore
+		      this #ifndef removes the entire compilation
+		      output of the uip.c file */
+
+
 #if UIP_CONF_IPV6
 #include "net/uip-neighbor.h"
 #endif /* UIP_CONF_IPV6 */
@@ -1928,3 +1934,4 @@ uip_send(const void *data, int len)
 }
 /*---------------------------------------------------------------------------*/
 /** @} */
+#endif /* UIP_CONF_IPV6 */
