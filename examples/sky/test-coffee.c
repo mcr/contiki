@@ -195,7 +195,6 @@ run_consistency_test(void)
     }
 
     offset = random_rand() % 8192;
-    offset &= ~0xffU;
 
     for(r = 0; r < sizeof(buf); r++) {
       buf[r] = r;
