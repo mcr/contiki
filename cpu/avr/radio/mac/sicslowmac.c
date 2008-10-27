@@ -483,7 +483,17 @@ PROCESS_THREAD(mac_process, ev, data)
   }
 #endif
 
-  radio_set_operating_channel(24);
+  uint8_t eeprom_channel;
+  uint8_t eeprom_check;
+  
+  eeprom_channel = eeprom_read_byte(9);
+  eeprom_check = eeprom_read_byte(10);
+  
+  if ((eeprom_channel < 11) || (eeprom_channel > 26) || ((uint8_t)eeprom_channel != (uint8_t)~eeprom_check)) {
+	eeprom_channel = 24; //Default
+  }
+
+  radio_set_operating_channel(eeprom_channel);
   radio_use_auto_tx_crc(true);
   radio_set_trx_state(TRX_OFF);
 
