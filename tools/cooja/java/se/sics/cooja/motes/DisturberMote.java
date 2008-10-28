@@ -88,11 +88,11 @@ public class DisturberMote implements Mote {
     Position myPosition = new Position(this);
     myPosition.setCoordinates(myRandom.nextDouble() * 100, myRandom
         .nextDouble() * 100, myRandom.nextDouble() * 100);
-    myInterfaceHandler.addPassiveInterface(myPosition);
+    myInterfaceHandler.addInterface(myPosition);
 
     // create interface handler for radio
     myDisturberRadio = new DisturberRadio(this);
-    myInterfaceHandler.addActiveInterface(myDisturberRadio);
+    myInterfaceHandler.addInterface(myDisturberRadio);
   }
 
   public void setState(State newState) {
@@ -163,20 +163,8 @@ public class DisturberMote implements Mote {
     element = new Element("interface_config");
     element.setText(myInterfaceHandler.getPosition().getClass().getName());
 
-    // Active interface configs (if any)
-    for (MoteInterface moteInterface: getInterfaces().getAllActiveInterfaces()) {
-      element = new Element("interface_config");
-      element.setText(moteInterface.getClass().getName());
-
-      Collection interfaceXML = moteInterface.getConfigXML();
-      if (interfaceXML != null) {
-        element.addContent(interfaceXML);
-        config.add(element);
-      }
-    }
-
-    // Passive interface configs (if any)
-    for (MoteInterface moteInterface: getInterfaces().getAllPassiveInterfaces()) {
+    // Interfaces
+    for (MoteInterface moteInterface: getInterfaces().getInterfaces()) {
       element = new Element("interface_config");
       element.setText(moteInterface.getClass().getName());
 
@@ -198,9 +186,9 @@ public class DisturberMote implements Mote {
     myMemory = new SectionMoteMemory(new Properties());
     myInterfaceHandler = new MoteInterfaceHandler();
     Position myPosition = new Position(this);
-    myInterfaceHandler.addPassiveInterface(myPosition);
+    myInterfaceHandler.addInterface(myPosition);
     myDisturberRadio = new DisturberRadio(this);
-    myInterfaceHandler.addActiveInterface(myDisturberRadio);
+    myInterfaceHandler.addInterface(myDisturberRadio);
 
 
     for (Element element : configXML) {

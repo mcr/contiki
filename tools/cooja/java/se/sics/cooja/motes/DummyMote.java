@@ -97,7 +97,7 @@ public class DummyMote implements Mote {
     Position myPosition = new Position(this);
     myPosition.setCoordinates(myRandom.nextDouble() * 100, myRandom
         .nextDouble() * 100, myRandom.nextDouble() * 100);
-    myInterfaceHandler.addPassiveInterface(myPosition);
+    myInterfaceHandler.addInterface(myPosition);
   }
 
   public void setState(State newState) {
@@ -188,7 +188,7 @@ public class DummyMote implements Mote {
     mySim = simulation;
     myMemory = new SectionMoteMemory(new Properties());
     myInterfaceHandler = new MoteInterfaceHandler();
-    myInterfaceHandler.addPassiveInterface(new Position(this));
+    myInterfaceHandler.addInterface(new Position(this));
 
     for (Element element : configXML) {
       String name = element.getName();

@@ -236,7 +236,7 @@ public class DisturberRadio extends Radio {
     this.deleteObserver(observer);
   }
 
-  public double energyConsumptionPerTick() {
+  public double energyConsumption() {
     return 0;
   }
 
