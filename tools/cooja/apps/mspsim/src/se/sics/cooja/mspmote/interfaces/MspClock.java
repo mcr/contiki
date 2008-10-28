@@ -69,12 +69,6 @@ public class MspClock extends Clock {
     myMote.cycleDrift = MspMote.NR_CYCLES_PER_MSEC * drift;
   }
 
-  public void doActionsBeforeTick() {
-  }
-
-  public void doActionsAfterTick() {
-  }
-
   public JPanel getInterfaceVisualizer() {
     return null;
   }
@@ -82,8 +76,8 @@ public class MspClock extends Clock {
   public void releaseInterfaceVisualizer(JPanel panel) {
   }
 
-  public double energyConsumptionPerTick() {
-    return 0.0;
+  public double energyConsumption() {
+    return 0;
   }
 
   public Collection<Element> getConfigXML() {
