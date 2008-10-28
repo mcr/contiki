@@ -31,28 +31,30 @@
 
 #include "dummy_intf.h"
 #include "lib/simEnvChange.h"
+
 #include <stdio.h>
 
-const struct simInterface beep_interface;
+const struct simInterface dummy_interface;
 
-// COOJA variables (shared between Java and C)
-char simDummyVar;
+/* COOJA variable simDummyVar is shared between Cooja and Contiki */
+char simDummyVar = 0;
 
 /*-----------------------------------------------------------------------------------*/
 static void
 doInterfaceActionsBeforeTick(void)
 {
-	fprintf(stderr, "Core (C) dummy interface acts BEFORE mote tick\n");
+  printf("Contiki-part of dummy interface acts BEFORE mote tick: %i\n", simDummyVar);
 }
 /*-----------------------------------------------------------------------------------*/
 static void
 doInterfaceActionsAfterTick(void)
 {
-	fprintf(stderr, "Core (C) dummy interface acts AFTER mote tick\n");
+  simDummyVar++;
+  printf("Contiki-part of dummy interface acts AFTER mote tick: %i\n", simDummyVar);
 }
 /*-----------------------------------------------------------------------------------*/
 
-// Register this as an available interface
+/* Register interface */
 SIM_INTERFACE(dummy_interface,
 	      doInterfaceActionsBeforeTick,
 	      doInterfaceActionsAfterTick);
