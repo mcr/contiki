@@ -386,20 +386,8 @@ public abstract class MspMote implements Mote {
     element.setText(getType().getIdentifier());
     config.add(element);
 
-    // Active interface configs (if any)
-    for (MoteInterface moteInterface: getInterfaces().getAllActiveInterfaces()) {
-      element = new Element("interface_config");
-      element.setText(moteInterface.getClass().getName());
-
-      Collection<Element> interfaceXML = moteInterface.getConfigXML();
-      if (interfaceXML != null) {
-        element.addContent(interfaceXML);
-        config.add(element);
-      }
-    }
-
-    // Passive interface configs (if any)
-    for (MoteInterface moteInterface: getInterfaces().getAllPassiveInterfaces()) {
+    // Mote interfaces
+    for (MoteInterface moteInterface: getInterfaces().getInterfaces()) {
       element = new Element("interface_config");
       element.setText(moteInterface.getClass().getName());
 
