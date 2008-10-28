@@ -255,7 +255,7 @@ public class ContikiLED extends LED implements ContikiMoteInterface, PolledAfter
     this.deleteObserver(observer);
   }
 
-  public double energyConsumptionPerTick() {
+  public double energyConsumption() {
     return myEnergyConsumption;
   }
 

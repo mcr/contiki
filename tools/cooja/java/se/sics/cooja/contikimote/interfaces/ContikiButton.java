@@ -161,7 +161,7 @@ public class ContikiButton extends Button implements ContikiMoteInterface {
   public void releaseInterfaceVisualizer(JPanel panel) {
   }
 
-  public double energyConsumptionPerTick() {
+  public double energyConsumption() {
     return 0.0;
   }
 

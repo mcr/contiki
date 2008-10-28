@@ -229,7 +229,7 @@ public class ContikiCFS extends MoteInterface implements ContikiMoteInterface, P
     this.deleteObserver(observer);
   }
 
-  public double energyConsumptionPerTick() {
+  public double energyConsumption() {
     return myEnergyConsumption;
   }
 

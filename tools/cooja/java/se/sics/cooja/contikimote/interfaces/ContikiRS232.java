@@ -245,7 +245,7 @@ public class ContikiRS232 extends MoteInterface implements ContikiMoteInterface,
     this.deleteObserver(observer);
   }
 
-  public double energyConsumptionPerTick() {
+  public double energyConsumption() {
     return myEnergyConsumption;
   }
 

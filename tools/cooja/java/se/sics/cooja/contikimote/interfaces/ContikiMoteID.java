@@ -126,7 +126,7 @@ public class ContikiMoteID extends MoteID implements ContikiMoteInterface {
     this.deleteObserver(observer);
   }
 
-  public double energyConsumptionPerTick() {
+  public double energyConsumption() {
     return 0.0;
   }
 

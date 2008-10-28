@@ -155,7 +155,7 @@ public class ContikiLog extends Log implements ContikiMoteInterface, PolledAfter
     this.deleteObserver(observer);
   }
 
-  public double energyConsumptionPerTick() {
+  public double energyConsumption() {
     // Does not require energy
     return 0.0;
   }

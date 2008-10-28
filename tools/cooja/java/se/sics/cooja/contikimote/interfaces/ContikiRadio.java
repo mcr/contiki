@@ -483,7 +483,7 @@ public class ContikiRadio extends Radio implements ContikiMoteInterface, PolledA
     this.deleteObserver(observer);
   }
 
-  public double energyConsumptionPerTick() {
+  public double energyConsumption() {
     return myEnergyConsumption;
   }
 

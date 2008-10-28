@@ -132,7 +132,7 @@ public class ContikiPIR extends PIR implements ContikiMoteInterface {
   public void releaseInterfaceVisualizer(JPanel panel) {
   }
 
-  public double energyConsumptionPerTick() {
+  public double energyConsumption() {
     return myEnergyConsumption;
   }
 

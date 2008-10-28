@@ -132,7 +132,7 @@ public class ContikiVib extends MoteInterface implements ContikiMoteInterface {
   public void releaseInterfaceVisualizer(JPanel panel) {
   }
 
-  public double energyConsumptionPerTick() {
+  public double energyConsumption() {
     return myEnergyConsumption;
   }
 

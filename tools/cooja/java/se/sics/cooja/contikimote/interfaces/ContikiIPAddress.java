@@ -149,7 +149,7 @@ public class ContikiIPAddress extends IPAddress implements ContikiMoteInterface 
     this.deleteObserver(observer);
   }
 
-  public double energyConsumptionPerTick() {
+  public double energyConsumption() {
     // Virtual interface, does not require any energy
     return 0.0;
   }

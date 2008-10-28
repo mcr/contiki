@@ -162,7 +162,7 @@ public class ContikiBeeper extends Beeper implements ContikiMoteInterface, Polle
     this.deleteObserver(observer);
   }
 
-  public double energyConsumptionPerTick() {
+  public double energyConsumption() {
     return myEnergyConsumption;
   }
 
