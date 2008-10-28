@@ -79,12 +79,6 @@ public class SkyFlash extends MoteInterface {
     }
   }
 
-  public void doActionsBeforeTick() {
-  }
-
-  public void doActionsAfterTick() {
-  }
-
   public JPanel getInterfaceVisualizer() {
     JPanel panel = new JPanel();
 //    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -201,7 +195,7 @@ public class SkyFlash extends MoteInterface {
     return fileData;
   }
 
-  public double energyConsumptionPerTick() {
+  public double energyConsumption() {
     return 0;
   }
 
