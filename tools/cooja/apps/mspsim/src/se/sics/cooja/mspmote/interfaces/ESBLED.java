@@ -88,14 +88,8 @@ public class ESBLED extends LED implements PortListener {
     return redOn;
   }
 
-  public void doActionsBeforeTick() {
-  }
-
-  public void doActionsAfterTick() {
-  }
-
-  public double energyConsumptionPerTick() {
-    return 0.0;
+  public double energyConsumption() {
+    return 0;
   }
 
   public JPanel getInterfaceVisualizer() {

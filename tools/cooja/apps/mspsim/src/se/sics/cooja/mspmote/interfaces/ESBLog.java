@@ -67,12 +67,6 @@ public class ESBLog extends Log implements USARTListener {
     return lastLogMessage;
   }
 
-  public void doActionsBeforeTick() {
-  }
-
-  public void doActionsAfterTick() {
-  }
-
   public JPanel getInterfaceVisualizer() {
     JPanel panel = new JPanel();
     panel.setLayout(new BorderLayout());
@@ -114,8 +108,8 @@ public class ESBLog extends Log implements USARTListener {
     this.deleteObserver(observer);
   }
 
-  public double energyConsumptionPerTick() {
-    return 0.0;
+  public double energyConsumption() {
+    return 0;
   }
 
   public Collection<Element> getConfigXML() {
