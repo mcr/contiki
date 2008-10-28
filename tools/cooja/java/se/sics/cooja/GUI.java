@@ -1182,7 +1182,6 @@ public class GUI extends Observable {
     simulation.setTitle("Quickstarted: " + filename);
     simulation.setDelayTime(delayTime);
     simulation.setSimulationTime(0);
-    simulation.setTickTime(1);
     String radioMediumClassName = null;
     try {
       radioMediumClassName = gui.getProjectConfig().getStringArrayValue(
