@@ -2493,10 +2493,15 @@ public class ContikiMoteTypeDialog extends JDialog {
           try {
             Class<? extends MoteInterface> newMoteInterfaceClass =
               myGUI.tryLoadClass(this, MoteInterface.class, moteInterface);
-            moteIntfClasses.add(newMoteInterfaceClass);
+
+            if (newMoteInterfaceClass == null) {
+              logger.fatal("Failed to load mote interface: " + moteInterface);
+            } else {
+              moteIntfClasses.add(newMoteInterfaceClass);
+            }
             // logger.info("Loaded mote interface: " + newMoteInterfaceClass);
           } catch (Exception ce) {
-            logger.warn("Failed to load mote interface: " + moteInterface);
+            logger.fatal("Failed to load mote interface: " + moteInterface);
           }
         }
 
