@@ -34,9 +34,9 @@ package se.sics.cooja.interfaces;
 import se.sics.cooja.*;
 
 /**
- * A IPAdress represents a mote Internet address. An implementation should notify all
+ * IP Address represents a mote Internet address. An implementation should notify all
  * observers if the address is set or changed.
- * 
+ *
  * @author Fredrik Osterlind
  */
 @ClassDescription("IPv4 Address")
@@ -47,7 +47,7 @@ public abstract class IPAddress extends MoteInterface {
    * @return IP address string
    */
   public abstract String getIPString();
-  
+
   /**
    * Change/Set IP address.
    * @param ipAddress IP string on the form a.b.c.d

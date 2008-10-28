@@ -45,9 +45,9 @@ import se.sics.cooja.*;
  * radio functionality. Supports radio channels and output power functionality.
  * The mote should observe the radio for incoming radio packet data.
  *
- * @author Fredrik Osterlind
+ * @author Fredrik Österlind
  */
-public class ApplicationRadio extends Radio {
+public class ApplicationRadio extends Radio implements PolledBeforeActiveTicks {
   private Mote myMote;
 
   private static Logger logger = Logger.getLogger(ApplicationRadio.class);
@@ -242,9 +242,6 @@ public class ApplicationRadio extends Radio {
       this.setChanged();
       this.notifyObservers();
     }
-  }
-
-  public void doActionsAfterTick() {
   }
 
   public JPanel getInterfaceVisualizer() {

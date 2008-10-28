@@ -34,6 +34,8 @@ package se.sics.cooja.interfaces;
 /**
  * A mote interface polled after ALL mote ticks.
  *
+ * @see Battery
+ *
  * @author Fredrik Österlind
  */
 public interface PolledAfterAllTicks {
