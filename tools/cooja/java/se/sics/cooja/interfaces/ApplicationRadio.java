@@ -306,7 +306,7 @@ public class ApplicationRadio extends Radio implements PolledBeforeActiveTicks {
     this.deleteObserver(observer);
   }
 
-  public double energyConsumptionPerTick() {
+  public double energyConsumption() {
     return 0;
   }
 

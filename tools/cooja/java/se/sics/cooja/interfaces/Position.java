@@ -168,7 +168,7 @@ public class Position extends MoteInterface {
     this.deleteObserver(observer);
   }
 
-  public double energyConsumptionPerTick() {
+  public double energyConsumption() {
     return 0.0;
   }
 
