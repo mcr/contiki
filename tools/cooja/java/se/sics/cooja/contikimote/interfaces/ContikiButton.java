@@ -96,7 +96,7 @@ public class ContikiButton extends Button implements ContikiMoteInterface {
         releaseButton();
       } else {
         /* Reschedule button release */
-        mote.getSimulation().addEvent(releaseButtonEvent, t+1);
+        mote.getSimulation().scheduleEvent(releaseButtonEvent, t+1);
       }
     }
   };
@@ -108,7 +108,7 @@ public class ContikiButton extends Button implements ContikiMoteInterface {
     pressButton();
 
     /* Schedule release button */
-    mote.getSimulation().addEvent(releaseButtonEvent, mote.getSimulation().getSimulationTime());
+    mote.getSimulation().scheduleEvent(releaseButtonEvent, mote.getSimulation().getSimulationTime());
   }
 
   public void releaseButton() {

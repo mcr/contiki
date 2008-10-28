@@ -132,7 +132,7 @@ public class ContikiCFS extends MoteInterface implements ContikiMoteInterface, P
       this.notifyObservers(mote);
 
       /* Reset energy consumption */
-      mote.getSimulation().addEvent(doneEvent, mote.getSimulation().getSimulationTime());
+      mote.getSimulation().scheduleEvent(doneEvent, mote.getSimulation().getSimulationTime());
     }
   }
 
