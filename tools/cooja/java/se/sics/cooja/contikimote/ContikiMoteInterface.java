@@ -34,15 +34,14 @@ package se.sics.cooja.contikimote;
 /**
  * A Contiki mote interface has information about which, if any, core interfaces
  * it needs.
- * 
- * All classes implementing this interface should also define a static method:
- * public String[] getCoreInterfaceDependencies() {
- * ...
- * }
- * 
+ *
+ * All classes implementing this interface must define the static method:
+ * public static String[] getCoreInterfaceDependencies();
+ *
  * The method should return the names of all needed core interfaces.
- * 
- * @author Fredrik Osterlind
+ *
+ * @author Fredrik Österlind
  */
 public interface ContikiMoteInterface {
+  /*public static String[] getCoreInterfaceDependencies();*/
 }
