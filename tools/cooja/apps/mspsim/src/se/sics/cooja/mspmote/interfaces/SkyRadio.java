@@ -130,9 +130,9 @@ public class SkyRadio extends Radio implements CustomDataRadio {
 //    cc2420.addOperatingModeListener(new OperatingModeListener() {
 //
 //      public void modeChanged(Chip source, int mode) {
-//        SkyRadio.this.mode = mode;        
+//        SkyRadio.this.mode = mode;
 //      }
-//      
+//
 //    });
   }
 
@@ -257,14 +257,8 @@ public class SkyRadio extends Radio implements CustomDataRadio {
     cc2420.setRSSI((int) signalStrength);
   }
 
-  public double energyConsumptionPerTick() {
+  public double energyConsumption() {
     return 0;
-  }
-
-  public void doActionsBeforeTick() {
-  }
-
-  public void doActionsAfterTick() {
   }
 
   public JPanel getInterfaceVisualizer() {
