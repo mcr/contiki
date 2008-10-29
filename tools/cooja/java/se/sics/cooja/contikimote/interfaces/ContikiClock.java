@@ -88,6 +88,10 @@ public class ContikiClock extends Clock implements ContikiMoteInterface, PolledB
     this.timeDrift = timeDrift;
   }
 
+  public int getDrift() {
+    return timeDrift;
+  }
+
   public int getTime() {
     return moteMem.getIntValueOf("simCurrentTime");
   }
