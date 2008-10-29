@@ -42,7 +42,7 @@ import se.sics.cooja.mspmote.MspMote;
 import se.sics.mspsim.core.MSP430;
 
 /**
- * @author Fredrik Osterlind
+ * @author Fredrik Österlind
  */
 @ClassDescription("Cycle clock")
 public class MspClock extends Clock {
@@ -67,6 +67,10 @@ public class MspClock extends Clock {
 
   public void setDrift(int drift) {
     myMote.cycleDrift = MspMote.NR_CYCLES_PER_MSEC * drift;
+  }
+
+  public int getDrift() {
+    return myMote.cycleDrift / MspMote.NR_CYCLES_PER_MSEC;
   }
 
   public JPanel getInterfaceVisualizer() {
