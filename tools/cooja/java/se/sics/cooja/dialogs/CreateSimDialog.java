@@ -52,7 +52,7 @@ public class CreateSimDialog extends JDialog {
   private AddSimEventHandler myEventHandler = new AddSimEventHandler();
 
   private final static int LABEL_WIDTH = 170;
-  private final static int LABEL_HEIGHT = 15;
+  private final static int LABEL_HEIGHT = 25;
 
   private Simulation mySimulation = null;
   private GUI myGUI = null;
