@@ -191,7 +191,7 @@ public class Simulation extends Observable implements Runnable {
       }
     }
     mspMoteArray = mspMotes.toArray(new Mote[mspMotes.size()]);
-    moteArray = contikiMotes.toArray(new Mote[mspMotes.size()]);
+    moteArray = contikiMotes.toArray(new Mote[contikiMotes.size()]);
 
     try {
       while (isRunning) {
@@ -216,7 +216,7 @@ public class Simulation extends Observable implements Runnable {
     } catch (IllegalMonitorStateException e) {
       logger.warn("IllegalMonitorStateException:" + e);
     } catch (RuntimeException e) {
-      logger.warn("Simulation stop requested");
+      logger.warn("Simulation stop requested: " + e);
     }
     isRunning = false;
     thread = null;
