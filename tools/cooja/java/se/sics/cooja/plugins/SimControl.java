@@ -217,7 +217,7 @@ public class SimControl extends VisPlugin {
     if (simulation.getDelayTime() > 0) {
       label = new JLabel("Delay: " + simulation.getDelayTime() + " ms");
     } else {
-      label = new JLabel("Zero simulation delay");
+      label = new JLabel("No simulation delay");
     }
     smallPanel.add(label);
     delayLabel = label;
