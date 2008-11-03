@@ -71,6 +71,7 @@ public class CodeUI extends JPanel {
     this.breakpoints = breakpoints;
 
     setLayout(new BorderLayout());
+
     panel = new JPanel(new BorderLayout());
     add(panel, BorderLayout.CENTER);
     displayNoCode();
@@ -188,6 +189,7 @@ public class CodeUI extends JPanel {
       public void run() {
         // Display code
         codeList = new JList(new CodeListModel(codeData));
+        codeList.setBackground(Color.WHITE);
         codeList.setFont(new Font("courier", 0, 12));
         codeList.setCellRenderer(new CodeCellRenderer(lineNr));
         codeList.addMouseListener(new MouseListener() {
