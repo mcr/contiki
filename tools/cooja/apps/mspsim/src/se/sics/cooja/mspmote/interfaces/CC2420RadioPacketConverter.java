@@ -51,7 +51,7 @@ public class CC2420RadioPacketConverter {
   public static final boolean WITH_TIMESTAMP = true;
   public static final boolean WITH_FOOTER = true;
 
-  public static byte[] fromCoojaToCC24240(COOJARadioPacket packet) {
+  public static byte[] fromCoojaToCC2420(COOJARadioPacket packet) {
     byte cc2420Data[] = new byte[6+127];
     int pos = 0;
     byte packetData[] = packet.getPacketData();
