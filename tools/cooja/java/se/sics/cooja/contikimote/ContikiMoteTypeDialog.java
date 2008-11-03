@@ -722,6 +722,8 @@ public class ContikiMoteTypeDialog extends JDialog {
       }
     });
     commStackComboBox.setSelectedIndex(0);
+    commStackComboBox.setEnabled(false);
+    commStackComboBox.setToolTipText("Disabled since Nov 2008, awaiting new Contiki communication protocol build interface");
 
     smallPane.add(label);
     smallPane.add(Box.createHorizontalStrut(10));
