@@ -176,6 +176,11 @@ public class Simulation extends Observable implements Runnable {
     logger.info("Simulation main loop started, system time: " + lastStartTime);
     isRunning = true;
 
+    /* Schedule tick events */
+    scheduleEvent(tickMotesEvent, currentSimulationTime);
+    scheduleEvent(tickMspMotesEvent, currentSimulationTime);
+    scheduleEvent(delayEvent, currentSimulationTime);
+
     /* Simulation starting */
     this.setChanged();
     this.notifyObservers(this);
@@ -237,13 +242,6 @@ public class Simulation extends Observable implements Runnable {
   public Simulation(GUI gui) {
     myGUI = gui;
     delayMotesRandom.setSeed(randomSeed);
-
-    /* XXX Remove me */
-    scheduleEvent(tickMotesEvent, currentSimulationTime);
-    /* XXX Remove me */
-    scheduleEvent(tickMspMotesEvent, currentSimulationTime);
-    /* XXX Remove me? */
-    scheduleEvent(delayEvent, currentSimulationTime);
   }
 
   /**
