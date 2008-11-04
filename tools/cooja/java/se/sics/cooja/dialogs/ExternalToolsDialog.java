@@ -128,7 +128,7 @@ public class ExternalToolsDialog extends JDialog {
     buttonPane.add(Box.createRigidArea(new Dimension(10, 0)));
     buttonPane.add(button);
 
-    button = new JButton("OK (Saves)");
+    button = new JButton("Save");
     button.setActionCommand("ok");
     button.addActionListener(myEventHandler);
     buttonPane.add(Box.createRigidArea(new Dimension(10, 0)));
