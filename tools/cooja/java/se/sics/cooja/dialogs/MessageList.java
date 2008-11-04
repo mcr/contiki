@@ -44,13 +44,11 @@ import java.io.InputStreamReader;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.io.PrintStream;
-
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
 
 public class MessageList extends JList {
 
@@ -128,16 +126,17 @@ public class MessageList extends JList {
   }
 
   public void addMessage(final String message, final int type) {
-    SwingUtilities.invokeLater(new Runnable() {
-      public void run() {
-        boolean scroll = getLastVisibleIndex() >= getModel().getSize() - 2;
-        MessageContainer msg = new MessageContainer(message, type);
-        ((DefaultListModel) getModel()).addElement(msg);
-        if (scroll) {
+    boolean scroll = getLastVisibleIndex() >= getModel().getSize() - 2;
+    MessageContainer msg = new MessageContainer(message, type);
+    ((DefaultListModel) getModel()).addElement(msg);
+
+    if (scroll) {
+      java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
           ensureIndexIsVisible(getModel().getSize() - 1);
         }
-      }
-  });
+      });
+    }
   }
 
   public void clearMessages() {
