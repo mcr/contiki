@@ -49,8 +49,8 @@
 #include "sys/clock.h"
 #include "sys/stimer.h"
 
-#define SCLOCK_LT(a, b)	((unsigned long)((a) - (b)) < \
-			((unsigned long)(~((unsigned long)0)) >> 1))
+#define SCLOCK_GEQ(a, b)	((unsigned long)((a) - (b)) < \
+				((unsigned long)(~((unsigned long)0)) >> 1))
 
 /*---------------------------------------------------------------------------*/
 /**
@@ -124,7 +124,7 @@ stimer_restart(struct stimer *t)
 int
 stimer_expired(struct stimer *t)
 {
-  return SCLOCK_LT(clock_seconds(), t->start + t->interval);
+  return SCLOCK_GEQ(clock_seconds(), t->start + t->interval);
 }
 /*---------------------------------------------------------------------------*/
 /**
