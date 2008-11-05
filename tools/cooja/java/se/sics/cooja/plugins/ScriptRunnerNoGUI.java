@@ -44,7 +44,7 @@ import org.jdom.Element;
 import se.sics.cooja.*;
 import se.sics.cooja.GUI.SimulationCreationException;
 
-@ClassDescription("Script Runner No GUI (Log)")
+@ClassDescription("Test Script Editor (no GUI)")
 @PluginType(PluginType.COOJA_PLUGIN)
 public class ScriptRunnerNoGUI implements Plugin {
   private static final long serialVersionUID = 1L;
