@@ -1209,6 +1209,12 @@ input(const struct mac_driver *r)
   u16_t frag_tag = 0;
 #endif /*SICSLOWPAN_CONF_FRAG*/
 
+#ifdef SICSLOWPAN_CONF_CONVENTIONAL_MAC
+  if(r->read() <= 0) {
+    return;
+  }
+#endif /* SICSLOWPAN_CONF_CONVENTIONAL_MAC */
+
   /* init */
   uncomp_hdr_len = 0;
   rime_hdr_len = 0;
