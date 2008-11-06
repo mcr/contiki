@@ -227,14 +227,14 @@ PROCESS_THREAD(slip_process, ev, data)
   rxbuf_init();
 
   while(1) {
-    PROCESS_YIELD();
+    PROCESS_YIELD_UNTIL(ev == PROCESS_EVENT_POLL);
     
     slip_active = 1;
 
     /* Move packet from rxbuf to buffer provided by uIP. */
     uip_len = slip_poll_handler(&uip_buf[UIP_LLH_LEN],
 				UIP_BUFSIZE - UIP_LLH_LEN);
-
+#if !UIP_CONF_IPV6
     if(uip_len == 4 && strncmp((char*)&uip_buf[UIP_LLH_LEN], "?IPA", 4) == 0) {
       char buf[8];
       memcpy(&buf[0], "=IPA", 4);
@@ -264,6 +264,7 @@ PROCESS_THREAD(slip_process, ev, data)
       uip_len = 0;
       SLIP_STATISTICS(slip_ip_drop++);
     }
+#endif /* UIP_CONF_IPV6 */
   }
 
   PROCESS_END();
