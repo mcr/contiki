@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002, Adam Dunkels.
+ * Copyright (c) 2004, Adam Dunkels.
  * All rights reserved. 
  *
  * Redistribution and use in source and binary forms, with or without 
@@ -32,9 +32,9 @@
  * $Id$
  *
  */
-#ifndef __EMAIL_H__
-#define __EMAIL_H__
+#ifndef __FTP_H__
+#define __FTP_H__
 
-PROCESS_NAME(email_process);
+PROCESS_NAME(ftp_process);
 
-#endif /* __EMAIL_H__ */
+#endif /* __FTP_H__ */
