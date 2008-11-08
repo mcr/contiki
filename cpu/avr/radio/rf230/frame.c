@@ -276,50 +276,55 @@ void rx_frame_parse(hal_rx_frame_t *rx_frame, parsed_frame_t *pf)
     }
 
 
-    if (fcf->frameType == ACKFRAME)
-        return;                     /* Don't bother with ACK frames */
-
     pf->fcf = (fcf_t *)p;
     pf->seqNum = p+2;
     p += 3;                             /* Skip first three bytes */
-    /* Destination PID, if any */
-    if (fcf->frameType != BEACONFRAME){ /* No destination addresses in Beacon frame */
-        pf->dest_pid = (uint16_t *)p;
-        p += 2;
-        /* Destination address */
-        pf->dest_addr = 0;
-        if (fcf->destAddrMode == SHORTADDRMODE ||
-            fcf->destAddrMode == LONGADDRMODE){
-            pf->dest_addr = (addr_t *)p;
-            /* Update pointer to account for possible missing addr field */
-            if (fcf->destAddrMode == SHORTADDRMODE){
-                p += 2;
-            }
-            if (fcf->destAddrMode == LONGADDRMODE){
-                p += 8;
-            }
-        }
-    }
-    /* Source PANID */
-    pf->src_pid = 0;
-    if (!fcf->panIdCompression){
-        pf->src_pid = (uint16_t *)p;
-        p += 2;
-    }
-    /* Source address */
-    pf->src_addr = (addr_t *)p;
-    if (fcf->srcAddrMode == SHORTADDRMODE){
-        p += 2;
-    }
-    if (fcf->srcAddrMode == LONGADDRMODE){
-        p += 8;
-    }
-    /* aux security header, not yet implemented */
-    pf->aux_sec_hdr = 0;
-    /* payload length */
-    pf->payload_length = rx_frame->length - (p - (uint8_t*)&rx_frame->data) - 2;
-    /* payload */
-    pf->payload = p;
+	
+	if (fcf->frameType == ACKFRAME) {	
+		//ACK frames have no addresses and no payload!
+		pf->payload_length = 0;
+	
+	} else {      
+		
+		/* Destination PID, if any */
+		if (fcf->frameType != BEACONFRAME){ /* No destination addresses in Beacon frame */
+			pf->dest_pid = (uint16_t *)p;
+			p += 2;
+			/* Destination address */
+			pf->dest_addr = 0;
+			if (fcf->destAddrMode == SHORTADDRMODE ||
+				fcf->destAddrMode == LONGADDRMODE){
+				pf->dest_addr = (addr_t *)p;
+				/* Update pointer to account for possible missing addr field */
+				if (fcf->destAddrMode == SHORTADDRMODE){
+					p += 2;
+				}
+				if (fcf->destAddrMode == LONGADDRMODE){
+					p += 8;
+				}
+			}
+		}
+		/* Source PANID */
+		pf->src_pid = 0;
+		if (!fcf->panIdCompression){
+			pf->src_pid = (uint16_t *)p;
+			p += 2;
+		}
+		/* Source address */
+		pf->src_addr = (addr_t *)p;
+		if (fcf->srcAddrMode == SHORTADDRMODE){
+			p += 2;
+		}
+		if (fcf->srcAddrMode == LONGADDRMODE){
+			p += 8;
+		}
+		/* aux security header, not yet implemented */
+		pf->aux_sec_hdr = 0;
+		/* payload length */
+		pf->payload_length = rx_frame->length - (p - (uint8_t*)&rx_frame->data) - 2;
+		/* payload */
+		pf->payload = p;
+	}
 
     pf->lqi = rx_frame->lqi;
     pf->fcs = rx_frame->crc;
