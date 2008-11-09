@@ -393,7 +393,7 @@ rudolph2_send(struct rudolph2_conn *c, clock_time_t send_interval)
     len = read_data(c, rimebuf_dataptr(), c->rcv_nxt);
   }
   c->flags = FLAG_LAST_RECEIVED;
-  printf("Highest chunk %d\n", c->rcv_nxt);
+  /*  printf("Highest chunk %d\n", c->rcv_nxt);*/
   send_data(c, SEND_INTERVAL);
   ctimer_set(&c->t, SEND_INTERVAL, timed_send, c);
 }
