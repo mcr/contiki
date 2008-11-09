@@ -74,13 +74,13 @@ write_chunk(struct rucb_conn *c, int offset, int flag,
     ether_set_text(buf);
   }
 #endif /* NETSIM */
-  printf("+");
+  /*  printf("+");*/
 }
 static int
 read_chunk(struct rucb_conn *c, int offset, char *to, int maxsize)
 {
   int size;
-  printf("-");
+  /*  printf("-");*/
   size = maxsize;
   if(bytecount + maxsize >= filesize) {
     size = filesize - bytecount;
