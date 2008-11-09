@@ -61,7 +61,7 @@
 #include <sys/wait.h>
 #include <arpa/inet.h>
 
-in_addr_t gwaddr;
+in_addr_t gwaddr, winifaddr;
 
 void netsim_init(void);
 
@@ -179,6 +179,7 @@ main(int argc, char **argv)
     exit(1);
   } else if(argc >= 2) {
     gwaddr = inet_addr(argv[2]);
+    winifaddr = inet_addr(argv[1]);
   }
 #endif /* __CYGWIN__ */
 
