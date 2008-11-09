@@ -49,7 +49,7 @@
 #define RS232_PRINTF_BUFFER_LENGTH 64
 #endif
 
-#if defined (__AVR_ATmega128__) || defined(__AVR_ATmega1284P__)
+#if defined (__AVR_ATmega128__) || defined(__AVR_ATmega1284P__) || defined(__AVR_ATmega1281__)
 typedef struct {
   volatile uint8_t * UDR;
   volatile uint8_t * UBRRH;

@@ -72,9 +72,28 @@
 /* Define all possible revisions here */
 #define RAVEN_D	    0
 #define RAVENUSB_C  1
+#define RCB_B	    2
 
+#if RCB_REVISION == RCB_B
+/* 1281 rcb */
+#   define SSPORT     B
+#   define SSPIN      (0x00)
+#   define SPIPORT    B
+#   define MOSIPIN    (0x02)
+#   define MISOPIN    (0x03)
+#   define SCKPIN     (0x01)
+#   define RSTPORT    B
+#   define RSTPIN     (0x05)
+#   define IRQPORT    D
+#   define IRQPIN     (0x04)
+#   define SLPTRPORT  B
+#   define SLPTRPIN   (0x04)
+#   define USART      1
+#   define USARTVECT  USART1_RX_vect
+#   define TICKTIMER  3
+#   define HAS_SPARE_TIMER
 
-#if RAVEN_REVISION == RAVEN_D
+#elif RAVEN_REVISION == RAVEN_D
 
 /* 1284 raven */
 #   define SSPORT     B
