@@ -76,7 +76,9 @@ public interface SensorInfo {
   public static final int BEST_NEIGHBOR = 20;
   public static final int BEST_NEIGHBOR_ETX = 21;
   public static final int BEST_NEIGHBOR_RTMETRIC = 22;
+  public static final int BATTERY_VOLTAGE = 23;
+  public static final int BATTERY_INDICATOR = 24;
 
-  public static final int VALUES_COUNT = 23;
+  public static final int VALUES_COUNT = 25;
 
 }

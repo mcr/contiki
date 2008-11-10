@@ -169,6 +169,14 @@ public class SensorData implements SensorInfo {
     return -39.6 + 0.01 * values[TEMPERATURE];
   }
 
+  public double getBatteryVoltage() {
+    return values[BATTERY_VOLTAGE] * 2 * 2.5 / 4096.0;
+  }
+
+  public double getBatteryIndicator() {
+    return values[BATTERY_INDICATOR];
+  }
+
   public double getRadioIntensity() {
     return values[RSSI];
   }

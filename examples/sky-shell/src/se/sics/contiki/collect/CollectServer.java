@@ -271,6 +271,31 @@ public class CollectServer {
             return data.getTemperature();
           }
         },
+        new TimeChartPanel(this, "Battery Voltage", "Battery Voltage",
+			   "Time", "Volt") {
+          {
+            setRangeTick(1);
+	    setRangeMinimumSize(4.0);
+	    setGlobalRange(true);
+            setMaxItemCount(defaultMaxItemCount);
+          }
+          protected double getSensorDataValue(SensorData data) {
+            return data.getBatteryVoltage();
+          }
+        },
+        new TimeChartPanel(this, "Battery Indicator", "Battery Indicator",
+			   "Time", "Indicator") {
+          {
+            chart.getXYPlot().getRangeAxis().setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+            setRangeTick(5);
+            setRangeMinimumSize(10.0);
+            setGlobalRange(true);
+            setMaxItemCount(defaultMaxItemCount);
+          }
+          protected double getSensorDataValue(SensorData data) {
+            return data.getBatteryIndicator();
+          }
+        },
         new TimeChartPanel(this, "Relative Humidity", "Humidity", "Time", "%") {
           {
             setMaxItemCount(defaultMaxItemCount);
