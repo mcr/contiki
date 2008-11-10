@@ -120,6 +120,7 @@ PROCESS_THREAD(shell_gui_process, ev, data)
   shell_run_init();
   shell_text_init();
   shell_time_init();
+  shell_wget_init();
 
   ctk_window_open(&window);
 

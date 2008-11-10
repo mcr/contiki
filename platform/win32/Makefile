@@ -43,7 +43,9 @@ appname = ${subst processes,process-list,${subst www,webbrowser,$(1)}}
 
 # Omit all the target and network stack specific shell commands
 SHELL_SOURCEFILES = shell.c shell-file.c shell-ps.c shell-run.c \
-		    shell-text.c shell-time.c list.c random.c
+		    shell-text.c shell-time.c shell-wget.c \
+		    http-strings.c http-user-agent-string.c \
+		    webclient.c list.c random.c
 		    
 # Use gui-shell.c instead of serial-shell.c to get CTK support
 override shell_src = gui-shell.c ctk-textentry-cmdline.c \
