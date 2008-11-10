@@ -273,7 +273,7 @@ sht11_humidity(void)
   return scmd(MEASURE_HUMI);
 }
 /*---------------------------------------------------------------------------*/
-#if 0 /* But ok! */
+#if 1 /* But ok! */
 unsigned
 sht11_sreg(void)
 {
