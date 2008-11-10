@@ -109,7 +109,11 @@ enum {
 #if UIP_CONF_IPV6
 u8_t (* tcpip_output)(uip_lladdr_t *);
 #else
-static u8_t dummy_tcpip_output_function(void) {return 0;}
+static u8_t dummy_tcpip_output_function(void)
+{
+  UIP_LOG("dummy_tcpip_output_function: Use tcpip_set_outputfunc() to replace this dummy");
+  return 0;
+}
 u8_t (* tcpip_output)(void) = dummy_tcpip_output_function;
 #endif
 
