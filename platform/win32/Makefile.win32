@@ -49,10 +49,10 @@ CONTIKI_CPU = $(CONTIKI)/cpu/native
 include $(CONTIKI)/cpu/native/Makefile.native
 
 ifdef PLATFORM_BUILD
-CONTIKI_TARGET_SOURCEFILES += dll-loader.c
-CFLAGS += -DPLATFORM_BUILD -DWITH_LOADER_ARCH -DAUTOSTART_ENABLE
-LDFLAGS += -Wl,--out-implib=contiki-main.$(TARGET).a \
-           -u _cfs_open -u _cfs_opendir -u _uiplib_ipaddrconv
+  CONTIKI_TARGET_SOURCEFILES += dll-loader.c
+  CFLAGS += -DPLATFORM_BUILD -DWITH_LOADER_ARCH -DAUTOSTART_ENABLE
+  LDFLAGS += -Wl,--out-implib=contiki-main.$(TARGET).a \
+             -u _cfs_open -u _cfs_opendir -u _uiplib_ipaddrconv
 endif
 
 ### Generate the module-link prerequisites
