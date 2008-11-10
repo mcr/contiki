@@ -383,6 +383,10 @@ sd_cache_t *sd_cache_read_block(const uint32_t * blAdr);
      uint16_t sd_read(void *pBuffer, uint32_t address, uint16_t size);
 #endif
 
+#if SD_WRITE
+uint16_t sd_write(uint32_t address, void *pBuffer, uint16_t size);
+#endif
+
 #endif /*__SD_H__*/
 
 /** @} */
