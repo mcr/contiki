@@ -39,6 +39,6 @@
 
 extern const struct mac_driver tdma_mac_driver;
 
-void tdma_mac_init(const struct radio_driver *r);
+const struct mac_driver * tdma_mac_init(const struct radio_driver *r);
 
 #endif /* __TDMA_MAC_H__ */
