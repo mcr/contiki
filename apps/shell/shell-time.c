@@ -260,7 +260,7 @@ PROCESS_THREAD(shell_repeat_process, ev, data)
     PROCESS_WAIT_UNTIL(ev == PROCESS_EVENT_EXITED &&
 		       data == &shell_repeat_server_process);
     
-    
+    PROCESS_PAUSE();
     PROCESS_WAIT_UNTIL(etimer_expired(&etimer));
     etimer_reset(&etimer);
   }
