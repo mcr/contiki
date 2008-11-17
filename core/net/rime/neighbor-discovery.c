@@ -53,7 +53,7 @@
 
 #include "lib/random.h"
 
-#if NETSIM
+#if CONTIKI_TARGET_NETSIM
 #include "ether.h"
 #endif
 

@@ -172,14 +172,14 @@ PT_THREAD(recv_tcpthread(struct pt *pt))
   
   ret = start_program();
   
-#if NETSIM
+#if CONTIKI_TARGET_NETSIM
   rudolph0_send(&rudolph0, CLOCK_SECOND / 4);
-#else /* NETSIM */
+#else /* CONTIKI_TARGET_NETSIM */
   if(ret == ELFLOADER_OK) {
     /* Propagate program. */
     rudolph0_send(&rudolph0, CLOCK_SECOND / 4);
   }
-#endif /* NETSIM */
+#endif /* CONTIKI_TARGET_NETSIM */
   
   /* Return "ok" message. */
   do {

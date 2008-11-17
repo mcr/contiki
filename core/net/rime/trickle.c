@@ -46,7 +46,7 @@
 #include "net/rime/trickle.h"
 #include "lib/random.h"
 
-#if NETSIM
+#if CONTIKI_TARGET_NETSIM
 #include "ether.h"
 #endif
 
@@ -153,9 +153,9 @@ recv(struct broadcast_conn *bc, rimeaddr_t *from)
     c->interval_scaling = 0;
     send(c);
   } else { /* hdr->seqno > c->seqno */
-#if NETSIM
+#if CONTIKI_TARGET_NETSIM
     /*    ether_set_line(from->u8[0], from->u8[1]);*/
-#endif /* NETSIM */
+#endif /* CONTIKI_TARGET_NETSIM */
     c->seqno = seqno;
     /* Store the incoming data in the queuebuf */
     if(c->q != NULL) {

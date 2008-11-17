@@ -45,9 +45,9 @@
 #include <stdio.h>
 #include <string.h>
 
-#if NETSIM
+#if CONTIKI_TARGET_NETSIM
 #include "ether.h"
-#endif /* NETSIM */
+#endif /* CONTIKI_TARGET_NETSIM */
 #ifndef HAVE_SNPRINTF
 int snprintf(char *str, size_t size, const char *format, ...);
 #endif /* HAVE_SNPRINTF */
@@ -66,14 +66,14 @@ static void
 write_chunk(struct rucb_conn *c, int offset, int flag,
 	    char *data, int datalen)
 {
-#if NETSIM
+#if CONTIKI_TARGET_NETSIM
   {
     char buf[100];
     printf("received %d; %d\n", offset, datalen);
     sprintf(buf, "%lu%%", (100 * (offset + datalen)) / filesize);
     ether_set_text(buf);
   }
-#endif /* NETSIM */
+#endif /* CONTIKI_TARGET_NETSIM */
   /*  printf("+");*/
 }
 static int
