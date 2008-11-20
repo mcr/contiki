@@ -267,18 +267,13 @@ Java_se_sics_cooja_corecomm_[CLASS_NAME]_tick(JNIEnv *env, jobject obj)
 }
 /*---------------------------------------------------------------------------*/
 /**
- * \brief      Get the absolute memory address of a special variable.
- * \return     Absolute memory address.
- *
- *             Returns the absolute memory address of a special variable
- *             "referenceVar". By comparing this address with the relative
- *             address (from the map file) for referenceVar, an runtime offset
- *             can be calculated.
+ * \brief      Set the relative memory address of the reference variable.
+ * \return     Relative memory address.
  *
  *             This is a JNI function and should only be called via the
  *             responsible Java part (MoteType.java).
  */
-JNIEXPORT jint JNICALL
+JNIEXPORT void JNICALL
 Java_se_sics_cooja_corecomm_[CLASS_NAME]_setReferenceAddress(JNIEnv *env, jobject obj, jint addr)
 {
   referenceVar = (((long)&referenceVar) - ((long)addr));
