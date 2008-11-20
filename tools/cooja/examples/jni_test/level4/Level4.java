@@ -45,7 +45,8 @@ public class Level4 {
   }
 
   private native void doCount();
-  private native int getRefAddress();
+
+  public native void setReferenceAddress(int addr);
 
   public Level4() {
     // Configure logger
@@ -152,12 +153,9 @@ public class Level4 {
       System.exit(1);
     }
 
-    int absRefAddress = getRefAddress();
-    System.out.println("Absolute reference address: 0x" + Integer.toHexString(absRefAddress));
     int relRefAddress = (Integer) addresses.get("ref_var");
     System.out.println("Relative reference address: 0x" + Integer.toHexString(relRefAddress));
-    int offsetRelToAbs = absRefAddress - relRefAddress;
-    System.out.println("Offset relative-absolute: 0x" + Integer.toHexString(offsetRelToAbs));
+    setReferenceAddress(relRefAddress);
 
     doCount();
     doCount();

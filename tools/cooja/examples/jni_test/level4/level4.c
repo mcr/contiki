@@ -32,19 +32,25 @@
 #include <jni.h>
 #include <stdio.h>
 
-int ref_var;
+long ref_var; /* Placed somewhere in the BSS section */
 
-int initialized_counter=1;
-int uninitialized_counter;
+int initialized_counter=1; /* Variable in data section */
+int uninitialized_counter; /* Variable in BSS section */
+
+JNIEXPORT void JNICALL
+Java_Level4_setReferenceAddress(JNIEnv *env, jobject obj, jint addr)
+{
+  /*printf("relative reference address is %p\n", addr);*/
+  /*printf("absolute reference address is %p\n", &ref_var);*/
+
+  ref_var = (((long)&ref_var) - ((long)addr));
+  printf("Offset is 0x%p\n", ref_var);
+  fflush(stdout);
+}
 
 JNIEXPORT void JNICALL
 Java_Level4_doCount(JNIEnv *env, jobject obj)
 {
  printf(">> DATA_counter=\t%i\tBSS_counter=\t%i\n", initialized_counter++, uninitialized_counter++);
  fflush(stdout);
-}
-JNIEXPORT jint JNICALL
-Java_Level4_getRefAddress(JNIEnv *env, jobject obj)
-{
-  return (jint) &ref_var;
 }
