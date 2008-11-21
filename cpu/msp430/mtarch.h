@@ -38,6 +38,8 @@
 struct mtarch_thread {
   unsigned short stack[MTARCH_STACKSIZE];
   unsigned short *sp;
+  void *data;
+  void *function;
 };
 
 struct mt_thread;
@@ -46,4 +48,4 @@ int mtarch_stack_usage(struct mt_thread *t);
 
 
 #endif /* __MTARCH_H__ */
-	
+
