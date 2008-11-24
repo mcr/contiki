@@ -117,6 +117,12 @@ cfs_seek(int f, unsigned int o)
 }
 /*---------------------------------------------------------------------------*/
 int
+cfs_remove(const char *name)
+{
+  return -1;
+}
+/*---------------------------------------------------------------------------*/
+int
 cfs_opendir(struct cfs_dir *p, const char *n)
 {
   return -1;

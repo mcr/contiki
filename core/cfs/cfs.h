@@ -191,6 +191,16 @@ CCIF unsigned int cfs_seek(int fd, unsigned int offset);
 #endif
 
 /**
+ * \brief      Remove a file.
+ * \param name The name of the file.
+ * \retval 0   If the file was removed.
+ * \return -1  If the file could not be removed or if it doesn't exist.
+ */
+#ifndef cfs_remove
+CCIF int cfs_remove(const char *name);
+#endif
+
+/**
  * \brief      Open a directory for reading directory entries.
  * \param dirp A pointer to a struct cfs_dir that is filled in by the function.
  * \param name The name of the directory.
