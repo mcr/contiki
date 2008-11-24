@@ -70,6 +70,9 @@ PROJECT_OBJECTFILES += ${addprefix $(OBJECTDIR)/,$(CONTIKI_TARGET_MAIN:.c=.o)}
 %.ihex: %.$(TARGET)
 	$(OBJCOPY) $^ -O ihex $@
 
+%.mspsim:	%.firmware
+	java -jar ${CONTIKI}/tools/mspsim/mspsim.jar -platform=${TARGET} $<
+
 core-labels.o: core.firmware
 	${CONTIKI}/tools/msp430-make-labels core.firmware > core-labels.S
 	$(AS) -o $@ core-labels.S
