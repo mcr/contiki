@@ -79,7 +79,7 @@ public class SensorDataAggregator implements SensorInfo {
   }
 
   public void addSensorData(SensorData data) {
-    for (int i = 0, n = Math.max(VALUES_COUNT, data.getValueCount()); i < n; i++) {
+    for (int i = 0, n = Math.min(VALUES_COUNT, data.getValueCount()); i < n; i++) {
       values[i] += data.getValue(i);
     }
     dataCount++;

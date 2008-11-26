@@ -99,7 +99,7 @@ public class SensorData implements SensorInfo {
   }
 
   public static SensorData parseSensorData(CollectServer server, String line, long systemTime) {
-    String[] components = line.split(" ");
+    String[] components = line.trim().split(" ");
     if (components.length == SensorData.VALUES_COUNT + 1) {
       // Sensor data with system time
       try {
