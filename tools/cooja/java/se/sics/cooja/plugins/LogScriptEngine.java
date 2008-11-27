@@ -108,6 +108,9 @@ public class LogScriptEngine {
               "See console for more information.",
               "Script error", JOptionPane.ERROR_MESSAGE);
           unregisterLogObserver();
+          if (LogScriptEngine.this.gui.getSimulation() != null) {
+            LogScriptEngine.this.gui.getSimulation().stopSimulation();
+          }
         }
       }
     };
@@ -120,6 +123,9 @@ public class LogScriptEngine {
       JOptionPane.showMessageDialog(GUI.getTopParentContainer(),
           "See console for more information.",
           "Script error", JOptionPane.ERROR_MESSAGE);
+      if (LogScriptEngine.this.gui.getSimulation() != null) {
+        LogScriptEngine.this.gui.getSimulation().stopSimulation();
+      }
       unregisterLogObserver();
     }
   }
@@ -206,6 +212,9 @@ public class LogScriptEngine {
 
         if (GUI.isVisualized()) {
           log("[if test was run without visualization, COOJA would now have been terminated]\n");
+          if (LogScriptEngine.this.gui.getSimulation() != null) {
+            LogScriptEngine.this.gui.getSimulation().stopSimulation();
+          }
         } else {
           gui.doQuit(false);
         }
@@ -215,6 +224,9 @@ public class LogScriptEngine {
 
         if (GUI.isVisualized()) {
           log("[if test was run without visualization, COOJA would now have been terminated]\n");
+          if (LogScriptEngine.this.gui.getSimulation() != null) {
+            LogScriptEngine.this.gui.getSimulation().stopSimulation();
+          }
         } else {
           gui.doQuit(false);
         }
