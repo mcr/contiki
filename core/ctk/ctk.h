@@ -237,6 +237,10 @@ typedef CTK_ARCH_KEY_T ctk_arch_key_t;
 typedef char ctk_arch_key_t;
 #endif /* CTK_ARCH_KEY_T */
 
+#ifndef CH_ENTER
+#define CH_ENTER '\n'
+#endif /* CH_ENTER */
+
 struct ctk_textentry;
 typedef unsigned char (* ctk_textentry_input)(ctk_arch_key_t c,
 					      struct ctk_textentry *t);
