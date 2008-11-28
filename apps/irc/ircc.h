@@ -59,7 +59,7 @@ void ircc_init(void);
 void ircc_appcall(void *s);
 
 struct ircc_state *ircc_connect(struct ircc_state *s,
-				char *server, u16_t *ipaddr, char *nick);
+				char *server, uip_ipaddr_t *ipaddr, char *nick);
 
 void ircc_join(struct ircc_state *s, char *channel);
 void ircc_part(struct ircc_state *s);
