@@ -150,7 +150,11 @@ cfs_seek(int f, unsigned int o)
 int
 cfs_remove(const char *name)
 {
-  return -1;
+  file.flag = FLAG_FILE_CLOSED;
+  file.fileptr = 0;
+  file.filesize = 0;
+  xmem_erase(CFS_XMEM_SIZE, CFS_XMEM_OFFSET);
+  return 0;
 }
 /*---------------------------------------------------------------------------*/
 int
