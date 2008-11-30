@@ -60,8 +60,8 @@ void
 rimeaddr_copy(rimeaddr_t *dest, const rimeaddr_t *src)
 {
   u8_t i;
-  for(i = 0; i < RIMEADDR_SIZE / 2; i++) {
-    dest->u16[i] = src->u16[i];
+  for(i = 0; i < RIMEADDR_SIZE; i++) {
+    dest->u8[i] = src->u8[i];
   }
 }
 /*---------------------------------------------------------------------------*/
@@ -69,8 +69,8 @@ int
 rimeaddr_cmp(const rimeaddr_t *addr1, const rimeaddr_t *addr2)
 {
   u8_t i;
-  for(i = 0; i < RIMEADDR_SIZE / 2; i++) {
-    if(addr1->u16[i] != addr2->u16[i]) {
+  for(i = 0; i < RIMEADDR_SIZE; i++) {
+    if(addr1->u8[i] != addr2->u8[i]) {
       return 0;
     }
   }
