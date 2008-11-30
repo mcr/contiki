@@ -65,7 +65,6 @@
 
 typedef union {
   unsigned char u8[RIMEADDR_SIZE];
-  unsigned short u16[RIMEADDR_SIZE / 2];
 } rimeaddr_t;
 
 
