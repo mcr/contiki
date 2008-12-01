@@ -88,7 +88,7 @@ PROCESS_THREAD(shell_ls_process, ev, data)
     totsize = 0;
     while(cfs_readdir(&dir, &dirent) == 0) {
       totsize += dirent.size;
-      sprintf(buf, "%3d ", dirent.size);
+      sprintf(buf, "%3lu ", (unsigned long)dirent.size);
       /*      printf("'%s'\n", dirent.name);*/
       shell_output_str(&ls_command, buf, dirent.name);
     }
