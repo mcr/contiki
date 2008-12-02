@@ -166,7 +166,7 @@ recv(const rimeaddr_t *originator, uint8_t seqno, uint8_t hops)
   
   msg = rimebuf_dataptr();
   printf("%u %u %u %u %u %u %u %u %u %u %u %lu %lu %lu %lu %lu ",
-	 (originator->u8[0] << 8) + originator->u8[1],
+	 (originator->u8[1] << 8) + originator->u8[0],
 	 seqno, hops,
 	 msg->light1, msg->light2, msg->temperature, msg->humidity,
 	 msg->rssi,
