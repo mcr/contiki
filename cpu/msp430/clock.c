@@ -40,10 +40,11 @@
 #include "sys/energest.h"
 #include "sys/clock.h"
 #include "sys/etimer.h"
+#include "rtimer-arch.h"
 
 /* 38400 cycles @ 2.4576MHz with divisor 8 ==> 1/8 s */
 /* #define INTERVAL (307200ULL / CLOCK_SECOND) */
-#define INTERVAL (4096ULL / CLOCK_SECOND)
+#define INTERVAL (RTIMER_ARCH_SECOND / CLOCK_SECOND)
 
 #define MAX_TICKS (~((clock_time_t)0) / 2)
 

@@ -53,11 +53,9 @@
 #endif
 
 /*---------------------------------------------------------------------------*/
-interrupt(TIMERB1_VECTOR) timerb1 (void) {
+interrupt(TIMERA0_VECTOR) timera0 (void) {
   ENERGEST_ON(ENERGEST_TYPE_IRQ);
-  if(TBIV == 2) {
-    rtimer_run_next();
-  }
+  rtimer_run_next();
   ENERGEST_OFF(ENERGEST_TYPE_IRQ);
 }
 /*---------------------------------------------------------------------------*/
@@ -66,18 +64,8 @@ rtimer_arch_init(void)
 {
   dint();
 
-  /* Select SMCLK (2.4576MHz), clear TAR; This makes the rtimer count
-     the number of processor cycles executed by the CPU. */
-  //TBCTL = TBSSEL1 | TBCLR;
-  
-  /* Select ACLK 32768Hz clock, divide by 8 */
-  TBCTL = TBSSEL0 | TBCLR | ID_3;
-
-  /* CCR1 interrupt enabled, interrupt occurs when timer equals CCR1. */
-  TBCCTL1 = CCIE;
-
-  /* Start Timer_B in continuous mode. */
-  TBCTL |= MC1;
+  /* CCR0 interrupt enabled, interrupt occurs when timer equals CCR0. */
+  TACCTL0 = CCIE;
 
   /* Enable interrupts. */
   eint();
@@ -87,5 +75,5 @@ void
 rtimer_arch_schedule(rtimer_clock_t t)
 {
   PRINTF("rtimer_arch_schedule time %u\n", t);
-  TBCCR1 = t;
+  TACCR0 = t;
 }

@@ -46,6 +46,6 @@
 
 #define RTIMER_ARCH_SECOND 4096
 
-#define rtimer_arch_now() (TBR)
+#define rtimer_arch_now() (TAR)
 
 #endif /* __RTIMER_ARCH_H__ */
