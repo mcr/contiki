@@ -129,4 +129,6 @@ public class ESBLog extends Log implements USARTListener {
     }
   }
 
+  public void stateChanged(int state) {
+  }
 }
