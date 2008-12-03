@@ -221,7 +221,13 @@ public class Simulation extends Observable implements Runnable {
     } catch (IllegalMonitorStateException e) {
       logger.warn("IllegalMonitorStateException:" + e);
     } catch (RuntimeException e) {
-      logger.warn("Simulation stop requested: " + e);
+      if (e.getClass().getName().contains("IllegalStateException")) { /* XXX Change exception type */
+        /* MSPSim memory alignment exception */
+        logger.fatal("MSPSim detected memory alignment error: " + e);
+      } else {
+        logger.warn("Simulation stopped for unknown reason: " + e);
+        e.printStackTrace();
+      }
     }
     isRunning = false;
     thread = null;
