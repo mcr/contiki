@@ -154,19 +154,17 @@ public class ScriptRunnerNoGUI implements Plugin {
         }
       });
 
-      /* Create timeout watch */
-      sim.addTickObserver(new Observer() {
-        public void update(Observable obs, Object obj) {
-          if (sim.getSimulationTime() > TIMEOUT) {
-            try {
-              logWriter.write("TEST TIMEOUT");
-              logWriter.flush();
-            } catch (IOException e) {
-            }
-            gui.doQuit(false);
+      /* Create timeout event */
+      sim.scheduleEvent(new TimeEvent(0) {
+        public void execute(int t) {
+          try {
+            logWriter.write("TEST TIMEOUT");
+            logWriter.flush();
+          } catch (IOException e) {
           }
+          gui.doQuit(false);
         }
-      });
+      }, TIMEOUT);
 
       /* Start simulation and leave control to script */
       sim.startSimulation();
