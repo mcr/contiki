@@ -198,6 +198,7 @@ public class Simulation extends Observable implements Runnable {
     mspMoteArray = mspMotes.toArray(new Mote[mspMotes.size()]);
     moteArray = contikiMotes.toArray(new Mote[contikiMotes.size()]);
 
+    boolean increasedTime;
     try {
       while (isRunning) {
 
@@ -206,11 +207,14 @@ public class Simulation extends Observable implements Runnable {
           throw new RuntimeException("No more events");
         }
 
+        increasedTime = nextEvent.time > currentSimulationTime;
         currentSimulationTime = nextEvent.time;
         nextEvent.execute(currentSimulationTime);
 
         /* Notify tick observers */
-        tickObservable.allTicksPerformed();
+        if (increasedTime) {
+          tickObservable.allTicksPerformed();
+        }
 
         if (stopSimulation) {
           isRunning = false;
