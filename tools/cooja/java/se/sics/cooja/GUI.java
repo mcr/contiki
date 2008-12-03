@@ -1736,7 +1736,7 @@ public class GUI extends Observable {
         pluginClass.asSubclass(VisPlugin.class);
 
         // Cast succeded, plugin is visualizer plugin!
-        logger.warn("Can't start visualizer plugin (no GUI): " + pluginClass);
+        /*logger.warn("Can't start visualizer plugin (no GUI): " + pluginClass);*/
         return null;
       } catch (ClassCastException e) {
       }
