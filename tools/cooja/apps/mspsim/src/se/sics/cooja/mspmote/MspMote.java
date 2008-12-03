@@ -237,7 +237,8 @@ public abstract class MspMote implements Mote {
       myELFModule = node.loadFirmware(fileELF.getPath(), memory);
     }
 
-    /* TODO Need new memory type including size and type as well */
+    /* Throw exceptions at bad memory access */
+    /*myCpu.setThrowIfWarning(true);*/
 
     /* Create mote address memory */
     MapTable map = myELFModule.getMap();
