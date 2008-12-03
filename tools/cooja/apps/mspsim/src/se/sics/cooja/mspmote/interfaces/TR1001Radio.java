@@ -295,6 +295,9 @@ public class TR1001Radio extends Radio implements USARTListener, CustomDataRadio
     }
   }
 
+  public void stateChanged(int state) {
+  }
+
   /* General radio support */
   public boolean isTransmitting() {
     return transmitting;
