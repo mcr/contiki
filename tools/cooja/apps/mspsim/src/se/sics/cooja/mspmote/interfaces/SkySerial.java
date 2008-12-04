@@ -134,15 +134,19 @@ public class SkySerial extends Log implements SerialPort, USARTListener {
   }
 
   private void tryWriteNextByte() {
-    if (incomingData.isEmpty()) {
-      return;
-    }
-    if (!usart.isReceiveFlagCleared()) {
-      return;
-    }
+    byte b;
 
-    /* Write byte to serial port */
-    byte b = incomingData.remove(0);
+    synchronized (incomingData) {
+      if (!usart.isReceiveFlagCleared()) {
+        return;
+      }
+      if (incomingData.isEmpty()) {
+        return;
+      }
+
+      /* Write byte to serial port */
+      b = incomingData.remove(0);
+    }
     usart.byteReceived(b);
   }
 
