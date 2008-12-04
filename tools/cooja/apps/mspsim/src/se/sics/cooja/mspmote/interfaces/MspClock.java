@@ -70,7 +70,7 @@ public class MspClock extends Clock {
   }
 
   public int getDrift() {
-    return myMote.cycleDrift / MspMote.NR_CYCLES_PER_MSEC;
+    return (int) (myMote.cycleDrift / MspMote.NR_CYCLES_PER_MSEC);
   }
 
   public JPanel getInterfaceVisualizer() {
