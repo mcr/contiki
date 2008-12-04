@@ -123,7 +123,7 @@ public class MspMoteID extends MoteID {
   }
 
   private TimeEvent persistentSetIDEvent = new TimeEvent(0) {
-    public void execute(int t) {
+    public void execute(long t) {
 
       if (persistentSetIDCounter-- > 0)
       {

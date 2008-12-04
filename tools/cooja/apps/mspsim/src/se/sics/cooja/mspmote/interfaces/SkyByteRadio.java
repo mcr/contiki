@@ -59,7 +59,7 @@ import se.sics.mspsim.chip.CC2420.StateListener;
 public class SkyByteRadio extends Radio implements CustomDataRadio {
   private static Logger logger = Logger.getLogger(SkyByteRadio.class);
 
-  private int lastEventTime = 0;
+  private long lastEventTime = 0;
 
   private RadioEvent lastEvent = RadioEvent.UNKNOWN;
 
@@ -155,7 +155,7 @@ public class SkyByteRadio extends Radio implements CustomDataRadio {
   private byte[] crossBufferedData = null;
 
   private TimeEvent receiveCrosslevelDataEvent = new TimeEvent(0) {
-    public void execute(int t) {
+    public void execute(long t) {
 
       if (crossBufferedData == null) {
         return;

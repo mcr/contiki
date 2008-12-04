@@ -103,7 +103,7 @@ public class MspStackWatcher extends VisPlugin {
     });
 
     // Create nfi's stack viewer
-    final StackUI stackUI = new StackUI(cpu, MspMote.NR_CYCLES_PER_MSEC);
+    final StackUI stackUI = new StackUI(cpu, (int)MspMote.NR_CYCLES_PER_MSEC);
 
     // Register as log listener
     /*if (logObserver == null && mspMote.getInterfaces().getLog() != null) {

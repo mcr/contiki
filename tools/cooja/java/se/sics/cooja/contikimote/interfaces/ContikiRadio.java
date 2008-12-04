@@ -121,11 +121,11 @@ public class ContikiRadio extends Radio implements ContikiMoteInterface, PolledA
 
   private boolean isInterfered = false;
 
-  private int transmissionEndTime = -1;
+  private long transmissionEndTime = -1;
 
   private RadioEvent lastEvent = RadioEvent.UNKNOWN;
 
-  private int lastEventTime = 0;
+  private long lastEventTime = 0;
 
   private int oldOutputPowerIndicator = -1;
 

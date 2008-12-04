@@ -258,7 +258,7 @@ public class RadioLogger extends VisPlugin {
 
         for (RadioConnection newConnection: newConnections) {
           Object[] data = new Object[3];
-          data[DATAPOS_TIME] = new Integer(simulation.getSimulationTime());
+          data[DATAPOS_TIME] = new Long(simulation.getSimulationTime());
           data[DATAPOS_CONNECTION] = newConnection;
 
           data[DATAPOS_PACKET] = newConnection.getSource().getLastPacketTransmitted();

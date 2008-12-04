@@ -80,8 +80,9 @@ public class ContikiClock extends Clock implements ContikiMoteInterface, PolledB
     return new String[]{"clock_interface"};
   }
 
-  public void setTime(int newTime) {
-    moteMem.setIntValueOf("simCurrentTime", newTime);
+  public void setTime(long newTime) {
+    /* TODO: check if this is correct even if newTime > MAX_INT */
+    moteMem.setIntValueOf("simCurrentTime", (int)newTime);
   }
 
   public void setDrift(int timeDrift) {
@@ -92,13 +93,13 @@ public class ContikiClock extends Clock implements ContikiMoteInterface, PolledB
     return timeDrift;
   }
 
-  public int getTime() {
+  public long getTime() {
     return moteMem.getIntValueOf("simCurrentTime");
   }
 
   public void doActionsBeforeTick() {
     /* Update time */
-    int moteTime = mote.getSimulation().getSimulationTime() + timeDrift;
+    long moteTime = mote.getSimulation().getSimulationTime() + timeDrift;
 
     if (moteTime > 0) {
       setTime(moteTime);

@@ -37,13 +37,13 @@ package se.sics.cooja;
 public class EventQueue {
 
   private TimeEvent first;
-  private int nextTime;
+  private long nextTime;
   private int eventCount = 0;
 
   public EventQueue() {
   }
 
-  public void addEvent(TimeEvent event, int time) {
+  public void addEvent(TimeEvent event, long time) {
     event.time = time;
     addEvent(event);
   }

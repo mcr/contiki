@@ -102,7 +102,7 @@ public class ContikiBeeper extends Beeper implements ContikiMoteInterface, Polle
   }
 
   private TimeEvent stopBeepEvent = new TimeEvent(0) {
-    public void execute(int t) {
+    public void execute(long t) {
       myEnergyConsumption = 0.0;
     }
   };
@@ -135,7 +135,7 @@ public class ContikiBeeper extends Beeper implements ContikiMoteInterface, Polle
           return;
         }
 
-        int currentTime = mote.getSimulation().getSimulationTime();
+        long currentTime = mote.getSimulation().getSimulationTime();
         statusLabel.setText("Last beep at time: " + currentTime);
 
         /* Beep on speakers */

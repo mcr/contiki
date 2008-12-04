@@ -85,7 +85,7 @@ public class ContikiButton extends Button implements ContikiMoteInterface {
   }
 
   private TimeEvent releaseButtonEvent = new TimeEvent(0) {
-    public void execute(int t) {
+    public void execute(long t) {
 
       /* Force mote awake when button is down */
       mote.setState(Mote.State.ACTIVE);

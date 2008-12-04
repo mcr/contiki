@@ -146,7 +146,7 @@ public class DummyMote implements Mote {
     this.mySim = simulation;
   }
 
-  public boolean tick(int simTime) {
+  public boolean tick(long simTime) {
 
     // Perform some dummy task
     if (myRandom.nextDouble() > 0.9) {

@@ -56,11 +56,11 @@ public class MspClock extends Clock {
     cpu = myMote.getCPU();
   }
 
-  public void setTime(int newTime) {
+  public void setTime(long newTime) {
     logger.fatal("Can't change emulated CPU time");
   }
 
-  public int getTime() {
+  public long getTime() {
     int time = (int) ((cpu.cycles + myMote.cycleDrift) / MspMote.NR_CYCLES_PER_MSEC);
     return time > 0 ? time : 0;
   }

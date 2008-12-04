@@ -57,7 +57,7 @@ public class MspIPAddress extends IPAddress {
     this.moteMem = (MspMoteMemory) mote.getMemory();
 
     TimeEvent updateWhenAddressReady = new TimeEvent(0) {
-      public void execute(int t) {
+      public void execute(long t) {
         if (getIPString().equals("0.0.0.0")) {
           MspIPAddress.this.mote.getSimulation().scheduleEvent(
               this,

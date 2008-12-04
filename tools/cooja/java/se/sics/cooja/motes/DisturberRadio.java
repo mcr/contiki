@@ -58,11 +58,11 @@ public class DisturberRadio extends Radio {
 
   private int distChannel = -1; // channel mote is disturbing
 
-  private int transEndTime = 0;
+  private long transEndTime = 0;
 
   private RadioEvent lastEvent = RadioEvent.UNKNOWN;
 
-  private int lastEventTime = 0;
+  private long lastEventTime = 0;
 
   public static int TRANSMISSION_INTERVAL = 100;
   public static int TRANSMISSION_DURATION = 98;
@@ -103,7 +103,7 @@ public class DisturberRadio extends Radio {
     return transmitting;
   }
 
-  public int getTransmissionEndTime() {
+  public long getTransmissionEndTime() {
     return transEndTime;
   }
 
@@ -152,7 +152,7 @@ public class DisturberRadio extends Radio {
   }
 
   public void doActionsBeforeTick() {
-    int currentTime = myMote.getSimulation().getSimulationTime();
+    long currentTime = myMote.getSimulation().getSimulationTime();
 
     if (!transmitting && currentTime % TRANSMISSION_INTERVAL == 0) {
       transmitting = true;

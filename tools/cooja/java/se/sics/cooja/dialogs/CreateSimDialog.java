@@ -127,7 +127,7 @@ public class CreateSimDialog extends JDialog {
     myDialog.delayTime.setValue(new Integer(simulationToConfigure.getDelayTime()));
 
     // Set simulation time
-    myDialog.simulationTime.setValue(new Integer(simulationToConfigure.getSimulationTime()));
+    myDialog.simulationTime.setValue(new Long(simulationToConfigure.getSimulationTime()));
 
     // Select radio medium
     if (simulationToConfigure.getRadioMedium() != null) {

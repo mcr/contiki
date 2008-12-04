@@ -179,7 +179,7 @@ public interface Mote {
    *          New simulation time
    * @return True is mote accepts another immediate tick
    */
-  public boolean tick(int simTime);
+  public boolean tick(long simTime);
 
   /**
    * Returns XML elements representing the current config of this mote. This is

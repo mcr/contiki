@@ -141,7 +141,7 @@ public class DisturberMote implements Mote {
     this.mySim = simulation;
   }
 
-  public boolean tick(int simTime) {
+  public boolean tick(long simTime) {
     myInterfaceHandler.doPassiveActionsBeforeTick();
     myInterfaceHandler.doActiveActionsBeforeTick();
     myInterfaceHandler.doActiveActionsAfterTick();

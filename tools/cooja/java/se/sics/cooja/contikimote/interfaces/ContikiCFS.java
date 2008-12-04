@@ -110,7 +110,7 @@ public class ContikiCFS extends MoteInterface implements ContikiMoteInterface, P
   }
 
   private TimeEvent doneEvent = new TimeEvent(0) {
-    public void execute(int t) {
+    public void execute(long t) {
       myEnergyConsumption = 0.0;
     }
   };
@@ -203,7 +203,7 @@ public class ContikiCFS extends MoteInterface implements ContikiMoteInterface, P
     Observer observer;
     this.addObserver(observer = new Observer() {
       public void update(Observable obs, Object obj) {
-        int currentTime = mote.getSimulation().getSimulationTime();
+        long currentTime = mote.getSimulation().getSimulationTime();
         lastTimeLabel.setText("Last change at time: " + currentTime);
         lastReadLabel.setText("Last change read bytes: " + getLastReadCount());
         lastWrittenLabel.setText("Last change wrote bytes: " + getLastWrittenCount());

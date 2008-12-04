@@ -151,7 +151,8 @@ public class SkySerial extends Log implements SerialPort, USARTListener {
   }
 
   private TimeEvent writeDataEvent = new TimeEvent(0) {
-    public void execute(int t) {
+    public void execute(long t) {
+      /* TODO Implement MSPSim callback - better timing */
       tryWriteNextByte();
       if (!incomingData.isEmpty()) {
         mote.getSimulation().scheduleEvent(this, t+1);

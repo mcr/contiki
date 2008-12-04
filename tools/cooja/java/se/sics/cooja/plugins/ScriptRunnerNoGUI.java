@@ -156,7 +156,7 @@ public class ScriptRunnerNoGUI implements Plugin {
 
       /* Create timeout event */
       sim.scheduleEvent(new TimeEvent(0) {
-        public void execute(int t) {
+        public void execute(long t) {
           try {
             logWriter.write("TEST TIMEOUT");
             logWriter.flush();

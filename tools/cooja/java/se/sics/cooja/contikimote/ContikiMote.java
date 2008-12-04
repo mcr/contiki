@@ -176,7 +176,7 @@ public class ContikiMote implements Mote {
    *
    * @param simTime Current simulation time
    */
-  public boolean tick(int simTime) {
+  public boolean tick(long simTime) {
     State currentState = getState();
 
     // If mote is dead, do nothing at all

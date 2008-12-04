@@ -70,7 +70,7 @@ public class TR1001Radio extends Radio implements USARTListener, CustomDataRadio
 
   private RadioEvent lastEvent = RadioEvent.UNKNOWN;
 
-  private int lastEventTime = 0;
+  private long lastEventTime = 0;
 
   private USART radioUSART = null;
 
@@ -379,7 +379,7 @@ public class TR1001Radio extends Radio implements USARTListener, CustomDataRadio
   }
 
   private TimeEvent followupTransmissionEvent = new TimeEvent(0) {
-    public void execute(int t) {
+    public void execute(long t) {
 
       if (isTransmitting()) {
         ticksSinceLastSend++;

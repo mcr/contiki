@@ -49,12 +49,12 @@ public abstract class Clock extends MoteInterface {
    *
    * @param newTime Time
    */
-  public abstract void setTime(int newTime);
+  public abstract void setTime(long newTime);
 
   /**
    * @return Current time
    */
-  public abstract int getTime();
+  public abstract long getTime();
 
   /**
    * Set time drift.

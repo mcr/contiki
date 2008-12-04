@@ -59,10 +59,10 @@ public class ApplicationRadio extends Radio implements PolledBeforeActiveTicks {
   private boolean isReceiving = false;
   private boolean isInterfered = false;
 
-  private int transmissionEndTime = 0;
+  private long transmissionEndTime = 0;
 
   private RadioEvent lastEvent = RadioEvent.UNKNOWN;
-  private int lastEventTime = 0;
+  private long lastEventTime = 0;
 
   private boolean outPacketExists = false;
   private RadioPacket outPacket = null;
@@ -126,7 +126,7 @@ public class ApplicationRadio extends Radio implements PolledBeforeActiveTicks {
     return isTransmitting;
   }
 
-  public int getTransmissionEndTime() {
+  public long getTransmissionEndTime() {
     return transmissionEndTime;
   }
 
@@ -217,7 +217,7 @@ public class ApplicationRadio extends Radio implements PolledBeforeActiveTicks {
   }
 
   public void doActionsBeforeTick() {
-    int currentTime = myMote.getSimulation().getSimulationTime();
+    long currentTime = myMote.getSimulation().getSimulationTime();
 
     if (outPacketExists) {
       outPacketExists = false;
