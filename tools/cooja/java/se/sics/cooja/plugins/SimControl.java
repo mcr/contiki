@@ -153,8 +153,8 @@ public class SimControl extends VisPlugin {
     stopButton = button;
     smallPanel.add(button);
 
-    button = new JButton("Handle single event");
-    button.setActionCommand("single_event");
+    button = new JButton("Step millisecond");
+    button.setActionCommand("single_ms");
     button.addActionListener(myEventHandler);
     smallPanel.add(button);
 
@@ -293,7 +293,7 @@ public class SimControl extends VisPlugin {
         if (simulation.isRunning()) {
           simulation.stopSimulation();
         }
-      } else if (e.getActionCommand().equals("single_event")) {
+      } else if (e.getActionCommand().equals("single_ms")) {
         simulation.tickSimulation();
       } else {
         logger.debug("Unhandled action: " + e.getActionCommand());
