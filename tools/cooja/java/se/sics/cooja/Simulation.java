@@ -275,7 +275,9 @@ public class Simulation extends Observable implements Runnable {
       /* Wait until simulation stops */
       if (Thread.currentThread() != thread) {
         try {
-          thread.join();
+          if (thread != null) {
+            thread.join();
+          }
         } catch (InterruptedException e) {
         }
       }
