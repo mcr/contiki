@@ -1997,6 +1997,18 @@ CCIF extern uip_lladdr_t uip_lladdr;
    (((a)->u8[13]) == (m)->addr[5]) &&            \
    (((a)->u8[14]) == (m)->addr[6]) &&            \
    (((a)->u8[15]) == (m)->addr[7]))
+#else
+
+#define uip_is_addr_mac_addr_based(a, m) \
+  ((((a)->u8[8])  == (((m)->addr[0]) | 0x02)) &&   \
+   (((a)->u8[9])  == (m)->addr[1]) &&            \
+   (((a)->u8[10]) == (m)->addr[2]) &&            \
+   (((a)->u8[11]) == 0xff) &&            \
+   (((a)->u8[12]) == 0xfe) &&            \
+   (((a)->u8[13]) == (m)->addr[3]) &&            \
+   (((a)->u8[14]) == (m)->addr[4]) &&            \
+   (((a)->u8[15]) == (m)->addr[5]))
+   
 #endif /*UIP_CONF_LL_802154*/
 
 /**

@@ -309,6 +309,8 @@ void rx_frame_parse(hal_rx_frame_t *rx_frame, parsed_frame_t *pf)
 		if (!fcf->panIdCompression){
 			pf->src_pid = (uint16_t *)p;
 			p += 2;
+		} else {
+			pf->src_pid = pf->dest_pid;
 		}
 		/* Source address */
 		pf->src_addr = (addr_t *)p;
