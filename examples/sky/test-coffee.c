@@ -54,7 +54,33 @@ AUTOSTART_PROCESSES(&testcoffee_process);
 
 /*---------------------------------------------------------------------------*/
 static int
-run_consistency_test(void)
+coffee_gc_test(void)
+{
+  int i;
+
+  cfs_remove("alpha");
+  cfs_remove("beta");
+
+
+  for (i = 0; i < 100; i++) {
+    if (i & 1) {
+      if(cfs_coffee_reserve("alpha", random_rand() & 0xffff) < 0) {
+	return -i;
+      }
+      cfs_remove("beta");
+    } else {
+      if(cfs_coffee_reserve("beta", 93171) < 0) {
+	return -1;
+      }
+      cfs_remove("alpha");
+    }
+  }
+
+  return 0;
+}
+/*---------------------------------------------------------------------------*/
+static int
+coffee_file_test(void)
 {
   int error;
   int wfd, rfd, afd;
@@ -280,7 +306,8 @@ PROCESS_THREAD(testcoffee_process, ev, data)
 {
   PROCESS_BEGIN();
 
-  printf("Coffee consistency test: %d\n", run_consistency_test());
+  printf("Coffee consistency test: %d\n", coffee_file_test());
+  printf("Coffee garbage collection test: %d\n", coffee_gc_test());
 
   PROCESS_END();
 }
