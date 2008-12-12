@@ -306,7 +306,7 @@ PROCESS_THREAD(testcoffee_process, ev, data)
 {
   PROCESS_BEGIN();
 
-  printf("Coffee consistency test: %d\n", coffee_file_test());
+  printf("Coffee file test: %d\n", coffee_file_test());
   printf("Coffee garbage collection test: %d\n", coffee_gc_test());
 
   PROCESS_END();
