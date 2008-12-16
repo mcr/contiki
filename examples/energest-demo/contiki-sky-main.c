@@ -104,7 +104,8 @@ static void
 set_rime_addr(void)
 {
   rimeaddr_t addr;
-  addr.u16[0] = node_id;
+  addr.u8[0] = node_id & 0xff;
+  addr.u8[1] = node_id >> 8;
   rimeaddr_set_node_addr(&addr);
 }
 /*---------------------------------------------------------------------------*/
