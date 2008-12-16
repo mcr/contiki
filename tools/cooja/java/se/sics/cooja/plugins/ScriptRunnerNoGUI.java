@@ -38,6 +38,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
+import javax.swing.JInternalFrame;
 import org.apache.log4j.Logger;
 import org.jdom.Element;
 
@@ -77,6 +78,10 @@ public class ScriptRunnerNoGUI implements Plugin {
       } catch (IOException e) {
       }
     }
+  }
+
+  public JInternalFrame getGUI() {
+    return null;
   }
 
   public boolean activateTest(File script, File log) {
