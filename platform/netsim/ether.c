@@ -499,8 +499,8 @@ ether_tick(void)
   }
 
   /* Remove all packets from the active packets list. */
-  for(p = list_head(active_packets); p != NULL; p = list_pop(active_packets)) {
-    memb_free(&packets, (void *)p);
+  while((p = list_pop(active_packets)) != NULL) {
+    memb_free(&packets, (void *) p);
   }
 
   ++timer;

@@ -202,20 +202,22 @@ list_chop(list_t list)
  * Remove the first object on a list.
  *
  * This function removes the first object on the list and returns a
- * pointer to the list.
+ * pointer to it.
  *
  * \param list The list.
- * \return The new head of the list.
+ * \return Pointer to the removed element of list.
  */
 /*---------------------------------------------------------------------------*/
 void *
 list_pop(list_t list)
 {
+  struct list *l;
+  l = *list;
   if(*list != NULL) {
     *list = ((struct list *)*list)->next;
   }
 
-  return *list;
+  return l;
 }
 /*---------------------------------------------------------------------------*/
 /**
