@@ -124,7 +124,7 @@ import se.sics.cooja.dialogs.MessageList;
 import se.sics.cooja.dialogs.ProjectDirectoriesDialog;
 import se.sics.cooja.plugins.LogListener;
 import se.sics.cooja.plugins.MoteTypeInformation;
-import se.sics.cooja.plugins.ScriptRunnerNoGUI;
+import se.sics.cooja.plugins.ScriptRunner;
 import se.sics.cooja.plugins.SimControl;
 import se.sics.cooja.plugins.SimInformation;
 import se.sics.cooja.plugins.VisState;
@@ -3268,8 +3268,8 @@ public class GUI extends Observable {
 
           if (scriptFile != null && configFile != null) {
             /* Load and start script plugin (no-GUI version) */
-            gui.registerPlugin(ScriptRunnerNoGUI.class, false);
-            ScriptRunnerNoGUI scriptPlugin = (ScriptRunnerNoGUI) gui.startPlugin(ScriptRunnerNoGUI.class, gui, null, null);
+            ScriptRunner scriptPlugin =
+              (ScriptRunner) gui.startPlugin(ScriptRunner.class, gui, null, null);
 
             /* Activate test */
             scriptPlugin.activateTest(configFile, scriptFile, logFile);
