@@ -364,12 +364,15 @@ public class GUI extends Observable {
         reparseProjectConfig();
       } catch (ParseProjectsException e) {
         logger.fatal("Error when loading project directories: " + e.getMessage());
-        e.printStackTrace();
-        if (myDesktopPane != null) {
+        if (isVisualized()) {
           JOptionPane.showMessageDialog(GUI.getTopParentContainer(),
               "Loading project directories failed.\nStack trace printed to console.",
               "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+          logger.fatal("Loading project directories failed");
+          logger.fatal("Stack trace:");
         }
+        e.printStackTrace();
       }
     }
 
