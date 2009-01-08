@@ -126,7 +126,7 @@ public class Simulation extends Observable implements Runnable {
     if (Thread.currentThread() == simulationThread) {
       eventQueue.addEvent(e, time);
     } else {
-      eventQueue.addPendingEvent(e, time);
+      eventQueue.addEventUnsorted(e, time);
     }
   }
 
