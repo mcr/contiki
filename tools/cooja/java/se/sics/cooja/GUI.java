@@ -363,11 +363,13 @@ public class GUI extends Observable {
       try {
         reparseProjectConfig();
       } catch (ParseProjectsException e) {
-        logger.fatal("Error when loading project directories: " + e.getMessage());
+        logger.fatal("Error when loading projects: " + e.getMessage());
         if (isVisualized()) {
           JOptionPane.showMessageDialog(GUI.getTopParentContainer(),
-              "Loading project directories failed.\nStack trace printed to console.",
-              "Error", JOptionPane.ERROR_MESSAGE);
+              "Default projects could not load, try to reconfigure project directories:" +
+              "\n\tMenu->Settings->Manage project directories" +
+              "\n\nSee console for stack trace with more information.",
+              "Project loading error", JOptionPane.ERROR_MESSAGE);
         } else {
           logger.fatal("Loading project directories failed");
           logger.fatal("Stack trace:");
@@ -845,7 +847,9 @@ public class GUI extends Observable {
   private static void configureFrame(final GUI gui, boolean createSimDialog) {
 
     // Create and set up the window.
-    frame = new JFrame("COOJA Simulator");
+    if (frame == null) {
+      frame = new JFrame("COOJA Simulator");
+    }
     frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
     // Add menu bar
@@ -3322,6 +3326,7 @@ public class GUI extends Observable {
         public void run() {
           JDesktopPane desktop = new JDesktopPane();
           desktop.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
+          frame = new JFrame("COOJA Simulator");
           GUI gui = new GUI(desktop);
           configureFrame(gui, false);
         }
