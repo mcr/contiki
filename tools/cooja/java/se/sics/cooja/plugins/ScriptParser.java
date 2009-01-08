@@ -59,11 +59,11 @@ public class ScriptParser {
 
     code = parseTimeoutWithAction(code);
 
+    code = replaceYieldThenWaitUntils(code);
+
     code = replaceYields(code);
 
     code = replaceWaitUntils(code);
-
-    code = replaceYieldThenWaitsUntils(code);
 
     this.code = code;
   }
@@ -179,7 +179,7 @@ public class ScriptParser {
     return pattern.matcher(code).replaceAll("SCRIPT_SWITCH()");
   }
 
-  private String replaceYieldThenWaitsUntils(String code) throws ScriptSyntaxErrorException {
+  private String replaceYieldThenWaitUntils(String code) throws ScriptSyntaxErrorException {
     Pattern pattern = Pattern.compile(
         "YIELD_THEN_WAIT_UNTIL\\(" +
         "(.*)" /* expression */ +
@@ -189,9 +189,7 @@ public class ScriptParser {
 
     while (matcher.find()) {
       code = matcher.replaceFirst(
-          "do { " +
-          " SCRIPT_SWITCH();" +
-          "} while (!(" + matcher.group(1) + "))");
+          "YIELD(); WAIT_UNTIL(" + matcher.group(1) + ")");
       matcher.reset(code);
     }
 
@@ -209,7 +207,7 @@ public class ScriptParser {
     while (matcher.find()) {
       code = matcher.replaceFirst(
           "while (!(" + matcher.group(1) + ")) { " +
-          " SCRIPT_SWITCH()" +
+          " SCRIPT_SWITCH(); " +
       "}");
       matcher.reset(code);
     }
