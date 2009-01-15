@@ -263,6 +263,9 @@ public class ScriptParser {
     " msg = new java.lang.String(msg); " +
     " node.setMoteMsg(mote, msg); " +
     "};\n" +
+    "function write(mote,msg) { " +
+    " mote.getInterfaces().getLog().writeString(msg); " +
+    "};\n" +
     "function run() { " +
     "SEMAPHORE_SIM.acquire(); " +
     "SEMAPHORE_SCRIPT.acquire(); " + /* STARTUP BLOCKS HERE! */
