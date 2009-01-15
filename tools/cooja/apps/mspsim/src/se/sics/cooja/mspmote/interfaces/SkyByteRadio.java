@@ -95,7 +95,7 @@ public class SkyByteRadio extends Radio implements CustomDataRadio {
     cc2420.setRFListener(new RFListener() {
       int len = 0;
       int expLen = 0;
-      byte[] buffer = new byte[127 + 5];
+      byte[] buffer = new byte[127 + 15];
       public void receivedByte(byte data) {
         if (len == 0) {
           lastEventTime = SkyByteRadio.this.mote.getSimulation().getSimulationTime();
