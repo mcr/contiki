@@ -66,6 +66,13 @@
 
 struct multihop_conn;
 
+#define MULTIHOP_ATTRIBUTES   { RIMEBUF_ADDR_ESENDER, RIMEBUF_ADDRSIZE }, \
+                              { RIMEBUF_ADDR_ERECEIVER, RIMEBUF_ADDRSIZE }, \
+                              { RIMEBUF_ATTR_TTL, RIMEBUF_ATTR_BIT * 5 }, \
+                                UNICAST_ATTRIBUTES
+
+
+
 struct multihop_callbacks {
   void (* recv)(struct multihop_conn *ptr,
 		rimeaddr_t *sender,

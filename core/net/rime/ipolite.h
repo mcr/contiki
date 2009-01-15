@@ -65,6 +65,8 @@
 
 struct ipolite_conn;
 
+#define IPOLITE_ATTRIBUTES IBC_ATTRIBUTES
+
 struct ipolite_callbacks {
   void (* recv)(struct ipolite_conn *c, rimeaddr_t *from);
   void (* sent)(struct ipolite_conn *c);

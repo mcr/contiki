@@ -65,6 +65,8 @@
 
 struct polite_conn;
 
+#define POLITE_ATTRIBUTES ABC_ATTRIBUTES
+
 struct polite_callbacks {
   void (* recv)(struct polite_conn *c);
   void (* sent)(struct polite_conn *c);
