@@ -39,6 +39,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.*;
 import javax.swing.*;
+
 import org.apache.log4j.Logger;
 import org.jdom.Element;
 
@@ -48,6 +49,7 @@ import se.sics.mspsim.core.*;
 import se.sics.cooja.interfaces.Log;
 import se.sics.cooja.interfaces.SerialPort;
 import se.sics.cooja.mspmote.SkyMote;
+import se.sics.cooja.plugins.SLIP;
 
 /**
  * @author Fredrik Österlind
@@ -63,6 +65,7 @@ public class SkySerial extends Log implements SerialPort, USARTListener {
   private JTextArea logTextPane = null;
   private USART usart;
   private JTextField commandField;
+  private JCheckBox slipCheckbox;
   private String[] history = new String[50];
   private int historyPos = 0;
   private int historyCount = 0;
@@ -186,16 +189,23 @@ public class SkySerial extends Log implements SerialPort, USARTListener {
               historyCount = (historyCount + 1) % history.length;
             }
             historyPos = historyCount;
-            addToLog("> " + command);
-            writeString(command);
+
+            if (slipCheckbox.isSelected()) {
+              addToLog("SLIP> " + command);
+              command += "\n";
+              writeArray(SLIP.asSlip(command.getBytes()));
+            } else {
+              addToLog("> " + command);
+              writeString(command);
+            }
             commandField.setText("");
           } catch (Exception ex) {
             System.err.println("could not send '" + command + "':");
             ex.printStackTrace();
             JOptionPane.showMessageDialog(logTextPane,
-                                          "could not send '" + command + "':\n"
-                                          + ex, "ERROR",
-                                          JOptionPane.ERROR_MESSAGE);
+                "could not send '" + command + "':\n"
+                + ex, "ERROR",
+                JOptionPane.ERROR_MESSAGE);
           }
         } else {
           commandField.getToolkit().beep();
@@ -244,8 +254,12 @@ public class SkySerial extends Log implements SerialPort, USARTListener {
 
     });
 
+    slipCheckbox = new JCheckBox("", false);
+    slipCheckbox.setToolTipText("Wrap data as SLIP");
+
     commandField.addActionListener(action);
     sendButton.addActionListener(action);
+    sendPane.add(BorderLayout.WEST, slipCheckbox);
     sendPane.add(BorderLayout.CENTER, commandField);
     sendPane.add(BorderLayout.EAST, sendButton);
 
