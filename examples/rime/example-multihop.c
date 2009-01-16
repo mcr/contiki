@@ -51,7 +51,8 @@ PROCESS(example_multihop_process, "multihop example");
 AUTOSTART_PROCESSES(&example_multihop_process);
 /*---------------------------------------------------------------------------*/
 static void
-recv(struct multihop_conn *c, rimeaddr_t *sender)
+recv(struct multihop_conn *c, rimeaddr_t *sender, rimeaddr_t *prevhop,
+     uint8_t hops)
 {
   printf("multihop message received '%s'\n", (char *)rimebuf_dataptr());
 }
