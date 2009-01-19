@@ -86,7 +86,9 @@ static struct uip_fw_netif meshif =
 #endif /* WITH_UIP */
 
 #define UIP_OVER_MESH_CHANNEL 8
+#if WITH_UIP
 static uint8_t is_gateway;
+#endif /* WITH_UIP */
 
 #ifdef EXPERIMENT_SETUP
 #include "experiment-setup.h"
