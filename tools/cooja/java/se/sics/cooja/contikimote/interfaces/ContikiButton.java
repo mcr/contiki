@@ -92,7 +92,7 @@ public class ContikiButton extends Button implements ContikiMoteInterface {
 
       /* Wait until button change is handled by Contiki */
       if (moteMem.getByteValueOf("simButtonChanged") == 0) {
-        logger.info("Releasing button at: " + t);
+        /*logger.info("Releasing button at: " + t);*/
         releaseButton();
       } else {
         /* Reschedule button release */
