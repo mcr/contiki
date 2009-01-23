@@ -245,6 +245,7 @@ public abstract class MspMote implements Mote {
     MapEntry[] allEntries = map.getAllEntries();
     myMemory = new MspMoteMemory(allEntries, myCpu);
 
+    heapStartAddress = map.heapStartAddress;
     myCpu.reset();
   }
 
