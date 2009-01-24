@@ -121,7 +121,7 @@ timer_restart(struct timer *t)
 int
 timer_expired(struct timer *t)
 {
-  return CLOCK_LT(clock_time(), t->start + t->interval);
+  return (clock_time_t)(clock_time() - t->start) >= (clock_time_t)t->interval;
 }
 /*---------------------------------------------------------------------------*/
 /**
