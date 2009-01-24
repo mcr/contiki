@@ -68,7 +68,7 @@
  * clock time values.
  *
  */
-#define CLOCK_LT(a, b) ((clock_time_t)((a) - (b)))
+#define CLOCK_LT(a, b) ((clock_time_t)((a) - (b)) < 0)
 
 /**
  * Initialize the clock library.
