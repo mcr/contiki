@@ -63,7 +63,6 @@
 
 
 SENSORS(&button_sensor);
-
 #ifndef WITH_UIP
 #define WITH_UIP 0
 #endif
@@ -326,7 +325,8 @@ main(int argc, char **argv)
      * Idle processing.
      */
     int s = splhigh();		/* Disable interrupts. */
-    if(process_nevents() != 0) {
+    /* uart1_active is for avoiding LPM3 when still sending or receiving */
+    if(process_nevents() != 0 || uart1_active()) {
       splx(s);			/* Re-enable interrupts. */
     } else {
       static unsigned long irq_energest = 0;
