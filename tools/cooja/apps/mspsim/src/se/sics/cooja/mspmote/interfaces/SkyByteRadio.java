@@ -240,12 +240,12 @@ public class SkyByteRadio extends Radio implements CustomDataRadio {
   }
 
   public int getChannel() {
-    /* TODO XXX Enable CC2420 channel selection (when implemented) */
-    //return cc2420.getActiveChannel();
-    return 26;
+    cc2420.updateActiveFrequency();
+    return cc2420.getActiveChannel();
   }
 
   public int getFrequency() {
+    cc2420.updateActiveFrequency();
     return cc2420.getActiveFrequency();
   }
 
