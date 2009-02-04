@@ -101,6 +101,7 @@ struct shell_input {
 
 #include "shell-blink.h"
 #include "shell-coffee.h"
+#include "shell-checkpoint.h"
 #include "shell-exec.h"
 #include "shell-file.h"
 #include "shell-httpd.h"
