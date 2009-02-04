@@ -49,7 +49,17 @@ typedef uint16_t   u16_t;
 typedef uint32_t   u32_t;
 typedef  int32_t   s32_t;
 
+/* default DCOSYNCH Period is 30 seconds */
+#ifdef DCOSYNCH_CONF_PERIOD
+#define DCOSYNCH_PERIOD DCOSYNCH_CONF_PERIOD
+#else
+#define DCOSYNCH_PERIOD 30
+#endif
+
 void msp430_cpu_init(void);	/* Rename to cpu_init() later! */
+void msp430_sync_dco(void);
+
+
 #define cpu_init() msp430_cpu_init()
 
 void   *sbrk(int);
