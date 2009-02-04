@@ -9,6 +9,10 @@
 #define SHELL_VARS_CONF_RAM_BEGIN 0x1100
 #define SHELL_VARS_CONF_RAM_END 0x2000
 
+/* DCO speed resynchronization for more robust UART, etc. */
+#define DCOSYNCH_CONF_ENABLED 1
+#define DCOSYNCH_CONF_PERIOD 30
+
 #define TIMESYNCH_CONF_ENABLED 1
 #define CC2420_CONF_TIMESTAMPS 1
 
