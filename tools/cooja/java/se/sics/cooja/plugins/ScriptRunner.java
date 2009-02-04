@@ -610,6 +610,7 @@ public class ScriptRunner implements Plugin {
 
       /* Prepare test log */
       logWriter = new BufferedWriter(new FileWriter(log));
+      logWriter.write("[" + log.getName() + "]\n\n");
 
       /* Create script engine */
       engine = new LogScriptEngine(gui);
