@@ -78,7 +78,7 @@ PROCESS_THREAD(example_abc_process, ev, data)
     abc_send(&abc);
     printf("abc message sent\n");
 
-    etimer_restart(&et);
+    etimer_reset(&et);
   }
 
   PROCESS_END();
