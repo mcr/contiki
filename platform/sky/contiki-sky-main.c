@@ -55,6 +55,8 @@
 
 #include "net/rime.h"
 
+#include "lib/rand.h"
+
 #include "node-id.h"
 #include "cfs-coffee-arch.h"
 #include "cfs/cfs-coffee.h"
@@ -236,6 +238,8 @@ main(int argc, char **argv)
 #else
   rime_init(xmac_init(&cc2420_driver));
 #endif
+
+  srand(ds2411_id[0] + node_id);
 
   printf(CONTIKI_VERSION_STRING " started. ");
   if(node_id > 0) {
