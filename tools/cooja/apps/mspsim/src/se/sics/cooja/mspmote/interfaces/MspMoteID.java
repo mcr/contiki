@@ -161,6 +161,10 @@ public class MspMoteID extends MoteID {
   }
 
   public void setMoteID(int newID) {
+    /* tell mote instance */
+    if (moteID != newID) {
+      mote.idUpdated(newID);
+    }
     moteID = newID;
 
     if (location == ID_LOCATION.VARIABLE_NODE_ID) {

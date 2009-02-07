@@ -120,6 +120,10 @@ public class SkyMote extends MspMote {
     return moteInterfaceHandler;
   }
 
+  public void idUpdated(int newID) {
+    skyNode.setNodeID(newID);
+  }
+  
   public String toString() {
     MoteID moteID = getInterfaces() != null ? getInterfaces().getMoteID() : null;
     if (moteID != null) {

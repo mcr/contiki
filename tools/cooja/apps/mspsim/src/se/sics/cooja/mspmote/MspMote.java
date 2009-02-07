@@ -257,6 +257,10 @@ public abstract class MspMote implements Mote {
     return Mote.State.ACTIVE;
   }
 
+  /* called when moteID is updated */
+  public void idUpdated(int newID) {
+  }
+  
   public MoteType getType() {
     return myMoteType;
   }
