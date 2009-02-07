@@ -336,7 +336,7 @@ send_packet(void)
       TIMETABLE_TIMESTAMP(xmac_timetable, "send strobe");
     }
 #endif
-    if(is_broadcast) {
+    if(0/*is_broadcast*/) {
       /* If we are sending a broadcast, we don't send strobes, we
 	 simply send the data packet repetedly */
       radio->send(rimebuf_hdrptr(), rimebuf_totlen());
