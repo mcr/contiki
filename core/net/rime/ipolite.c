@@ -45,7 +45,7 @@
 
 #include "net/rime.h"
 #include "net/rime/ipolite.h"
-#include "lib/random.h"
+#include "lib/rand.h"
 
 #include <string.h>
 
@@ -153,7 +153,7 @@ ipolite_send(struct ipolite_conn *c, clock_time_t interval, uint8_t hdrsize)
     c->q = queuebuf_new_from_rimebuf();
     if(c->q != NULL) {
       ctimer_set(&c->t,
-		 interval / 2 + (random_rand() % (interval / 2)),
+		 interval / 2 + (rand() % (interval / 2)),
 		 send, c);
       return 1;
     }
