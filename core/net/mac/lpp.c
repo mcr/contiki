@@ -56,6 +56,7 @@
 #include "net/mac/mac.h"
 #include "net/mac/lpp.h"
 #include "net/rime/rimebuf.h"
+#include "net/rime/announcement.h"
 
 #include <stdlib.h>
 
