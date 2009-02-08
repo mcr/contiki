@@ -945,7 +945,12 @@ public class GUI extends Observable {
 
     /* Nimbus */
     try {
-      UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+      String osName = System.getProperty("os.name").toLowerCase();
+      if (osName.startsWith("linux")) {
+        UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+      } else {
+        UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+      }
       return;
     } catch (Exception e) {
     }
