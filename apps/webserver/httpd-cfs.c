@@ -227,7 +227,7 @@ httpd_appcall(void *state)
         webserver_log_file(&uip_conn->ripaddr, "reset (timeout)");
       }
     } else {
-      timer_reset(&s->timer);
+      timer_restart(&s->timer);
     }
     handle_connection(s);
   } else {
