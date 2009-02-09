@@ -46,6 +46,7 @@
 #ifndef __RIME_H__
 #define __RIME_H__
 
+#include "net/rime/announcement.h"
 #include "net/rime/collect.h"
 #include "net/rime/ctimer.h"
 #include "net/rime/ipolite.h"
@@ -54,6 +55,7 @@
 #include "net/rime/neighbor-discovery.h"
 #include "net/rime/neighbor.h"
 #include "net/rime/netflood.h"
+#include "net/rime/polite-announcement.h"
 #include "net/rime/polite.h"
 #include "net/rime/queuebuf.h"
 #include "net/rime/rimeaddr.h"
@@ -62,8 +64,8 @@
 #include "net/rime/rmh.h"
 #include "net/rime/route-discovery.h"
 #include "net/rime/route.h"
-#include "net/rime/runicast.h"
 #include "net/rime/rucb.h"
+#include "net/rime/runicast.h"
 #include "net/rime/timesynch.h"
 #include "net/rime/trickle.h"
 
