@@ -47,6 +47,8 @@
 #include "net/rime/chameleon.h"
 #include "net/rime/neighbor.h"
 #include "net/rime/route.h"
+#include "net/rime/announcement.h"
+#include "net/rime/polite-announcement.h"
 #include "net/mac/mac.h"
 
 #include "lib/list.h"
@@ -92,6 +94,7 @@ rime_init(const struct mac_driver *m)
   route_init();
   rimebuf_clear();
   neighbor_init();
+  announcement_init();
   rime_mac = m;
   rime_mac->set_receive_function(input);
 
