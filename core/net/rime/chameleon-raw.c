@@ -74,8 +74,7 @@ input(void)
     PRINTF("chameleon-raw: input: channel %d not found\n", hdr->channel);
     return NULL;
   }
-  
-  rimebuf_attr_clear();
+
   hdrptr = rimebuf_dataptr();
   rimebuf_hdrreduce(c->hdrsize);
   byteptr = bitptr = 0;

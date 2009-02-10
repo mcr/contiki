@@ -295,7 +295,6 @@ unpack_header(void)
     return NULL;
   }
 
-  rimebuf_attr_clear();
   hdrptr = rimebuf_dataptr();
   hdrbytesize = c->hdrsize / 8 + ((c->hdrsize & 7) == 0? 0: 1);
   rimebuf_hdrreduce(hdrbytesize);
