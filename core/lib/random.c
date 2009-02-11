@@ -31,42 +31,21 @@
  * @(#)$Id$
  */
 
-/*
-  From:
-  
-   D. Seetharam and S. Rhee, ``An Efficient Random Number Generator
-   for Low-Power Sensor Networks'' First IEEE Workshop on Embedded
-   Networked Sensors (EmNets-I), November 2004.
-   
-   http://www.dseetharam.org/papers/emnets.pdf
-*/
 
 #include "lib/random.h"
+#include "lib/rand.h"
 #include "sys/clock.h"
 
-static clock_time_t time;
-
-static unsigned short key;
-
+/*---------------------------------------------------------------------------*/
 void
 random_init(unsigned short seed)
 {
-  key = seed;
+  srand(seed);
 }
-
+/*---------------------------------------------------------------------------*/
 unsigned short
 random_rand(void)
 {
-  unsigned short rv, tv;
-
-  rv = tv = 0;
-
-  tv = (unsigned short)(time + clock_time());
-  rv = tv ^ key;
-
-  key = ~tv + 4711;
-  tv = ~rv;
-  time = tv;
-  
-  return rv;
+  return (unsigned short)rand();
 }
+/*---------------------------------------------------------------------------*/

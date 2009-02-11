@@ -36,6 +36,8 @@
 #ifndef RAND_H
 #define RAND_H
 
+#include "sys/cc.h"
+
 #undef RAND_MAX
 #define RAND_MAX 0x7fff
 
