@@ -44,7 +44,7 @@
  */
 
 #include "net/rime/netflood.h"
-#include "lib/rand.h"
+
 #include <string.h>
 
 #define HOPS_MAX 16

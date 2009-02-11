@@ -45,7 +45,7 @@
 
 #include "net/rime.h"
 #include "net/rime/polite.h"
-#include "lib/rand.h"
+#include "lib/random.h"
 
 #include <string.h>
 
@@ -128,7 +128,7 @@ polite_send(struct polite_conn *c, clock_time_t interval, uint8_t hdrsize)
   c->hdrsize = hdrsize;
   c->q = queuebuf_new_from_rimebuf();
   if(c->q != NULL) {
-    ctimer_set(&c->t, interval / 2 + (rand() % (interval / 2)), send, c);
+    ctimer_set(&c->t, interval / 2 + (random_rand() % (interval / 2)), send, c);
     return 1;
   }
   return 0;

@@ -79,7 +79,7 @@ PROCESS_THREAD(example_collect_process, ev, data)
     /* Send a packet every 16 seconds; first wait 8 seconds, than a
        random time between 0 and 8 seconds. */
 
-    etimer_set(&et, CLOCK_SECOND * 16 + rand() % (CLOCK_SECOND * 16));
+    etimer_set(&et, CLOCK_SECOND * 16 + random_rand() % (CLOCK_SECOND * 16));
     PROCESS_WAIT_EVENT();
 
     if(etimer_expired(&et)) {

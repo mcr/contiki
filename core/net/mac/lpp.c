@@ -196,7 +196,7 @@ dutycycle(void *ptr)
       /* There is a bit of randomness here right now to avoid collisions
 	 due to synchronization effects. Not sure how needed it is
 	 though. XXX */
-	ctimer_set(t, OFF_TIME / 2 + (rand() % (OFF_TIME / 2)),
+	ctimer_set(t, OFF_TIME / 2 + (random_rand() % (OFF_TIME / 2)),
 		   (void (*)(void *))dutycycle, t);
 	PT_YIELD(&pt);
       } else {
