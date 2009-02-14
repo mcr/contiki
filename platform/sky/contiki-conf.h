@@ -4,6 +4,9 @@
 #ifndef CONTIKI_CONF_H
 #define CONTIKI_CONF_H
 
+#define XMAC_CONF_ANNOUNCEMENTS 1
+#define RIME_CONF_NO_POLITE_ANNOUCEMENTS 1
+
 #define RIMEBUF_CONF_ATTRS_INLINE 1
 
 #define SHELL_VARS_CONF_RAM_BEGIN 0x1100
@@ -220,6 +223,11 @@ typedef unsigned long off_t;
 
 #define SPI_ENABLE()    ( P4OUT &= ~BV(CSN) ) /* ENABLE CSn (active low) */
 #define SPI_DISABLE()   ( P4OUT |=  BV(CSN) ) /* DISABLE CSn (active low) */
+
+#ifdef PROJECT_CONF_H
+#include PROJECT_CONF_H
+#endif /* PROJECT_CONF_H */
+
 
 
 #endif /* CONTIKI_CONF_H */
