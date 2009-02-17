@@ -500,8 +500,11 @@ public abstract class MspMoteType implements MoteType {
 
       try {
         logger.info("Compilation command: " + command);
-        compileProcess = Runtime.getRuntime().exec(command, null,
-            parentDirectory);
+        compileProcess = Runtime.getRuntime().exec(
+            new String[] {"bash", "-c", command},
+            null,
+            parentDirectory
+        );
 
         final BufferedReader processNormal = new BufferedReader(
             new InputStreamReader(compileProcess.getInputStream()));
