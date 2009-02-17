@@ -81,11 +81,11 @@ typedef uip_ip4addr_t uip_ipaddr_t;
 
 /*---------------------------------------------------------------------------*/
 
-/** \brief 64 bit 802.15.4 address */
+/** \brief 16 bit 802.15.4 address */
 struct uip_802154_shortaddr {
   u8_t addr[2];
 };
-/** \brief 16 bit 802.15.4 address */
+/** \brief 64 bit 802.15.4 address */
 struct uip_802154_longaddr {
   u8_t addr[8];
 };
