@@ -75,6 +75,7 @@ struct runicast_conn {
   struct stunicast_conn c;
   const struct runicast_callbacks *u;
   uint8_t sndnxt;
+  uint8_t lastrecv;
   uint8_t rxmit;
   uint8_t max_rxmit;
 };
