@@ -68,7 +68,7 @@ public class DummyMote implements Mote {
   private MoteInterfaceHandler myInterfaceHandler = null;
   private Simulation mySim = null;
 
-  private Random myRandom = new Random();
+  private Random random = null;
 
   /**
    * Creates a new uninitialized dummy mote.
@@ -88,6 +88,7 @@ public class DummyMote implements Mote {
   public DummyMote(MoteType moteType, Simulation sim) {
     mySim = sim;
     myType = moteType;
+    random = mySim.getRandomGenerator();
 
     // Create memory
     myMemory = new SectionMoteMemory(new Properties());
@@ -95,8 +96,11 @@ public class DummyMote implements Mote {
     // Create interface handler
     myInterfaceHandler = new MoteInterfaceHandler();
     Position myPosition = new Position(this);
-    myPosition.setCoordinates(myRandom.nextDouble() * 100, myRandom
-        .nextDouble() * 100, myRandom.nextDouble() * 100);
+    myPosition.setCoordinates(
+        random.nextDouble() * 100,
+        random.nextDouble() * 100,
+        random.nextDouble() * 100
+    );
     myInterfaceHandler.addInterface(myPosition);
   }
 
@@ -149,13 +153,13 @@ public class DummyMote implements Mote {
   public boolean tick(long simTime) {
 
     // Perform some dummy task
-    if (myRandom.nextDouble() > 0.9) {
+    if (random.nextDouble() > 0.9) {
       // Move mote randomly
       Position myPosition = myInterfaceHandler.getPosition();
       myPosition.setCoordinates(myPosition.getXCoordinate()
-          + myRandom.nextDouble() - 0.5, myPosition.getYCoordinate()
-          + myRandom.nextDouble() - 0.5, myPosition.getZCoordinate()
-          + myRandom.nextDouble() - 0.5);
+          + random.nextDouble() - 0.5, myPosition.getYCoordinate()
+          + random.nextDouble() - 0.5, myPosition.getZCoordinate()
+          + random.nextDouble() - 0.5);
     }
     return false;
   }
@@ -187,6 +191,7 @@ public class DummyMote implements Mote {
       Collection<Element> configXML, boolean visAvailable) {
     mySim = simulation;
     myMemory = new SectionMoteMemory(new Properties());
+    random = mySim.getRandomGenerator();
     myInterfaceHandler = new MoteInterfaceHandler();
     myInterfaceHandler.addInterface(new Position(this));
 
