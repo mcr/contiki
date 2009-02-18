@@ -592,7 +592,7 @@ public class GUI extends Observable {
     JMenuItem menuItem2 = new JMenuItem("same random seed");
     menuItem2.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        reloadCurrentSimulation(false, false);
+        reloadCurrentSimulation(false, getSimulation().getRandomSeed());
       }
     });
     menuItem.add(menuItem2);
@@ -600,7 +600,7 @@ public class GUI extends Observable {
     menuItem2 = new JMenuItem("new random seed");
     menuItem2.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        reloadCurrentSimulation(false, true);
+        reloadCurrentSimulation(false, getSimulation().getRandomSeed()+1);
       }
     });
     menuItem.add(menuItem2);
@@ -2389,7 +2389,7 @@ public class GUI extends Observable {
    * @param autoStart Start executing simulation when loaded
    * @param newSeed Change simulation seed
    */
-  public void reloadCurrentSimulation(final boolean autoStart, final boolean newSeed) {
+  public void reloadCurrentSimulation(final boolean autoStart, final long randomSeed) {
     if (getSimulation() == null) {
       logger.fatal("No simulation to reload");
       return;
@@ -2402,9 +2402,6 @@ public class GUI extends Observable {
         /* Get current simulation configuration */
         Element root = new Element("simconf");
         Element simulationElement = new Element("simulation");
-        if (newSeed) {
-          getSimulation().setRandomSeed(getSimulation().getRandomSeed() + 1);
-        }
 
         simulationElement.addContent(getSimulation().getConfigXML());
         root.addContent(simulationElement);
@@ -2421,6 +2418,8 @@ public class GUI extends Observable {
             myGUI.doRemoveSimulation(false);
             Simulation newSim = loadSimulationConfig(root, true);
             myGUI.setSimulation(newSim);
+            myGUI.getSimulation().setRandomSeed(randomSeed);
+
             if (autoStart) {
               newSim.startSimulation();
             }
@@ -2486,7 +2485,7 @@ public class GUI extends Observable {
    * @param autoStart Start executing simulation when loaded
    */
   public void reloadCurrentSimulation(boolean autoStart) {
-    reloadCurrentSimulation(autoStart, false);
+    reloadCurrentSimulation(autoStart, getSimulation().getRandomSeed());
   }
 
   /**
