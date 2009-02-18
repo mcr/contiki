@@ -478,7 +478,6 @@ public class AddMoteDialog extends JDialog {
 
           if (positioner == null) {
             logger.fatal("Could not create positioner");
-            dispose();
             return;
           }
 
