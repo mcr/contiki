@@ -50,8 +50,6 @@ public class DummyVisualizer extends Visualizer2D {
   private static final long serialVersionUID = 1L;
   private static Logger logger = Logger.getLogger(DummyVisualizer.class);
 
-  private Random random = new Random();
-
   public DummyVisualizer(Simulation simulationToVisualize, GUI gui) {
     super(simulationToVisualize, gui);
     setTitle("Dummy Visualizer");
@@ -60,6 +58,7 @@ public class DummyVisualizer extends Visualizer2D {
   }
 
   public Color[] getColorOf(Mote m) {
+    Random random = new Random(); /* Do not use main random generator */
     Color moteColors[] = new Color[2];
 
     /* Outer color */
@@ -76,6 +75,7 @@ public class DummyVisualizer extends Visualizer2D {
 
     /* TODO Analyze data - determine color */
 
+    Random random = new Random(); /* Do not use main random generator */
     return new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256));
   }
 
