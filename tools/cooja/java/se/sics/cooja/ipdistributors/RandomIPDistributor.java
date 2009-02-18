@@ -30,6 +30,7 @@
  */
 
 package se.sics.cooja.ipdistributors;
+import java.util.Random;
 import java.util.Vector;
 import se.sics.cooja.*;
 
@@ -42,16 +43,17 @@ import se.sics.cooja.*;
 @ClassDescription("Random (10.10.?.?)")
 public class RandomIPDistributor extends IPDistributor {
 
+  private Random random = new Random(); /* Do not use main random generator for setup */
+
   /**
    * Creates a random IP distributor.
    * @param newMotes All motes which later will be assigned IP numbers.
    */
   public RandomIPDistributor(Vector<Mote> newMotes) {
-    // NOP
   }
 
   public String getNextIPAddress() {
-    return "" + 10 + "." + 10 + "." + (Math.round(Math.random()*20) + 1) + "." + (Math.round(Math.random()*20) + 1);
+    return "" + 10 + "." + 10 + "." + (1+random.nextInt(20)) + "." + (1+random.nextInt(20));
   }
 
 }

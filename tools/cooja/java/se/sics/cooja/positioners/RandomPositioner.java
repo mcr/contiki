@@ -30,6 +30,8 @@
  */
 
 package se.sics.cooja.positioners;
+import java.util.Random;
+
 import se.sics.cooja.*;
 
 /**
@@ -40,6 +42,8 @@ import se.sics.cooja.*;
 @ClassDescription("Random positioning")
 public class RandomPositioner extends Positioner {
   double startX, endX, startY, endY, startZ, endZ;
+
+  private Random random = new Random(); /* Do not use main random generator for setup */
 
   /**
    * Creates a random positioner.
@@ -65,9 +69,9 @@ public class RandomPositioner extends Positioner {
 
   public double[] getNextPosition() {
     return new double[] {
-        startX + Math.random()*(endX - startX),
-        startY + Math.random()*(endY - startY),
-        startZ + Math.random()*(endZ - startZ)
+        startX + random.nextDouble()*(endX - startX),
+        startY + random.nextDouble()*(endY - startY),
+        startZ + random.nextDouble()*(endZ - startZ)
     };
   }
 
