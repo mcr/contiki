@@ -602,21 +602,29 @@ public class Simulation extends Observable implements Runnable {
    * @param mote
    *          Mote to remove
    */
-  public void removeMote(Mote mote) {
-
-    if (isRunning()) {
-      stopSimulation();
+  public void removeMote(final Mote mote) {
+    if (!isRunning()) {
+      /* Simulation is stopped, remove mote immediately */
       motes.remove(mote);
-      startSimulation();
-    } else {
-      motes.remove(mote);
+      currentRadioMedium.unregisterMote(mote, this);
+      myGUI.closeMotePlugins(mote);
+      this.setChanged();
+      this.notifyObservers(this);
+      return;
     }
 
-    myGUI.closeMotePlugins(mote);
-    currentRadioMedium.unregisterMote(mote, this);
+    /* Simulation is running, remove mote in simulation loop */
+    TimeEvent removeNewMoteEvent = new TimeEvent(0) {
+      public void execute(long t) {
+        motes.remove(mote);
+        currentRadioMedium.unregisterMote(mote, Simulation.this);
+        recreateTickLists();
+        Simulation.this.setChanged();
+        Simulation.this.notifyObservers(this);
+      }
+    };
 
-    this.setChanged();
-    this.notifyObservers(this);
+    scheduleEvent(removeNewMoteEvent, Simulation.this.getSimulationTime());
   }
 
   /**
