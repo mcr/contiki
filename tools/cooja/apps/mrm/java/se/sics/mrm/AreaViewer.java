@@ -2128,7 +2128,7 @@ public class AreaViewer extends VisPlugin {
       g2d.setTransform(realWorldTransformScaled);
       g2d.setStroke(new BasicStroke((float) 0.0));
 
-      Random random = new Random();
+      Random random = new Random(); /* Do not use main random generator */
       for (int i=0; i < trackedComponents.size(); i++) {
         g2d.setColor(new Color(255, random.nextInt(255), random.nextInt(255), 255));
         Line2D originalLine = trackedComponents.get(i);

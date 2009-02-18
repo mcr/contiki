@@ -63,7 +63,7 @@ public class MRM extends AbstractRadioMedium {
   private ChannelModel currentChannelModel = null;
   private Simulation mySimulation = null;
 
-  private Random random = new Random();
+  private Random random = null;
 
   /**
    * Notifies observers when this radio medium has changed settings.
@@ -75,6 +75,7 @@ public class MRM extends AbstractRadioMedium {
    */
   public MRM(Simulation simulation) {
     super(simulation);
+    random = simulation.getRandomGenerator();
 
     // Create the channel model
     currentChannelModel = new ChannelModel();
