@@ -321,6 +321,11 @@ public class GUI extends Observable {
     myDesktopPane = desktop;
     if (menuPlugins == null) {
       menuPlugins = new JMenu("Plugins");
+      menuPlugins.removeAll();
+
+      /* COOJA/GUI plugins at top, simulation plugins in middle, mote plugins at bottom */
+      menuPlugins.addSeparator();
+      menuPlugins.addSeparator();
     }
     if (menuMotePluginClasses == null) {
       menuMotePluginClasses = new Vector<Class<? extends Plugin>>();
@@ -801,6 +806,11 @@ public class GUI extends Observable {
     // Plugins menu
     if (menuPlugins == null) {
       menuPlugins = new JMenu("Plugins");
+      menuPlugins.removeAll();
+
+      /* COOJA/GUI plugins at top, simulation plugins in middle, mote plugins at bottom */
+      menuPlugins.addSeparator();
+      menuPlugins.addSeparator();
     } else {
       menuPlugins.setText("Plugins");
     }
@@ -2034,14 +2044,37 @@ public class GUI extends Observable {
           menuItem.putClientProperty("class", newPluginClass);
           menuItem.addActionListener(guiEventHandler);
 
-          menuPlugins.add(menuItem);
-
-          if (pluginType == PluginType.MOTE_PLUGIN) {
+          /* Sort menu according to plugin type */
+          int itemIndex=0;
+          if (pluginType == PluginType.COOJA_PLUGIN || pluginType == PluginType.COOJA_STANDARD_PLUGIN) {
+            for (; itemIndex < menuPlugins.getItemCount(); itemIndex++) {
+              if (menuPlugins.getItem(itemIndex) == null /* separator */) {
+                break;
+              }
+            }
+            menuItem.setToolTipText("COOJA plugin: " + newPluginClass.getName());
+          } else if (pluginType == PluginType.SIM_PLUGIN || pluginType == PluginType.SIM_STANDARD_PLUGIN) {
+            for (; itemIndex < menuPlugins.getItemCount(); itemIndex++) {
+              if (menuPlugins.getItem(itemIndex) == null /* separator */) {
+                break;
+              }
+            }
+            itemIndex++;
+            for (; itemIndex < menuPlugins.getItemCount(); itemIndex++) {
+              if (menuPlugins.getItem(itemIndex) == null /* separator */) {
+                break;
+              }
+            }
+            menuItem.setToolTipText("Simulation plugin: " + newPluginClass.getName());
+          } else if (pluginType == PluginType.MOTE_PLUGIN) {
             // Disable previous menu item and add new item to mote plugins menu
             menuItem.setEnabled(false);
-            menuItem.setToolTipText("Mote plugin");
+            menuItem.setToolTipText("Mote plugin: " + newPluginClass.getName());
             menuMotePluginClasses.add(newPluginClass);
+            itemIndex = menuPlugins.getItemCount();
           }
+
+          menuPlugins.add(menuItem, itemIndex);
           return true;
         }
       }.invokeAndWait();
@@ -2057,6 +2090,10 @@ public class GUI extends Observable {
   public void unregisterPlugins() {
     if (menuPlugins != null) {
       menuPlugins.removeAll();
+
+      /* COOJA/GUI plugins at top, simulation plugins in middle, mote plugins at bottom */
+      menuPlugins.addSeparator();
+      menuPlugins.addSeparator();
     }
     if (menuMotePluginClasses != null) {
       menuMotePluginClasses.clear();
