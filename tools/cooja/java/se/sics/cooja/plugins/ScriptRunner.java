@@ -176,6 +176,7 @@ public class ScriptRunner implements Plugin {
             engine = null;
           }
           toggleButton.setText("Activate");
+          logTextArea.setText("");
           scriptTextArea.setEnabled(true);
         }
       }
