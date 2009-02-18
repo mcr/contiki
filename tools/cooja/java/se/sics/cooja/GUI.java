@@ -1305,6 +1305,8 @@ public class GUI extends Observable {
     Simulation simulation = new Simulation(gui);
     simulation.setTitle("Quickstarted: " + filename);
     simulation.setDelayTime(delayTime);
+    simulation.setRandomSeed(new Random().nextLong());
+    simulation.setRandomSeedGenerated(true);
     simulation.setSimulationTime(0);
     String radioMediumClassName = null;
     try {
@@ -1325,7 +1327,7 @@ public class GUI extends Observable {
     // Create nodes
     logger.info("> Creating motes");
     Vector<ContikiMote> motes = new Vector<ContikiMote>();
-    Random random = new Random();
+    Random random = simulation.getRandomGenerator();
     int nextMoteID = 1;
     int nextIP = 0;
     for (int i = 0; i < numberOfNodes; i++) {
