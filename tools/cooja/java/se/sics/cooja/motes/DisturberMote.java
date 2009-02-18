@@ -57,8 +57,6 @@ public class DisturberMote implements Mote {
 
   private Simulation mySim = null;
 
-  private Random myRandom = new Random();
-
   private DisturberRadio myDisturberRadio;
 
   /**
@@ -79,6 +77,7 @@ public class DisturberMote implements Mote {
   public DisturberMote(MoteType moteType, Simulation sim) {
     mySim = sim;
     myType = moteType;
+    Random random = new Random(); /* Do not use main random generator for positioning */
 
     // Create memory
     myMemory = new SectionMoteMemory(new Properties());
@@ -86,8 +85,11 @@ public class DisturberMote implements Mote {
     // Create interface handler
     myInterfaceHandler = new MoteInterfaceHandler();
     Position myPosition = new Position(this);
-    myPosition.setCoordinates(myRandom.nextDouble() * 100, myRandom
-        .nextDouble() * 100, myRandom.nextDouble() * 100);
+    myPosition.setCoordinates(
+        random.nextDouble() * 100,
+        random.nextDouble() * 100,
+        random.nextDouble() * 100
+    );
     myInterfaceHandler.addInterface(myPosition);
 
     // create interface handler for radio
