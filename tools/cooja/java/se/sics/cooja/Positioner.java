@@ -32,11 +32,12 @@
 package se.sics.cooja;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import org.apache.log4j.Logger;
 
 /**
- * A positioner is used for determining positions of newly created motes.
- * 
+ * A positioner is used for determining initial positions of motes.
+ *
  * @author Fredrik Osterlind
  */
 public abstract class Positioner {
@@ -46,7 +47,7 @@ public abstract class Positioner {
    * This method creates an instance of the given class with the given interval
    * information as constructor arguments. Instead of calling the constructors
    * directly this method may be used.
-   * 
+   *
    * @param positionerClass
    *          Positioner class
    * @param totalNumberOfMotes
@@ -68,24 +69,37 @@ public abstract class Positioner {
    */
   public static final Positioner generateInterface(
       Class<? extends Positioner> positionerClass, int totalNumberOfMotes,
-      double startX, double endX, double startY, double endY, double startZ,
-      double endZ) {
+      double startX, double endX,
+      double startY, double endY,
+      double startZ, double endZ) {
     try {
-      // Generating positioner
-      Constructor constr = positionerClass.getConstructor(new Class[] {
-          int.class, double.class, double.class, double.class, double.class,
-          double.class, double.class });
-      return (Positioner) constr.newInstance(new Object[] { totalNumberOfMotes,
-          startX, endX, startY, endY, startZ, endZ });
+      Constructor<? extends Positioner> constr =
+        positionerClass.getConstructor(new Class[] {
+          int.class,
+          double.class, double.class,
+          double.class, double.class,
+          double.class, double.class
+        });
+      return constr.newInstance(new Object[] {
+          totalNumberOfMotes,
+          startX, endX,
+          startY, endY,
+          startZ, endZ
+      });
     } catch (Exception e) {
-      logger.fatal("Exception when creating " + positionerClass + ": " + e);
+
+      if (e instanceof InvocationTargetException) {
+        logger.fatal("Exception when creating " + positionerClass + ": " + e.getCause());
+      } else {
+        logger.fatal("Exception when creating " + positionerClass + ": " + e.getMessage());
+      }
       return null;
     }
   }
 
   /**
    * Returns the next mote position.
-   * 
+   *
    * @return Position
    */
   public abstract double[] getNextPosition();
