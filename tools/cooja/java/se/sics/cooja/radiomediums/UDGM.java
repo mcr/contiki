@@ -94,7 +94,6 @@ public class UDGM extends AbstractRadioMedium {
 
   private Random random = new Random();
 
-
   /**
    * Visualizes radio traffic in the UDGM. Allows a user to
    * change transmission ranges.
@@ -429,7 +428,7 @@ public class UDGM extends AbstractRadioMedium {
 
     myRadioMedium = this;
     mySimulation = simulation;
-    random.setSeed(simulation.getRandomSeed());
+    random = mySimulation.getRandomGenerator();
   }
 
   public RadioConnection createConnections(Radio sendingRadio) {
@@ -627,7 +626,7 @@ public class UDGM extends AbstractRadioMedium {
         SUCCESS_RATIO_RX = Double.parseDouble(element.getText());
       }
     }
-    random.setSeed(mySimulation.getRandomSeed());
+    random = mySimulation.getRandomGenerator();
     return true;
   }
 
