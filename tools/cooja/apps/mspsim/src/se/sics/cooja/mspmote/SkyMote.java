@@ -74,7 +74,7 @@ public class SkyMote extends MspMote {
 
     // Add position interface
     Position motePosition = new Position(this);
-    Random random = new Random();
+    Random random = new Random(); /* Do not use main random generator for positioning */
     motePosition.setCoordinates(random.nextDouble()*100, random.nextDouble()*100, random.nextDouble()*100);
     moteInterfaceHandler.addInterface(motePosition);
 
