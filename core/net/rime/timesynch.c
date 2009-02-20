@@ -51,9 +51,11 @@
 
 #include <stdio.h>
 
+
 static int authority_level;
 static rtimer_clock_t offset;
 
+#if TIMESYNCH_CONF_ENABLED
 /*---------------------------------------------------------------------------*/
 int
 timesynch_authority_level(void)
@@ -132,4 +134,5 @@ timesynch_init(void)
   rime_sniffer_add(&sniffer);
 }
 /*---------------------------------------------------------------------------*/
+#endif /* TIMESYNCH_CONF_ENABLED */
 /** @} */
