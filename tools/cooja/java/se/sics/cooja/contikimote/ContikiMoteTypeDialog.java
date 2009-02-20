@@ -1484,6 +1484,7 @@ public class ContikiMoteTypeDialog extends JDialog {
       return false;
     }
 
+    libFile.delete();
     if (libFile.exists()) {
       if (errorStream != null) {
         errorStream.println("Bad output filenames");
@@ -1500,6 +1501,7 @@ public class ContikiMoteTypeDialog extends JDialog {
       return false;
     }
 
+    arFile.delete();
     if (arFile.exists()) {
       if (errorStream != null) {
         errorStream.println("Bad output filenames");
@@ -1508,6 +1510,7 @@ public class ContikiMoteTypeDialog extends JDialog {
       return false;
     }
 
+    mapFile.delete();
     if (mapFile.exists()) {
       if (errorStream != null) {
         errorStream.println("Bad output filenames");
