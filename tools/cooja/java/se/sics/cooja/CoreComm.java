@@ -202,7 +202,7 @@ public abstract class CoreComm {
    * @throws MoteTypeCreationException
    *           If Java class compilation error occurs
    */
-  private static void compileSourceFile(String className)
+  public static void compileSourceFile(String className)
       throws MoteTypeCreationException {
     MessageList compilationOutput = new MessageList();
     OutputStream compilationStandardStream = compilationOutput
@@ -286,7 +286,7 @@ public abstract class CoreComm {
    * @throws MoteTypeCreationException
    *           If error occurs
    */
-  private static Class loadClassFile(String className)
+  public static Class loadClassFile(String className)
       throws MoteTypeCreationException {
     Class loadedClass = null;
     try {
