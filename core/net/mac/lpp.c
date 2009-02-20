@@ -51,7 +51,7 @@
  */
 
 #include "dev/leds.h"
-
+#include "lib/random.h"
 #include "net/rime.h"
 #include "net/mac/mac.h"
 #include "net/mac/lpp.h"
