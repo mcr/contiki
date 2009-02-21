@@ -85,8 +85,10 @@ public abstract class AbstractRadioMedium extends RadioMedium {
   /**
    * @return All active connections
    */
-  public Vector<RadioConnection> getActiveConnections() {
-    return activeConnections;
+  public RadioConnection[] getActiveConnections() {
+    RadioConnection[] active = new RadioConnection[activeConnections.size()];
+    activeConnections.toArray(active);
+    return active;
   }
 
   /**
