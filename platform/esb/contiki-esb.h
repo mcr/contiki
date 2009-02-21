@@ -42,8 +42,6 @@
 
 #include "dev/lpm.h"
 
-#include "codeprop.h"
-
 #include "dev/rs232.h"
 
 #include "dev/serial.h"
