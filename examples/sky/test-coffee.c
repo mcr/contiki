@@ -311,6 +311,7 @@ PROCESS_THREAD(testcoffee_process, ev, data)
 {
   PROCESS_BEGIN();
 
+  printf("Coffee format: %d\n", cfs_coffee_format());
   printf("Coffee file test: %d\n", coffee_file_test());
   printf("Coffee garbage collection test: %d\n", coffee_gc_test());
 
