@@ -2189,12 +2189,15 @@ public class GUI extends Observable {
       moteTypeOK = newMoteType.configureAndInit(GUI.getTopParentContainer(), mySimulation, isVisualized());
     } catch (InstantiationException e) {
       logger.fatal("Exception when creating mote type: " + e);
+      e.printStackTrace();
       return;
     } catch (IllegalAccessException e) {
       logger.fatal("Exception when creating mote type: " + e);
+      e.printStackTrace();
       return;
     } catch (MoteTypeCreationException e) {
       logger.fatal("Exception when creating mote type: " + e);
+      e.printStackTrace();
       return;
     }
 
