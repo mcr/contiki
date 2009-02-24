@@ -118,6 +118,10 @@ timedout_mesh(struct mesh_conn *c)
   /*  printf("packet timedout\n");*/
 }
 static void
+sent_mesh(struct mesh_conn *c)
+{
+}
+static void
 recv_mesh(struct mesh_conn *c, rimeaddr_t *from, u8_t hops)
 {
   struct ping_msg *ping;
@@ -152,7 +156,7 @@ recv_mesh(struct mesh_conn *c, rimeaddr_t *from, u8_t hops)
   }
 }
 CC_CONST_FUNCTION static struct mesh_callbacks mesh_callbacks = { recv_mesh,
-						      NULL,
+						      sent_mesh,
 						      timedout_mesh };
 /*---------------------------------------------------------------------------*/
 void
