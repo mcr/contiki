@@ -48,6 +48,8 @@ public class RadioConnection {
 
   private Vector<Radio> destinations = new Vector<Radio>();
 
+  private Vector<Long> destinationDelays = new Vector<Long>();
+
   private Vector<Radio> interfered = new Vector<Radio>();
 
   /**
@@ -78,6 +80,17 @@ public class RadioConnection {
    */
   public void addDestination(Radio radio) {
     destinations.add(radio);
+    destinationDelays.add(new Long(0));
+  }
+
+  public void addDestination(Radio radio, Long delay) {
+    destinations.add(radio);
+    destinationDelays.add(delay);
+  }
+
+  public Long getDestinationDelay(Radio radio) {
+    int idx = destinations.indexOf(radio);
+    return destinationDelays.get(idx);
   }
 
   /**
@@ -97,7 +110,10 @@ public class RadioConnection {
    *          Radio
    */
   public void removeDestination(Radio radio) {
-    destinations.remove(radio);
+    int idx = destinations.indexOf(radio);
+
+    destinations.remove(idx);
+    destinationDelays.remove(idx);
   }
 
   /**
@@ -121,26 +137,18 @@ public class RadioConnection {
    * @return All destinations of this connection
    */
   public Radio[] getDestinations() {
-    Radio[] radioArrayType;
-    Radio[] radioArray;
-
-    radioArrayType = new Radio[destinations.size()];
-    radioArray = destinations.toArray(radioArrayType);
-
-    return radioArray;
+    Radio[] arr = new Radio[destinations.size()];
+    destinations.toArray(arr);
+    return arr;
   }
 
   /**
    * @return All radios interfered by this connection
    */
   public Radio[] getInterfered() {
-    Radio[] radioArrayType;
-    Radio[] radioArray;
-
-    radioArrayType = new Radio[interfered.size()];
-    radioArray = interfered.toArray(radioArrayType);
-
-    return radioArray;
+    Radio[] arr = new Radio[interfered.size()];
+    interfered.toArray(arr);
+    return arr;
   }
 
   public String toString() {
