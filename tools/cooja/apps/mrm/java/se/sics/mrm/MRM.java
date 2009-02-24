@@ -147,7 +147,6 @@ public class MRM extends AbstractRadioMedium {
           // Radio OK to receive
           //logger.info("OK, creating connection and starting to transmit");
           newConnection.addDestination(listeningRadio, probData[1]);
-          listeningRadio.signalReceptionStart();
         }
       } else if (probData[1] > currentChannelModel.getParameterDoubleValue("bg_noise_mean")) {
         // Interfere radio
