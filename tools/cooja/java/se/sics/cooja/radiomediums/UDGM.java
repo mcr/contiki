@@ -156,7 +156,6 @@ public class UDGM extends AbstractRadioMedium {
         } else {
           // Radio OK to receive
           newConnection.addDestination(listeningRadio);
-          listeningRadio.signalReceptionStart();
         }
       } else if (distance <= moteInterferenceRange) {
         // Interfere radio
