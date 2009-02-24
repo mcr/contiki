@@ -388,8 +388,7 @@ public class ContikiRadio extends Radio implements ContikiMoteInterface, PolledA
 
       // Calculate transmission duration (ms)
       int duration = (int) ((280 + 10 * size) / RADIO_TRANSMISSION_RATE_kbps);
-      transmissionEndTime = myMote.getSimulation().getSimulationTime()
-          + Math.max(1, duration);
+      transmissionEndTime = myMote.getSimulation().getSimulationTime() + Math.max(1, duration);
       lastEventTime = myMote.getSimulation().getSimulationTime();
 
       lastEvent = RadioEvent.TRANSMISSION_STARTED;
@@ -496,5 +495,9 @@ public class ContikiRadio extends Radio implements ContikiMoteInterface, PolledA
 
   public Mote getMote() {
     return myMote;
+  }
+
+  public String toString() {
+    return "Radio at " + myMote;
   }
 }
