@@ -83,7 +83,7 @@ import se.sics.cooja.radiomediums.UDGM;
  * @see #getLastEvent()
  * @see UDGM
  *
- * @author Fredrik Österlind
+ * @author Fredrik Osterlind
  */
 public class ContikiRadio extends Radio implements ContikiMoteInterface, PolledAfterActiveTicks {
   private Mote myMote;

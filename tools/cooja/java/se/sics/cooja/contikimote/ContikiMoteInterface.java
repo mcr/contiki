@@ -40,7 +40,7 @@ package se.sics.cooja.contikimote;
  *
  * The method should return the names of all needed core interfaces.
  *
- * @author Fredrik Österlind
+ * @author Fredrik Osterlind
  */
 public interface ContikiMoteInterface {
   /*public static String[] getCoreInterfaceDependencies();*/

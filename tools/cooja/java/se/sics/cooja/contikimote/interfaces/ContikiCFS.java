@@ -64,7 +64,7 @@ import se.sics.cooja.interfaces.PolledAfterActiveTicks;
  * <p>
  * This observable notifies when the filesystem is used (read/write).
  *
- * @author Fredrik Österlind
+ * @author Fredrik Osterlind
  */
 @ClassDescription("Filesystem (CFS)")
 public class ContikiCFS extends MoteInterface implements ContikiMoteInterface, PolledAfterActiveTicks {

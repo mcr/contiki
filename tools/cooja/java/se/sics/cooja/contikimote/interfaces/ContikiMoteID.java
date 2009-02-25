@@ -58,7 +58,7 @@ import se.sics.cooja.interfaces.MoteID;
  *
  * This observable notifies observers when the mote ID is set or altered.
  *
- * @author Fredrik Österlind
+ * @author Fredrik Osterlind
  */
 public class ContikiMoteID extends MoteID implements ContikiMoteInterface {
   private SectionMoteMemory moteMem = null;

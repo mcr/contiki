@@ -60,7 +60,7 @@ import se.sics.cooja.interfaces.PolledAfterActiveTicks;
  *
  * This observable is changed and notifies observers when the mote beeps.
  *
- * @author Fredrik Österlind
+ * @author Fredrik Osterlind
  */
 public class ContikiBeeper extends Beeper implements ContikiMoteInterface, PolledAfterActiveTicks {
   private Mote mote = null;

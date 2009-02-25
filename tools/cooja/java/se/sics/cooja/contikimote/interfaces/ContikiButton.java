@@ -59,7 +59,7 @@ import se.sics.cooja.interfaces.Button;
  *
  * This observable notifies when the button is pressed or released.
  *
- * @author Fredrik Österlind
+ * @author Fredrik Osterlind
  */
 public class ContikiButton extends Button implements ContikiMoteInterface {
   private SectionMoteMemory moteMem;

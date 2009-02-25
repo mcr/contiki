@@ -63,7 +63,7 @@ import se.sics.cooja.interfaces.IPAddress;
  *
  * This observable notifies when the IP address is set or altered.
  *
- * @author Fredrik Österlind
+ * @author Fredrik Osterlind
  */
 public class ContikiIPAddress extends IPAddress implements ContikiMoteInterface {
   private SectionMoteMemory moteMem = null;

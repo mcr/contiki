@@ -56,7 +56,7 @@ import se.sics.cooja.interfaces.PolledBeforeActiveTicks;
  *
  * This observable never notifies.
  *
- * @author Fredrik Österlind
+ * @author Fredrik Osterlind
  */
 public class ContikiClock extends Clock implements ContikiMoteInterface, PolledBeforeActiveTicks {
 

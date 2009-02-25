@@ -59,7 +59,7 @@ import se.sics.cooja.interfaces.PolledAfterActiveTicks;
  *
  * This observable notifies when any LED changes.
  *
- * @author Fredrik Österlind
+ * @author Fredrik Osterlind
  */
 public class ContikiLED extends LED implements ContikiMoteInterface, PolledAfterActiveTicks {
   private static Logger logger = Logger.getLogger(ContikiLED.class);

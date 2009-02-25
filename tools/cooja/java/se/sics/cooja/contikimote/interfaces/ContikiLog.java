@@ -63,7 +63,7 @@ import se.sics.cooja.interfaces.PolledAfterActiveTicks;
  *
  * This observable notifies at new mote log output.
  *
- * @author Fredrik Österlind
+ * @author Fredrik Osterlind
  */
 public class ContikiLog extends Log implements ContikiMoteInterface, PolledAfterActiveTicks {
   private static Logger logger = Logger.getLogger(ContikiLog.class);

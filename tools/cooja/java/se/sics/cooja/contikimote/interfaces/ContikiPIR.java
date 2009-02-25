@@ -59,7 +59,7 @@ import se.sics.cooja.interfaces.PIR;
  *
  * This observable notifies if PIR triggers.
  *
- * @author Fredrik Österlind
+ * @author Fredrik Osterlind
  */
 public class ContikiPIR extends PIR implements ContikiMoteInterface {
   private static Logger logger = Logger.getLogger(ContikiPIR.class);

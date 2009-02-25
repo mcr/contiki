@@ -58,7 +58,7 @@ import se.sics.cooja.contikimote.ContikiMoteInterface;
  *
  * This observable never notifies.
  *
- * @author Fredrik Österlind
+ * @author Fredrik Osterlind
  */
 @ClassDescription("Vibration sensor")
 public class ContikiVib extends MoteInterface implements ContikiMoteInterface {
