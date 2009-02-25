@@ -1169,7 +1169,7 @@ activate(CC_REGISTER_ARG struct ctk_widget *w)
    function pointers cannot be NULL. ctk_textentry_input is typedef'd
    in ctk/ctk.h, hence the strange-looking function signature. */
 unsigned char
-ctk_textentry_input_null(ctk_arch_key_t c, struct ctk_textentry *t);
+ctk_textentry_input_null(ctk_arch_key_t c, struct ctk_textentry *t)
 {
 
 }
