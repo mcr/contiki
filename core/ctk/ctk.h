@@ -290,7 +290,7 @@ struct ctk_textentry {
 
 /* Dummy function that we define to keep sdcc happy - with sdcc,
    function pointers cannot be NULL.*/
-ctk_textentry_input ctk_textentry_input_null;
+unsigned char ctk_textentry_input_null(ctk_arch_key_t c, struct ctk_textentry *t);
 
 #if CTK_CONF_ICON_BITMAPS
 #define CTK_ICON_BITMAP(bitmap)	  bitmap
