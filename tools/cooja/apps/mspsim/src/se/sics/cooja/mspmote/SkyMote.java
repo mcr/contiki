@@ -117,13 +117,17 @@ public class SkyMote extends MspMote {
     } catch (UnknownVariableException e) {
     }
 
+    /* Mote relation listener */
+    Mote2MoteRelations mote2moteRelation = new Mote2MoteRelations(this);
+    moteInterfaceHandler.addInterface(mote2moteRelation);
+
     return moteInterfaceHandler;
   }
 
   public void idUpdated(int newID) {
     skyNode.setNodeID(newID);
   }
-  
+
   public String toString() {
     MoteID moteID = getInterfaces() != null ? getInterfaces().getMoteID() : null;
     if (moteID != null) {
