@@ -60,7 +60,7 @@ import se.sics.cooja.interfaces.PolledBeforeAllTicks;
  * @see PolledBeforeAllTicks
  * @see PolledAfterAllTicks
  *
- * @author Fredrik Österlind
+ * @author Fredrik Osterlind
  */
 public abstract class MoteInterface extends Observable {
   private static Logger logger = Logger.getLogger(MoteInterface.class);
@@ -85,6 +85,7 @@ public abstract class MoteInterface extends Observable {
       return instance;
     } catch (Exception e) {
       logger.fatal("Exception when creating " + interfaceClass + ": " + e);
+      e.printStackTrace();
       return null;
     }
   }
