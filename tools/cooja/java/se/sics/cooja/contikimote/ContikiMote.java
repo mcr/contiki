@@ -310,11 +310,13 @@ public class ContikiMote implements Mote {
   }
 
   public String toString() {
-    if (getInterfaces().getMoteID() != null) {
-      return "Contiki Mote, ID=" + getInterfaces().getMoteID().getMoteID();
-    } else {
+    if (getInterfaces() == null) {
+      return "Contiki Mote";
+    }
+    if (getInterfaces().getMoteID() == null) {
       return "Contiki Mote, ID=null";
     }
+    return "Contiki Mote, ID=" + getInterfaces().getMoteID().getMoteID();
   }
 
 }
