@@ -50,10 +50,10 @@
 #define SINK_ID	1
 #endif
 
-PROCESS(cfs_process, "Test CFS process");
-AUTOSTART_PROCESSES(&cfs_process);
+PROCESS(deluge_test_process, "Deluge test process");
+AUTOSTART_PROCESSES(&deluge_test_process);
 /*---------------------------------------------------------------------------*/
-PROCESS_THREAD(cfs_process, ev, data)
+PROCESS_THREAD(deluge_test_process, ev, data)
 {
   int fd, r;
   char buf[32];
