@@ -91,7 +91,7 @@ main(void)
   close(STDOUT_FILENO);
 #if !UIP_LOGGING && !LOG_CONF_ENABLED
   close(STDERR_FILENO);
-#endif /* !WITH_PFS */
+#endif /* !UIP_LOGGING && !LOG_CONF_ENABLED */
 
   process_init();
 
