@@ -85,7 +85,7 @@ cfs_write(int f, const void *b, unsigned int l)
 }
 /*---------------------------------------------------------------------------*/
 cfs_offset_t
-cfs_seek(int f, unsigned int o, int w)
+cfs_seek(int f, cfs_offset_t o, int w)
 {
   if(w == CFS_SEEK_SET) {
     w = SEEK_SET;
