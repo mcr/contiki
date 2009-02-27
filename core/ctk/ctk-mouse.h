@@ -55,8 +55,10 @@ void ctk_mouse_show(void);
 #else
 
 #define ctk_mouse_init()
+
 #define ctk_mouse_x() 0
 #define ctk_mouse_y() 0
+
 #define ctk_mouse_xtoc(x) 0
 #define ctk_mouse_ytoc(y) 0
 
