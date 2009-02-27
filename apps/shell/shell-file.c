@@ -220,7 +220,7 @@ PROCESS_THREAD(shell_read_process, ev, data)
     }
     
     fd = cfs_open(filename, CFS_READ);
-    cfs_seek(fd, offset);
+    cfs_seek(fd, offset, CFS_SEEK_SET);
     
     if(fd < 0) {
       shell_output_str(&read_command,

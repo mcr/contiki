@@ -70,7 +70,7 @@ write_chunk(struct rudolph0_conn *c, int offset, int flag,
   
   if(datalen > 0) {
     int ret;
-    cfs_seek(fd, offset);
+    cfs_seek(fd, offset, CFS_SEEK_SET);
     ret = cfs_write(fd, data, datalen);
     /*    printf("write_chunk wrote %d bytes at %d, %d\n", ret, offset, (unsigned char)data[0]);*/
   }
@@ -102,7 +102,7 @@ read_chunk(struct rudolph0_conn *c, int offset, uint8_t *to, int maxsize)
   
   fd = cfs_open("hej", CFS_READ);
 
-  cfs_seek(fd, offset);
+  cfs_seek(fd, offset, CFS_SEEK_SET);
   ret = cfs_read(fd, to, maxsize);
   /*  printf("read_chunk %d bytes at %d, %d\n", ret, offset, (unsigned char)to[0]);*/
   cfs_close(fd);

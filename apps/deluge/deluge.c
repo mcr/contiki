@@ -134,7 +134,7 @@ transition(int state)
 static int
 write_page(struct deluge_object *obj, unsigned pagenum, unsigned char *data)
 {
-  cfs_seek(obj->cfs_fd, pagenum * S_PAGE);
+  cfs_seek(obj->cfs_fd, pagenum * S_PAGE, CFS_SEEK_SET);
   return cfs_write(obj->cfs_fd, (char *)data,
 	S_PAGE);
 }
@@ -142,7 +142,7 @@ write_page(struct deluge_object *obj, unsigned pagenum, unsigned char *data)
 static int
 read_page(struct deluge_object *obj, unsigned pagenum, unsigned char *buf)
 {
-  cfs_seek(obj->cfs_fd, pagenum * S_PAGE);
+  cfs_seek(obj->cfs_fd, pagenum * S_PAGE, CFS_SEEK_SET);
   return cfs_read(obj->cfs_fd, (char *)buf, S_PAGE);
 }
 
