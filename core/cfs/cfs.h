@@ -70,6 +70,12 @@ struct cfs_dirent {
   unsigned int size;
 };
 
+#ifndef CFS_OFFSET_TYPE
+typedef unsigned cfs_offset_t;
+#else
+typedef CFS_OFFSET_TYPE cfs_offset_t;
+#endif
+
 /**
  * Specify that cfs_open() should open a file for reading.
  *
@@ -178,16 +184,27 @@ CCIF int cfs_write(int fd, const void *buf, unsigned int len);
 /**
  * \brief      Seek to a specified position in an open file.
  * \param fd   The file descriptor of the open file.
- * \param offset The position in the file.
- * \return     The new position in the file.
+ * \param offset A position, either relative or absolute, in the file.
+ * \param whence Determines how to interpret the offset parameter.
+ * \return     The new position in the file, or (cfs_offset_t)-1 if the seek failed.
  *
  *             This function moves the file position to the specified
  *             position in the file. The next byte that is read from
- *             or written to the file will be at the position given by
- *             the offset parameter.
+ *             or written to the file will be at the position given 
+ *             determined by the combination of the offset parameter 
+ *             and the whence parameter.
+ *
+ *             If whence is CFS_SEEK_SET, the current position is set 
+ *             to the offset value. CFS_SEEK_CUR moves the position 
+ *             forward the number of bytes specified by offset. CFS_SEEK 
+ *             end moves the position offset bytes past the end of the file.
  */
 #ifndef cfs_seek
-CCIF unsigned int cfs_seek(int fd, unsigned int offset);
+#define CFS_SEEK_SET	0
+#define CFS_SEEK_CUR	1
+#define CFS_SEEK_END	2
+
+CCIF cfs_offset_t cfs_seek(int fd, cfs_offset_t offset, int whence);
 #endif
 
 /**

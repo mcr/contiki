@@ -133,18 +133,17 @@ cfs_write(int f, const void *buf, unsigned int len)
   }
 }
 /*---------------------------------------------------------------------------*/
-unsigned int
-cfs_seek(int f, unsigned int o)
+cfs_offset_t
+cfs_seek(int f, cfs_offset_t o, int w)
 {
-  if(f == 1) {
+  if(w == CFS_SEEK_SET && f == 1) {
     if(o > file.filesize) {
       o = file.filesize;
     }
     file.fileptr = o;
     return o;
-  } else {
-    return -1;
   }
+  return -1;
 }
 /*---------------------------------------------------------------------------*/
 int

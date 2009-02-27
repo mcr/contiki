@@ -106,9 +106,9 @@ cfs_write(int f, const void *buf, unsigned int len)
 }
 /*---------------------------------------------------------------------------*/
 unsigned int
-cfs_seek(int f, unsigned int o)
+cfs_seek(int f, unsigned int o, int w)
 {
-  if(f == 1) {
+  if(w == CFS_SEEK_SET && f == 1) {
     file.fileptr = o;
     return o;
   } else {
