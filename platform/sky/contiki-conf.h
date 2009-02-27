@@ -19,6 +19,8 @@
 #define TIMESYNCH_CONF_ENABLED 1
 #define CC2420_CONF_TIMESTAMPS 1
 
+#define CFS_OFFSET_TYPE		unsigned long
+
 #define PROFILE_CONF_ON 0
 #define ENERGEST_CONF_ON 1
 
