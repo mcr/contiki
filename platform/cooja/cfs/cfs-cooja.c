@@ -103,7 +103,7 @@ cfs_write(int f, const void *buf, unsigned int len)
 }
 /*---------------------------------------------------------------------------*/
 unsigned int
-cfs_seek(int f, unsigned int o)
+cfs_seek(int f, unsigned int o, int w)
 {
   if(f == FLAG_FILE_OPEN) {
     file.fileptr = o;
@@ -111,6 +111,12 @@ cfs_seek(int f, unsigned int o)
   } else {
     return -1;
   }
+}
+/*---------------------------------------------------------------------------*/
+int
+cfs_remove(const char *name)
+{
+  return -1;
 }
 /*---------------------------------------------------------------------------*/
 int
