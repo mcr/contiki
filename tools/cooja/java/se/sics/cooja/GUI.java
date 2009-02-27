@@ -2302,6 +2302,13 @@ public class GUI extends Observable {
     // Delete simulation
     mySimulation.deleteObservers();
     mySimulation.stopSimulation();
+
+    /* Clear current mote relations */
+    MoteRelation relations[] = getMoteRelations();
+    for (MoteRelation r: relations) {
+      removeMoteRelation(r.source, r.dest);
+    }
+
     mySimulation = null;
 
     // Unregister temporary plugin classes
