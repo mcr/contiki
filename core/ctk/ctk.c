@@ -1165,6 +1165,7 @@ activate(CC_REGISTER_ARG struct ctk_widget *w)
   return REDRAW_NONE;
 }
 /*---------------------------------------------------------------------------*/
+#ifdef SDCC
 /* Dummy function that we define to keep sdcc happy - with sdcc,
    function pointers cannot be NULL. ctk_textentry_input is typedef'd
    in ctk/ctk.h, hence the strange-looking function signature. */
@@ -1173,6 +1174,7 @@ ctk_textentry_input_null(ctk_arch_key_t c, struct ctk_textentry *t)
 {
   return 0;
 }
+#endif /* SDCC */
 /*---------------------------------------------------------------------------*/
 static void CC_FASTCALL
 textentry_input(ctk_arch_key_t c, CC_REGISTER_ARG struct ctk_textentry *t)
