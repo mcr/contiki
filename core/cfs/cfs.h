@@ -119,6 +119,33 @@ struct cfs_dirent {
 #endif
 
 /**
+ * Specify that cfs_seek() should compute the offset from the beginning of the file.
+ *
+ * \sa cfs_seek()
+ */
+#ifndef CFS_SEEK_SET
+#define CFS_SEEK_SET 0
+#endif
+
+/**
+ * Specify that cfs_seek() should compute the offset from the current position of the file pointer.
+ *
+ * \sa cfs_seek()
+ */
+#ifndef CFS_SEEK_CUR
+#define CFS_SEEK_CUR 1
+#endif
+
+/**
+ * Specify that cfs_seek() should compute the offset from the end of the file.
+ *
+ * \sa cfs_seek()
+ */
+#ifndef CFS_SEEK_END
+#define CFS_SEEK_END 2
+#endif
+
+/**
  * \brief      Open a file.
  * \param name The name of the file.
  * \param flags CFS_READ, or CFS_WRITE/CFS_APPEND, or both.
@@ -200,10 +227,6 @@ CCIF int cfs_write(int fd, const void *buf, unsigned int len);
  *             end moves the position offset bytes past the end of the file.
  */
 #ifndef cfs_seek
-#define CFS_SEEK_SET	0
-#define CFS_SEEK_CUR	1
-#define CFS_SEEK_END	2
-
 CCIF cfs_offset_t cfs_seek(int fd, cfs_offset_t offset, int whence);
 #endif
 
