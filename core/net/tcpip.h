@@ -336,8 +336,8 @@ CCIF void tcpip_input(void);
 u8_t tcpip_output(uip_lladdr_t *);
 void tcpip_set_outputfunc(u8_t (* f)(uip_lladdr_t *));
 #else
-void tcpip_set_outputfunc(u8_t (* f)(void));
 u8_t tcpip_output(void);
+void tcpip_set_outputfunc(u8_t (* f)(void));
 #endif
 
 /**
