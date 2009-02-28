@@ -221,10 +221,9 @@ CCIF int cfs_write(int fd, const void *buf, unsigned int len);
  *             determined by the combination of the offset parameter 
  *             and the whence parameter.
  *
- *             If whence is CFS_SEEK_SET, the current position is set 
- *             to the offset value. CFS_SEEK_CUR moves the position 
- *             forward the number of bytes specified by offset. CFS_SEEK 
- *             end moves the position offset bytes past the end of the file.
+ * \sa         CFS_SEEK_CUR
+ * \sa         CFS_SEEK_END
+ * \sa         CFS_SEEK_SET
  */
 #ifndef cfs_seek
 CCIF cfs_offset_t cfs_seek(int fd, cfs_offset_t offset, int whence);
