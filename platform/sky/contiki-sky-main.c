@@ -50,10 +50,11 @@
 #include "dev/watchdog.h"
 #include "dev/xmem.h"
 
+#include "lib/random.h"
+
 #include "net/mac/nullmac.h"
 #include "net/mac/xmac.h"
 #include "net/mac/lpp.h"
-
 #include "net/rime.h"
 
 #include "node-id.h"
