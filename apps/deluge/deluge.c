@@ -41,8 +41,6 @@
  * 	Nicolas Tsiftes <nvt@sics.se>
  */
 
-#define DEBUG	0
-
 #include "contiki.h"
 #include "net/rime.h"
 #include "net/rime/ctimer.h"
@@ -61,6 +59,18 @@
 #include "dev/leds.h"
 #include <stdlib.h>
 #include <string.h>
+
+#define DEBUG	1
+#if DEBUG
+#include <stdio.h>
+#define PRINTF(...)                             \
+  do {                                          \
+    printf("[Node %02u] ", (unsigned) node_id); \
+    printf(__VA_ARGS__);                        \
+  } while (0)
+#else
+#define PRINTF(...)
+#endif
 
 PROCESS(deluge_process, "Deluge process");
 

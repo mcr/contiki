@@ -45,17 +45,6 @@
 
 PROCESS_NAME(deluge_process);
 
-#if DEBUG
-#include <stdio.h>
-#define PRINTF(...)				\
-  do {						\
-    printf("[Node %02u] ", (unsigned) node_id);	\
-    printf(__VA_ARGS__);			\
-  } while (0)
-#else
-#define PRINTF(...)
-#endif
-
 #define LONG_TIMER(et, counter, time)			\
   do {							\
     for (counter = 0; counter < time; counter++) {	\
