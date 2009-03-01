@@ -1,3 +1,6 @@
+/** \addtogroup sys
+ * @{ */
+
 /**
  * \defgroup rt Real-time task scheduling
  *
@@ -146,4 +149,5 @@ void rtimer_arch_schedule(rtimer_clock_t t);
 
 #endif /* __RTIMER_H__ */
 
+/** @} */
 /** @} */

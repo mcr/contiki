@@ -2,7 +2,7 @@
  * @{ */
 
 /**
- * \defgroup timer Seconds timer library
+ * \defgroup stimer Seconds timer library
  *
  * The stimer library provides functions for setting, resetting and
  * restarting timers, and for checking if a timer has expired. An
