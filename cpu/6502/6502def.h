@@ -122,7 +122,7 @@ typedef unsigned short uip_stats_t;
 #define ctk_arch_getkey   cgetc
 #define ctk_arch_isprint  isprint
 
-#define CFS_OFFSET_TYPE off_t
+#define CFS_CONF_OFFSET_TYPE off_t
 
 #if WITH_PFS
 #define cfs_open     pfs_open
