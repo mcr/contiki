@@ -61,10 +61,10 @@
 
 #include "contiki.h"
 
-#ifndef CFS_OFFSET_TYPE
+#ifndef CFS_CONF_OFFSET_TYPE
 typedef unsigned cfs_offset_t;
 #else
-typedef CFS_OFFSET_TYPE cfs_offset_t;
+typedef CFS_CONF_OFFSET_TYPE cfs_offset_t;
 #endif
 
 struct cfs_dir {
