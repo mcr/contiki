@@ -49,11 +49,13 @@ PROCESS_THREAD(shell_init_process, ev, data)
 {
   PROCESS_BEGIN();
 
-  shell_file_init();   
-  shell_ps_init();   
-  shell_run_init();   
-  shell_text_init();   
-  shell_time_init();   
+  shell_file_init();
+  shell_httpd_init();
+  shell_irc_init();
+  shell_ps_init();
+  shell_run_init();
+  shell_text_init();
+  shell_time_init();
   shell_wget_init();
 
   PROCESS_END();
