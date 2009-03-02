@@ -102,15 +102,14 @@ cfs_write(int f, const void *buf, unsigned int len)
   }
 }
 /*---------------------------------------------------------------------------*/
-unsigned int
-cfs_seek(int f, unsigned int o, int w)
+cfs_offset_t
+cfs_seek(int f, cfs_offset_t o, int w)
 {
   if(f == FLAG_FILE_OPEN) {
     file.fileptr = o;
     return o;
-  } else {
-    return -1;
   }
+  return -1;
 }
 /*---------------------------------------------------------------------------*/
 int
