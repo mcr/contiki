@@ -1,3 +1,8 @@
+/**
+ * \addtogroup shell
+ * @{
+ */
+
 /*
  * Copyright (c) 2008, Swedish Institute of Computer Science.
  * All rights reserved.
@@ -33,7 +38,7 @@
 
 /**
  * \file
- *         A brief description of what this file is.
+ *         The shell application
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
@@ -544,3 +549,5 @@ shell_quit(void)
   process_exit(&shell_server_process);
 }
 /*---------------------------------------------------------------------------*/
+
+/** @} */
