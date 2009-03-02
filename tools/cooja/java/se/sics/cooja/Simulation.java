@@ -44,7 +44,7 @@ import se.sics.cooja.dialogs.*;
  * changed simulation state, added or deleted motes etc are observed.
  * To track mote changes, observe the mote (interfaces) itself.
  *
- * @author Fredrik Österlind
+ * @author Fredrik Osterlind
  */
 public class Simulation extends Observable implements Runnable {
 
@@ -52,7 +52,7 @@ public class Simulation extends Observable implements Runnable {
 
   private Vector<MoteType> moteTypes = new Vector<MoteType>();
 
-  private int delayTime = 5;
+  private int delayTime = 0;
 
   private long currentSimulationTime = 0;
 
