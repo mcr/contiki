@@ -84,7 +84,7 @@ struct announcement {
 
 /**
  * \name Application API
- * *{
+ * @{
  */
 /**
  * \brief      Register an announcement
@@ -168,7 +168,7 @@ void announcement_listen(int periods);
 
 /**
  * \name System API
- * *{
+ * @{
  */
 
 /**
