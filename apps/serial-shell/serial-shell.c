@@ -1,3 +1,8 @@
+/**
+ * \addtogroup shell
+ * @{
+ */
+
 /*
  * Copyright (c) 2008, Swedish Institute of Computer Science.
  * All rights reserved.
@@ -33,7 +38,7 @@
 
 /**
  * \file
- *         A shell driver for the serial port
+ *         A shell back-end for the serial port
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
@@ -92,3 +97,4 @@ serial_shell_init(void)
   process_start(&serial_shell_process, NULL);
 }
 /*---------------------------------------------------------------------------*/
+/** @} */
