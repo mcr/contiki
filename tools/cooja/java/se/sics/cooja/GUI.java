@@ -621,6 +621,9 @@ public class GUI extends Observable {
         ActionEvent.CTRL_MASK));
     menuItem2.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
+        if (getSimulation() == null) {
+          return;
+        }
         reloadCurrentSimulation(false, getSimulation().getRandomSeed());
       }
     });
@@ -632,6 +635,9 @@ public class GUI extends Observable {
         ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK));
     menuItem2.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
+        if (getSimulation() == null) {
+          return;
+        }
         reloadCurrentSimulation(false, getSimulation().getRandomSeed()+1);
       }
     });
