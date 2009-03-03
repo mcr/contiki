@@ -374,6 +374,7 @@ public class ScriptRunner implements Plugin {
           }
         }
 
+        setScriptActive(true);
       }
     }).start();
 
