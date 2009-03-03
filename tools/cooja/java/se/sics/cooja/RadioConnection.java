@@ -41,7 +41,7 @@ import se.sics.cooja.interfaces.Radio;
  * to receive data sent by the source radio, and the interfered radios are not.
  *
  * @see RadioMedium
- * @author Fredrik Österlind
+ * @author Fredrik Osterlind
  */
 public class RadioConnection {
   private Radio source;

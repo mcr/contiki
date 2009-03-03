@@ -32,7 +32,7 @@
 package se.sics.cooja;
 
 /**
- * @author Joakim Eriksson (ported to COOJA by Fredrik Österlind)
+ * @author Joakim Eriksson (ported to COOJA by Fredrik Osterlind)
  */
 public abstract class TimeEvent {
   TimeEvent nextEvent;

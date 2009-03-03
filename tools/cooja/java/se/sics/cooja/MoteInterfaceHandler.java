@@ -44,7 +44,7 @@ import se.sics.cooja.interfaces.*;
  * @see #doPassiveActionsAfterTick()
  * @see #doPassiveActionsBeforeTick()
  *
- * @author Fredrik Österlind
+ * @author Fredrik Osterlind
  */
 public class MoteInterfaceHandler {
   private static Logger logger = Logger.getLogger(MoteInterfaceHandler.class);

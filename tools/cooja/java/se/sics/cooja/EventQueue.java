@@ -34,7 +34,7 @@ package se.sics.cooja;
 import java.util.ArrayList;
 
 /**
- * @author Joakim Eriksson (ported to COOJA by Fredrik Österlind)
+ * @author Joakim Eriksson (ported to COOJA by Fredrik Osterlind)
  */
 public class EventQueue {
 
