@@ -75,7 +75,7 @@ struct runicast_conn {
   struct stunicast_conn c;
   const struct runicast_callbacks *u;
   uint8_t sndnxt;
-  uint8_t lastrecv;
+  uint8_t is_tx;
   uint8_t rxmit;
   uint8_t max_rxmit;
 };
@@ -85,6 +85,8 @@ void runicast_open(struct runicast_conn *c, uint16_t channel,
 void runicast_close(struct runicast_conn *c);
 
 int runicast_send(struct runicast_conn *c, rimeaddr_t *receiver, uint8_t max_retransmissions);
+
+uint8_t runicast_is_transmitting(struct runicast_conn *c);
 
 #endif /* __RUNICAST_H__ */
 /** @} */
