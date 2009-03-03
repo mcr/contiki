@@ -2190,6 +2190,18 @@ public class ContikiMoteTypeDialog extends JDialog {
     testButton.setEnabled(settingsOK);
   }
 
+  public static void cleanTempFiles() {
+    File objectDir = ContikiMoteType.tempOutputDirectory;
+    if (objectDir.exists() && objectDir.isDirectory()) {
+      logger.info("Cleaning temporary files in: " + objectDir);
+      File[] objectFiles = objectDir.listFiles();
+      for (File objectFile : objectFiles) {
+        objectFile.delete();
+      }
+      objectDir.delete();
+    }
+  }
+
   private class MoteTypeEventHandler
       implements
         ActionListener,
@@ -2227,16 +2239,7 @@ public class ContikiMoteTypeDialog extends JDialog {
         myMoteType = null;
         dispose();
       } else if (e.getActionCommand().equals("clean")) {
-        // Delete any created intermediate files
-        File objectDir = ContikiMoteType.tempOutputDirectory;
-        if (objectDir.exists() && objectDir.isDirectory()) {
-          File[] objectFiles = objectDir.listFiles();
-          for (File objectFile : objectFiles) {
-            objectFile.delete();
-          }
-
-          objectDir.delete();
-        }
+        cleanTempFiles();
       } else if (e.getActionCommand().equals("create")) {
         // Create mote type and set various data
         try {
