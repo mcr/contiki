@@ -209,6 +209,11 @@ public class ContikiMoteType implements MoteType {
       return ContikiMoteTypeDialog.showDialog(parentContainer, simulation, this);
     } else {
 
+      /* Automatically clean if not visualized */
+      if (!GUI.isVisualized()) {
+        ContikiMoteTypeDialog.cleanTempFiles();
+      }
+
       // Create temp output directory if not already exists
       if (!ContikiMoteType.tempOutputDirectory.exists()) {
         ContikiMoteType.tempOutputDirectory.mkdir();
