@@ -2193,10 +2193,12 @@ public class ContikiMoteTypeDialog extends JDialog {
   public static void cleanTempFiles() {
     File objectDir = ContikiMoteType.tempOutputDirectory;
     if (objectDir.exists() && objectDir.isDirectory()) {
-      logger.info("Cleaning temporary files in: " + objectDir);
+      logger.info("Cleaning temporary files in: " + objectDir.getPath());
       File[] objectFiles = objectDir.listFiles();
       for (File objectFile : objectFiles) {
-        objectFile.delete();
+        if (!objectFile.getName().endsWith(ContikiMoteType.librarySuffix)) {
+           objectFile.delete();
+        }
       }
       objectDir.delete();
     }
