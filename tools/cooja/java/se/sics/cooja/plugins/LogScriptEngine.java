@@ -380,6 +380,9 @@ public class LogScriptEngine {
         if (timeoutEvent != null) {
           timeoutEvent.remove();
         }
+
+        semaphoreSim.release(100);
+        throw new RuntimeException("test script killed");
       }
       public void testFailed() {
         log("TEST FAILED\n");
@@ -408,6 +411,9 @@ public class LogScriptEngine {
         if (timeoutEvent != null) {
           timeoutEvent.remove();
         }
+
+        semaphoreSim.release(100);
+        throw new RuntimeException("test script killed");
       }
 
       public void generateMessage(long delay, final String msg) {
