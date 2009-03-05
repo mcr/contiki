@@ -144,7 +144,7 @@ output(struct channel *c)
     } else {
       rimebuf_attr_t val;
       val = rimebuf_attr(a->type);
-      hdrptr[byteptr] = rimebuf_attr(a->type);
+      memcpy(&hdrptr[byteptr], &val, len / 8);
       PRINTF("%d.%d: value %d\n",
 	    rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1],
 	    val);
