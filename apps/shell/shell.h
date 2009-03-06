@@ -355,13 +355,14 @@ struct shell_input {
 
 
 #include "shell-blink.h"
-#include "shell-coffee.h"
 #include "shell-checkpoint.h"
+#include "shell-coffee.h"
 #include "shell-exec.h"
 #include "shell-file.h"
 #include "shell-httpd.h"
-#include "shell-netfile.h"
 #include "shell-irc.h"
+#include "shell-netfile.h"
+#include "shell-ping.h"
 #include "shell-power.h"
 #include "shell-ps.h"
 #include "shell-reboot.h"
@@ -374,8 +375,10 @@ struct shell_input {
 #include "shell-run.h"
 #include "shell-sendtest.h"
 #include "shell-sky.h"
+#include "shell-tcpsend.h"
 #include "shell-text.h"
 #include "shell-time.h"
+#include "shell-udpsend.h"
 #include "shell-vars.h"
 #include "shell-wget.h"
 
