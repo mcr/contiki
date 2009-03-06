@@ -203,7 +203,7 @@ node_packet_received(struct runicast_conn *c, rimeaddr_t *from, uint8_t seqno)
 
     if(!tc->forwarding) {
       n = neighbor_best();
-      if(n != NULL) {
+      if(n != NULL && !rimeaddr_cmp(&n->addr, from)) {
 #if CONTIKI_TARGET_NETSIM
 	ether_set_line(n->addr.u8[0], n->addr.u8[1]);
 #endif /* CONTIKI_TARGET_NETSIM */
