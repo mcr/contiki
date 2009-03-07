@@ -7,7 +7,12 @@
  * \defgroup rimeuc Single-hop unicast
  * @{
  *
- * The uc module sends a packet to a single receiver.
+ * The unicast module sends a packet to an identified single-hop
+ * neighbor.  The unicast primitive and adds the single-hop receiver
+ * address attribute to the outgoing packets. For incoming packets,
+ * the unicast module inspects the single-hop receiver address
+ * attribute and discards the packet if the address does not match the
+ * address of the node.
  *
  * \section channels Channels
  *
