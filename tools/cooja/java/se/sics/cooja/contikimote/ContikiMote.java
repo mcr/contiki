@@ -97,7 +97,7 @@ public class ContikiMote implements Mote {
     this.mySim = sim;
     this.myType = moteType;
     this.myMemory = moteType.createInitialMemory();
-    this.myInterfaceHandler = new MoteInterfaceHandler(this, moteType.getMoteInterfaces());
+    this.myInterfaceHandler = new MoteInterfaceHandler(this, moteType.getMoteInterfaceClasses());
 
     myState = State.ACTIVE;
   }
@@ -286,7 +286,7 @@ public class ContikiMote implements Mote {
       if (name.equals("motetype_identifier")) {
         myType = (ContikiMoteType) simulation.getMoteType(element.getText());
         myMemory = myType.createInitialMemory();
-        myInterfaceHandler = new MoteInterfaceHandler(this, myType.getMoteInterfaces());
+        myInterfaceHandler = new MoteInterfaceHandler(this, myType.getMoteInterfaceClasses());
 
       } else if (name.equals("interface_config")) {
         Class<? extends MoteInterface> moteInterfaceClass =
