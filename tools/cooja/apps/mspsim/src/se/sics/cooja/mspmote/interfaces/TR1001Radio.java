@@ -49,7 +49,7 @@ import se.sics.cooja.mspmote.ESBMote;
  * TR1001 radio interface on ESB platform. Assumes driver specifics such as
  * preambles, synchbytes, GCR coding, CRC16.
  *
- * @author Fredrik Österlind
+ * @author Fredrik Osterlind
  */
 @ClassDescription("TR1001 Radio")
 public class TR1001Radio extends Radio implements USARTListener, CustomDataRadio {

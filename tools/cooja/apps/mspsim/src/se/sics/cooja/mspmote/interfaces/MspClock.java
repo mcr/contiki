@@ -42,7 +42,7 @@ import se.sics.cooja.mspmote.MspMote;
 import se.sics.mspsim.core.MSP430;
 
 /**
- * @author Fredrik Österlind
+ * @author Fredrik Osterlind
  */
 @ClassDescription("Cycle clock")
 public class MspClock extends Clock {

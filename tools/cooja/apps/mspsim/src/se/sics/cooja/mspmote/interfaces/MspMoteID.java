@@ -52,7 +52,7 @@ import se.sics.cooja.mspmote.MspMoteMemory;
  * @see #GENERATE_ID_HEADER
  * @see #PERSISTENT_SET_ID
  *
- * @author Fredrik Österlind
+ * @author Fredrik Osterlind
  */
 public class MspMoteID extends MoteID {
   private static Logger logger = Logger.getLogger(MspMoteID.class);

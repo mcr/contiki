@@ -52,7 +52,7 @@ import se.sics.cooja.mspmote.SkyMote;
 import se.sics.cooja.plugins.SLIP;
 
 /**
- * @author Fredrik Österlind
+ * @author Fredrik Osterlind
  */
 @ClassDescription("Serial port")
 public class SkySerial extends Log implements SerialPort, USARTListener {

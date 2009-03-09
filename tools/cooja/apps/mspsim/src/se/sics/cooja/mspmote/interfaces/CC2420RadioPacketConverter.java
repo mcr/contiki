@@ -39,7 +39,7 @@ import se.sics.cooja.COOJARadioPacket;
  * Converts radio packets between X-MAC/CC24240/Sky and COOJA.
  * Handles radio driver specifics such as length header and CRC footer.
  *
- * @author Fredrik Österlind
+ * @author Fredrik Osterlind
  */
 public class CC2420RadioPacketConverter {
   private static Logger logger = Logger.getLogger(CC2420RadioPacketConverter.class);
