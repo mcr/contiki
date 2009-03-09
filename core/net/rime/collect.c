@@ -114,6 +114,7 @@ update_rtmetric(struct collect_conn *tc)
 	       rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1]);
       }
       tc->rtmetric = RTMETRIC_MAX;
+			announcement_set_value(&tc->announcement, tc->rtmetric);
     } else {
 
       /* We set our rtmetric to the rtmetric of our best neighbor plus
