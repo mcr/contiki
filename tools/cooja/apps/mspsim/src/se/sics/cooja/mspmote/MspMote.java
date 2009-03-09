@@ -112,7 +112,7 @@ public abstract class MspMote implements Mote {
 
   protected void initMote() {
     if (myMoteType != null) {
-      initEmulator(myMoteType.getELFFile());
+      initEmulator(myMoteType.getContikiFirmwareFile());
       myMoteInterfaceHandler = createMoteInterfaceHandler();
     }
   }
@@ -260,7 +260,7 @@ public abstract class MspMote implements Mote {
   /* called when moteID is updated */
   public void idUpdated(int newID) {
   }
-  
+
   public MoteType getType() {
     return myMoteType;
   }
@@ -364,7 +364,7 @@ public abstract class MspMote implements Mote {
         myMoteType = (MspMoteType) simulation.getMoteType(element.getText());
         getType().setIdentifier(element.getText());
 
-        initEmulator(myMoteType.getELFFile());
+        initEmulator(myMoteType.getContikiFirmwareFile());
         myMoteInterfaceHandler = createMoteInterfaceHandler();
 
       } else if (name.equals("interface_config")) {
