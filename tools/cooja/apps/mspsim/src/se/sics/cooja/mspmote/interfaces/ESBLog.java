@@ -49,15 +49,15 @@ import se.sics.cooja.mspmote.ESBMote;
 public class ESBLog extends Log implements USARTListener {
   private static Logger logger = Logger.getLogger(ESBLog.class);
 
-  private Mote myMote;
+  private ESBMote mote;
   private String lastLogMessage = "";
   private String newMessage = "";
 
-  public ESBLog(ESBMote mote) {
-    myMote = mote;
+  public ESBLog(Mote mote) {
+    this.mote = (ESBMote) mote;
 
     /* Listen to port writes */
-    IOUnit usart = mote.getCPU().getIOUnit("USART 1");
+    IOUnit usart = this.mote.getCPU().getIOUnit("USART 1");
     if (usart instanceof USART) {
       ((USART) usart).setUSARTListener(this);
     }
@@ -125,7 +125,7 @@ public class ESBLog extends Log implements USARTListener {
       lastLogMessage = newMessage;
       newMessage = "";
       this.setChanged();
-      this.notifyObservers(myMote);
+      this.notifyObservers(mote);
     }
   }
 

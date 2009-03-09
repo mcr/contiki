@@ -50,7 +50,7 @@ import se.sics.mspsim.platform.esb.ESBNode;
 public class ESBLED extends LED implements PortListener {
   private static Logger logger = Logger.getLogger(ESBLED.class);
 
-  private ESBMote mspMote;
+  private ESBMote mote;
   private boolean redOn = false;
   private boolean greenOn = false;
   private boolean yellowOn = false;
@@ -63,10 +63,10 @@ public class ESBLED extends LED implements PortListener {
   private static final Color RED = new Color(255, 0, 0);
 
   public ESBLED(Mote mote) {
-    mspMote = (ESBMote) mote;
+    this.mote = (ESBMote) mote;
 
     /* Listen for port writes */
-    IOUnit unit = mspMote.getCPU().getIOUnit("Port 2");
+    IOUnit unit = this.mote.getCPU().getIOUnit("Port 2");
     if (unit instanceof IOPort) {
       ((IOPort) unit).setPortListener(this);
     }

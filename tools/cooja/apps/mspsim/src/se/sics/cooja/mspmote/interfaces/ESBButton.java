@@ -50,10 +50,10 @@ import se.sics.cooja.mspmote.ESBMote;
 public class ESBButton extends Button {
   private static Logger logger = Logger.getLogger(ESBButton.class);
 
-  private ESBMote esbMote;
+  private ESBMote mote;
 
   public ESBButton(Mote mote) {
-    esbMote = (ESBMote) mote;
+    this.mote = (ESBMote) mote;
   }
 
   public void clickButton() {
@@ -62,13 +62,13 @@ public class ESBButton extends Button {
   }
 
   public void releaseButton() {
-    esbMote.esbNode.setButton(false);
+    mote.esbNode.setButton(false);
     setChanged();
     notifyObservers();
   }
 
   public void pressButton() {
-    esbMote.esbNode.setButton(true);
+    mote.esbNode.setButton(true);
     setChanged();
     notifyObservers();
   }

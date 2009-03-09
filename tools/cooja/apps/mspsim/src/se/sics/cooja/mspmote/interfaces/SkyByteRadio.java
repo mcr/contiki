@@ -88,9 +88,9 @@ public class SkyByteRadio extends Radio implements CustomDataRadio {
 
   //TODO: HW on/off
 
-  public SkyByteRadio(SkyMote mote) {
-    this.mote = mote;
-    this.cc2420 = mote.skyNode.radio;
+  public SkyByteRadio(Mote mote) {
+    this.mote = (SkyMote) mote;
+    this.cc2420 = this.mote.skyNode.radio;
 
     cc2420.setRFListener(new RFListener() {
       int len = 0;

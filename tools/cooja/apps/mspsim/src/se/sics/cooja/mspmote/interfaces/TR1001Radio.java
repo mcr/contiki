@@ -116,11 +116,11 @@ public class TR1001Radio extends Radio implements USARTListener, CustomDataRadio
    * @see Mote
    * @see se.sics.cooja.MoteInterfaceHandler
    */
-  public TR1001Radio(ESBMote mote) {
-    this.mote = mote;
+  public TR1001Radio(Mote mote) {
+    this.mote = (ESBMote) mote;
 
     /* Start listening to CPU's USART */
-    IOUnit usart = mote.getCPU().getIOUnit("USART 0");
+    IOUnit usart = this.mote.getCPU().getIOUnit("USART 0");
     if (usart instanceof USART) {
       radioUSART = (USART) usart;
       radioUSART.setUSARTListener(this);

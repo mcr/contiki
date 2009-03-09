@@ -51,8 +51,8 @@ public class MspClock extends Clock {
   private MspMote myMote;
   private MSP430 cpu;
 
-  public MspClock(MspMote mote) {
-    myMote = mote;
+  public MspClock(Mote mote) {
+    myMote = (MspMote) mote;
     cpu = myMote.getCPU();
   }
 
