@@ -39,14 +39,13 @@ import se.sics.cooja.Simulation;
 import se.sics.cooja.dialogs.AbstractCompileDialog;
 import se.sics.cooja.interfaces.Mote2MoteRelations;
 import se.sics.cooja.interfaces.Position;
+import se.sics.cooja.mspmote.interfaces.ESBButton;
+import se.sics.cooja.mspmote.interfaces.ESBLED;
+import se.sics.cooja.mspmote.interfaces.ESBLog;
 import se.sics.cooja.mspmote.interfaces.MspClock;
 import se.sics.cooja.mspmote.interfaces.MspIPAddress;
 import se.sics.cooja.mspmote.interfaces.MspMoteID;
-import se.sics.cooja.mspmote.interfaces.SkyButton;
-import se.sics.cooja.mspmote.interfaces.SkyByteRadio;
-import se.sics.cooja.mspmote.interfaces.SkyFlash;
-import se.sics.cooja.mspmote.interfaces.SkyLED;
-import se.sics.cooja.mspmote.interfaces.SkySerial;
+import se.sics.cooja.mspmote.interfaces.TR1001Radio;
 
 public class ESBCompileDialog extends AbstractCompileDialog {
   private static Logger logger = Logger.getLogger(ESBCompileDialog.class);
@@ -77,16 +76,16 @@ public class ESBCompileDialog extends AbstractCompileDialog {
     if (moteIntfBox.getComponentCount() > 0) {
       selected = false;
     }
+
     addMoteInterface(Position.class, selected);
     addMoteInterface(MspIPAddress.class, selected);
-    addMoteInterface(Mote2MoteRelations.class, selected);
+    addMoteInterface(ESBLog.class, selected);
     addMoteInterface(MspClock.class, selected);
+    addMoteInterface(ESBLED.class, selected);
+    addMoteInterface(ESBButton.class, selected);
     addMoteInterface(MspMoteID.class, selected);
-    addMoteInterface(SkyButton.class, selected);
-    addMoteInterface(SkyFlash.class, selected);
-    addMoteInterface(SkyByteRadio.class, selected);
-    addMoteInterface(SkySerial.class, selected);
-    addMoteInterface(SkyLED.class, selected);
+    addMoteInterface(TR1001Radio.class, selected);
+    addMoteInterface(Mote2MoteRelations.class, selected);
   }
 
   public boolean canLoadFirmware(File file) {
