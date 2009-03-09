@@ -46,7 +46,7 @@ import se.sics.cooja.*;
 /**
  * The Control Panel is a simple control panel for simulations.
  *
- * @author Fredrik Österlind
+ * @author Fredrik Osterlind
  */
 @ClassDescription("Control Panel")
 @PluginType(PluginType.SIM_STANDARD_PLUGIN)

@@ -43,7 +43,7 @@ import se.sics.cooja.*;
 /**
  * Mote Interface Viewer views information about a specific mote interface.
  *
- * @author Fredrik Österlind
+ * @author Fredrik Osterlind
  */
 @ClassDescription("Mote Interface Viewer")
 @PluginType(PluginType.MOTE_PLUGIN)
