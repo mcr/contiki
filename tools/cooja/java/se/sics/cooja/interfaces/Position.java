@@ -45,7 +45,7 @@ import se.sics.cooja.*;
  * <p>
  * This observable notifies when the position is changed.
  *
- * @author Fredrik Österlind
+ * @author Fredrik Osterlind
  */
 @ClassDescription("Position")
 public class Position extends MoteInterface {

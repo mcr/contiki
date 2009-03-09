@@ -54,7 +54,7 @@ import se.sics.cooja.*;
  * @see MoteInterface
  * @see MoteInterface#energyConsumption()
  *
- * @author Fredrik Österlind
+ * @author Fredrik Osterlind
  */
 @ClassDescription("Battery")
 public class Battery extends MoteInterface implements PolledAfterAllTicks {

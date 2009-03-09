@@ -38,7 +38,7 @@ import se.sics.cooja.contikimote.interfaces.ContikiLog;
  *
  * @see ContikiLog
  *
- * @author Fredrik Österlind
+ * @author Fredrik Osterlind
  */
 public interface PolledAfterActiveTicks {
   public void doActionsAfterTick();

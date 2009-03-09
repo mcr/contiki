@@ -34,7 +34,7 @@ package se.sics.cooja.interfaces;
 /**
  * A mote interface polled before ALL mote ticks.
  *
- * @author Fredrik Österlind
+ * @author Fredrik Osterlind
  */
 public interface PolledBeforeAllTicks {
   public void doActionsBeforeTick();

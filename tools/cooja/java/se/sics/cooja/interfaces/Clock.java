@@ -39,7 +39,7 @@ import se.sics.cooja.*;
  *
  * This observable never notifies.
  *
- * @author Fredrik Österlind
+ * @author Fredrik Osterlind
  */
 @ClassDescription("Clock")
 public abstract class Clock extends MoteInterface {

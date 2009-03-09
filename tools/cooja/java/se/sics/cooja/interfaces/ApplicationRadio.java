@@ -45,7 +45,7 @@ import se.sics.cooja.*;
  * radio functionality. Supports radio channels and output power functionality.
  * The mote should observe the radio for incoming radio packet data.
  *
- * @author Fredrik Österlind
+ * @author Fredrik Osterlind
  */
 public class ApplicationRadio extends Radio implements PolledBeforeActiveTicks {
   private Mote myMote;

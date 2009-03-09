@@ -38,7 +38,7 @@ import se.sics.cooja.contikimote.interfaces.ContikiClock;
  *
  * @see ContikiClock
  *
- * @author Fredrik Österlind
+ * @author Fredrik Osterlind
  */
 public interface PolledBeforeActiveTicks {
   public void doActionsBeforeTick();

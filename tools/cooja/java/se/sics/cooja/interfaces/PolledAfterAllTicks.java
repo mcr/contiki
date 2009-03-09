@@ -36,7 +36,7 @@ package se.sics.cooja.interfaces;
  *
  * @see Battery
  *
- * @author Fredrik Österlind
+ * @author Fredrik Osterlind
  */
 public interface PolledAfterAllTicks {
   public void doActionsAfterTick();
