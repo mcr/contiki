@@ -117,6 +117,10 @@ public abstract class MspMote implements Mote {
     }
   }
 
+  protected MoteInterfaceHandler createMoteInterfaceHandler() {
+    return new MoteInterfaceHandler(this, getType().getMoteInterfaceClasses());
+  }
+
   public void sendCLICommand(String line) {
     if (commandHandler != null) {
       commandHandler.lineRead(line);
@@ -282,13 +286,6 @@ public abstract class MspMote implements Mote {
   public void setInterfaces(MoteInterfaceHandler moteInterfaceHandler) {
     myMoteInterfaceHandler = moteInterfaceHandler;
   }
-
-  /**
-   * Creates an interface handler object and registers interfaces to it.
-   *
-   * @return Interface handler
-   */
-  protected abstract MoteInterfaceHandler createMoteInterfaceHandler();
 
   /**
    * Initializes emulator by creating CPU, memory and node object.

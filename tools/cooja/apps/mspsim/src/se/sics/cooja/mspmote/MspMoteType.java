@@ -33,6 +33,7 @@ package se.sics.cooja.mspmote;
 
 import java.awt.*;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Vector;
 import javax.swing.*;
@@ -227,12 +228,20 @@ public abstract class MspMoteType implements MoteType {
     element.setText(fileFirmware.getPath().replaceAll("\\\\", "/"));
     config.add(element);
 
+    // Mote interfaces
+    for (Class moteInterface : getMoteInterfaceClasses()) {
+      element = new Element("moteinterface");
+      element.setText(moteInterface.getName());
+      config.add(element);
+    }
+
     return config;
   }
 
   public boolean setConfigXML(Simulation simulation,
       Collection<Element> configXML, boolean visAvailable)
       throws MoteTypeCreationException {
+    ArrayList<Class<? extends MoteInterface>> intfClassList = new ArrayList<Class<? extends MoteInterface>>();
     for (Element element : configXML) {
       String name = element.getName();
 
@@ -249,12 +258,25 @@ public abstract class MspMoteType implements MoteType {
       } else if (name.equals("elf")) {
         /* Backwards compatibility: elf is now firmware */
         fileFirmware = new File(element.getText());
+      } else if (name.equals("moteinterface")) {
+        Class<? extends MoteInterface> moteInterfaceClass =
+          simulation.getGUI().tryLoadClass(this, MoteInterface.class, element.getText().trim());
+
+        if (moteInterfaceClass == null) {
+          logger.warn("Can't find mote interface class: " + element.getText());
+        } else {
+          intfClassList.add(moteInterfaceClass);
+        }
       } else {
         logger.fatal("Unrecognized entry in loaded configuration: " + name);
         throw new MoteTypeCreationException(
             "Unrecognized entry in loaded configuration: " + name);
       }
     }
+
+    Class<? extends MoteInterface>[] intfClasses = new Class[intfClassList.size()];
+    intfClassList.toArray(intfClasses);
+    setMoteInterfaceClasses(intfClasses);
 
     return configureAndInit(GUI.getTopParentContainer(), simulation, visAvailable);
   }
