@@ -119,11 +119,11 @@ public class VisState extends Visualizer2D {
 
 
     // Associate different colors with different mote types
-    Vector<MoteType> allTypes = simulation.getMoteTypes();
-    int numberOfTypes = allTypes.size();
+    MoteType[] allTypes = simulation.getMoteTypes();
+    int numberOfTypes = allTypes.length;
 
     for (int colCounter=0; colCounter < numberOfTypes && colCounter < moteTypeColors.length; colCounter++) {
-      if (mote.getType() == allTypes.get(colCounter)) {
+      if (mote.getType() == allTypes[colCounter]) {
         returnColors[0] = moteTypeColors[colCounter];
         return returnColors;
       }
