@@ -84,6 +84,9 @@ PROCESS_THREAD(example_collect_process, ev, data)
     PROCESS_WAIT_EVENT();
 
     if(etimer_expired(&et)) {
+      while(tc.forwarding) {
+	PROCESS_PAUSE();
+      }
       printf("Sending\n");
       rimebuf_clear();
       rimebuf_set_datalen(sprintf(rimebuf_dataptr(),
