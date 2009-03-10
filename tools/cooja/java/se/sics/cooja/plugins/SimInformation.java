@@ -155,7 +155,7 @@ public class SimInformation extends VisPlugin {
     smallPane.add(Box.createHorizontalGlue());
 
     label = new JLabel();
-    label.setText(""  + simulation.getMoteTypes().size());
+    label.setText(""  + simulation.getMoteTypes().length);
 
     labelNrMoteTypes = label;
     smallPane.add(label);
@@ -203,7 +203,7 @@ public class SimInformation extends VisPlugin {
           labelStatus.setText("STOPPED");
         }
         labelNrMotes.setText(""  + simulation.getMotesCount());
-        labelNrMoteTypes.setText(""  + simulation.getMoteTypes().size());
+        labelNrMoteTypes.setText(""  + simulation.getMoteTypes().length);
 
       }
     });
