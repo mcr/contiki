@@ -100,8 +100,7 @@ public abstract class CoreComm {
    */
   public static boolean hasLibraryFileBeenLoaded(File libraryFile) {
     for (File loadedFile : coreCommFiles) {
-      if (loadedFile != null
-          && loadedFile.getName().equals(libraryFile.getName())) {
+      if (loadedFile.getName().equals(libraryFile.getName())) {
         return true;
       }
     }

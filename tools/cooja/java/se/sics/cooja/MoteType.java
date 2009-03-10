@@ -35,18 +35,19 @@ import java.util.Collection;
 import javax.swing.JPanel;
 import org.jdom.Element;
 
+import se.sics.cooja.contikimote.ContikiMoteType;
 import se.sics.cooja.dialogs.MessageList;
 
 /**
  * The mote type defines properties common for several motes. These properties
  * may differ between different implementations, but typically includes how a
- * mote of that type is initialized, which hardware peripherals each mote has
- * etc.
- * Every simulated motes must belong to a mote type.
+ * mote is initialized, which hardware peripherals each mote has
+ * etc. All simulated motes belongs to one mote type.
  *
  * A mote type may also hold the connection to an underlying simulation
  * framework, such as a compiled Contiki system.
  *
+ * @see ContikiMoteType
  * @author Fredrik Osterlind
  */
 public interface MoteType {
