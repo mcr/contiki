@@ -1052,16 +1052,23 @@ uip_process(u8_t flag)
     UIP_LOG("ip: packet shorter than reported in IP header.");
     goto drop;
   }
-   
+  
+  PRINTF("IPv6 packet received from ");
+  PRINT6ADDR(&UIP_IP_BUF->srcipaddr);
+  PRINTF(" to ");
+  PRINT6ADDR(&UIP_IP_BUF->destipaddr);
+  PRINTF("\n");
 
   if(uip_is_addr_mcast(&UIP_IP_BUF->srcipaddr)){
     UIP_STAT(++uip_stat.ip.drop);
+    PRINTF("Dropping packet, src is mcast\n");
     goto drop;
   }
       
   if(!uip_netif_is_addr_my_unicast(&UIP_IP_BUF->destipaddr) &&
      !uip_netif_is_addr_my_solicited(&UIP_IP_BUF->destipaddr) &&
      !uip_is_addr_linklocal_allnodes_mcast(&UIP_IP_BUF->destipaddr)){
+    PRINTF("Dropping packet, not for me\n");
     UIP_STAT(++uip_stat.ip.drop);
     goto drop;
   }
