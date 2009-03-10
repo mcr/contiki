@@ -561,8 +561,7 @@ public class Simulation extends Observable implements Runnable {
           return false;
         }
 
-        MoteType moteType = moteTypeClass.getConstructor((Class[]) null)
-            .newInstance();
+        MoteType moteType = moteTypeClass.getConstructor((Class[]) null).newInstance();
 
         boolean createdOK = moteType.setConfigXML(this, element.getChildren(),
             visAvailable);
@@ -698,8 +697,10 @@ public class Simulation extends Observable implements Runnable {
    *
    * @return All mote types
    */
-  public Vector<MoteType> getMoteTypes() {
-    return moteTypes;
+  public MoteType[] getMoteTypes() {
+    MoteType[] types = new MoteType[moteTypes.size()];
+    moteTypes.toArray(types);
+    return types;
   }
 
   /**
