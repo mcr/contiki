@@ -1246,7 +1246,8 @@ public class ContikiMoteType implements MoteType {
     config.add(element);
 
     element = new Element("contikiapp");
-    element.setText(getContikiSourceFile().getAbsolutePath()); /* TODO Fix Contiki-relative path */
+    File tmp = GUI.stripAbsoluteContikiPath(getContikiSourceFile());
+    element.setText(tmp.getPath().replaceAll("\\\\", "/")); /* TODO Fix Contiki-relative path */
     config.add(element);
 
     element = new Element("commands");
