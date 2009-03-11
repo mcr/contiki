@@ -489,7 +489,11 @@ public abstract class AbstractCompileDialog extends JDialog {
       nextButton.setText("Compile");
       nextButton.setEnabled(false);
       commandsArea.setEnabled(false);
-      commandsArea.setText("");
+      SwingUtilities.invokeLater(new Runnable() {
+        public void run() {
+          commandsArea.setText("");
+        }
+      });
       break;
 
     case SELECTED_SOURCE:
