@@ -318,6 +318,12 @@ cc2420_send(const void *payload, unsigned short payload_len)
 
   GET_LOCK();
 
+  if(rimebuf_attr(RIMEBUF_ATTR_RADIO_TXPOWER) > 0) {
+    cc2420_set_txpower(rimebuf_attr(RIMEBUF_ATTR_RADIO_TXPOWER) - 1);
+  } else {
+    cc2420_set_txpower(CC2420_TXPOWER_MAX);
+  }
+  
   PRINTF("cc2420: sending %d bytes\n", payload_len);
   
   RIMESTATS_ADD(lltx);
