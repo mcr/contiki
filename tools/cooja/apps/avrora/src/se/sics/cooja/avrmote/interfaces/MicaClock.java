@@ -42,7 +42,7 @@ import se.sics.cooja.interfaces.Clock;
 
 
 /**
- * @author Fredrik Österlind, Joakim Eriksson
+ * @author Fredrik Osterlind, Joakim Eriksson
  */
 @ClassDescription("Cycle clock")
 public class MicaClock extends Clock {
