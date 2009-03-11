@@ -148,7 +148,8 @@ public class SkyMoteType extends MspMoteType {
         try {
           CompileContiki.compile(
               cmd,
-              null /* No output file */,
+              null,
+              null /* Do not observe output firmware file */,
               getContikiSourceFile().getParentFile(),
               null,
               null,

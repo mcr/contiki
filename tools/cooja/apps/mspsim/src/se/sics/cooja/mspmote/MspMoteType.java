@@ -217,7 +217,7 @@ public abstract class MspMoteType implements MoteType {
       fileSource = GUI.stripAbsoluteContikiPath(fileSource);
       element.setText(fileSource.getPath().replaceAll("\\\\", "/"));
       config.add(element);
-      element = new Element("command");
+      element = new Element("commands");
       element.setText(compileCommands);
       config.add(element);
     }
@@ -251,7 +251,7 @@ public abstract class MspMoteType implements MoteType {
         description = element.getText();
       } else if (name.equals("source")) {
         fileSource = new File(element.getText());
-      } else if (name.equals("command")) {
+      } else if (name.equals("commands")) {
         compileCommands = element.getText();
       } else if (name.equals("firmware")) {
         fileFirmware = new File(element.getText());
