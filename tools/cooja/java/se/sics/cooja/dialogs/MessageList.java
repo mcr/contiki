@@ -62,6 +62,8 @@ import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 
+import se.sics.cooja.GUI;
+
 public class MessageList extends JList {
 
   public static final int NORMAL = 0;
@@ -160,6 +162,8 @@ public class MessageList extends JList {
   }
 
   public void addMessage(final String message, final int type) {
+    GUI.setProgressMessage(message);
+
     MessageContainer msg = new MessageContainer(message, type);
     messages.add(msg);
 
