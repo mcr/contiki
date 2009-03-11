@@ -1274,6 +1274,9 @@ public class ContikiMoteType implements MoteType {
   public boolean setConfigXML(Simulation simulation,
       Collection<Element> configXML, boolean visAvailable)
   throws MoteTypeCreationException {
+    boolean warnedOldVersion = false;
+    File oldVersionSource = null;
+
     moteInterfacesClasses = new ArrayList<Class<? extends MoteInterface>>();
     this.simulation = simulation;
 
@@ -1309,6 +1312,29 @@ public class ContikiMoteType implements MoteType {
         } else {
           moteInterfacesClasses.add(moteInterfaceClass);
         }
+      } else if (
+          name.equals("contikibasedir") ||
+          name.equals("contikicoredir") ||
+          name.equals("projectdir") ||
+          name.equals("compilefile") ||
+          name.equals("process") ||
+          name.equals("sensor") ||
+          name.equals("coreinterface")) {
+        /* Backwards compatibility: old contiki mote type is being loaded */
+        if (!warnedOldVersion) {
+          warnedOldVersion = true;
+          logger.warn("Old simulation config detected: contiki mote types may not load correctly");
+        }
+
+        if (name.equals("compilefile")) {
+          if (element.getText().endsWith(".c")) {
+            File potentialFile = new File(element.getText());
+            if (potentialFile.exists()) {
+              oldVersionSource = potentialFile;
+            }
+          }
+        }
+
       } else {
         logger.fatal("Unrecognized entry in loaded configuration: " + name);
       }
@@ -1319,6 +1345,25 @@ public class ContikiMoteType implements MoteType {
       new Class[moteInterfacesClasses.size()];
     moteInterfacesClasses.toArray(arr);
     setCoreInterfaces(ContikiMoteType.getRequiredCoreInterfaces(arr));
+
+    /* Backwards compatibility: old contiki mote type is being loaded */
+    if (getContikiSourceFile() == null &&
+        warnedOldVersion &&
+        oldVersionSource != null)
+    {
+      /* Guess Contiki source */
+      setContikiSourceFile(oldVersionSource);
+      logger.info("Guessing Contiki source: " + oldVersionSource.getAbsolutePath());
+
+      setContikiFirmwareFile(getExpectedFirmwareFile(oldVersionSource));
+      logger.info("Guessing Contiki firmware: " + getContikiFirmwareFile().getAbsolutePath());
+
+      /* Guess compile commands */
+      String compileCommands =
+      "make " + getExpectedFirmwareFile(oldVersionSource).getName() + " TARGET=cooja";
+      logger.info("Guessing compile commands: " + compileCommands);
+      setCompileCommands(compileCommands);
+    }
 
     boolean createdOK = configureAndInit(GUI.getTopParentContainer(), simulation, visAvailable);
     return createdOK;
