@@ -1246,8 +1246,8 @@ public class ContikiMoteType implements MoteType {
     config.add(element);
 
     element = new Element("contikiapp");
-    File tmp = GUI.stripAbsoluteContikiPath(getContikiSourceFile());
-    element.setText(tmp.getPath().replaceAll("\\\\", "/")); /* TODO Fix Contiki-relative path */
+    File file = simulation.getGUI().createPortablePath(getContikiSourceFile());
+    element.setText(file.getPath().replaceAll("\\\\", "/"));
     config.add(element);
 
     element = new Element("commands");
@@ -1288,7 +1288,12 @@ public class ContikiMoteType implements MoteType {
       } else if (name.equals("description")) {
         description = element.getText();
       } else if (name.equals("contikiapp")) {
-        setContikiSourceFile(new File(element.getText())); /* TODO Fix Contiki-relative paths */
+        File file = new File(element.getText());
+        if (!file.exists()) {
+          file = simulation.getGUI().restorePortablePath(file);
+        }
+
+        setContikiSourceFile(file);
 
         /* XXX Do not load the generated firmware. Instead, load the unique library file directly */
         File contikiFirmware = new File(
