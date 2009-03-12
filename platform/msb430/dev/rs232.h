@@ -49,6 +49,8 @@
 #ifndef __RS232_H__
 #define __RS232_H__
 
+#include "dev/msb430-uart1.h"
+
 enum rs232_speed {
 	RS232_9600  =	0,
 	RS232_19200 =	1,
