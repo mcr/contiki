@@ -51,6 +51,8 @@ import se.sics.cooja.dialogs.MessageList.MessageContainer;
 public class MicaZMoteType implements MoteType {
   private static Logger logger = Logger.getLogger(MicaZMoteType.class);
 
+  private Simulation simulation;
+
   public static final String target = "micaz";
   public static final String targetNice = "MicaZ";
 
@@ -150,6 +152,8 @@ public class MicaZMoteType implements MoteType {
   protected boolean configureAndInitMicaZType(Container parentContainer, Simulation simulation,
       boolean visAvailable, final String target, final String targetNice)
   throws MoteTypeCreationException {
+    this.simulation = simulation;
+
     boolean compileFromSource = false;
 
     if (getIdentifier() == null && !visAvailable) {
@@ -1060,8 +1064,8 @@ public class MicaZMoteType implements MoteType {
     // Source file
     if (fileSource != null) {
       element = new Element("source");
-      fileSource = GUI.stripAbsoluteContikiPath(fileSource);
-      element.setText(fileSource.getPath().replaceAll("\\\\", "/"));
+      File file = simulation.getGUI().createPortablePath(fileSource);
+      element.setText(file.getPath().replaceAll("\\\\", "/"));
       config.add(element);
       element = new Element("command");
       element.setText(compileCommand);
@@ -1069,9 +1073,7 @@ public class MicaZMoteType implements MoteType {
     } else {
       // ELF file
       element = new Element("elf");
-      File file = fileFirmware;
-      file = GUI.stripAbsoluteContikiPath(file);
-      fileFirmware = file;
+      File file = simulation.getGUI().createPortablePath(fileFirmware);
       element.setText(file.getPath().replaceAll("\\\\", "/"));
       config.add(element);
     }
@@ -1091,10 +1093,16 @@ public class MicaZMoteType implements MoteType {
         description = element.getText();
       } else if (name.equals("source")) {
         fileSource = new File(element.getText());
+        if (!fileSource.exists()) {
+          fileSource = simulation.getGUI().restorePortablePath(fileSource);
+        }
       } else if (name.equals("command")) {
         compileCommand = element.getText();
       } else if (name.equals("elf")) {
         fileFirmware = new File(element.getText());
+        if (!fileFirmware.exists()) {
+          fileFirmware = simulation.getGUI().restorePortablePath(fileSource);
+        }
       } else {
         logger.fatal("Unrecognized entry in loaded configuration: " + name);
         throw new MoteTypeCreationException(
