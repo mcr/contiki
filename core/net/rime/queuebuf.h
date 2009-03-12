@@ -54,15 +54,15 @@
 #ifndef __QUEUEBUF_H__
 #define __QUEUEBUF_H__
 
-#include "net/rime/rimebuf.h"
+#include "net/rime/packetbuf.h"
 
 struct queuebuf;
 
 void queuebuf_init(void);
 
-struct queuebuf *queuebuf_new_from_rimebuf(void);
+struct queuebuf *queuebuf_new_from_packetbuf(void);
 void queuebuf_free(struct queuebuf *b);
-void queuebuf_to_rimebuf(struct queuebuf *b);
+void queuebuf_to_packetbuf(struct queuebuf *b);
 
 void *queuebuf_dataptr(struct queuebuf *b);
 int queuebuf_datalen(struct queuebuf *b);

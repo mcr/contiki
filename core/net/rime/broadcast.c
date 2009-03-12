@@ -46,9 +46,9 @@
 #include "contiki-net.h"
 #include <string.h>
 
-static const struct rimebuf_attrlist attributes[] =
+static const struct packetbuf_attrlist attributes[] =
   {
-    BROADCAST_ATTRIBUTES RIMEBUF_ATTR_LAST
+    BROADCAST_ATTRIBUTES PACKETBUF_ATTR_LAST
   };
 
 #define DEBUG 0
@@ -66,7 +66,7 @@ recv_from_abc(struct abc_conn *bc)
   rimeaddr_t sender;
   struct broadcast_conn *c = (struct broadcast_conn *)bc;
 
-  rimeaddr_copy(&sender, rimebuf_addr(RIMEBUF_ADDR_SENDER));
+  rimeaddr_copy(&sender, packetbuf_addr(PACKETBUF_ADDR_SENDER));
   
   PRINTF("%d.%d: broadcast: from %d.%d\n",
 	 rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1],
@@ -96,7 +96,7 @@ broadcast_send(struct broadcast_conn *c)
 {
   PRINTF("%d.%d: broadcast_send\n",
 	 rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1]);
-  rimebuf_set_addr(RIMEBUF_ADDR_SENDER, &rimeaddr_node_addr);
+  packetbuf_set_addr(PACKETBUF_ADDR_SENDER, &rimeaddr_node_addr);
   return abc_send(&c->c);
 }
 /*---------------------------------------------------------------------------*/

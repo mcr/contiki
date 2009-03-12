@@ -75,11 +75,11 @@ input_sniffer(void)
   int i;
   uint8_t *dataptr;
 
-  printf("x %d ", rimebuf_totlen());
-  dataptr = rimebuf_dataptr();
+  printf("x %d ", packetbuf_totlen());
+  dataptr = packetbuf_dataptr();
   printf("%02x ", dataptr[0]);
   /*  if(dataptr[0] == 18) {*/
-    for(i = 1; i < rimebuf_totlen(); ++i) {
+    for(i = 1; i < packetbuf_totlen(); ++i) {
       printf("%02x ", dataptr[i]);
     }
     /*  }*/
@@ -90,8 +90,8 @@ static void
 output_sniffer(void)
 {
   uint8_t *dataptr;
-  printf("- %d ", rimebuf_totlen());
-  dataptr = rimebuf_dataptr();
+  printf("- %d ", packetbuf_totlen());
+  dataptr = packetbuf_dataptr();
   printf("%02x\n", dataptr[0]);
 }
 /*---------------------------------------------------------------------------*/

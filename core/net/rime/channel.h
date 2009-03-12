@@ -44,20 +44,20 @@
 struct channel;
 
 #include "contiki-conf.h"
-#include "net/rime/rimebuf.h"
+#include "net/rime/packetbuf.h"
 #include "net/rime/chameleon.h"
 
 struct channel {
   struct channel *next;
   uint16_t channelno;
-  const struct rimebuf_attrlist *attrlist;
+  const struct packetbuf_attrlist *attrlist;
   uint8_t hdrsize;
 };
 
 struct channel *channel_lookup(uint16_t channelno);
 
 void channel_set_attributes(uint16_t channelno,
-			    const struct rimebuf_attrlist attrlist[]);
+			    const struct packetbuf_attrlist attrlist[]);
 void channel_open(struct channel *c, uint16_t channelno);
 void channel_close(struct channel *c);
 void channel_init(void);

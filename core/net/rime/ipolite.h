@@ -170,7 +170,7 @@ void ipolite_close(struct ipolite_conn *c);
  * \param interval The timer interval in which the packet should be sent.
  * \param hdrsize The size of the header that should be unique within the time interval.
  *
- *             This function sends a packet from the rimebuf on the
+ *             This function sends a packet from the packetbuf on the
  *             ipolite connection. The packet is sent some time during
  *             the time interval, but only if no other packet is
  *             received with the same header.

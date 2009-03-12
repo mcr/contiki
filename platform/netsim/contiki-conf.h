@@ -107,8 +107,8 @@ typedef unsigned long clock_time_t;
 
 /*------------------------------------------------------------------------------*/
 
-#define RIMEBUF_CONF_SIZE        128
-#define RIMEBUF_CONF_HDR_SIZE    32
+#define PACKETBUF_CONF_SIZE        128
+#define PACKETBUF_CONF_HDR_SIZE    32
 
 #define UIP_CONF_UIP_IP4ADDR_T_WITH_U32 1
 

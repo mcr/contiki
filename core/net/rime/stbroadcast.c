@@ -82,7 +82,7 @@ send(void *ptr)
   struct stbroadcast_conn *c = ptr;
 
   /*  DEBUGF(3, "stbroadcast: send()\n");*/
-  queuebuf_to_rimebuf(c->buf);
+  queuebuf_to_packetbuf(c->buf);
   broadcast_send(&c->c);
   ctimer_reset(&c->t);
   if(c->u->sent != NULL) {
@@ -102,7 +102,7 @@ stbroadcast_send_stubborn(struct stbroadcast_conn *c, clock_time_t t)
   if(c->buf != NULL) {
     queuebuf_free(c->buf);
   }
-  c->buf = queuebuf_new_from_rimebuf();
+  c->buf = queuebuf_new_from_packetbuf();
   if(c->buf == NULL) {
     return 0;
   }

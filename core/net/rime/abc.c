@@ -58,8 +58,8 @@
 #define PRINTF(...)
 #endif
 
-static const struct rimebuf_attrlist attributes[] =
-  { ABC_ATTRIBUTES RIMEBUF_ATTR_LAST };
+static const struct packetbuf_attrlist attributes[] =
+  { ABC_ATTRIBUTES PACKETBUF_ATTR_LAST };
 
 /*---------------------------------------------------------------------------*/
 void

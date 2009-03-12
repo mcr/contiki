@@ -49,13 +49,13 @@
 struct chameleon_module {
   struct channel *(* input)(void);
   int (* output)(struct channel *);
-  int (* hdrsize)(const struct rimebuf_attrlist *);
+  int (* hdrsize)(const struct packetbuf_attrlist *);
   void (* init)(void);
 };
 
 void chameleon_init(const struct chameleon_module *header_processing_module);
 
-int chameleon_hdrsize(const struct rimebuf_attrlist attrlist[]);
+int chameleon_hdrsize(const struct packetbuf_attrlist attrlist[]);
 void chameleon_input(void);
 int chameleon_output(struct channel *c);
 

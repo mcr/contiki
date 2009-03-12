@@ -53,11 +53,11 @@ abc_recv(struct abc_conn *c)
   char *s;
   int i;
 
-  s = rimebuf_dataptr();
+  s = packetbuf_dataptr();
 
-  printf("abc message received '%s'\n", (char *)rimebuf_dataptr());
-  printf("message length: %u\n", rimebuf_datalen());
-  for (i = 0; i < rimebuf_datalen(); i++) {
+  printf("abc message received '%s'\n", (char *)packetbuf_dataptr());
+  printf("message length: %u\n", packetbuf_datalen());
+  for (i = 0; i < packetbuf_datalen(); i++) {
     printf("0x%x ", s[i]);
   }
   printf("\n");
@@ -83,7 +83,7 @@ PROCESS_THREAD(test_abc_process, ev, data)
     PROCESS_WAIT_EVENT();
     if (etimer_expired(&et)) {
       len = snprintf(buf, sizeof (buf), "%u", ++i);
-      rimebuf_copyfrom(buf, len + 1);
+      packetbuf_copyfrom(buf, len + 1);
       abc_send(&abc);
     }
   }

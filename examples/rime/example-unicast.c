@@ -76,7 +76,7 @@ PROCESS_THREAD(example_unicast_process, ev, data)
     
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
 
-    rimebuf_copyfrom("Hello", 5);
+    packetbuf_copyfrom("Hello", 5);
     addr.u8[0] = 41;
     addr.u8[1] = 41;
     unicast_send(&uc, &addr);

@@ -33,7 +33,7 @@
 
 #include "contiki.h"
 #include "net/mac/ctdma_mac.h"
-#include "net/rime/rimebuf.h"
+#include "net/rime/packetbuf.h"
 #include "net/uip-fw.h"
 #include "net/rime/ctimer.h"
 #include "net/rime.h"
@@ -165,7 +165,7 @@ send(void)
   }
 
   /* Allocate queue buf for packet */
-  data[freeslot] = queuebuf_new_from_rimebuf();
+  data[freeslot] = queuebuf_new_from_packetbuf();
   id[freeslot] = id_counter;
   if (data[freeslot] == NULL)
   {
@@ -196,9 +196,9 @@ static int
 read(void)
 {
   int len;
-  rimebuf_clear();
-  len = radio->read(rimebuf_dataptr(), RIMEBUF_SIZE);
-  rimebuf_set_datalen(len);
+  packetbuf_clear();
+  len = radio->read(packetbuf_dataptr(), PACKETBUF_SIZE);
+  packetbuf_set_datalen(len);
   return len;
 }
 /*---------------------------------------------------------------------------*/

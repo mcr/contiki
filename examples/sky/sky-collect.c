@@ -164,7 +164,7 @@ recv(const rimeaddr_t *originator, uint8_t seqno, uint8_t hops)
 {
   struct sky_collect_msg *msg;
   
-  msg = rimebuf_dataptr();
+  msg = packetbuf_dataptr();
   printf("%u %u %u %u %u %u %u %u %u %u %u %lu %lu %lu %lu %lu ",
 	 (originator->u8[1] << 8) + originator->u8[0],
 	 seqno, hops,
@@ -213,9 +213,9 @@ PROCESS_THREAD(test_collect_process, ev, data)
       struct sky_collect_msg *msg;
       struct neighbor *n;
       /*      leds_toggle(LEDS_BLUE);*/
-      rimebuf_clear();
-      msg = (struct sky_collect_msg *)rimebuf_dataptr();
-      rimebuf_set_datalen(sizeof(struct sky_collect_msg));
+      packetbuf_clear();
+      msg = (struct sky_collect_msg *)packetbuf_dataptr();
+      packetbuf_set_datalen(sizeof(struct sky_collect_msg));
       msg->light1 = sensors_light1();
       msg->light2 = sensors_light2();
       msg->temperature = sht11_temp();

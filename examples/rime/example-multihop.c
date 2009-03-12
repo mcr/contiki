@@ -54,13 +54,13 @@ static void
 recv(struct multihop_conn *c, rimeaddr_t *sender, rimeaddr_t *prevhop,
      uint8_t hops)
 {
-  printf("multihop message received '%s'\n", (char *)rimebuf_dataptr());
+  printf("multihop message received '%s'\n", (char *)packetbuf_dataptr());
 }
 static rimeaddr_t *
 forward(struct multihop_conn *c, rimeaddr_t *originator, rimeaddr_t *dest,
 	rimeaddr_t *prevhop, uint8_t hops)
 {
-  printf("Forwarding message '%s'\n", (char *)rimebuf_dataptr());
+  printf("Forwarding message '%s'\n", (char *)packetbuf_dataptr());
   return NULL;
 }
 static const struct multihop_callbacks multihop_call = {recv, forward};
@@ -82,7 +82,7 @@ PROCESS_THREAD(example_multihop_process, ev, data)
     
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
 
-    rimebuf_copyfrom("Hej", 4);
+    packetbuf_copyfrom("Hej", 4);
     to.u8[0] = 161;
     to.u8[1] = 161;
     multihop_send(&multihop, &to);

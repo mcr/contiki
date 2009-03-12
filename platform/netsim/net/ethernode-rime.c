@@ -53,12 +53,12 @@ receiver(void)
 {
   u8_t len;
 
-  rimebuf_clear();
+  packetbuf_clear();
 
-  len = ethernode_read(rimebuf_dataptr(), RIMEBUF_SIZE);
+  len = ethernode_read(packetbuf_dataptr(), PACKETBUF_SIZE);
 
   if(len > 0) {
-    rimebuf_set_datalen(len);
+    packetbuf_set_datalen(len);
     rime_input();
   }
 }
@@ -66,7 +66,7 @@ receiver(void)
 void
 ethernode_rime_send(void)
 {
-  ethernode_send_buf(rimebuf_hdrptr(), rimebuf_totlen());
+  ethernode_send_buf(packetbuf_hdrptr(), packetbuf_totlen());
 }
 /*---------------------------------------------------------------------------*/
 void

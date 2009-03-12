@@ -100,7 +100,7 @@ static int send_amount = 10;
 static void
 abc_recv(struct abc_conn *c)
 {
-  struct energy_time *incoming= (struct energy_time *)rimebuf_dataptr();
+  struct energy_time *incoming= (struct energy_time *)packetbuf_dataptr();
   read++;
   if(node_id == SINK_ID) {
     printf("%i SICS %i %u %li %li %li %li\n", node_id, read,
@@ -129,7 +129,7 @@ do_sending(void)
   cc2420_set_txpower(1);
 
   for(i = 0;i < send_amount; i++) {
-    rimebuf_copyfrom(send_string, send_length);
+    packetbuf_copyfrom(send_string, send_length);
 
     mac->on();
     abc_send(&abc);
@@ -196,7 +196,7 @@ PROCESS_THREAD(output_process, ev, data)
 /*     printf("%i SICS %i %i %li %li %li %li\n", node_id, send, */
 /* 	   diff.source, diff.cpu, diff.lpm, diff.transmit, diff.listen); */
 
-    rimebuf_copyfrom((char*)&diff, sizeof(diff));
+    packetbuf_copyfrom((char*)&diff, sizeof(diff));
 
     mac->on();
     abc_send(&abc);
