@@ -195,6 +195,7 @@ public class ContikiMoteType implements MoteType {
 
   public boolean configureAndInit(Container parentContainer, Simulation simulation,
       boolean visAvailable) throws MoteTypeCreationException {
+    this.simulation = simulation;
     myConfig = simulation.getGUI().getProjectConfig().clone();
 
     if (visAvailable) {
