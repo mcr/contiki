@@ -254,27 +254,12 @@ public class Simulation extends Observable implements Runnable {
           isRunning = false;
         }
       }
-    } catch (IllegalArgumentException e) {
-      logger.warn("llegalArgumentException:" + e);
-    } catch (IllegalMonitorStateException e) {
-      logger.warn("IllegalMonitorStateException:" + e);
     } catch (RuntimeException e) {
-      if (e.getClass().getName().contains("IllegalStateException")) { /* XXX Change exception type */
-        /* MSPSim memory alignment exception */
-        logger.fatal("MSPSim detected memory alignment error: " + e);
-      } else {
-        logger.fatal("Simulation stopped for unknown reason: " + e);
+      logger.fatal("Simulation stopped due to error", e);
 
-        /* Print exception stack trace with logger */
-        StackTraceElement[] stackTrace = e.getStackTrace();
-        for (StackTraceElement element : stackTrace) {
-          logger.fatal(element.toString());
-        }
-
-        if (!GUI.isVisualized()) {
-          /* Quit simulator if in test mode */
-          System.exit(1);
-        }
+      if (!GUI.isVisualized()) {
+	/* Quit simulator if in test mode */
+	System.exit(1);
       }
     }
     isRunning = false;
