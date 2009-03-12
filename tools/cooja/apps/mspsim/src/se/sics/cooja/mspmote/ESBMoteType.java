@@ -56,14 +56,6 @@ import se.sics.cooja.mspmote.interfaces.TR1001Radio;
 public class ESBMoteType extends MspMoteType {
   private static Logger logger = Logger.getLogger(ESBMoteType.class);
 
-  public ESBMoteType() {
-  }
-
-  public ESBMoteType(String identifier) {
-    setIdentifier(identifier);
-    setDescription("ESB Mote Type #" + identifier);
-  }
-
   public Icon getMoteTypeIcon() {
     Toolkit toolkit = Toolkit.getDefaultToolkit();
     URL imageURL = this.getClass().getClassLoader().getResource("images/esb.jpg");
@@ -88,6 +80,7 @@ public class ESBMoteType extends MspMoteType {
 
   public boolean configureAndInit(Container parentContainer, Simulation simulation, boolean visAvailable)
   throws MoteTypeCreationException {
+    this.simulation = simulation;
 
     /* SPECIAL CASE: Cooja started in applet.
      * Use preconfigured Contiki firmware */

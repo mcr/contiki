@@ -57,14 +57,6 @@ import se.sics.cooja.mspmote.interfaces.SkySerial;
 public class SkyMoteType extends MspMoteType {
   private static Logger logger = Logger.getLogger(SkyMoteType.class);
 
-  public SkyMoteType() {
-  }
-
-  public SkyMoteType(String identifier) {
-    setIdentifier(identifier);
-    setDescription("Sky Mote Type #" + identifier);
-  }
-
   public Icon getMoteTypeIcon() {
     Toolkit toolkit = Toolkit.getDefaultToolkit();
     URL imageURL = this.getClass().getClassLoader().getResource("images/sky.jpg");
@@ -89,6 +81,7 @@ public class SkyMoteType extends MspMoteType {
 
   public boolean configureAndInit(Container parentContainer, Simulation simulation, boolean visAvailable)
   throws MoteTypeCreationException {
+    this.simulation = simulation;
 
     /* SPECIAL CASE: Cooja started in applet.
      * Use preconfigured Contiki firmware */
