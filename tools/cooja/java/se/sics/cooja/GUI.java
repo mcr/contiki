@@ -2878,10 +2878,16 @@ public class GUI extends Observable {
       String contikiApp = args[0].substring("-quickstart=".length());
 
       if (contikiApp.endsWith(".cooja")) {
-        contikiApp = contikiApp.substring(0, contikiApp.length() - 6);
+        contikiApp = contikiApp.substring(0, contikiApp.length() - ".cooja".length());
       }
       if (!contikiApp.endsWith(".c")) {
         contikiApp += ".c";
+      }
+
+      /* Cygwin fix */
+      if (contikiApp.startsWith("/cygdrive/")) {
+        char driveCharacter = contikiApp.charAt("/cygdrive/".length());
+        contikiApp = contikiApp.replace("/cygdrive/" + driveCharacter + "/", driveCharacter + ":/");
       }
 
       boolean ok = quickStartSimulation(contikiApp);
