@@ -83,7 +83,7 @@ void
 cooja_mtarch_start(struct cooja_mtarch_thread *t,
     void (*function)(void *), void *data)
 {
-  struct frame *f = (struct frame *)&t->stack[COOJA_MTARCH_STACKSIZE - sizeof(struct frame)/4];
+  struct frame *f = (struct frame *)&t->stack[COOJA_MTARCH_STACKSIZE - sizeof(struct frame)/sizeof(unsigned long)];
   int i;
 
   for(i = 0; i < COOJA_MTARCH_STACKSIZE; ++i) {
@@ -132,15 +132,15 @@ void cooja_sw(void)
 #if ON_64BIT_ARCH
   __asm__ ("movq %0, %%rax\n\t" : : "m" (cooja_running_thread));
   __asm__ (
-      "movq 0(%rax), %rbx\n\t"
-      "movq %rsp, 0(%rax)\n\t"
+      "movq (%rax), %rbx\n\t"
+      "movq %rsp, (%rax)\n\t"
       "movq %rbx, %rsp\n\t"
   );
 #else /* ON_64BIT_ARCH */
   __asm__ ("movl %0, %%eax\n\t" : : "m" (cooja_running_thread));
   __asm__ (
-      "movl 0(%eax), %ebx\n\t"
-      "movl %esp, 0(%eax)\n\t"
+      "movl (%eax), %ebx\n\t"
+      "movl %esp, (%eax)\n\t"
       "movl %ebx, %esp\n\t"
   );
 #endif /* ON_64BIT_ARCH */
