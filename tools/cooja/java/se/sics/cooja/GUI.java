@@ -114,7 +114,6 @@ import se.sics.cooja.VisPlugin.PluginRequiresVisualizationException;
 import se.sics.cooja.contikimote.ContikiMoteType;
 import se.sics.cooja.dialogs.AddMoteDialog;
 import se.sics.cooja.dialogs.ConfigurationWizard;
-import se.sics.cooja.dialogs.ContikiMoteCompileDialog;
 import se.sics.cooja.dialogs.CreateSimDialog;
 import se.sics.cooja.dialogs.ExternalToolsDialog;
 import se.sics.cooja.dialogs.MessageList;
@@ -1066,18 +1065,16 @@ public class GUI extends Observable {
 
     logger.info("> Creating mote type");
     ContikiMoteType moteType = new ContikiMoteType();
-    moteType.setConfig(simulation.getGUI().getProjectConfig().clone());
     moteType.setContikiSourceFile(new File(source));
     moteType.setDescription("Contiki Mote Type (" + source + ")");
 
-    boolean compileOK = ContikiMoteCompileDialog.showDialog(frame, simulation, moteType);
-    if (!compileOK) {
-      logger.fatal("Contiki compilation failed, aborting quickstart");
-      return false;
-    }
     try {
-      moteType.doInit();
-    } catch (MoteTypeCreationException e) {
+      boolean compileOK = moteType.configureAndInit(GUI.getTopParentContainer(), simulation, true);
+      if (!compileOK) {
+        logger.fatal("Mote type initialization failed, aborting quickstart");
+        return false;
+      }
+    } catch (MoteTypeCreationException e1) {
       logger.fatal("Mote type initialization failed, aborting quickstart");
       return false;
     }
