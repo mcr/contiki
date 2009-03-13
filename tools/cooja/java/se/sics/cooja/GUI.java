@@ -3534,9 +3534,9 @@ public class GUI extends Observable {
 
           messageListDialog.getContentPane().add(messageListPanel);
           messageListDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-          messageListDialog.pack();
+          messageListDialog.setSize(1000, 500);
           messageListDialog.setLocationRelativeTo(errorDialog);
-
+          
           Rectangle maxSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
           if (maxSize != null
               && (messageListDialog.getSize().getWidth() > maxSize.getWidth() || messageListDialog
