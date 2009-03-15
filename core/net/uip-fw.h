@@ -62,7 +62,7 @@ struct uip_fw_netif {
 };
 
 /**
- * Intantiating macro for a uIP network interface.
+ * Instantiating macro for a uIP network interface.
  *
  * Example:
  \code
