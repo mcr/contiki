@@ -32,7 +32,7 @@
  */
 /**
  * \file
- * TCP/IP header compresison header file.
+ * TCP/IP header compression header file.
  * \author Adam Dunkels <adam@sics.se>
  *
  */

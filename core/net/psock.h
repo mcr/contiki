@@ -263,7 +263,7 @@ PT_THREAD(psock_readto(struct psock *psock, unsigned char c));
  *
  * This macro will block waiting for data and read the data into the
  * input buffer specified with the call to PSOCK_INIT(). Data is only
- * read until the specifieed character appears in the data stream.
+ * read until the specified character appears in the data stream.
  *
  * \param psock (struct psock *) A pointer to the protosocket from which
  * data should be read.
