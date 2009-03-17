@@ -49,13 +49,10 @@
 #include "net/rime.h"
 #include "dev/cc2420.h"
 
-#include <stdio.h>
-
-
+#if TIMESYNCH_CONF_ENABLED
 static int authority_level;
 static rtimer_clock_t offset;
 
-#if TIMESYNCH_CONF_ENABLED
 /*---------------------------------------------------------------------------*/
 int
 timesynch_authority_level(void)
