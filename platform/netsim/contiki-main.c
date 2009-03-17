@@ -37,7 +37,7 @@
 #include "contiki-net.h"
 #include "contiki-lib.h"
 
-#include "dev/serial.h"
+#include "dev/serial-line.h"
 #include "net/rime.h"
 
 #ifdef __CYGWIN__
@@ -121,14 +121,15 @@ contiki_main(int flag)
 
   procinit_init();
 
-  serial_init();
+  serial_line_init();
   
   uip_init();
  
   ctimer_init();
   rime_init(nullmac_init(&ethernode_driver));
+  /*  rime_init(lpp_init(&ethernode_driver));*/
 
-  uip_over_mesh_init(0);
+  uip_over_mesh_init(2);
   uip_over_mesh_set_net(&meshif.ipaddr, &meshif.netmask);
       
   if(flag == 1) {

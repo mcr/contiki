@@ -37,8 +37,8 @@
  * Adam Dunkels
  *
  */
-#ifndef __SERIAL_H__
-#define __SERIAL_H__
+#ifndef __SERIAL_LINE_H__
+#define __SERIAL_LINE_H__
 
 #include "contiki.h"
 
@@ -49,7 +49,7 @@
  * from the serial port. A data pointer to the incoming line of input
  * is sent together with the event.
  */
-extern process_event_t serial_event_message;
+extern process_event_t serial_line_event_message;
 
 /**
  * Get one byte of input from the serial driver.
@@ -68,10 +68,10 @@ extern process_event_t serial_event_message;
  * \return Non-zero if the CPU should be powered up, zero otherwise.
  */
 
-int serial_input_byte(unsigned char c);
+int serial_line_input_byte(unsigned char c);
 
-void serial_init(void);
+void serial_line_init(void);
 
-PROCESS_NAME(serial_process);
+PROCESS_NAME(serial_line_process);
 
-#endif /* __SERIAL_H__ */
+#endif /* __SERIAL_LINE_H__ */

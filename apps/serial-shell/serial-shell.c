@@ -46,7 +46,7 @@
 #include "contiki.h"
 #include "shell.h"
 
-#include "dev/serial.h"
+#include "dev/serial-line.h"
 #include "net/rime.h"
 
 #include <stdio.h>
@@ -84,7 +84,7 @@ PROCESS_THREAD(serial_shell_process, ev, data)
   shell_init();
   
   while(1) {
-    PROCESS_WAIT_EVENT_UNTIL(ev == serial_event_message && data != NULL);
+    PROCESS_WAIT_EVENT_UNTIL(ev == serial_line_event_message && data != NULL);
     shell_input(data, strlen(data));
   }
   

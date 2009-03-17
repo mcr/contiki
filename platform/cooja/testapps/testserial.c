@@ -30,7 +30,7 @@
  */
 
 #include "contiki.h"
-#include "dev/serial.h"
+#include "dev/serial-port.h"
 #include "dev/rs232.h"
 
 #include <stdio.h>
@@ -47,7 +47,7 @@ PROCESS_THREAD(test_serial_process, ev, data)
   etimer_set(&et, CLOCK_SECOND);
 
   /* Start serial process */
-  serial_init();
+  serial_port_init();
 
   printf("Starting serial test process\n");
 
@@ -60,7 +60,7 @@ PROCESS_THREAD(test_serial_process, ev, data)
       etimer_restart(&et);
     }
 
-    if(ev == serial_event_message) {
+    if(ev == serial_port_event_message) {
       printf("Message received: '%s'\n", data);
     }
   }

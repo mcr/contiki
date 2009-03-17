@@ -42,7 +42,7 @@
 #include "dev/leds.h"
 #include "dev/light.h"
 #include "dev/battery-sensor.h"
-#include "dev/serial.h"
+#include "dev/serial-line.h"
 #include "dev/sht11.h"
 #include "dev/cc2420.h"
 #include "dev/slip.h"
@@ -260,8 +260,8 @@ main(int argc, char **argv)
 #endif /* WITH_UIP6 */
 
 #if !WITH_UIP && !WITH_UIP6
-  uart1_set_input(serial_input_byte);
-  serial_init();
+  uart1_set_input(serial_line_input_byte);
+  serial_line_init();
 #endif
 
 #if PROFILE_CONF_ON
