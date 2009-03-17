@@ -75,7 +75,7 @@
 
 #include "node-id.h"
 
-PROCINIT(&etimer_process);
+PROCINIT(&etimer_process,&sensors_process);
 
 /* Declare all sensors */
 [SENSOR_DEFINITIONS]
