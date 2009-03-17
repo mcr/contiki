@@ -149,7 +149,7 @@ PROCESS_THREAD(shell_tcpsend_process, ev, data)
   *next = 0;
   ++next;
   strncpy(server, data, sizeof(server));
-  port = shell_strtolong(next, NULL);
+  port = shell_strtolong(next, &next);
   
   running = 1;
 
