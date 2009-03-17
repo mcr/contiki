@@ -3536,7 +3536,7 @@ public class GUI extends Observable {
           messageListDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
           messageListDialog.setSize(1000, 500);
           messageListDialog.setLocationRelativeTo(errorDialog);
-          
+
           Rectangle maxSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
           if (maxSize != null
               && (messageListDialog.getSize().getWidth() > maxSize.getWidth() || messageListDialog
@@ -3813,8 +3813,14 @@ public class GUI extends Observable {
 
       String fileCanonical = file.getCanonicalPath();
       if (!fileCanonical.startsWith(configCanonical)) {
-        /*logger.warn("Error when converting to config relative path: file not in config directory: " + file.getAbsolutePath());*/
-        return file;
+
+        /* SPECIAL CASE: Allow one parent directory */
+        configCanonical = configPath.getParentFile().getCanonicalPath();
+        configIdentifier += "/..";
+        if (!fileCanonical.startsWith(configCanonical)) {
+          /*logger.warn("Error when converting to config relative path: file not in config directory: " + file.getAbsolutePath());*/
+          return file;
+        }
       }
 
       /* Replace config's canonical path with config identifier */
