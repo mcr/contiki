@@ -135,6 +135,7 @@ telnet_connected(struct telnet_state *s)
 PROCESS_THREAD(shell_tcpsend_process, ev, data)
 {
   char *next;
+  const char *dummy; 
   struct shell_input *input;
   uint16_t port;
   
@@ -149,7 +150,7 @@ PROCESS_THREAD(shell_tcpsend_process, ev, data)
   *next = 0;
   ++next;
   strncpy(server, data, sizeof(server));
-  port = shell_strtolong(next, &next);
+  port = shell_strtolong(next, &dummy);
   
   running = 1;
 
