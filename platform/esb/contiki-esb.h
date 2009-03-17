@@ -44,7 +44,7 @@
 
 #include "dev/rs232.h"
 
-#include "dev/serial.h"
+#include "dev/serial-line.h"
 #include "dev/slip.h"
 #include "dev/tr1001.h"
 #include "net/tr1001-uip.h"

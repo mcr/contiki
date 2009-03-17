@@ -47,6 +47,6 @@ init_net(void)
   rimeaddr.u8[1] = node_id >> 8;
   rimeaddr_set_node_addr(&rimeaddr);
 
-  rs232_set_input(serial_input_byte);
+  rs232_set_input(serial_line_input_byte);
 
 }
