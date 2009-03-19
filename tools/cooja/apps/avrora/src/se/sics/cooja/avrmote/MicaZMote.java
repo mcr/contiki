@@ -43,6 +43,7 @@ import se.sics.cooja.MoteMemory;
 import se.sics.cooja.MoteType;
 import se.sics.cooja.Simulation;
 import se.sics.cooja.avrmote.interfaces.MicaClock;
+import se.sics.cooja.avrmote.interfaces.MicaSerial;
 import se.sics.cooja.avrmote.interfaces.MicaZLED;
 import se.sics.cooja.avrmote.interfaces.MicaZRadio;
 import se.sics.cooja.interfaces.Position;
@@ -273,8 +274,10 @@ public class MicaZMote implements Mote {
       moteInterfaceHandler.addInterface(new MicaZLED(micaZ));
       // Add Radio interface
       moteInterfaceHandler.addInterface(new MicaZRadio(this));
-      // Add Radio interface
+      // Add Clock interface
       moteInterfaceHandler.addInterface(new MicaClock(this));
+      // Add Serial interface
+      moteInterfaceHandler.addInterface(new MicaSerial(this));
 
 
       return moteInterfaceHandler;
