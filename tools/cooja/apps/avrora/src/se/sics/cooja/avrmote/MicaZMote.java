@@ -235,7 +235,7 @@ public class MicaZMote implements Mote {
         getType().setIdentifier(element.getText());
 
         try {
-          prepareMote(myMoteType.getContikiFirmwareFile().getName());
+          prepareMote(myMoteType.getContikiFirmwareFile().getAbsolutePath());
         } catch (Exception e) {
           // TODO Auto-generated catch block
           e.printStackTrace();

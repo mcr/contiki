@@ -266,10 +266,10 @@ public class MicaZMoteType implements MoteType {
     }
 
     // Check dependency files
-    File elfFile = null;
-    if (getContikiFirmwareFile() != null) {
-      elfFile = new File(getContikiFirmwareFile().getName());
-    }
+    File elfFile = getContikiFirmwareFile();
+//    if (getContikiFirmwareFile() != null) {
+//      elfFile = new File(getContikiFirmwareFile().getName());
+//    }
     if (elfFile == null || !elfFile.exists()) {
       if (!visAvailable) {
         throw new MoteTypeCreationException("ELF file does not exist: " + getContikiFirmwareFile());
