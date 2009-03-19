@@ -103,12 +103,13 @@ public class MicaZMote implements Mote {
 
   protected void initMote() {
     if (myMoteType != null) {
-      initEmulator(myMoteType.getContikiFirmwareFile().getName());
+      initEmulator(myMoteType.getContikiFirmwareFile().getAbsolutePath());
       myMoteInterfaceHandler = createMoteInterfaceHandler();
     }
   }
 
   protected boolean initEmulator(String fileELF) {
+    //System.out.println("Loading elf file: " + fileELF);
     try {
       prepareMote(fileELF);
     } catch (Exception e) {
