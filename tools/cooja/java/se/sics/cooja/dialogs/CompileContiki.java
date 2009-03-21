@@ -201,8 +201,15 @@ public class CompileContiki {
         try {
           handleCompilationResultThread.join();
         } catch (Exception e) {
+          /* Make sure process has exited */
+          compileProcess.destroy();
+
+          String msg = e.getMessage();
+          if (e instanceof InterruptedException) {
+            msg = "Aborted by user";
+          }
           throw (MoteTypeCreationException) new MoteTypeCreationException(
-              "Compilation error: " + e.getMessage()).initCause(e);
+              "Compilation error: " + msg).initCause(e);
         }
 
         /* Detect error manually */
