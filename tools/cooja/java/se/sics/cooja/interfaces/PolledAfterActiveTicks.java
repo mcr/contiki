@@ -31,12 +31,12 @@
 
 package se.sics.cooja.interfaces;
 
-import se.sics.cooja.contikimote.interfaces.ContikiLog;
+import se.sics.cooja.contikimote.interfaces.ContikiRS232;
 
 /**
  * A mote interface polled after a mote tick ONLY IF the mote is awake.
  *
- * @see ContikiLog
+ * @see ContikiRS232
  *
  * @author Fredrik Osterlind
  */

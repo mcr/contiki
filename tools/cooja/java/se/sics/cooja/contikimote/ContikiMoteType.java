@@ -1309,14 +1309,18 @@ public class ContikiMoteType implements MoteType {
       } else if (name.equals("commstack")) {
         commStack = CommunicationStack.parse(element.getText());
       } else if (name.equals("moteinterface")) {
-        Class<? extends MoteInterface> moteInterfaceClass =
-          simulation.getGUI().tryLoadClass(
-              this, MoteInterface.class, element.getText().trim());
-
-        if (moteInterfaceClass == null) {
-          logger.warn("Can't find mote interface class: " + element.getText());
+        if (element.getText().trim().equals("se.sics.cooja.contikimote.interfaces.ContikiLog")) {
+          /* Backwards compatibility: ContikiLog was removed */
         } else {
-          moteInterfacesClasses.add(moteInterfaceClass);
+          Class<? extends MoteInterface> moteInterfaceClass =
+            simulation.getGUI().tryLoadClass(
+                this, MoteInterface.class, element.getText().trim());
+
+          if (moteInterfaceClass == null) {
+            logger.warn("Can't find mote interface class: " + element.getText());
+          } else {
+            moteInterfacesClasses.add(moteInterfaceClass);
+          }
         }
       } else if (
           name.equals("contikibasedir") ||
