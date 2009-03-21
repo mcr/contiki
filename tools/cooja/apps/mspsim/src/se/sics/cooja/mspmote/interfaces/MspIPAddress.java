@@ -83,7 +83,7 @@ public class MspIPAddress extends IPAddress {
       (addr[2]&0xFF) + "." +
       (addr[3]&0xFF);
     } catch (UnknownVariableException e) {
-      logger.fatal("IP Address not available on mote: " + e.getMessage());
+      /*logger.warn("IP Address not available on mote: " + e.getMessage());*/
     }
     return "?.?.?.?";
   }
