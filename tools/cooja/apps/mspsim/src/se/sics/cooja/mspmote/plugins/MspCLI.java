@@ -97,7 +97,9 @@ public class MspCLI extends VisPlugin {
         if (command != null) {
           try {
             int previous = historyCount - 1;
-            if (previous < 0) previous += history.length;
+            if (previous < 0) {
+              previous += history.length;
+            }
             if (!command.equals(history[previous])) {
               history[historyCount] = command;
               historyCount = (historyCount + 1) % history.length;
@@ -177,6 +179,7 @@ public class MspCLI extends VisPlugin {
     }
     // Tries to select this plugin
     try {
+      setSize(400, 200);
       setSelected(true);
     } catch (java.beans.PropertyVetoException e) {
       // Could not select
