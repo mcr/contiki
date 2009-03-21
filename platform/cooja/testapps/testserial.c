@@ -31,7 +31,6 @@
 
 #include "contiki.h"
 #include "dev/serial-line.h"
-#include "dev/rs232.h"
 
 #include <stdio.h>
 
@@ -49,14 +48,11 @@ PROCESS_THREAD(test_serial_process, ev, data)
   /* Start serial process */
   serial_line_init();
 
-  printf("Starting serial test process\n");
-
   while(1) {
     PROCESS_WAIT_EVENT();
 
     if (etimer_expired(&et)) {
-      printf("Sending serial data now\n");
-      rs232_print("GNU's not Unix\n");
+      printf("Waiting for serial data\n");
       etimer_restart(&et);
     }
 
