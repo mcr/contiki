@@ -47,6 +47,7 @@ import se.sics.cooja.*;
 import se.sics.cooja.dialogs.MessageList;
 import se.sics.cooja.dialogs.MessageList.MessageContainer;
 
+@AbstractionLevelDescription("Emulated level")
 @ClassDescription("MicaZ Mote Type")
 public class MicaZMoteType implements MoteType {
   private static Logger logger = Logger.getLogger(MicaZMoteType.class);
