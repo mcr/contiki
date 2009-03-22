@@ -3710,7 +3710,7 @@ public class GUI extends Observable {
     return restoreConfigPath(file);
   }
 
-  private File currentConfigFile = null; /* Used to generate config relative paths */
+  public File currentConfigFile = null; /* Used to generate config relative paths */
   public File createConfigPath(File file) {
     if (currentConfigFile == null) {
       return file;
@@ -3719,6 +3719,9 @@ public class GUI extends Observable {
     try {
       File configPath = currentConfigFile.getParentFile();
       String configIdentifier = "[CONFIG_DIR]";
+      if (configPath == null) {
+        return file;
+      }
       String configCanonical = configPath.getCanonicalPath();
 
       String fileCanonical = file.getCanonicalPath();
@@ -3753,6 +3756,9 @@ public class GUI extends Observable {
     }
 
     File configPath = currentConfigFile.getParentFile();
+    if (configPath == null) {
+      return file;
+    }
 
     String path = file.getPath();
     if (!path.startsWith("[CONFIG_DIR]")) {
