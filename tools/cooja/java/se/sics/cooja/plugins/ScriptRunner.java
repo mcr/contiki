@@ -323,9 +323,10 @@ public class ScriptRunner implements Plugin {
         logTextArea.setText("");
 
         gui.doLoadConfig(false, true, proposedDir);
-        Vector<File> history = gui.getFileHistory();
-
-        File cscFile = history.firstElement();
+        if (gui.getSimulation() == null) {
+          return;
+        }
+        File cscFile = gui.currentConfigFile;
         String testName = cscFile.getName().substring(0, cscFile.getName().length()-4);
         File testDir = cscFile.getParentFile();
         File jsFile = new File(testDir, testName + ".js");
@@ -458,6 +459,7 @@ public class ScriptRunner implements Plugin {
     }
 
     /* Get current simulation configuration */
+    simulation.getGUI().currentConfigFile = cscFile;
     Element root = new Element("simconf");
     Element simulationElement = new Element("simulation");
     simulationElement.addContent(simulation.getConfigXML());
@@ -613,7 +615,7 @@ public class ScriptRunner implements Plugin {
               if (line == null) {
                 line = "";
               }
-              testOutput.addMessage("", MessageList.NORMAL);
+              testOutput.addMessage(line, MessageList.NORMAL);
               if (line.contains("TEST OK")) {
                 testSucceeded = true;
                break;
