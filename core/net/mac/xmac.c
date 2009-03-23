@@ -342,8 +342,12 @@ format_announcement(char *hdr)
     adata->num++;
   }
 
-  return ANNOUNCEMENT_MSG_HEADERLEN +
-    sizeof(struct announcement_data) * adata->num;
+  if(adata->num > 0) {
+    return ANNOUNCEMENT_MSG_HEADERLEN +
+      sizeof(struct announcement_data) * adata->num;
+  } else {
+    return 0;
+  }
 }
 #endif /* XMAC_CONF_ANNOUNCEMENTS */
 /*---------------------------------------------------------------------------*/
@@ -698,10 +702,10 @@ send_announcement(void *ptr)
   announcement_len = format_announcement((char *)hdr +
 					 sizeof(struct xmac_hdr));
 
-  packetbuf_set_datalen(sizeof(struct xmac_hdr) + announcement_len);
-
-  /*  PRINTF("Sending probe\n");*/
-  radio->send(packetbuf_hdrptr(), packetbuf_totlen());
+  if(announcement_len > 0) {
+    packetbuf_set_datalen(sizeof(struct xmac_hdr) + announcement_len);
+    radio->send(packetbuf_hdrptr(), packetbuf_totlen());
+  }
 }
 /*---------------------------------------------------------------------------*/
 static void
