@@ -398,7 +398,6 @@ const rimeaddr_t *packetbuf_addr(uint8_t type);
 #endif /* PACKETBUF_CONF_ATTRS_INLINE */
 
 void              packetbuf_attr_clear(void);
-int               packetbuf_attr_isset(uint8_t type);
 
 void              packetbuf_attr_copyto(struct packetbuf_attr *attrs,
 				      struct packetbuf_addr *addrs);
