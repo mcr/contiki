@@ -108,7 +108,10 @@ send_adv(clock_time_t interval)
   PRINTF("%d.%d: sending neighbor advertisement with %d announcements\n",
 	 rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1], adata->num);
 
-  ipolite_send(&c.c, interval, packetbuf_datalen());
+  if(adata->num > 0) {
+    /* Send the packet if it contains more than one announcement. */
+    ipolite_send(&c.c, interval, packetbuf_datalen());
+  }
 }
 /*---------------------------------------------------------------------------*/
 static void
