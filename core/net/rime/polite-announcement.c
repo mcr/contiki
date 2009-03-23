@@ -109,7 +109,7 @@ send_adv(clock_time_t interval)
 	 rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1], adata->num);
 
   if(adata->num > 0) {
-    /* Send the packet if it contains more than one announcement. */
+    /* Send the packet only if it contains more than zero announcements. */
     ipolite_send(&c.c, interval, packetbuf_datalen());
   }
 }
