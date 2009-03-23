@@ -62,8 +62,9 @@
 
 /*---------------------------------------------------------------------------*/
 static void
-data_packet_received(struct multihop_conn *multihop, rimeaddr_t *from,
-		     rimeaddr_t *prevhop, uint8_t hops)
+data_packet_received(struct multihop_conn *multihop,
+		     const rimeaddr_t *from,
+		     const rimeaddr_t *prevhop, uint8_t hops)
 {
   struct mesh_conn *c = (struct mesh_conn *)
     ((char *)multihop - offsetof(struct mesh_conn, multihop));
@@ -74,8 +75,10 @@ data_packet_received(struct multihop_conn *multihop, rimeaddr_t *from,
 }
 /*---------------------------------------------------------------------------*/
 static rimeaddr_t *
-data_packet_forward(struct multihop_conn *multihop, rimeaddr_t *originator,
-		    rimeaddr_t *dest, rimeaddr_t *prevhop, uint8_t hops)
+data_packet_forward(struct multihop_conn *multihop,
+		    const rimeaddr_t *originator,
+		    const rimeaddr_t *dest,
+		    const rimeaddr_t *prevhop, uint8_t hops)
 {
   struct route_entry *rt;
 

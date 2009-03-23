@@ -96,7 +96,7 @@ route_init(void)
 }
 /*---------------------------------------------------------------------------*/
 int
-route_add(rimeaddr_t *dest, rimeaddr_t *nexthop,
+route_add(const rimeaddr_t *dest, const rimeaddr_t *nexthop,
 	  uint8_t hop_count, uint8_t seqno)
 {
   struct route_entry *e;
@@ -126,7 +126,7 @@ route_add(rimeaddr_t *dest, rimeaddr_t *nexthop,
 }
 /*---------------------------------------------------------------------------*/
 struct route_entry *
-route_lookup(rimeaddr_t *dest)
+route_lookup(const rimeaddr_t *dest)
 {
   struct route_entry *e;
 
