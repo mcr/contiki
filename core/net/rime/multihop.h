@@ -78,20 +78,20 @@ struct multihop_conn;
 
 #define MULTIHOP_ATTRIBUTES   { PACKETBUF_ADDR_ESENDER, PACKETBUF_ADDRSIZE }, \
                               { PACKETBUF_ADDR_ERECEIVER, PACKETBUF_ADDRSIZE }, \
-                              { PACKETBUF_ATTR_TTL, PACKETBUF_ATTR_BIT * 5 }, \
+                              { PACKETBUF_ATTR_HOPS, PACKETBUF_ATTR_BIT * 5 }, \
                                 UNICAST_ATTRIBUTES
 
 
 
 struct multihop_callbacks {
   void (* recv)(struct multihop_conn *ptr,
-		rimeaddr_t *sender,
-		rimeaddr_t *prevhop,
+		const rimeaddr_t *sender,
+		const rimeaddr_t *prevhop,
 		uint8_t hops);
   rimeaddr_t *(* forward)(struct multihop_conn *ptr,
-			  rimeaddr_t *originator,
-			  rimeaddr_t *dest,
-			  rimeaddr_t *prevhop,
+			  const rimeaddr_t *originator,
+			  const rimeaddr_t *dest,
+			  const rimeaddr_t *prevhop,
 			  uint8_t hops);
 };
 
