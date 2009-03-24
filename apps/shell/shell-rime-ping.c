@@ -122,7 +122,7 @@ sent_mesh(struct mesh_conn *c)
 {
 }
 static void
-recv_mesh(struct mesh_conn *c, rimeaddr_t *from, u8_t hops)
+recv_mesh(struct mesh_conn *c, const rimeaddr_t *from, u8_t hops)
 {
   struct rime_ping_msg *ping;
   char buf[64];
