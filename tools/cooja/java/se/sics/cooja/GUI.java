@@ -3337,6 +3337,16 @@ public class GUI extends Observable {
 
         // Read plugin class
         String pluginClassName = pluginElement.getText().trim();
+
+        /* Backwards compatibility: old visualizers were replaced */
+        if (pluginClassName.equals("se.sics.cooja.plugins.VisUDGM") ||
+            pluginClassName.equals("se.sics.cooja.plugins.VisBattery") ||
+            pluginClassName.equals("se.sics.cooja.plugins.VisTraffic") ||
+            pluginClassName.equals("se.sics.cooja.plugins.VisUDGM")) {
+          logger.warn("Old simulation config detected: visualizers have been remade");
+          pluginClassName = "se.sics.cooja.plugins.Visualizer";
+        }
+
         Class<? extends Plugin> pluginClass =
           tryLoadClass(this, Plugin.class, pluginClassName);
         if (pluginClass == null) {
