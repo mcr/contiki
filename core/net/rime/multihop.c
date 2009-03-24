@@ -119,7 +119,7 @@ multihop_close(struct multihop_conn *c)
 }
 /*---------------------------------------------------------------------------*/
 int
-multihop_send(struct multihop_conn *c, rimeaddr_t *to)
+multihop_send(struct multihop_conn *c, const rimeaddr_t *to)
 {
   rimeaddr_t *nexthop;
 

@@ -132,7 +132,7 @@ void mesh_close(struct mesh_conn *c);
  *             must have previously been set up with mesh_open().
  *
  */
-int mesh_send(struct mesh_conn *c, rimeaddr_t *dest);
+int mesh_send(struct mesh_conn *c, const rimeaddr_t *dest);
 
 #endif /* __MESH_H__ */
 /** @} */

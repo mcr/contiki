@@ -78,7 +78,7 @@ struct rrep_hdr {
 
 /*---------------------------------------------------------------------------*/
 static void
-send_rreq(struct route_discovery_conn *c, rimeaddr_t *dest)
+send_rreq(struct route_discovery_conn *c, const rimeaddr_t *dest)
 {
   struct route_msg *msg;
 
@@ -253,7 +253,7 @@ timeout_handler(void *ptr)
 }
 /*---------------------------------------------------------------------------*/
 void
-route_discovery_discover(struct route_discovery_conn *c, rimeaddr_t *addr,
+route_discovery_discover(struct route_discovery_conn *c, const rimeaddr_t *addr,
 			 clock_time_t timeout)
 {
   PRINTF("route_discovery_send: sending route request\n");

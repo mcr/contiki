@@ -147,7 +147,7 @@ mesh_close(struct mesh_conn *c)
 }
 /*---------------------------------------------------------------------------*/
 int
-mesh_send(struct mesh_conn *c, rimeaddr_t *to)
+mesh_send(struct mesh_conn *c, const rimeaddr_t *to)
 {
   int could_send;
 
