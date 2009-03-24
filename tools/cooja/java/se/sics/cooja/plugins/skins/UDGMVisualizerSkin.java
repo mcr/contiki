@@ -353,7 +353,7 @@ public class UDGMVisualizerSkin implements VisualizerSkin {
     }
   }
 
-  protected static class RangeMenuAction implements SimulationMenuAction {
+  public static class RangeMenuAction implements SimulationMenuAction {
     public boolean isEnabled(Simulation simulation) {
       return true;
     }
@@ -370,7 +370,7 @@ public class UDGMVisualizerSkin implements VisualizerSkin {
     }
   };
 
-  protected static class SuccessRatioMenuAction implements SimulationMenuAction {
+  public static class SuccessRatioMenuAction implements SimulationMenuAction {
     public boolean isEnabled(Simulation simulation) {
       return true;
     }
