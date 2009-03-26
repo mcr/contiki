@@ -122,8 +122,10 @@ public class SimControl extends VisPlugin {
               }
             }
 
-            sliderDelay.setValue(convertTimeToSlide(simulation.getDelayTime()));
-            simulationTime.setText("Current simulation time: " + simulation.getSimulationTime());
+            if (sliderDelay != null) {
+              sliderDelay.setValue(convertTimeToSlide(simulation.getDelayTime()));
+              simulationTime.setText("Current simulation time: " + simulation.getSimulationTime());
+            }
           }
         });
       }
