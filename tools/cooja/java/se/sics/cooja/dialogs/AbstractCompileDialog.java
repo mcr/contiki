@@ -340,6 +340,23 @@ public abstract class AbstractCompileDialog extends JDialog {
       setSize(newSize);
     }
 
+    /* Recompile at Ctrl+R */
+    Action recompileAction = new AbstractAction() {
+      public void actionPerformed(ActionEvent e) {
+        try {
+          setDialogState(DialogState.AWAITING_COMPILATION);
+          if (nextButton.getText().equals("Compile")) {
+            compileContiki();
+          }
+        } catch (Exception e1) {
+          e1.printStackTrace();
+        }
+      }
+    };
+    InputMap inputMap = getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK, false), "recompile");
+    getRootPane().getActionMap().put("recompile", recompileAction);
+
     pack();
     setLocationRelativeTo(parent);
   }
