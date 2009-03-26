@@ -49,6 +49,12 @@ clock_time(void)
   return simCurrentTime;
 }
 /*-----------------------------------------------------------------------------------*/
+unsigned long
+clock_seconds(void)
+{
+  return 0;
+}
+/*-----------------------------------------------------------------------------------*/
 void
 clock_delay(unsigned int delay_time)
 {

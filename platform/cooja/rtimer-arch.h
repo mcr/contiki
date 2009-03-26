@@ -35,7 +35,11 @@
 #define __RTIMER_ARCH_H__
 
 #include "contiki-conf.h"
+#include "sys/clock.h"
 
 #define RTIMER_ARCH_SECOND CLOCK_CONF_SECOND
+
+#define rtimer_arch_now() -1
+
 
 #endif /* __RTIMER_ARCH_H__ */
