@@ -34,7 +34,8 @@
 
 #include "dev/flash.h"
 
-static char datamemory[ELFLOADER_DATAMEMORY_SIZE];
+static uint16_t datamemory_aligned[ELFLOADER_DATAMEMORY_SIZE/2+1];
+static uint8_t* datamemory = (uint8_t *)datamemory_aligned;
 #if ELFLOADER_CONF_TEXT_IN_ROM
 static const char textmemory[ELFLOADER_TEXTMEMORY_SIZE] = {0};
 #else /* ELFLOADER_CONF_TEXT_IN_ROM */
