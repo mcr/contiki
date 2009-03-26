@@ -71,19 +71,18 @@ PROCESS_THREAD(shell_exec_process, ev, data)
     autostart_exit(elfloader_autostart_processes);
   }
 
-  
-  fd = cfs_open(name, CFS_READ);
+  fd = cfs_open(name, CFS_READ | CFS_WRITE);
   if(fd < 0) {
     shell_output_str(&exec_command,
 		     "exec: could not open ", name);
   } else {
     int ret;
     char *print, *symbol;
-    
+
     ret = elfloader_load(fd);
     cfs_close(fd);
     symbol = "";
-    
+
     switch(ret) {
     case ELFLOADER_OK:
       print = "OK";
@@ -127,7 +126,7 @@ PROCESS_THREAD(shell_exec_process, ev, data)
     }
 
   }
-  
+
   PROCESS_END();
 }
 /*---------------------------------------------------------------------------*/
