@@ -43,12 +43,9 @@ import se.sics.cooja.interfaces.PolledAfterActiveTicks;
  *
  * Contiki variables:
  * <ul>
- * <li>char simSerialSendingFlag (1=mote is sending data)
- * <li>int simSerialSendingLength (length of data being sent from mote)
- * <li>byte[] simSerialSendingData (data being sent from mote)
- * <li>char simSerialRecevingFlag (1=mote is receving data)
- * <li>int simSerialReceivingLength (length of data being received at mote)
- * <li>byte[] simSerialReceivingData (data being received at mote)
+ * <li>char simSerialReceivingFlag (1=mote has incoming serial data)
+ * <li>int simSerialReceivingLength
+ * <li>byte[] simSerialReceivingData
  * </ul>
  * <p>
  *
@@ -117,24 +114,31 @@ public class ContikiRS232 extends SerialUI implements ContikiMoteInterface, Poll
   }
 
   public void writeString(String message) {
-    moteMem.setByteValueOf("simSerialReceivingFlag", (byte) 1);
+    final byte[] dataToAppend = message.getBytes();
 
-    byte[] dataToAppend = message.getBytes();
+    TimeEvent writeStringEvent = new TimeEvent(0) {
+      public void execute(long t) {
+        /* Append to existing buffer */
+        int oldSize = moteMem.getIntValueOf("simSerialReceivingLength");
+        int newSize = oldSize + dataToAppend.length;
+        moteMem.setIntValueOf("simSerialReceivingLength", newSize);
 
-    /* Append to existing buffer */
-    int oldSize = moteMem.getIntValueOf("simSerialReceivingLength");
-    int newSize = oldSize + dataToAppend.length;
-    moteMem.setIntValueOf("simSerialReceivingLength", newSize);
+        byte[] oldData = moteMem.getByteArray("simSerialReceivingData", oldSize);
+        byte[] newData = new byte[newSize];
 
-    byte[] oldData = moteMem.getByteArray("simSerialReceivingData", oldSize);
-    byte[] newData = new byte[newSize];
+        System.arraycopy(oldData, 0, newData, 0, oldData.length);
+        System.arraycopy(dataToAppend, 0, newData, oldSize, dataToAppend.length);
 
-    System.arraycopy(oldData, 0, newData, 0, oldData.length);
-    System.arraycopy(dataToAppend, 0, newData, oldSize, dataToAppend.length);
+        moteMem.setByteArray("simSerialReceivingData", newData);
 
-    moteMem.setByteArray("simSerialReceivingData", newData);
-
-    mote.setState(Mote.State.ACTIVE);
+        moteMem.setByteValueOf("simSerialReceivingFlag", (byte) 1);
+        mote.setState(Mote.State.ACTIVE);
+      }
+    };
+    mote.getSimulation().scheduleEvent(
+        writeStringEvent,
+        mote.getSimulation().getSimulationTime()
+    );
   }
 
   public double energyConsumption() {
