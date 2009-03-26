@@ -59,6 +59,11 @@ public abstract class AbstractRadioMedium extends RadioMedium {
 
   private Simulation simulation = null;
 
+  /* Book-keeping */
+  public int COUNTER_TX = 0;
+  public int COUNTER_RX = 0;
+  public int COUNTER_INTERFERED = 0;
+
   public class RadioMediumObservable extends Observable {
     public void setRadioMediumChanged() {
       setChanged();
@@ -243,7 +248,9 @@ public abstract class AbstractRadioMedium extends RadioMedium {
         } else {
           activeConnections.remove(connection);
           finishedConnections.add(connection);
+          COUNTER_TX++;
           for (Radio dstRadio : connection.getDestinations()) {
+            COUNTER_RX++;
             if (connection.getDestinationDelay(dstRadio) == 0) {
               dstRadio.signalReceptionEnd();
             } else {
@@ -262,6 +269,7 @@ public abstract class AbstractRadioMedium extends RadioMedium {
             }
           }
           for (Radio dstRadio : connection.getInterfered()) {
+            COUNTER_INTERFERED++;
             dstRadio.signalReceptionEnd();
           }
         }
