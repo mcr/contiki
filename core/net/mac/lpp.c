@@ -363,8 +363,6 @@ read_packet(void)
 				packet type of the queued packet to see
 				if it is a data packet. If not, we
 				should not turn the radio on. */
-
-	    break;
 	  }
 	}
       }
