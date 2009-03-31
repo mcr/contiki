@@ -251,22 +251,21 @@ dutycycle(void *ptr)
 static int
 send_packet(void)
 {
-  struct lpp_hdr *hdr;
+  struct lpp_hdr hdr;
   clock_time_t timeout;
 
-  packetbuf_hdralloc(sizeof(struct lpp_hdr));
-  hdr = packetbuf_hdrptr();
+  rimeaddr_copy(&hdr.sender, &rimeaddr_node_addr);
+  rimeaddr_copy(&hdr.receiver, packetbuf_addr(PACKETBUF_ADDR_RECEIVER));
+  hdr.type = TYPE_DATA;
 
-  rimeaddr_copy(&hdr->sender, &rimeaddr_node_addr);
-  rimeaddr_copy(&hdr->receiver, packetbuf_addr(PACKETBUF_ADDR_RECEIVER));
-  hdr->type = TYPE_DATA;
+  packetbuf_hdralloc(sizeof(struct lpp_hdr));
+  memcpy(packetbuf_hdrptr(), &hdr, sizeof(struct lpp_hdr));
 
   packetbuf_compact();
   PRINTF("%d.%d: queueing packet to %d.%d, channel %d\n",
 	 rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1],
-	 hdr->receiver.u8[0], hdr->receiver.u8[1],
+	 hdr.receiver.u8[0], hdr.receiver.u8[1],
 	 packetbuf_attr(PACKETBUF_ATTR_CHANNEL));
-
   if(packetbuf_attr(PACKETBUF_ATTR_PACKET_TYPE) == PACKETBUF_ATTR_PACKET_TYPE_ACK) {
     /* Immediately send ACKs - we're assuming that the other node is
        listening. */
@@ -283,7 +282,7 @@ send_packet(void)
       } else {
 	list_add(queued_packets_list, i);
         timeout = UNICAST_TIMEOUT;
-        if(rimeaddr_cmp(&hdr->receiver, &rimeaddr_null)) {
+        if(rimeaddr_cmp(&hdr.receiver, &rimeaddr_null)) {
           timeout = PACKET_LIFETIME;
         }
 	ctimer_set(&i->timer, timeout, remove_queued_packet, i);
