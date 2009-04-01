@@ -163,6 +163,10 @@ public class Visualizer extends VisPlugin {
     skinBox = new JComboBox();
     skinBox.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
+        if (skinBox.getSelectedIndex() < 0 ||
+            skinBox.getSelectedIndex() > visualizerSkins.size()) {
+          return;
+        }
         Class<? extends VisualizerSkin> skinClass = visualizerSkins.get(skinBox.getSelectedIndex());
         selectSkin(skinClass);
       }
@@ -857,6 +861,8 @@ public class Visualizer extends VisPlugin {
   }
 
   public void closePlugin() {
+    skinBox.removeAllItems();
+
     if (currentSkin != null) {
       currentSkin.setInactive();
     }
