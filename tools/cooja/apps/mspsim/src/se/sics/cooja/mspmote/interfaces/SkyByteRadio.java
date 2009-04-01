@@ -193,7 +193,7 @@ public class SkyByteRadio extends Radio implements CustomDataRadio {
     lastIncomingPacket = packet;
 
     /* TODO Receiving all bytes at the same time ok? */
-    byte[] packetData = CC2420RadioPacketConverter.fromCoojaToCC2420((COOJARadioPacket) packet);
+    byte[] packetData = CC2420RadioPacketConverter.fromCoojaToCC2420(packet);
 
     if (cc2420.getState() != CC2420.RadioState.RX_SFD_SEARCH) {
       /*logger.info("Radio is not currently active. Let's wait some...");*/
