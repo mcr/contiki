@@ -52,6 +52,8 @@ public class RadioConnection {
 
   private Vector<Radio> interfered = new Vector<Radio>();
 
+  private long startTime;
+
   /**
    * Creates a new radio connection with given source and no destinations.
    *
@@ -60,6 +62,11 @@ public class RadioConnection {
    */
   public RadioConnection(Radio sourceRadio) {
     this.source = sourceRadio;
+    startTime = sourceRadio.getMote().getSimulation().getSimulationTime();
+  }
+
+  public long getStartTime() {
+    return startTime;
   }
 
   /**
