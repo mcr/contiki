@@ -45,9 +45,6 @@ PROCESS_THREAD(test_serial_process, ev, data)
 
   etimer_set(&et, CLOCK_SECOND);
 
-  /* Start serial process */
-  serial_line_init();
-
   while(1) {
     PROCESS_WAIT_EVENT();
 
