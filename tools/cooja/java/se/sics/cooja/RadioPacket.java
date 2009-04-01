@@ -39,6 +39,8 @@ import se.sics.cooja.interfaces.CustomDataRadio;
  * implementations can additionally support custom data objects.
  *
  * @see CustomDataRadio
+ * @see COOJARadioPacket
+ * @see ConvertedRadioPacket
  * @author Fredrik Osterlind
  */
 public interface RadioPacket {
