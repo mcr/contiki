@@ -65,14 +65,13 @@
 #include "contiki-lib.h"
 #include "contiki-conf.h"
 #include "sys/clock.h"
-
-#include "lib/simEnvChange.h"
-#include "lib/sensors.h"
-#include "dev/cooja-radio.h"
 #include "sys/etimer.h"
 #include "sys/cooja_mt.h"
+#include "dev/serial-line.h"
+#include "dev/cooja-radio.h"
+#include "lib/simEnvChange.h"
+#include "lib/sensors.h"
 #include "net/init-net.h"
-
 #include "node-id.h"
 
 PROCINIT(&etimer_process,&sensors_process);
@@ -118,8 +117,6 @@ print_processes(struct process * const processes[])
 static void
 start_process_run_loop(void *data)
 {
-    int i;
-
     /* Initialize random generator */
     random_init(0);
 
@@ -139,11 +136,9 @@ start_process_run_loop(void *data)
 
     /* Initialize communication stack */
     init_net();
-    printf("Rime started with address ");
-    for(i = 0; i < sizeof(rimeaddr_node_addr.u8) - 1; i++) {
-      printf("%d.", rimeaddr_node_addr.u8[i]);
-    }
-    printf("%d\n", rimeaddr_node_addr.u8[i]);
+
+    /* Start serial process */
+    serial_line_init();
 
     /* Start autostart processes (defined in Contiki application) */
     print_processes(autostart_processes);
