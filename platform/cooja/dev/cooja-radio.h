@@ -48,7 +48,7 @@
 #define COOJA_RADIO_ZEROLEN UIP_FW_ZEROLEN
 #define COOJA_RADIO_OK UIP_FW_OK
 
-extern const struct radio_driver cooja_driver;
+extern const struct radio_driver cooja_radio;
 
 /**
  * Turn radio hardware on.
