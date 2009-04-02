@@ -65,9 +65,9 @@ cc24240_timerb1_interrupt(void)
   /* always read TBIV to clear IFG */
   tbiv = TBIV;
   if(SFD_IS_1) {
-    start_time = TBCCR1;
+    sfd_start_time = TBCCR1;
   } else {
-    end_time = TBCCR1;
+    sfd_end_time = TBCCR1;
   }
   ENERGEST_OFF(ENERGEST_TYPE_IRQ);
 }
