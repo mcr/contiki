@@ -55,9 +55,13 @@ public abstract class VisPlugin extends JInternalFrame implements Plugin {
   private Object tag = null;
 
   public VisPlugin(String title, final GUI gui) {
+    this(title, gui, true);
+  }
+
+  public VisPlugin(String title, final GUI gui, boolean requiresVis) {
     super(title, true, true, true, true);
 
-    if (!GUI.isVisualized()) {
+    if (requiresVis && !GUI.isVisualized()) {
       throw new PluginRequiresVisualizationException();
     }
 
