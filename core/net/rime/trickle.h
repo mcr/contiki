@@ -74,7 +74,7 @@ struct trickle_callbacks {
 struct trickle_conn {
   struct broadcast_conn c;
   const struct trickle_callbacks *cb;
-  struct ctimer t, interval_timer;
+  struct ctimer t, interval_timer, first_transmission_timer;
   struct pt pt;
   struct queuebuf *q;
   clock_time_t interval;

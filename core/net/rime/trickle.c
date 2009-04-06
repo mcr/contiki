@@ -164,7 +164,8 @@ recv(struct broadcast_conn *bc, rimeaddr_t *from)
     c->q = queuebuf_new_from_packetbuf();
     c->interval_scaling = 0;
     reset_interval(c);
-    send(c);
+    ctimer_set(&c->first_transmission_timer, random_rand() % c->interval,
+	       send, c);
     c->cb->recv(c);
   }
 }
