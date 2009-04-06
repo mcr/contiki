@@ -62,13 +62,13 @@
 #define F_CPU 2457600uL
 
 /* Our clock resolution, this is the same as Unix HZ. */
-#define CLOCK_CONF_SECOND 64
+#define CLOCK_CONF_SECOND 128
 
 #define BAUD2UBR(baud) ((F_CPU/baud))
 
 #ifdef WITH_UIP6
 
-#define RIMEADDR_CONF_SIZE              2
+#define RIMEADDR_CONF_SIZE              8
 
 #define UIP_CONF_LL_802154              1
 #define UIP_CONF_LLH_LEN                0
