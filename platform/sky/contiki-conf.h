@@ -26,6 +26,7 @@
 #define ENERGEST_CONF_ON 1
 
 #define HAVE_STDINT_H
+#define MSP430_MEMCPY_WORKAROUND 1
 #include "msp430def.h"
 
 #ifndef RF_CHANNEL
