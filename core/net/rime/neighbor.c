@@ -280,7 +280,7 @@ neighbor_best(void)
   int found;
   /*  int lowest, best;*/
   struct neighbor *n, *best;
-  uint8_t rtmetric;
+  uint16_t rtmetric;
 
   rtmetric = RTMETRIC_MAX;
   best = NULL;
