@@ -109,7 +109,7 @@ void uip_log(char *msg);
 #define RIME_HC1_HC_UDP_UDP_ENCODING  2 /* 8 bit */
 #define RIME_HC1_HC_UDP_TTL           3 /* 8 bit */
 #define RIME_HC1_HC_UDP_PORTS         4 /* 8 bit */
-#define RIME_HC1_HC_UDP_CHECKSUM      5 /* 16 bit */
+#define RIME_HC1_HC_UDP_CHKSUM        5 /* 16 bit */
 
 #define RIME_IPHC_BUF              ((struct sicslowpan_iphc_hdr *)(rime_ptr + rime_hdr_len))
 /* #define RIME_IPHC_DISPATCH            0 /\* 8 bit *\/ */
