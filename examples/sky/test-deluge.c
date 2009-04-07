@@ -81,7 +81,7 @@ PROCESS_THREAD(deluge_test_process, ev, data)
 
   deluge_disseminate("test", node_id == SINK_ID);
 
-  etimer_set(&et, CLOCK_SECOND);
+  etimer_set(&et, CLOCK_SECOND * 5);
   for(;;) {
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
     if(node_id != SINK_ID) {
