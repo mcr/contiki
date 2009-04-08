@@ -33,6 +33,8 @@
 #ifndef __IRQ_H__
 #define __IRQ_H__
 
+#include "lib/sensors.h"
+
 void irq_adc12_activate(const struct sensors_sensor *sensor,
 			unsigned char adcno, unsigned char config);
 
