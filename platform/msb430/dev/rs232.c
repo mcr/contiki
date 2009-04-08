@@ -64,17 +64,6 @@ rs232_init(void)
   rs232_set_speed(RS232_115200);
 }
 /*---------------------------------------------------------------------------*/
-void
-rs232_send(char c)
-{
-  /* Check if the UART is in RS232 mode before sending.
-     This check can be ommitted if every access to rs232 locks the uart
-     before using it.
-  */
-
-  putchar(c);
-}
-/*---------------------------------------------------------------------------*/
 int
 putchar(int c)
 {
@@ -87,6 +76,17 @@ putchar(int c)
   } else {
     return -1;
   }
+}
+/*---------------------------------------------------------------------------*/
+void
+rs232_send(char c)
+{
+  /* Check if the UART is in RS232 mode before sending.
+     This check can be ommitted if every access to rs232 locks the uart
+     before using it.
+  */
+
+  putchar(c);
 }
 /*---------------------------------------------------------------------------*/
 void
