@@ -54,8 +54,14 @@ ifndef MOTELIST
   USBDEVPREFIX=
   SERIALDUMP = $(CONTIKI)/tools/sky/serialdump-linux
   MOTELIST = $(CONTIKI)/tools/sky/motelist-linux
-  BSL = $(CONTIKI)/tools/sky/msp430-bsl-linux --telosb
-  BSL_FILETYPE = -I
+  TMOTE_BSL=$(if $(wildcard $(CONTIKI)/tools/sky/tmote-bsl-linux),1,0)
+  ifeq ($(TMOTE_BSL), 1)
+    PATH := $(PATH):$(CONTIKI)/tools/sky
+    BSL =  $(CONTIKI)/tools/sky/tmote-bsl-linux
+  else
+    BSL = $(CONTIKI)/tools/sky/msp430-bsl-linux --telosb
+    BSL_FILETYPE = -I
+  endif
   MOTES = $(shell $(MOTELIST) 2>&- | grep USB | \
      cut -f 4 -d \  | \
      perl -ne 'print $$1 . " " if(m-(/dev/\w+)-);')
