@@ -383,7 +383,11 @@
  * This is should not be to set to more than
  * UIP_BUFSIZE - UIP_LLH_LEN - UIP_TCPIP_HLEN.
  */
+#ifdef UIP_CONF_TCP_MSS
+#define UIP_TCP_MSS UIP_CONF_TCP_MSS
+#else
 #define UIP_TCP_MSS     (UIP_BUFSIZE - UIP_LLH_LEN - UIP_TCPIP_HLEN)
+#endif
 
 /**
  * The size of the advertised receiver's window.
