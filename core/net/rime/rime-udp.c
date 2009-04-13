@@ -77,12 +77,10 @@ PROCESS_THREAD(rime_udp_process, ev, data)
 
   PROCESS_BEGIN();
 
-  uip_create_linklocal_allnodes_mcast(&ipaddr);
-  broadcast_conn = udp_new(&ipaddr, HTONS(RIME_UDP_PORT), NULL);
+  broadcast_conn = udp_broadcast_new(HTONS(RIME_UDP_PORT), NULL);
   if(broadcast_conn == NULL) {
     PRINTF("rime-udp: Failed to allocate a broadcast connection!\n");
   }
-  udp_bind(broadcast_conn, HTONS(RIME_UDP_PORT));
 
   uip_create_unspecified(&ipaddr);
   unicast_conn = udp_new(&ipaddr, HTONS(RIME_UDP_PORT), NULL);
