@@ -307,8 +307,12 @@ udp_broadcast_new(u16_t port, void *appstate)
 {
   uip_ipaddr_t addr;
   struct uip_udp_conn *conn;
-  
+
+#if UIP_CONF_IPV6
+  uip_create_linklocal_allnodes_mcast(&addr);
+#else
   uip_ipaddr(&addr, 255,255,255,255);
+#endif /* UIP_CONF_IPV6 */
   conn = udp_new(&addr, port, appstate);
   if(conn != NULL) {
     udp_bind(conn, port);
