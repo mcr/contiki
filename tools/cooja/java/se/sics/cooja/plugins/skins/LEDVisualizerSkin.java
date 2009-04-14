@@ -134,6 +134,9 @@ public class LEDVisualizerSkin implements VisualizerSkin {
   }
 
   public void paintSkin(Graphics g) {
-    visualizer.paintSkinGeneric(g);
+  }
+
+  public Visualizer getVisualizer() {
+    return visualizer;
   }
 }

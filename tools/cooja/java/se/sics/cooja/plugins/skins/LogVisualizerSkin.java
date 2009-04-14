@@ -100,12 +100,10 @@ public class LogVisualizerSkin implements VisualizerSkin {
   }
 
   public Color[] getColorOf(Mote mote) {
-    return new Color[] { Color.BLACK };
+    return null;
   }
 
   public void paintSkin(Graphics g) {
-    visualizer.paintSkinGeneric(g);
-
     FontMetrics fm = g.getFontMetrics();
 
     /* Paint last output below motes */
@@ -126,5 +124,9 @@ public class LogVisualizerSkin implements VisualizerSkin {
       int msgWidth = fm.stringWidth(msg);
       g.drawString(msg, pixel.x - msgWidth/2, pixel.y - Visualizer.MOTE_RADIUS);
     }
+  }
+
+  public Visualizer getVisualizer() {
+    return visualizer;
   }
 }

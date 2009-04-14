@@ -84,4 +84,9 @@ public interface VisualizerSkin {
    */
   public void paintSkin(Graphics g);
 
+  /**
+   * @return Visualizer plugin where this skin is showing
+   */
+  public Visualizer getVisualizer();
+
 }
