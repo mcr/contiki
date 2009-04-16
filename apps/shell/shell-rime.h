@@ -63,10 +63,16 @@ void shell_rime_init(void);
 /* Rime channel used by the 'netcmd' command, which uses 1 channels */
 #define SHELL_RIME_CHANNEL_NETCMD   SHELL_RIME_CHANNEL_PING + 3
 
+/* Rime channel used by the 'sendcmd' command, which uses 1 channels */
+#define SHELL_RIME_CHANNEL_SENDCMD   SHELL_RIME_CHANNEL_NETCMD + 1
+
 /* Rime channel used by the 'netfile' command, which uses 2 channels */
-#define SHELL_RIME_CHANNEL_NETFILE   SHELL_RIME_CHANNEL_NETCMD + 1
+#define SHELL_RIME_CHANNEL_NETFILE   SHELL_RIME_CHANNEL_SENDCMD + 1
 
 /* Rime channel used by the 'sendtest' command, which uses 1 channels */
 #define SHELL_RIME_CHANNEL_SENDTEST  SHELL_RIME_CHANNEL_NETFILE + 2
+
+/* Rime channel used by the 'download' command, which uses 2 channels */
+#define SHELL_RIME_CHANNEL_DOWNLOAD SHELL_RIME_CHANNEL_SENDTEST + 1
 
 #endif /* __SHELL_RIME_H__ */
