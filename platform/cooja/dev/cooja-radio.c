@@ -164,8 +164,12 @@ int
 radio_read(void *buf, unsigned short bufsize)
 {
   int tmpInSize = simInSize;
-  if(simInSize > 0) {
 
+  if( bufsize < simInSize ) {
+    return 0;
+  }
+
+  if(simInSize > 0) {
     memcpy(buf, simInDataBuffer, simInSize);
     simInSize = 0;
     return tmpInSize;
