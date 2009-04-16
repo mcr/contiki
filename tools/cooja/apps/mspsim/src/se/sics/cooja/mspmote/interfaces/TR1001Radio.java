@@ -498,4 +498,9 @@ public class TR1001Radio extends Radio implements USARTListener, CustomDataRadio
   public Mote getMote() {
     return mote;
   }
+
+  public boolean isReceiverOn() {
+    /* TODO Implement me */
+    return true;
+  }
 }
