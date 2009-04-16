@@ -119,6 +119,8 @@ public abstract class Radio extends MoteInterface {
    */
   public abstract boolean isInterfered();
 
+  public abstract boolean isReceiverOn();
+
   /**
    * Interferes with any current reception. If this method is called, the packet
    * will be dropped. This method can be used to simulate radio interference

@@ -320,4 +320,8 @@ public class ApplicationRadio extends Radio implements PolledBeforeActiveTicks {
   public Mote getMote() {
     return myMote;
   }
+
+  public boolean isReceiverOn() {
+    return true;
+  }
 }

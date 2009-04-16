@@ -176,7 +176,7 @@ public class ContikiRadio extends Radio implements ContikiMoteInterface, PolledA
   }
 
   /* General radio support */
-  public boolean isOn() {
+  public boolean isReceiverOn() {
     return radioOn;
   }
 

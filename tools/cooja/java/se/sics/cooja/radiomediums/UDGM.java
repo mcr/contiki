@@ -120,6 +120,9 @@ public class UDGM extends AbstractRadioMedium {
           sendingRadio.getChannel() != listeningRadio.getChannel()) {
         continue;
       }
+      if (!listeningRadio.isReceiverOn()) {
+        continue;
+      }
 
       double distance = sendingPosition.getDistanceTo(listeningRadioPosition);
 

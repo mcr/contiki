@@ -269,4 +269,8 @@ public class DisturberRadio extends Radio implements PolledBeforeAllTicks {
   public Mote getMote() {
     return myMote;
   }
+
+  public boolean isReceiverOn() {
+    return true;
+  }
 }

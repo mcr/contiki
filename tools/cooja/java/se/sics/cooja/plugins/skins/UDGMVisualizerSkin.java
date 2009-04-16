@@ -52,7 +52,6 @@ import se.sics.cooja.ClassDescription;
 import se.sics.cooja.Mote;
 import se.sics.cooja.RadioConnection;
 import se.sics.cooja.Simulation;
-import se.sics.cooja.contikimote.interfaces.ContikiRadio;
 import se.sics.cooja.interfaces.Position;
 import se.sics.cooja.interfaces.Radio;
 import se.sics.cooja.plugins.Visualizer;
@@ -296,7 +295,7 @@ public class UDGMVisualizerSkin implements VisualizerSkin {
       return new Color[] { Color.CYAN };
     }
 
-    if (moteRadio instanceof ContikiRadio && !((ContikiRadio) moteRadio).isOn()) {
+    if (!moteRadio.isReceiverOn()) {
       return new Color[] { Color.GRAY };
     }
 
