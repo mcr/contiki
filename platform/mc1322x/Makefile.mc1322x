@@ -1,4 +1,4 @@
-CONTIKI_TARGET_DIRS = . #apps net 
+CONTIKI_TARGET_DIRS = . apps net 
 CONTIKI_CORE=contiki-mc1322x-main
 CONTIKI_TARGET_MAIN = ${CONTIKI_CORE}.o
 
