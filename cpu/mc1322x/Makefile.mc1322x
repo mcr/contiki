@@ -40,9 +40,11 @@ STRIP    = $(CROSS)strip
 
 PROJECT_OBJECTFILES += ${addprefix $(OBJECTDIR)/,$(CONTIKI_TARGET_MAIN:.c=.o)}
 
+TEXT_BASE = 0x00400000
+export TEXT_BASE
 LINKERSCRIPT = $(CONTIKI_CPU)/mc1322x.lds
 
-#STARTUP=${addprefix $(OBJECTDIR)/,startup-SAM7S.o}
+STARTUP=${addprefix $(OBJECTDIR)/,startup.o}
 
 # JTAG program upload
 #OPENOCD	 = openocd
@@ -65,8 +67,9 @@ CFLAGSNO = -I. -I$(CONTIKI)/core -I$(CONTIKI_CPU) -I$(CONTIKI_CPU)/loader \
            -DWITH_UIP -DWITH_ASCII -DMCK=$(MCK) \
            -Werror $(ARCH_FLAGS) -g 
 
-CFLAGS  += $(CFLAGSNO) -O -DRUN_AS_SYSTEM -DROM_RUN -fno-strict-aliasing  -fno-common -ffixed-r8 -msoft-float
+CFLAGS  += $(CFLAGSNO) -O -DRUN_AS_SYSTEM -DROM_RUN -fno-strict-aliasing  -fno-common -ffixed-r8 -msoft-float -DTEXT_BASE=$(TEXT_BASE)
 LDFLAGS += -T $(LINKERSCRIPT) -nostartfiles
+AFLAGS := $(AFLAGS_DEBUG) -D__ASSEMBLY__ $(CPPFLAGS)
 
 CDEPFLAGS = $(CFLAGS) -D __MAKING_DEPS__
 
