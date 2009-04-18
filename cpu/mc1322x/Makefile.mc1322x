@@ -27,7 +27,7 @@ TARGETLIBS =
 CONTIKI_TARGET_SOURCEFILES += ${MC1322X} \
                               $(TARGETLIBS)
 
-CONTIKI_SOURCEFILES        += $(CONTIKI_TARGET_SOURCEFILE								       S)
+CONTIKI_SOURCEFILES        += $(CONTIKI_TARGET_SOURCEFILES)
 
 
 ### Compiler definitions
@@ -39,8 +39,7 @@ OBJCOPY  = arm-linux-objcopy
 STRIP    = arm-linux-strip
 
 RELFLAGS = -fno-strict-aliasing  -fno-common -ffixed-r8 -msoft-float
-CPPFLAGS = -march=armv4t -mcallee-super-interworking -mthumb \ 
-	 -mtune=arm7tdmi-s -mthumb-interwork -DCONFIG_ARM -D__ARM__
+CPPFLAGS = -march=armv4t -mcallee-super-interworking -mthumb -mtune=arm7tdmi-s -mthumb-interwork -DCONFIG_ARM -D__ARM__
 
 CFLAGSNO = -I. -I$(CONTIKI)/core -I$(CONTIKI_CPU) $(USB_INCLUDES) \
            -I$(CONTIKI)/platform/$(TARGET) \

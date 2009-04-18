@@ -52,14 +52,14 @@ main(void)
   init_lowlevel();
 
   /* Clock */
-  clock_init();
+//  clock_init();
 
 
   /* Process subsystem */
   process_init();
 
   /* Register initial processes */
-  procinit_init();
+//  procinit_init();
 
   /* Autostart processes */
   autostart_start(autostart_processes);
@@ -67,9 +67,9 @@ main(void)
   //Give ourselves a prefix
   //init_net();
 
-  printf_P(PSTR("\n********BOOTING CONTIKI*********\n"));
+//  printf_P(PSTR("\n********BOOTING CONTIKI*********\n"));
 
-  printf_P(PSTR("System online.\n"));
+//  printf_P(PSTR("System online.\n"));
 
   /* Main scheduler loop */
   while(1) {
