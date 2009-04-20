@@ -38,6 +38,7 @@ import se.sics.cooja.MoteInterface;
 import se.sics.cooja.MoteType;
 import se.sics.cooja.Simulation;
 import se.sics.cooja.dialogs.AbstractCompileDialog;
+import se.sics.mspsim.util.ELF;
 
 public class SkyCompileDialog extends AbstractCompileDialog {
   private static Logger logger = Logger.getLogger(SkyCompileDialog.class);
@@ -75,7 +76,7 @@ public class SkyCompileDialog extends AbstractCompileDialog {
   }
 
   public boolean canLoadFirmware(File file) {
-    if (file.getName().endsWith(".sky")) {
+    if (ELF.isELF(file)) {
       return true;
     }
     return false;
