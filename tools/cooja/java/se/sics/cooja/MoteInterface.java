@@ -84,8 +84,7 @@ public abstract class MoteInterface extends Observable {
 
       return instance;
     } catch (Exception e) {
-      logger.fatal("Exception when creating " + interfaceClass + ": " + e);
-      e.printStackTrace();
+      logger.fatal("Exception when calling constructor of " + interfaceClass, e);
       return null;
     }
   }
