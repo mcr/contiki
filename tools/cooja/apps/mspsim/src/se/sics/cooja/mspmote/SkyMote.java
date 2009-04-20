@@ -71,16 +71,6 @@ public class SkyMote extends MspMote {
     MoteInterfaceHandler moteInterfaceHandler =
       super.createMoteInterfaceHandler();
 
-    /* TODO check if uIP is used, remove IPv4 interface otherwise */
-//    moteInterfaceHandler.getIPAddress()
-//    try {
-//      if (((MspMoteMemory)this.getMemory()).getVariableAddress("uip_hostaddr") != 0) {
-//        IPAddress ip = new MspIPAddress(this);
-//        moteInterfaceHandler.addInterface(ip);
-//      }
-//    } catch (UnknownVariableException e) {
-//    }
-
     return moteInterfaceHandler;
   }
 
