@@ -95,6 +95,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
@@ -1004,6 +1005,8 @@ public class GUI extends Observable {
 
     JFrame.setDefaultLookAndFeelDecorated(true);
     JDialog.setDefaultLookAndFeelDecorated(true);
+
+    ToolTipManager.sharedInstance().setDismissDelay(60000);
 
     /* Nimbus */
     try {
