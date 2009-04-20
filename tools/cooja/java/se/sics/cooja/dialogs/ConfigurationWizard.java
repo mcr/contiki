@@ -589,7 +589,6 @@ public class ConfigurationWizard extends JDialog {
     testOutput.addMessage("### Compiling C library source: " + cLibrarySourceFile.getName());
     try {
       String contikiPath = GUI.getExternalToolsSetting("PATH_CONTIKI").replaceAll("\\\\", "/");
-      System.out.println(" CURR DIR: " + new File(".").getAbsolutePath());
       CompileContiki.compile(
           "make " +
           "-f " + contikiPath + "/Makefile.include " +
