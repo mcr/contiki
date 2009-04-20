@@ -58,6 +58,7 @@ public class MoteInterfaceHandler {
   private Button myButton;
   private Clock myClock;
   private IPAddress myIPAddress;
+  private RimeAddress myRimeAddress;
   private LED myLED;
   private Log myLog;
   private MoteID myMoteID;
@@ -170,6 +171,16 @@ public class MoteInterfaceHandler {
       myIPAddress = getInterfaceOfType(IPAddress.class);
     }
     return myIPAddress;
+  }
+
+  /**
+   * @return Rime address interface
+   */
+  public RimeAddress getRimeAddress() {
+    if (myRimeAddress == null) {
+      myRimeAddress = getInterfaceOfType(RimeAddress.class);
+    }
+    return myRimeAddress;
   }
 
   /**
