@@ -50,7 +50,7 @@ import se.sics.cooja.*;
  * @author Fredrik Osterlind
  */
 @ClassDescription("IP Address")
-public abstract class IPAddress extends MoteInterface {
+public class IPAddress extends MoteInterface {
   private static Logger logger = Logger.getLogger(IPAddress.class);
   private AddressMemory moteMem;
   private static boolean warnedNotImplemented = false;
@@ -231,23 +231,10 @@ public abstract class IPAddress extends MoteInterface {
 
 
   public Collection<Element> getConfigXML() {
-    Vector<Element> config = new Vector<Element>();
-    Element element;
-
-    // Infinite boolean
-    element = new Element("ip");
-    element.setText(getIPString());
-    config.add(element);
-
-    return config;
+    return null;
   }
 
   public void setConfigXML(Collection<Element> configXML, boolean visAvailable) {
-    for (Element element : configXML) {
-      if (element.getName().equals("ip")) {
-        setIPString(element.getText());
-      }
-    }
   }
 
   private static String hex16ToString(int data) {
@@ -257,5 +244,9 @@ public abstract class IPAddress extends MoteInterface {
       s = str16.substring(0, 4 - s.length()) + s;
     }
     return s;
+  }
+
+  public double energyConsumption() {
+    return 0;
   }
 }
