@@ -56,6 +56,7 @@ import org.jdom.Element;
 import se.sics.cooja.*;
 import se.sics.cooja.GUI.MoteRelation;
 import se.sics.cooja.interfaces.*;
+import se.sics.cooja.plugins.skins.AddressVisualizerSkin;
 import se.sics.cooja.plugins.skins.IDVisualizerSkin;
 import se.sics.cooja.plugins.skins.LEDVisualizerSkin;
 import se.sics.cooja.plugins.skins.LogVisualizerSkin;
@@ -109,6 +110,7 @@ public class Visualizer extends VisPlugin {
   static {
     /* Register default visualizer skins */
     registerVisualizerSkin(IDVisualizerSkin.class);
+    registerVisualizerSkin(AddressVisualizerSkin.class);
     registerVisualizerSkin(LogVisualizerSkin.class);
     registerVisualizerSkin(LEDVisualizerSkin.class);
   }
