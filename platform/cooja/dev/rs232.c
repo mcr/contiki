@@ -68,6 +68,12 @@ rs232_print(char *message)
   printf("%s", message);
 }
 /*-----------------------------------------------------------------------------------*/
+void
+slip_arch_writeb(unsigned char c)
+{
+  simlog_char(c);
+}
+/*-----------------------------------------------------------------------------------*/
 static void
 doInterfaceActionsBeforeTick(void)
 {
@@ -83,18 +89,18 @@ doInterfaceActionsBeforeTick(void)
     return;
   }
 
-  /* Notify rs232 handler */
+  /* Notify specified rs232 handler */
   if(input_handler != NULL) {
     for (i=0; i < simSerialReceivingLength; i++) {
       input_handler(simSerialReceivingData[i]);
     }
+  } else {
+    /* Notify serial process */
+    for (i=0; i < simSerialReceivingLength; i++) {
+      serial_line_input_byte(simSerialReceivingData[i]);
+    }
+    serial_line_input_byte(0x0a);
   }
-
-  /* Notify serial process */
-  for (i=0; i < simSerialReceivingLength; i++) {
-    serial_line_input_byte(simSerialReceivingData[i]);
-  }
-  serial_line_input_byte(0x0a);
 
   simSerialReceivingLength = 0;
   simSerialReceivingFlag = 0;
