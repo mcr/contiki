@@ -51,7 +51,7 @@ CONTIKI_APP_OBJ = $(CONTIKI_APP).co
 COOJA = $(CONTIKI)/platform/$(TARGET)
 CONTIKI_TARGET_DIRS = . dev lib sys cfs net
 
-COOJA_BASE	= simEnvChange.c irq.c cooja_mt.c cooja_mtarch.c rtimer-arch.c
+COOJA_BASE	= simEnvChange.c irq.c cooja_mt.c cooja_mtarch.c rtimer-arch.c slip.c
 
 COOJA_INTFS	= beep.c button-sensor.c ip.c leds-arch.c moteid.c \
 		    pir-sensor.c rs232.c vib-sensor.c \
