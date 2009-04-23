@@ -338,7 +338,6 @@ public class LogScriptEngine {
         /*logger.info("test script thread starts");*/
         try {
           ((Invocable)engine).getInterface(Runnable.class).run();
-
         } catch (RuntimeException e) {
           Throwable throwable = e;
           while (throwable.getCause() != null) {
@@ -347,7 +346,7 @@ public class LogScriptEngine {
 
           if (throwable.getMessage() != null &&
               throwable.getMessage().contains("test script killed") ) {
-            /*logger.info("test script thread terminated by exception");*/
+            logger.info("Test script finished");
           } else {
             if (!GUI.isVisualized()) {
               logger.fatal("Test script error, terminating Cooja.");
@@ -356,8 +355,8 @@ public class LogScriptEngine {
             }
 
             logger.fatal("Script error:", e);
-            gui.getSimulation().stopSimulation();
             deactivateScript();
+            gui.getSimulation().stopSimulation();
           }
         }
         /*logger.info("test script thread exits");*/
