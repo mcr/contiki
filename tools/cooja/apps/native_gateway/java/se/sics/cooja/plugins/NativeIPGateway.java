@@ -70,6 +70,7 @@ import se.sics.cooja.Plugin;
 import se.sics.cooja.PluginType;
 import se.sics.cooja.Simulation;
 import se.sics.cooja.interfaces.SerialPort;
+import se.sics.cooja.util.StringUtils;
 
 @ClassDescription("Open Native IP Gateway")
 @PluginType(PluginType.MOTE_PLUGIN)
@@ -736,12 +737,11 @@ public class NativeIPGateway implements Plugin {
 
     /* Sanity check outgoing data */
     if (packetData.length < IP_HEADER_LEN) {
-      /*logger.warn("Ignoring small packet: " + packetData.length);*/
+      /*logger.warn("Ignoring small packet:\n" + StringUtils.hexDump(packetData));*/
       return;
     }
     if (packetData[0] != 0x45) {
-      /*logger.warn("Ignoring bad header:" +
-      		" 0x" + Integer.toHexString(packetData[0]&0xFF));*/
+      /*logger.warn("Ignoring bad header:\n" + StringUtils.hexDump(packetData));*/
       return;
     }
 
