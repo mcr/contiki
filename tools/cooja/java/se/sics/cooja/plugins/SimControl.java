@@ -149,7 +149,7 @@ public class SimControl extends VisPlugin {
     startButton = button;
     smallPanel.add(button);
 
-    button = new JButton("Stop");
+    button = new JButton("Pause");
     button.setActionCommand("stop");
     button.addActionListener(myEventHandler);
     stopButton = button;
