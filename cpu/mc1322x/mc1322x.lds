@@ -11,6 +11,7 @@ SECTIONS
   .text           :
   {
     *startup.o	(.text)
+    *(.irq)		
     *(.text .stub .text.* .gnu.linkonce.t.*)
     /* .gnu.warning sections are handled specially by elf32.em.  */
     *(.gnu.warning)

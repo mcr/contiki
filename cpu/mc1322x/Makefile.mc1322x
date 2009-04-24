@@ -51,12 +51,8 @@ STARTUP=${addprefix $(OBJECTDIR)/,startup.o}
 #OPENOCD_FLASH_CFG = arm7_wig_flash.cfg
 #OPENOCD_RESET = arm7_wig_reset.cfg
 
-# USB program upload
-#SAMIAM=Sam_I_Am
-#SAMIAM_TTY=/dev/ttyACM0
-
-ARCH_FLAGS= -mcpu=arm7tdmi-s -mthumb-interwork -march=armv4t -mthumb -mcallee-super-interworking -mtune=arm7tdmi-s -DCONFIG_ARM -D__ARM__
-THUMB_FLAGS=-mthumb
+ARCH_FLAGS= -mcpu=arm7tdmi-s -mthumb-interwork -march=armv4t -mtune=arm7tdmi-s -DCONFIG_ARM -D__ARM__
+THUMB_FLAGS=-mthumb -mcallee-super-interworking
 ARM_FLAGS=
 
 
@@ -91,7 +87,7 @@ $(OBJECTDIR)/%-interrupt.o: %-interrupt.c
 $(OBJECTDIR)/%-arm.o: %-arm.c
 	$(CC) $(CFLAGS) $(ARM_FLAGS) -c $< -o $@
 
-$(OBJECTDIR)/interrupt-utils.o: interrupt-utils.c
+$(OBJECTDIR)/isr.o: isr.c
 	$(CC) $(CFLAGS) $(ARM_FLAGS) $< -c -o $@
 
 %.o: %.c

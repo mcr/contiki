@@ -39,6 +39,8 @@
 #include "contiki-net.h"
 #include "contiki-lib.h"
 
+#include "isr.h"
+
 void
 init_lowlevel(void)
 {

@@ -24,6 +24,27 @@
  */
 
 
+/* Standard definitions of Mode bits and Interrupt (I & F) flags in PSRs */
+	
+	.equ    I_BIT,          0x80      /* when I bit is set, IRQ is disabled */
+	.equ    F_BIT,          0x40      /* when F bit is set, FIQ is disabled */
+	
+	.equ    USR_MODE,       0x10
+	.equ    FIQ_MODE,       0x11
+	.equ    IRQ_MODE,       0x12
+	.equ    SVC_MODE,       0x13
+	.equ    ABT_MODE,       0x17
+	.equ    UND_MODE,       0x1B
+	.equ    SYS_MODE,       0x1F
+
+	.equ    usr_stack_size, 256*4
+	.equ    irq_stack_size, 128*4
+	.equ    fiq_stack_size, 128*4
+	.equ    und_stack_size,  32*4
+	.equ    abt_stack_size,  32*4
+	.equ    sup_stack_size,  32*4
+
+	
 /*
  *************************************************************************
  *
@@ -72,7 +93,35 @@ ROM_var_end:   .word 0
 .code 32
 .align
 _begin:
+ 	ldr     r1,=_system_stack
+ 	msr     cpsr_c,#(SVC_MODE | I_BIT | F_BIT)
+ 	add     r1,r1,#sup_stack_size
+ 	mov     sp,r1
+
+ 	msr     cpsr_c,#(IRQ_MODE | I_BIT | F_BIT)
+ 	add     r1,r1,#irq_stack_size
+ 	mov     sp,r1
+
+ 	msr     cpsr_c,#(FIQ_MODE | I_BIT | F_BIT)
+ 	add     r1,r1,#fiq_stack_size
+ 	mov     sp,r1
+	
+ 	msr     cpsr_c,#(ABT_MODE | I_BIT | F_BIT)
+ 	add     r1,r1,#abt_stack_size
+ 	mov     sp,r1
+
+ 	msr     cpsr_c,#(UND_MODE | I_BIT | F_BIT)
+ 	add     r1,r1,#und_stack_size
+ 	mov     sp,r1
+
+// 	msr     cpsr_c,#(USR_MODE | I_BIT | F_BIT)
+
 	bl _rom_data_init+.-base
+	msr     cpsr_c,#(SVC_MODE) // turn on interrupts --- for debug only
+//	msr     cpsr_c,#(USR_MODE) // turn on interrupts --- for debug only		
+// 	add     r1,r1,#usr_stack_size
+// 	mov     sp,r1
+	
 	b main
 	
 _undefined_instruction:	.word undefined_instruction
@@ -118,6 +167,10 @@ _bss_end:
 
 _start_armboot: .word main
 
+_system_stack:
+	. = . + usr_stack_size + irq_stack_size + fiq_stack_size + und_stack_size + abt_stack_size + sup_stack_size
+
+	
 /*
  *************************************************************************
  *
@@ -196,9 +249,9 @@ not_used:
 
 
 	.align	5
-irq:
-
-	.align	5
+//irq:
+//
+//	.align	5
 fiq:
 
 	.align	5
