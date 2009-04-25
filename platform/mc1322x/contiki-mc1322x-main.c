@@ -57,40 +57,21 @@ init_lowlevel(void)
 int
 main(void)
 {
-
-  *(volatile uint32_t *)GPIO_PAD_DIR0 = 0x00000100;
-  
-  volatile uint32_t i;
-  
-  while(1) {
-	  
-	  *(volatile uint32_t *)GPIO_DATA0 = 0x00000100;
-	  
-	  for(i=0; i<DELAY; i++) { continue; }
-	  
-	  *(volatile uint32_t *)GPIO_DATA0 = 0x00000000;
-	  
-	  for(i=0; i<DELAY; i++) { continue; }
-	  
-  };
-
-
-
   /* Initialize hardware */
   init_lowlevel();
 
   /* Clock */
-//  clock_init();
+  clock_init();
 
 
   /* Process subsystem */
   process_init();
 
   /* Register initial processes */
-//  procinit_init();
+  procinit_init();
 
   /* Autostart processes */
-//  autostart_start(autostart_processes);
+  autostart_start(autostart_processes);
 
   //Give ourselves a prefix
   //init_net();

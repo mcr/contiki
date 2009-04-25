@@ -136,8 +136,11 @@ CUSTOM_RULE_LINK=yes
 
 %.bin: %.$(TARGET)
 	$(OBJCOPY) -O binary $< $@
+
+symbols.c:
+	@${CONTIKI}/tools/make-empty-symbols
  
-%.$(TARGET): %.co $(PROJECT_OBJECTFILES) contiki-$(TARGET).a $(STARTUP) #$(OBJECTDIR)/symbols.o
+%.$(TARGET): %.co $(PROJECT_OBJECTFILES) contiki-$(TARGET).a $(STARTUP) $(OBJECTDIR)/symbols.o
 	$(CC) $(LDFLAGS) $(CFLAGS) -nostartfiles -o $@ $(filter-out %.a,$^) $(filter %.a,$^) -lc $(filter %.a,$^)
 
 $(CONTIKI_CPU)/usb/string-descriptors.c: \
