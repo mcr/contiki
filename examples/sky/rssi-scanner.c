@@ -68,7 +68,7 @@ do_rssi(void)
   printf("RSSI:");
   for(channel = 0; channel <= 79; ++channel) {
     set_frq(channel + 55);
-    printf("%d ", cc2420_rssi() + 53);
+    printf("%d ", cc2420_rssi() + 55);
   }
   printf("\n");
 }
@@ -86,6 +86,7 @@ PROCESS_THREAD(scanner_process, ev, data)
 
   while(1) {
     do_rssi();
+    PROCESS_PAUSE();
   }
 
   PROCESS_END();
