@@ -55,20 +55,20 @@ int
 main(void)
 {
   /* Clock */
-  clock_init();
+//  clock_init();
 
   /* Initialize hardware and */
   /* go into user mode */
-  init_lowlevel();
+//  init_lowlevel();
 
   /* Process subsystem */
-  process_init();
+//  process_init();
 
   /* Register initial processes */
-  procinit_init();
+//  procinit_init();
 
   /* Autostart processes */
-  autostart_start(autostart_processes);
+//  autostart_start(autostart_processes);
 
   //Give ourselves a prefix
   //init_net();
@@ -79,7 +79,7 @@ main(void)
 
   /* Main scheduler loop */
   while(1) {
-    process_run();
+//    process_run();
   }
 
   return 0;
