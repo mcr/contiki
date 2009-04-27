@@ -26,7 +26,8 @@ enum interrupt_nums {
 
 #define enable_irq(irq) (reg32(INTENNUM) = INT_NUM_##irq)
 
-#define tmr_irq() (bit_is_set(reg32(INTSRC),INT_NUM_TMR))
+//#define tmr_irq() (bit_is_set(reg32(INTSRC),INT_NUM_TMR))
+#define tmr_irq() 0
 
 extern void tmr0_isr(void) __attribute__((weak));
 extern void tmr1_isr(void) __attribute__((weak));
