@@ -51,15 +51,19 @@ init_lowlevel(void)
 	    ".code 16; ");
 }
 
+#define GPIO_PAD_DIR0   0x80000000
+
 int
 main(void)
 {
+	*(volatile uint32_t *)GPIO_PAD_DIR0 = 0x00000100;
+
   /* Clock */
-//  clock_init();
+  clock_init();
 
   /* Initialize hardware and */
   /* go into user mode */
-//  init_lowlevel();
+  init_lowlevel();
 
   /* Process subsystem */
 //  process_init();
@@ -79,7 +83,7 @@ main(void)
 
   /* Main scheduler loop */
   while(1) {
-//    process_run();
+    process_run();
   }
 
   return 0;
