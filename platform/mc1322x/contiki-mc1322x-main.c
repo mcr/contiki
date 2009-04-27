@@ -44,25 +44,22 @@
 void
 init_lowlevel(void)
 {
+	/* go into user mode to handle IRQs */
+	/* disabling interrupts is now difficult */
+ 	asm(".code 32;"
+	    "msr     cpsr_c,#(0x10);"
+	    ".code 16; ");
 }
-
-#define MBAR_GPIO       0x80000000
-#define GPIO_PAD_DIR0   0x80000000
-#define GPIO_DATA0      0x80000008
-#define UART1_DATA      0x80005008
-#define DELAY 400000
-
-
 
 int
 main(void)
 {
-  /* Initialize hardware */
-  init_lowlevel();
-
   /* Clock */
   clock_init();
 
+  /* Initialize hardware and */
+  /* go into user mode */
+  init_lowlevel();
 
   /* Process subsystem */
   process_init();

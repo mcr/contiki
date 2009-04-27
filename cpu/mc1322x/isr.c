@@ -7,10 +7,10 @@ __attribute__ ((interrupt("IRQ")))
 void irq(void)
 {
 	if(tmr_irq()) {
-		/* dispatch to individual timer isrs if the exist */
+		/* dispatch to individual timer isrs if they exist */
 		/* timer isrs are responsible for determining if they
 		 * caused an interrupt */
-		/* and clearing there own interrupt flags */
+		/* and clearing their own interrupt flags */
 		if(tmr0_isr != 0) { tmr0_isr(); }
 		if(tmr1_isr != 0) { tmr1_isr(); }
 		if(tmr2_isr != 0) { tmr2_isr(); }

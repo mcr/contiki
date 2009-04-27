@@ -65,7 +65,7 @@ CFLAGSNO = -I. -I$(CONTIKI)/core -I$(CONTIKI_CPU) -I$(CONTIKI_CPU)/loader \
 
 CFLAGS  += $(CFLAGSNO) -O -DRUN_AS_SYSTEM -DROM_RUN -fno-strict-aliasing  -fno-common -ffixed-r8 -msoft-float -DTEXT_BASE=$(TEXT_BASE)
 LDFLAGS += -T $(LINKERSCRIPT) -nostartfiles 
-AFLAGS := $(AFLAGS_DEBUG) -D__ASSEMBLY__ $(CPPFLAGS)
+AFLAGS := $(AFLAGS_DEBUG) -D__ASSEMBLY__ $(CPPFLAGS) -gstabs
 
 CDEPFLAGS = $(CFLAGS) -D __MAKING_DEPS__
 
@@ -98,10 +98,10 @@ $(OBJECTDIR)/%.o: %.c
 
 CUSTOM_RULE_S_TO_OBJECTDIR_O = yes
 %.o: %.S
-	$(CC) $(CFLAGS) $(ARM_FLAGS) $< -c
+	$(CC) $(CFLAGS) $(AFLAGS) $(ARM_FLAGS) $< -c
 
 $(OBJECTDIR)/%.o: %.S
-	$(CC) $(CFLAGS) $(ARM_FLAGS) $< -c  -o $@
+	$(CC) $(CFLAGS) $(AFLAGS) $(ARM_FLAGS) $< -c  -o $@
 
 
 CUSTOM_RULE_C_TO_CO=yes
@@ -141,7 +141,7 @@ symbols.c:
 	@${CONTIKI}/tools/make-empty-symbols
  
 %.$(TARGET): %.co $(PROJECT_OBJECTFILES) contiki-$(TARGET).a $(STARTUP) $(OBJECTDIR)/symbols.o
-	$(CC) $(LDFLAGS) $(CFLAGS) -nostartfiles -o $@ $(filter-out %.a,$^) $(filter %.a,$^) -lc $(filter %.a,$^)
+	$(CC) $(LDFLAGS) $(CFLAGS) -static -nostartfiles -o $@ $(filter-out %.a,$^) $(filter %.a,$^) -lc $(filter %.a,$^)
 
 $(CONTIKI_CPU)/usb/string-descriptors.c: \
 		$(CONTIKI_CPU)/usb/string-descriptors.xml

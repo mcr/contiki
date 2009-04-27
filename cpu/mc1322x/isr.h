@@ -11,7 +11,7 @@
 #define INTSRC   INTBASE + INTSRC_OFF 
 
 enum interrupt_nums {
-	INT_NUM_ASM,
+	INT_NUM_ASM = 0,
 	INT_NUM_UART1,
 	INT_NUM_UART2,
 	INT_NUM_CRM,
@@ -26,8 +26,7 @@ enum interrupt_nums {
 
 #define enable_irq(irq) (reg32(INTENNUM) = INT_NUM_##irq)
 
-//#define tmr_irq() (bit_is_set(reg32(INTENNUM),INT_NUM_TMR))
-#define tmr_irq() (bit_is_set(reg32(1),INT_NUM_TMR))
+#define tmr_irq() (bit_is_set(reg32(INTSRC),INT_NUM_TMR))
 
 extern void tmr0_isr(void) __attribute__((weak));
 extern void tmr1_isr(void) __attribute__((weak));

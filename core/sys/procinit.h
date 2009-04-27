@@ -35,10 +35,10 @@
 
 #include "sys/process.h"
 
-#if ! CC_NO_VA_ARGS
-#define PROCINIT(...)					\
-const struct process *procinit[] = {__VA_ARGS__, NULL}
-#endif 
+//#if ! CC_NO_VA_ARGS
+//#define PROCINIT(...)					\
+extern const struct process *procinit[] = {__VA_ARGS__, NULL}
+//#endif 
 
 void procinit_init(void);
 

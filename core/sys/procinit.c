@@ -34,7 +34,7 @@
 #include "contiki.h"
 #include "sys/procinit.h"
 
-extern const struct process *procinit[];
+const struct process *procinit[16];
 
 /*---------------------------------------------------------------------------*/
 void
