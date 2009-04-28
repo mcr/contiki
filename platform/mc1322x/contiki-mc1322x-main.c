@@ -72,7 +72,7 @@ main(void)
    procinit_init();
 
   /* Autostart processes */
-//  autostart_start(autostart_processes);
+  autostart_start(autostart_processes);
 
   //Give ourselves a prefix
   //init_net();

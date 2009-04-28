@@ -26,8 +26,8 @@ clock_init()
 	reg16(TMR0_SCTRL) = 0;
 	reg16(TMR0_CSCTRL) =0x0040;
 	reg16(TMR0_LOAD) = 0;                    /* reload to zero */
-	reg16(TMR0_COMP_UP) = 18750;             /* trigger a reload at the end */
-	reg16(TMR0_CMPLD1) = 18750;              /* compare 1 triggered reload level, 10HZ maybe? */
+	reg16(TMR0_COMP_UP) = 1875;             /* trigger a reload at the end */
+	reg16(TMR0_CMPLD1) = 1875;              /* compare 1 triggered reload level, 10HZ maybe? */
 	reg16(TMR0_CNTR) = 0;                    /* reset count register */
 	reg16(TMR0_CTRL) = (COUNT_MODE<<13) | (PRIME_SRC<<9) | (SEC_SRC<<7) | (ONCE<<6) | (LEN<<5) | (DIR<<4) | (CO_INIT<<3) | (OUT_MODE);
 	reg16(TMR_ENBL) = 0xf;                   /* enable all the timers --- why not? */
@@ -61,7 +61,7 @@ void tmr0_isr(void) {
 			/* dbg_printf("%d,%d\n", clock_time(),etimer_next_expiration_time  	()); */
 			
 		}
-		toggle_led();
+		//toggle_led();
 		/* clear the compare flags */
 		reg16(TMR(0,SCTRL))  = clear_bit(reg16(TMR(0,SCTRL)),TCF);                
 		reg16(TMR(0,CSCTRL)) = clear_bit(reg16(TMR(0,CSCTRL)),TCF1);                
