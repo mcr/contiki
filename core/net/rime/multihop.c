@@ -73,7 +73,8 @@ data_packet_received(struct unicast_conn *uc, rimeaddr_t *from)
 
   PRINTF("data_packet_received from %d.%d towards %d.%d len %d\n",
 	 from->u8[0], from->u8[1],
-	 msg.dest.u8[0], msg.dest.u8[1],
+	 packetbuf_addr(PACKETBUF_ADDR_ERECEIVER)->u8[0],
+	 packetbuf_addr(PACKETBUF_ADDR_ERECEIVER)->u8[1],
 	 packetbuf_datalen());
 
   if(rimeaddr_cmp(packetbuf_addr(PACKETBUF_ADDR_ERECEIVER),
