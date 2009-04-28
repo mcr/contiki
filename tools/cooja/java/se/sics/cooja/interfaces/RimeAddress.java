@@ -88,7 +88,7 @@ public class RimeAddress extends MoteInterface {
     for (int i=0; i < RIME_ADDR_LENGTH-1; i++) {
       addrString += (0xFF & addr[i]) + ".";
     }
-    addrString += addr[RIME_ADDR_LENGTH-1];
+    addrString += (0xFF & addr[RIME_ADDR_LENGTH-1]);
     return addrString;
   }
 

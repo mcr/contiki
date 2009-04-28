@@ -98,7 +98,7 @@ public class IPAddress extends MoteInterface {
       for (int i=0; i < 3; i++) {
         ipString += (0xFF & ip[i]) + ".";
       }
-      ipString += ip[3];
+      ipString += (0xFF & ip[3]);
       return ipString;
     } else if (isVersion6()) {
       String ipString = "";
