@@ -36,23 +36,6 @@ clock_init()
 
 }
 
-volatile uint8_t led;
-
-#define GPIO_DATA0      0x80000008
-#define led_on() do  { led = 1; reg32(GPIO_DATA0) = 0x00000100; } while(0);
-#define led_off() do { led = 0; reg32(GPIO_DATA0) = 0x00000000; } while(0);
-
-void toggle_led(void) {
-	if(0 == led) {
-		led_on();
-		led = 1;
-
-	} else {
-		led_off();
-	}
-}
-
-
 void tmr0_isr(void) {
 	if(bit_is_set(reg16(TMR(0,CSCTRL)),TCF1)) {
 		current_clock++;
@@ -61,7 +44,6 @@ void tmr0_isr(void) {
 			/* dbg_printf("%d,%d\n", clock_time(),etimer_next_expiration_time  	()); */
 			
 		}
-		//toggle_led();
 		/* clear the compare flags */
 		reg16(TMR(0,SCTRL))  = clear_bit(reg16(TMR(0,SCTRL)),TCF);                
 		reg16(TMR(0,CSCTRL)) = clear_bit(reg16(TMR(0,CSCTRL)),TCF1);                
