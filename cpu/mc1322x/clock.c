@@ -54,7 +54,6 @@ void toggle_led(void) {
 
 
 void tmr0_isr(void) {
-	volatile uint32_t sctrl;
 	if(bit_is_set(reg16(TMR(0,CSCTRL)),TCF1)) {
 		current_clock++;
 		if(etimer_pending() && etimer_next_expiration_time() <= current_clock) {
@@ -62,19 +61,11 @@ void tmr0_isr(void) {
 			/* dbg_printf("%d,%d\n", clock_time(),etimer_next_expiration_time  	()); */
 			
 		}
-		/* clear the compare flags */
-//		reg16(TMR(0,SCTRL))  = clear_bit(reg16(TMR(0,SCTRL)),TCF);                
-//		reg16(TMR(0,CSCTRL)) = clear_bit(reg16(TMR(0,CSCTRL)),TCF1);                
-//		reg16(TMR(0,CSCTRL)) = clear_bit(reg16(TMR(0,CSCTRL)),TCF2);                
-
 		toggle_led();
-		/* works */
-		reg16(TMR0_SCTRL) = 0;
-		/* doesn't work (it should) */
-		/* suggests there might be something wrong with the stack */
-//		sctrl = 0;
-//		reg16(TMR0_SCTRL) = sctrl;
-		reg16(TMR0_CSCTRL) = 0x0040; 
+		/* clear the compare flags */
+		reg16(TMR(0,SCTRL))  = clear_bit(reg16(TMR(0,SCTRL)),TCF);                
+		reg16(TMR(0,CSCTRL)) = clear_bit(reg16(TMR(0,CSCTRL)),TCF1);                
+		reg16(TMR(0,CSCTRL)) = clear_bit(reg16(TMR(0,CSCTRL)),TCF2);                
 		return;
 	} else {
 		/* this timer didn't create an interrupt condition */

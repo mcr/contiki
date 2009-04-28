@@ -6,6 +6,14 @@ ENTRY(_start)
 SEARCH_DIR("=/usr/local/lib"); SEARCH_DIR("=/lib"); SEARCH_DIR("=/usr/lib");
 SECTIONS
 {
+
+SYS_STACK_SIZE = 1024;
+IRQ_STACK_SIZE = 256;
+FIQ_STACK_SIZE = 256;
+SVC_STACK_SIZE = 256;
+ABT_STACK_SIZE = 16;
+UND_STACK_SIZE = 16;
+
   /* Read-only sections, merged into text segment: */
   PROVIDE (__executable_start = 0x00400000); . = 0x00400000;
   .text           :
@@ -17,6 +25,36 @@ SECTIONS
     *(.gnu.warning)
     *(.glue_7t) *(.glue_7) *(.vfp11_veneer) *(.v4_bx)
   } =0
+
+	.stack : {
+		__stack_start__ = . ;
+
+		. += IRQ_STACK_SIZE;
+		. = ALIGN (4);
+		__irq_stack_top__ = . ;
+
+		. += FIQ_STACK_SIZE;
+		. = ALIGN (4);
+		__fiq_stack_top__ = . ;
+
+		. += SVC_STACK_SIZE;
+		. = ALIGN (4);
+		__svc_stack_top__ = . ;
+
+		. += ABT_STACK_SIZE;
+		. = ALIGN (4);
+		__abt_stack_top__ = . ;
+
+		. += UND_STACK_SIZE;
+		. = ALIGN (4);
+		__und_stack_top__ = . ;
+
+		. += SYS_STACK_SIZE;
+		. = ALIGN (4);
+		__sys_stack_top__ = . ;
+
+		__stack_end__ = .;
+	}	
 
   .interp         : { *(.interp) }
   .note.gnu.build-id : { *(.note.gnu.build-id) }
