@@ -201,7 +201,7 @@ public class VariableWatcher extends VisPlugin {
         if (varType.getSelectedIndex() == BYTE_INDEX) {
           try {
             byte val = moteMemory.getByteValueOf((String) varName.getSelectedItem());
-            varValues[0].setValue(new Integer(val));
+            varValues[0].setValue(new Integer(0xFF & val));
             varName.setBackground(Color.WHITE);
             writeButton.setEnabled(true);
           } catch (UnknownVariableException ex) {
@@ -223,7 +223,7 @@ public class VariableWatcher extends VisPlugin {
             int length = ((Number) varLength.getValue()).intValue();
             byte[] vals = moteMemory.getByteArray((String) varName.getSelectedItem(), length);
             for (int i=0; i < length; i++) {
-              varValues[i].setValue(new Integer(vals[i]));
+              varValues[i].setValue(new Integer(0xFF & vals[i]));
             }
             varName.setBackground(Color.WHITE);
             writeButton.setEnabled(true);
