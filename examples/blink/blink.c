@@ -50,10 +50,10 @@
 
 #include <stdio.h> /* For printf() */
 /*---------------------------------------------------------------------------*/
-PROCESS(hello_world_process, "Hello world process");
-AUTOSTART_PROCESSES(&hello_world_process);
+PROCESS(blink_process, "blink process");
+AUTOSTART_PROCESSES(&blink_process);
 /*---------------------------------------------------------------------------*/
-PROCESS_THREAD(hello_world_process, ev, data)
+PROCESS_THREAD(blink_process, ev, data)
 {
   PROCESS_BEGIN();
   
