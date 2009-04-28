@@ -57,13 +57,13 @@ PROCESS_THREAD(hello_world_process, ev, data)
 {
   PROCESS_BEGIN();
   
-  *(volatile uint32_t *)GPIO_PAD_DIR0 = 0x00000100;
+  *(volatile uint32_t *)GPIO_PAD_DIR0 = 0x00000200;
   
   volatile uint32_t i;
   
   while(1) {
 	  
-	  *(volatile uint32_t *)GPIO_DATA0 = 0x00000100;
+	  *(volatile uint32_t *)GPIO_DATA0 = 0x00000200;
 	  
 	  for(i=0; i<DELAY; i++) { continue; }
 	  

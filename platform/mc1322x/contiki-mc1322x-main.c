@@ -69,7 +69,7 @@ main(void)
 //  process_init();
 
   /* Register initial processes */
-//  procinit_init();
+  // procinit_init();
 
   /* Autostart processes */
 //  autostart_start(autostart_processes);

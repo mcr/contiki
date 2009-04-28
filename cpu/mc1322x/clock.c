@@ -36,8 +36,26 @@ clock_init()
 
 }
 
+volatile uint8_t led;
+
+#define GPIO_DATA0      0x80000008
+#define led_on() do  { led = 1; reg32(GPIO_DATA0) = 0x00000100; } while(0);
+#define led_off() do { led = 0; reg32(GPIO_DATA0) = 0x00000000; } while(0);
+
+void toggle_led(void) {
+	if(0 == led) {
+		led_on();
+		led = 1;
+
+	} else {
+		led_off();
+	}
+}
+
+
 void tmr0_isr(void) {
-	if(bit_is_set(TMR(0,SCTRL),TCF)) {
+	volatile uint32_t sctrl;
+	if(bit_is_set(reg16(TMR(0,CSCTRL)),TCF1)) {
 		current_clock++;
 		if(etimer_pending() && etimer_next_expiration_time() <= current_clock) {
 			etimer_request_poll();
@@ -45,9 +63,18 @@ void tmr0_isr(void) {
 			
 		}
 		/* clear the compare flags */
-		reg16(TMR(0,SCTRL)) = clear_bit(reg16(TMR(0,SCTRL)),TCF);                
-		reg16(TMR(0,CSCTRL)) = clear_bit(reg16(TMR(0,CSCTRL)),TCF1);                
-		reg16(TMR(0,CSCTRL)) = clear_bit(reg16(TMR(0,CSCTRL)),TCF2);                
+//		reg16(TMR(0,SCTRL))  = clear_bit(reg16(TMR(0,SCTRL)),TCF);                
+//		reg16(TMR(0,CSCTRL)) = clear_bit(reg16(TMR(0,CSCTRL)),TCF1);                
+//		reg16(TMR(0,CSCTRL)) = clear_bit(reg16(TMR(0,CSCTRL)),TCF2);                
+
+		toggle_led();
+		/* works */
+		reg16(TMR0_SCTRL) = 0;
+		/* doesn't work (it should) */
+		/* suggests there might be something wrong with the stack */
+//		sctrl = 0;
+//		reg16(TMR0_SCTRL) = sctrl;
+		reg16(TMR0_CSCTRL) = 0x0040; 
 		return;
 	} else {
 		/* this timer didn't create an interrupt condition */

@@ -9,5 +9,6 @@
 #define reg16(x) (*(volatile uint16_t *)(x))
 
 #define bit_is_set(val,bit) (((val & (1<<bit)) >> bit) == 1)
+#define clear_bit(val,bit)  (val & ~(1<<bit))
 
 #endif /* UTILS_H */
