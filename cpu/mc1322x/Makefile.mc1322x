@@ -20,7 +20,7 @@ CROSS=arm-linux-
 
 ### Compiler definitions
 CC       = $(CROSS)gcc
-LD       = $(CROSS)ld
+LD       = $(CROSS)gcc
 AS       = $(CROSS)as
 AR       = $(CROSS)ar
 NM       = $(CROSS)nm

@@ -52,6 +52,7 @@
 /*---------------------------------------------------------------------------*/
 PROCESS(blink_process, "blink process");
 AUTOSTART_PROCESSES(&blink_process);
+PROCINIT(&blink_process);
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(blink_process, ev, data)
 {

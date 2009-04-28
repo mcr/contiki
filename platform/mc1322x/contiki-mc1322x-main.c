@@ -46,9 +46,9 @@ init_lowlevel(void)
 {
 	/* go into user mode to handle IRQs */
 	/* disabling interrupts is now difficult */
- 	asm(".code 32;"
-	    "msr     cpsr_c,#(0x10);"
-	    ".code 16; ");
+// 	asm(".code 32;"
+//	    "msr     cpsr_c,#(0x10);"
+//	    ".code 16; ");
 }
 
 #define GPIO_PAD_DIR0   0x80000000
@@ -69,7 +69,7 @@ main(void)
   process_init();
 
   /* Register initial processes */
-  // procinit_init();
+   procinit_init();
 
   /* Autostart processes */
 //  autostart_start(autostart_processes);
