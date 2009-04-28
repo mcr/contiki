@@ -66,7 +66,7 @@ main(void)
   init_lowlevel();
 
   /* Process subsystem */
-//  process_init();
+  process_init();
 
   /* Register initial processes */
   // procinit_init();
