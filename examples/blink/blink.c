@@ -40,6 +40,7 @@
 
 #include "contiki.h"
 
+#include "utils.h"
 
 #define MBAR_GPIO       0x80000000
 #define GPIO_PAD_DIR0   0x80000000
@@ -49,6 +50,7 @@
 
 
 #include <stdio.h> /* For printf() */
+
 /*---------------------------------------------------------------------------*/
 PROCESS(blink_process, "blink process");
 AUTOSTART_PROCESSES(&blink_process);
@@ -57,18 +59,18 @@ PROCINIT(&blink_process);
 PROCESS_THREAD(blink_process, ev, data)
 {
   PROCESS_BEGIN();
-  
-  *(volatile uint32_t *)GPIO_PAD_DIR0 = 0x00000200;
+
+  set_bit(reg32(GPIO_PAD_DIR0),9);
   
   volatile uint32_t i;
   
   while(1) {
 	  
-	  *(volatile uint32_t *)GPIO_DATA0 = 0x00000200;
+	  set_bit(reg32(GPIO_DATA0),9);
 	  
 	  for(i=0; i<DELAY; i++) { continue; }
 	  
-	  *(volatile uint32_t *)GPIO_DATA0 = 0x00000000;
+	  clear_bit(reg32(GPIO_DATA0),9);
 	  
 	  for(i=0; i<DELAY; i++) { continue; }
 	  

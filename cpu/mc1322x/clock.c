@@ -45,9 +45,13 @@ void tmr0_isr(void) {
 			
 		}
 		/* clear the compare flags */
-		reg16(TMR(0,SCTRL))  = clear_bit(reg16(TMR(0,SCTRL)),TCF);                
-		reg16(TMR(0,CSCTRL)) = clear_bit(reg16(TMR(0,CSCTRL)),TCF1);                
-		reg16(TMR(0,CSCTRL)) = clear_bit(reg16(TMR(0,CSCTRL)),TCF2);                
+//		reg16(TMR(0,SCTRL))  = clear_bit(reg16(TMR(0,SCTRL)),TCF);                
+//		reg16(TMR(0,CSCTRL)) = clear_bit(reg16(TMR(0,CSCTRL)),TCF1);                
+//		reg16(TMR(0,CSCTRL)) = clear_bit(reg16(TMR(0,CSCTRL)),TCF2);                
+
+		clear_bit(reg16(TMR(0,SCTRL)),TCF);                
+		clear_bit(reg16(TMR(0,CSCTRL)),TCF1);                
+		clear_bit(reg16(TMR(0,CSCTRL)),TCF2);                
 		return;
 	} else {
 		/* this timer didn't create an interrupt condition */
