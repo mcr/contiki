@@ -44,20 +44,19 @@
 void
 init_lowlevel(void)
 {
-	/* go into user mode to handle IRQs */
-	/* disabling interrupts is now difficult */
-// 	asm(".code 32;"
-//	    "msr     cpsr_c,#(0x10);"
-//	    ".code 16; ");
 }
 
 #define GPIO_PAD_DIR0   0x80000000
 
+PROCESS_NAME(blink8_process);
+PROCESS_NAME(blink9_process);
+PROCESS_NAME(blink10_process);
+
+PROCINIT(&blink8_process,&blink9_process,&blink10_process);
+
 int
 main(void)
 {
-	*(volatile uint32_t *)GPIO_PAD_DIR0 = 0x00000100;
-
   /* Clock */
   clock_init();
 
@@ -69,7 +68,7 @@ main(void)
   process_init();
 
   /* Register initial processes */
-   procinit_init();
+  procinit_init();
 
   /* Autostart processes */
   autostart_start(autostart_processes);

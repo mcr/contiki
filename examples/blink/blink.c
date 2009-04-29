@@ -42,23 +42,51 @@
 
 #include "utils.h"
 
-#define MBAR_GPIO       0x80000000
 #define GPIO_PAD_DIR0   0x80000000
 #define GPIO_DATA0      0x80000008
-#define UART1_DATA      0x80005008
-#define DELAY 400000
+#define DELAY8  100000
+#define DELAY9  200000
+#define DELAY10 400000
 
 
 #include <stdio.h> /* For printf() */
 
-/*---------------------------------------------------------------------------*/
-PROCESS(blink_process, "blink process");
-AUTOSTART_PROCESSES(&blink_process);
-PROCINIT(&blink_process);
-/*---------------------------------------------------------------------------*/
-PROCESS_THREAD(blink_process, ev, data)
+
+PROCESS(blink8_process, "blink8 process");
+PROCESS(blink9_process, "blink9 process");
+PROCESS(blink10_process, "blink10 process");
+
+AUTOSTART_PROCESSES(&blink8_process,&blink9_process,&blink10_process);
+
+PROCESS_THREAD(blink8_process, ev, data)
 {
   PROCESS_BEGIN();
+
+  set_bit(reg32(GPIO_PAD_DIR0),8);
+  
+  volatile uint32_t i;
+  
+  while(1) {
+	  
+	  set_bit(reg32(GPIO_DATA0),8);
+
+	  PROCESS_PAUSE();	  
+	  
+	  clear_bit(reg32(GPIO_DATA0),8);
+	  
+	  PROCESS_PAUSE();
+	  
+  };
+  
+  PROCESS_END();
+}
+
+
+PROCESS_THREAD(blink9_process, ev, data)
+{
+  PROCESS_BEGIN();
+
+  process_start(&blink8_process, NULL);
 
   set_bit(reg32(GPIO_PAD_DIR0),9);
   
@@ -68,14 +96,40 @@ PROCESS_THREAD(blink_process, ev, data)
 	  
 	  set_bit(reg32(GPIO_DATA0),9);
 	  
-	  for(i=0; i<DELAY; i++) { continue; }
-	  
+	  PROCESS_PAUSE();
+
 	  clear_bit(reg32(GPIO_DATA0),9);
 	  
-	  for(i=0; i<DELAY; i++) { continue; }
+	  PROCESS_PAUSE();
 	  
   };
   
   PROCESS_END();
 }
-/*---------------------------------------------------------------------------*/
+
+
+PROCESS_THREAD(blink10_process, ev, data)
+{
+  PROCESS_BEGIN();
+
+  set_bit(reg32(GPIO_PAD_DIR0),10);
+  
+  volatile uint32_t i;
+  
+  while(1) {
+	  
+	  set_bit(reg32(GPIO_DATA0),10);
+	  
+	  PROCESS_PAUSE();
+
+	  clear_bit(reg32(GPIO_DATA0),10);
+	  
+	  PROCESS_PAUSE();
+
+
+  };
+  
+  PROCESS_END();
+}
+
+
