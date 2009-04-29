@@ -66,8 +66,8 @@ import se.sics.mspsim.util.MapTable;
 public abstract class MspMote implements Mote {
   private static Logger logger = Logger.getLogger(MspMote.class);
 
-  /* 2.4576 MHz according to Contiki's speed sync loop*/
-  public static long NR_CYCLES_PER_MSEC = 2458;
+  /* 3.900 MHz according to Contiki's speed sync loop*/
+  public static long NR_CYCLES_PER_MSEC = 3900;
 
   /* Cycle counter */
   public long cycleCounter = 0;
