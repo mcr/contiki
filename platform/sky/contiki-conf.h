@@ -62,7 +62,7 @@
 /*#define PROCESS_CONF_FASTPOLL    4*/
 
 /* CPU target speed in Hz */
-#define F_CPU 2457600uL
+#define F_CPU 3900000uL /*2457600uL*/
 
 /* Our clock resolution, this is the same as Unix HZ. */
 #define CLOCK_CONF_SECOND 128
