@@ -41,18 +41,24 @@
 
 #include "isr.h"
 
+#define GPIO_PAD_DIR0   0x80000000
+
 void
 init_lowlevel(void)
 {
+  set_bit(reg32(GPIO_PAD_DIR0),8);
+  set_bit(reg32(GPIO_PAD_DIR0),9);
+  set_bit(reg32(GPIO_PAD_DIR0),10);
 }
-
-#define GPIO_PAD_DIR0   0x80000000
 
 PROCESS_NAME(blink8_process);
 PROCESS_NAME(blink9_process);
 PROCESS_NAME(blink10_process);
 
-PROCINIT(&blink8_process,&blink9_process,&blink10_process);
+//PROCINIT(&etimer_process, &blink8_process,&blink9_process,&blink10_process);
+PROCINIT(&etimer_process, &blink8_process);
+//AUTOSTART_PROCESSES(&etimer_process, &blink8_process, &blink9_process, &blink10_process);
+AUTOSTART_PROCESSES(&etimer_process, &blink8_process);
 
 int
 main(void)

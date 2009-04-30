@@ -52,30 +52,43 @@
 #include <stdio.h> /* For printf() */
 
 
+static struct etimer blink8_timer;
+
 PROCESS(blink8_process, "blink8 process");
 PROCESS(blink9_process, "blink9 process");
 PROCESS(blink10_process, "blink10 process");
 
-AUTOSTART_PROCESSES(&blink8_process,&blink9_process,&blink10_process);
+PROCESS_NAME(blink8_process);
+PROCESS_NAME(blink9_process);
+PROCESS_NAME(blink10_process);
+
 
 PROCESS_THREAD(blink8_process, ev, data)
 {
+
   PROCESS_BEGIN();
+
+  etimer_set(&blink8_timer, CLOCK_SECOND);
 
   set_bit(reg32(GPIO_PAD_DIR0),8);
   
   volatile uint32_t i;
+
+  volatile uint8_t led = 0;
   
   while(1) {
+	  PROCESS_WAIT_EVENT_UNTIL(ev == PROCESS_EVENT_TIMER);
 	  
-	  set_bit(reg32(GPIO_DATA0),8);
-
-	  PROCESS_PAUSE();	  
-	  
-	  clear_bit(reg32(GPIO_DATA0),8);
-	  
-	  PROCESS_PAUSE();
-	  
+	  if(data == &blink8_timer) {
+		  if(led == 0) {
+			  set_bit(reg32(GPIO_DATA0),8);
+			  led = 1;
+		  } else {
+			  clear_bit(reg32(GPIO_DATA0),8);
+			  led = 0;
+		  }
+		  etimer_reset(&blink8_timer);
+	  }
   };
   
   PROCESS_END();
@@ -85,8 +98,6 @@ PROCESS_THREAD(blink8_process, ev, data)
 PROCESS_THREAD(blink9_process, ev, data)
 {
   PROCESS_BEGIN();
-
-  process_start(&blink8_process, NULL);
 
   set_bit(reg32(GPIO_PAD_DIR0),9);
   

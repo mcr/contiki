@@ -110,7 +110,7 @@ typedef int32_t s32_t;
 /* #define UIP_CONF_TCP_SPLIT       1 */
 
 
-typedef unsigned short clock_time_t;
+typedef uint32_t clock_time_t;
 typedef unsigned char u8_t;
 typedef unsigned short u16_t;
 typedef unsigned long u32_t;
