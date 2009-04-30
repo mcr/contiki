@@ -52,7 +52,7 @@
 #include <stdio.h> /* For printf() */
 
 
-static struct etimer blink8_timer;
+static struct etimer blink8_timer, blink9_timer, blink10_timer;
 
 PROCESS(blink8_process, "blink8 process");
 PROCESS(blink9_process, "blink9 process");
@@ -74,18 +74,18 @@ PROCESS_THREAD(blink8_process, ev, data)
   
   volatile uint32_t i;
 
-  static volatile uint8_t led = 0;
+  static volatile uint8_t led8 = 0;
   
   while(1) {
 	  PROCESS_WAIT_EVENT_UNTIL(ev == PROCESS_EVENT_TIMER);
 	  
 	  if(data == &blink8_timer) {
-		  if(led == 0) {
+		  if(led8 == 0) {
 			  set_bit(reg32(GPIO_DATA0),8);
-			  led = 1;
+			  led8 = 1;
 		  } else {
 			  clear_bit(reg32(GPIO_DATA0),8);
-			  led = 0;
+			  led8 = 0;
 		  }
 		  etimer_reset(&blink8_timer);
 	  }
@@ -97,50 +97,65 @@ PROCESS_THREAD(blink8_process, ev, data)
 
 PROCESS_THREAD(blink9_process, ev, data)
 {
+
   PROCESS_BEGIN();
+
+  etimer_set(&blink9_timer, CLOCK_SECOND/2);
 
   set_bit(reg32(GPIO_PAD_DIR0),9);
   
   volatile uint32_t i;
+
+  static volatile uint8_t led9 = 0;
   
   while(1) {
+	  PROCESS_WAIT_EVENT_UNTIL(ev == PROCESS_EVENT_TIMER);
 	  
-	  set_bit(reg32(GPIO_DATA0),9);
-	  
-	  PROCESS_PAUSE();
-
-	  clear_bit(reg32(GPIO_DATA0),9);
-	  
-	  PROCESS_PAUSE();
-	  
+	  if(data == &blink9_timer) {
+		  if(led9 == 0) {
+			  set_bit(reg32(GPIO_DATA0),9);
+			  led9 = 1;
+		  } else {
+			  clear_bit(reg32(GPIO_DATA0),9);
+			  led9 = 0;
+		  }
+		  etimer_reset(&blink9_timer);
+	  }
   };
   
   PROCESS_END();
 }
+
 
 
 PROCESS_THREAD(blink10_process, ev, data)
 {
+
   PROCESS_BEGIN();
+
+  etimer_set(&blink10_timer, CLOCK_SECOND/4);
 
   set_bit(reg32(GPIO_PAD_DIR0),10);
   
   volatile uint32_t i;
+
+  static volatile uint8_t led10 = 0;
   
   while(1) {
+	  PROCESS_WAIT_EVENT_UNTIL(ev == PROCESS_EVENT_TIMER);
 	  
-	  set_bit(reg32(GPIO_DATA0),10);
-	  
-	  PROCESS_PAUSE();
-
-	  clear_bit(reg32(GPIO_DATA0),10);
-	  
-	  PROCESS_PAUSE();
-
-
+	  if(data == &blink10_timer) {
+		  if(led10 == 0) {
+			  set_bit(reg32(GPIO_DATA0),10);
+			  led10 = 1;
+		  } else {
+			  clear_bit(reg32(GPIO_DATA0),10);
+			  led10 = 0;
+		  }
+		  etimer_reset(&blink10_timer);
+	  }
   };
   
   PROCESS_END();
 }
-
 

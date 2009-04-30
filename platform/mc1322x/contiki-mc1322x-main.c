@@ -56,9 +56,9 @@ PROCESS_NAME(blink9_process);
 PROCESS_NAME(blink10_process);
 
 //PROCINIT(&etimer_process, &blink8_process,&blink9_process,&blink10_process);
-PROCINIT(&etimer_process, &blink8_process);
+PROCINIT(&etimer_process, &blink8_process, &blink9_process, &blink10_process);
 //AUTOSTART_PROCESSES(&etimer_process, &blink8_process, &blink9_process, &blink10_process);
-AUTOSTART_PROCESSES(&etimer_process, &blink8_process);
+AUTOSTART_PROCESSES(&etimer_process, &blink8_process, &blink9_process, &blink10_process);
 
 int
 main(void)
