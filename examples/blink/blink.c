@@ -74,7 +74,7 @@ PROCESS_THREAD(blink8_process, ev, data)
   
   volatile uint32_t i;
 
-  volatile uint8_t led = 0;
+  static volatile uint8_t led = 0;
   
   while(1) {
 	  PROCESS_WAIT_EVENT_UNTIL(ev == PROCESS_EVENT_TIMER);

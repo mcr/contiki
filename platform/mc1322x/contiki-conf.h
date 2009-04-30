@@ -57,7 +57,7 @@ typedef int32_t s32_t;
 #define PLATFORM PLATFORM_MC1322X
 
 /* Clock ticks per second */
-#define CLOCK_CONF_SECOND 125
+#define CLOCK_CONF_SECOND 100
 
 /* Pre-allocated memory for loadable modules heap space (in bytes)*/
 #define MMEM_CONF_SIZE 256
