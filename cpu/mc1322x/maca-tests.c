@@ -1,337 +1,85 @@
 #include <stdint.h>
-#include <stdio.h>
-
-/* contiki */
-#include "radio.h"
-#include "sys/process.h"
-
-/* mc1322x */
-//#include "maca.h"
 #include "maca-tests.h"
 #include "nvm.h"
 
-/* contiki mac driver */
-uint32_t ack[10];
-
-static void (* receiver_callback)(const struct radio_driver *);
-
-int maca_on(void);
-int maca_off(void);
-int maca_read(void *buf, unsigned short bufsize);
-int maca_send(const void *data, unsigned short len);
-void maca_set_receiver(void (* recv)(const struct radio_driver *d));
-
-const struct radio_driver maca_driver =
-{
-	maca_send,
-	maca_read,
-	maca_set_receiver,
-	maca_on,
-	maca_off,
-};
-
-int maca_on(void) {
-	printf("maca on\n\r");
-	return 1;
-}
-
-int maca_off(void) {
-	printf("maca on\n\r");
-	return 1;
-}
-
-int maca_read(void *buf, unsigned short bufsize) {
-	printf("maca read: bufsize %x",bufsize);
-	return 0;
-}
-
-int maca_send(const void *payload, unsigned short payload_len) {
-	int i;
-	printf("maca: sending %d bytes\n\r", payload_len);
-	for(i=0; i<payload_len; i++) {
-		printf(" %x",((uint8_t *)payload)[i]);
-	}
-	printf("\n\r");
-
-#if 0	
-	/* set dma tx pointer to the payload */
-	/* and set the tx len */
-	reg32(MACA_TXLEN) = (uint32_t)payload_len+4;
-	reg32(MACA_DMATX) = (uint32_t)payload;
-	reg32(MACA_DMARX) = (uint32_t)&ack;
-	/* do the transmit */
-	reg32(MACA_CONTROL) = ( (1<<maca_ctrl_prm) | 
-				(maca_ctrl_mode_no_cca<<maca_ctrl_mode) | 
-				(1<<maca_ctrl_asap) |
-				(maca_ctrl_seq_tx));
-#endif
-
-        maca_txlen = (uint32_t)(payload_len+4);  
-        maca_dmatx = (uint32_t)payload;					
-        maca_dmarx = (uint32_t)&ack; 
-        maca_control = (control_prm | control_mode_no_cca | 
-                        control_asap | control_seq_tx); 
-
-}
-
-void maca_set_receiver(void (* recv)(const struct radio_driver *))
-{
-  receiver_callback = recv;
-}
-
-
-
-
-#include "maca-tests.c"
-
-PROCESS(maca_process, "maca process");
-PROCESS_THREAD(maca_process, ev, data)
-{
-	volatile uint32_t i, status;
-
-	PROCESS_BEGIN();
-
-        reg(MACA_CONTROL) = SMAC_MACA_CNTL_INIT_STATE;
-	for(i=0; i<DELAY; i++) { continue; }
-
-	while(1) {		
-
-		if(_is_action_complete_interrupt(maca_irq)) {
-			maca_clrirq = maca_irq;
-			
-			status = reg(MACA_STATUS) & 0x0000ffff;
-			switch(status)
-			{
-			case(cc_aborted):
-			{
-				printf("aborted\n\r");
-				ResumeMACASync();				
-				break;
-				
-			}
-			case(cc_not_completed):
-			{
-				puts("not completed\n\r");
-				ResumeMACASync();
-				break;
-				
-			}
-			case(cc_timeout):
-			{
-				printf("timeout\n\r");
-				ResumeMACASync();
-				break;
-				
-			}
-			case(cc_no_ack):
-			{
-				printf("no ack\n\r");
-				ResumeMACASync();
-				break;
-				
-			}
-			case(cc_ext_timeout):
-			{
-				printf("ext timeout\n\r");
-				ResumeMACASync();
-				break;
-				
-			}
-			case(cc_ext_pnd_timeout):
-			{
-				printf("ext pnd timeout\n\r");
-				ResumeMACASync();
-				break;
-				
-			}
-			case(cc_success):
-			{
-				printf("success\n\r");
-				break;
-				
-			}
-			default:
-			{
-				printf("status: %x",status);
-				ResumeMACASync();
-				
-			}
-			}
-		} else if (_is_filter_failed_interrupt(maca_irq)) {
-			printf("filter failed\n\r");
-			ResumeMACASync();
-		}
-		
-		for(i=0; i<DELAY; i++) { continue; }
-		
-		PROCESS_PAUSE();
-		
-	}
-	
-	PROCESS_END();
-}
-
-#if 0
-
-/* maca process */
-
-#include "gpio.h"
-static volatile uint8_t led8 = 0;
-
-PROCESS(maca_process, "maca process");
-PROCESS_THREAD(maca_process, ev, data)
-{
-	volatile uint32_t i;
-	volatile uint16_t status;
-
-	PROCESS_BEGIN();
-
-	reg32(MACA_CONTROL) = ((1<<maca_ctrl_prm) | (1<<maca_ctrl_nofc) | (maca_ctrl_mode_no_cca<<maca_ctrl_mode));
-	for(i=0; i<400000; i++) { continue; }
-
-	while(1) {		
-
-		if(_is_action_complete_irq()) {
-
-			if(led8 == 0) {
-				set_bit(reg32(GPIO_DATA0),8);
-				led8 = 1;
-			} else {
-				clear_bit(reg32(GPIO_DATA0),8);
-				led8 = 0;
-			}
-
-			reg32(MACA_CLRIRQ) = reg32(MACA_IRQ);
-			status = reg32(MACA_STATUS) & 0x0000ffff;
-			switch(status)
-			{
-			case(maca_cc_aborted):
-			{
-				printf("maca: aborted\n\r");
-				ResumeMACASync();				
-				break;
-				
-			}
-			case(maca_cc_not_completed):
-			{
-				printf("maca: not completed\n\r");
-				ResumeMACASync();
-				break;
-				
-			}
-			case(maca_cc_timeout):
-			{
-				printf("maca: timeout\n\r");
-				ResumeMACASync();
-				break;
-				
-			}
-			case(maca_cc_no_ack):
-			{
-				printf("maca: no ack\n\r");
-				ResumeMACASync();
-				break;
-				
-			}
-			case(maca_cc_ext_timeout):
-			{
-				printf("maca: ext timeout\n\r");
-				ResumeMACASync();
-				break;
-				
-			}
-			case(maca_cc_ext_pnd_timeout):
-			{
-				printf("maca: ext pnd timeout\n\r");
-				ResumeMACASync();
-				break;
-			}
-			case(maca_cc_success):
-			{
-				printf("maca: success\n\r");
-				break;				
-			}
-			default:
-			{
-				printf("status: %x",status);
-				ResumeMACASync();
-				
-			}
-			}
-		} else if (_is_filter_failed_irq()) {
-			printf("filter failed\n\r");
-			ResumeMACASync();
-		}
-		
-		PROCESS_PAUSE();
-		
-	};
-	
-	PROCESS_END();
-}
-
-/* internal mc1322x routines */
-
-#define MACA_CLOCK_DIV 95
+#define reg(x) (*(volatile uint32_t *)(x))
 
 static uint8_t ram_values[4];
 
 void init_phy(void)
 {
   volatile uint32_t cnt;
-
-  set_bit(reg32(MACA_RESET),maca_reset_rst);
+  
+  maca_reset = maca_reset_rst;
  
   for(cnt=0; cnt < 100; cnt++); 
+  
+  maca_reset = maca_reset_cln_on;              
+  maca_control = control_seq_nop;              
+#define DELAY 400000
+  for(cnt=0; cnt < DELAY; cnt++); 
 
-  set_bit(reg32(MACA_RESET),maca_reset_clkon);
-
-  reg32(MACA_CONTROL) = maca_ctrl_seq_nop;
-
-  for(cnt=0; cnt < 400000; cnt++); 
-
-  reg32(MACA_TMREN) = (1<<maca_tmren_strt) | (1<<maca_tmren_cpl);
-  reg32(MACA_CLKDIV) = MACA_CLOCK_DIV;
-  reg32(MACA_WARMUP) = 0x00180012;    
-  reg32(MACA_EOFDELAY) = 0x00000004;  
-  reg32(MACA_CCADELAY) = 0x001a0022;   
-  reg32(MACA_TXCCADELAY) = 0x00000025;
-  reg32(MACA_FRAMESYNC0) = 0x000000A7; 
-  reg32(MACA_CLK) = 0x00000008;       
-  reg32(MACA_MASKIRQ) = ((1<<maca_irq_rst) | (1<<maca_irq_acpl) | (1<<maca_irq_cm) | (1<<maca_irq_flt) | (1<<maca_irq_crc));
-  reg32(MACA_SLOTOFFSET) = 0x00350000; 
+  maca_tmren = maca_start_clk | maca_cpl_clk;   
+  maca_divider = gMACA_Clock_DIV_c; 
+  maca_warmup = 0x00180012;    
+  maca_eofdelay = 0x00000004;  
+  maca_ccadelay = 0x001a0022;  
+  maca_txccadelay = 0x00000025;
+  maca_framesync = 0x000000A7; 
+  maca_clk = 0x00000008;       
+//  maca_maskirq = 0; //(maca_irq_cm   | maca_irq_acpl | maca_irq_rst  | maca_irq_di | maca_irq_crc | maca_irq_flt );
+  maca_maskirq = (maca_irq_rst | maca_irq_acpl | maca_irq_cm | maca_irq_flt | maca_irq_crc);
+  maca_slotoffset = 0x00350000; 
 }
 
 void reset_maca(void)
 {
 	uint32_t tmp;
-	reg32(MACA_CONTROL) = maca_ctrl_seq_nop;
-	do
-	{
-		tmp = reg32(MACA_STATUS);
-	}
-	while ((tmp & 0xf) == maca_cc_not_completed);
-	
-	/* Clear all interrupts. */
-	reg32(MACA_CLRIRQ) = 0xffff;
+	MACA_WRITE(maca_control, control_seq_nop);
+  do
+  {
+	  tmp = MACA_READ(maca_status);
+  }
+  while ((tmp & maca_status_cc_mask) == cc_not_completed);
+
+  /* Clear all interrupts. */
+  MACA_WRITE(maca_clrirq,   0xFFFF);
 }
 
+/*
+	004030c4 <SMAC_InitFlybackSettings>:
+	4030c4:       4806            ldr     r0, [pc, #24]   (4030e0 <SMAC_InitFlybackSettings+0x1c>) // r0 gets base 0x80009a00
+		4030c6:       6881            ldr     r1, [r0, #8]                                             // r1 gets *(0x80009a08)
+		4030c8:       4806            ldr     r0, [pc, #24]   (4030e4 <SMAC_InitFlybackSettings+0x20>) // r0 gets 0x0000f7df
+		4030ca:       4308            orrs    r0, r1                                                   // or them, r0 has it
+		4030cc:       4904            ldr     r1, [pc, #16]   (4030e0 <SMAC_InitFlybackSettings+0x1c>) // r1 gets base 0x80009a00
+		4030ce:       6088            str     r0, [r1, #8]     // put r0 into 0x80009a08
+		4030d0:       0008            lsls    r0, r1, #0       // r0 gets r1, r0 is the base now
+		4030d2:       4905            ldr     r1, [pc, #20]   (4030e8 <SMAC_InitFlybackSettings+0x24>) // r1 gets 0x00ffffff
+		4030d4:       60c1            str     r1, [r0, #12]   // put 0x00ffffff into base+12
+		4030d6:       0b09            lsrs    r1, r1, #12     // r1 = 0x00ffffff >> 12
+		4030d8:       6101            str     r1, [r0, #16]   // put r1 base+16
+		4030da:       2110            movs    r1, #16         // r1 gets 16
+		4030dc:       6001            str     r1, [r0, #0]    // put r1 in the base
+		4030de:       4770            bx      lr              // return
+		4030e0:       80009a00        .word   0x80009a00
+		4030e4:       0000f7df        .word   0x0000f7df
+		4030e8:       00ffffff        .word   0x00ffffff
+*/
+
+/* tested and is good */
 #define RF_BASE 0x80009a00
 void flyback_init(void) {
 	uint32_t val8, or;
 	
-	val8 = reg32(RF_BASE+8);
+	val8 = *(volatile uint32_t *)(RF_BASE+8);
 	or = val8 | 0x0000f7df;
-	reg32(RF_BASE+8) = or;
-	reg32(RF_BASE+12) = 0x00ffffff;
-	reg32(RF_BASE+16) = (((uint32_t)0x00ffffff)>>12);
-	reg32(RF_BASE) = 16;
+	*(volatile uint32_t *)(RF_BASE+8) = or;
+	*(volatile uint32_t *)(RF_BASE+12) = 0x00ffffff;
+	*(volatile uint32_t *)(RF_BASE+16) = (((uint32_t)0x00ffffff)>>12);
+	*(volatile uint32_t *)(RF_BASE) = 16;
 	/* good luck and godspeed */
 }
-
-/* all of this calibration data was pulled from the ROM  */
-/* should probably do that instead of hardcoding it here */
-/* also should probably run it through the execute_entry */
 
 #define MAX_SEQ1 2
 const uint32_t addr_seq1[MAX_SEQ1] = {
@@ -391,11 +139,11 @@ const uint32_t data_reg_rep[MAX_DATA] = { 0x00180012,0x00000605,0x00000504,0x000
 /* has been tested and it good */
 void vreg_init(void) {
 	volatile uint32_t i;
-	reg32(0x80003000) = 0x00000018; /* set default state */
-	reg32(0x80003048) = 0x00000f04; /* bypass the buck */
+	*(volatile uint32_t *)(0x80003000) = 0x00000018; /* set default state */
+	*(volatile uint32_t *)(0x80003048) = 0x00000f04; /* bypass the buck */
 	for(i=0; i<0x161a8; i++) { continue; } /* wait for the bypass to take */
 //	while((((*(volatile uint32_t *)(0x80003018))>>17) & 1) !=1) { continue; } /* wait for the bypass to take */
-	reg32(0x80003048) = 0x00000ff8; /* start the regulators */
+	*(volatile uint32_t *)(0x80003048) = 0x00000ff8; /* start the regulators */
 }
 
 
@@ -404,48 +152,57 @@ void radio_init(void) {
 	volatile uint32_t i;
 	/* sequence 1 */
 	for(i=0; i<MAX_SEQ1; i++) {
-		reg32(addr_seq1[i]) = data_seq1[i];
+		*(volatile uint32_t *)(addr_seq1[i]) = data_seq1[i];
 	}
 	/* seq 1 delay */
 	for(i=0; i<0x161a8; i++) { continue; }
 	/* sequence 2 */
 	for(i=0; i<MAX_SEQ2; i++) {
-		reg32(addr_seq2[i]) = data_seq2[i];
+		*(volatile uint32_t *)(addr_seq2[i]) = data_seq2[i];
 	}
 	/* modem val */
-	reg32(0x80009000) = 0x80050100;
+	*(volatile uint32_t *)0x80009000 = 0x80050100;
 	/* cal 3 seq 1*/
 	for(i=0; i<MAX_CAL3_SEQ1; i++) {
-		reg32(addr_cal3_seq1[i]) = data_cal3_seq1[i];
+		*(volatile uint32_t *)(addr_cal3_seq1[i]) = data_cal3_seq1[i];
 	}
 	/* cal 3 delay */
 	for(i=0; i<0x11194; i++) { continue; }
 	/* cal 3 seq 2*/
 	for(i=0; i<MAX_CAL3_SEQ2; i++) {
-		reg32(addr_cal3_seq2[i]) = data_cal3_seq2[i];
+		*(volatile uint32_t *)(addr_cal3_seq2[i]) = data_cal3_seq2[i];
 	}
 	/* cal 3 delay */
 	for(i=0; i<0x11194; i++) { continue; }
 	/* cal 3 seq 3*/
 	for(i=0; i<MAX_CAL3_SEQ3; i++) {
-		reg32(addr_cal3_seq3[i]) = data_cal3_seq3[i];
+		*(volatile uint32_t *)(addr_cal3_seq3[i]) = data_cal3_seq3[i];
 	}
 	/* cal 5 */
 	for(i=0; i<MAX_CAL5; i++) {
-		reg32(addr_cal5[i]) = data_cal5[i];
+		*(volatile uint32_t *)(addr_cal5[i]) = data_cal5[i];
 	}
 	/*reg replacment */
 	for(i=0; i<MAX_DATA; i++) {
-		reg32(addr_reg_rep[i]) = data_reg_rep[i];
+		*(volatile uint32_t *)(addr_reg_rep[i]) = data_reg_rep[i];
 	}
 	
-	reg32(0x80003048) = 0x00000f04; /* bypass the buck */
+	puts("initfromflash\n\r");
+
+	*(volatile uint32_t *)(0x80003048) = 0x00000f04; /* bypass the buck */
 	for(i=0; i<0x161a8; i++) { continue; } /* wait for the bypass to take */
 //	while((((*(volatile uint32_t *)(0x80003018))>>17) & 1) !=1) { continue; } /* wait for the bypass to take */
-	reg32(0x80003048) = 0x00000fa4; /* start the regulators */
+	*(volatile uint32_t *)(0x80003048) = 0x00000fa4; /* start the regulators */
 	for(i=0; i<0x161a8; i++) { continue; } /* wait for the bypass to take */
 
 	init_from_flash(0x1F000);
+
+	puts("ram_values:\n\r");
+	for(i=0; i<4; i++) {
+//		puts("  0x");
+//		put_hex(ram_values[i]);
+//		puts("\n\r");
+	}
 
 }
 
@@ -520,9 +277,9 @@ const uint32_t AIMVAL[19] = {
 #define ADDR_POW2 ADDR_POW1 + 12
 #define ADDR_POW3 ADDR_POW1 + 64
 void set_power(uint8_t power) {
-	reg32(ADDR_POW1) = PSMVAL[power];
-	reg32(ADDR_POW2) = (ADDR_POW1>>18) | PAVAL[power];
-	reg32(ADDR_POW3) = AIMVAL[power];
+	reg(ADDR_POW1) = PSMVAL[power];
+	reg(ADDR_POW2) = (ADDR_POW1>>18) | PAVAL[power];
+	reg(ADDR_POW3) = AIMVAL[power];
 }
 
 const uint8_t VCODivI[16] = {
@@ -590,24 +347,24 @@ const uint8_t ctov_4c[16] = {
 void set_channel(uint8_t chan) {
 	volatile uint32_t tmp;
 
-	tmp = reg32(ADDR_CHAN1);
+	tmp = reg(ADDR_CHAN1);
 	tmp = tmp & 0xbfffffff;
-	reg32(ADDR_CHAN1) = tmp;
+	reg(ADDR_CHAN1) = tmp;
 
-	reg32(ADDR_CHAN2) = VCODivI[chan];
-	reg32(ADDR_CHAN3) = VCODivF[chan];
+	reg(ADDR_CHAN2) = VCODivI[chan];
+	reg(ADDR_CHAN3) = VCODivF[chan];
 
-	tmp = reg32(ADDR_CHAN4);
+	tmp = reg(ADDR_CHAN4);
 	tmp = tmp | 2;
-	reg32(ADDR_CHAN4) = tmp;
+	reg(ADDR_CHAN4) = tmp;
 
-	tmp = reg32(ADDR_CHAN4);
+	tmp = reg(ADDR_CHAN4);
 	tmp = tmp | 4;
-	reg32(ADDR_CHAN4) = tmp;
+	reg(ADDR_CHAN4) = tmp;
 
 	tmp = tmp & 0xffffe0ff;
 	tmp = tmp | (((ctov_4c[chan])<<8)&0x1F00);
-	reg32(ADDR_CHAN4) = tmp;
+	reg(ADDR_CHAN4) = tmp;
 	/* duh! */
 }
 
@@ -621,15 +378,30 @@ uint32_t exec_init_entry(volatile uint32_t *entries, uint8_t *valbuf)
 	if(entries[0] <= ROM_END) {
 		if (entries[0] == 0) {
 			/* do delay command*/
+//			puts("init_entry: delay ");
+//			put_hex32(entries[1]);
+//			puts("\n\r");
 			for(i=0; i<entries[1]; i++) { continue; }
 			return 2;
 		} else if (entries[0] == 1) {
 			/* do bit set/clear command*/
-			reg32(entries[2]) = (reg32(entries[2]) & ~entries[1]) | (entries[3] & entries[1]);
+//			puts("init_entry: bit set clear ");
+//			put_hex32(entries[1]);
+//			putc(' ');
+//			put_hex32(entries[2]);
+//			putc(' ');
+//			put_hex32(entries[3]);
+//			puts("\n\r");
+			reg(entries[2]) = (reg(entries[2]) & ~entries[1]) | (entries[3] & entries[1]);
 			return 4;
 		} else if ((entries[0] >= 16) &&
 			   (entries[0] < 0xfff1)) {
 			/* store bytes in valbuf */
+//			puts("init_entry: store in valbuf ");
+//			put_hex(entries[1]);
+//			puts(" position ");
+//			put_hex((entries[0]>>4)-1);
+//			puts("\n\r");
 			valbuf[(entries[0]>>4)-1] = entries[1];
 			return 2;
 		} else if (entries[0] == ENTRY_EOF) {
@@ -637,11 +409,19 @@ uint32_t exec_init_entry(volatile uint32_t *entries, uint8_t *valbuf)
 			return 0;
 		} else {
 			/* invalid command code */
+//			puts("init_entry: invaild code ");
+//			put_hex32(entries[0]);
+//			puts("\n\r");
 			return 0;
 		}
 	} else { /* address isn't in ROM space */   
 		 /* do store value in address command  */
-		reg32(entries[0]) = entries[1];
+//		puts("init_entry: address value pair - *0x");
+//		put_hex32(entries[0]);
+//		puts(" = ");
+//		put_hex32(entries[1]);
+//		puts("\n\r");
+		reg(entries[0]) = entries[1];
 		return 2;
 	}
 }
@@ -655,11 +435,24 @@ uint32_t init_from_flash(uint32_t addr) {
 	volatile uint16_t len;
 	volatile uint32_t i=0,j;
 	err = nvm_detect(NVM_INTERFACE_INTERNAL, &type);
+//	puts("nvm_detect returned type ");
+//	put_hex32(type);
+//	puts(" err ");
+//	put_hex(err);
+//	puts("\n\r");
 		
 	nvm_setsvar(0);
 	err = nvm_read(NVM_INTERFACE_INTERNAL, type, (uint8_t *)buf, addr, 8);
 	i+=8;
+//	puts("nvm_read returned: 0x");
+//	put_hex(err);
+//	puts("\n\r");
 	
+//	for(j=0; j<4; j++) {
+//		put_hex32(buf[j]);
+//		puts("\n\r");
+//	}
+
 	if(buf[0] == FLASH_INIT_MAGIC) {
 		len = buf[1] & 0x0000ffff;
 		while(i<len-4) {
@@ -707,26 +500,28 @@ void ResumeMACASync(void)
   (*((volatile uint32_t *)(0x80009300 + LastWarmupStep))) = LastWarmdownData;
 
   /* Abort */
-  reg32(MACA_CONTROL) = maca_ctrl_seq_abort;
+  MACA_WRITE(maca_control, 1);
   
   /* Wait ~8us */
-  for (clk = reg32(MACA_CLK), i = 0; reg32(MACA_CLK) - clk < 3 && i < 300; i++);
+  for (clk = maca_clk, i = 0; maca_clk - clk < 3 && i < 300; i++)
+    ;
  
   /* NOP */
-  reg32(MACA_CONTROL) = maca_ctrl_seq_nop;
+  MACA_WRITE(maca_control, 0);  
   
   /* Wait ~8us */  
-  for (clk = reg32(MACA_CLK), i = 0; reg32(MACA_CLK) - clk < 3 && i < 300; i++);
+  for (clk = maca_clk, i = 0; maca_clk - clk < 3 && i < 300; i++)
+    ;
    
 
   /* restore original "last warmup step" data to TSM (VERY IMPORTANT!!!) */
   (*((volatile uint32_t *)(0x80009300 + LastWarmupStep))) = LastWarmupData;
 
+  
+  
   /* Clear all MACA interrupts - we should have gotten the ABORT IRQ */
-  reg32(MACA_CLRIRQ) = 0xffff;
+  MACA_WRITE(maca_clrirq, 0xFFFF);
 
-  /* need to */
-  /* renable interrupts if they were enabled */
+//  AppInterrupts_UnprotectFromMACAIrq(tmpIsrStatus);  <- Original from MAC code, but not sure how is it implemented
+//  ITC_EnableInterrupt(gMacaInt_c);
 }
-
-#endif
