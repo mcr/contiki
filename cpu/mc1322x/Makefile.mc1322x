@@ -8,7 +8,7 @@ CONTIKI_CPU=$(CONTIKI)/cpu/mc1322x
 
 CONTIKI_CPU_DIRS = . 
 
-MC1322X = uart1.c dbg-io.c printf-arch.c
+MC1322X = uart1.c dbg-io.c printf-arch.c maca.c nvm.c
 
 CONTIKI_TARGET_SOURCEFILES += $(MC1322X) $(SYSAPPS) $(ELFLOADER) \
 			$(TARGETLIBS) $(UIPDRIVERS) $(USB)

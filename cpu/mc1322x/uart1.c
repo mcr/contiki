@@ -24,6 +24,7 @@ void uart1_init(void) {
 }
 
 int uart1_putchar(int c) {
+ 	while( reg32(UT1CON) == 31 );
 	reg32(UART1_DATA) = c;
 	return c;
 }

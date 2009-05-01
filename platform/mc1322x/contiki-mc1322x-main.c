@@ -42,6 +42,14 @@
 #include "isr.h"
 #include "gpio.h"
 #include "uart1.h"
+#include "maca.h"
+
+#include "net/mac/frame802154.h"
+#include "net/mac/nullmac.h"
+#include "net/mac/xmac.h"
+#include "net/mac/lpp.h"
+
+#include "net/rime.h"
 
 void
 init_lowlevel(void)
@@ -54,14 +62,16 @@ init_lowlevel(void)
 
 }
 
-PROCESS_NAME(blink8_process);
-PROCESS_NAME(blink9_process);
-PROCESS_NAME(blink10_process);
+//PROCESS_NAME(blink8_process);
+//PROCESS_NAME(blink9_process);
+//PROCESS_NAME(blink10_process);
+//PROCESS_NAME(example_abc);
 
 //PROCINIT(&etimer_process, &blink8_process,&blink9_process,&blink10_process);
-PROCINIT(&etimer_process, &blink8_process, &blink9_process, &blink10_process);
+//PROCINIT(&etimer_process, &blink8_process, &blink9_process, &blink10_process);
+PROCINIT(&etimer_process);
 //AUTOSTART_PROCESSES(&etimer_process, &blink8_process, &blink9_process, &blink10_process);
-AUTOSTART_PROCESSES(&etimer_process, &blink8_process, &blink9_process, &blink10_process);
+//AUTOSTART_PROCESSES(&hello_world_process);
 
 int
 main(void)
@@ -78,6 +88,8 @@ main(void)
 
   /* Register initial processes */
   procinit_init();
+
+  rime_init(nullmac_init(&maca_driver));
 
   /* Autostart processes */
   autostart_start(autostart_processes);
