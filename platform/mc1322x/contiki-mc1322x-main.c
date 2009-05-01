@@ -54,22 +54,34 @@
 void
 init_lowlevel(void)
 {
-  set_bit(reg32(GPIO_PAD_DIR0),8);
-  set_bit(reg32(GPIO_PAD_DIR0),9);
-  set_bit(reg32(GPIO_PAD_DIR0),10);
-
-  uart1_init();
-
+	/* led direction init */
+	set_bit(reg32(GPIO_PAD_DIR0),8);
+	set_bit(reg32(GPIO_PAD_DIR0),9);
+	set_bit(reg32(GPIO_PAD_DIR0),10);
+	
+	/* uart init */
+	uart1_init();
+	
+	/* radio init */
+	reset_maca();
+	radio_init();
+	vreg_init();
+	flyback_init();
+	init_phy();
+	
+	set_power(0x0f); /* 0dbm */
+	set_channel(0); /* channel 11 */
+	
 }
 
 //PROCESS_NAME(blink8_process);
 //PROCESS_NAME(blink9_process);
 //PROCESS_NAME(blink10_process);
-//PROCESS_NAME(example_abc);
+//PROCESS_NAME(maca_process);
 
 //PROCINIT(&etimer_process, &blink8_process,&blink9_process,&blink10_process);
 //PROCINIT(&etimer_process, &blink8_process, &blink9_process, &blink10_process);
-PROCINIT(&etimer_process);
+PROCINIT(&etimer_process, &maca_process);
 //AUTOSTART_PROCESSES(&etimer_process, &blink8_process, &blink9_process, &blink10_process);
 //AUTOSTART_PROCESSES(&hello_world_process);
 
@@ -97,9 +109,9 @@ main(void)
   //Give ourselves a prefix
   //init_net();
 
-//  printf_P(PSTR("\n********BOOTING CONTIKI*********\n"));
+  printf("\n\r********BOOTING CONTIKI*********\n\r");
 
-//  printf_P(PSTR("System online.\n"));
+  printf("System online.\n\r");
 
   /* Main scheduler loop */
   while(1) {

@@ -6,6 +6,9 @@
 /* contiki */
 #include "contiki.h"
 #include "dev/radio.h"
+#include "sys/process.h"
+
+PROCESS_NAME(maca_process);
 
 /* mc1322x */
 #include "utils.h"
@@ -97,9 +100,9 @@ enum maca_ctrl_seq {
 
 /* transmission modes */
 enum maca_ctrl_modes {
-	maca_control_mode_no_cca = 0,
-	maca_control_mode_non_slotted_csma_ca = 1,
-	maca_control_mode_slotted_csma_ca = 2,
+	maca_ctrl_mode_no_cca = 0,
+	maca_ctrl_mode_non_slotted_csma_ca = 1,
+	maca_ctrl_mode_slotted_csma_ca = 2,
 };
 
 /* MACA_CONTROL bits */

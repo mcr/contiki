@@ -3,12 +3,14 @@
 
 /* contiki */
 #include "radio.h"
+#include "sys/process.h"
 
 /* mc1322x */
 #include "maca.h"
 #include "nvm.h"
 
 /* contiki mac driver */
+uint32_t ack[10];
 
 static void (* receiver_callback)(const struct radio_driver *);
 
@@ -49,12 +51,119 @@ int maca_send(const void *payload, unsigned short payload_len) {
 		printf(" %x",((uint8_t *)payload)[i]);
 	}
 	printf("\n\r");
-	return 0;
+	
+	/* set dma tx pointer to the payload */
+	/* and set the tx len */
+	reg32(MACA_TXLEN) = (uint32_t)payload_len+4;
+	reg32(MACA_DMATX) = (uint32_t)payload;
+	reg32(MACA_DMARX) = (uint32_t)&ack;
+	/* do the transmit */
+	reg32(MACA_CONTROL) = ( (1<<maca_ctrl_prm) | 
+				(maca_ctrl_mode_no_cca<<maca_ctrl_mode) | 
+				(1<<maca_ctrl_asap) |
+				(maca_ctrl_seq_tx));
 }
 
 void maca_set_receiver(void (* recv)(const struct radio_driver *))
 {
   receiver_callback = recv;
+}
+
+/* maca process */
+
+#include "gpio.h"
+static volatile uint8_t led8 = 0;
+
+PROCESS(maca_process, "maca process");
+PROCESS_THREAD(maca_process, ev, data)
+{
+	volatile uint32_t i;
+	volatile uint16_t status;
+
+	PROCESS_BEGIN();
+
+	reg32(MACA_CONTROL) = ((1<<maca_ctrl_prm) | (1<<maca_ctrl_nofc) | (maca_ctrl_mode_no_cca<<maca_ctrl_mode));
+	for(i=0; i<400000; i++) { continue; }
+
+	while(1) {		
+
+		if(_is_action_complete_irq()) {
+
+			if(led8 == 0) {
+				set_bit(reg32(GPIO_DATA0),8);
+				led8 = 1;
+			} else {
+				clear_bit(reg32(GPIO_DATA0),8);
+				led8 = 0;
+			}
+
+			reg32(MACA_CLRIRQ) = reg32(MACA_IRQ);
+			status = reg32(MACA_STATUS) & 0x0000ffff;
+			switch(status)
+			{
+			case(maca_cc_aborted):
+			{
+				printf("maca: aborted\n\r");
+				ResumeMACASync();				
+				break;
+				
+			}
+			case(maca_cc_not_completed):
+			{
+				printf("maca: not completed\n\r");
+				ResumeMACASync();
+				break;
+				
+			}
+			case(maca_cc_timeout):
+			{
+				printf("maca: timeout\n\r");
+				ResumeMACASync();
+				break;
+				
+			}
+			case(maca_cc_no_ack):
+			{
+				printf("maca: no ack\n\r");
+				ResumeMACASync();
+				break;
+				
+			}
+			case(maca_cc_ext_timeout):
+			{
+				printf("maca: ext timeout\n\r");
+				ResumeMACASync();
+				break;
+				
+			}
+			case(maca_cc_ext_pnd_timeout):
+			{
+				printf("maca: ext pnd timeout\n\r");
+				ResumeMACASync();
+				break;
+			}
+			case(maca_cc_success):
+			{
+				printf("maca: success\n\r");
+				break;				
+			}
+			default:
+			{
+				printf("status: %x",status);
+				ResumeMACASync();
+				
+			}
+			}
+		} else if (_is_filter_failed_irq()) {
+			printf("filter failed\n\r");
+			ResumeMACASync();
+		}
+		
+		PROCESS_PAUSE();
+		
+	};
+	
+	PROCESS_END();
 }
 
 /* internal mc1322x routines */
