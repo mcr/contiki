@@ -48,6 +48,8 @@
 
 #include <stdint.h>
 
+#include "uart1.h"
+
 typedef int32_t s32_t;
 
 /*
@@ -66,6 +68,11 @@ typedef int32_t s32_t;
 
 #define CCIF
 #define CLIF
+
+#define dbg_putchar(x) uart1_putchar(x)
+
+#define USE_FORMATTED_STDIO 1
+
 /*
 #define RIMEADDR_CONF_SIZE       8
 #define PACKETBUF_CONF_HDR_SIZE    0

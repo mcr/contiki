@@ -40,8 +40,8 @@
 #include "contiki-lib.h"
 
 #include "isr.h"
-
-#define GPIO_PAD_DIR0   0x80000000
+#include "gpio.h"
+#include "uart1.h"
 
 void
 init_lowlevel(void)
@@ -49,6 +49,9 @@ init_lowlevel(void)
   set_bit(reg32(GPIO_PAD_DIR0),8);
   set_bit(reg32(GPIO_PAD_DIR0),9);
   set_bit(reg32(GPIO_PAD_DIR0),10);
+
+  uart1_init();
+
 }
 
 PROCESS_NAME(blink8_process);

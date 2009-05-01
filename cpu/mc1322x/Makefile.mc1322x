@@ -6,8 +6,9 @@ CONTIKI_CPU=$(CONTIKI)/cpu/mc1322x
 
 ### Define the source files we have in the AT91SAM7S port
 
-CONTIKI_CPU_DIRS = . dbg-io loader usb
+CONTIKI_CPU_DIRS = . 
 
+MC1322X = uart1.c dbg-io.c printf-arch.c
 
 CONTIKI_TARGET_SOURCEFILES += $(MC1322X) $(SYSAPPS) $(ELFLOADER) \
 			$(TARGETLIBS) $(UIPDRIVERS) $(USB)
@@ -47,8 +48,8 @@ CFLAGSNO = -I. -I$(CONTIKI)/core -I$(CONTIKI_CPU) -I$(CONTIKI_CPU)/loader \
            -DWITH_UIP -DWITH_ASCII -DMCK=$(MCK) \
            -Werror $(ARCH_FLAGS) -g 
 
-CFLAGS  += $(CFLAGSNO) -Os -DRUN_AS_SYSTEM -DROM_RUN -fno-strict-aliasing  -fno-common -ffixed-r8 -msoft-float -DTEXT_BASE=$(TEXT_BASE)
-LDFLAGS += -T $(LINKERSCRIPT) -nostartfiles 
+CFLAGS  += $(CFLAGSNO) -Os -DRUN_AS_SYSTEM -DROM_RUN -fno-strict-aliasing  -fno-common -ffixed-r8 -msoft-float -DTEXT_BASE=$(TEXT_BASE) -fno-builtin-printf -fno-builtin-sprintf
+LDFLAGS += -T $(LINKERSCRIPT) -nostartfiles -static
 AFLAGS := $(AFLAGS_DEBUG) -D__ASSEMBLY__ $(CPPFLAGS) -gstabs
 
 CDEPFLAGS = $(CFLAGS) -D __MAKING_DEPS__
@@ -90,5 +91,6 @@ symbols.c:
 	@${CONTIKI}/tools/make-empty-symbols
  
 %.$(TARGET): %.co $(PROJECT_OBJECTFILES) contiki-$(TARGET).a $(STARTUP) $(OBJECTDIR)/symbols.o
-	$(CC) $(LDFLAGS) $(CFLAGS) -static -nostartfiles -o $@ $(filter-out %.a,$^) $(filter %.a,$^) -lc $(filter %.a,$^)
+	$(CC) $(LDFLAGS) $(CFLAGS) -nostartfiles -o $@ $(filter-out %.a,$^) $(filter %.a,$^) $(filter %.a,$^)
+
 

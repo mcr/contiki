@@ -41,9 +41,9 @@
 #include "contiki.h"
 
 #include "utils.h"
+#include "gpio.h"
+#include "uart1.h"
 
-#define GPIO_PAD_DIR0   0x80000000
-#define GPIO_DATA0      0x80000008
 #define DELAY8  100000
 #define DELAY9  200000
 #define DELAY10 400000
@@ -83,6 +83,7 @@ PROCESS_THREAD(blink8_process, ev, data)
 		  if(led8 == 0) {
 			  set_bit(reg32(GPIO_DATA0),8);
 			  led8 = 1;
+			  printf("Red\n\r");
 		  } else {
 			  clear_bit(reg32(GPIO_DATA0),8);
 			  led8 = 0;
@@ -115,6 +116,7 @@ PROCESS_THREAD(blink9_process, ev, data)
 		  if(led9 == 0) {
 			  set_bit(reg32(GPIO_DATA0),9);
 			  led9 = 1;
+			  printf("Green\n\r");
 		  } else {
 			  clear_bit(reg32(GPIO_DATA0),9);
 			  led9 = 0;
@@ -148,6 +150,7 @@ PROCESS_THREAD(blink10_process, ev, data)
 		  if(led10 == 0) {
 			  set_bit(reg32(GPIO_DATA0),10);
 			  led10 = 1;
+			  printf("Blue\n\r");
 		  } else {
 			  clear_bit(reg32(GPIO_DATA0),10);
 			  led10 = 0;
