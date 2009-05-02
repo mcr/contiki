@@ -9,9 +9,6 @@
 #include "maca.h"
 #include "nvm.h"
 #include "gpio.h"
-static volatile uint8_t led8 = 0;
-static volatile uint8_t led9 = 0;
-
 
 #ifndef MAX_PACKET_SIZE
 #define MAX_PACKET_SIZE 127
@@ -74,6 +71,7 @@ int maca_send(const void *payload, unsigned short payload_len) {
 
 	/* set dma tx pointer to the payload */
 	/* and set the tx len */
+	set_bit(reg32(GPIO_DATA0),8);
 	reg32(MACA_TXLEN) = (uint32_t)payload_len+4;
 	reg32(MACA_DMATX) = (uint32_t)tx_buf;
 	reg32(MACA_DMARX) = (uint32_t)rx_buf;
@@ -82,15 +80,6 @@ int maca_send(const void *payload, unsigned short payload_len) {
 				(maca_ctrl_mode_no_cca<<maca_ctrl_mode) |
 				(1<<maca_ctrl_asap) |
 				(maca_ctrl_seq_tx));
-
-	if(led8 == 0) {
-		set_bit(reg32(GPIO_DATA0),8);
-		led8 = 1;
-	} else {
-		clear_bit(reg32(GPIO_DATA0),8);
-		led8 = 0;
-	}
-
 
 }
 
@@ -136,17 +125,13 @@ PROCESS_THREAD(maca_process, ev, data)
 		if(data_indication_irq()) {
 			/* call the recieve callback */
 			/* then do something? */
-			if(led9 == 0) {
-				set_bit(reg32(GPIO_DATA0),9);
-				led9 = 1;
-			} else {
-				clear_bit(reg32(GPIO_DATA0),9);
-				led9 = 0;
-			}
+			set_bit(reg32(GPIO_DATA0),9);
 			
 			receiver_callback(&maca_driver);
 			
 			reg32(MACA_CLRIRQ) = (1<<maca_irq_di);			
+
+			clear_bit(reg32(GPIO_DATA0),9);
 		}
 
 		if(action_complete_irq()) {
@@ -197,6 +182,7 @@ PROCESS_THREAD(maca_process, ev, data)
 			}
 			case(maca_cc_success):
 			{
+				clear_bit(reg32(GPIO_DATA0),8);
 				printf("maca: success\n\r");
 				break;				
 			}
