@@ -8,6 +8,17 @@
 /* mc1322x */
 #include "maca.h"
 #include "nvm.h"
+#include "gpio.h"
+static volatile uint8_t led8 = 0;
+static volatile uint8_t led9 = 0;
+
+
+#ifndef MAX_PACKET_SIZE
+#define MAX_PACKET_SIZE 127
+#endif
+static uint8_t tx_buf[MAX_PACKET_SIZE];
+static uint8_t rx_buf[MAX_PACKET_SIZE];
+
 
 /* contiki mac driver */
 uint32_t ack[10];
@@ -40,31 +51,43 @@ int maca_off(void) {
 }
 
 int maca_read(void *buf, unsigned short bufsize) {
-	printf("maca read: bufsize %x",bufsize);
+	printf("maca read: bufsize %x\n\r",bufsize);
 	return 0;
 }
 
 int maca_send(const void *payload, unsigned short payload_len) {
 	int i;
+	/* wait for maca to finish what it's doing */
+	while(status_is_not_completed());
+
 	printf("maca: sending %d bytes\n\r", payload_len);
 	for(i=0; i<payload_len; i++) {
+		/* copy payload into tx buf */
+		tx_buf[i] = ((uint8_t*)payload)[i];
 		printf(" %x",((uint8_t *)payload)[i]);
 	}
 	printf("\n\r");
 
-	/* wait for maca to finish what it's doing */
-	while(_status_is_not_completed());
-
 	/* set dma tx pointer to the payload */
 	/* and set the tx len */
 	reg32(MACA_TXLEN) = (uint32_t)payload_len+4;
-	reg32(MACA_DMATX) = (uint32_t)payload;
-	reg32(MACA_DMARX) = (uint32_t)&ack;
+	reg32(MACA_DMATX) = (uint32_t)tx_buf;
+	reg32(MACA_DMARX) = (uint32_t)rx_buf;
 	/* do the transmit */
-	reg32(MACA_CONTROL) = ( (1<<maca_ctrl_prm) | 
-				(maca_ctrl_mode_no_cca<<maca_ctrl_mode) | 
+	reg32(MACA_CONTROL) = ( (1<<maca_ctrl_prm) |
+				(maca_ctrl_mode_no_cca<<maca_ctrl_mode) |
 				(1<<maca_ctrl_asap) |
 				(maca_ctrl_seq_tx));
+
+	if(led8 == 0) {
+		set_bit(reg32(GPIO_DATA0),8);
+		led8 = 1;
+	} else {
+		clear_bit(reg32(GPIO_DATA0),8);
+		led8 = 0;
+	}
+
+
 }
 
 void maca_set_receiver(void (* recv)(const struct radio_driver *))
@@ -72,8 +95,6 @@ void maca_set_receiver(void (* recv)(const struct radio_driver *))
   receiver_callback = recv;
 }
 
-#include "gpio.h"
-static volatile uint8_t led8 = 0;
 
 PROCESS(maca_process, "maca process");
 PROCESS_THREAD(maca_process, ev, data)
@@ -89,27 +110,42 @@ PROCESS_THREAD(maca_process, ev, data)
 	while(1) {		
 
 		/* if we aren't doing anything */
-		if(!(_status_is_not_completed())) {
+		/* should also check that there is nothing that has been recieved */
+		if(!(status_is_not_completed())) {
 			/* start a reception */
+//			printf("maca: starting reception sequence\n\r");
+			/* this sets the rxlen field */
+			/* this is undocumented but very important */
+			/* you will not receive anything without setting it */
+			reg32(MACA_TXLEN) = (MAX_PACKET_SIZE << 16);
+			reg32(MACA_DMATX) = (uint32_t)&tx_buf;
+			reg32(MACA_DMARX) = (uint32_t)&rx_buf;
 			/* with timeout */		       
+			reg32(MACA_TMREN) = ((1<<maca_tmren_cpl) | (1<<maca_tmren_sft));
+			/* start the receive sequence */ 
+			reg32(MACA_CONTROL) = ( (1<<maca_ctrl_prm) | 
+						(1<<maca_ctrl_asap) |
+						(maca_ctrl_seq_rx));
 		}
 
 		if(data_indication_irq()) {
 			/* call the recieve callback */
 			/* then do something? */
+			if(led9 == 0) {
+				set_bit(reg32(GPIO_DATA0),9);
+				led9 = 1;
+			} else {
+				clear_bit(reg32(GPIO_DATA0),9);
+				led9 = 0;
+			}
+			
+			receiver_callback(&maca_driver);
+			
+			reg32(MACA_CLRIRQ) = (1<<maca_irq_di);			
 		}
 
-		if(_is_action_complete_irq()) {
-
-			if(led8 == 0) {
-				set_bit(reg32(GPIO_DATA0),8);
-				led8 = 1;
-			} else {
-				clear_bit(reg32(GPIO_DATA0),8);
-				led8 = 0;
-			}
-
-			reg32(MACA_CLRIRQ) = reg32(MACA_IRQ);
+		if(action_complete_irq()) {
+			reg32(MACA_CLRIRQ) = (1<<maca_irq_acpl);
 			status = reg32(MACA_STATUS) & 0x0000ffff;
 			switch(status)
 			{
@@ -122,7 +158,7 @@ PROCESS_THREAD(maca_process, ev, data)
 			}
 			case(maca_cc_not_completed):
 			{
-				printf("maca: not completed\n\r");
+				//			printf("maca: not completed\n\r");
 				ResumeMACASync();
 				break;
 				
@@ -166,7 +202,7 @@ PROCESS_THREAD(maca_process, ev, data)
 				
 			}
 			}
-		} else if (_is_filter_failed_irq()) {
+		} else if (filter_failed_irq()) {
 			printf("filter failed\n\r");
 			ResumeMACASync();
 		}
@@ -208,8 +244,10 @@ void init_phy(void)
   reg32(MACA_TXCCADELAY) = 0x00000025;
   reg32(MACA_FRAMESYNC0) = 0x000000A7; 
   reg32(MACA_CLK) = 0x00000008;       
-  reg32(MACA_MASKIRQ) = ((1<<maca_irq_rst) | (1<<maca_irq_acpl) | (1<<maca_irq_cm) | (1<<maca_irq_flt) | (1<<maca_irq_crc));
+  reg32(MACA_MASKIRQ) = ((1<<maca_irq_rst) | (1<<maca_irq_acpl) | (1<<maca_irq_cm) | (1<<maca_irq_flt) | (1<<maca_irq_crc) | (1<<maca_irq_di));
   reg32(MACA_SLOTOFFSET) = 0x00350000; 
+
+
 }
 
 void reset_maca(void)
