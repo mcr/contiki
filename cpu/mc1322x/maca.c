@@ -20,6 +20,10 @@ static uint8_t tx_buf[MAX_PACKET_SIZE];
 static uint8_t rx_buf[MAX_PACKET_SIZE];
 
 
+#ifndef MACA_SOFT_TIMEOUT
+#define MACA_SOFT_TIMEOUT 25000
+#endif
+
 /* contiki mac driver */
 uint32_t ack[10];
 
@@ -120,7 +124,8 @@ PROCESS_THREAD(maca_process, ev, data)
 			reg32(MACA_TXLEN) = (MAX_PACKET_SIZE << 16);
 			reg32(MACA_DMATX) = (uint32_t)&tx_buf;
 			reg32(MACA_DMARX) = (uint32_t)&rx_buf;
-			/* with timeout */		       
+			/* with timeout */		    
+			reg32(MACA_SFTCLK) = reg32(MACA_CLK) + MACA_SOFT_TIMEOUT;
 			reg32(MACA_TMREN) = ((1<<maca_tmren_cpl) | (1<<maca_tmren_sft));
 			/* start the receive sequence */ 
 			reg32(MACA_CONTROL) = ( (1<<maca_ctrl_prm) | 
@@ -179,7 +184,7 @@ PROCESS_THREAD(maca_process, ev, data)
 			}
 			case(maca_cc_ext_timeout):
 			{
-				printf("maca: ext timeout\n\r");
+				//printf("maca: ext timeout\n\r");
 				ResumeMACASync();
 				break;
 				
