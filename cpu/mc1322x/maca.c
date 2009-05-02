@@ -82,6 +82,7 @@ int maca_send(const void *payload, unsigned short payload_len) {
 	/* wait for maca to finish what it's doing */
 	while(status_is_not_completed());
 	set_bit(reg32(GPIO_DATA0),8);
+	ResumeMACASync();
 
 	PRINTF("maca: sending %d bytes\n\r", payload_len);
 	for(i=0; i<payload_len; i++) {
@@ -125,6 +126,8 @@ PROCESS_THREAD(maca_process, ev, data)
 
 	reg32(MACA_CONTROL) = ((1<<maca_ctrl_prm) | (1<<maca_ctrl_nofc) | (maca_ctrl_mode_no_cca<<maca_ctrl_mode));
 	for(i=0; i<400000; i++) { continue; }
+
+	ResumeMACASync();
 
 	while(1) {		
 
@@ -179,7 +182,7 @@ PROCESS_THREAD(maca_process, ev, data)
 			}
 			case(maca_cc_not_completed):
 			{
-				PRINTF("maca: not completed\n\r");
+//				PRINTF("maca: not completed\n\r");
 				ResumeMACASync();
 				break;
 				
@@ -200,7 +203,7 @@ PROCESS_THREAD(maca_process, ev, data)
 			}
 			case(maca_cc_ext_timeout):
 			{
-				PRINTF("maca: ext timeout\n\r");
+//				PRINTF("maca: ext timeout\n\r");
 				ResumeMACASync();
 				break;
 				
