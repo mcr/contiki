@@ -50,6 +50,7 @@
 #include "net/mac/lpp.h"
 
 #include "net/rime.h"
+#include "net/rime/rimeaddr.h"
 
 void
 init_lowlevel(void)
@@ -88,35 +89,48 @@ PROCINIT(&etimer_process, &maca_process);
 int
 main(void)
 {
-  /* Clock */
-  clock_init();
+	volatile uint32_t i;
+	rimeaddr_t addr;
 
-  /* Initialize hardware and */
-  /* go into user mode */
-  init_lowlevel();
+	/* Clock */
+	clock_init();
+	
+	/* Initialize hardware and */
+	/* go into user mode */
+	init_lowlevel();
+	
+	/* Process subsystem */
+	process_init();
+	
+	/* Register initial processes */
+	procinit_init();
+	
+	rime_init(nullmac_init(&maca_driver));
+	
+	rimeaddr_copy(&addr,&rimeaddr_null);
+	addr.u8[0] = 41;
+	addr.u8[1] = 41;
+	rimeaddr_set_node_addr(&addr);
+	printf("Rime started with address ");
+	for(i = 0; i < sizeof(addr.u8) - 1; i++) {
+		printf("%d.", addr.u8[i]);
+	}
+	printf("%d\n", addr.u8[i]);
 
-  /* Process subsystem */
-  process_init();
-
-  /* Register initial processes */
-  procinit_init();
-
-  rime_init(nullmac_init(&maca_driver));
-
-  /* Autostart processes */
-  autostart_start(autostart_processes);
-
-  //Give ourselves a prefix
-  //init_net();
-
-  printf("\n\r********BOOTING CONTIKI*********\n\r");
-
-  printf("System online.\n\r");
-
-  /* Main scheduler loop */
-  while(1) {
-    process_run();
-  }
-
-  return 0;
+	/* Autostart processes */
+	autostart_start(autostart_processes);
+	
+	//Give ourselves a prefix
+	//init_net();
+	
+	printf("\n\r********BOOTING CONTIKI*********\n\r");
+	
+	printf("System online.\n\r");
+	
+	/* Main scheduler loop */
+	while(1) {
+		process_run();
+	}
+	
+	return 0;
 }

@@ -13,21 +13,24 @@
 #ifndef MAX_PACKET_SIZE
 #define MAX_PACKET_SIZE 127
 #endif
-static uint8_t tx_buf[MAX_PACKET_SIZE];
-static uint8_t rx_buf[MAX_PACKET_SIZE];
+
+static volatile uint8_t tx_buf[MAX_PACKET_SIZE]  __attribute__ ((aligned (4)));
+static volatile uint8_t rx_buf[MAX_PACKET_SIZE]  __attribute__ ((aligned (4)));				
+								
 
 #ifndef MACA_SOFT_TIMEOUT
 #define MACA_SOFT_TIMEOUT 25000
 #endif
 
-#ifdef MACA_PRINTF
-#define PRINTF(...) printf(...)
-#else 
-#define PRINTF(...)
+#ifdef MACA_DEBUG
+#define PRINTF(...) printf(__VA_ARGS__)
+#else
+#define PRINTF(...) do {} while (0)
 #endif
 
+#undef DISABLE_RECEPTION
+
 /* contiki mac driver */
-uint32_t ack[10];
 
 static void (* receiver_callback)(const struct radio_driver *);
 
@@ -48,6 +51,9 @@ const struct radio_driver maca_driver =
 
 int maca_on(void) {
 	PRINTF("maca on\n\r");
+#ifdef DISABLE_RECEPTION
+	PRINTF("reception is disabled\n\r");
+#endif /*DISABLE_RECEPTION*/	
 	return 1;
 }
 
@@ -75,27 +81,32 @@ int maca_send(const void *payload, unsigned short payload_len) {
 	int i;
 	/* wait for maca to finish what it's doing */
 	while(status_is_not_completed());
+	set_bit(reg32(GPIO_DATA0),8);
 
 	PRINTF("maca: sending %d bytes\n\r", payload_len);
 	for(i=0; i<payload_len; i++) {
 		/* copy payload into tx buf */
-		tx_buf[i] = ((uint8_t*)payload)[i];
+		tx_buf[i] = ((uint8_t *)payload)[i];
 		PRINTF(" %x",((uint8_t *)payload)[i]);
 	}
 	PRINTF("\n\r");
 
 	/* set dma tx pointer to the payload */
 	/* and set the tx len */
-	set_bit(reg32(GPIO_DATA0),8);
-	reg32(MACA_TXLEN) = (uint32_t)payload_len+4;
+	reg32(MACA_TXLEN) = (uint32_t)(payload_len+4);
 	reg32(MACA_DMATX) = (uint32_t)tx_buf;
 	reg32(MACA_DMARX) = (uint32_t)rx_buf;
+	reg32(MACA_TMREN) = 0; /* no completion or start clocks (will send asap) */
 	/* do the transmit */
 	reg32(MACA_CONTROL) = ( (1<<maca_ctrl_prm) |
 				(maca_ctrl_mode_no_cca<<maca_ctrl_mode) |
 				(1<<maca_ctrl_asap) |
 				(maca_ctrl_seq_tx));
 
+	/* wait for transmit to finish */
+	while(status_is_not_completed());
+	clear_bit(reg32(GPIO_DATA0),8);
+	return 0;
 }
 
 void maca_set_receiver(void (* recv)(const struct radio_driver *))
@@ -117,9 +128,13 @@ PROCESS_THREAD(maca_process, ev, data)
 
 	while(1) {		
 
+#ifndef DISABLE_RECEPTION
 		/* if we aren't doing anything */
 		/* should also check that there is nothing that has been recieved */
-		if(!(status_is_not_completed())) {
+		if(!(status_is_not_completed()) && 
+		   !(data_indication_irq())
+			) 
+		{
 			/* start a reception */
 //			PRINTF("maca: starting reception sequence\n\r");
 			/* this sets the rxlen field */
@@ -148,6 +163,7 @@ PROCESS_THREAD(maca_process, ev, data)
 
 			clear_bit(reg32(GPIO_DATA0),9);
 		}
+#endif /* DISABLE_RECEPTION */
 
 		if(action_complete_irq()) {
 			reg32(MACA_CLRIRQ) = (1<<maca_irq_acpl);
@@ -163,7 +179,7 @@ PROCESS_THREAD(maca_process, ev, data)
 			}
 			case(maca_cc_not_completed):
 			{
-				//			PRINTF("maca: not completed\n\r");
+				PRINTF("maca: not completed\n\r");
 				ResumeMACASync();
 				break;
 				
@@ -184,7 +200,7 @@ PROCESS_THREAD(maca_process, ev, data)
 			}
 			case(maca_cc_ext_timeout):
 			{
-				//PRINTF("maca: ext timeout\n\r");
+				PRINTF("maca: ext timeout\n\r");
 				ResumeMACASync();
 				break;
 				
@@ -197,7 +213,6 @@ PROCESS_THREAD(maca_process, ev, data)
 			}
 			case(maca_cc_success):
 			{
-				clear_bit(reg32(GPIO_DATA0),8);
 				PRINTF("maca: success\n\r");
 				break;				
 			}

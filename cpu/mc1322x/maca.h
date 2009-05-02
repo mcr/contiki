@@ -160,6 +160,7 @@ enum maca_tmren_bits {
 #define data_indication_irq()     bit_is_set(reg32(MACA_IRQ),maca_irq_di)
 
 #define status_is_not_completed() ((reg32(MACA_STATUS) & 0xffff) == maca_cc_not_completed)
+#define status_is_success() ((reg32(MACA_STATUS) & 0xffff) == maca_cc_success)
 
 void reset_maca(void);
 void init_phy(void);
