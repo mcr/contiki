@@ -52,8 +52,18 @@ int maca_off(void) {
 }
 
 int maca_read(void *buf, unsigned short bufsize) {
-	printf("maca read: bufsize %x\n\r",bufsize);
-	return 0;
+	uint32_t i;
+	volatile uint32_t rx_size;
+	rx_size = reg32(MACA_GETRXLVL) - 4;
+	if(rx_size < bufsize) bufsize = rx_size;
+	printf("maca read: bufsize 0x%0x \n\r",bufsize);
+	printf("maca read:   \n\r");
+	for(i=1; i<=bufsize; i++) {
+		printf(" %0x",rx_buf[i]);
+		((uint8_t *)buf)[i-1] = rx_buf[i];
+	}
+	printf("\n\r");
+	return bufsize;
 }
 
 int maca_send(const void *payload, unsigned short payload_len) {
