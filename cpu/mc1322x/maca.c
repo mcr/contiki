@@ -16,9 +16,14 @@
 static uint8_t tx_buf[MAX_PACKET_SIZE];
 static uint8_t rx_buf[MAX_PACKET_SIZE];
 
-
 #ifndef MACA_SOFT_TIMEOUT
 #define MACA_SOFT_TIMEOUT 25000
+#endif
+
+#ifdef MACA_PRINTF
+#define PRINTF(...) printf(...)
+#else 
+#define PRINTF(...)
 #endif
 
 /* contiki mac driver */
@@ -42,12 +47,12 @@ const struct radio_driver maca_driver =
 };
 
 int maca_on(void) {
-	printf("maca on\n\r");
+	PRINTF("maca on\n\r");
 	return 1;
 }
 
 int maca_off(void) {
-	printf("maca off\n\r");
+	PRINTF("maca off\n\r");
 	return 1;
 }
 
@@ -56,13 +61,13 @@ int maca_read(void *buf, unsigned short bufsize) {
 	volatile uint32_t rx_size;
 	rx_size = reg32(MACA_GETRXLVL) - 4;
 	if(rx_size < bufsize) bufsize = rx_size;
-	printf("maca read: bufsize 0x%0x \n\r",bufsize);
-	printf("maca read:   \n\r");
+	PRINTF("maca read: bufsize 0x%0x \n\r",bufsize);
+	PRINTF("maca read:   \n\r");
 	for(i=1; i<=bufsize; i++) {
-		printf(" %0x",rx_buf[i]);
+		PRINTF(" %0x",rx_buf[i]);
 		((uint8_t *)buf)[i-1] = rx_buf[i];
 	}
-	printf("\n\r");
+	PRINTF("\n\r");
 	return bufsize;
 }
 
@@ -71,13 +76,13 @@ int maca_send(const void *payload, unsigned short payload_len) {
 	/* wait for maca to finish what it's doing */
 	while(status_is_not_completed());
 
-	printf("maca: sending %d bytes\n\r", payload_len);
+	PRINTF("maca: sending %d bytes\n\r", payload_len);
 	for(i=0; i<payload_len; i++) {
 		/* copy payload into tx buf */
 		tx_buf[i] = ((uint8_t*)payload)[i];
-		printf(" %x",((uint8_t *)payload)[i]);
+		PRINTF(" %x",((uint8_t *)payload)[i]);
 	}
-	printf("\n\r");
+	PRINTF("\n\r");
 
 	/* set dma tx pointer to the payload */
 	/* and set the tx len */
@@ -116,7 +121,7 @@ PROCESS_THREAD(maca_process, ev, data)
 		/* should also check that there is nothing that has been recieved */
 		if(!(status_is_not_completed())) {
 			/* start a reception */
-//			printf("maca: starting reception sequence\n\r");
+//			PRINTF("maca: starting reception sequence\n\r");
 			/* this sets the rxlen field */
 			/* this is undocumented but very important */
 			/* you will not receive anything without setting it */
@@ -151,60 +156,60 @@ PROCESS_THREAD(maca_process, ev, data)
 			{
 			case(maca_cc_aborted):
 			{
-				printf("maca: aborted\n\r");
+				PRINTF("maca: aborted\n\r");
 				ResumeMACASync();				
 				break;
 				
 			}
 			case(maca_cc_not_completed):
 			{
-				//			printf("maca: not completed\n\r");
+				//			PRINTF("maca: not completed\n\r");
 				ResumeMACASync();
 				break;
 				
 			}
 			case(maca_cc_timeout):
 			{
-				printf("maca: timeout\n\r");
+				PRINTF("maca: timeout\n\r");
 				ResumeMACASync();
 				break;
 				
 			}
 			case(maca_cc_no_ack):
 			{
-				printf("maca: no ack\n\r");
+				PRINTF("maca: no ack\n\r");
 				ResumeMACASync();
 				break;
 				
 			}
 			case(maca_cc_ext_timeout):
 			{
-				//printf("maca: ext timeout\n\r");
+				//PRINTF("maca: ext timeout\n\r");
 				ResumeMACASync();
 				break;
 				
 			}
 			case(maca_cc_ext_pnd_timeout):
 			{
-				printf("maca: ext pnd timeout\n\r");
+				PRINTF("maca: ext pnd timeout\n\r");
 				ResumeMACASync();
 				break;
 			}
 			case(maca_cc_success):
 			{
 				clear_bit(reg32(GPIO_DATA0),8);
-				printf("maca: success\n\r");
+				PRINTF("maca: success\n\r");
 				break;				
 			}
 			default:
 			{
-				printf("status: %x",status);
+				PRINTF("status: %x",status);
 				ResumeMACASync();
 				
 			}
 			}
 		} else if (filter_failed_irq()) {
-			printf("filter failed\n\r");
+			PRINTF("filter failed\n\r");
 			ResumeMACASync();
 		}
 		
