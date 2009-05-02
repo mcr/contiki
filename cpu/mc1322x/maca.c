@@ -6,8 +6,8 @@
 #include "sys/process.h"
 
 /* mc1322x */
-//#include "maca.h"
-#include "maca-tests.h"
+#include "maca.h"
+//#include "maca-tests.h" /* it's something in here */
 #include "nvm.h"
 
 /* contiki mac driver */
@@ -53,7 +53,6 @@ int maca_send(const void *payload, unsigned short payload_len) {
 	}
 	printf("\n\r");
 
-#if 0	
 	/* set dma tx pointer to the payload */
 	/* and set the tx len */
 	reg32(MACA_TXLEN) = (uint32_t)payload_len+4;
@@ -64,14 +63,6 @@ int maca_send(const void *payload, unsigned short payload_len) {
 				(maca_ctrl_mode_no_cca<<maca_ctrl_mode) | 
 				(1<<maca_ctrl_asap) |
 				(maca_ctrl_seq_tx));
-#endif
-
-        maca_txlen = (uint32_t)(payload_len+4);  
-        maca_dmatx = (uint32_t)payload;					
-        maca_dmarx = (uint32_t)&ack; 
-        maca_control = (control_prm | control_mode_no_cca | 
-                        control_asap | control_seq_tx); 
-
 }
 
 void maca_set_receiver(void (* recv)(const struct radio_driver *))
@@ -79,101 +70,7 @@ void maca_set_receiver(void (* recv)(const struct radio_driver *))
   receiver_callback = recv;
 }
 
-
-
-
-#include "maca-tests.c"
-
-PROCESS(maca_process, "maca process");
-PROCESS_THREAD(maca_process, ev, data)
-{
-	volatile uint32_t i, status;
-
-	PROCESS_BEGIN();
-
-        reg(MACA_CONTROL) = SMAC_MACA_CNTL_INIT_STATE;
-	for(i=0; i<DELAY; i++) { continue; }
-
-	while(1) {		
-
-		if(_is_action_complete_interrupt(maca_irq)) {
-			maca_clrirq = maca_irq;
-			
-			status = reg(MACA_STATUS) & 0x0000ffff;
-			switch(status)
-			{
-			case(cc_aborted):
-			{
-				printf("aborted\n\r");
-				ResumeMACASync();				
-				break;
-				
-			}
-			case(cc_not_completed):
-			{
-				puts("not completed\n\r");
-				ResumeMACASync();
-				break;
-				
-			}
-			case(cc_timeout):
-			{
-				printf("timeout\n\r");
-				ResumeMACASync();
-				break;
-				
-			}
-			case(cc_no_ack):
-			{
-				printf("no ack\n\r");
-				ResumeMACASync();
-				break;
-				
-			}
-			case(cc_ext_timeout):
-			{
-				printf("ext timeout\n\r");
-				ResumeMACASync();
-				break;
-				
-			}
-			case(cc_ext_pnd_timeout):
-			{
-				printf("ext pnd timeout\n\r");
-				ResumeMACASync();
-				break;
-				
-			}
-			case(cc_success):
-			{
-				printf("success\n\r");
-				break;
-				
-			}
-			default:
-			{
-				printf("status: %x",status);
-				ResumeMACASync();
-				
-			}
-			}
-		} else if (_is_filter_failed_interrupt(maca_irq)) {
-			printf("filter failed\n\r");
-			ResumeMACASync();
-		}
-		
-		for(i=0; i<DELAY; i++) { continue; }
-		
-		PROCESS_PAUSE();
-		
-	}
-	
-	PROCESS_END();
-}
-
-#if 0
-
-/* maca process */
+//#include "maca-tests.c"
 
 #include "gpio.h"
 static volatile uint8_t led8 = 0;
@@ -270,6 +167,8 @@ PROCESS_THREAD(maca_process, ev, data)
 	PROCESS_END();
 }
 
+
+
 /* internal mc1322x routines */
 
 #define MACA_CLOCK_DIV 95
@@ -280,11 +179,11 @@ void init_phy(void)
 {
   volatile uint32_t cnt;
 
-  set_bit(reg32(MACA_RESET),maca_reset_rst);
+  reg32(MACA_RESET) = (1<<maca_reset_rst);
  
   for(cnt=0; cnt < 100; cnt++); 
 
-  set_bit(reg32(MACA_RESET),maca_reset_clkon);
+  reg32(MACA_RESET) = (1<<maca_reset_clkon);
 
   reg32(MACA_CONTROL) = maca_ctrl_seq_nop;
 
@@ -397,7 +296,6 @@ void vreg_init(void) {
 //	while((((*(volatile uint32_t *)(0x80003018))>>17) & 1) !=1) { continue; } /* wait for the bypass to take */
 	reg32(0x80003048) = 0x00000ff8; /* start the regulators */
 }
-
 
 /* radio_init has been tested to be good */
 void radio_init(void) {
@@ -728,5 +626,5 @@ void ResumeMACASync(void)
   /* need to */
   /* renable interrupts if they were enabled */
 }
-
+#if 0
 #endif

@@ -6,206 +6,206 @@
 
 static uint8_t ram_values[4];
 
-void init_phy(void)
-{
-  volatile uint32_t cnt;
+/* void init_phy(void) */
+/* { */
+/*   volatile uint32_t cnt; */
   
-  maca_reset = maca_reset_rst;
+/*   maca_reset = maca_reset_rst; */
  
-  for(cnt=0; cnt < 100; cnt++); 
+/*   for(cnt=0; cnt < 100; cnt++);  */
   
-  maca_reset = maca_reset_cln_on;              
-  maca_control = control_seq_nop;              
-#define DELAY 400000
-  for(cnt=0; cnt < DELAY; cnt++); 
+/*   maca_reset = maca_reset_cln_on;               */
+/*   maca_control = control_seq_nop;               */
+/* #define DELAY 400000 */
+/*   for(cnt=0; cnt < DELAY; cnt++);  */
 
-  maca_tmren = maca_start_clk | maca_cpl_clk;   
-  maca_divider = gMACA_Clock_DIV_c; 
-  maca_warmup = 0x00180012;    
-  maca_eofdelay = 0x00000004;  
-  maca_ccadelay = 0x001a0022;  
-  maca_txccadelay = 0x00000025;
-  maca_framesync = 0x000000A7; 
-  maca_clk = 0x00000008;       
-//  maca_maskirq = 0; //(maca_irq_cm   | maca_irq_acpl | maca_irq_rst  | maca_irq_di | maca_irq_crc | maca_irq_flt );
-  maca_maskirq = (maca_irq_rst | maca_irq_acpl | maca_irq_cm | maca_irq_flt | maca_irq_crc);
-  maca_slotoffset = 0x00350000; 
-}
+/*   maca_tmren = maca_start_clk | maca_cpl_clk;    */
+/*   maca_divider = gMACA_Clock_DIV_c;  */
+/*   maca_warmup = 0x00180012;     */
+/*   maca_eofdelay = 0x00000004;   */
+/*   maca_ccadelay = 0x001a0022;   */
+/*   maca_txccadelay = 0x00000025; */
+/*   maca_framesync = 0x000000A7;  */
+/*   maca_clk = 0x00000008;        */
+/* //  maca_maskirq = 0; //(maca_irq_cm   | maca_irq_acpl | maca_irq_rst  | maca_irq_di | maca_irq_crc | maca_irq_flt ); */
+/*   maca_maskirq = (maca_irq_rst | maca_irq_acpl | maca_irq_cm | maca_irq_flt | maca_irq_crc); */
+/*   maca_slotoffset = 0x00350000;  */
+/* } */
 
-void reset_maca(void)
-{
-	uint32_t tmp;
-	MACA_WRITE(maca_control, control_seq_nop);
-  do
-  {
-	  tmp = MACA_READ(maca_status);
-  }
-  while ((tmp & maca_status_cc_mask) == cc_not_completed);
+/* void reset_maca(void) */
+/* { */
+/* 	uint32_t tmp; */
+/* 	MACA_WRITE(maca_control, control_seq_nop); */
+/*   do */
+/*   { */
+/* 	  tmp = MACA_READ(maca_status); */
+/*   } */
+/*   while ((tmp & maca_status_cc_mask) == cc_not_completed); */
 
-  /* Clear all interrupts. */
-  MACA_WRITE(maca_clrirq,   0xFFFF);
-}
+/*   /\* Clear all interrupts. *\/ */
+/*   MACA_WRITE(maca_clrirq,   0xFFFF); */
+/* } */
 
-/*
-	004030c4 <SMAC_InitFlybackSettings>:
-	4030c4:       4806            ldr     r0, [pc, #24]   (4030e0 <SMAC_InitFlybackSettings+0x1c>) // r0 gets base 0x80009a00
-		4030c6:       6881            ldr     r1, [r0, #8]                                             // r1 gets *(0x80009a08)
-		4030c8:       4806            ldr     r0, [pc, #24]   (4030e4 <SMAC_InitFlybackSettings+0x20>) // r0 gets 0x0000f7df
-		4030ca:       4308            orrs    r0, r1                                                   // or them, r0 has it
-		4030cc:       4904            ldr     r1, [pc, #16]   (4030e0 <SMAC_InitFlybackSettings+0x1c>) // r1 gets base 0x80009a00
-		4030ce:       6088            str     r0, [r1, #8]     // put r0 into 0x80009a08
-		4030d0:       0008            lsls    r0, r1, #0       // r0 gets r1, r0 is the base now
-		4030d2:       4905            ldr     r1, [pc, #20]   (4030e8 <SMAC_InitFlybackSettings+0x24>) // r1 gets 0x00ffffff
-		4030d4:       60c1            str     r1, [r0, #12]   // put 0x00ffffff into base+12
-		4030d6:       0b09            lsrs    r1, r1, #12     // r1 = 0x00ffffff >> 12
-		4030d8:       6101            str     r1, [r0, #16]   // put r1 base+16
-		4030da:       2110            movs    r1, #16         // r1 gets 16
-		4030dc:       6001            str     r1, [r0, #0]    // put r1 in the base
-		4030de:       4770            bx      lr              // return
-		4030e0:       80009a00        .word   0x80009a00
-		4030e4:       0000f7df        .word   0x0000f7df
-		4030e8:       00ffffff        .word   0x00ffffff
-*/
+/* /\* */
+/* 	004030c4 <SMAC_InitFlybackSettings>: */
+/* 	4030c4:       4806            ldr     r0, [pc, #24]   (4030e0 <SMAC_InitFlybackSettings+0x1c>) // r0 gets base 0x80009a00 */
+/* 		4030c6:       6881            ldr     r1, [r0, #8]                                             // r1 gets *(0x80009a08) */
+/* 		4030c8:       4806            ldr     r0, [pc, #24]   (4030e4 <SMAC_InitFlybackSettings+0x20>) // r0 gets 0x0000f7df */
+/* 		4030ca:       4308            orrs    r0, r1                                                   // or them, r0 has it */
+/* 		4030cc:       4904            ldr     r1, [pc, #16]   (4030e0 <SMAC_InitFlybackSettings+0x1c>) // r1 gets base 0x80009a00 */
+/* 		4030ce:       6088            str     r0, [r1, #8]     // put r0 into 0x80009a08 */
+/* 		4030d0:       0008            lsls    r0, r1, #0       // r0 gets r1, r0 is the base now */
+/* 		4030d2:       4905            ldr     r1, [pc, #20]   (4030e8 <SMAC_InitFlybackSettings+0x24>) // r1 gets 0x00ffffff */
+/* 		4030d4:       60c1            str     r1, [r0, #12]   // put 0x00ffffff into base+12 */
+/* 		4030d6:       0b09            lsrs    r1, r1, #12     // r1 = 0x00ffffff >> 12 */
+/* 		4030d8:       6101            str     r1, [r0, #16]   // put r1 base+16 */
+/* 		4030da:       2110            movs    r1, #16         // r1 gets 16 */
+/* 		4030dc:       6001            str     r1, [r0, #0]    // put r1 in the base */
+/* 		4030de:       4770            bx      lr              // return */
+/* 		4030e0:       80009a00        .word   0x80009a00 */
+/* 		4030e4:       0000f7df        .word   0x0000f7df */
+/* 		4030e8:       00ffffff        .word   0x00ffffff */
+/* *\/ */
 
-/* tested and is good */
-#define RF_BASE 0x80009a00
-void flyback_init(void) {
-	uint32_t val8, or;
+/* /\* tested and is good *\/ */
+/* #define RF_BASE 0x80009a00 */
+/* void flyback_init(void) { */
+/* 	uint32_t val8, or; */
 	
-	val8 = *(volatile uint32_t *)(RF_BASE+8);
-	or = val8 | 0x0000f7df;
-	*(volatile uint32_t *)(RF_BASE+8) = or;
-	*(volatile uint32_t *)(RF_BASE+12) = 0x00ffffff;
-	*(volatile uint32_t *)(RF_BASE+16) = (((uint32_t)0x00ffffff)>>12);
-	*(volatile uint32_t *)(RF_BASE) = 16;
-	/* good luck and godspeed */
-}
+/* 	val8 = *(volatile uint32_t *)(RF_BASE+8); */
+/* 	or = val8 | 0x0000f7df; */
+/* 	*(volatile uint32_t *)(RF_BASE+8) = or; */
+/* 	*(volatile uint32_t *)(RF_BASE+12) = 0x00ffffff; */
+/* 	*(volatile uint32_t *)(RF_BASE+16) = (((uint32_t)0x00ffffff)>>12); */
+/* 	*(volatile uint32_t *)(RF_BASE) = 16; */
+/* 	/\* good luck and godspeed *\/ */
+/* } */
 
-#define MAX_SEQ1 2
-const uint32_t addr_seq1[MAX_SEQ1] = {
-	0x80003048,      
-	0x8000304c,
-};
+/* #define MAX_SEQ1 2 */
+/* const uint32_t addr_seq1[MAX_SEQ1] = { */
+/* 	0x80003048,       */
+/* 	0x8000304c, */
+/* }; */
 
-const uint32_t data_seq1[MAX_SEQ1] = {
-	0x00000f78,     
-	0x00607707,
-};
-
-
-#define MAX_SEQ2 2
-const uint32_t addr_seq2[MAX_SEQ2] = {
-	0x8000a050,      
-	0x8000a054,      
-};
-
-const uint32_t data_seq2[MAX_SEQ2] = {
-	0x0000047b,
-	0x0000007b, 
-};
-
-#define MAX_CAL3_SEQ1 3
-const uint32_t addr_cal3_seq1[MAX_CAL3_SEQ1] = { 0x80009400,0x80009a04,0x80009a00, };
-const uint32_t data_cal3_seq1[MAX_CAL3_SEQ1] = {0x00020017,0x8185a0a4,0x8c900025, };
-
-#define MAX_CAL3_SEQ2 2
-const uint32_t addr_cal3_seq2[MAX_CAL3_SEQ2] = { 0x80009a00,0x80009a00,};
-const uint32_t data_cal3_seq2[MAX_CAL3_SEQ2] = { 0x8c900021,0x8c900027,};
-
-#define MAX_CAL3_SEQ3 1
-const uint32_t addr_cal3_seq3[MAX_CAL3_SEQ3] = { 0x80009a00 };
-const uint32_t data_cal3_seq3[MAX_CAL3_SEQ3] = { 0x8c900000 };
-
-#define MAX_CAL5 4
-const uint32_t addr_cal5[MAX_CAL5] = { 
-	0x80009400,  
-	0x8000a050,       
-	0x8000a054,  
-	0x80003048,
-};
-const uint32_t data_cal5[MAX_CAL5] = {
-	0x00000017,
-	0x00000000,            
-	0x00000000,
-	0x00000f00,
-};
-
-#define MAX_DATA 43
-const uint32_t addr_reg_rep[MAX_DATA] = { 0x80004118,0x80009204,0x80009208,0x8000920c,0x80009210,0x80009300,0x80009304,0x80009308,0x8000930c,0x80009310,0x80009314,0x80009318,0x80009380,0x80009384,0x80009388,0x8000938c,0x80009390,0x80009394,0x8000a008,0x8000a018,0x8000a01c,0x80009424,0x80009434,0x80009438,0x8000943c,0x80009440,0x80009444,0x80009448,0x8000944c,0x80009450,0x80009460,0x80009464,0x8000947c,0x800094e0,0x800094e4,0x800094e8,0x800094ec,0x800094f0,0x800094f4,0x800094f8,0x80009470,0x8000981c,0x80009828 };
-
-const uint32_t data_reg_rep[MAX_DATA] = { 0x00180012,0x00000605,0x00000504,0x00001111,0x0fc40000,0x20046000,0x4005580c,0x40075801,0x4005d801,0x5a45d800,0x4a45d800,0x40044000,0x00106000,0x00083806,0x00093807,0x0009b804,0x000db800,0x00093802,0x00000015,0x00000002,0x0000000f,0x0000aaa0,0x01002020,0x016800fe,0x8e578248,0x000000dd,0x00000946,0x0000035a,0x00100010,0x00000515,0x00397feb,0x00180358,0x00000455,0x00000001,0x00020003,0x00040014,0x00240034,0x00440144,0x02440344,0x04440544,0x0ee7fc00,0x00000082,0x0000002a };
+/* const uint32_t data_seq1[MAX_SEQ1] = { */
+/* 	0x00000f78,      */
+/* 	0x00607707, */
+/* }; */
 
 
-/* has been tested and it good */
-void vreg_init(void) {
-	volatile uint32_t i;
-	*(volatile uint32_t *)(0x80003000) = 0x00000018; /* set default state */
-	*(volatile uint32_t *)(0x80003048) = 0x00000f04; /* bypass the buck */
-	for(i=0; i<0x161a8; i++) { continue; } /* wait for the bypass to take */
-//	while((((*(volatile uint32_t *)(0x80003018))>>17) & 1) !=1) { continue; } /* wait for the bypass to take */
-	*(volatile uint32_t *)(0x80003048) = 0x00000ff8; /* start the regulators */
-}
+/* #define MAX_SEQ2 2 */
+/* const uint32_t addr_seq2[MAX_SEQ2] = { */
+/* 	0x8000a050,       */
+/* 	0x8000a054,       */
+/* }; */
+
+/* const uint32_t data_seq2[MAX_SEQ2] = { */
+/* 	0x0000047b, */
+/* 	0x0000007b,  */
+/* }; */
+
+/* #define MAX_CAL3_SEQ1 3 */
+/* const uint32_t addr_cal3_seq1[MAX_CAL3_SEQ1] = { 0x80009400,0x80009a04,0x80009a00, }; */
+/* const uint32_t data_cal3_seq1[MAX_CAL3_SEQ1] = {0x00020017,0x8185a0a4,0x8c900025, }; */
+
+/* #define MAX_CAL3_SEQ2 2 */
+/* const uint32_t addr_cal3_seq2[MAX_CAL3_SEQ2] = { 0x80009a00,0x80009a00,}; */
+/* const uint32_t data_cal3_seq2[MAX_CAL3_SEQ2] = { 0x8c900021,0x8c900027,}; */
+
+/* #define MAX_CAL3_SEQ3 1 */
+/* const uint32_t addr_cal3_seq3[MAX_CAL3_SEQ3] = { 0x80009a00 }; */
+/* const uint32_t data_cal3_seq3[MAX_CAL3_SEQ3] = { 0x8c900000 }; */
+
+/* #define MAX_CAL5 4 */
+/* const uint32_t addr_cal5[MAX_CAL5] = {  */
+/* 	0x80009400,   */
+/* 	0x8000a050,        */
+/* 	0x8000a054,   */
+/* 	0x80003048, */
+/* }; */
+/* const uint32_t data_cal5[MAX_CAL5] = { */
+/* 	0x00000017, */
+/* 	0x00000000,             */
+/* 	0x00000000, */
+/* 	0x00000f00, */
+/* }; */
+
+/* #define MAX_DATA 43 */
+/* const uint32_t addr_reg_rep[MAX_DATA] = { 0x80004118,0x80009204,0x80009208,0x8000920c,0x80009210,0x80009300,0x80009304,0x80009308,0x8000930c,0x80009310,0x80009314,0x80009318,0x80009380,0x80009384,0x80009388,0x8000938c,0x80009390,0x80009394,0x8000a008,0x8000a018,0x8000a01c,0x80009424,0x80009434,0x80009438,0x8000943c,0x80009440,0x80009444,0x80009448,0x8000944c,0x80009450,0x80009460,0x80009464,0x8000947c,0x800094e0,0x800094e4,0x800094e8,0x800094ec,0x800094f0,0x800094f4,0x800094f8,0x80009470,0x8000981c,0x80009828 }; */
+
+/* const uint32_t data_reg_rep[MAX_DATA] = { 0x00180012,0x00000605,0x00000504,0x00001111,0x0fc40000,0x20046000,0x4005580c,0x40075801,0x4005d801,0x5a45d800,0x4a45d800,0x40044000,0x00106000,0x00083806,0x00093807,0x0009b804,0x000db800,0x00093802,0x00000015,0x00000002,0x0000000f,0x0000aaa0,0x01002020,0x016800fe,0x8e578248,0x000000dd,0x00000946,0x0000035a,0x00100010,0x00000515,0x00397feb,0x00180358,0x00000455,0x00000001,0x00020003,0x00040014,0x00240034,0x00440144,0x02440344,0x04440544,0x0ee7fc00,0x00000082,0x0000002a }; */
 
 
-/* radio_init has been tested to be good */
-void radio_init(void) {
-	volatile uint32_t i;
-	/* sequence 1 */
-	for(i=0; i<MAX_SEQ1; i++) {
-		*(volatile uint32_t *)(addr_seq1[i]) = data_seq1[i];
-	}
-	/* seq 1 delay */
-	for(i=0; i<0x161a8; i++) { continue; }
-	/* sequence 2 */
-	for(i=0; i<MAX_SEQ2; i++) {
-		*(volatile uint32_t *)(addr_seq2[i]) = data_seq2[i];
-	}
-	/* modem val */
-	*(volatile uint32_t *)0x80009000 = 0x80050100;
-	/* cal 3 seq 1*/
-	for(i=0; i<MAX_CAL3_SEQ1; i++) {
-		*(volatile uint32_t *)(addr_cal3_seq1[i]) = data_cal3_seq1[i];
-	}
-	/* cal 3 delay */
-	for(i=0; i<0x11194; i++) { continue; }
-	/* cal 3 seq 2*/
-	for(i=0; i<MAX_CAL3_SEQ2; i++) {
-		*(volatile uint32_t *)(addr_cal3_seq2[i]) = data_cal3_seq2[i];
-	}
-	/* cal 3 delay */
-	for(i=0; i<0x11194; i++) { continue; }
-	/* cal 3 seq 3*/
-	for(i=0; i<MAX_CAL3_SEQ3; i++) {
-		*(volatile uint32_t *)(addr_cal3_seq3[i]) = data_cal3_seq3[i];
-	}
-	/* cal 5 */
-	for(i=0; i<MAX_CAL5; i++) {
-		*(volatile uint32_t *)(addr_cal5[i]) = data_cal5[i];
-	}
-	/*reg replacment */
-	for(i=0; i<MAX_DATA; i++) {
-		*(volatile uint32_t *)(addr_reg_rep[i]) = data_reg_rep[i];
-	}
+/* /\* has been tested and it good *\/ */
+/* void vreg_init(void) { */
+/* 	volatile uint32_t i; */
+/* 	*(volatile uint32_t *)(0x80003000) = 0x00000018; /\* set default state *\/ */
+/* 	*(volatile uint32_t *)(0x80003048) = 0x00000f04; /\* bypass the buck *\/ */
+/* 	for(i=0; i<0x161a8; i++) { continue; } /\* wait for the bypass to take *\/ */
+/* //	while((((*(volatile uint32_t *)(0x80003018))>>17) & 1) !=1) { continue; } /\* wait for the bypass to take *\/ */
+/* 	*(volatile uint32_t *)(0x80003048) = 0x00000ff8; /\* start the regulators *\/ */
+/* } */
+
+
+/* /\* radio_init has been tested to be good *\/ */
+/* void radio_init(void) { */
+/* 	volatile uint32_t i; */
+/* 	/\* sequence 1 *\/ */
+/* 	for(i=0; i<MAX_SEQ1; i++) { */
+/* 		*(volatile uint32_t *)(addr_seq1[i]) = data_seq1[i]; */
+/* 	} */
+/* 	/\* seq 1 delay *\/ */
+/* 	for(i=0; i<0x161a8; i++) { continue; } */
+/* 	/\* sequence 2 *\/ */
+/* 	for(i=0; i<MAX_SEQ2; i++) { */
+/* 		*(volatile uint32_t *)(addr_seq2[i]) = data_seq2[i]; */
+/* 	} */
+/* 	/\* modem val *\/ */
+/* 	*(volatile uint32_t *)0x80009000 = 0x80050100; */
+/* 	/\* cal 3 seq 1*\/ */
+/* 	for(i=0; i<MAX_CAL3_SEQ1; i++) { */
+/* 		*(volatile uint32_t *)(addr_cal3_seq1[i]) = data_cal3_seq1[i]; */
+/* 	} */
+/* 	/\* cal 3 delay *\/ */
+/* 	for(i=0; i<0x11194; i++) { continue; } */
+/* 	/\* cal 3 seq 2*\/ */
+/* 	for(i=0; i<MAX_CAL3_SEQ2; i++) { */
+/* 		*(volatile uint32_t *)(addr_cal3_seq2[i]) = data_cal3_seq2[i]; */
+/* 	} */
+/* 	/\* cal 3 delay *\/ */
+/* 	for(i=0; i<0x11194; i++) { continue; } */
+/* 	/\* cal 3 seq 3*\/ */
+/* 	for(i=0; i<MAX_CAL3_SEQ3; i++) { */
+/* 		*(volatile uint32_t *)(addr_cal3_seq3[i]) = data_cal3_seq3[i]; */
+/* 	} */
+/* 	/\* cal 5 *\/ */
+/* 	for(i=0; i<MAX_CAL5; i++) { */
+/* 		*(volatile uint32_t *)(addr_cal5[i]) = data_cal5[i]; */
+/* 	} */
+/* 	/\*reg replacment *\/ */
+/* 	for(i=0; i<MAX_DATA; i++) { */
+/* 		*(volatile uint32_t *)(addr_reg_rep[i]) = data_reg_rep[i]; */
+/* 	} */
 	
-	puts("initfromflash\n\r");
+/* 	puts("initfromflash\n\r"); */
 
-	*(volatile uint32_t *)(0x80003048) = 0x00000f04; /* bypass the buck */
-	for(i=0; i<0x161a8; i++) { continue; } /* wait for the bypass to take */
-//	while((((*(volatile uint32_t *)(0x80003018))>>17) & 1) !=1) { continue; } /* wait for the bypass to take */
-	*(volatile uint32_t *)(0x80003048) = 0x00000fa4; /* start the regulators */
-	for(i=0; i<0x161a8; i++) { continue; } /* wait for the bypass to take */
+/* 	*(volatile uint32_t *)(0x80003048) = 0x00000f04; /\* bypass the buck *\/ */
+/* 	for(i=0; i<0x161a8; i++) { continue; } /\* wait for the bypass to take *\/ */
+/* //	while((((*(volatile uint32_t *)(0x80003018))>>17) & 1) !=1) { continue; } /\* wait for the bypass to take *\/ */
+/* 	*(volatile uint32_t *)(0x80003048) = 0x00000fa4; /\* start the regulators *\/ */
+/* 	for(i=0; i<0x161a8; i++) { continue; } /\* wait for the bypass to take *\/ */
 
-	init_from_flash(0x1F000);
+/* 	init_from_flash(0x1F000); */
 
-	puts("ram_values:\n\r");
-	for(i=0; i<4; i++) {
-//		puts("  0x");
-//		put_hex(ram_values[i]);
-//		puts("\n\r");
-	}
+/* 	puts("ram_values:\n\r"); */
+/* 	for(i=0; i<4; i++) { */
+/* //		puts("  0x"); */
+/* //		put_hex(ram_values[i]); */
+/* //		puts("\n\r"); */
+/* 	} */
 
-}
-
+/* } */
+#if 0
 const uint32_t PSMVAL[19] = {
 	0x0000080f,
 	0x0000080f,
@@ -525,3 +525,4 @@ void ResumeMACASync(void)
 //  AppInterrupts_UnprotectFromMACAIrq(tmpIsrStatus);  <- Original from MAC code, but not sure how is it implemented
 //  ITC_EnableInterrupt(gMacaInt_c);
 }
+#endif
