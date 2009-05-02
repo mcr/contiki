@@ -158,6 +158,8 @@ enum maca_tmren_bits {
 #define _is_filter_failed_irq()     bit_is_set(reg32(MACA_IRQ),maca_irq_flt)
 #define _is_checksum_failed_irq()   bit_is_set(reg32(MACA_IRQ),maca_irq_crc)
 
+#define _status_is_not_completed() bit_is_set(reg32(MACA_STATUS),maca_cc_not_completed)
+
 void reset_maca(void);
 void init_phy(void);
 void vreg_init(void);

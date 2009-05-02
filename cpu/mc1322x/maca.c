@@ -35,7 +35,7 @@ int maca_on(void) {
 }
 
 int maca_off(void) {
-	printf("maca on\n\r");
+	printf("maca off\n\r");
 	return 1;
 }
 
@@ -51,6 +51,9 @@ int maca_send(const void *payload, unsigned short payload_len) {
 		printf(" %x",((uint8_t *)payload)[i]);
 	}
 	printf("\n\r");
+
+	/* wait for maca to finish what it's doing */
+	while(_status_is_not_completed());
 
 	/* set dma tx pointer to the payload */
 	/* and set the tx len */
@@ -84,6 +87,17 @@ PROCESS_THREAD(maca_process, ev, data)
 	for(i=0; i<400000; i++) { continue; }
 
 	while(1) {		
+
+		/* if we aren't doing anything */
+		if(!(_status_is_not_completed())) {
+			/* start a reception */
+			/* with timeout */		       
+		}
+
+		if(data_indication_irq()) {
+			/* call the recieve callback */
+			/* then do something? */
+		}
 
 		if(_is_action_complete_irq()) {
 
