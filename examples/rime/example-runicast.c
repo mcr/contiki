@@ -145,8 +145,8 @@ PROCESS_THREAD(test_runicast_process, ev, data)
       rimeaddr_t recv;
 
       packetbuf_copyfrom("Hello", 5);
-      recv.u8[0] = 1;
-      recv.u8[1] = 0;
+      recv.u8[0] = 41;
+      recv.u8[1] = 41;
 
       printf("%u.%u: sending runicast to address %u.%u\n",
           rimeaddr_node_addr.u8[0],

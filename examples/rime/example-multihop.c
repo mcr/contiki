@@ -221,15 +221,19 @@ PROCESS_THREAD(example_multihop_process, ev, data)
 
   /* Activate the button sensor. We use the button to drive traffic -
      when the btton is pressed, a packet is sent. */
-  button_sensor.activate();
+//  button_sensor.activate();
 
   /* Loop forever, send a packet when the button is pressed. */
   while(1) {
+    static struct etimer et;
     rimeaddr_t to;
 
     /* Wait until we get a sensor event with the button sensor as data. */
-    PROCESS_WAIT_EVENT_UNTIL(ev == sensors_event &&
-			     data == &button_sensor);
+//    PROCESS_WAIT_EVENT_UNTIL(ev == sensors_event &&
+//			     data == &button_sensor);
+
+    etimer_set(&et, CLOCK_SECOND);
+    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
 
     /* Copy the "Hello" to the packet buffer. */
     packetbuf_copyfrom("Hello", 6);
@@ -238,8 +242,9 @@ PROCESS_THREAD(example_multihop_process, ev, data)
        1.1. This is just a dummy value that happens to work nicely in a
        netsim simulation (because the default simulation setup creates
        one node with address 1.1). */
-    to.u8[0] = 1;
-    to.u8[1] = 1;
+    rimeaddr_copy(&to, &rimeaddr_null);
+    to.u8[0] = 41;
+    to.u8[1] = 41;
 
     /* Send the packet. */
     multihop_send(&multihop, &to);
