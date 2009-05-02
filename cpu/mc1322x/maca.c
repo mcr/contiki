@@ -7,7 +7,6 @@
 
 /* mc1322x */
 #include "maca.h"
-//#include "maca-tests.h" /* it's something in here */
 #include "nvm.h"
 
 /* contiki mac driver */
@@ -69,8 +68,6 @@ void maca_set_receiver(void (* recv)(const struct radio_driver *))
 {
   receiver_callback = recv;
 }
-
-//#include "maca-tests.c"
 
 #include "gpio.h"
 static volatile uint8_t led8 = 0;
