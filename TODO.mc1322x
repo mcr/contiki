@@ -1,0 +1,8 @@
+Things to do before submitting to contiki:
+
+- Use the ROM data for radio init instead of hardcoding it
+
+- multihop mesh test?
+
+- Set address from NVM. This will enable easier testing of mesh and
+  stuff.
