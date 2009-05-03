@@ -72,16 +72,16 @@ PROCESS_THREAD(example_abc_process, ev, data)
 
   while(1) {
 
-//    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
+    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
 
 //    packetbuf_copyfrom("Hello", 6);
     packetbuf_copyfrom("HelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHello", 120);
     abc_send(&abc);
     printf("abc message sent\n");
 
-//    etimer_reset(&et);
+    etimer_reset(&et);
 
-    PROCESS_PAUSE();
+//    PROCESS_PAUSE();
 
   }
 

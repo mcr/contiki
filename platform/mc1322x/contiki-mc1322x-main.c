@@ -108,8 +108,8 @@ main(void)
 	rime_init(nullmac_init(&maca_driver));
 	
 	rimeaddr_copy(&addr,&rimeaddr_null);
-	addr.u8[0] = 41;
-	addr.u8[1] = 41;
+	addr.u8[0] = 161;
+	addr.u8[1] = 161;
 	rimeaddr_set_node_addr(&addr);
 	printf("Rime started with address ");
 	for(i = 0; i < sizeof(addr.u8) - 1; i++) {

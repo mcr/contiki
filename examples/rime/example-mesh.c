@@ -64,7 +64,7 @@ timedout(struct mesh_conn *c)
   printf("packet timedout\n");
 }
 static void
-recv(struct mesh_conn *c, rimeaddr_t *from, uint8_t hops)
+recv(struct mesh_conn *c, const rimeaddr_t *from, uint8_t hops)
 {
   printf("Data received from %d.%d: %.*s (%d)\n",
 	 from->u8[0], from->u8[1],
@@ -75,6 +75,7 @@ recv(struct mesh_conn *c, rimeaddr_t *from, uint8_t hops)
 }
 
 const static struct mesh_callbacks callbacks = {recv, sent, timedout};
+
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(example_mesh_process, ev, data)
 {
@@ -83,15 +84,17 @@ PROCESS_THREAD(example_mesh_process, ev, data)
 
   mesh_open(&mesh, 128, &callbacks);
 
-  button_sensor.activate();
+//  button_sensor.activate();
 
   while(1) {
     rimeaddr_t addr;
     static struct etimer et;
 
-    /*    etimer_set(&et, CLOCK_SECOND * 4);*/
-    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et) ||
-			     (ev == sensors_event && data == &button_sensor));
+    etimer_set(&et, CLOCK_SECOND);
+    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
+
+//    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et) ||
+//			     (ev == sensors_event && data == &button_sensor));
 
     printf("Button\n");
 
@@ -101,6 +104,7 @@ PROCESS_THREAD(example_mesh_process, ev, data)
      */
     
     packetbuf_copyfrom("Hej", 3);
+    rimeaddr_copy(&addr,&rimeaddr_null);
     addr.u8[0] = 161;
     addr.u8[1] = 161;
     mesh_send(&mesh, &addr);
