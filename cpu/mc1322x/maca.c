@@ -19,7 +19,7 @@ static volatile uint8_t rx_buf[MAX_PACKET_SIZE]  __attribute__ ((aligned (4)));
 								
 
 #ifndef MACA_SOFT_TIMEOUT
-#define MACA_SOFT_TIMEOUT 25000
+#define MACA_SOFT_TIMEOUT 5000
 #endif
 
 #ifdef MACA_DEBUG
@@ -27,8 +27,6 @@ static volatile uint8_t rx_buf[MAX_PACKET_SIZE]  __attribute__ ((aligned (4)));
 #else
 #define PRINTF(...) do {} while (0)
 #endif
-
-#undef DISABLE_RECEPTION
 
 /* contiki mac driver */
 
@@ -88,7 +86,7 @@ int maca_send(const void *payload, unsigned short payload_len) {
 	for(i=0; i<payload_len; i++) {
 		/* copy payload into tx buf */
 		tx_buf[i] = ((uint8_t *)payload)[i];
-		PRINTF(" %x",((uint8_t *)payload)[i]);
+		PRINTF(" %02x",((uint8_t *)payload)[i]);
 	}
 	PRINTF("\n\r");
 
@@ -140,6 +138,7 @@ PROCESS_THREAD(maca_process, ev, data)
 		{
 			/* start a reception */
 //			PRINTF("maca: starting reception sequence\n\r");
+			ResumeMACASync();
 			/* this sets the rxlen field */
 			/* this is undocumented but very important */
 			/* you will not receive anything without setting it */

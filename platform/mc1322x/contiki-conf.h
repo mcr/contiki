@@ -72,10 +72,14 @@ typedef int32_t s32_t;
 #define dbg_putchar(x) uart1_putchar(x)
 
 #define USE_FORMATTED_STDIO 1
+#undef DISABLE_RECEPTION
 //#undef MACA_DEBUG
 #define MACA_DEBUG 1
 
+
 #define RIMEADDR_CONF_SIZE       8
+#define PACKETBUF_CONF_SIZE 96
+
 
 typedef uint32_t clock_time_t;
 typedef unsigned char u8_t;
