@@ -80,6 +80,11 @@ static uip_ipaddr_t netaddr, netmask;
 static void
 recv_data(struct unicast_conn *c, rimeaddr_t *from)
 {
+  struct route_entry *e;
+
+  e = route_lookup(from);
+  route_refresh(e);
+  
   uip_len = packetbuf_copyto(&uip_buf[UIP_LLH_LEN]);
 
   /*  uip_len = hc_inflate(&uip_buf[UIP_LLH_LEN], uip_len);*/
@@ -185,8 +190,8 @@ uip_over_mesh_init(u16_t channels)
   trickle_open(&gateway_announce_conn, CLOCK_SECOND * 4, channels + 3,
 	       &trickle_call);
 
-  /*  tcpip_set_forwarding(1);*/
-
+  /* Set lifetime to 10 seconds for non-refreshed routes. */
+  route_set_lifetime(10);
 }
 /*---------------------------------------------------------------------------*/
 u8_t
