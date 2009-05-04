@@ -60,6 +60,9 @@ int maca_off(void) {
 	return 1;
 }
 
+/* it appears that the mc1332x radio cannot */
+/* receive packets where the last three bits of the first byte */
+/* is equal to 2 --- even in promiscuous mode */
 int maca_read(void *buf, unsigned short bufsize) {
 	uint32_t i;
 	volatile uint32_t rx_size;
@@ -76,34 +79,78 @@ int maca_read(void *buf, unsigned short bufsize) {
 }
 
 int maca_send(const void *payload, unsigned short payload_len) {
-	int i;
+	volatile uint32_t i,j;
+	volatile uint32_t retry;
+	volatile uint32_t len;
+
+	len = payload_len;
+
 	/* wait for maca to finish what it's doing */
 	while(status_is_not_completed());
 	set_bit(reg32(GPIO_DATA0),8);
 	ResumeMACASync();
 
+	for(retry=0; retry<4; retry++) {
+
 	PRINTF("maca: sending %d bytes\n\r", payload_len);
 	for(i=0; i<payload_len; i++) {
 		/* copy payload into tx buf */
 		tx_buf[i] = ((uint8_t *)payload)[i];
-		PRINTF(" %02x",((uint8_t *)payload)[i]);
+//		PRINTF(" %02x",((uint8_t *)payload)[i]);
+		PRINTF(" %02x",tx_buf[i]);
 	}
 	PRINTF("\n\r");
 
+	tx_buf[0]=0x82; 
+	tx_buf[1]=0x00 ;
+tx_buf[2]=	0x00 ;
+tx_buf[3]=	0x00 ;
+tx_buf[4]=	0x01 ;
+tx_buf[5]=	0x01;
+tx_buf[6]=	0x00 ;
+tx_buf[7]=	0x00 ;
+tx_buf[8]=	0x04 ;
+tx_buf[9]=	0x04 ;
+tx_buf[10]=	0x00 ;
+tx_buf[11]=	0x00 ;
+tx_buf[12]=	0x81 ;
+tx_buf[13]=	0x00 ;
+tx_buf[14]=	0x00 ;
+tx_buf[15]=	0x00 ;
+tx_buf[16]=	0x01 ;
+tx_buf[17]=	0x01 ;
+tx_buf[18]=	0x00 ;
+tx_buf[19]=	0x00 ;
+tx_buf[20]=	0x04 ;
+tx_buf[21]=	0x04 ;
+tx_buf[22]=	0x00 ;
+tx_buf[23]=	0x00;
+
+//	len=24;
+//	for(i=0; i<len; i++) {
+//		tx_buf[i] = 0;
+//	}
+
 	/* set dma tx pointer to the payload */
 	/* and set the tx len */
-	reg32(MACA_TXLEN) = (uint32_t)(payload_len+4);
+	reg32(MACA_TXLEN) = (uint32_t)(len+4);
 	reg32(MACA_DMATX) = (uint32_t)tx_buf;
 	reg32(MACA_DMARX) = (uint32_t)rx_buf;
-	reg32(MACA_TMREN) = 0; /* no completion or start clocks (will send asap) */
+	reg32(MACA_TMREN) = 0;
 	/* do the transmit */
 	reg32(MACA_CONTROL) = ( (1<<maca_ctrl_prm) |
 				(maca_ctrl_mode_no_cca<<maca_ctrl_mode) |
 				(1<<maca_ctrl_asap) |
-				(maca_ctrl_seq_tx));
+				(maca_ctrl_seq_tx));	
 
 	/* wait for transmit to finish */
-	while(status_is_not_completed());
+	/* maybe wait until action complete instead? */
+
+//	for(j=0; j<1000000; j++) { continue; }
+
+	while(!action_complete_irq());
+	ResumeMACASync();
+	}
 	clear_bit(reg32(GPIO_DATA0),8);
 	return 0;
 }
@@ -228,6 +275,11 @@ PROCESS_THREAD(maca_process, ev, data)
 		} else if (filter_failed_irq()) {
 			PRINTF("filter failed\n\r");
 			ResumeMACASync();
+			reg32(MACA_CLRIRQ) = (1<<maca_irq_flt);
+		} else if (checksum_failed_irq()) {
+			PRINTF("checksum failed\n\r");
+			ResumeMACASync();
+			reg32(MACA_CLRIRQ) = (1<<maca_irq_crc);
 		}
 		
 		PROCESS_PAUSE();
