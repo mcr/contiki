@@ -118,7 +118,9 @@ public class RadioConnection {
    */
   public void removeDestination(Radio radio) {
     int idx = destinations.indexOf(radio);
-
+    if (idx < 0) {
+      return; 
+    }
     destinations.remove(idx);
     destinationDelays.remove(idx);
   }
