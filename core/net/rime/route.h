@@ -67,6 +67,7 @@ void route_init(void);
 int route_add(const rimeaddr_t *dest, const rimeaddr_t *nexthop,
 	      uint8_t hop_count, uint8_t seqno);
 struct route_entry *route_lookup(const rimeaddr_t *dest);
+void route_refresh(struct route_entry *e);
 void route_remove(struct route_entry *e);
 void route_flush_all(void);
 void route_set_lifetime(int seconds);
