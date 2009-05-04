@@ -92,6 +92,7 @@ public class TimeLine extends VisPlugin {
       if (!viewportTracking) {
         return;    
       }
+      viewportInfinite.x = timeline.getWidth();
       timelineScrollPane.getViewport().setViewPosition(viewportInfinite);
     }
   };
