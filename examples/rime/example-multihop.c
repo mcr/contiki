@@ -125,9 +125,9 @@ received_announcement(struct announcement *a, rimeaddr_t *from,
 {
   struct example_neighbor *e;
   
-  /*  printf("Got announcement from %d.%d, id %d, value %d\n",
-      from->u8[0], from->u8[1], id, value);*/
-
+  printf("Got announcement from %d.%d, id %d, value %d\n",
+	 from->u8[0], from->u8[1], id, value);
+  
   /* We received an announcement from a neighbor so we need to update
      the neighbor list, or add a new entry to the table. */
   for(e = list_head(neighbor_table); e != NULL; e = e->next) {
@@ -243,8 +243,8 @@ PROCESS_THREAD(example_multihop_process, ev, data)
        netsim simulation (because the default simulation setup creates
        one node with address 1.1). */
     rimeaddr_copy(&to, &rimeaddr_null);
-    to.u8[0] = 41;
-    to.u8[1] = 41;
+    to.u8[0] = 4;
+    to.u8[1] = 4;
 
     /* Send the packet. */
     multihop_send(&multihop, &to);

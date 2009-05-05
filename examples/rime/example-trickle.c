@@ -66,11 +66,12 @@ PROCESS_THREAD(example_trickle_process, ev, data)
   PROCESS_BEGIN();
 
   trickle_open(&trickle, CLOCK_SECOND, 128, &trickle_call);
-  button_sensor.activate();
+//  button_sensor.activate();
 
   while(1) {
-    PROCESS_WAIT_EVENT_UNTIL(ev == sensors_event &&
-			     data == &button_sensor);
+    static struct etimer et;
+    etimer_set(&et, CLOCK_SECOND);
+    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
 
     packetbuf_copyfrom("Hello, world", 13);
     trickle_send(&trickle);

@@ -90,24 +90,26 @@ PROCESS_THREAD(example_mesh_process, ev, data)
     rimeaddr_t addr;
     static struct etimer et;
 
-    etimer_set(&et, CLOCK_SECOND);
+    etimer_set(&et, CLOCK_SECOND * 4); /* need to wait longer here than the ipolite wait --- otherwise you always cancel */
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
 
 //    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et) ||
 //			     (ev == sensors_event && data == &button_sensor));
 
-    printf("Button\n");
+//    printf("Button\n");
 
     /*
      * Send a message containing "Hej" (3 characters) to node number
      * 6.
      */
-    
+#if 0
     packetbuf_copyfrom("Hej", 3);
     rimeaddr_copy(&addr,&rimeaddr_null);
-    addr.u8[0] = 161;
-    addr.u8[1] = 161;
+    addr.u8[0] = 4;
+    addr.u8[1] = 4;
     mesh_send(&mesh, &addr);
+#endif
+
   }
   PROCESS_END();
 }

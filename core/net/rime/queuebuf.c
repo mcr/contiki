@@ -76,7 +76,7 @@ struct queuebuf_ref {
 MEMB(bufmem, struct queuebuf, QUEUEBUF_NUM);
 MEMB(refbufmem, struct queuebuf_ref, QUEUEBUF_REF_NUM);
 
-#define DEBUG 0
+#define DEBUG 1
 #if DEBUG
 #include <stdio.h>
 #define PRINTF(...) printf(__VA_ARGS__)

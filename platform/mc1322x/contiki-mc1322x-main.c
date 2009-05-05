@@ -51,6 +51,7 @@
 
 #include "net/rime.h"
 #include "net/rime/rimeaddr.h"
+#include "net/rime/ctimer.h"
 
 void
 init_lowlevel(void)
@@ -70,7 +71,8 @@ init_lowlevel(void)
 	flyback_init();
 	init_phy();
 	
-	set_power(0x0f); /* 0dbm */
+//	set_power(0x0f); /* 0dbm */
+	set_power(0x0); /* 0dbm */
 	set_channel(0); /* channel 11 */
 	
 }
@@ -82,7 +84,7 @@ init_lowlevel(void)
 
 //PROCINIT(&etimer_process, &blink8_process,&blink9_process,&blink10_process);
 //PROCINIT(&etimer_process, &blink8_process, &blink9_process, &blink10_process);
-PROCINIT(&etimer_process, &maca_process);
+PROCINIT(&etimer_process, &ctimer_process, &maca_process);
 //AUTOSTART_PROCESSES(&etimer_process, &blink8_process, &blink9_process, &blink10_process);
 //AUTOSTART_PROCESSES(&hello_world_process);
 
@@ -108,8 +110,8 @@ main(void)
 	rime_init(nullmac_init(&maca_driver));
 	
 	rimeaddr_copy(&addr,&rimeaddr_null);
-	addr.u8[0] = 161;
-	addr.u8[1] = 161;
+	addr.u8[0] = 1;
+	addr.u8[1] = 1;
 	rimeaddr_set_node_addr(&addr);
 	printf("Rime started with address ");
 	for(i = 0; i < sizeof(addr.u8) - 1; i++) {

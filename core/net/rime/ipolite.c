@@ -57,7 +57,7 @@
 #define MIN(a, b) ((a) < (b)? (a) : (b))
 #endif /* MIN */
 
-#define DEBUG 0
+#define DEBUG 1
 #if DEBUG
 #include <stdio.h>
 #define PRINTF(...) printf(__VA_ARGS__)
@@ -132,6 +132,7 @@ ipolite_close(struct ipolite_conn *c)
 int
 ipolite_send(struct ipolite_conn *c, clock_time_t interval, uint8_t hdrsize)
 {
+	PRINTF("ipolite_send: interval %d\n\r",interval);
   if(c->q != NULL) {
     /* If we are already about to send a packet, we cancel the old one. */
     PRINTF("%d.%d: ipolite_send: cancel old send\n",
@@ -152,8 +153,11 @@ ipolite_send(struct ipolite_conn *c, clock_time_t interval, uint8_t hdrsize)
   } else {
     c->q = queuebuf_new_from_packetbuf();
     if(c->q != NULL) {
+//      ctimer_set(&c->t,
+//		 interval / 2 + (random_rand() % (interval / 2)),
+//		 send, c);
       ctimer_set(&c->t,
-		 interval / 2 + (random_rand() % (interval / 2)),
+		 interval / 2 + interval/4,
 		 send, c);
       return 1;
     }

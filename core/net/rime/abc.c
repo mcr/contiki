@@ -90,9 +90,16 @@ void
 abc_input(struct channel *channel)
 {
   struct abc_conn *c = (struct abc_conn *)channel;
+  int i;
   PRINTF("%d.%d: abc: abc_input_packet on channel %d\n",
 	 rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1],
 	 channel->channelno);
+#if DEBUG
+  for(i = 0; i<packetbuf_datalen(); i++) {
+	  printf(" %02x",((char *)packetbuf_dataptr())[i]);
+  }
+  printf("\n\r");
+#endif
 
   c->u->recv(c);
 }
