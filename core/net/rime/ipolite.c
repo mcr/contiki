@@ -153,11 +153,8 @@ ipolite_send(struct ipolite_conn *c, clock_time_t interval, uint8_t hdrsize)
   } else {
     c->q = queuebuf_new_from_packetbuf();
     if(c->q != NULL) {
-//      ctimer_set(&c->t,
-//		 interval / 2 + (random_rand() % (interval / 2)),
-//		 send, c);
       ctimer_set(&c->t,
-		 interval / 2 + interval/4,
+		 interval / 2 + (random_rand() % (interval / 2)),
 		 send, c);
       return 1;
     }
