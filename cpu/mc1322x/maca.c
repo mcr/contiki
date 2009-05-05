@@ -28,6 +28,10 @@ static volatile uint8_t rx_buf[MAX_PACKET_SIZE]  __attribute__ ((aligned (4)));
 #define PRINTF(...) do {} while (0)
 #endif
 
+#ifndef MACA_RAW_PREPEND
+#define MACA_RAW_PREPEND 0xff
+#endif
+
 /* contiki mac driver */
 
 static void (* receiver_callback)(const struct radio_driver *);
@@ -68,11 +72,18 @@ int maca_read(void *buf, unsigned short bufsize) {
 	volatile uint32_t rx_size;
 	rx_size = reg32(MACA_GETRXLVL) - 4;
 	if(rx_size < bufsize) bufsize = rx_size;
+#if MACA_RAW_MODE
+	PRINTF("maca read: in raw mode bufsize 0x%0x \n\r",bufsize);
+	PRINTF("maca read:   \n\r");
+	for(i=2; i<=bufsize; i++) {
+	((uint8_t *)buf)[i-2] = rx_buf[i];
+#else
 	PRINTF("maca read: bufsize 0x%0x \n\r",bufsize);
 	PRINTF("maca read:   \n\r");
 	for(i=1; i<=bufsize; i++) {
-		PRINTF(" %0x",rx_buf[i]);
-		((uint8_t *)buf)[i-1] = rx_buf[i];
+	((uint8_t *)buf)[i-1] = rx_buf[i];
+#endif
+		PRINTF(" %02x",rx_buf[i]);
 	}
 	PRINTF("\n\r");
 	return bufsize;
@@ -90,46 +101,28 @@ int maca_send(const void *payload, unsigned short payload_len) {
 	set_bit(reg32(GPIO_DATA0),8);
 	ResumeMACASync();
 
-	for(retry=0; retry<4; retry++) {
+//	for(retry=0; retry<4; retry++) {
 
+/* the mc1322x promiscuous mode doen't appear to be entirely promiscuous */
+/* in MACA_RAW_MODE, all transmitted packets are prepended with MACA_RAW_PREPEND */
+/* received packets get stripped of this */
+/* i.e. it's "raw" with respect to the upper layers of RIME */
+#if MACA_RAW_MODE
+	PRINTF("maca: in raw mode sending 0x%0x + %d bytes\n\r", MACA_RAW_PREPEND, payload_len);
+	tx_buf[0] = MACA_RAW_PREPEND;
+	len++;
+	for(i=1; i<=payload_len; i++) {
+#else
 	PRINTF("maca: sending %d bytes\n\r", payload_len);
 	for(i=0; i<payload_len; i++) {
+#endif
 		/* copy payload into tx buf */
-		tx_buf[i] = ((uint8_t *)payload)[i];
-//		PRINTF(" %02x",((uint8_t *)payload)[i]);
-		PRINTF(" %02x",tx_buf[i]);
+		tx_buf[i] = ((uint8_t *)payload)[i-1];
+		PRINTF(" %02x",((uint8_t *)payload)[i-1]);
+//		PRINTF(" %02x",tx_buf[i]);
 	}
 	PRINTF("\n\r");
 
-	tx_buf[0]=0x82; 
-	tx_buf[1]=0x00 ;
-tx_buf[2]=	0x00 ;
-tx_buf[3]=	0x00 ;
-tx_buf[4]=	0x01 ;
-tx_buf[5]=	0x01;
-tx_buf[6]=	0x00 ;
-tx_buf[7]=	0x00 ;
-tx_buf[8]=	0x04 ;
-tx_buf[9]=	0x04 ;
-tx_buf[10]=	0x00 ;
-tx_buf[11]=	0x00 ;
-tx_buf[12]=	0x81 ;
-tx_buf[13]=	0x00 ;
-tx_buf[14]=	0x00 ;
-tx_buf[15]=	0x00 ;
-tx_buf[16]=	0x01 ;
-tx_buf[17]=	0x01 ;
-tx_buf[18]=	0x00 ;
-tx_buf[19]=	0x00 ;
-tx_buf[20]=	0x04 ;
-tx_buf[21]=	0x04 ;
-tx_buf[22]=	0x00 ;
-tx_buf[23]=	0x00;
-
-//	len=24;
-//	for(i=0; i<len; i++) {
-//		tx_buf[i] = 0;
-//	}
 
 	/* set dma tx pointer to the payload */
 	/* and set the tx len */
@@ -145,12 +138,9 @@ tx_buf[23]=	0x00;
 
 	/* wait for transmit to finish */
 	/* maybe wait until action complete instead? */
-
-//	for(j=0; j<1000000; j++) { continue; }
-
 	while(!action_complete_irq());
 	ResumeMACASync();
-	}
+//	}
 	clear_bit(reg32(GPIO_DATA0),8);
 	return 0;
 }
