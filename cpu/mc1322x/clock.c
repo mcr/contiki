@@ -38,40 +38,12 @@ clock_init()
 
 #define GPIO_DATA0      0x80000008
 
-static volatile uint8_t tmr_led,tmr_led9=0;
-
 void tmr0_isr(void) {
 	if(bit_is_set(reg16(TMR(0,CSCTRL)),TCF1)) {
 		current_clock++;
-		/* maybe blink out current clock somehow for debug?*/
-		/* maybe check if a bit is set in current_clock? */
-		/* that should give me a divided blink */
-		
-//		if(etimer_pending() && etimer_next_expiration_time() <= current_clock) {
 		if(etimer_pending()) {
 			etimer_request_poll();
-			/* dbg_printf("%d,%d\n", clock_time(),etimer_next_expiration_time  	()); */			
-
-			if(tmr_led == 0) {
-//				set_bit(reg32(GPIO_DATA0),10);
-				tmr_led = 1;
-			} else {
-//				clear_bit(reg32(GPIO_DATA0),10);
-				tmr_led = 0;
-			}
-
 		}
-
-/* 		if((current_clock % 32) == 0) { */
-/* 			if(tmr_led9 == 0) { */
-/* 				set_bit(reg32(GPIO_DATA0),9); */
-/* 				tmr_led9 = 1; */
-/* 			} else { */
-/* 				clear_bit(reg32(GPIO_DATA0),9); */
-/* 				tmr_led9 = 0; */
-/* 			} */
-/* 		} */
-
 		/* clear the compare flags */
 		clear_bit(reg16(TMR(0,SCTRL)),TCF);                
 		clear_bit(reg16(TMR(0,CSCTRL)),TCF1);                
