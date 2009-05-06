@@ -100,15 +100,6 @@ init_lowlevel(void)
 	
 }
 
-void
-kbi7_isr(void) 
-{
-	printf("button7\n\r");
-	clear_kbi_evnt(7);
-	return;
-}
-
-
 
 void
 set_rimeaddr(rimeaddr_t *addr) 

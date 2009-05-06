@@ -47,6 +47,16 @@
 #include "dev/leds.h"
 
 #include <stdio.h>
+#include <string.h>
+
+#include "kbi.h"
+#include "crm.h"
+#include "utils.h"
+
+#define NF_TIME 10
+#define NF_CHAN 1
+
+process_event_t ev_pressed;
 
 static struct mesh_conn mesh;
 /*---------------------------------------------------------------------------*/
@@ -63,52 +73,63 @@ timedout(struct mesh_conn *c)
 {
   printf("packet timedout\n");
 }
-static void
-recv(struct mesh_conn *c, const rimeaddr_t *from, uint8_t hops)
+
+static int
+nf_recv(struct netflood_conn *nf, rimeaddr_t *from,
+		      rimeaddr_t *originator, uint8_t seqno, uint8_t hops)
 {
-  printf("Data received from %d.%d: %.*s (%d)\n",
+  printf("NF data received from %d.%d: %.*s (%d)\n",
 	 from->u8[0], from->u8[1],
 	 packetbuf_datalen(), (char *)packetbuf_dataptr(), packetbuf_datalen());
+  printf(" %s",(char *)packetbuf_dataptr());
 
-  packetbuf_copyfrom("Hopp", 4);
-  mesh_send(&mesh, from);
+  return 1;
+
 }
 
-const static struct mesh_callbacks callbacks = {recv, sent, timedout};
+static struct netflood_conn nf;
+static const struct netflood_callbacks nf_cb = {nf_recv, NULL, NULL};
 
-/*---------------------------------------------------------------------------*/
+void
+kbi7_isr(void) 
+{
+	process_post(&example_mesh_process,ev_pressed,"button");
+	clear_kbi_evnt(7);
+	return;
+}
+
 PROCESS_THREAD(example_mesh_process, ev, data)
 {
-  PROCESS_EXITHANDLER(mesh_close(&mesh);)
+  PROCESS_EXITHANDLER(netflood_close(&nf);)
   PROCESS_BEGIN();
 
-  mesh_open(&mesh, 128, &callbacks);
+  netflood_open(&nf,NF_TIME,NF_CHAN,&nf_cb);
 
-//  button_sensor.activate();
+  ev_pressed = process_alloc_event();
 
   while(1) {
     rimeaddr_t addr;
     static struct etimer et;
+    static uint32_t tic = 0;
+    uint32_t i;
 
-    etimer_set(&et, CLOCK_SECOND * 4); /* need to wait longer here than the ipolite wait --- otherwise you always cancel */
-    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
+    etimer_set(&et, CLOCK_SECOND); 
 
-//    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et) ||
-//			     (ev == sensors_event && data == &button_sensor));
+    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et) ||
+			     (ev == ev_pressed));
 
-//    printf("Button\n");
-
-    /*
-     * Send a message containing "Hej" (3 characters) to node number
-     * 6.
-     */
-#if 0
-    packetbuf_copyfrom("Hej", 3);
-    rimeaddr_copy(&addr,&rimeaddr_null);
-    addr.u8[0] = 1;
-    addr.u8[1] = 1;
-    mesh_send(&mesh, &addr);
-#endif
+    if(ev == ev_pressed) 
+    {
+	    printf("netflood event\n\r");
+	    printf("data: %s\n\r",(char *)data);
+	    packetbuf_copyfrom(data,(uint16_t)strlen(data));
+	    netflood_send(&nf,tic);
+    }
+    
+    if(etimer_expired(&et)) 
+    {
+	    printf("tic %x\n\r",tic++);
+    }
 
   }
   PROCESS_END();
