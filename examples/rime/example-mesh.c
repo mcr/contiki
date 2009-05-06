@@ -54,7 +54,7 @@
 #include "utils.h"
 
 #define NF_TIME 10
-#define NF_CHAN 1
+#define NF_CHAN 128
 
 process_event_t ev_pressed;
 
@@ -81,7 +81,7 @@ nf_recv(struct netflood_conn *nf, rimeaddr_t *from,
   printf("NF data received from %d.%d: %.*s (%d)\n",
 	 from->u8[0], from->u8[1],
 	 packetbuf_datalen(), (char *)packetbuf_dataptr(), packetbuf_datalen());
-  printf(" %s",(char *)packetbuf_dataptr());
+  printf(" %s\n\r",(char *)packetbuf_dataptr());
 
   return 1;
 
@@ -125,7 +125,7 @@ PROCESS_THREAD(example_mesh_process, ev, data)
 	    packetbuf_copyfrom(data,(uint16_t)strlen(data));
 	    netflood_send(&nf,tic);
     }
-    
+
     if(etimer_expired(&et)) 
     {
 	    printf("tic %x\n\r",tic++);
