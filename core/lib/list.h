@@ -80,6 +80,10 @@
  * being a pointer. This pointer is used by the linked list library to
  * form the linked lists.
  *
+ * The list variable is declared as static to make it easy to use in a
+ * single C module without unnecessarily exporting the name to other
+ * modules. 
+ *
  * \param name The name of the list.
  */
 #define LIST(name) \
