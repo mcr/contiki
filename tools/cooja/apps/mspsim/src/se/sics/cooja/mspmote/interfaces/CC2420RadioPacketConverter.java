@@ -179,14 +179,14 @@ public class CC2420RadioPacketConverter {
     /*logger.info("Payload pos: " + pos);
     logger.info("Payload length: " + len);*/
 
+    byte originalData[] = new byte[originalLen];
+    System.arraycopy(data, 6, originalData, 0, originalLen);
     if (len < 0) {
       logger.fatal("Negative length radio packet. Conversion failed.");
-      return new ConvertedRadioPacket(new byte[0], new byte[0]);
+      return new ConvertedRadioPacket(new byte[0], originalData);
     }
     byte convertedData[] = new byte[len];
     System.arraycopy(data, pos, convertedData, 0, len);
-    byte originalData[] = new byte[originalLen];
-    System.arraycopy(data, 0, originalData, 0, originalLen);
     return new ConvertedRadioPacket(convertedData, originalData);
   }
 
