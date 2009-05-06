@@ -196,7 +196,7 @@ PT_THREAD(psock_send(struct psock *psock, const uint8_t *buf, unsigned int len))
  * \hideinitializer
  */
 #define PSOCK_SEND_STR(psock, str)      		\
-    PT_WAIT_THREAD(&((psock)->pt), psock_send(psock, str, strlen(str)))
+  PT_WAIT_THREAD(&((psock)->pt), psock_send(psock, (uint8_t *)str, strlen(str)))
 
 PT_THREAD(psock_generator_send(struct psock *psock,
 				unsigned short (*f)(void *), void *arg));
