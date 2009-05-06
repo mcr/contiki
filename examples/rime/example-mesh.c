@@ -52,6 +52,8 @@
 #include "kbi.h"
 #include "crm.h"
 #include "utils.h"
+#include "timer.h"
+#include "gpio.h"
 
 #define NF_TIME 10
 #define NF_CHAN 128
@@ -98,6 +100,60 @@ kbi7_isr(void)
 	return;
 }
 
+/* I can't get this to drive the output directly for some reason */
+/* should probably just toggle this in an interrupt for now... */
+
+void
+beep_init(void)
+{
+	/* timer setup */
+	/* CTRL */
+#define COUNT_MODE 1      /* use rising edge of primary source */
+#define PRIME_SRC  0xd    /* Perip. clock with 32 prescale (for 24Mhz = 187500Hz)*/
+#define SEC_SRC    0      /* don't need this */
+#define ONCE       0      /* keep counting */
+#define LEN        1      /* count until compare then reload with value in LOAD */
+#define DIR        0      /* count up */
+#define CO_INIT    0      /* other counters cannot force a re-initialization of this counter */
+#define OUT_MODE   3      /* toggle OFLAG */
+
+//	reg16(TMR_ENBL) = 0;                     /* tmrs reset to enabled */
+//	reg16(TMR2_SCTRL) = 1;                   /* output enable */
+	reg16(TMR2_CSCTRL) =0x0040;              /* enable compare 1 interrupt */
+	reg16(TMR2_LOAD) = 0;                    /* reload to zero */
+	reg16(TMR2_COMP_UP) = 187;             /* trigger a reload at the end */
+	reg16(TMR2_CMPLD1) = 187;              /* compare 1 triggered reload level, 10HZ maybe? */
+	reg16(TMR2_CNTR) = 0;                    /* reset count register */
+	reg16(TMR2_CTRL) = (COUNT_MODE<<13) | (PRIME_SRC<<9) | (SEC_SRC<<7) | (ONCE<<6) | (LEN<<5) | (DIR<<4) | (CO_INIT<<3) | (OUT_MODE);
+//	reg16(TMR_ENBL) = 0xf;                   /* enable all the timers --- why not? */
+
+
+}
+
+void tmr2_isr(void) {
+	static volatile uint8_t led10 = 0;
+
+	if(bit_is_set(reg16(TMR(2,CSCTRL)),TCF1)) {
+		if(led10 == 0) {
+			set_bit(reg32(GPIO_DATA0),10);
+			led10 = 1;
+//			  printf("Red\n\r");
+		} else {
+			clear_bit(reg32(GPIO_DATA0),10);
+			led10 = 0;
+		}
+		/* clear the compare flags */
+		clear_bit(reg16(TMR(2,SCTRL)),TCF);                
+		clear_bit(reg16(TMR(2,CSCTRL)),TCF1);                
+		clear_bit(reg16(TMR(2,CSCTRL)),TCF2);                
+		return;
+	} else {
+		/* this timer didn't create an interrupt condition */
+		return;
+	}
+}
+
+
 PROCESS_THREAD(example_mesh_process, ev, data)
 {
   PROCESS_EXITHANDLER(netflood_close(&nf);)
@@ -106,6 +162,8 @@ PROCESS_THREAD(example_mesh_process, ev, data)
   netflood_open(&nf,NF_TIME,NF_CHAN,&nf_cb);
 
   ev_pressed = process_alloc_event();
+
+  beep_init();
 
   while(1) {
     rimeaddr_t addr;
