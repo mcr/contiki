@@ -942,8 +942,9 @@ public class TimeLine extends VisPlugin {
 
         /* Ignore painting events with zero width */
         if (w == 0) {
-          ev = ev.next;
-          continue;
+	    /*          ev = ev.next;
+			continue;*/
+	    w = 1;
         }
         
         if (ev.state == RadioEvent.TRANSMISSION_STARTED) {
@@ -1000,10 +1001,10 @@ public class TimeLine extends VisPlugin {
         }
 
         /* Ignore painting events with zero width */
-        if (w == 0) {
-          ev = ev.next;
-          continue;
-        }
+	if (w == 0) {
+	    ev = ev.next;
+	    continue;
+	}
 
         g.setColor(Color.GRAY);
         g.fillRect(
