@@ -35,14 +35,10 @@
 
 #include <stdbool.h>
 
+/* contiki */
 #include "contiki.h"
 #include "contiki-net.h"
 #include "contiki-lib.h"
-
-#include "isr.h"
-#include "gpio.h"
-#include "uart1.h"
-#include "maca.h"
 
 #include "net/mac/frame802154.h"
 #include "net/mac/nullmac.h"
@@ -53,6 +49,23 @@
 #include "net/rime/rimeaddr.h"
 #include "net/rime/ctimer.h"
 
+/* mc1322x */
+#include "isr.h"
+#include "gpio.h"
+#include "uart1.h"
+#include "maca.h"
+#include "nvm.h"
+#include "kbi.h"
+
+
+#ifndef RIMEADDR_NVM
+#define RIMEADDR_NVM 0x1E000
+#endif
+
+#ifndef RIMEADDR_NBYTES
+#define RIMEADDR_NBYTES 8
+#endif
+
 void
 init_lowlevel(void)
 {
@@ -60,6 +73,16 @@ init_lowlevel(void)
 	set_bit(reg32(GPIO_PAD_DIR0),8);
 	set_bit(reg32(GPIO_PAD_DIR0),9);
 	set_bit(reg32(GPIO_PAD_DIR0),10);
+
+	/* button init */
+	/* set up kbi */
+	enable_irq_kbi(7);
+	kbi_edge(7);
+	enable_wu_en(7);
+	kbi_pol_neg(7);
+	gpio_sel0_pullup(29);
+
+	enable_irq(CRM);
 	
 	/* uart init */
 	uart1_init();
@@ -72,9 +95,40 @@ init_lowlevel(void)
 	init_phy();
 	
 //	set_power(0x0f); /* 0dbm */
-	set_power(0x0); /* 0dbm */
+	set_power(0x0); 
 	set_channel(0); /* channel 11 */
 	
+}
+
+void
+kbi7_isr(void) 
+{
+	printf("button7\n\r");
+	clear_kbi_evnt(7);
+	return;
+}
+
+
+
+void
+set_rimeaddr(rimeaddr_t *addr) 
+{
+	nvm_type_t type=0;
+	nvm_err_t err;	
+	volatile uint8_t buf[RIMEADDR_NBYTES];
+	int i;
+
+	err = nvm_detect(NVM_INTERFACE_INTERNAL, &type);
+
+	err = nvm_read(NVM_INTERFACE_INTERNAL, type, (uint8_t *)buf, RIMEADDR_NVM, RIMEADDR_NBYTES);
+
+	rimeaddr_copy(addr,&rimeaddr_null);
+
+	for(i=0; i<RIMEADDR_CONF_SIZE; i++) {		
+		addr->u8[i] = buf[i];
+	}
+
+	rimeaddr_set_node_addr(addr);
 }
 
 //PROCESS_NAME(blink8_process);
@@ -84,6 +138,7 @@ init_lowlevel(void)
 
 //PROCINIT(&etimer_process, &blink8_process,&blink9_process,&blink10_process);
 //PROCINIT(&etimer_process, &blink8_process, &blink9_process, &blink10_process);
+//PROCINIT(&etimer_process, &ctimer_process, &maca_process, &blink8_process,&blink9_process,&blink10_process);
 PROCINIT(&etimer_process, &ctimer_process, &maca_process);
 //AUTOSTART_PROCESSES(&etimer_process, &blink8_process, &blink9_process, &blink10_process);
 //AUTOSTART_PROCESSES(&hello_world_process);
@@ -108,11 +163,9 @@ main(void)
 	procinit_init();
 	
 	rime_init(nullmac_init(&maca_driver));
-	
-	rimeaddr_copy(&addr,&rimeaddr_null);
-	addr.u8[0] = 1;
-	addr.u8[1] = 1;
-	rimeaddr_set_node_addr(&addr);
+
+	set_rimeaddr(&addr);
+
 	printf("Rime started with address ");
 	for(i = 0; i < sizeof(addr.u8) - 1; i++) {
 		printf("%d.", addr.u8[i]);

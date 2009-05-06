@@ -2,13 +2,15 @@
 #define ISR_H
 
 #include "utils.h"
+#include "crm.h"
+#include "kbi.h"
 
 #define INTBASE (0x80020000)
 #define INTENNUM_OFF (0x8)
 #define INTSRC_OFF (0x30)
 
-#define INTENNUM INTBASE + INTENNUM_OFF
-#define INTSRC   INTBASE + INTSRC_OFF 
+#define INTENNUM (INTBASE + INTENNUM_OFF)
+#define INTSRC   (INTBASE + INTSRC_OFF) 
 
 enum interrupt_nums {
 	INT_NUM_ASM = 0,
@@ -32,6 +34,9 @@ extern void tmr0_isr(void) __attribute__((weak));
 extern void tmr1_isr(void) __attribute__((weak));
 extern void tmr2_isr(void) __attribute__((weak));
 extern void tmr3_isr(void) __attribute__((weak));
+
+#define crm_irq() (bit_is_set(reg32(INTSRC),INT_NUM_CRM))
+
 
 #endif
 

@@ -46,6 +46,9 @@
 #include "net/rime/rimeaddr.h"
 
 rimeaddr_t rimeaddr_node_addr;
+#if RIMEADDR_SIZE == 1
+const rimeaddr_t rimeaddr_null = { { 0 } };
+#else /*RIMEADDR_SIZE == 2*/
 #if RIMEADDR_SIZE == 2
 const rimeaddr_t rimeaddr_null = { { 0, 0 } };
 #else /*RIMEADDR_SIZE == 2*/
@@ -53,6 +56,7 @@ const rimeaddr_t rimeaddr_null = { { 0, 0 } };
 const rimeaddr_t rimeaddr_null = { { 0, 0, 0, 0, 0, 0, 0, 0 } };
 #endif /*RIMEADDR_SIZE == 8*/
 #endif /*RIMEADDR_SIZE == 2*/
+#endif /*RIMEADDR_SIZE == 1*/
 
 
 /*---------------------------------------------------------------------------*/

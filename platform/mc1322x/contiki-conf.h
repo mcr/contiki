@@ -77,7 +77,7 @@ typedef int32_t s32_t;
 #define MACA_DEBUG 1
 #define MACA_RAW_MODE 1
 
-#define RIMEADDR_CONF_SIZE       2
+#define RIMEADDR_CONF_SIZE       1
 #define PACKETBUF_CONF_SIZE 96
 
 

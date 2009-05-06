@@ -105,8 +105,8 @@ PROCESS_THREAD(example_mesh_process, ev, data)
 #if 0
     packetbuf_copyfrom("Hej", 3);
     rimeaddr_copy(&addr,&rimeaddr_null);
-    addr.u8[0] = 4;
-    addr.u8[1] = 4;
+    addr.u8[0] = 1;
+    addr.u8[1] = 1;
     mesh_send(&mesh, &addr);
 #endif
 

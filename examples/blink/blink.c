@@ -62,6 +62,7 @@ PROCESS_NAME(blink8_process);
 PROCESS_NAME(blink9_process);
 PROCESS_NAME(blink10_process);
 
+AUTOSTART_PROCESSES(&blink8_process,&blink9_process,&blink10_process);
 
 PROCESS_THREAD(blink8_process, ev, data)
 {
@@ -83,7 +84,7 @@ PROCESS_THREAD(blink8_process, ev, data)
 		  if(led8 == 0) {
 			  set_bit(reg32(GPIO_DATA0),8);
 			  led8 = 1;
-			  printf("Red\n\r");
+//			  printf("Red\n\r");
 		  } else {
 			  clear_bit(reg32(GPIO_DATA0),8);
 			  led8 = 0;
@@ -116,7 +117,7 @@ PROCESS_THREAD(blink9_process, ev, data)
 		  if(led9 == 0) {
 			  set_bit(reg32(GPIO_DATA0),9);
 			  led9 = 1;
-			  printf("Green\n\r");
+//			  printf("Green\n\r");
 		  } else {
 			  clear_bit(reg32(GPIO_DATA0),9);
 			  led9 = 0;
@@ -150,7 +151,7 @@ PROCESS_THREAD(blink10_process, ev, data)
 		  if(led10 == 0) {
 			  set_bit(reg32(GPIO_DATA0),10);
 			  led10 = 1;
-			  printf("Blue\n\r");
+//			  printf("Blue\n\r");
 		  } else {
 			  clear_bit(reg32(GPIO_DATA0),10);
 			  led10 = 0;

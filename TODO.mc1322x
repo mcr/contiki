@@ -1,4 +1,4 @@
-Things to do before submitting to contiki:
+Things to do:
 
 - Use the ROM data for radio init instead of hardcoding it
 
