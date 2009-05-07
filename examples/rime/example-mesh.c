@@ -58,7 +58,9 @@
 #define NF_TIME 10
 #define NF_CHAN 128
 
+static volatile int beeping=0;
 process_event_t ev_pressed;
+process_event_t ev_recv;
 
 static struct mesh_conn mesh;
 /*---------------------------------------------------------------------------*/
@@ -80,22 +82,37 @@ static int
 nf_recv(struct netflood_conn *nf, rimeaddr_t *from,
 		      rimeaddr_t *originator, uint8_t seqno, uint8_t hops)
 {
-  printf("NF data received from %d.%d: %.*s (%d)\n",
-	 from->u8[0], from->u8[1],
-	 packetbuf_datalen(), (char *)packetbuf_dataptr(), packetbuf_datalen());
-  printf(" %s\n\r",(char *)packetbuf_dataptr());
+  printf("NF data received from %d.%d: (%d)\n",
+	 from->u8[0], from->u8[1], packetbuf_datalen());
+
+  if(strncmp(packetbuf_dataptr(),"button",packetbuf_datalen())==0) {
+	  process_post(&example_mesh_process,ev_recv,"button");
+	  printf("posting recv event\n\r");
+  }
 
   return 1;
-
 }
 
 static struct netflood_conn nf;
 static const struct netflood_callbacks nf_cb = {nf_recv, NULL, NULL};
 
+static volatile uint8_t led10 = 0;
+
+#define beeper_on()  do {            \
+(reg16(TMR2_CSCTRL) =0x0040);        \
+} while(0)
+#define beeper_off()  do {            \
+(reg16(TMR2_CSCTRL) =0x0000);        \
+clear_bit(reg32(GPIO_DATA0),10);     \
+led10 = 0;                           \
+} while(0)
+
+
 void
 kbi7_isr(void) 
 {
 	process_post(&example_mesh_process,ev_pressed,"button");
+	process_post(&example_mesh_process,ev_recv,"button");
 	clear_kbi_evnt(7);
 	return;
 }
@@ -119,7 +136,9 @@ beep_init(void)
 
 //	reg16(TMR_ENBL) = 0;                     /* tmrs reset to enabled */
 //	reg16(TMR2_SCTRL) = 1;                   /* output enable */
-	reg16(TMR2_CSCTRL) =0x0040;              /* enable compare 1 interrupt */
+	reg16(TMR2_SCTRL) = 0;                   
+//	reg16(TMR2_CSCTRL) =0x0040;              /* enable compare 1 interrupt */
+	reg16(TMR2_CSCTRL) =0x0000;              /* enable compare 1 interrupt */
 	reg16(TMR2_LOAD) = 0;                    /* reload to zero */
 	reg16(TMR2_COMP_UP) = 187;             /* trigger a reload at the end */
 	reg16(TMR2_CMPLD1) = 187;              /* compare 1 triggered reload level, 10HZ maybe? */
@@ -131,13 +150,12 @@ beep_init(void)
 }
 
 void tmr2_isr(void) {
-	static volatile uint8_t led10 = 0;
 
-	if(bit_is_set(reg16(TMR(2,CSCTRL)),TCF1)) {
+	if(bit_is_set(reg16(TMR(2,CSCTRL)),TCF1) &&
+	   bit_is_set(reg16(TMR(2,CSCTRL)),TCF1EN)) {
 		if(led10 == 0) {
 			set_bit(reg32(GPIO_DATA0),10);
 			led10 = 1;
-//			  printf("Red\n\r");
 		} else {
 			clear_bit(reg32(GPIO_DATA0),10);
 			led10 = 0;
@@ -162,6 +180,7 @@ PROCESS_THREAD(example_mesh_process, ev, data)
   netflood_open(&nf,NF_TIME,NF_CHAN,&nf_cb);
 
   ev_pressed = process_alloc_event();
+  ev_recv = process_alloc_event();
 
   beep_init();
 
@@ -174,7 +193,9 @@ PROCESS_THREAD(example_mesh_process, ev, data)
     etimer_set(&et, CLOCK_SECOND); 
 
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et) ||
-			     (ev == ev_pressed));
+			     (ev == ev_pressed) ||
+			     (ev == ev_recv)
+	    );
 
     if(ev == ev_pressed) 
     {
@@ -184,8 +205,21 @@ PROCESS_THREAD(example_mesh_process, ev, data)
 	    netflood_send(&nf,tic);
     }
 
+    if(ev == ev_recv) 
+    {
+	    printf("recv event\n\r");
+	    printf("data: %s\n\r",(char *)data);
+
+	    if(strcmp(data,"button")==0) 
+	    {
+		    beeping = 1;
+		    beeper_on();
+	    }
+    }
+
     if(etimer_expired(&et)) 
     {
+	    beeper_off();
 	    printf("tic %x\n\r",tic++);
     }
 
