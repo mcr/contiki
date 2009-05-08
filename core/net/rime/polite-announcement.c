@@ -150,7 +150,7 @@ new_announcement(uint16_t id, uint16_t val)
 }
 /*---------------------------------------------------------------------------*/
 static const struct ipolite_callbacks ipolite_callbacks =
-  {adv_packet_received};
+  {adv_packet_received, NULL, NULL};
 /*---------------------------------------------------------------------------*/
 void
 polite_announcement_init(uint16_t channel,
