@@ -75,4 +75,7 @@ void shell_rime_init(void);
 /* Rime channel used by the 'download' command, which uses 2 channels */
 #define SHELL_RIME_CHANNEL_DOWNLOAD SHELL_RIME_CHANNEL_SENDTEST + 1
 
+/* Announcement idenfied used by the 'neighbors' command, uses one idenfier */
+#define SHELL_RIME_ANNOUNCEMENT_IDENTIFIER_NEIGHBORS SHELL_RIME_CHANNEL_DOWNLOAD + 2
+
 #endif /* __SHELL_RIME_H__ */
