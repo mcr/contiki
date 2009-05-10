@@ -94,8 +94,8 @@ init_lowlevel(void)
 	flyback_init();
 	init_phy();
 	
-//	set_power(0x0f); /* 0dbm */
-	set_power(0x0); 
+	set_power(0x0f); /* 0dbm */
+//	set_power(0x0); 
 	set_channel(0); /* channel 11 */
 	
 }
