@@ -9,6 +9,7 @@
 #include "maca.h"
 #include "nvm.h"
 #include "gpio.h"
+#include "crm.h"
 
 #ifndef MAX_PACKET_SIZE
 #define MAX_PACKET_SIZE 127
@@ -56,11 +57,21 @@ int maca_on(void) {
 #ifdef DISABLE_RECEPTION
 	PRINTF("reception is disabled\n\r");
 #endif /*DISABLE_RECEPTION*/	
+
+        /* turn the radio regulators back on */
+        reg32(CRM_VREG_CNTL) =  0x00000f78;
+        /* reinitialize the phy */
+        init_phy();
+
 	return 1;
 }
 
 int maca_off(void) {
 	PRINTF("maca off\n\r");
+        /* turn off the radio regulators */
+        reg32(CRM_VREG_CNTL) =  0x00000f00;
+        /* hold the maca in reset */
+	set_bit(reg32(MACA_RESET),maca_reset_rst);
 	return 1;
 }
 
