@@ -41,7 +41,6 @@
 #include "contiki.h"
 #include "contiki-net.h"
 #include "shell.h"
-#include "serial-shell.h"
 
 #include "twitter.h"
 
