@@ -80,7 +80,7 @@ httpd_fs_open(const char *name, struct httpd_fs_file *file)
 
     if(httpd_fs_strcmp(name, f->name) == 0) {
       file->data = f->data;
-      file->len = f->len;
+      file->len = f->len - 1;
 #if HTTPD_FS_STATISTICS
       ++count[i];
 #endif /* HTTPD_FS_STATISTICS */
