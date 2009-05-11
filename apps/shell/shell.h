@@ -353,7 +353,6 @@ struct shell_input {
  * @}
  */
 
-
 #include "shell-blink.h"
 #include "shell-checkpoint.h"
 #include "shell-coffee.h"
@@ -379,10 +378,12 @@ struct shell_input {
 #include "shell-rsh.h"
 #include "shell-run.h"
 #include "shell-sendtest.h"
+#include "shell-sensortweet.h"
 #include "shell-sky.h"
 #include "shell-tcpsend.h"
 #include "shell-text.h"
 #include "shell-time.h"
+#include "shell-tweet.h"
 #include "shell-udpsend.h"
 #include "shell-vars.h"
 #include "shell-wget.h"
