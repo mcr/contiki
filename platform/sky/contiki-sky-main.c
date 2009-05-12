@@ -177,8 +177,10 @@ set_gateway(void)
 {
   if(!is_gateway) {
     leds_on(LEDS_RED);
-    printf("%d.%d: making myself the IP network gateway.\n",
+    printf("%d.%d: making myself the IP network gateway.\n\n",
 	   rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1]);
+    printf("IPv4 address of the gateway: %d.%d.%d.%d\n\n",
+	   uip_ipaddr_to_quad(&uip_hostaddr));
     uip_over_mesh_set_gateway(&rimeaddr_node_addr);
     uip_over_mesh_make_announced_gateway();
     is_gateway = 1;
