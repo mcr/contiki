@@ -84,10 +84,9 @@
 #define TMR3_CMPLD2  (TMR3_BASE + TMR_REGOFF_CMPLD2)
 #define TMR3_CSCTRL  (TMR3_BASE + TMR_REGOFF_CSCTRL)
 
-#define TCF     15
-#define TCF1    4
-#define TCF1EN  6
-#define TCF2    5
+#define TCF  15
+#define TCF1 4
+#define TCF2 5
 
 #define TMR(num, reg)  CAT2(TMR,num,_##reg)
 
