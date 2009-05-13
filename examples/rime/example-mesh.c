@@ -47,6 +47,20 @@
 #include "dev/leds.h"
 
 #include <stdio.h>
+#include <string.h>
+
+#include "kbi.h"
+#include "crm.h"
+#include "utils.h"
+#include "timer.h"
+#include "gpio.h"
+
+#define NF_TIME 10
+#define NF_CHAN 128
+
+static volatile int beeping=0;
+process_event_t ev_pressed;
+process_event_t ev_recv;
 
 static struct mesh_conn mesh;
 /*---------------------------------------------------------------------------*/
@@ -63,52 +77,151 @@ timedout(struct mesh_conn *c)
 {
   printf("packet timedout\n");
 }
-static void
-recv(struct mesh_conn *c, const rimeaddr_t *from, uint8_t hops)
-{
-  printf("Data received from %d.%d: %.*s (%d)\n",
-	 from->u8[0], from->u8[1],
-	 packetbuf_datalen(), (char *)packetbuf_dataptr(), packetbuf_datalen());
 
-  packetbuf_copyfrom("Hopp", 4);
-  mesh_send(&mesh, from);
+static int
+nf_recv(struct netflood_conn *nf, rimeaddr_t *from,
+		      rimeaddr_t *originator, uint8_t seqno, uint8_t hops)
+{
+  printf("NF data received from %d.%d: (%d)\n",
+	 from->u8[0], from->u8[1], packetbuf_datalen());
+
+  if(strncmp(packetbuf_dataptr(),"button",packetbuf_datalen())==0) {
+	  process_post(&example_mesh_process,ev_recv,"button");
+	  printf("posting recv event\n\r");
+  }
+
+  return 1;
 }
 
-const static struct mesh_callbacks callbacks = {recv, sent, timedout};
+static struct netflood_conn nf;
+static const struct netflood_callbacks nf_cb = {nf_recv, NULL, NULL};
 
-/*---------------------------------------------------------------------------*/
+static volatile uint8_t led10 = 0;
+
+#define beeper_on()  do {            \
+(reg16(TMR2_CSCTRL) =0x0040);        \
+} while(0)
+#define beeper_off()  do {            \
+(reg16(TMR2_CSCTRL) =0x0000);        \
+clear_bit(reg32(GPIO_DATA0),10);     \
+led10 = 0;                           \
+} while(0)
+
+
+void
+kbi7_isr(void) 
+{
+	process_post(&example_mesh_process,ev_pressed,"button");
+	process_post(&example_mesh_process,ev_recv,"button");
+	clear_kbi_evnt(7);
+	return;
+}
+
+/* I can't get this to drive the output directly for some reason */
+/* should probably just toggle this in an interrupt for now... */
+
+void
+beep_init(void)
+{
+	/* timer setup */
+	/* CTRL */
+#define COUNT_MODE 1      /* use rising edge of primary source */
+#define PRIME_SRC  0xd    /* Perip. clock with 32 prescale (for 24Mhz = 187500Hz)*/
+#define SEC_SRC    0      /* don't need this */
+#define ONCE       0      /* keep counting */
+#define LEN        1      /* count until compare then reload with value in LOAD */
+#define DIR        0      /* count up */
+#define CO_INIT    0      /* other counters cannot force a re-initialization of this counter */
+#define OUT_MODE   3      /* toggle OFLAG */
+
+//	reg16(TMR_ENBL) = 0;                     /* tmrs reset to enabled */
+//	reg16(TMR2_SCTRL) = 1;                   /* output enable */
+	reg16(TMR2_SCTRL) = 0;                   
+//	reg16(TMR2_CSCTRL) =0x0040;              /* enable compare 1 interrupt */
+	reg16(TMR2_CSCTRL) =0x0000;              /* enable compare 1 interrupt */
+	reg16(TMR2_LOAD) = 0;                    /* reload to zero */
+	reg16(TMR2_COMP_UP) = 187;             /* trigger a reload at the end */
+	reg16(TMR2_CMPLD1) = 187;              /* compare 1 triggered reload level, 10HZ maybe? */
+	reg16(TMR2_CNTR) = 0;                    /* reset count register */
+	reg16(TMR2_CTRL) = (COUNT_MODE<<13) | (PRIME_SRC<<9) | (SEC_SRC<<7) | (ONCE<<6) | (LEN<<5) | (DIR<<4) | (CO_INIT<<3) | (OUT_MODE);
+//	reg16(TMR_ENBL) = 0xf;                   /* enable all the timers --- why not? */
+
+
+}
+
+void tmr2_isr(void) {
+
+	if(bit_is_set(reg16(TMR(2,CSCTRL)),TCF1) &&
+	   bit_is_set(reg16(TMR(2,CSCTRL)),TCF1EN)) {
+		if(led10 == 0) {
+			set_bit(reg32(GPIO_DATA0),10);
+			led10 = 1;
+		} else {
+			clear_bit(reg32(GPIO_DATA0),10);
+			led10 = 0;
+		}
+		/* clear the compare flags */
+		clear_bit(reg16(TMR(2,SCTRL)),TCF);                
+		clear_bit(reg16(TMR(2,CSCTRL)),TCF1);                
+		clear_bit(reg16(TMR(2,CSCTRL)),TCF2);                
+		return;
+	} else {
+		/* this timer didn't create an interrupt condition */
+		return;
+	}
+}
+
+
 PROCESS_THREAD(example_mesh_process, ev, data)
 {
-  PROCESS_EXITHANDLER(mesh_close(&mesh);)
+  PROCESS_EXITHANDLER(netflood_close(&nf);)
   PROCESS_BEGIN();
 
-  mesh_open(&mesh, 128, &callbacks);
+  netflood_open(&nf,NF_TIME,NF_CHAN,&nf_cb);
 
-//  button_sensor.activate();
+  ev_pressed = process_alloc_event();
+  ev_recv = process_alloc_event();
+
+  beep_init();
 
   while(1) {
     rimeaddr_t addr;
     static struct etimer et;
+    static uint32_t tic = 0;
+    uint32_t i;
 
-    etimer_set(&et, CLOCK_SECOND * 4); /* need to wait longer here than the ipolite wait --- otherwise you always cancel */
-    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
+    etimer_set(&et, CLOCK_SECOND); 
 
-//    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et) ||
-//			     (ev == sensors_event && data == &button_sensor));
+    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et) ||
+			     (ev == ev_pressed) ||
+			     (ev == ev_recv)
+	    );
 
-//    printf("Button\n");
+    if(ev == ev_pressed) 
+    {
+	    printf("netflood event\n\r");
+	    printf("data: %s\n\r",(char *)data);
+	    packetbuf_copyfrom(data,(uint16_t)strlen(data));
+	    netflood_send(&nf,tic);
+    }
 
-    /*
-     * Send a message containing "Hej" (3 characters) to node number
-     * 6.
-     */
-#if 0
-    packetbuf_copyfrom("Hej", 3);
-    rimeaddr_copy(&addr,&rimeaddr_null);
-    addr.u8[0] = 1;
-    addr.u8[1] = 1;
-    mesh_send(&mesh, &addr);
-#endif
+    if(ev == ev_recv) 
+    {
+	    printf("recv event\n\r");
+	    printf("data: %s\n\r",(char *)data);
+
+	    if(strcmp(data,"button")==0) 
+	    {
+		    beeping = 1;
+		    beeper_on();
+	    }
+    }
+
+    if(etimer_expired(&et)) 
+    {
+	    beeper_off();
+	    printf("tic %x\n\r",tic++);
+    }
 
   }
   PROCESS_END();

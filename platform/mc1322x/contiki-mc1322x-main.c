@@ -94,20 +94,11 @@ init_lowlevel(void)
 	flyback_init();
 	init_phy();
 	
-//	set_power(0x0f); /* 0dbm */
-	set_power(0x0); 
+	set_power(0x0f); /* 0dbm */
+//	set_power(0x0); 
 	set_channel(0); /* channel 11 */
 	
 }
-
-void
-kbi7_isr(void) 
-{
-	printf("button7\n\r");
-	clear_kbi_evnt(7);
-	return;
-}
-
 
 
 void
