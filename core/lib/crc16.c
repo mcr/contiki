@@ -67,13 +67,12 @@ unsigned short
 crc16_data(const unsigned char *data, int len, unsigned short acc)
 {
   int i;
-  unsigned short crc = 0;
   
   for(i = 0; i < len; ++i) {
-    crc = crc16_add(*data, crc);
+    acc = crc16_add(*data, acc);
     ++data;
   }
-  return crc;
+  return acc;
 }
 /*---------------------------------------------------------------------------*/
 
