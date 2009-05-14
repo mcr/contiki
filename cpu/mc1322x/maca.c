@@ -59,10 +59,8 @@ int maca_on(void) {
 #endif /*DISABLE_RECEPTION*/	
 
         /* turn the radio regulators back on */
-	set_bit(reg32(CRM_VREG_CNTL),3);
-	set_bit(reg32(CRM_VREG_CNTL),4);
-	set_bit(reg32(CRM_VREG_CNTL),5);
-	
+	reg32(CRM_VREG_CNTL) = reg32(CRM_VREG_CNTL) | 0x00000078;
+
 	/* reinitialize the phy */
         init_phy();
 
@@ -72,10 +70,8 @@ int maca_on(void) {
 int maca_off(void) {
 	PRINTF("maca off\n\r");
         /* turn off the radio regulators */
-	clear_bit(reg32(CRM_VREG_CNTL),3);
-	clear_bit(reg32(CRM_VREG_CNTL),4);
-	clear_bit(reg32(CRM_VREG_CNTL),5);
-	
+	reg32(CRM_VREG_CNTL) = reg32(CRM_VREG_CNTL) & (~0x00000078);
+
         /* hold the maca in reset */
 	set_bit(reg32(MACA_RESET),maca_reset_rst);
 	return 1;
