@@ -94,8 +94,8 @@ init_lowlevel(void)
 	flyback_init();
 	init_phy();
 	
-//	set_power(0x0f); /* 0dbm */
-	set_power(0x0); 
+	set_power(0x0f); /* 0dbm */
+//	set_power(0x0); 
 	set_channel(0); /* channel 11 */
 	
 }
@@ -103,8 +103,10 @@ init_lowlevel(void)
 void
 kbi7_isr(void) 
 {
+	set_bit(reg32(GPIO_DATA0),10);
 	printf("button7\n\r");
 	clear_kbi_evnt(7);
+	clear_bit(reg32(GPIO_DATA0),10);
 	return;
 }
 
