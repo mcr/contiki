@@ -48,6 +48,11 @@
 
 #include <stdio.h>
 
+#include "gpio.h"
+#include "utils.h"
+
+#define TIC 4
+
 static struct collect_conn tc;
 
 /*---------------------------------------------------------------------------*/
@@ -73,6 +78,7 @@ PROCESS_THREAD(example_collect_process, ev, data)
 
   collect_open(&tc, 128, &callbacks);
 
+	 
   while(1) {
     static struct etimer et;
     uint16_t tmp;
@@ -80,7 +86,7 @@ PROCESS_THREAD(example_collect_process, ev, data)
     /* Send a packet every 16 seconds; first wait 8 seconds, than a
        random time between 0 and 8 seconds. */
 
-    etimer_set(&et, CLOCK_SECOND * 16 + random_rand() % (CLOCK_SECOND * 16));
+    etimer_set(&et, CLOCK_SECOND * TIC + random_rand() % (CLOCK_SECOND * TIC));
     PROCESS_WAIT_EVENT();
 
     if(etimer_expired(&et)) {
@@ -89,18 +95,24 @@ PROCESS_THREAD(example_collect_process, ev, data)
       }
       printf("Sending\n");
       packetbuf_clear();
-      packetbuf_set_datalen(sprintf(packetbuf_dataptr(),
-				  "%s", "Hello") + 1);
+      if(bit_is_set(reg32(GPIO_DATA0),29)) {
+	      packetbuf_copyfrom("GPIO29-High",12);
+      } else {
+	      packetbuf_copyfrom("GPIO29-Low",11);
+      }
       collect_send(&tc, 4);
     }
 
-    if(ev == sensors_event) {
-      if(data == &button_sensor) {
-	printf("I am sink\n");
-	collect_set_sink(&tc, 1);
-      }
-    }
+//    if(ev == sensors_event) {
+//      if(data == &button_sensor) {
 
+    
+    if(rimeaddr_node_addr.u8[0] == 1) {
+	    printf("I am sink\n");
+	    collect_set_sink(&tc, 1);
+    }
+    
+    
   }
 
   PROCESS_END();
