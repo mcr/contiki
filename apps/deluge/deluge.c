@@ -183,23 +183,14 @@ init_page(struct deluge_object *obj, int pagenum, int have)
 static int
 file_size(const char *file)
 {
-  int fd, r, size;
-  char buf[32];
+  int fd, size;
 
   fd = cfs_open(file, CFS_READ);
   if(fd < 0) {
     return -1;
   }
 
-  size = 0;
-  do {
-    r = cfs_read(fd, buf, sizeof(buf));
-    if(r < 0) {
-      cfs_close(fd);
-      return -1;
-    }
-    size += r;
-  } while(r > 0);
+  size = cfs_seek(fd, 0, CFS_SEEK_END);
 
   cfs_close(fd);
   return size;
