@@ -63,6 +63,7 @@ timedout(struct mesh_conn *c)
 {
   printf("packet timedout\n");
 }
+
 static void
 recv(struct mesh_conn *c, const rimeaddr_t *from, uint8_t hops)
 {

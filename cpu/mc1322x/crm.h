@@ -33,4 +33,15 @@
 
 #define enable_wu_en(k) (set_bit(reg32(CRM_WU_CNTL),(EXT_WU_EN+k-4)))
 
+#define SLEEP_MODE_HIBERNATE (1<<0)
+#define SLEEP_MODE_DOZE      (1<<1)
+
+#define SLEEP_PAD_PWR    (1<<7)
+#define SLEEP_RETAIN_MCU (1<<6)
+#define sleep_ram_retain(x) (x<<4)   /* 0-3 */
+#define SLEEP_RAM_8K sleep_ram_retain(0)
+#define SLEEP_RAM_32K sleep_ram_retain(1)
+#define SLEEP_RAM_64K sleep_ram_retain(2)
+#define SLEEP_RAM_96K sleep_ram_retain(3)
+
 #endif
