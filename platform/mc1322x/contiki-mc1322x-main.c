@@ -78,7 +78,7 @@ init_lowlevel(void)
 	/* set up kbi */
 	enable_irq_kbi(7);
 	kbi_edge(7);
-	enable_wu_en(7);
+	enable_ext_wu(7);
 	kbi_pol_neg(7);
 	gpio_sel0_pullup(29);
 
@@ -99,18 +99,6 @@ init_lowlevel(void)
 	set_channel(0); /* channel 11 */
 	
 }
-
-void
-kbi7_isr(void) 
-{
-	set_bit(reg32(GPIO_DATA0),10);
-	printf("button7\n\r");
-	clear_kbi_evnt(7);
-	clear_bit(reg32(GPIO_DATA0),10);
-	return;
-}
-
-
 
 void
 set_rimeaddr(rimeaddr_t *addr) 

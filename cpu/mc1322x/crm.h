@@ -27,11 +27,24 @@
 #define EXT_WU_EN    4       /* 4 bits */ 
 #define EXT_WU_EDGE  8       /* 4 bits */ 
 #define EXT_WU_POL   12      /* 4 bits */ 
+#define TIMER_WU_EN  0 
+#define RTC_WU_EN    1 
 
 /* status bit locations */
 #define EXT_WU_EVT 4       /* 4 bits */
 
-#define enable_wu_en(k) (set_bit(reg32(CRM_WU_CNTL),(EXT_WU_EN+k-4)))
+/* enable external wake-ups on kbi 4-7 */ 
+/* see kbi.h for other kbi specific macros */
+#define enable_ext_wu(kbi) (set_bit(reg32(CRM_WU_CNTL),(EXT_WU_EN+kbi-4)))
+#define disable_ext_wu(kbi) (clear_bit(reg32(CRM_WU_CNTL),(EXT_WU_EN+kbi-4)))
+
+/* enable wake-up timer */
+#define enable_timer_wu() ((set_bit(reg32(CRM_WU_CNTL),(TIMER_WU_EN))))
+#define disable_timer_wu() ((clear_bit(reg32(CRM_WU_CNTL),(TIMER_WU_EN))))
+
+/* enable wake-up from RTC compare */
+#define enable_rtc_wu() ((set_bit(reg32(CRM_WU_CNTL),(RTC_WU_EN))))
+#define disable_rtc_wu() ((clear_bit(reg32(CRM_WU_CNTL),(RTC_WU_EN))))
 
 #define SLEEP_MODE_HIBERNATE (1<<0)
 #define SLEEP_MODE_DOZE      (1<<1)
