@@ -56,9 +56,15 @@
 #define TIC 4
 #define ON_BATTERY 1
 #define WAKE_TIME  10  /* seconds */
-#define SLEEP_TIME 30 /* seconds */
+#define SLEEP_TIME 3 /* seconds */
 
 static struct collect_conn tc;
+process_event_t ev_pressed;
+
+/*---------------------------------------------------------------------------*/
+PROCESS(example_collect_process, "Test collect process");
+AUTOSTART_PROCESSES(&example_collect_process);
+/*---------------------------------------------------------------------------*/
 
 #define REF_OSC 24000000UL          /* reference osc. frequency */
 #define NOMINAL_RING_OSC_SEC 2000 /* nominal ring osc. frequency */
@@ -66,15 +72,13 @@ static uint32_t hib_wake_secs;      /* calibrated hibernate wake seconds */
 
 void safe_sleep(void) {
 	reg32(CRM_WU_TIMEOUT) = hib_wake_secs * SLEEP_TIME;
-	reg32(CRM_WU_CNTL) = 0x1;
 //	sleep((SLEEP_RETAIN_MCU|SLEEP_RAM_64K),SLEEP_MODE_HIBERNATE);
-	sleep((SLEEP_RETAIN_MCU|SLEEP_RAM_64K),1);
+	sleep((SLEEP_RETAIN_MCU|SLEEP_RAM_96K),SLEEP_MODE_HIBERNATE);
 	enable_irq(TMR);
 	enable_irq(CRM);
 	uart1_init();
 	maca_on();
 	printf("awake\n\r");
-	set_bit(reg32(CRM_STATUS),1);
 }
 
 void report_state(void) {
@@ -93,15 +97,11 @@ kbi7_isr(void)
 	set_bit(reg32(GPIO_DATA0),10);
 	printf("button7\n\r");
 	clear_kbi_evnt(7);
+	process_post(&example_collect_process, ev_pressed, "GPIO29");
 	clear_bit(reg32(GPIO_DATA0),10);
-	report_state();
 	return;
 }
 
-/*---------------------------------------------------------------------------*/
-PROCESS(example_collect_process, "Test collect process");
-AUTOSTART_PROCESSES(&example_collect_process);
-/*---------------------------------------------------------------------------*/
 static void
 recv(const rimeaddr_t *originator, uint8_t seqno, uint8_t hops)
 {
@@ -119,6 +119,8 @@ uint32_t cal_factor;
 PROCESS_THREAD(example_collect_process, ev, data)
 {
   PROCESS_BEGIN();
+
+  ev_pressed = process_alloc_event();
 
   collect_open(&tc, 128, &callbacks);
 
@@ -150,16 +152,20 @@ PROCESS_THREAD(example_collect_process, ev, data)
     /* platform is set to wake up on kbi7 */
     /* safe_sleep sets it to sleep for SLEEP_TIME */
     etimer_set(&et, CLOCK_SECOND * WAKE_TIME);
-    PROCESS_WAIT_EVENT();
+    
+    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et) ||
+			     (ev == ev_pressed)
+	    );
 
 /*     if(etimer_expired(&et)) { */
 /* 	    safe_sleep(); */
 /*     } */
 
-    if(etimer_expired(&et)) {
-	    while(tc.forwarding) {
-		    PROCESS_PAUSE();
-	    }
+    if(etimer_expired(&et) ||
+       ev == ev_pressed) {
+//	    while(tc.forwarding) {
+//		    PROCESS_PAUSE();
+//	    }
 	    report_state();
 	    printf("going to sleep\n");
 	    safe_sleep();
