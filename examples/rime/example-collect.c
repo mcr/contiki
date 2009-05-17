@@ -56,7 +56,7 @@
 #define TIC 4
 #define ON_BATTERY 1
 #define WAKE_TIME  10  /* seconds */
-#define SLEEP_TIME 3 /* seconds */
+#define SLEEP_TIME 60 /* seconds */
 
 static struct collect_conn tc;
 process_event_t ev_pressed;
@@ -72,13 +72,16 @@ static uint32_t hib_wake_secs;      /* calibrated hibernate wake seconds */
 
 void safe_sleep(void) {
 	reg32(CRM_WU_TIMEOUT) = hib_wake_secs * SLEEP_TIME;
-//	sleep((SLEEP_RETAIN_MCU|SLEEP_RAM_64K),SLEEP_MODE_HIBERNATE);
-	sleep((SLEEP_RETAIN_MCU|SLEEP_RAM_96K),SLEEP_MODE_HIBERNATE);
+	sleep((SLEEP_RETAIN_MCU|SLEEP_RAM_64K),SLEEP_MODE_HIBERNATE);
+//	sleep((SLEEP_RETAIN_MCU|SLEEP_RAM_96K),SLEEP_MODE_HIBERNATE);
 	enable_irq(TMR);
 	enable_irq(CRM);
 	uart1_init();
 	maca_on();
 	printf("awake\n\r");
+	if(bit_is_set(reg32(CRM_STATUS),7)) {
+		printf("woke up from button\n\r");
+	}
 }
 
 void report_state(void) {

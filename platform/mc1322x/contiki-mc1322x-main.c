@@ -76,7 +76,7 @@ init_lowlevel(void)
 
 	/* button init */
 	/* set up kbi */
-	enable_irq_kbi(7);
+//	enable_irq_kbi(7);
 	kbi_edge(7);
 	enable_ext_wu(7);
 	kbi_pol_neg(7);
