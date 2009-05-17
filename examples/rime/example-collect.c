@@ -71,6 +71,14 @@ AUTOSTART_PROCESSES(&example_collect_process);
 static uint32_t hib_wake_secs;      /* calibrated hibernate wake seconds */
 
 void safe_sleep(void) {
+	/* set kbi wake up polarity to the opposite of the current reading */
+	if(bit_is_set(reg32(GPIO_DATA0),29)) {
+		printf("pol neg\n\r");
+		kbi_pol_neg(7);
+	} else {
+		printf("pol pos\n\r");
+		kbi_pol_pos(7);
+	}
 	reg32(CRM_WU_TIMEOUT) = hib_wake_secs * SLEEP_TIME;
 	sleep((SLEEP_RETAIN_MCU|SLEEP_RAM_64K),SLEEP_MODE_HIBERNATE);
 	enable_irq(TMR);
@@ -80,15 +88,16 @@ void safe_sleep(void) {
 	printf("awake\n\r");
 	if(bit_is_set(reg32(CRM_STATUS),7)) {
 		printf("woke up from button\n\r");
+		process_post(&example_collect_process, ev_pressed, "GPIO29");
 	}
 }
 
 void report_state(void) {
 	packetbuf_clear();
 	if(bit_is_set(reg32(GPIO_DATA0),29)) {
-		packetbuf_copyfrom("GPIO29-1",12);
+		packetbuf_copyfrom("GPIO29-1",9);
 	} else {
-		packetbuf_copyfrom("GPIO29-0",11);
+		packetbuf_copyfrom("GPIO29-0",9);
 	}
 	collect_send(&tc, 4);
 }
@@ -159,9 +168,11 @@ PROCESS_THREAD(example_collect_process, ev, data)
 			     (ev == ev_pressed)
 	    );
 
-    if(etimer_expired(&et) ||
-       ev == ev_pressed) {
+    if(etimer_expired(&et)) {
 	    report_state();
+	    while(tc.forwarding) {
+		    PROCESS_PAUSE();
+	    }
 	    printf("going to sleep\n");
 	    safe_sleep();
     }
@@ -171,12 +182,16 @@ PROCESS_THREAD(example_collect_process, ev, data)
     PROCESS_WAIT_EVENT();
 
     if(etimer_expired(&et)) {
+      report_state();
       while(tc.forwarding) {
 	PROCESS_PAUSE();
       }
-      report_state();
     }
 #endif
+
+    if(ev == ev_pressed) {
+	    report_state();
+    }
     
   }
 

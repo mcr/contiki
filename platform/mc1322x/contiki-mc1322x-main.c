@@ -80,7 +80,9 @@ init_lowlevel(void)
 	kbi_edge(7);
 	enable_ext_wu(7);
 	kbi_pol_neg(7);
-	gpio_sel0_pullup(29);
+//	kbi_pol_pos(7);
+//	gpio_sel0_pullup(29);
+	gpio_pu0_disable(29);
 
 	enable_irq(CRM);
 	
