@@ -87,9 +87,9 @@ void safe_sleep(void) {
 void report_state(void) {
 	packetbuf_clear();
 	if(bit_is_set(reg32(GPIO_DATA0),29)) {
-		packetbuf_copyfrom("GPIO29-High",12);
+		packetbuf_copyfrom("GPIO29-1",12);
 	} else {
-		packetbuf_copyfrom("GPIO29-Low",11);
+		packetbuf_copyfrom("GPIO29-0",11);
 	}
 	collect_send(&tc, 4);
 }
