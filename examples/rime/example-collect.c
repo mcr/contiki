@@ -73,7 +73,6 @@ static uint32_t hib_wake_secs;      /* calibrated hibernate wake seconds */
 void safe_sleep(void) {
 	reg32(CRM_WU_TIMEOUT) = hib_wake_secs * SLEEP_TIME;
 	sleep((SLEEP_RETAIN_MCU|SLEEP_RAM_64K),SLEEP_MODE_HIBERNATE);
-//	sleep((SLEEP_RETAIN_MCU|SLEEP_RAM_96K),SLEEP_MODE_HIBERNATE);
 	enable_irq(TMR);
 	enable_irq(CRM);
 	uart1_init();
@@ -160,15 +159,8 @@ PROCESS_THREAD(example_collect_process, ev, data)
 			     (ev == ev_pressed)
 	    );
 
-/*     if(etimer_expired(&et)) { */
-/* 	    safe_sleep(); */
-/*     } */
-
     if(etimer_expired(&et) ||
        ev == ev_pressed) {
-//	    while(tc.forwarding) {
-//		    PROCESS_PAUSE();
-//	    }
 	    report_state();
 	    printf("going to sleep\n");
 	    safe_sleep();
@@ -182,13 +174,9 @@ PROCESS_THREAD(example_collect_process, ev, data)
       while(tc.forwarding) {
 	PROCESS_PAUSE();
       }
-      printf("Sending\n");
       report_state();
     }
 #endif
-
-//    if(ev == sensors_event) {
-//      if(data == &button_sensor) {
     
   }
 
