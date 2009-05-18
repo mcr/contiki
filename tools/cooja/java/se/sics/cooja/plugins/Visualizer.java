@@ -947,7 +947,12 @@ public class Visualizer extends VisPlugin {
         String wanted = element.getText();
         for (Class<? extends VisualizerSkin> skinClass: visualizerSkins) {
           if (wanted.equals(GUI.getDescriptionOf(skinClass))) {
-            generateAndActivateSkin(skinClass);
+            final Class<? extends VisualizerSkin> skin = skinClass;
+            SwingUtilities.invokeLater(new Runnable() {
+              public void run() {
+                generateAndActivateSkin(skin);
+              }
+            });
             wanted = null;
             break;
           }
