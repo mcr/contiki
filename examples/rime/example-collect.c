@@ -56,7 +56,7 @@
 #define TIC 4
 #define ON_BATTERY 1
 #define WAKE_TIME  10  /* seconds */
-#define SLEEP_TIME 60 /* seconds */
+#define SLEEP_TIME 300 /* seconds */
 
 static struct collect_conn tc;
 process_event_t ev_pressed;
@@ -90,6 +90,7 @@ void safe_sleep(void) {
 		printf("woke up from button\n\r");
 		process_post(&example_collect_process, ev_pressed, "GPIO29");
 	}
+	clear_ext_wu_evt(7);
 }
 
 void report_state(void) {

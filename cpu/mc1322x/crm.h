@@ -38,6 +38,9 @@
 #define enable_ext_wu(kbi) (set_bit(reg32(CRM_WU_CNTL),(EXT_WU_EN+kbi-4)))
 #define disable_ext_wu(kbi) (clear_bit(reg32(CRM_WU_CNTL),(EXT_WU_EN+kbi-4)))
 
+#define is_ext_wu_evt(kbi) (bit_is_set(reg32(CRM_STATUS),(EXT_WU_EVT+kbi-4)))
+#define clear_ext_wu_evt(kbi) (set_bit(reg32(CRM_STATUS),(EXT_WU_EVT+kbi-4))) /* r1wc bit */
+
 /* enable wake-up timer */
 #define enable_timer_wu() ((set_bit(reg32(CRM_WU_CNTL),(TIMER_WU_EN))))
 #define disable_timer_wu() ((clear_bit(reg32(CRM_WU_CNTL),(TIMER_WU_EN))))
