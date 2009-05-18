@@ -1,5 +1,5 @@
 /* -*- C -*- */
-/* @(#)$Id: contiki-conf.h,v 1.50 2009/04/16 14:34:51 fros4943 Exp $ */
+/* @(#)$Id: contiki-conf.h,v 1.53 2009/05/18 10:32:56 fros4943 Exp $ */
 
 #ifndef CONTIKI_CONF_H
 #define CONTIKI_CONF_H
@@ -9,6 +9,8 @@
 #define RIME_CONF_NO_POLITE_ANNOUCEMENTS 1
 
 #define PACKETBUF_CONF_ATTRS_INLINE 1
+
+#define QUEUEBUF_CONF_NUM          16
 
 #define IEEE802154_CONF_PANID       0xABCD
 
@@ -39,8 +41,8 @@
 #endif /* RF_CHANNEL */
 
 #define ELFLOADER_CONF_TEXT_IN_ROM 0
-#define ELFLOADER_CONF_DATAMEMORY_SIZE 0x800
-#define ELFLOADER_CONF_TEXTMEMORY_SIZE 0x1000
+#define ELFLOADER_CONF_DATAMEMORY_SIZE 0x400
+#define ELFLOADER_CONF_TEXTMEMORY_SIZE 0x800
 
 #define IRQ_PORT1 0x01
 #define IRQ_PORT2 0x02
@@ -62,7 +64,7 @@
 /*#define PROCESS_CONF_FASTPOLL    4*/
 
 /* CPU target speed in Hz */
-#define F_CPU 2457600uL
+#define F_CPU 3900000uL /*2457600uL*/
 
 /* Our clock resolution, this is the same as Unix HZ. */
 #define CLOCK_CONF_SECOND 128

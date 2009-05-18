@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: lpp.c,v 1.20 2009/04/07 11:29:08 nvt-se Exp $
+ * $Id: lpp.c,v 1.22 2009/05/10 21:09:05 adamdunkels Exp $
  */
 
 /**
@@ -73,9 +73,48 @@
 #define PRINTF(...)
 #endif
 
-#define WITH_ACK_OPTIMIZATION         1
-#define WITH_PROBE_AFTER_RECEPTION    1
-#define WITH_PROBE_AFTER_TRANSMISSION 1
+#define WITH_ACK_OPTIMIZATION         0
+#define WITH_PROBE_AFTER_RECEPTION    0
+#define WITH_PROBE_AFTER_TRANSMISSION 0
+#define WITH_ENCOUNTER_OPTIMIZATION   1
+#define WITH_ADAPTIVE_OFF_TIME        0
+#define WITH_PENDING_BROADCAST        1
+
+#ifdef LPP_CONF_LISTEN_TIME
+#define LISTEN_TIME LPP_CONF_LISTEN_TIME
+#else
+#define LISTEN_TIME (CLOCK_SECOND / 128)
+#endif /** LP_CONF_LISTEN_TIME */
+
+#ifdef LPP_CONF_OFF_TIME
+#define OFF_TIME LPP_CONF_OFF_TIME
+#else
+#define OFF_TIME (CLOCK_SECOND / 2)
+#endif /* LPP_CONF_OFF_TIME */
+
+#define PACKET_LIFETIME (LISTEN_TIME + OFF_TIME)
+#define UNICAST_TIMEOUT	(4 * PACKET_LIFETIME)
+#define PROBE_AFTER_TRANSMISSION_TIME (LISTEN_TIME * 2)
+
+#define LOWEST_OFF_TIME (CLOCK_SECOND / 8)
+
+#define ENCOUNTER_LIFETIME (16 * OFF_TIME)
+
+#ifdef QUEUEBUF_CONF_NUM
+#define MAX_QUEUED_PACKETS QUEUEBUF_CONF_NUM / 2
+#else /* QUEUEBUF_CONF_NUM */
+#define MAX_QUEUED_PACKETS 4
+#endif /* QUEUEBUF_CONF_NUM */
+
+
+/* If CLOCK_SECOND is less than 4, we may end up with an OFF_TIME that
+   is 0 which will make compilation fail due to a modulo operation in
+   the code. To ensure that OFF_TIME is greater than zero, we use the
+   construct below. */
+#if OFF_TIME == 0
+#undef OFF_TIME
+#define OFF_TIME 1
+#endif
 
 struct announcement_data {
   uint16_t id;
@@ -107,46 +146,22 @@ static struct ctimer timer;
 
 static uint8_t is_listening = 0;
 static clock_time_t off_time_adjustment = 0;
-
-#ifdef LPP_CONF_LISTEN_TIME
-#define LISTEN_TIME LPP_CONF_LISTEN_TIME
-#else
-#define LISTEN_TIME (CLOCK_SECOND / 64)
-#endif /** LP_CONF_LISTEN_TIME */
-
-#ifdef LPP_CONF_OFF_TIME
-#define OFF_TIME LPP_CONF_OFF_TIME
-#else
-#define OFF_TIME (CLOCK_SECOND / 4)
-#endif /* LPP_CONF_OFF_TIME */
-
-/* If CLOCK_SECOND is less than 4, we may end up with an OFF_TIME that
-   is 0 which will make compilation fail due to a modulo operation in
-   the code. To ensure that OFF_TIME is greater than zero, we use the
-   construct below. */
-#if OFF_TIME == 0
-#undef OFF_TIME
-#define OFF_TIME 1
-#endif
-
-#define PACKET_LIFETIME (LISTEN_TIME + OFF_TIME)
-#define UNICAST_TIMEOUT	(2 * PACKET_LIFETIME)
-#define PROBE_AFTER_TRANSMISSION_TIME (LISTEN_TIME * 2)
-
-#define ENCOUNTER_LIFETIME (16 * OFF_TIME)
+static clock_time_t off_time = OFF_TIME;
 
 struct queue_list_item {
   struct queue_list_item *next;
   struct queuebuf *packet;
-  struct ctimer timer;
+  struct ctimer removal_timer;
   struct compower_activity compower;
+#if WITH_PENDING_BROADCAST
+  uint8_t broadcast_flag;
+#endif /* WITH_PENDING_BROADCAST */
 };
 
-#ifdef QUEUEBUF_CONF_NUM
-#define MAX_QUEUED_PACKETS QUEUEBUF_CONF_NUM / 2
-#else /* QUEUEBUF_CONF_NUM */
-#define MAX_QUEUED_PACKETS 4
-#endif /* QUEUEBUF_CONF_NUM */
+#define BROADCAST_FLAG_NONE    0
+#define BROADCAST_FLAG_WAITING 1
+#define BROADCAST_FLAG_PENDING 2
+#define BROADCAST_FLAG_SEND    3
 
 LIST(pending_packets_list);
 LIST(queued_packets_list);
@@ -168,14 +183,14 @@ static void
 turn_radio_on(void)
 {
   radio->on();
-  leds_on(LEDS_YELLOW);
+  /*  leds_on(LEDS_YELLOW);*/
 }
 /*---------------------------------------------------------------------------*/
 static void
 turn_radio_off(void)
 {
   radio->off();
-  leds_off(LEDS_YELLOW);
+  /*  leds_off(LEDS_YELLOW);*/
 }
 /*---------------------------------------------------------------------------*/
 static void
@@ -243,13 +258,16 @@ turn_radio_on_for_neighbor(rimeaddr_t *neighbor, struct queue_list_item *i)
   struct encounter *e;
 
   if(rimeaddr_cmp(neighbor, &rimeaddr_null)) {
+#if ! WITH_PENDING_BROADCAST
     /* We have been asked to turn on the radio for a broadcast, so we
        just turn on the radio. */
     turn_radio_on();
+#endif /* ! WITH_PENDING_BROADCAST */
     list_add(queued_packets_list, i);
     return;
   }
-  
+
+#if WITH_ENCOUNTER_OPTIMIZATION
   /* We go through the list of encounters to find if we have recorded
      an encounter with this particular neighbor. If so, we can compute
      the time for the next expected encounter and setup a ctimer to
@@ -285,6 +303,8 @@ turn_radio_on_for_neighbor(rimeaddr_t *neighbor, struct queue_list_item *i)
       return;
     }
   }
+#endif /* WITH_ENCOUNTER_OPTIMIZATION */
+  
   /* We did not find the neighbor in the list of recent encounters, so
      we just turn on the radio. */
   /*  printf("Neighbor %d.%d not found in recent encounters\n",
@@ -298,8 +318,12 @@ static void
 remove_queued_packet(void *item)
 {
   struct queue_list_item *i = item;
+  
+  PRINTF("%d.%d: removing queued packet\n",
+	 rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1]);
 
-  ctimer_stop(&i->timer);  
+  
+  ctimer_stop(&i->removal_timer);  
   queuebuf_free(i->packet);
   list_remove(pending_packets_list, i);
   list_remove(queued_packets_list, i);
@@ -312,6 +336,15 @@ remove_queued_packet(void *item)
 
   memb_free(&queued_packets_memb, i);
 }
+/*---------------------------------------------------------------------------*/
+#if WITH_PENDING_BROADCAST
+static void
+set_broadcast_flag(struct queue_list_item *i, uint8_t flag)
+{
+  i->broadcast_flag = flag;
+  ctimer_set(&i->removal_timer, PACKET_LIFETIME, remove_queued_packet, i);
+}
+#endif /* WITH_PENDING_BROADCAST */
 /*---------------------------------------------------------------------------*/
 static void
 listen_callback(int periods)
@@ -365,6 +398,25 @@ send_probe(void)
   compower_accumulate(&compower_idle_activity);
 }
 /*---------------------------------------------------------------------------*/
+static int
+num_packets_to_send(void)
+{
+#if WITH_PENDING_BROADCAST
+  struct queue_list_item *i;
+  int num = 0;
+  
+  for(i = list_head(queued_packets_list); i != NULL; i = i->next) {
+    if(i->broadcast_flag == BROADCAST_FLAG_SEND ||
+       i->broadcast_flag == BROADCAST_FLAG_NONE) {
+      ++num;
+    }
+  }
+  return num;
+#else /* WITH_PENDING_BROADCAST */
+  return list_length(queued_packets_list);
+#endif /* WITH_PENDING_BROADCAST */
+}
+/*---------------------------------------------------------------------------*/
 /**
  * Duty cycle the radio and send probes. This function is called
  * repeatedly by a ctimer. The function restart_dutycycle() is used to
@@ -379,6 +431,22 @@ dutycycle(void *ptr)
 
   while(1) {
 
+#if WITH_PENDING_BROADCAST
+    {
+	struct queue_list_item *p;
+	/* Before sending the probe, we mark all broadcast packets in
+	   our output queue to be pending. This means that they are
+	   ready to be sent, once we know that no neighbor is
+	   currently broadcasting. */
+	for(p = list_head(queued_packets_list); p != NULL; p = p->next) {
+	  if(p->broadcast_flag == BROADCAST_FLAG_WAITING) {
+	    PRINTF("wait -> pending\n");
+	    set_broadcast_flag(p, BROADCAST_FLAG_PENDING);
+	  }
+	}
+      }
+#endif /* WITH_PENDING_BROADCAST */
+
     /* Send a probe packet. */
     send_probe();
     
@@ -390,28 +458,56 @@ dutycycle(void *ptr)
     ctimer_set(t, LISTEN_TIME, (void (*)(void *))dutycycle, t);
     PT_YIELD(&dutycycle_pt);
 
+#if WITH_PENDING_BROADCAST
+    {
+      struct queue_list_item *p;
+      /* Go through the list of packets we are waiting to send, and
+	 check if there are any pending broadcasts in the list. If
+	 there are pending broadcasts, and we did not receive any
+	 broadcast packets from a neighbor in response to our probe,
+	 we mark the broadcasts as being ready to send. */
+      for(p = list_head(queued_packets_list); p != NULL; p = p->next) {
+	if(p->broadcast_flag == BROADCAST_FLAG_PENDING) {
+	  PRINTF("pending -> send\n");
+	  set_broadcast_flag(p, BROADCAST_FLAG_SEND);
+	  turn_radio_on();
+	}
+      }
+    }
+#endif /* WITH_PENDING_BROADCAST */
+
     /* If we have no packets to send (indicated by the list length of
        queued_packets_list being zero), we should turn the radio
        off. Othersize, we keep the radio on. */
-    
-    if(list_length(queued_packets_list) == 0) {
+    if(num_packets_to_send() == 0) {
       
       /* If we are not listening for announcements, we turn the radio
 	 off and wait until we send the next probe. */
       if(is_listening == 0) {
 	turn_radio_off();
 	compower_accumulate(&compower_idle_activity);
-	ctimer_set(t, OFF_TIME + off_time_adjustment, (void (*)(void *))dutycycle, t);
+	ctimer_set(t, off_time + off_time_adjustment, (void (*)(void *))dutycycle, t);
 	off_time_adjustment = 0;
 	PT_YIELD(&dutycycle_pt);
 
+#if WITH_ADAPTIVE_OFF_TIME
+	off_time += LOWEST_OFF_TIME;
+	if(off_time > OFF_TIME) {
+	  off_time = OFF_TIME;
+	}
+#endif /* WITH_ADAPTIVE_OFF_TIME */
+
       } else {
+	/* We are listening for annonucements, so we count down the
+	   listen time, and keep the radio on. */
 	is_listening--;
 	ctimer_set(t, OFF_TIME, (void (*)(void *))dutycycle, t);
 	PT_YIELD(&dutycycle_pt);
       }
     } else {
-      ctimer_set(t, OFF_TIME, (void (*)(void *))dutycycle, t);
+      /* We had pending packets to send, so we do not turn the radio off. */
+
+      ctimer_set(t, off_time, (void (*)(void *))dutycycle, t);
       PT_YIELD(&dutycycle_pt);
     }
   }
@@ -445,9 +541,13 @@ send_packet(void)
 {
   struct lpp_hdr hdr;
   clock_time_t timeout;
+  uint8_t is_broadcast = 0;
 
   rimeaddr_copy(&hdr.sender, &rimeaddr_node_addr);
   rimeaddr_copy(&hdr.receiver, packetbuf_addr(PACKETBUF_ADDR_RECEIVER));
+  if(rimeaddr_cmp(&hdr.receiver, &rimeaddr_null)) {
+    is_broadcast = 1;
+  }
   hdr.type = TYPE_DATA;
 
   packetbuf_hdralloc(sizeof(struct lpp_hdr));
@@ -465,6 +565,12 @@ send_packet(void)
     return 1;
   }
 #endif /* WITH_ACK_OPTIMIZATION */
+
+#if WITH_ADAPTIVE_OFF_TIME
+  off_time = LOWEST_OFF_TIME;
+  restart_dutycycle(off_time);
+#endif /* WITH_ADAPTIVE_OFF_TIME */
+
   {
     struct queue_list_item *i;
     i = memb_alloc(&queued_packets_memb);
@@ -474,17 +580,33 @@ send_packet(void)
 	memb_free(&queued_packets_memb, i);
 	return 0;
       } else {
-
-        timeout = UNICAST_TIMEOUT;
-        if(rimeaddr_cmp(&hdr.receiver, &rimeaddr_null)) {
+        if(is_broadcast) {
           timeout = PACKET_LIFETIME;
-        }
-	ctimer_set(&i->timer, timeout, remove_queued_packet, i);
+#if WITH_PENDING_BROADCAST
+	  /* We set the broadcast state of the packet to be
+	     waiting. This means that the packet is waiting for our
+	     next probe to be sent. Our next probe is used to check if
+	     there are any neighbors currently broadcasting a
+	     packet. If so, we will get a broadcast packet in response
+	     to our probe. If no broadcast packet is received in
+	     response to our probe, we mark the packet as ready to be
+	     sent. */
+	  set_broadcast_flag(i, BROADCAST_FLAG_WAITING);
+	  PRINTF("-> waiting\n");
+#endif /* WITH_PENDING_BROADCAST */
+        } else {
+	  timeout = UNICAST_TIMEOUT;
+#if WITH_PENDING_BROADCAST
+	  i->broadcast_flag = BROADCAST_FLAG_NONE;
+#endif /* WITH_PENDING_BROADCAST */
+	}
+	ctimer_set(&i->removal_timer, timeout, remove_queued_packet, i);
 
 	/* Wait for a probe packet from a neighbor. The actual packet
 	   transmission is handled by the read_packet() function,
 	   which receives the probe from the neighbor. */
         turn_radio_on_for_neighbor(&hdr.receiver, i);
+
       }
     }
   }
@@ -513,6 +635,7 @@ read_packet(void)
     hdr = packetbuf_dataptr();
     packetbuf_hdrreduce(sizeof(struct lpp_hdr));
     /*    PRINTF("got packet type %d\n", hdr->type);*/
+
     if(hdr->type == TYPE_PROBE) {
       /* Parse incoming announcements */
       struct announcement_msg *adata = packetbuf_dataptr();
@@ -533,8 +656,13 @@ read_packet(void)
 			   adata->data[i].value);
       }
 
+      /* Register the encounter with the sending node. We now know the
+	 neighbor's phase. */
       register_encounter(&hdr->sender, reception_time);
-      
+
+      /* Go through the list of packets to be sent to see if any of
+	 them match the sender of the probe, or if they are a
+	 broadcast packet that should be sent. */
       if(list_length(queued_packets_list) > 0) {
 	struct queue_list_item *i;
 	for(i = list_head(queued_packets_list); i != NULL; i = i->next) {
@@ -542,15 +670,34 @@ read_packet(void)
 	  
 	  qhdr = queuebuf_dataptr(i->packet);
 	  if(rimeaddr_cmp(&qhdr->receiver, &hdr->sender) ||
-	     rimeaddr_cmp(&qhdr->receiver, &rimeaddr_null)) {
-	    PRINTF("%d.%d: got a probe from %d.%d, sending packet to %d.%d\n",
+	      rimeaddr_cmp(&qhdr->receiver, &rimeaddr_null)) {
+	    queuebuf_to_packetbuf(i->packet);
+
+#if WITH_PENDING_BROADCAST
+	    if(i->broadcast_flag == BROADCAST_FLAG_NONE ||
+	       i->broadcast_flag == BROADCAST_FLAG_SEND) {
+	      radio->send(queuebuf_dataptr(i->packet),
+			  queuebuf_datalen(i->packet));
+	      PRINTF("%d.%d: got a probe from %d.%d, sent packet to %d.%d\n",
+		   rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1],
+		     hdr->sender.u8[0], hdr->sender.u8[1],
+		     qhdr->receiver.u8[0], qhdr->receiver.u8[1]);
+	      
+	    } else {
+	      PRINTF("%d.%d: got a probe from %d.%d, did not send packet\n",
+		     rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1],
+		     hdr->sender.u8[0], hdr->sender.u8[1]);
+	    }
+#else /* WITH_PENDING_BROADCAST */
+	    radio->send(queuebuf_dataptr(i->packet),
+			queuebuf_datalen(i->packet));
+	    PRINTF("%d.%d: got a probe from %d.%d, sent packet to %d.%d\n",
 		   rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1],
 		   hdr->sender.u8[0], hdr->sender.u8[1],
 		   qhdr->receiver.u8[0], qhdr->receiver.u8[1]);
-	    queuebuf_to_packetbuf(i->packet);
-	    
-	    radio->send(queuebuf_dataptr(i->packet),
-			queuebuf_datalen(i->packet));
+#endif /* WITH_PENDING_BROADCAST */
+
+
 
 	    /* Attribute the energy spent on listening for the probe
 	       to this packet transmission. */
@@ -570,7 +717,8 @@ read_packet(void)
 	    }
 
 #if WITH_ACK_OPTIMIZATION
-	    if(packetbuf_attr(PACKETBUF_ATTR_RELIABLE)) {
+	    if(packetbuf_attr(PACKETBUF_ATTR_RELIABLE) ||
+	       packetbuf_attr(PACKETBUF_ATTR_ERELIABLE)) {
 	      /* We're sending a packet that needs an ACK, so we keep
 		 the radio on in anticipation of the ACK. */
 	      turn_radio_on();
@@ -585,7 +733,7 @@ read_packet(void)
       PRINTF("%d.%d: got data from %d.%d\n",
 	     rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1],
 	     hdr->sender.u8[0], hdr->sender.u8[1]);
-      
+
       /* Accumulate the power consumption for the packet reception. */
       compower_accumulate(&current_packet);
       /* Convert the accumulated power consumption for the received
@@ -598,6 +746,27 @@ read_packet(void)
 	 for the next packet. */
       compower_clear(&current_packet);
 
+#if WITH_PENDING_BROADCAST
+      if(rimeaddr_cmp(&hdr->receiver, &rimeaddr_null)) {
+	/* This is a broadcast packet. Check the list of pending
+	   packets to see if we are currently sending a broadcast. If
+	   so, we refrain from sending our broadcast until one sleep
+	   cycle period, so that the other broadcaster will have
+	   finished sending. */
+	
+	struct queue_list_item *i;
+	for(i = list_head(queued_packets_list); i != NULL; i = i->next) {
+	  /* If the packet is a broadcast packet that is not yet
+	     ready to be sent, we do not send it. */
+	  if(i->broadcast_flag == BROADCAST_FLAG_PENDING) {
+	    PRINTF("Someone else is sending, pending -> waiting\n");
+	    set_broadcast_flag(i, BROADCAST_FLAG_WAITING);
+	  }
+	}
+      }
+#endif /* WITH_PENDING_BROADCAST */
+	    
+      
 #if WITH_PROBE_AFTER_RECEPTION
       /* XXX send probe after receiving a packet to facilitate data
         streaming. We must first copy the contents of the packetbuf into
@@ -612,6 +781,12 @@ read_packet(void)
         }
       }
 #endif /* WITH_PROBE_AFTER_RECEPTION */
+
+#if WITH_ADAPTIVE_OFF_TIME
+      off_time = LOWEST_OFF_TIME;
+      restart_dutycycle(off_time);
+#endif /* WITH_ADAPTIVE_OFF_TIME */
+      
     }
 
     len = packetbuf_datalen();
