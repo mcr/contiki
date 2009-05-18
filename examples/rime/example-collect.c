@@ -54,8 +54,9 @@
 #include "isr.h"
 
 #define TIC 4
-#define ON_BATTERY 1
-#define WAKE_TIME  10  /* seconds */
+#define ON_BATTERY 0
+#define CHIRP_INTERVAL  3  /* seconds */
+#define CHIRPS          3 
 #define SLEEP_TIME 300 /* seconds */
 
 static struct collect_conn tc;
@@ -157,45 +158,55 @@ PROCESS_THREAD(example_collect_process, ev, data)
   printf("hib_wake_secs: %d \n\nr", hib_wake_secs);
 
   while(1) {
-    static struct etimer et;
-    uint16_t tmp;
-
+	  static struct etimer et;
+	  static uint16_t chirps;
+	  
 #if ON_BATTERY
-    /* platform is set to wake up on kbi7 */
-    /* safe_sleep sets it to sleep for SLEEP_TIME */
-    etimer_set(&et, CLOCK_SECOND * WAKE_TIME);
-    
-    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et) ||
-			     (ev == ev_pressed)
-	    );
-
-    if(etimer_expired(&et)) {
-	    report_state();
-	    while(tc.forwarding) {
-		    PROCESS_PAUSE();
-	    }
-	    printf("going to sleep\n");
-	    safe_sleep();
-    }
-
+	  /* platform is set to wake up on kbi7 */
+	  /* safe_sleep sets it to sleep for SLEEP_TIME */
+	  chirps = 0;
+	  
+	  for(chirps=0; chirps<CHIRPS; chirps++) {
+		  
+		  etimer_set(&et, CLOCK_SECOND*CHIRP_INTERVAL);
+		  PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et) ||
+					   (ev == ev_pressed)
+			  );
+		  
+		  if(etimer_expired(&et) || 
+		     (ev == ev_pressed)) {
+			  printf("chirp %d\n\r",chirps);
+			  while(tc.forwarding) {
+				  PROCESS_PAUSE();
+			  }
+			  report_state();
+		  }
+	  }
+	  
+	  printf("going to sleep\n");
+	  safe_sleep();
+	  
 #else
-    etimer_set(&et, CLOCK_SECOND * TIC + random_rand() % (CLOCK_SECOND * TIC));
-    PROCESS_WAIT_EVENT();
+	  etimer_set(&et, CLOCK_SECOND * TIC + random_rand() % (CLOCK_SECOND * TIC));
+	  PROCESS_WAIT_EVENT();
+	  
+	  if(etimer_expired(&et)) {
+		  while(tc.forwarding) {
+			  PROCESS_PAUSE();
+		  }
+		  report_state();
+	  }
 
-    if(etimer_expired(&et)) {
-      report_state();
-      while(tc.forwarding) {
-	PROCESS_PAUSE();
-      }
-    }
+//	  if(ev == ev_pressed) {
+//		  report_state();
+//	  }
+
+
 #endif
-
-    if(ev == ev_pressed) {
-	    report_state();
-    }
-    
+	  
+	  
   }
-
+  
   PROCESS_END();
 }
 /*---------------------------------------------------------------------------*/
