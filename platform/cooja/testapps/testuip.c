@@ -67,16 +67,16 @@ PROCESS_THREAD(test_uip_process, ev, data)
       tcpip_poll_udp(broadcast_conn);
       PROCESS_WAIT_UNTIL(ev == tcpip_event && uip_poll());
       uip_send("cooyah COOJA", 12);
-    }
-
-    if(ev == sensors_event && data == &button_sensor && !button_sensor.value(0)) {
+    } else if(ev == sensors_event && data == &button_sensor && !button_sensor.value(0)) {
       printf("button released, ignoring event\n");
-    }
-
-    if(ev == tcpip_event && uip_newdata()) {
+    } else if(ev == sensors_event) {
+      printf("unknown sensor event: %s\n", ((struct sensors_sensor *)data)->type);
+    } else if(ev == tcpip_event && uip_newdata()) {
       printf("a packet was received, toggling leds\n");
       printf("packet data: '%s'\n", (char*) uip_appdata);
       leds_toggle(LEDS_ALL);
+    } else {
+      printf("unknown event: %d\n", ev);
     }
   }
 
