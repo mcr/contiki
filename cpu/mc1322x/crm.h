@@ -33,6 +33,17 @@
 /* status bit locations */
 #define EXT_WU_EVT 4       /* 4 bits */
 
+/* RINGOSC_CNTL bit locations */
+#define ROSC_CTUNE 9       /* 4 bits */
+#define ROSC_FTUNE 4       /* 4 bits */
+#define ROSC_EN    0
+
+#define ring_osc_on() (set_bit(reg32(CRM_RINGOSC_CNTL),ROSC_EN))
+#define ring_osc_off() (clear_bit(reg32(CRM_RINGOSC_CNTL),ROSC_EN))
+
+/* XTAL32_CNTL bit locations */
+#define XTAL32_GAIN 4      /* 2 bits */
+
 /* enable external wake-ups on kbi 4-7 */ 
 /* see kbi.h for other kbi specific macros */
 #define enable_ext_wu(kbi) (set_bit(reg32(CRM_WU_CNTL),(EXT_WU_EN+kbi-4)))
@@ -49,11 +60,11 @@
 #define enable_rtc_wu() ((set_bit(reg32(CRM_WU_CNTL),(RTC_WU_EN))))
 #define disable_rtc_wu() ((clear_bit(reg32(CRM_WU_CNTL),(RTC_WU_EN))))
 
-#define SLEEP_MODE_HIBERNATE (1<<0)
-#define SLEEP_MODE_DOZE      (1<<1)
+#define SLEEP_MODE_HIBERNATE bit(0)
+#define SLEEP_MODE_DOZE      bit(1)
 
-#define SLEEP_PAD_PWR    (1<<7)
-#define SLEEP_RETAIN_MCU (1<<6)
+#define SLEEP_PAD_PWR     bit(7)
+#define SLEEP_RETAIN_MCU bit(6)
 #define sleep_ram_retain(x) (x<<4)   /* 0-3 */
 #define SLEEP_RAM_8K sleep_ram_retain(0)
 #define SLEEP_RAM_32K sleep_ram_retain(1)
