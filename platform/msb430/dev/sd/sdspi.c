@@ -111,6 +111,10 @@ sdspi_dma_wait(void)
 void
 sdspi_read(void *pDestination, const uint16_t size, const bool incDest)
 {
+  int s;
+
+  s = splhigh();
+
 #if SPI_DMA_READ
   sdspi_dma_wait();
 
@@ -153,12 +157,17 @@ sdspi_read(void *pDestination, const uint16_t size, const bool incDest)
     i--;
   } while (i);
 #endif
+
+  splx(s);
 }
 
 #if SPI_WRITE
 void
 sdspi_write(const void *pSource, const uint16_t size, const int increment)
 {
+  int s;
+
+  s = splhigh();
 #if SPI_DMA_WRITE
   sdspi_dma_wait();
 
@@ -191,6 +200,8 @@ sdspi_write(const void *pSource, const uint16_t size, const int increment)
     i--;
   } while (i);
 #endif
+
+  splx(s);
 }
 #endif
 
