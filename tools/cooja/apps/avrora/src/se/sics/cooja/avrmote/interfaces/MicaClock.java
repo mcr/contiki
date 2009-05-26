@@ -63,12 +63,12 @@ public class MicaClock extends Clock {
     return time > 0 ? time : 0;
   }
 
-  public void setDrift(int drift) {
-    myMote.cycleDrift = MicaZMote.NR_CYCLES_PER_MSEC * drift;
+  public void setDrift(long drift) {
+    myMote.cycleDrift = Simulation.MILLISECOND * MicaZMote.NR_CYCLES_PER_MSEC * drift;
   }
 
-  public int getDrift() {
-    return (int) (myMote.cycleDrift / MicaZMote.NR_CYCLES_PER_MSEC);
+  public long getDrift() {
+    return (long) ((double)myMote.cycleDrift / MicaZMote.NR_CYCLES_PER_MSEC / Simulation.MILLISECOND);
   }
 
   public JPanel getInterfaceVisualizer() {
