@@ -88,7 +88,7 @@ public class LogListener extends VisPlugin {
         if (lastMessage.length() > 0 && lastMessage.charAt(lastMessage.length() - 1) == '\n') {
           lastMessage = lastMessage.substring(0, lastMessage.length() - 1);
         }
-        String outputString = "TIME:" + simulation.getSimulationTime() + "\t";
+        String outputString = "TIME:" + simulation.getSimulationTimeMillis() + "\t";
         if (mote != null && mote.getInterfaces().getMoteID() != null) {
           outputString += "ID:" + mote.getInterfaces().getMoteID().getMoteID() + "\t";
         }
@@ -247,8 +247,8 @@ public class LogListener extends VisPlugin {
 
     setTitle("Log Listener - Listening on " + nrLogs + " mote logs");
     pack();
-    setSize(gui.getDesktopPane().getWidth(), getHeight());
-    setLocation(0, gui.getDesktopPane().getHeight() - getHeight());
+    setSize(gui.getDesktopPane().getWidth(), 150);
+    setLocation(0, gui.getDesktopPane().getHeight() - 300);
 
     try {
       setSelected(true);

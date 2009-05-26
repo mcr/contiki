@@ -86,8 +86,8 @@ public class ScriptRunner implements Plugin {
     " */\n" +
     "\n" +
     "/* Make test automatically fail (timeout) after 100 simulated seconds */\n" +
-    "//TIMEOUT(100000); /* no action at timeout */\n" +
-    "TIMEOUT(100000, log.log(\"last msg: \" + msg + \"\\n\")); /* print last msg at timeout */\n" +
+    "//TIMEOUT(100000); /* milliseconds. no action at timeout */\n" +
+    "TIMEOUT(100000, log.log(\"last msg: \" + msg + \"\\n\")); /* milliseconds. print last msg at timeout */\n" +
     "\n" +
     "log.log(\"first mote output: '\" + msg + \"'\\n\");\n" +
     "\n" +

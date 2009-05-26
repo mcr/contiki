@@ -38,6 +38,8 @@ import javax.script.ScriptException;
 
 import org.apache.log4j.Logger;
 
+import se.sics.cooja.Simulation;
+
 public class ScriptParser {
   private static final long serialVersionUID = 1L;
   private static Logger logger = Logger.getLogger(ScriptParser.class);
@@ -130,7 +132,7 @@ public class ScriptParser {
       throw new ScriptSyntaxErrorException("Only one timeout handler allowed");
     }
 
-    timeoutTime = Long.parseLong(matcher.group(1));
+    timeoutTime = Long.parseLong(matcher.group(1))*Simulation.MILLISECOND;
     timeoutCode = ";";
 
     matcher.reset(code);
@@ -161,7 +163,7 @@ public class ScriptParser {
       throw new ScriptSyntaxErrorException("Only one timeout handler allowed");
     }
 
-    timeoutTime = Long.parseLong(matcher.group(1));
+    timeoutTime = Long.parseLong(matcher.group(1))*Simulation.MILLISECOND;
     timeoutCode = matcher.group(2);
 
     matcher.reset(code);
@@ -228,7 +230,7 @@ public class ScriptParser {
     Matcher matcher = pattern.matcher(code);
 
     while (matcher.find()) {
-      long time = Long.parseLong(matcher.group(1));
+      long time = Long.parseLong(matcher.group(1))*Simulation.MILLISECOND;
       String msg = matcher.group(2);
 
       code = matcher.replaceFirst(
