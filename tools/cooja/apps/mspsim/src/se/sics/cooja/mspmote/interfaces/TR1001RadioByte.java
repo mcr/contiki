@@ -40,14 +40,11 @@ public class TR1001RadioByte {
 
   private byte b;
 
-  private long delay;
-
   /**
    * Creates new TR1001 radio byte
    */
-  public TR1001RadioByte(byte b, long delay) {
+  public TR1001RadioByte(byte b) {
     this.b = b;
-    this.delay = delay;
   }
 
   /**
@@ -55,13 +52,6 @@ public class TR1001RadioByte {
    */
   public byte getByte() {
     return b;
-  }
-
-  /**
-   * @return Cycle delay since previous byte
-   */
-  public long getDelay() {
-    return delay;
   }
 
 }
