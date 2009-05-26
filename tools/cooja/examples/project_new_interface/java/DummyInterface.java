@@ -76,9 +76,6 @@ public class DummyInterface extends MoteInterface implements ContikiMoteInterfac
   }
 
   public void doActionsBeforeTick() {
-    /* Wake up potentially sleeping Contiki mote */
-    mote.setState(Mote.State.ACTIVE);
-
     logger.debug("Java-part of dummy interface acts BEFORE mote tick: " + memory.getByteValueOf("simDummyVar"));
   }
 
