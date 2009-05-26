@@ -7,7 +7,7 @@
  * \defgroup rimeaddr Rime addresses
  * @{
  *
- * The rimeaddr module is an abstract repressentation of addresses in
+ * The rimeaddr module is an abstract representation of addresses in
  * Rime.
  *
  */
@@ -47,7 +47,7 @@
 
 /**
  * \file
- *         Header file for the Rime address repressentation
+ *         Header file for the Rime address representation
  * \author
  *         Adam Dunkels <adam@sics.se>
  */

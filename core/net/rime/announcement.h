@@ -76,7 +76,7 @@ typedef void (*announcement_callback_t)(struct announcement *a,
 					uint16_t id, uint16_t val);
 
 /**
- * \brief      Repressentation of an announcement.
+ * \brief      Representation of an announcement.
  *
  *             This structure holds the state of an announcement. It
  *             is an opaque structure with no user-visible elements.
@@ -154,7 +154,7 @@ void announcement_set_value(struct announcement *a, uint16_t value);
 void announcement_set_id(struct announcement *a, uint16_t id);
 
 /**
- * \brief      Listen for announcements for a spefic amount of
+ * \brief      Listen for announcements for a specific amount of
  *             announcement periods
  * \param periods The number of periods to listen for announcement
  *

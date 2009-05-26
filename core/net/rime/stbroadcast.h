@@ -9,7 +9,7 @@
  *
  * The stbroadcast module provides stubborn anonymous best-effort local area
  * broadcast. A message sent with the stbroadcast module is repeated until
- * either the mssage is canceled or a new message is sent. Messages
+ * either the message is canceled or a new message is sent. Messages
  * sent with the stbroadcast module are not identified with a sender ID.
  *
  * \section channels Channels
