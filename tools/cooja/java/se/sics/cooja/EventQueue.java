@@ -189,6 +189,14 @@ public class EventQueue {
     return tmp;
   }
 
+  public TimeEvent peekFirst() {
+    if (hasUnsortedEvents) {
+      sortEvents();
+    }
+
+    return first;
+  }
+
   public String toString() {
     return "EventQueue with " + (eventCount+unsortedEvents.size()) + " events";
   }
