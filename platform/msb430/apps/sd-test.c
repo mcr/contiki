@@ -47,7 +47,7 @@
 
 #define BLOCK_SIZE	512UL
 
-#define CALM_MODE	0
+#define CALM_MODE	1
 #define ALTER_OFFSET	0
 
 /*---------------------------------------------------------------------------*/
@@ -69,7 +69,7 @@ PROCESS_THREAD(test_sd_process, ev, data)
   printf("starting the SD test\n");
 
   while(1) {
-    printf("\n\nIteration %u\n", ++iter);
+    printf("\n\nIteration %lu\n", ++iter);
     sprintf(buf, "Testing the SD memory #%lu.", iter);
 
 #if CALM_MODE
@@ -80,7 +80,7 @@ PROCESS_THREAD(test_sd_process, ev, data)
 #endif
     offset = BLOCK_SIZE;
 #if ALTER_OFFSET
-    offset *= (random_rand() & 0xff));
+    offset *= (random_rand() & 0xff);
 #endif
 
     r = sd_write_block(offset, &buf);
