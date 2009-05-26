@@ -264,7 +264,7 @@ public class RadioLogger extends VisPlugin {
       "<b>Packet data (" + original.length + " bytes)</b><br>" +
       "<pre>" + StringUtils.hexDump(original) + "</pre>" +
       "</font><font face=\"Monospaced\">" +
-      "<b>Cross-level packet data conversion failed</b><br>" +
+      "<b>No cross-level conversion available</b><br>" +
       "</font></html>";
     } else {
       byte[] data = packet.getPacketData();
