@@ -61,7 +61,7 @@ PROCESS_THREAD(test_sd_process, ev, data)
   static struct etimer et;
 #endif
   static int r;
-  static unsigned iter;
+  static unsigned long iter;
   static uint32_t offset;
 
   PROCESS_BEGIN();
@@ -70,7 +70,7 @@ PROCESS_THREAD(test_sd_process, ev, data)
 
   while(1) {
     printf("\n\nIteration %u\n", ++iter);
-    sprintf(buf, "Testing the SD memory #%u.", iter);
+    sprintf(buf, "Testing the SD memory #%lu.", iter);
 
 #if CALM_MODE
     etimer_set(&et, CLOCK_SECOND);
