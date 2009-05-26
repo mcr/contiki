@@ -61,11 +61,20 @@ public abstract class Clock extends MoteInterface {
    *
    * @param timeDrift Time drift
    */
-  public abstract void setDrift(int timeDrift);
+  public abstract void setDrift(long timeDrift);
 
   /**
+   * The clock drift provides information about the mote's internal time,
+   * and can the used to calculate for instance its startup time.
+   * 
+   * The startup time is the negative drift time.
+   * 
+   * The mote internal time can be calculated by:
+   * [current simulation time] + [mote drift].
+   * 
+   * @see Simulation#getSimulationTime()
    * @return Time drift
    */
-  public abstract int getDrift();
+  public abstract long getDrift();
 
 }

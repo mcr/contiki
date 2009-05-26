@@ -75,7 +75,7 @@ public class RimeAddress extends MoteInterface {
         /* Postpone until address has been set */
         mote.getSimulation().scheduleEvent(
             this,
-            mote.getSimulation().getSimulationTime() + 1);
+            mote.getSimulation().getSimulationTime() + Simulation.MILLISECOND);
         return;
       }
     };

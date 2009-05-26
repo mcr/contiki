@@ -77,7 +77,7 @@ public class IPAddress extends MoteInterface {
         /* Postpone until IP has been set */
         mote.getSimulation().scheduleEvent(
             this,
-            mote.getSimulation().getSimulationTime() + 1);
+            mote.getSimulation().getSimulationTime() + Simulation.MILLISECOND);
         return;
       }
     };
