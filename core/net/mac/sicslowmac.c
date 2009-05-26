@@ -131,7 +131,6 @@ send_packet(void)
   if(rimeaddr_cmp(packetbuf_addr(PACKETBUF_ADDR_RECEIVER), &rimeaddr_null)) {
     /* Broadcast requires short address mode. */
     params.fcf.dest_addr_mode = FRAME802154_SHORTADDRMODE;
-    params.dest_pid = FRAME802154_BROADCASTPANDID;
     params.dest_addr.u8[0] = 0xFF;
     params.dest_addr.u8[1] = 0xFF;
 
@@ -185,9 +184,17 @@ read_packet(void)
     packetbuf_set_datalen(len);
     if(frame802154_parse(packetbuf_dataptr(), len, &frame) &&
        packetbuf_hdrreduce(len - frame.payload_len)) {
-      if(frame.fcf.dest_addr_mode &&
-         !is_broadcast_addr(frame.fcf.dest_addr_mode, frame.dest_addr.u8)) {
-        packetbuf_set_addr(PACKETBUF_ADDR_RECEIVER, &frame.dest_addr);
+      if(frame.fcf.dest_addr_mode) {
+        if(frame.dest_pid != mac_src_pan_id &&
+           frame.dest_pid != FRAME802154_BROADCASTPANDID) {
+          /* Not broadcast or for our PAN */
+          PRINTF("6MAC: for another pan %u\n", frame.dest_pid);
+          return 0;
+
+        }
+        if(!is_broadcast_addr(frame.fcf.dest_addr_mode, frame.dest_addr.u8)) {
+          packetbuf_set_addr(PACKETBUF_ADDR_RECEIVER, &frame.dest_addr);
+        }
       }
       packetbuf_set_addr(PACKETBUF_ADDR_SENDER, &frame.src_addr);
 
