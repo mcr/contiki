@@ -53,7 +53,7 @@ PROCESS_THREAD(cfs_process, ev, data)
   {
     int i, j, fd;
     int errors = 0;
-    int filesize = 65000;
+    uint16_t filesize = 65000;
 #define CHUNKSIZE 128
 
     fd = cfs_open("hej", CFS_WRITE);
@@ -77,13 +77,14 @@ PROCESS_THREAD(cfs_process, ev, data)
       for(i = 0; i < filesize; ++i) {
 	unsigned char buf;
 	cfs_read(fd, &buf, 1);
-	if(buf != i) {
+	if(buf != (i & 0xff)) {
 	  errors++;
-	  printf("error: diff at %d, %d != %d\n", i, i, buf);
+	  printf("error: diff at %d, %d != %d\n", i, i & 0xff, buf);
 	}
       }
     }
     printf("CFS xmem test 1 completed with %d errors\n", errors);
+    cfs_remove("hej");
 
     fd = cfs_open("hej", CFS_WRITE);
     if(fd < 0) {
@@ -106,9 +107,9 @@ PROCESS_THREAD(cfs_process, ev, data)
       for(i = 0; i < filesize; ++i) {
 	unsigned char buf;
 	cfs_read(fd, &buf, 1);
-	if(buf != i + 1) {
+	if(buf != ((i + 1) & 0xff)) {
 	  errors++;
-	  printf("error: diff at %d, %d != %d\n", i, i, buf);
+	  printf("error: diff at %d, %d != %d\n", i, (i + 1) & 0xff, buf);
 	}
       }
     }
