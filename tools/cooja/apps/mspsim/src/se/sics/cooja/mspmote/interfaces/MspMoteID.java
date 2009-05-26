@@ -41,6 +41,7 @@ import org.apache.log4j.Logger;
 import org.jdom.Element;
 
 import se.sics.cooja.Mote;
+import se.sics.cooja.Simulation;
 import se.sics.cooja.TimeEvent;
 import se.sics.cooja.interfaces.MoteID;
 import se.sics.cooja.mspmote.MspMote;
@@ -118,7 +119,7 @@ public class MspMoteID extends MoteID {
     /*logger.debug("ID location: " + location);*/
 
     if (PERSISTENT_SET_ID) {
-      mote.getSimulation().scheduleEvent(persistentSetIDEvent, mote.getSimulation().getSimulationTime()+1);
+      mote.getSimulation().scheduleEvent(persistentSetIDEvent, mote.getSimulation().getSimulationTime());
     }
   }
 
@@ -128,12 +129,13 @@ public class MspMoteID extends MoteID {
       if (persistentSetIDCounter-- > 0)
       {
         setMoteID(moteID);
-        /*logger.debug("Persistent set ID: " + moteID);*/
+        /*logger.info("Setting ID: " + moteID + " at " + t);*/
 
-        if (t < -mote.getInterfaces().getClock().getDrift()) {
+        if (t + mote.getInterfaces().getClock().getDrift() < 0) {
+          /* Wait until node is booting */
           mote.getSimulation().scheduleEvent(this, -mote.getInterfaces().getClock().getDrift());
         } else {
-          mote.getSimulation().scheduleEvent(this, t+1);
+          mote.getSimulation().scheduleEvent(this, t+Simulation.MILLISECOND);
         }
       }
     }

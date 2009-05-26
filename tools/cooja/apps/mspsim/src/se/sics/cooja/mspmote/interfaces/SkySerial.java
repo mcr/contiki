@@ -56,6 +56,8 @@ import se.sics.cooja.plugins.SLIP;
  */
 @ClassDescription("Serial port")
 public class SkySerial extends Log implements SerialPort, USARTListener {
+  private static final long DELAY_INCOMING_DATA = 69; /* Corresponds to 115200 bit/s */
+  
   private static Logger logger = Logger.getLogger(SkySerial.class);
 
   private SkyMote mote;
@@ -104,7 +106,6 @@ public class SkySerial extends Log implements SerialPort, USARTListener {
 
   public void writeByte(byte b) {
     incomingData.add(b);
-    tryWriteNextByte();
     mote.getSimulation().scheduleEvent(writeDataEvent, mote.getSimulation().getSimulationTime());
   }
 
@@ -157,7 +158,7 @@ public class SkySerial extends Log implements SerialPort, USARTListener {
     public void execute(long t) {
       tryWriteNextByte();
       if (!incomingData.isEmpty()) {
-        mote.getSimulation().scheduleEvent(this, t+1);
+        mote.getSimulation().scheduleEvent(this, t+DELAY_INCOMING_DATA);
       }
     }
   };

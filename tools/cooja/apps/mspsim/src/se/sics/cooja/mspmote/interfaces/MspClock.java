@@ -61,16 +61,16 @@ public class MspClock extends Clock {
   }
 
   public long getTime() {
-    int time = (int) ((cpu.cycles + myMote.cycleDrift) / MspMote.NR_CYCLES_PER_MSEC);
+    long time = (long) ((double)cpu.cycles * Simulation.MILLISECOND / MspMote.NR_CYCLES_PER_MSEC);
     return time > 0 ? time : 0;
   }
 
-  public void setDrift(int drift) {
-    myMote.cycleDrift = MspMote.NR_CYCLES_PER_MSEC * drift;
+  public void setDrift(long drift) {
+    myMote.usDrift = drift;
   }
 
-  public int getDrift() {
-    return (int) (myMote.cycleDrift / MspMote.NR_CYCLES_PER_MSEC);
+  public long getDrift() {
+    return myMote.usDrift;
   }
 
   public JPanel getInterfaceVisualizer() {
