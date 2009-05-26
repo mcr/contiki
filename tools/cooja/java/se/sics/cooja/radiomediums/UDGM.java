@@ -36,6 +36,7 @@ import org.jdom.Element;
 import org.apache.log4j.Logger;
 
 import se.sics.cooja.*;
+import se.sics.cooja.contikimote.interfaces.ContikiRadio;
 import se.sics.cooja.interfaces.*;
 import se.sics.cooja.plugins.Visualizer;
 import se.sics.cooja.plugins.skins.UDGMVisualizerSkin;
@@ -92,7 +93,6 @@ public class UDGM extends AbstractRadioMedium {
 
   public RadioConnection createConnections(Radio sendingRadio) {
     Position sendingPosition = sendingRadio.getPosition();
-
     RadioConnection newConnection = new RadioConnection(sendingRadio);
 
     // Fetch current output power indicator (scale with as percent)
@@ -121,7 +121,15 @@ public class UDGM extends AbstractRadioMedium {
         continue;
       }
       if (!listeningRadio.isReceiverOn()) {
-        continue;
+        /* Special case: allow connection if source is Contiki radio, 
+         * and destination is something else (byte radio).
+         * Allows cross-level communication with power-saving MACs. */
+        if (sendingRadio instanceof ContikiRadio &&
+            !(listeningRadio instanceof ContikiRadio)) {
+          /*logger.info("Special case: creating connection to turned off radio");*/
+        } else {
+          continue;
+        }
       }
 
       double distance = sendingPosition.getDistanceTo(listeningRadioPosition);
