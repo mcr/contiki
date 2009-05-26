@@ -130,7 +130,7 @@ public class CreateSimDialog extends JDialog {
     myDialog.delayTime.setValue(new Integer(simulationToConfigure.getDelayTime()));
 
     // Set simulation time
-    myDialog.simulationTime.setValue(new Long(simulationToConfigure.getSimulationTime()));
+    myDialog.simulationTime.setValue(new Long(simulationToConfigure.getSimulationTime()/Simulation.MILLISECOND));
 
     // Select radio medium
     if (simulationToConfigure.getRadioMedium() != null) {
@@ -158,8 +158,8 @@ public class CreateSimDialog extends JDialog {
       myDialog.randomSeed.setValue(new Long(simulationToConfigure.getRandomSeed()));
     }
 
-    // Set delayed mote startup time
-    myDialog.delayedStartup.setValue(new Integer(simulationToConfigure.getDelayedMoteStartupTime()));
+    // Set delayed mote startup time (ms)
+    myDialog.delayedStartup.setValue(new Long(simulationToConfigure.getDelayedMoteStartupTime()/Simulation.MILLISECOND));
 
 
     // Set position and focus of dialog
@@ -455,7 +455,7 @@ public class CreateSimDialog extends JDialog {
           mySimulation.setRandomSeed(((Number) randomSeed.getValue()).longValue());
         }
 
-        mySimulation.setDelayedMoteStartupTime(((Number) delayedStartup.getValue()).intValue());
+        mySimulation.setDelayedMoteStartupTime((int) ((Number) delayedStartup.getValue()).intValue()*Simulation.MILLISECOND);
 
         dispose();
       }
