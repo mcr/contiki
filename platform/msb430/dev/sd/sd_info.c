@@ -70,10 +70,10 @@ sd_get_size(void)
 {
   uint32_t size = 0;
 
-  if (uart_lock(UART_MODE_SPI)) {
+  if(uart_lock(UART_MODE_SPI)) {
     struct sd_csd csd;
 
-    if (_sd_read_register(&csd, SD_CMD_SEND_CSD, sizeof (struct sd_csd))) {
+    if(_sd_read_register(&csd, SD_CMD_SEND_CSD, sizeof (struct sd_csd))) {
       size = SD_CSD_C_SIZE(csd) + 1;
       size <<= SD_CSD_C_MULT(csd);
       size <<= 2;

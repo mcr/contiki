@@ -65,17 +65,17 @@ sd_erase_blocks(uint32_t address, uint16_t numBlocks)
   uint8_t ret, r1;
   uint32_t endAdr;
 
-  if (sd_protected()) {
+  if(sd_protected()) {
     return FALSE;
   }
 
-  if (!uart_lock(UART_MODE_SPI)) {
+  if(!uart_lock(UART_MODE_SPI)) {
     return FALSE;
   }
 
   ret = _sd_send_cmd(SD_CMD_ERASE_WR_BLK_START_ADDR, SD_RESPONSE_SIZE_R1,
 		 &address, &r1);
-  if (!ret | r1) {
+  if(!ret | r1) {
     uart_unlock(UART_MODE_SPI);
     return FALSE;
   }
@@ -85,7 +85,7 @@ sd_erase_blocks(uint32_t address, uint16_t numBlocks)
 
   ret = _sd_send_cmd(SD_CMD_ERASE_WR_BLK_END_ADDR, SD_RESPONSE_SIZE_R1, 
 		&endAdr, &r1);
-  if (!ret | r1) {
+  if(!ret | r1) {
     uart_unlock(UART_MODE_SPI);
     return FALSE;
   }
