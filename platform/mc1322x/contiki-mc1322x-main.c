@@ -155,6 +155,7 @@ main(void)
 	procinit_init();
 	
 	rime_init(nullmac_init(&maca_driver));
+	//	rime_init(xmac_init(&maca_driver));
 
 	set_rimeaddr(&addr);
 
