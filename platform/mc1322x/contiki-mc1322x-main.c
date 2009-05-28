@@ -86,12 +86,6 @@ init_lowlevel(void)
 	
 	/* uart init */
 	uart1_init();
-
-#if USE_32KHZ_XTAL
-	enable_32khz_xtal();
-#else
-	cal_ring_osc();
-#endif
 	
 	enable_irq(CRM);
 
@@ -100,13 +94,6 @@ init_lowlevel(void)
 	clear_rtc_wu_evt();
 	enable_rtc_wu();
 	enable_rtc_wu_irq();
-#if USE_32KHZ_XTAL
-	reg32(CRM_RTC_TIMEOUT) = 32768/2 * 10; /* unexplained /2; makes it work */
-#else 
-//	reg32(CRM_RTC_TIMEOUT) = cal_rtc_secs * 10;
-	reg32(CRM_RTC_TIMEOUT) = 16200 * 10; /* unexplained 16200 from 07f78c7ee3b36e9d9e798220e2e1d83a09; makes it work */
-	/* this version cals to 2860 */
-#endif
 
 	/* radio init */
 	reset_maca();
@@ -118,6 +105,19 @@ init_lowlevel(void)
 	set_power(0x0f); /* 0dbm */
 //	set_power(0x0); 
 	set_channel(0); /* channel 11 */
+
+#if USE_32KHZ_XTAL
+	enable_32khz_xtal();
+#else
+	cal_ring_osc();
+#endif
+
+#if USE_32KHZ_XTAL
+	reg32(CRM_RTC_TIMEOUT) = 32768/2 * 10; /* unexplained /2; makes it work */
+#else 
+	reg32(CRM_RTC_TIMEOUT) = cal_rtc_secs * 10;
+#endif
+
 	
 }
 
@@ -166,13 +166,13 @@ main(void)
 	/* Initialize hardware and */
 	/* go into user mode */
 	init_lowlevel();
-	
+
 	/* Process subsystem */
 	process_init();
-	
+
 	/* Register initial processes */
 	procinit_init();
-	
+
 	//rime_init(nullmac_init(&maca_driver));
 	rime_init(xmac_init(&maca_driver));
 

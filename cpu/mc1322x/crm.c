@@ -73,13 +73,15 @@ void cal_ring_osc(void)
 {
 	uint32_t cal_factor;
 	PRINTF("performing ring osc cal\n\r");
+	PRINTF("crm_status: 0x%0x\n\r",reg32(CRM_STATUS));
 	PRINTF("sys_cntl: 0x%0x\n\r",reg32(CRM_SYS_CNTL)); 
-	reg32(CRM_CAL_CNTL) = (1<<16) | (2000); 
+	reg32(CRM_CAL_CNTL) = (1<<16) | (20000); 
 	while((reg32(CRM_STATUS) & (1<<9)) == 0);
 	PRINTF("ring osc cal complete\n\r");
 	PRINTF("cal_count: 0x%0x\n\r",reg32(CRM_CAL_COUNT)); 
-	cal_factor = REF_OSC*100/reg32(CRM_CAL_COUNT);
+	cal_factor = (REF_OSC*1000)/reg32(CRM_CAL_COUNT);
 	cal_rtc_secs = (NOMINAL_RING_OSC_SEC * cal_factor)/100;
 	PRINTF("cal factor: %d \n\nr", cal_factor);
-	PRINTF("hib_wake_secs: %d \n\nr", cal_rtc_secs);       
+	PRINTF("hib_wake_secs: %d \n\nr", cal_rtc_secs);      
+	set_bit(reg32(CRM_STATUS),9);
 }
