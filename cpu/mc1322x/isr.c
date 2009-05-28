@@ -27,7 +27,7 @@ void irq(void)
  	}
 	if(crm_irq()) {
 		PRINTF("crm irq\n\r");
-		if(rtc_wu_evnt()) { PRINTF("rtc_wu_irq\n\r"); clear_rtc_wu_evt(); }
+		if(rtc_wu_evt()) { PRINTF("rtc_wu_irq\n\r"); clear_rtc_wu_evt(); while(rtc_wu_evt()){}}
 		if(kbi_evnt(4) && (kbi4_isr != 0)) { kbi4_isr(); }
 		if(kbi_evnt(5) && (kbi5_isr != 0)) { kbi5_isr(); }
 		if(kbi_evnt(6) && (kbi6_isr != 0)) { kbi6_isr(); }

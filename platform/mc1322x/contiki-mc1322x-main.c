@@ -87,11 +87,11 @@ init_lowlevel(void)
 	/* uart init */
 	uart1_init();
 
-//#if USE_32KHZ_XTAL
-//	enable_32khz_xtal();
-//#else
+#if USE_32KHZ_XTAL
+	enable_32khz_xtal();
+#else
 	cal_ring_osc();
-//#endif
+#endif
 	
 	enable_irq(CRM);
 
@@ -100,7 +100,13 @@ init_lowlevel(void)
 	clear_rtc_wu_evt();
 	enable_rtc_wu();
 	enable_rtc_wu_irq();
-	reg32(CRM_RTC_TIMEOUT) = cal_rtc_secs * 10;
+#if USE_32KHZ_XTAL
+	reg32(CRM_RTC_TIMEOUT) = 32768/2 * 10; /* unexplained /2; makes it work */
+#else 
+//	reg32(CRM_RTC_TIMEOUT) = cal_rtc_secs * 10;
+	reg32(CRM_RTC_TIMEOUT) = 16200 * 10; /* unexplained 16200 from 07f78c7ee3b36e9d9e798220e2e1d83a09; makes it work */
+	/* this version cals to 2860 */
+#endif
 
 	/* radio init */
 	reset_maca();

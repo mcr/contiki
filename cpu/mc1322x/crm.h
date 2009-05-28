@@ -84,7 +84,7 @@ extern uint32_t cal_rtc_secs;      /* calibrated 2khz rtc seconds */
 #define disable_rtc_wu() ((clear_bit(reg32(CRM_WU_CNTL),(RTC_WU_EN))))
 
 #define clear_rtc_wu_evt() (set_bit(reg32(CRM_STATUS),RTC_WU_EVT))
-#define rtc_wu_evnt() (bit_is_set(reg32(CRM_STATUS),RTC_WU_EVT))
+#define rtc_wu_evt() (bit_is_set(reg32(CRM_STATUS),RTC_WU_EVT))
 
 #define SLEEP_MODE_HIBERNATE bit(0)
 #define SLEEP_MODE_DOZE      bit(1)

@@ -45,6 +45,7 @@ void sleep(uint32_t opts, uint32_t mode)
 void enable_32khz_xtal(void) 
 {
 	static volatile uint32_t rtc_count;
+        PRINTF("enabling 32kHz crystal\n\r");
 	/* first, disable the ring osc */
 	ring_osc_off();
 	/* enable the 32kHZ crystal */
@@ -59,10 +60,12 @@ void enable_32khz_xtal(void)
 	/* this blocks until it starts */
 	/* it would be better to timeout and return an error */
 	rtc_count = reg32(CRM_RTC_COUNT);
+	PRINTF("waiting for xtal\n\r");
 	while(reg32(CRM_RTC_COUNT) == rtc_count) {
 		continue;
 	}
 	/* RTC has started up */
+	PRINTF("32kHZ xtal started\n\r");
 
 }
 
