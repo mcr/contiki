@@ -580,7 +580,15 @@ public class GUI extends Observable {
     }
   }
 
+  /**
+   * Enables/disables menues and menu items depending on whether a simulation is loaded etc.
+   */
   private void updateGUIComponentState() {
+    if (!isVisualized()) {
+      return;
+    }
+
+    /* Update action state */
     Action[] arr = guiActions.toArray(new Action[0]);
     for (Action a: arr) {
       a.setEnabled(a.isEnabled());
@@ -594,6 +602,7 @@ public class GUI extends Observable {
       }
     }
 
+    /* Mote and mote type menues */
     menuMoteTypeClasses.setEnabled(getSimulation() != null);
     menuMoteTypes.setEnabled(getSimulation() != null);
   }
