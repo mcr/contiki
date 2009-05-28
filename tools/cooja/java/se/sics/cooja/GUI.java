@@ -1777,6 +1777,11 @@ public class GUI extends Observable {
               }
             }
             tooltip += "COOJA plugin: " + newPluginClass.getName();
+            menuItem.addActionListener(new ActionListener() {
+              public void actionPerformed(ActionEvent e) {
+                startPlugin(newPluginClass, myGUI, mySimulation, null);
+              }
+            });
           } else if (pluginType == PluginType.SIM_PLUGIN || pluginType == PluginType.SIM_STANDARD_PLUGIN) {
             for (; itemIndex < menuPlugins.getItemCount(); itemIndex++) {
               if (menuPlugins.getItem(itemIndex) == null /* separator */) {
