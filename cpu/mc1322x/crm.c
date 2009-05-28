@@ -30,3 +30,29 @@ void sleep(uint32_t opts, uint32_t mode)
 	/* and turning the radio back on */
 
 }
+
+/* turn on the 32kHz crystal */
+/* once you start the 32xHz crystal it can only be stopped with a reset (hard or soft) */
+void enable_32khz_xtal(void) 
+{
+	static volatile uint32_t rtc_count;
+	/* first, disable the ring osc */
+	ring_osc_off();
+	/* enable the 32kHZ crystal */
+	xtal32_on();
+
+        /* set the XTAL32_EXISTS bit */
+        /* the datasheet says to do this after you've check that RTC_COUNT is changing */
+        /* the datasheet is not correct */
+	xtal32_exists();
+
+	/* now check that the crystal starts */
+	/* this blocks until it starts */
+	/* it would be better to timeout and return an error */
+	rtc_count = reg32(CRM_RTC_COUNT);
+	while(reg32(CRM_RTC_COUNT) == rtc_count) {
+		continue;
+	}
+	/* RTC has started up */
+
+}

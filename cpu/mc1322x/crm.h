@@ -22,7 +22,10 @@
 #define CRM_VREG_CNTL    (CRM_BASE+0x48)
 #define CRM_SW_RST       (CRM_BASE+0x50)
 
-/* wu_cntl bit locations */
+/* CRM_SYS_CNTL bit locations */
+#define XTAL32_EXISTS 5 
+
+/* CRM_WU_CNTL bit locations */
 #define EXT_WU_IEN   20      /* 4 bits */ 
 #define EXT_WU_EN    4       /* 4 bits */ 
 #define EXT_WU_EDGE  8       /* 4 bits */ 
@@ -30,7 +33,7 @@
 #define TIMER_WU_EN  0 
 #define RTC_WU_EN    1 
 
-/* status bit locations */
+/* CRM_STATUS bit locations */
 #define EXT_WU_EVT 4       /* 4 bits */
 
 /* RINGOSC_CNTL bit locations */
@@ -43,6 +46,11 @@
 
 /* XTAL32_CNTL bit locations */
 #define XTAL32_GAIN 4      /* 2 bits */
+#define XTAL32_EN   0
+
+#define xtal32_on() (set_bit(reg32(CRM_XTAL32_CNTL),XTAL32_EN))
+#define xtal32_off() (clear_bit(reg32(CRM_XTAL32_CNTL),XTAL32_EN))
+#define xtal32_exists() (set_bit(reg32(CRM_SYS_CNTL),XTAL32_EXISTS))
 
 /* enable external wake-ups on kbi 4-7 */ 
 /* see kbi.h for other kbi specific macros */
