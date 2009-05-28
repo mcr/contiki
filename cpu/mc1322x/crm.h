@@ -1,6 +1,8 @@
 #ifndef CRM_H
 #define CRM_H
 
+#include <stdint.h>
+
 #define CRM_BASE         (0x80003000)
 #define CRM_SYS_CNTL     (CRM_BASE+0x00)
 #define CRM_WU_CNTL      (CRM_BASE+0x04)
@@ -43,6 +45,10 @@
 
 #define ring_osc_on() (set_bit(reg32(CRM_RINGOSC_CNTL),ROSC_EN))
 #define ring_osc_off() (clear_bit(reg32(CRM_RINGOSC_CNTL),ROSC_EN))
+
+#define REF_OSC 24000000UL          /* reference osc. frequency */
+#define NOMINAL_RING_OSC_SEC 2000 /* nominal ring osc. frequency */
+extern uint32_t cal_rtc_secs;      /* calibrated 2khz rtc seconds */
 
 /* XTAL32_CNTL bit locations */
 #define XTAL32_GAIN 4      /* 2 bits */

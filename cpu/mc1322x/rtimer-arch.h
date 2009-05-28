@@ -48,7 +48,11 @@
 #include "crm.h"
 #include "utils.h"
 
-#define RTIMER_ARCH_SECOND 4096
+#if USE_32KHZ_XTAL
+#define RTIMER_ARCH_SECOND 32768
+#else
+#define RTIMER_ARCH_SECOND 2000
+#endif
 
 #define rtimer_arch_now() (reg32(CRM_RTC_COUNT))
 

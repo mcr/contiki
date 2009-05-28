@@ -1,6 +1,15 @@
 #include "crm.h"
 #include "maca.h"
 
+#define CRM_DEBUG 1
+#if CRM_DEBUG
+#define PRINTF(...) printf(__VA_ARGS__)
+#else
+#define PRINTF(...)
+#endif
+
+uint32_t cal_rtc_secs;      /* calibrated 2khz rtc seconds */
+
 void sleep(uint32_t opts, uint32_t mode)
 {
 
@@ -55,4 +64,19 @@ void enable_32khz_xtal(void)
 	}
 	/* RTC has started up */
 
+}
+
+void cal_ring_osc(void)
+{
+	uint32_t cal_factor;
+	PRINTF("performing ring osc cal\n\r");
+	PRINTF("sys_cntl: 0x%0x\n\r",reg32(CRM_SYS_CNTL)); 
+	reg32(CRM_CAL_CNTL) = (1<<16) | (2000); 
+	while((reg32(CRM_STATUS) & (1<<9)) == 0);
+	PRINTF("ring osc cal complete\n\r");
+	PRINTF("cal_count: 0x%0x\n\r",reg32(CRM_CAL_COUNT)); 
+	cal_factor = REF_OSC*100/reg32(CRM_CAL_COUNT);
+	cal_rtc_secs = (NOMINAL_RING_OSC_SEC * cal_factor)/100;
+	PRINTF("cal factor: %d \n\nr", cal_factor);
+	PRINTF("hib_wake_secs: %d \n\nr", cal_rtc_secs);       
 }

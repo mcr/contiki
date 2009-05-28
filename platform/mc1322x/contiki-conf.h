@@ -75,12 +75,12 @@ typedef int32_t s32_t;
 #undef DISABLE_RECEPTION
 #undef MACA_DEBUG
 //#define MACA_DEBUG 1
-#define MACA_RAW_MODE 1
+#define MACA_RAW_MODE       0
+#define USE_32KHZ_XTAL      0
 
-#define QUEUEBUF_CONF_NUM 8
-#define RIMEADDR_CONF_SIZE       2
-#define PACKETBUF_CONF_SIZE 96
-
+#define QUEUEBUF_CONF_NUM     8
+#define RIMEADDR_CONF_SIZE    2
+#define PACKETBUF_CONF_SIZE  96
 
 typedef uint32_t clock_time_t;
 typedef unsigned char u8_t;

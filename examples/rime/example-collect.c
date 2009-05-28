@@ -67,10 +67,6 @@ PROCESS(example_collect_process, "Test collect process");
 AUTOSTART_PROCESSES(&example_collect_process);
 /*---------------------------------------------------------------------------*/
 
-#define REF_OSC 24000000UL          /* reference osc. frequency */
-#define NOMINAL_RING_OSC_SEC 2000 /* nominal ring osc. frequency */
-static uint32_t hib_wake_secs;      /* calibrated hibernate wake seconds */
-
 void safe_sleep(void) {
 	/* set kbi wake up polarity to the opposite of the current reading */
 	if(bit_is_set(reg32(GPIO_DATA0),29)) {
@@ -80,7 +76,7 @@ void safe_sleep(void) {
 		printf("pol pos\n\r");
 		kbi_pol_pos(7);
 	}
-	reg32(CRM_WU_TIMEOUT) = hib_wake_secs * SLEEP_TIME;
+	reg32(CRM_WU_TIMEOUT) = cal_rtc_secs * SLEEP_TIME;
 	sleep((SLEEP_RETAIN_MCU|SLEEP_RAM_64K),SLEEP_MODE_HIBERNATE);
 	enable_irq(TMR);
 	enable_irq(CRM);
@@ -127,7 +123,6 @@ recv(const rimeaddr_t *originator, uint8_t seqno, uint8_t hops)
 }
 /*---------------------------------------------------------------------------*/
 static const struct collect_callbacks callbacks = { recv };
-uint32_t cal_factor;
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(example_collect_process, ev, data)
 {
@@ -145,17 +140,6 @@ PROCESS_THREAD(example_collect_process, ev, data)
 	  printf("I am sink\n");
 	  collect_set_sink(&tc, 1);
   }
-
-  printf("performing ring osc cal\n\r");
-  printf("sys_cntl: 0x%0x\n\r",reg32(CRM_SYS_CNTL)); 
-  reg32(CRM_CAL_CNTL) = (1<<16) | (2000); 
-  while((reg32(CRM_STATUS) & (1<<9)) == 0);
-  printf("ring osc cal complete\n\r");
-  printf("cal_count: 0x%0x\n\r",reg32(CRM_CAL_COUNT)); 
-  cal_factor = REF_OSC*100/reg32(CRM_CAL_COUNT);
-  hib_wake_secs = (NOMINAL_RING_OSC_SEC * cal_factor)/100;
-  printf("cal factor: %d \n\nr", cal_factor);
-  printf("hib_wake_secs: %d \n\nr", hib_wake_secs);
 
   while(1) {
 	  static struct etimer et;

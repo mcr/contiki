@@ -88,6 +88,12 @@ init_lowlevel(void)
 	
 	/* uart init */
 	uart1_init();
+
+#if USE_32KHZ_XTAL
+	enable_32khz_xtal();
+#else
+	cal_ring_osc();
+#endif
 	
 	/* radio init */
 	reset_maca();
