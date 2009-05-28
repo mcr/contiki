@@ -54,7 +54,7 @@
 #include "isr.h"
 
 #define TIC 4
-#define ON_BATTERY 1
+#define ON_BATTERY 0
 #define CHIRP_INTERVAL  3  /* seconds */
 #define CHIRPS          3 
 #define SLEEP_TIME 300 /* seconds */

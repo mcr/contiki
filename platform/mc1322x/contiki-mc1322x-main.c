@@ -154,8 +154,8 @@ main(void)
 	/* Register initial processes */
 	procinit_init();
 	
-	rime_init(nullmac_init(&maca_driver));
-	//	rime_init(xmac_init(&maca_driver));
+	//rime_init(nullmac_init(&maca_driver));
+	rime_init(xmac_init(&maca_driver));
 
 	set_rimeaddr(&addr);
 

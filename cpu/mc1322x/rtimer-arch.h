@@ -28,12 +28,28 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: rtimer-arch.h,v 1.4 2007/12/11 17:21:14 joxe Exp $
+ * $Id: rtimer-arch.h,v 1.5 2008/12/02 12:44:48 joxe Exp $
+ */
+
+/**
+ * \file
+ *         Header file for the mc1322x-specific rtimer code
+ * \author
+ *         Mariano Alvira <mar@devl.org>
  */
 
 #ifndef __RTIMER_ARCH_H__
 #define __RTIMER_ARCH_H__
 
-#define RTIMER_ARCH_SECOND (8192)
+/* contiki */
+#include "sys/rtimer.h"
+
+/* mc1322x */
+#include "crm.h"
+#include "utils.h"
+
+#define RTIMER_ARCH_SECOND 4096
+
+#define rtimer_arch_now() (reg32(CRM_RTC_COUNT))
 
 #endif /* __RTIMER_ARCH_H__ */
