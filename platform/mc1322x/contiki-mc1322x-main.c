@@ -83,18 +83,25 @@ init_lowlevel(void)
 //	kbi_pol_pos(7);
 //	gpio_sel0_pullup(29);
 	gpio_pu0_disable(29);
-
-	enable_irq(CRM);
 	
 	/* uart init */
 	uart1_init();
 
-#if USE_32KHZ_XTAL
-	enable_32khz_xtal();
-#else
+//#if USE_32KHZ_XTAL
+//	enable_32khz_xtal();
+//#else
 	cal_ring_osc();
-#endif
+//#endif
 	
+	enable_irq(CRM);
+
+	/* XXX debug */
+	/* trigger periodic rtc int */
+	clear_rtc_wu_evt();
+	enable_rtc_wu();
+	enable_rtc_wu_irq();
+	reg32(CRM_RTC_TIMEOUT) = cal_rtc_secs * 10;
+
 	/* radio init */
 	reset_maca();
 	radio_init();

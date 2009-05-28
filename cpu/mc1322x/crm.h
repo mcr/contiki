@@ -34,9 +34,12 @@
 #define EXT_WU_POL   12      /* 4 bits */ 
 #define TIMER_WU_EN  0 
 #define RTC_WU_EN    1 
+#define TIMER_WU_IEN  16 
+#define RTC_WU_IEN    17
 
 /* CRM_STATUS bit locations */
-#define EXT_WU_EVT 4       /* 4 bits */
+#define EXT_WU_EVT 4       /* 4 bits, rw1c */
+#define RTC_WU_EVT 3       /* rw1c */
 
 /* RINGOSC_CNTL bit locations */
 #define ROSC_CTUNE 9       /* 4 bits */
@@ -67,12 +70,21 @@ extern uint32_t cal_rtc_secs;      /* calibrated 2khz rtc seconds */
 #define clear_ext_wu_evt(kbi) (set_bit(reg32(CRM_STATUS),(EXT_WU_EVT+kbi-4))) /* r1wc bit */
 
 /* enable wake-up timer */
+#define enable_timer_wu_irq() ((set_bit(reg32(CRM_WU_CNTL),(TIMER_WU_IEN))))
+#define disable_timer_wu_irq() ((clear_bit(reg32(CRM_WU_CNTL),(TIMER_WU_IEN))))
+
 #define enable_timer_wu() ((set_bit(reg32(CRM_WU_CNTL),(TIMER_WU_EN))))
 #define disable_timer_wu() ((clear_bit(reg32(CRM_WU_CNTL),(TIMER_WU_EN))))
 
 /* enable wake-up from RTC compare */
+#define enable_rtc_wu_irq() (set_bit(reg32(CRM_WU_CNTL),RTC_WU_IEN))
+#define disable_rtc_wu_irq() (clear_bit(reg32(CRM_WU_CNTL),RTC_WU_IEN))
+
 #define enable_rtc_wu() ((set_bit(reg32(CRM_WU_CNTL),(RTC_WU_EN))))
 #define disable_rtc_wu() ((clear_bit(reg32(CRM_WU_CNTL),(RTC_WU_EN))))
+
+#define clear_rtc_wu_evt() (set_bit(reg32(CRM_STATUS),RTC_WU_EVT))
+#define rtc_wu_evnt() (bit_is_set(reg32(CRM_STATUS),RTC_WU_EVT))
 
 #define SLEEP_MODE_HIBERNATE bit(0)
 #define SLEEP_MODE_DOZE      bit(1)
