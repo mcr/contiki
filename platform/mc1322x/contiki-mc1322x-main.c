@@ -89,14 +89,10 @@ init_lowlevel(void)
 	
 	enable_irq(CRM);
 
-	/* XXX debug */
-	/* trigger periodic rtc int */
-	clear_rtc_wu_evt();
-	enable_rtc_wu();
-	enable_rtc_wu_irq();
-
 	/* radio init */
 	reset_maca();
+	/* it looks like radio_init does something to */
+	/* that changes the ring_oscillator           */
 	radio_init();
 	vreg_init();
 	flyback_init();
@@ -113,12 +109,16 @@ init_lowlevel(void)
 #endif
 
 #if USE_32KHZ_XTAL
-	reg32(CRM_RTC_TIMEOUT) = 32768/2 * 10; /* unexplained /2; makes it work */
+	reg32(CRM_RTC_TIMEOUT) = 32768 * 10; 
 #else 
 	reg32(CRM_RTC_TIMEOUT) = cal_rtc_secs * 10;
 #endif
 
-	
+	/* XXX debug */
+	/* trigger periodic rtc int */
+	clear_rtc_wu_evt();
+	enable_rtc_wu();
+	enable_rtc_wu_irq();
 }
 
 void
