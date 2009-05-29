@@ -125,8 +125,6 @@ int maca_send(const void *payload, unsigned short payload_len) {
 	set_bit(reg32(GPIO_DATA0),8);
 	ResumeMACASync();
 
-//	for(retry=0; retry<4; retry++) {
-
 /* the mc1322x promiscuous mode doen't appear to be entirely promiscuous */
 /* in MACA_RAW_MODE, all transmitted packets are prepended with MACA_RAW_PREPEND */
 /* received packets get stripped of this */
@@ -136,15 +134,18 @@ int maca_send(const void *payload, unsigned short payload_len) {
 	tx_buf[0] = MACA_RAW_PREPEND;
 	len++;
 	for(i=1; i<=payload_len; i++) {
-#else
-	PRINTF("maca: sending %d bytes\n\r", payload_len);
-	for(i=0; i<payload_len; i++) {
-#endif
 		/* copy payload into tx buf */
 		tx_buf[i] = ((uint8_t *)payload)[i-1];
 		PRINTF(" %02x",((uint8_t *)payload)[i-1]);
-//		PRINTF(" %02x",tx_buf[i]);
 	}
+#else
+	PRINTF("maca: sending %d bytes\n\r", payload_len);
+	for(i=0; i<payload_len; i++) {
+		/* copy payload into tx buf */
+		tx_buf[i] = ((uint8_t *)payload)[i];
+		PRINTF(" %02x",((uint8_t *)payload)[i]);
+	}
+#endif
 	PRINTF("\n\r");
 
 
