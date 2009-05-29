@@ -175,6 +175,18 @@ main(void)
 
 	//rime_init(nullmac_init(&maca_driver));
 	rime_init(xmac_init(&maca_driver));
+#if !(USE_32KHZ_XTAL)
+	printf("setting xmac to use calibrated rtc value\n");
+	xmac_config.on_time = cal_rtc_secs/200;
+	xmac_config.off_time = cal_rtc_secs/2 - xmac_config.on_time;
+	xmac_config.strobe_time = 20 * xmac_config.on_time + xmac_config.off_time; 
+	xmac_config.strobe_wait_time = 7 * xmac_config.on_time / 8; 
+	printf("xmac_config.on_time %u\n\r",xmac_config.on_time);
+	printf("xmac_config.off_time %u\n\r",xmac_config.off_time);
+	printf("xmac_config.strobe_time %u\n\r",xmac_config.strobe_time); 
+	printf("xmac_config.strobe_wait_time %u\n\r",xmac_config.strobe_wait_time);
+#endif
+
 
 	set_rimeaddr(&addr);
 
