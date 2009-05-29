@@ -73,8 +73,7 @@ typedef int32_t s32_t;
 
 #define USE_FORMATTED_STDIO 1
 #undef DISABLE_RECEPTION
-#undef MACA_DEBUG
-//#define MACA_DEBUG 1
+#define MACA_DEBUG 0
 #define MACA_RAW_MODE       0
 #define USE_32KHZ_XTAL      0
 

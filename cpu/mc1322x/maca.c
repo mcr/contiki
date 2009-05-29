@@ -23,10 +23,10 @@ static volatile uint8_t rx_buf[MAX_PACKET_SIZE]  __attribute__ ((aligned (4)));
 #define MACA_SOFT_TIMEOUT 5000
 #endif
 
-#ifdef MACA_DEBUG
+#if MACA_DEBUG
 #define PRINTF(...) printf(__VA_ARGS__)
 #else
-#define PRINTF(...) do {} while (0)
+#define PRINTF(...)
 #endif
 
 #ifndef MACA_RAW_PREPEND
@@ -424,6 +424,43 @@ void vreg_init(void) {
 	reg32(0x80003048) = 0x00000ff8; /* start the regulators */
 }
 
+/* get_ctov thanks to Umberto */
+
+#define _INIT_CTOV_WORD_1       0x00dfbe77
+#define _INIT_CTOV_WORD_2       0x023126e9
+uint8_t get_ctov( uint32_t r0, uint32_t r1 )
+{
+
+        r0 = r0 * _INIT_CTOV_WORD_1;
+        r0 += ( r1 << 22 );
+        r0 += _INIT_CTOV_WORD_2;
+
+        r0 = (uint32_t)(((int32_t)r0) >> 25);
+
+        return (uint8_t)r0;
+}
+
+/* initialized with 0x4c */
+uint8_t ctov[16] = {
+	0x0b,
+	0x0b,
+	0x0b,
+	0x0a,
+	0x0d,
+	0x0d,
+	0x0c,
+	0x0c,
+	0x0f,
+	0x0e,
+	0x0e,
+	0x0e,
+	0x11,
+	0x10,
+	0x10,
+	0x0f,
+};
+
+
 /* radio_init has been tested to be good */
 void radio_init(void) {
 	volatile uint32_t i;
@@ -471,6 +508,12 @@ void radio_init(void) {
 	for(i=0; i<0x161a8; i++) { continue; } /* wait for the bypass to take */
 
 	init_from_flash(0x1F000);
+
+	PRINTF("radio_init: ctov parameter 0x%x\n\r",ram_values[3]);
+	for(i=0; i<16; i++) {
+		ctov[i] = get_ctov(i,ram_values[3]);
+		PRINTF("radio_init: ctov[%d] = 0x%x\n\r",i,ctov[i]);
+	}
 
 }
 
@@ -588,25 +631,6 @@ const uint32_t VCODivF[16] = {
 	0x01555555,		
 };
 
-const uint8_t ctov_4c[16] = {
-	0x0b,
-	0x0b,
-	0x0b,
-	0x0a,
-	0x0d,
-	0x0d,
-	0x0c,
-	0x0c,
-	0x0f,
-	0x0e,
-	0x0e,
-	0x0e,
-	0x11,
-	0x10,
-	0x10,
-	0x0f,
-};
-
 /* tested good */
 #define ADDR_CHAN1 0x80009800
 #define ADDR_CHAN2 (ADDR_CHAN1+12)
@@ -631,7 +655,7 @@ void set_channel(uint8_t chan) {
 	reg32(ADDR_CHAN4) = tmp;
 
 	tmp = tmp & 0xffffe0ff;
-	tmp = tmp | (((ctov_4c[chan])<<8)&0x1F00);
+	tmp = tmp | (((ctov[chan])<<8)&0x1F00);
 	reg32(ADDR_CHAN4) = tmp;
 	/* duh! */
 }
