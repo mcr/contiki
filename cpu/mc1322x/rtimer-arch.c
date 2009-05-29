@@ -47,7 +47,7 @@
 /* mc1322x */
 #include "utils.h"
 
-#define DEBUG 1
+#define DEBUG 0
 #if DEBUG
 #include <stdio.h>
 #define PRINTF(...) printf(__VA_ARGS__)
@@ -55,28 +55,34 @@
 #define PRINTF(...)
 #endif
 
-/*---------------------------------------------------------------------------*/
-//interrupt(TIMERA0_VECTOR) timera0 (void) {
-//  ENERGEST_ON(ENERGEST_TYPE_IRQ);
-//  rtimer_run_next();
-//  ENERGEST_OFF(ENERGEST_TYPE_IRQ);
-//}
-/*---------------------------------------------------------------------------*/
+void rtc_isr(void) {
+	PRINTF("rtc_wu_irq\n\r");
+	PRINTF("now is %u\n", rtimer_arch_now());
+	disable_rtc_wu();
+	disable_rtc_wu_irq();
+	rtimer_run_next();
+	clear_rtc_wu_evt();
+}
+
 void
 rtimer_arch_init(void)
 {
-//  dint();
-
-  /* CCR0 interrupt enabled, interrupt occurs when timer equals CCR0. */
-//  TACCTL0 = CCIE;
-
-  /* Enable interrupts. */
-//  eint();
 }
-/*---------------------------------------------------------------------------*/
+
 void
 rtimer_arch_schedule(rtimer_clock_t t)
 {
-	PRINTF("rtimer_arch_schedule time %u; now is %u\n", t,rtimer_arch_now());
-//  TACCR0 = t;
+	volatile uint32_t now;
+	now = rtimer_arch_now();
+	PRINTF("rtimer_arch_schedule time %u; now is %u\n", t,now);
+	if(now>t) {
+		reg32(CRM_RTC_TIMEOUT) = 1;
+	} else {
+		reg32(CRM_RTC_TIMEOUT) = t - now;
+	}
+
+	clear_rtc_wu_evt();
+	enable_rtc_wu();
+	enable_rtc_wu_irq();
+	PRINTF("rtimer_arch_schedule CRM_RTC_TIMEOUT is %u\n", reg32(CRM_RTC_TIMEOUT));
 }

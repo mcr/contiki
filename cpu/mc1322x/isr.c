@@ -3,7 +3,7 @@
 #include "isr.h"
 #include "crm.h"
 
-#define ISR_DEBUG 1
+#define ISR_DEBUG 0
 #if ISR_DEBUG
 #define PRINTF(...) printf(__VA_ARGS__)
 #else
@@ -27,7 +27,7 @@ void irq(void)
  	}
 	if(crm_irq()) {
 		PRINTF("crm irq\n\r");
-		if(rtc_wu_evt()) { PRINTF("rtc_wu_irq\n\r"); clear_rtc_wu_evt(); while(rtc_wu_evt()){}}
+		if(rtc_wu_evt() && (rtc_isr != 0)) { rtc_isr(); }
 		if(kbi_evnt(4) && (kbi4_isr != 0)) { kbi4_isr(); }
 		if(kbi_evnt(5) && (kbi5_isr != 0)) { kbi5_isr(); }
 		if(kbi_evnt(6) && (kbi6_isr != 0)) { kbi6_isr(); }

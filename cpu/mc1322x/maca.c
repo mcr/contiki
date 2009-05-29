@@ -10,6 +10,7 @@
 #include "nvm.h"
 #include "gpio.h"
 #include "crm.h"
+#include "isr.h"
 
 #ifndef MAX_PACKET_SIZE
 #define MAX_PACKET_SIZE 127
@@ -18,6 +19,9 @@
 static volatile uint8_t tx_buf[MAX_PACKET_SIZE]  __attribute__ ((aligned (4)));
 static volatile uint8_t rx_buf[MAX_PACKET_SIZE]  __attribute__ ((aligned (4)));				
 								
+static volatile uint8_t radio_state;
+#define radio_is_on() (radio_state == 1)
+#define radio_is_off() (radio_state == 0)
 
 #ifndef MACA_SOFT_TIMEOUT
 #define MACA_SOFT_TIMEOUT 5000
@@ -64,6 +68,8 @@ int maca_on(void) {
 	/* reinitialize the phy */
         init_phy();
 
+	radio_state = 1;
+
 	return 1;
 }
 
@@ -74,6 +80,9 @@ int maca_off(void) {
 
         /* hold the maca in reset */
 	set_bit(reg32(MACA_RESET),maca_reset_rst);
+
+	radio_state = 0;
+
 	return 1;
 }
 
@@ -106,6 +115,8 @@ int maca_send(const void *payload, unsigned short payload_len) {
 	volatile uint32_t i,j;
 	volatile uint32_t retry;
 	volatile uint32_t len;
+
+	maca_on();
 
 	len = payload_len;
 
@@ -155,6 +166,7 @@ int maca_send(const void *payload, unsigned short payload_len) {
 	ResumeMACASync();
 //	}
 	clear_bit(reg32(GPIO_DATA0),8);
+
 	return 0;
 }
 
