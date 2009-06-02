@@ -594,8 +594,12 @@ public class GUI extends Observable {
     }
     
     /* Mote and mote type menues */
-    menuMoteTypeClasses.setEnabled(getSimulation() != null);
-    menuMoteTypes.setEnabled(getSimulation() != null);
+    if (menuMoteTypeClasses != null) {
+      menuMoteTypeClasses.setEnabled(getSimulation() != null);
+    }
+    if (menuMoteTypes != null) {
+      menuMoteTypes.setEnabled(getSimulation() != null);
+    }
   }
   
   private JMenuBar createMenuBar() {
@@ -1818,10 +1822,10 @@ public class GUI extends Observable {
     JMenu menuMotePlugins = new JMenu("Open mote plugin for " + mote);
 
     for (Class<? extends Plugin> motePluginClass: menuMotePluginClasses) {
-      JMenuItem menuItem = new JMenuItem(getDescriptionOf(motePluginClass));
+      GUIAction guiAction = new StartPluginGUIAction(getDescriptionOf(motePluginClass));
+      JMenuItem menuItem = new JMenuItem(guiAction);
       menuItem.putClientProperty("class", motePluginClass);
       menuItem.putClientProperty("mote", mote);
-      menuItem.addActionListener(guiEventHandler);
       menuMotePlugins.add(menuItem);
     }
     return menuMotePlugins;
