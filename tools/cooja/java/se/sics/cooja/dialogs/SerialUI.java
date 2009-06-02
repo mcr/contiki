@@ -34,6 +34,7 @@ package se.sics.cooja.dialogs;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -244,6 +245,12 @@ public abstract class SerialUI extends Log implements SerialPort {
     current = len > 0 ? (current + '\n' + text) : text;
     logTextPane.setText(current);
     logTextPane.setCaretPosition(current.length());
+    
+    Rectangle visRect = logTextPane.getVisibleRect();
+    if (visRect.x > 0) {
+      visRect.x = 0;
+      logTextPane.scrollRectToVisible(visRect);
+    }
   }
 
   public void releaseInterfaceVisualizer(JPanel panel) {
