@@ -1096,13 +1096,11 @@ public class ContikiMoteType implements MoteType {
    * @return Unique mote type ID.
    */
   public static String generateUniqueMoteTypeID(MoteType[] existingTypes, Collection reservedIdentifiers) {
-    int counter = 0;
     String testID = "";
     boolean okID = false;
 
     while (!okID) {
-      counter++;
-      testID = ID_PREFIX + counter;
+      testID = ID_PREFIX + (new Random().nextInt(1000));
       okID = true;
 
       // Check if identifier is reserved
@@ -1129,10 +1127,11 @@ public class ContikiMoteType implements MoteType {
       }
 
       // Check if identifier library has been loaded
+      /* XXX Currently only checks the build directory! */
       File libraryFile = new File(
           ContikiMoteType.tempOutputDirectory,
           testID + ContikiMoteType.librarySuffix);
-      if (CoreComm.hasLibraryFileBeenLoaded(libraryFile)) {
+      if (libraryFile.exists() || CoreComm.hasLibraryFileBeenLoaded(libraryFile)) {
         okID = false;
       }
     }
