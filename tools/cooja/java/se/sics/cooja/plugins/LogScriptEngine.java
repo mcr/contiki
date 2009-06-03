@@ -235,13 +235,13 @@ public class LogScriptEngine {
     scriptActive = false;
 
     if (semaphoreScript == null) {
-      logger.warn("semaphoreScript is not initialized");
+      /*logger.warn("semaphoreScript is not initialized");*/
     }
     if (semaphoreSim == null) {
-      logger.warn("semaphoreSim is not initialized");
+      /*logger.warn("semaphoreSim is not initialized");*/
     }
     if (scriptThread == null) {
-      logger.warn("scriptThread is not initialized");
+      /*logger.warn("scriptThread is not initialized");*/
     }
 
     if (timeoutEvent != null) {
@@ -369,6 +369,10 @@ public class LogScriptEngine {
             logger.fatal("Script error:", e);
             deactivateScript();
             gui.getSimulation().stopSimulation();
+            if (GUI.isVisualized()) {
+              GUI.showErrorDialog(GUI.getTopParentContainer(),
+                  "Script error", e, false);
+            }
           }
         }
         /*logger.info("test script thread exits");*/
