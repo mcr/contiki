@@ -79,8 +79,6 @@ PROCESS_THREAD(example_abc_process, ev, data)
     packetbuf_copyfrom("Hello", 6);
     abc_send(&abc);
     printf("abc message sent\n");
-
-    etimer_reset(&et);
   }
 
   PROCESS_END();
