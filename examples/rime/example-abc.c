@@ -40,6 +40,7 @@
 
 #include "contiki.h"
 #include "net/rime.h"
+#include "random.h"
 
 #include "dev/button-sensor.h"
 
@@ -68,9 +69,10 @@ PROCESS_THREAD(example_abc_process, ev, data)
 
   abc_open(&abc, 128, &abc_call);
 
-  etimer_set(&et, 2 * CLOCK_SECOND);
-
   while(1) {
+
+    /* Delay 2-4 seconds */
+    etimer_set(&et, CLOCK_SECOND * 2 + random_rand() % (CLOCK_SECOND * 2));
 
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
 
