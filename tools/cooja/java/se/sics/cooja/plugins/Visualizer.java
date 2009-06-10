@@ -1008,11 +1008,14 @@ public class Visualizer extends VisPlugin {
       String desc = GUI.getDescriptionOf(mote.getInterfaces().getLED());
 
       MoteInterfaceViewer viewer =
-        (MoteInterfaceViewer) simulation.getGUI().startPlugin(
+        (MoteInterfaceViewer) simulation.getGUI().tryStartPlugin(
             MoteInterfaceViewer.class,
             simulation.getGUI(),
             simulation,
             mote);
+      if (viewer == null) {
+        return;
+      }
       viewer.setSelectedInterface(desc);
       viewer.pack();
     }
@@ -1056,11 +1059,14 @@ public class Visualizer extends VisPlugin {
       String desc = GUI.getDescriptionOf(serialPort);
 
       MoteInterfaceViewer viewer =
-        (MoteInterfaceViewer) simulation.getGUI().startPlugin(
+        (MoteInterfaceViewer) simulation.getGUI().tryStartPlugin(
             MoteInterfaceViewer.class,
             simulation.getGUI(),
             simulation,
             mote);
+      if (viewer == null) {
+        return;
+      }
       viewer.setSelectedInterface(desc);
       viewer.pack();
     }

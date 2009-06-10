@@ -37,6 +37,7 @@ import org.apache.log4j.Logger;
 import org.jdom.Element;
 
 import se.sics.cooja.*;
+import se.sics.cooja.GUI.PluginConstructionException;
 import se.sics.cooja.contikimote.ContikiMoteType;
 import se.sics.cooja.interfaces.*;
 
@@ -115,11 +116,10 @@ public class EventListener extends VisPlugin {
           + myParent.mySimulation.getSimulationTime(), new AbstractAction(
           "View interface visualizer") {
         public void actionPerformed(ActionEvent e) {
-          MoteInterfaceViewer plugin = (MoteInterfaceViewer) mySimulation
-              .getGUI().startPlugin(MoteInterfaceViewer.class,
-                  mySimulation.getGUI(), mySimulation, myMote);
-          plugin.setSelectedInterface(GUI.getDescriptionOf(moteInterface
-              .getClass()));
+          MoteInterfaceViewer plugin = 
+            (MoteInterfaceViewer) mySimulation.getGUI().tryStartPlugin(
+                MoteInterfaceViewer.class, mySimulation.getGUI(), mySimulation, myMote);
+          plugin.setSelectedInterface(GUI.getDescriptionOf(moteInterface.getClass()));
         }
       });
     }
