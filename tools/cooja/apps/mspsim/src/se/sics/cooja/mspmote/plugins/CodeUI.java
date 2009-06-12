@@ -78,6 +78,12 @@ public class CodeUI extends JPanel {
 
     breakpoints.addWatchpointListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
+        /* Only update code list if simulation is not running */
+        if (CodeUI.this.breakpoints.getMote().getSimulation().isRunning() ||
+            CodeUI.this.breakpoints.getLastWatchpoint() != null) {
+          return;
+        }
+        
         SwingUtilities.invokeLater(new Runnable() {
           public void run() {
             if (codeList != null) {
