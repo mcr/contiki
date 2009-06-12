@@ -67,8 +67,6 @@ public class ScriptParser {
 
     code = replaceWaitUntils(code);
 
-    code = replaceGenerateMessages(code);
-
     this.code = code;
   }
 
@@ -219,30 +217,11 @@ public class ScriptParser {
     return code;
   }
 
-  private String replaceGenerateMessages(String code) throws ScriptSyntaxErrorException {
-    Pattern pattern = Pattern.compile(
-        "GENERATE_MSG\\(" +
-        "([0-9]+)" /* timeout */ +
-        "[\\s]*,[\\s]*" +
-        "(.*)" /* code */ +
-        "\\)"
-    );
-    Matcher matcher = pattern.matcher(code);
-
-    while (matcher.find()) {
-      long time = Long.parseLong(matcher.group(1))*Simulation.MILLISECOND;
-      String msg = matcher.group(2);
-
-      code = matcher.replaceFirst(
-          "log.generateMessage(" + time + "," + msg + ")");
-      matcher.reset(code);
-    }
-
-    return code;
-  }
-
   public String getJSCode() {
     return
+    "function GENERATE_MSG(time, msg) { " +
+    " log.generateMessage(time, msg); " +
+    "};\n" +
     "function SCRIPT_KILL() { " +
     " SEMAPHORE_SIM.release(100); " +
     " throw('test script killed'); " +
