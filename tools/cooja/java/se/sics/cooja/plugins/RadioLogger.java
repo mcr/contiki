@@ -170,6 +170,9 @@ public class RadioLogger extends VisPlugin {
         int rowIndex = rowAtPoint(p);
         int colIndex = columnAtPoint(p);
         int realColumnIndex = convertColumnIndexToModel(colIndex);
+        if (rowIndex < 0 || realColumnIndex < 0) {
+          return super.getToolTipText(e);
+        }
 
         RadioConnectionLog conn = connections.get(rowIndex);
         if (realColumnIndex == COLUMN_TIME) {
