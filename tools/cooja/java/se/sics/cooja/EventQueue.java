@@ -52,7 +52,9 @@ public class EventQueue {
     hasUnsortedEvents = false;
 
     for (TimeEvent e: unsortedEvents) {
-      addEvent(e);
+      if (!e.removed) {
+        addEvent(e);
+      }
     }
     unsortedEvents.clear();
   }
