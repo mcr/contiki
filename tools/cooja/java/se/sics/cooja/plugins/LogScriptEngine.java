@@ -394,7 +394,6 @@ public class LogScriptEngine {
 
       public void generateMessage(long delay, final String msg) {
         final Mote currentMote = (Mote) engine.get("mote");
-
         TimeEvent generateEvent = new TimeEvent(0) {
           public void execute(long t) {
             if (scriptThread == null ||
@@ -415,7 +414,7 @@ public class LogScriptEngine {
         };
         simulation.scheduleEvent(
             generateEvent,
-            simulation.getSimulationTime() + delay);
+            simulation.getSimulationTime() + delay*Simulation.MILLISECOND);
       }
     });
 
