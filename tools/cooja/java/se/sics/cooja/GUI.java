@@ -3768,7 +3768,7 @@ public class GUI extends Observable {
       }
 
       /* Replace config's canonical path with config identifier */
-      String newFilePath = fileCanonical.replace(configCanonical, configIdentifier);
+      String newFilePath = fileCanonical.replaceFirst(configCanonical, configIdentifier);
 
       File newFile = new File(newFilePath);
       logger.info("Generated config relative path: '" + file.getPath() + "' to '" + newFile.getPath() + "'");
