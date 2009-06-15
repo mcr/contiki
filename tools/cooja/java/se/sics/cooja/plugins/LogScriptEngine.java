@@ -276,11 +276,11 @@ public class LogScriptEngine {
           timeoutEvent,
           simulation.getSimulationTime() + timeoutTime);
     } else {
-      logger.info("No timeout defined, using default: " + 
-          simulation.getSimulationTime() + DEFAULT_TIMEOUT);
+      logger.info("No timeout defined, using default (us): " + 
+          (simulation.getSimulationTime() + DEFAULT_TIMEOUT));
       simulation.scheduleEvent(
           timeoutEvent,
-          simulation.getSimulationTime() + DEFAULT_TIMEOUT);
+          (simulation.getSimulationTime() + DEFAULT_TIMEOUT));
     }
 
     engine.eval(jsCode);
@@ -296,7 +296,7 @@ public class LogScriptEngine {
     try {
       semaphoreScript.acquire();
     } catch (InterruptedException e) {
-      e.printStackTrace();
+      logger.fatal("Error when creating engine: " + e.getMessage(), e);
     }
     ThreadGroup group = new ThreadGroup("script") {
       public void uncaughtException(Thread t, Throwable e) {
