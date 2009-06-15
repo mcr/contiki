@@ -159,7 +159,6 @@ public class ContikiRS232 extends SerialUI implements ContikiMoteInterface, Poll
       pendingBytes.add(b);
     }
 
-    mote.scheduleImmediateWakeup();
     if (pendingBytesEvent != null) {
       /* Event is already scheduled, no need to reschedule */
       return;
@@ -197,6 +196,7 @@ public class ContikiRS232 extends SerialUI implements ContikiMoteInterface, Poll
 
         /* Reschedule us if more bytes are available */
         mote.getSimulation().scheduleEvent(this, t);
+        mote.scheduleImmediateWakeup();
       }
     };
     mote.getSimulation().scheduleEvent(
@@ -208,7 +208,6 @@ public class ContikiRS232 extends SerialUI implements ContikiMoteInterface, Poll
   public void writeByte(final byte b) {
     pendingBytes.add(b);
 
-    mote.scheduleImmediateWakeup();
     if (pendingBytesEvent != null) {
       /* Event is already scheduled, no need to reschedule */
       return;
@@ -246,6 +245,7 @@ public class ContikiRS232 extends SerialUI implements ContikiMoteInterface, Poll
 
         /* Reschedule us if more bytes are available */
         mote.getSimulation().scheduleEvent(this, t);
+        mote.scheduleImmediateWakeup();
       }
     };
     mote.getSimulation().scheduleEvent(
