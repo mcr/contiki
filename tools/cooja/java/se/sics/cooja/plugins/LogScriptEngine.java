@@ -371,9 +371,7 @@ public class LogScriptEngine {
           simulation.scheduleEvent(quitEvent, simulation.getSimulationTime());
         }
 
-        if (timeoutEvent != null) {
-          timeoutEvent.remove();
-        }
+        timeoutEvent.remove();
 
         semaphoreSim.release(100);
         throw new RuntimeException("test script killed");
