@@ -31,6 +31,8 @@
 
 package se.sics.cooja;
 
+import java.awt.Color;
+
 /**
  * @author Fredrik Osterlind
  */
@@ -45,4 +47,9 @@ public interface Watchpoint {
    * @return Mote
    */
   public Mote getMote();
+  
+  /**
+   * @return Color
+   */
+  public Color getColor();
 }
