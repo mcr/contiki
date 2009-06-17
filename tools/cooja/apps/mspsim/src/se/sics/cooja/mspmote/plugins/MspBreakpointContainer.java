@@ -193,7 +193,8 @@ public class MspBreakpointContainer implements WatchpointMote {
 
     /* Notify listeners */
     lastTriggeredBreakpoint = b;
-    for (ActionListener listener: listeners) {
+    ActionListener[] arr = getWatchpointListeners();
+    for (ActionListener listener: arr) {
       listener.actionPerformed(null);
     }
   }

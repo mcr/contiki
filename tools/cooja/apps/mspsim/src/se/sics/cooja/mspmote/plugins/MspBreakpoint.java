@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
 import org.jdom.Element;
 
 import se.sics.cooja.Watchpoint;
@@ -50,6 +51,8 @@ import se.sics.mspsim.core.CPUMonitor;
  * @author Fredrik Osterlind
  */
 public class MspBreakpoint implements Watchpoint {
+  private static Logger logger = Logger.getLogger(MspBreakpoint.class);
+
   private MspBreakpointContainer breakpoints;
   private MspMote mspMote;
 
@@ -205,6 +208,17 @@ public class MspBreakpoint implements Watchpoint {
       return false;
     }
 
+    /* TODO Save source code line */
+
+    if (codeFile != null && lineNr != null) {
+      /* Update executable address */
+      address = mspMote.getBreakpointsContainer().getExecutableAddressOf(codeFile, lineNr);
+      if (address == null) {
+        logger.fatal("Could not restore breakpoint, did source code change?");
+        address = 0;
+      }
+    }
+    
     createMonitor();
     return true;
   }
