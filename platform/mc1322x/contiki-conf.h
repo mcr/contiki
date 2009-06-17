@@ -73,13 +73,14 @@ typedef int32_t s32_t;
 
 #define USE_FORMATTED_STDIO 1
 #undef DISABLE_RECEPTION
-#define MACA_DEBUG          1
+#define MACA_DEBUG          0
 #define MACA_RAW_MODE       0
 #define USE_32KHZ_XTAL      0
 
 #define QUEUEBUF_CONF_NUM     8
-#define RIMEADDR_CONF_SIZE    2
+#define RIMEADDR_CONF_SIZE    8
 #define PACKETBUF_CONF_SIZE  96
+#define PACKETBUF_CONF_HDR_SIZE 64
 
 typedef uint32_t clock_time_t;
 typedef unsigned char u8_t;
