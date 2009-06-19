@@ -54,9 +54,9 @@
 #include "isr.h"
 
 #define TIC 4
-#define ON_BATTERY 0
-#define CHIRP_INTERVAL  3  /* seconds */
-#define CHIRPS          3 
+#define ON_BATTERY 1
+#define CHIRP_INTERVAL  10  /* seconds */
+#define CHIRPS          5 
 #define SLEEP_TIME 300 /* seconds */
 
 static struct collect_conn tc;
@@ -97,7 +97,7 @@ void report_state(void) {
 	} else {
 		packetbuf_copyfrom("GPIO29-0",9);
 	}
-	collect_send(&tc, 2);
+	collect_send(&tc, 4);
 }
 
 void
