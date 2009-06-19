@@ -37,7 +37,12 @@
 
 #include "contiki-net.h"
 
-#define HTTPD_FS_STATISTICS 1
+//#define HTTPD_FS_STATISTICS 1   //Puts count in file system
+#define HTTPD_FS_STATISTICS 2     //Puts count in RAM array
+
+#if HTTPD_FS_STATISTICS==2
+extern u16_t httpd_filecount[];
+#endif /* HTTPD_FS_STATISTICS */
 
 #include <avr/pgmspace.h>
 
@@ -47,14 +52,11 @@ struct httpd_fs_file {
 };
 
 /* file must be allocated by caller and will be filled in
-   by the function. */
-int httpd_fs_open(const char *name, struct httpd_fs_file *file);
+   by the function. If NULL, just file stats are returned.*/
+u16_t httpd_fs_open(const char *name, struct httpd_fs_file *file);
 
-#ifdef HTTPD_FS_STATISTICS
-#if HTTPD_FS_STATISTICS == 1  
-u16_t httpd_fs_count(char *name);
-#endif /* HTTPD_FS_STATISTICS */
-#endif /* HTTPD_FS_STATISTICS */
+/* Returns root of http pages in flash */
+void * httpd_get_root();
 
 void httpd_fs_init(void);
 

@@ -42,10 +42,8 @@ struct httpd_fsdata_file {
   const char *name;
   const char *data;
   const int len;
-#ifdef HTTPD_FS_STATISTICS
 #if HTTPD_FS_STATISTICS == 1
   u16_t count;
-#endif /* HTTPD_FS_STATISTICS */
 #endif /* HTTPD_FS_STATISTICS */
 };
 
@@ -54,10 +52,8 @@ struct httpd_fsdata_file_noconst {
   char *name;
   char *data;
   int len;
-#ifdef HTTPD_FS_STATISTICS
 #if HTTPD_FS_STATISTICS == 1
   u16_t count;
-#endif /* HTTPD_FS_STATISTICS */
 #endif /* HTTPD_FS_STATISTICS */
 };
 
