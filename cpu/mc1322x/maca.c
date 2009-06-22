@@ -172,7 +172,7 @@ int maca_send(const void *payload, unsigned short payload_len) {
 	while(!action_complete_irq());
 	ResumeMACASync();
 //	}
-	clear_bit(reg32(GPIO_DATA0),8);
+	led_red_off();
 
 	return 0;
 }
@@ -226,13 +226,13 @@ PROCESS_THREAD(maca_process, ev, data)
 		if(data_indication_irq()) {
 			/* call the recieve callback */
 			/* then do something? */
-			set_bit(reg32(GPIO_DATA0),9);
+			led_green_on();
 			
 			receiver_callback(&maca_driver);
 			
 			reg32(MACA_CLRIRQ) = (1<<maca_irq_di);			
 
-			clear_bit(reg32(GPIO_DATA0),9);
+			led_green_off();
 		}
 #endif /* DISABLE_RECEPTION */
 
