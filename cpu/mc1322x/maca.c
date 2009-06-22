@@ -37,6 +37,12 @@ static volatile uint8_t radio_state;
 #define MACA_RAW_PREPEND 0xff
 #endif
 
+#define led_red_on() do { set_bit(reg32(GPIO_DATA0),8); set_bit(reg32(GPIO_DATA0),23); } while (0)
+#define led_red_off() do { clear_bit(reg32(GPIO_DATA0),8); clear_bit(reg32(GPIO_DATA0),23); } while (0)
+
+#define led_green_on() do { set_bit(reg32(GPIO_DATA0),9); set_bit(reg32(GPIO_DATA0),24); } while (0)
+#define led_green_off() do { clear_bit(reg32(GPIO_DATA0),9); clear_bit(reg32(GPIO_DATA0),24); } while(0)
+
 /* contiki mac driver */
 
 static void (* receiver_callback)(const struct radio_driver *);
@@ -122,7 +128,7 @@ int maca_send(const void *payload, unsigned short payload_len) {
 
 	/* wait for maca to finish what it's doing */
 	while(status_is_not_completed());
-	set_bit(reg32(GPIO_DATA0),8);
+	led_red_on();
 	ResumeMACASync();
 
 /* the mc1322x promiscuous mode doen't appear to be entirely promiscuous */

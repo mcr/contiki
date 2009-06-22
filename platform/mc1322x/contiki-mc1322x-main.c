@@ -81,6 +81,9 @@ init_lowlevel(void)
 	set_bit(reg32(GPIO_PAD_DIR0),8);
 	set_bit(reg32(GPIO_PAD_DIR0),9);
 	set_bit(reg32(GPIO_PAD_DIR0),10);
+	set_bit(reg32(GPIO_PAD_DIR0),23);
+	set_bit(reg32(GPIO_PAD_DIR0),24);
+	set_bit(reg32(GPIO_PAD_DIR0),25);
 
 	/* button init */
 	/* set up kbi */

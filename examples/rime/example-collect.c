@@ -54,7 +54,7 @@
 #include "isr.h"
 
 #define TIC 4
-#define ON_BATTERY 1
+#define ON_BATTERY 0
 #define CHIRP_INTERVAL  10  /* seconds */
 #define CHIRPS          5 
 #define SLEEP_TIME 300 /* seconds */
@@ -66,6 +66,9 @@ process_event_t ev_pressed;
 PROCESS(example_collect_process, "Test collect process");
 AUTOSTART_PROCESSES(&example_collect_process);
 /*---------------------------------------------------------------------------*/
+
+#define led_blue_on() do { set_bit(reg32(GPIO_DATA0),10); set_bit(reg32(GPIO_DATA0),25); } while (0)
+#define led_blue_off() do { clear_bit(reg32(GPIO_DATA0),10); clear_bit(reg32(GPIO_DATA0),25); } while(0)
 
 void safe_sleep(void) {
 	/* set kbi wake up polarity to the opposite of the current reading */
@@ -103,11 +106,11 @@ void report_state(void) {
 void
 kbi7_isr(void) 
 {
-	set_bit(reg32(GPIO_DATA0),10);
+	led_blue_on();
 	printf("button7\n\r");
 	clear_kbi_evnt(7);
 	process_post(&example_collect_process, ev_pressed, "GPIO29");
-	clear_bit(reg32(GPIO_DATA0),10);
+	led_blue_off();
 	return;
 }
 
