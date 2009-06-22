@@ -18,6 +18,9 @@
 
 static volatile uint8_t tx_buf[MAX_PACKET_SIZE]  __attribute__ ((aligned (4)));
 static volatile uint8_t rx_buf[MAX_PACKET_SIZE]  __attribute__ ((aligned (4)));				
+
+static volatile uint8_t maca_request_on = 0;
+static volatile uint8_t maca_request_off = 0;
 								
 #ifndef MACA_SOFT_TIMEOUT
 #define MACA_SOFT_TIMEOUT 5000
@@ -43,8 +46,8 @@ static volatile uint8_t rx_buf[MAX_PACKET_SIZE]  __attribute__ ((aligned (4)));
 
 static void (* receiver_callback)(const struct radio_driver *);
 
-int maca_on(void);
-int maca_off(void);
+int maca_on_request(void);
+int maca_off_request(void);
 int maca_read(void *buf, unsigned short bufsize);
 int maca_send(const void *data, unsigned short len);
 void maca_set_receiver(void (* recv)(const struct radio_driver *d));
@@ -54,9 +57,22 @@ const struct radio_driver maca_driver =
 	maca_send,
 	maca_read,
 	maca_set_receiver,
-	maca_on,
-	maca_off,
+	maca_on_request,
+	maca_off_request,
 };
+
+int maca_on_request(void) {
+	maca_request_on = 1;
+	maca_request_off = 0;
+	return 1;
+}
+
+int maca_off_request(void) {
+	maca_request_on = 0;
+	maca_request_off = 1;
+	return 1;
+}
+
 
 int maca_on(void) {
 	PRINTF("maca on\n\r");
@@ -201,6 +217,18 @@ PROCESS_THREAD(maca_process, ev, data)
 		   !(data_indication_irq())
 			) 
 		{
+
+			/* check if there is a request to turn the radio on or off */
+			if(maca_request_on == 1) {
+				maca_request_on = 0;
+				maca_on();
+			}
+			if(maca_request_off == 1) {
+				maca_request_off = 0;
+				maca_off();
+				goto out;
+			}
+			
 			/* start a reception */
 //			PRINTF("maca: starting reception sequence\n\r");
 			ResumeMACASync();
@@ -218,6 +246,7 @@ PROCESS_THREAD(maca_process, ev, data)
 						(1<<maca_ctrl_asap) |
 						(maca_ctrl_seq_rx));
 		}
+	out:
 
 		if(data_indication_irq()) {
 			/* call the recieve callback */
