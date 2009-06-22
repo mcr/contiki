@@ -221,9 +221,13 @@ on(void)
 }
 /*---------------------------------------------------------------------------*/
 static int
-off(void)
+off(int keep_radio_on)
 {
-  return radio->off();
+  if(keep_radio_on) {
+    return radio->on();
+  } else {
+    return radio->off();
+  }
 }
 /*---------------------------------------------------------------------------*/
 const struct mac_driver *
@@ -243,6 +247,7 @@ tdma_mac_init(const struct radio_driver *d)
 /*---------------------------------------------------------------------------*/
 const struct mac_driver tdma_mac_driver = {
     "TDMA MAC",
+    tdma_mac_init,
     send,
     read,
     set_receive_function,

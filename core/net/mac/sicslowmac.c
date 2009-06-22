@@ -234,6 +234,7 @@ off(int keep_radio_on)
 /*---------------------------------------------------------------------------*/
 const struct mac_driver sicslowmac_driver = {
   "sicslowmac",
+  sicslowmac_init,
   send_packet,
   read_packet,
   set_receive_function,

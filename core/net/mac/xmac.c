@@ -745,6 +745,7 @@ turn_off(int keep_radio_on)
 const struct mac_driver xmac_driver =
   {
     "X-MAC",
+    xmac_init,
     qsend_packet,
     read_packet,
     set_receive_function,

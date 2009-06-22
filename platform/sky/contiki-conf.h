@@ -4,6 +4,9 @@
 #ifndef CONTIKI_CONF_H
 #define CONTIKI_CONF_H
 
+/* Specifies the default MAC driver */
+#define MAC_CONF_DRIVER xmac_driver
+
 #define XMAC_CONF_COMPOWER 1
 #define XMAC_CONF_ANNOUNCEMENTS 1
 #define RIME_CONF_NO_POLITE_ANNOUCEMENTS 1

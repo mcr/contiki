@@ -818,8 +818,9 @@ off(int keep_radio_on)
   return 1;
 }
 /*---------------------------------------------------------------------------*/
-static const struct mac_driver lpp_driver = {
+const struct mac_driver lpp_driver = {
   "LPP",
+  lpp_init,
   send_packet,
   read_packet,
   set_receive_function,

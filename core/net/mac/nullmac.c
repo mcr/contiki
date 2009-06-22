@@ -92,6 +92,7 @@ off(int keep_radio_on)
 /*---------------------------------------------------------------------------*/
 const struct mac_driver nullmac_driver = {
   "nullmac",
+  nullmac_init,
   send_packet,
   read_packet,
   set_receive_function,

@@ -47,6 +47,8 @@
 #include "net/mac/mac.h"
 #include "dev/radio.h"
 
+extern const struct mac_driver lpp_driver;
+
 const struct mac_driver *lpp_init(const struct radio_driver *d);
 
 #endif /* __LPP_H__ */
