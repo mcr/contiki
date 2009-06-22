@@ -19,10 +19,6 @@
 static volatile uint8_t tx_buf[MAX_PACKET_SIZE]  __attribute__ ((aligned (4)));
 static volatile uint8_t rx_buf[MAX_PACKET_SIZE]  __attribute__ ((aligned (4)));				
 								
-static volatile uint8_t radio_state;
-#define radio_is_on() (radio_state == 1)
-#define radio_is_off() (radio_state == 0)
-
 #ifndef MACA_SOFT_TIMEOUT
 #define MACA_SOFT_TIMEOUT 5000
 #endif
@@ -69,25 +65,25 @@ int maca_on(void) {
 #endif /*DISABLE_RECEPTION*/	
 
         /* turn the radio regulators back on */
-	reg32(CRM_VREG_CNTL) = reg32(CRM_VREG_CNTL) | 0x00000078;
+//	reg32(CRM_VREG_CNTL) = reg32(CRM_VREG_CNTL) | 0x00000078;
 
 	/* reinitialize the phy */
-        init_phy();
-
-	radio_state = 1;
+//        init_phy();
 
 	return 1;
 }
 
 int maca_off(void) {
+	PRINTF("waiting to turn maca off");
+	while((reg32(MACA_STATUS) & 0x0000ffff) == maca_cc_not_completed) {
+		PRINTF(".");
+	}
 	PRINTF("maca off\n\r");
         /* turn off the radio regulators */
-	reg32(CRM_VREG_CNTL) = reg32(CRM_VREG_CNTL) & (~0x00000078);
+//	reg32(CRM_VREG_CNTL) = reg32(CRM_VREG_CNTL) & (~0x00000078);
 
         /* hold the maca in reset */
-	set_bit(reg32(MACA_RESET),maca_reset_rst);
-
-	radio_state = 0;
+//	set_bit(reg32(MACA_RESET),maca_reset_rst);
 
 	return 1;
 }
