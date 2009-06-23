@@ -129,11 +129,13 @@ PROCESS_THREAD(hello_world_process, ev, data)
 				uart1_putchar(STATUS_SUCCESS);
 				break;
 			case CMD_SET_CHANNEL:
+				maca_off();
 				parm1 = uart1_getc();
 				set_channel(parm1);
 				printf("zb");
 				uart1_putchar(RESP_SET_CHANNEL);
 				uart1_putchar(STATUS_SUCCESS);
+				maca_on();
 				break;
 			case CMD_ED:
 				printf("zb");
