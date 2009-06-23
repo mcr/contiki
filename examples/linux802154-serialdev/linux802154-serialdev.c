@@ -58,6 +58,21 @@
 
 #include <stdio.h> /* For printf() */
 
+static volatile uint8_t buf[MAX_DATA_SIZE];
+
+void di(const struct radio_driver * radio) {
+	uint8_t len,i;
+	len = maca_driver.read((uint8_t *)buf,MAX_DATA_SIZE);
+	printf("zb");
+	uart1_putchar(DATA_RECV_BLOCK);
+	uart1_putchar(0);
+	uart1_putchar(len);
+	for(i=0; i<len; i++) {
+		uart1_putchar(buf[i]);
+	}
+}	
+
+
 /*---------------------------------------------------------------------------*/
 PROCESS(hello_world_process, "Hello world process");
 AUTOSTART_PROCESSES(&hello_world_process);
@@ -68,18 +83,13 @@ PROCESS_THREAD(hello_world_process, ev, data)
 	volatile uint32_t i;
 	uint8_t cmd,parm1,parm2;
 	static uint8_t state = IDLE_MODE;
-	static volatile uint8_t buf[MAX_DATA_SIZE];
 
 	PROCESS_BEGIN();
 
+	maca_driver.set_receive_function(di);
+
 	while(1) {
 		
-/* 		if(uart1_can_get()) { */
-/* 			printf("got %c\n\r", uart1_getc()); */
-/* 		} */
-
-//		led_blue_off();
-
 		/* clear out sb */
 		for(i=0; i<NUM_START_BYTES; i++) {
 			sb[i] = 0;
@@ -88,13 +98,13 @@ PROCESS_THREAD(hello_world_process, ev, data)
 		/* recieve bytes until we see the first start byte */
 		/* this syncs up to the commands */
 		while(sb[0] != START_BYTE1) {
-			while(!uart1_can_get());
+			while(!uart1_can_get()) { PROCESS_PAUSE();}
 			sb[0] = uart1_getc();
 		}
 
 		/* receive start bytes */
 		for(i=1; i<NUM_START_BYTES; i++) {
-			while(!uart1_can_get());
+			while(!uart1_can_get()) { /* PROCESS_PAUSE(); */};
 			sb[i] = uart1_getc();
 		}
 		
@@ -103,7 +113,7 @@ PROCESS_THREAD(hello_world_process, ev, data)
 			cmd = 0;
 //			led_blue_on();
 
-			while(!uart1_can_get());
+			while(!uart1_can_get()) { /* PROCESS_PAUSE(); */};
 			cmd = uart1_getc();
 			
 			switch(cmd)
