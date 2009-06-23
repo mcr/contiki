@@ -39,18 +39,123 @@
  */
 
 #include "contiki.h"
+#include "rime.h"
+
+#include "linux-serialdev.h"
+#define start_command() ((sb[0] == START_BYTE1) && (sb[1] == START_BYTE2))
+
+#include "gpio.h"
+#include "maca.h"
+
+#define led_red_on() do { set_bit(reg32(GPIO_DATA0),8); set_bit(reg32(GPIO_DATA0),23); } while (0)
+#define led_red_off() do { clear_bit(reg32(GPIO_DATA0),8); clear_bit(reg32(GPIO_DATA0),23); } while (0)
+
+#define led_green_on() do { set_bit(reg32(GPIO_DATA0),9); set_bit(reg32(GPIO_DATA0),24); } while (0)
+#define led_green_off() do { clear_bit(reg32(GPIO_DATA0),9); clear_bit(reg32(GPIO_DATA0),24); } while(0)
+
+#define led_blue_on() do { set_bit(reg32(GPIO_DATA0),10); set_bit(reg32(GPIO_DATA0),25); } while (0)
+#define led_blue_off() do { clear_bit(reg32(GPIO_DATA0),10); clear_bit(reg32(GPIO_DATA0),25); } while(0)
 
 #include <stdio.h> /* For printf() */
+
 /*---------------------------------------------------------------------------*/
 PROCESS(hello_world_process, "Hello world process");
 AUTOSTART_PROCESSES(&hello_world_process);
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(hello_world_process, ev, data)
 {
-  PROCESS_BEGIN();
+	uint8_t sb[NUM_START_BYTES];
+	volatile uint32_t i;
+	uint8_t cmd,parm1,parm2;
+	static uint8_t state = IDLE_MODE;
+	static volatile uint8_t buf[MAX_DATA_SIZE];
 
-  printf("Hello, world\n");
-  
-  PROCESS_END();
+	PROCESS_BEGIN();
+
+	while(1) {
+		
+/* 		if(uart1_can_get()) { */
+/* 			printf("got %c\n\r", uart1_getc()); */
+/* 		} */
+
+//		led_blue_off();
+
+		/* clear out sb */
+		for(i=0; i<NUM_START_BYTES; i++) {
+			sb[i] = 0;
+		}
+
+		/* recieve bytes until we see the first start byte */
+		/* this syncs up to the commands */
+		while(sb[0] != START_BYTE1) {
+			while(!uart1_can_get());
+			sb[0] = uart1_getc();
+		}
+
+		/* receive start bytes */
+		for(i=1; i<NUM_START_BYTES; i++) {
+			while(!uart1_can_get());
+			sb[i] = uart1_getc();
+		}
+		
+		if(start_command()) {
+			/* do a command */
+			cmd = 0;
+//			led_blue_on();
+
+			while(!uart1_can_get());
+			cmd = uart1_getc();
+			
+			switch(cmd)
+			{
+			case CMD_OPEN:
+				printf("zb");
+				uart1_putchar(RESP_OPEN);
+				uart1_putchar(STATUS_SUCCESS);
+				break;
+			case CMD_CLOSE:
+				printf("zb");
+				uart1_putchar(RESP_CLOSE);
+				uart1_putchar(STATUS_SUCCESS);
+				break;
+			case CMD_SET_CHANNEL:
+				parm1 = uart1_getc();
+				set_channel(parm1);
+				printf("zb");
+				uart1_putchar(RESP_SET_CHANNEL);
+				uart1_putchar(STATUS_SUCCESS);
+				break;
+			case CMD_ED:
+				printf("zb");
+				uart1_putchar(RESP_ED);
+				uart1_putchar(STATUS_SUCCESS);
+				uart1_putchar(0);
+				break;
+			case CMD_SET_STATE:
+				state = uart1_getc();
+				printf("zb");
+				uart1_putchar(RESP_SET_STATE);
+				uart1_putchar(STATUS_SUCCESS);
+			case DATA_XMIT_BLOCK:
+				parm1 = uart1_getc();
+				for(i=0; i<parm1; i++) {
+					buf[i] = uart1_getc();
+				}
+				maca_driver.send((const uint8_t *)buf,parm1);
+				printf("zb");
+				uart1_putchar(RESP_XMIT_BLOCK);
+				uart1_putchar(STATUS_SUCCESS);
+			default:
+				break;
+			}
+
+		}
+		
+		PROCESS_PAUSE();
+
+	}
+
+	
+	PROCESS_END();
 }
 /*---------------------------------------------------------------------------*/

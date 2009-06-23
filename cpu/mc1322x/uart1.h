@@ -10,7 +10,9 @@
 #define UART1_CTS       0x80005014
 #define UART1_BR        0x80005018
 
-
 int uart1_putchar(int c);
+
+#define uart1_can_get() (reg32(UR1CON) > 0)
+#define uart1_getc() (reg32(UART1_DATA))
 
 #endif
