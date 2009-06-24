@@ -46,6 +46,7 @@
 
 #include "gpio.h"
 #include "maca.h"
+#include "uart1.h"
 
 #define led_red_on() do { set_bit(reg32(GPIO_DATA0),8); set_bit(reg32(GPIO_DATA0),23); } while (0)
 #define led_red_off() do { clear_bit(reg32(GPIO_DATA0),8); clear_bit(reg32(GPIO_DATA0),23); } while (0)
@@ -130,7 +131,6 @@ PROCESS_THREAD(hello_world_process, ev, data)
 				break;
 			case CMD_SET_CHANNEL:
 				maca_off();
-				while(!uart1_can_get());
 				parm1 = uart1_getc();
 				set_channel(parm1);
 				printf("zb");
@@ -145,17 +145,14 @@ PROCESS_THREAD(hello_world_process, ev, data)
 				uart1_putchar(0);
 				break;
 			case CMD_SET_STATE:
-				while(!uart1_can_get());
 				state = uart1_getc();
 				printf("zb");
 				uart1_putchar(RESP_SET_STATE);
 				uart1_putchar(STATUS_SUCCESS);
 				break;
 			case DATA_XMIT_BLOCK:
-				while(!uart1_can_get());
 				parm1 = uart1_getc();
 				for(i=0; i<parm1; i++) {
-					while(!uart1_can_get());
 					buf[i] = uart1_getc();
 				}
 				maca_driver.send((const uint8_t *)buf,parm1);
