@@ -2222,9 +2222,8 @@ public class GUI extends Observable {
           try {
             shouldRetry = false;
             myGUI.doRemoveSimulation(false);
-            Simulation newSim = loadSimulationConfig(root, true);
+            Simulation newSim = loadSimulationConfig(root, true, new Long(randomSeed));
             myGUI.setSimulation(newSim, false);
-            myGUI.getSimulation().setRandomSeed(randomSeed);
 
             if (autoStart) {
               newSim.startSimulation();
@@ -3064,7 +3063,7 @@ public class GUI extends Observable {
       Document doc = builder.build(file);
       Element root = doc.getRootElement();
 
-      return loadSimulationConfig(root, quick);
+      return loadSimulationConfig(root, quick, null);
     } catch (JDOMException e) {
       logger.fatal("Config not wellformed: " + e.getMessage());
       return null;
@@ -3081,7 +3080,7 @@ public class GUI extends Observable {
       Document doc = builder.build(stringReader);
       Element root = doc.getRootElement();
 
-      return loadSimulationConfig(root, quick);
+      return loadSimulationConfig(root, quick, null);
     } catch (JDOMException e) {
       throw (SimulationCreationException) new SimulationCreationException(
           "Configuration file not wellformed: " + e.getMessage()).initCause(e);
@@ -3091,7 +3090,7 @@ public class GUI extends Observable {
     }
   }
 
-  private Simulation loadSimulationConfig(Element root, boolean quick)
+  private Simulation loadSimulationConfig(Element root, boolean quick, Long manualRandomSeed)
   throws SimulationCreationException {
     Simulation newSim = null;
 
@@ -3153,7 +3152,7 @@ public class GUI extends Observable {
           Collection<Element> config = ((Element) element).getChildren();
           newSim = new Simulation(this);
           System.gc();
-          boolean createdOK = newSim.setConfigXML(config, !quick);
+          boolean createdOK = newSim.setConfigXML(config, !quick, manualRandomSeed);
           if (!createdOK) {
             logger.info("Simulation not loaded");
             return null;
