@@ -58,7 +58,7 @@
 
 #include <stdio.h> /* For printf() */
 
-static volatile uint8_t buf[MAX_DATA_SIZE];
+volatile uint8_t buf[MAX_DATA_SIZE];
 
 void di(const struct radio_driver * radio) {
 	uint8_t len,i;
@@ -79,9 +79,9 @@ AUTOSTART_PROCESSES(&hello_world_process);
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(hello_world_process, ev, data)
 {
-	uint8_t sb[NUM_START_BYTES];
+	volatile uint8_t sb[NUM_START_BYTES];
 	volatile uint32_t i;
-	uint8_t cmd,parm1,parm2;
+	volatile uint8_t cmd,parm1,parm2;
 	static uint8_t state = IDLE_MODE;
 
 	PROCESS_BEGIN();
@@ -130,6 +130,7 @@ PROCESS_THREAD(hello_world_process, ev, data)
 				break;
 			case CMD_SET_CHANNEL:
 				maca_off();
+				while(!uart1_can_get());
 				parm1 = uart1_getc();
 				set_channel(parm1);
 				printf("zb");
@@ -144,19 +145,24 @@ PROCESS_THREAD(hello_world_process, ev, data)
 				uart1_putchar(0);
 				break;
 			case CMD_SET_STATE:
+				while(!uart1_can_get());
 				state = uart1_getc();
 				printf("zb");
 				uart1_putchar(RESP_SET_STATE);
 				uart1_putchar(STATUS_SUCCESS);
+				break;
 			case DATA_XMIT_BLOCK:
+				while(!uart1_can_get());
 				parm1 = uart1_getc();
 				for(i=0; i<parm1; i++) {
+					while(!uart1_can_get());
 					buf[i] = uart1_getc();
 				}
 				maca_driver.send((const uint8_t *)buf,parm1);
 				printf("zb");
 				uart1_putchar(RESP_XMIT_BLOCK);
 				uart1_putchar(STATUS_SUCCESS);
+				break;
 			default:
 				break;
 			}
