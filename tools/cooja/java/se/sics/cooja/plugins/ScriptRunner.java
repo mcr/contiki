@@ -39,7 +39,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -276,6 +275,8 @@ public class ScriptRunner extends VisPlugin {
               logFile.delete();
             }
             logWriter = new BufferedWriter(new FileWriter(logFile));
+            logWriter.write("Random seed: " + simulation.getRandomSeed() + "\n");
+            logWriter.flush();
           }
           engine.setScriptLogObserver(new Observer() {
             public void update(Observable obs, Object obj) {
@@ -333,6 +334,10 @@ public class ScriptRunner extends VisPlugin {
 
       if (logWriter != null) {
         try {
+          logWriter.write(
+              "Test ended at simulation time: " + 
+              (simulation!=null?simulation.getSimulationTime():"?") + "\n");
+          logWriter.flush();
           logWriter.close();
         } catch (IOException e) {
         }
