@@ -73,6 +73,8 @@ void di(const struct radio_driver * radio) {
 	}
 }	
 
+/* linux passed 802.15.4 channel numbers but the maca driver expects 0-15 */
+#define PHY_CHANNEL_OFFSET 11 
 
 /*---------------------------------------------------------------------------*/
 PROCESS(hello_world_process, "Hello world process");
@@ -132,7 +134,7 @@ PROCESS_THREAD(hello_world_process, ev, data)
 			case CMD_SET_CHANNEL:
 				maca_off();
 				parm1 = uart1_getc();
-				set_channel(parm1);
+				set_channel(parm1-PHY_CHANNEL_OFFSET);
 				printf("zb");
 				uart1_putchar(RESP_SET_CHANNEL);
 				uart1_putchar(STATUS_SUCCESS);
@@ -143,6 +145,11 @@ PROCESS_THREAD(hello_world_process, ev, data)
 				uart1_putchar(RESP_ED);
 				uart1_putchar(STATUS_SUCCESS);
 				uart1_putchar(0);
+				break;
+			case CMD_CCA:
+				printf("zb");
+				uart1_putchar(RESP_CCA);
+				uart1_putchar(STATUS_IDLE);
 				break;
 			case CMD_SET_STATE:
 				state = uart1_getc();

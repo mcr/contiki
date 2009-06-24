@@ -23,11 +23,6 @@ void uart1_init(void) {
 	reg32(UART1_CON) = 0x00000003; /* enable receive and transmit */
 	reg32(GPIO_FUNC_SEL0) = ( (0x01 << (14*2)) | (0x01 << (15*2)) ); /* set GPIO15-14 to UART (UART1 TX and RX)*/
 
-	for(i=0; i<=0x18; i+=4) {
-		printf("reg %08x val %08x\n\r",BASE_UART1+i,reg32(BASE_UART1+i));
-	}
-
-
 }
 
 int uart1_putchar(int c) {
