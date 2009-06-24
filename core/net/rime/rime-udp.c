@@ -152,6 +152,7 @@ off(int keep_radio_on)
 /*---------------------------------------------------------------------------*/
 const struct mac_driver rime_udp_driver = {
   "rime-udp",
+  rime_udp_init,
   send_packet,
   read_packet,
   set_receive_function,
