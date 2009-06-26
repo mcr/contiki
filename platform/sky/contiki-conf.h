@@ -83,7 +83,7 @@
 #define UIP_CONF_LL_802154              1
 #define UIP_CONF_LLH_LEN                0
 
-#define UIP_CONF_ROUTER			1
+#define UIP_CONF_ROUTER			0
 
 #define UIP_CONF_IPV6                   1
 #define UIP_CONF_IPV6_QUEUE_PKT         1
