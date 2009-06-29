@@ -108,8 +108,8 @@ rs232_set_speed(enum rs232_speed speed)
 void
 rs232_print(char *cptr)
 {
-  // lock UART for print operation
-  if (uart_lock(UART_MODE_RS232)) {
+  /* lock UART for the print operation */
+  if(uart_lock(UART_MODE_RS232)) {
     while(*cptr != 0) {
       rs232_send(*cptr);
       ++cptr;
@@ -119,7 +119,7 @@ rs232_print(char *cptr)
 }
 /*---------------------------------------------------------------------------*/
 void
-rs232_set_input(fp_uart_handler f)
+rs232_set_input(uart_handler_t f)
 {
   uart_set_handler(UART_MODE_RS232, f);
 }

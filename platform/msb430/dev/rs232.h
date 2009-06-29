@@ -84,7 +84,7 @@ void rs232_init(void);
  *             take place. If the input handler returns zero, the CPU
  *             is kept sleeping.
  */
-void rs232_set_input(fp_uart_handler f);
+void rs232_set_input(uart_handler_t f);
 
 /**
  * \brief      Configure the speed of the RS232 hardware
