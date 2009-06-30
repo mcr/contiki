@@ -4009,8 +4009,10 @@ public class GUI extends Observable {
   GUIAction reloadRandomSimulationAction = new GUIAction("new random seed", KeyEvent.VK_N, KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK)) {
     public void actionPerformed(ActionEvent e) {
       /* Replace seed before reloading */
-      getSimulation().setRandomSeed(getSimulation().getRandomSeed()+1);
-      reloadSimulationAction.actionPerformed(null);
+      if (getSimulation() != null) {
+        getSimulation().setRandomSeed(getSimulation().getRandomSeed()+1);
+        reloadSimulationAction.actionPerformed(null);
+      }
     }
     public boolean shouldBeEnabled() {
       return getSimulation() != null;
