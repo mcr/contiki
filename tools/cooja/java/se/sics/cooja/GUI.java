@@ -111,7 +111,6 @@ import javax.swing.filechooser.FileFilter;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
-import org.jcp.xml.dsig.internal.dom.Utils;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
