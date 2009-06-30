@@ -33,6 +33,7 @@ package se.sics.cooja;
 
 import java.util.Collection;
 import javax.swing.JInternalFrame;
+import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 import org.jdom.Element;
@@ -67,21 +68,17 @@ public abstract class VisPlugin extends JInternalFrame implements Plugin {
 
     setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
-    addInternalFrameListener(new InternalFrameListener() {
+    addInternalFrameListener(new InternalFrameAdapter() {
       public void internalFrameClosing(InternalFrameEvent e) {
         gui.removePlugin(VisPlugin.this, true);
       }
-      public void internalFrameClosed(InternalFrameEvent e) { }
-      public void internalFrameOpened(InternalFrameEvent e) { }
-      public void internalFrameIconified(InternalFrameEvent e) { }
-      public void internalFrameDeiconified(InternalFrameEvent e) { }
       public void internalFrameActivated(InternalFrameEvent e) {
         /* Highlight mote in COOJA */
         if (VisPlugin.this.tag != null && tag instanceof Mote) {
           gui.signalMoteHighlight((Mote) tag);
         }
+        gui.loadQuickHelp(VisPlugin.this);
       }
-      public void internalFrameDeactivated(InternalFrameEvent e) { }
     }
     );
   }
