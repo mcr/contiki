@@ -55,6 +55,7 @@ import org.jdom.Element;
 
 import se.sics.cooja.*;
 import se.sics.cooja.GUI.MoteRelation;
+import se.sics.cooja.SimEventCentral.MoteCountListener;
 import se.sics.cooja.interfaces.*;
 import se.sics.cooja.plugins.skins.AddressVisualizerSkin;
 import se.sics.cooja.plugins.skins.IDVisualizerSkin;
@@ -117,7 +118,7 @@ public class Visualizer extends VisPlugin {
   private ArrayList<VisualizerSkin> currentSkins = new ArrayList<VisualizerSkin>();
 
   /* Generic visualization */
-  private Observer simObserver = null;
+  private MoteCountListener newMotesListener;
   private Observer posObserver = null;
   private Observer moteHighligtObserver = null;
   private Vector<Mote> highlightedMotes = new Vector<Mote>();
@@ -239,22 +240,32 @@ public class Visualizer extends VisPlugin {
         repaint();
       }
     };
-    simulation.addObserver(simObserver = new Observer() {
-      public void update(Observable obs, Object obj) {
-
-        /* Observe mote positions */
-        for (Mote mote: Visualizer.this.simulation.getMotes()) {
-          Position posIntf = mote.getInterfaces().getPosition();
-          if (posIntf != null) {
-            posIntf.addObserver(posObserver);
-          }
+    simulation.getEventCentral().addMoteCountListener(newMotesListener = new MoteCountListener() {
+      public void moteWasAdded(Mote mote) {
+        Position pos = mote.getInterfaces().getPosition();
+        if (pos != null) {
+          pos.addObserver(posObserver);
         }
-
+        calculateTransformations();
+        repaint();
+      }
+      public void moteWasRemoved(Mote mote) {
+        Position pos = mote.getInterfaces().getPosition();
+        if (pos != null) {
+          pos.deleteObserver(posObserver);
+        }
         calculateTransformations();
         repaint();
       }
     });
-    simObserver.update(null, null);
+    for (Mote mote: simulation.getMotes()) {
+      Position pos = mote.getInterfaces().getPosition();
+      if (pos != null) {
+        pos.addObserver(posObserver);
+      }
+    }
+    calculateTransformations();
+    repaint();
 
     /* Observe mote highlights */
     gui.addMoteHighlightObserver(moteHighligtObserver = new Observer() {
@@ -908,14 +919,11 @@ public class Visualizer extends VisPlugin {
       gui.deleteMoteRelationsObserver(moteRelationsObserver);
     }
 
-    if (simObserver != null) {
-      simulation.deleteObserver(simObserver);
-
-      for (int i = 0; i < simulation.getMotesCount(); i++) {
-        Position posIntf = simulation.getMote(i).getInterfaces().getPosition();
-        if (posIntf != null) {
-          posIntf.deleteObserver(posObserver);
-        }
+    simulation.getEventCentral().removeMoteCountListener(newMotesListener);
+    for (Mote mote: simulation.getMotes()) {
+      Position pos = mote.getInterfaces().getPosition();
+      if (pos != null) {
+        pos.deleteObserver(posObserver);
       }
     }
   }
