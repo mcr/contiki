@@ -413,7 +413,7 @@ public class Simulation extends Observable implements Runnable {
    * @return Current simulation config
    */
   public Collection<Element> getConfigXML() {
-    Vector<Element> config = new Vector<Element>();
+    ArrayList<Element> config = new ArrayList<Element>();
 
     Element element;
 
@@ -445,10 +445,15 @@ public class Simulation extends Observable implements Runnable {
     element = new Element("radiomedium");
     element.setText(currentRadioMedium.getClass().getName());
 
-    Collection radioMediumXML = currentRadioMedium.getConfigXML();
+    Collection<Element> radioMediumXML = currentRadioMedium.getConfigXML();
     if (radioMediumXML != null) {
       element.addContent(radioMediumXML);
     }
+    config.add(element);
+
+    /* Event central */
+    element = new Element("events");
+    element.addContent(eventCentral.getConfigXML());
     config.add(element);
 
     // Mote types
@@ -456,7 +461,7 @@ public class Simulation extends Observable implements Runnable {
       element = new Element("motetype");
       element.setText(moteType.getClass().getName());
 
-      Collection moteTypeXML = moteType.getConfigXML();
+      Collection<Element> moteTypeXML = moteType.getConfigXML();
       if (moteTypeXML != null) {
         element.addContent(moteTypeXML);
       }
@@ -468,7 +473,7 @@ public class Simulation extends Observable implements Runnable {
       element = new Element("mote");
       element.setText(mote.getClass().getName());
 
-      Collection moteXML = mote.getConfigXML();
+      Collection<Element> moteXML = mote.getConfigXML();
       if (moteXML != null) {
         element.addContent(moteXML);
       }
@@ -558,6 +563,11 @@ public class Simulation extends Observable implements Runnable {
         } else {
           logger.info("Radio Medium changed - ignoring radio medium specific config");
         }
+      }
+
+      /* Event central */
+      if (element.getName().equals("events")) {
+        eventCentral.setConfigXML(this, element.getChildren(), visAvailable);
       }
 
       // Mote type

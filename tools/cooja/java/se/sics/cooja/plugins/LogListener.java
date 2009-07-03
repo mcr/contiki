@@ -247,6 +247,22 @@ public class LogListener extends VisPlugin {
           }
         });
       }
+      public void removedLogOutput(final LogOutputEvent ev) {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+          public void run() {
+            LogData toRemove = null;
+            for (LogData data: logs) {
+              if (data.ev == ev) {
+                toRemove = data;
+                break;
+              }
+            }
+            if (toRemove != null) {
+              logs.remove(toRemove);      
+            }
+          }
+        });
+      }
     });
 
     /* UI components */
