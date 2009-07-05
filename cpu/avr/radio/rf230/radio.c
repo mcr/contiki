@@ -1035,11 +1035,7 @@ radio_get_device_role(void)
 void
 radio_set_device_role(bool i_am_coordinator)
 {
-    if (i_am_coordinator == true){
-        hal_subregister_write(SR_I_AM_COORD, 0);
-    } else {
-        hal_subregister_write(SR_I_AM_COORD, 0);
-    }
+    hal_subregister_write(SR_I_AM_COORD, i_am_coordinator);
 }
 
 /*----------------------------------------------------------------------------*/
