@@ -250,15 +250,12 @@ public class LogListener extends VisPlugin {
       public void removedLogOutput(final LogOutputEvent ev) {
         java.awt.EventQueue.invokeLater(new Runnable() {
           public void run() {
-            LogData toRemove = null;
-            for (LogData data: logs) {
-              if (data.ev == ev) {
-                toRemove = data;
+            for (int i = 0, n = logs.size(); i < n; i++) {
+              if (logs.get(i).ev == ev) {
+                logs.remove(i);
+                model.fireTableRowsDeleted(i, i);
                 break;
               }
-            }
-            if (toRemove != null) {
-              logs.remove(toRemove);      
             }
           }
         });
