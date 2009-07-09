@@ -60,7 +60,7 @@ loader_arch_load(char *name, char *arg)
   return LOADER_ERR_NOLOADER;
 }
 void
-loader_arch_unload(void *process_load)
+loader_arch_unload()
 {
   log_message("loader_arch_unload", name);
 }
