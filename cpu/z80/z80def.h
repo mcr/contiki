@@ -87,4 +87,6 @@ typedef unsigned int size_t;
 #define uip_ipaddr_copy(dest, src)		\
     memcpy(dest, src, sizeof(*dest))
 
+#define snprintf(a...)
+
 #endif /* __Z80_DEF_H__ */
