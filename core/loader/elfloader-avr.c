@@ -102,9 +102,12 @@ elfloader_arch_allocate_rom(int size)
 /* Eliminate compiler warnings for (non-functional) code when flash requires 32 bit addresses and pointers are 16 bit U*/
 #define INCLUDE_APPLICATE_SOURCE 1
 #ifdef __GNUC__
-#if (FLASHEND > USHRT_MAX) && (SIZEOF_POINTER__ <= 2)
+#if (FLASHEND > USHRT_MAX) && (__SIZEOF_POINTER__ <= 2)
 #undef INCLUDE_APPLICATE_SOURCE
 #define INCLUDE_APPLICATE_SOURCE 0
+#endif
+#if (__SIZEOF_POINTER__ > 2)
+#define INCLUDE_32BIT_CODE 1
 #endif
 #endif
 #if INCLUDE_APPLICATE_SOURCE
@@ -257,7 +260,7 @@ elfloader_arch_relocate(int fd, unsigned int sectionoffset,
     write_ldi(fd, instr, (unsigned int)addr >> 8);
     break;
     
-#if INCLUDE_APPLICATE_SOURCE         /* 32 bit AVRs */
+#if INCLUDE_32BIT_CODE         /* 32 bit AVRs */
   case R_AVR_HH8_LDI_NEG: /* 11 */
     addr = (char *)(0 - (unsigned int)addr);
     write_ldi(fd, instr, (unsigned int)addr >> 16);
@@ -271,7 +274,7 @@ elfloader_arch_relocate(int fd, unsigned int sectionoffset,
     write_ldi(fd, instr, (unsigned int)addr >> 9);
     break;
 
-#if INCLUDE_APPLICATE_SOURCE         /* 32 bit AVRs */
+#if INCLUDE_32BIT_CODE         /* 32 bit AVRs */
   case R_AVR_HH8_LDI_PM: /* 14 */
     write_ldi(fd, instr, (unsigned int)addr >> 17);
     break;
@@ -286,7 +289,7 @@ elfloader_arch_relocate(int fd, unsigned int sectionoffset,
     write_ldi(fd, instr, (unsigned int)addr >> 9);
     break;
     
-#if INCLUDE_APPLICATE_SOURCE         /* 32 bit AVRs */
+#if INCLUDE_32BIT_CODE         /* 32 bit AVRs */
   case R_AVR_HH8_LDI_PM_NEG: /* 17 */
     addr = (char *) (0 - (unsigned int)addr);
     write_ldi(fd, instr, (unsigned int)addr >> 17);
