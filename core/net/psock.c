@@ -225,6 +225,7 @@ PT_THREAD(psock_generator_send(CC_REGISTER_ARG struct psock *s,
     s->state = STATE_DATA_SENT;
 
     /* Wait until all data is sent and acknowledged. */
+ // if (!s->sendlen) break;   //useful debugging aid
     PT_YIELD_UNTIL(&s->psockpt, uip_acked() || uip_rexmit());
   } while(!uip_acked());
   

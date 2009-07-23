@@ -97,7 +97,7 @@ int
 cfs_write(int f, const void *buf, unsigned int len)
 {
   if(f == 1) {
-    eeprom_write(CFS_EEPROM_OFFSET + file.fileptr, buf, len);
+    eeprom_write(CFS_EEPROM_OFFSET + file.fileptr, (unsigned char *)buf, len);
     file.fileptr += len;
     return len;
   } else {
