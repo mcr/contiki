@@ -59,6 +59,5 @@ struct httpd_state {
 
 void httpd_init(void);
 void httpd_appcall(void *state);
-void memcpy_P_trim(char *toram, char *fromflash);
 
 #endif /* __HTTPD_H__ */
