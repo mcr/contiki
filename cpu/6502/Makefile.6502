@@ -81,7 +81,7 @@ CUSTOM_RULE_C_TO_OBJECTDIR_O = 1
 $(OBJECTDIR)/%.o: %.c
 	$(CC) $(CFLAGS) --create-dep $< -o $(@:.o=.s)
 	@$(AS) $(ASFLAGS) $(@:.o=.s) -o $@
-	@sed 's!.s:!.o:!' < $(@:.o=.u) > $(@:.o=.d)
+	@sed -e 's!.s:!.o:!' -e 's!\t! !' < $(@:.o=.u) > $(@:.o=.d)
 	@rm -f $(@:.o=.s) $(@:.o=.u)
 	@$(FINALIZE_DEPENDENCY)
 
