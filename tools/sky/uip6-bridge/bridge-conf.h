@@ -53,4 +53,6 @@
 #undef RF_CHANNEL
 #define RF_CHANNEL              24
 
+#define CC2420_CONF_AUTOACK     1
+
 #endif /* __BRIDGE_CONF_H__ */
