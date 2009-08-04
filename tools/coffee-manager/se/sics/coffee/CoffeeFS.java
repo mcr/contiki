@@ -146,9 +146,9 @@ public class CoffeeFS {
 		try {
 			File file = new File(filename);
 			FileInputStream input = new FileInputStream(file);
-System.out.println("file length: " + file.length() + ", page count: " + pageCount(file.length()));
 			int allocatePages = pageCount(file.length());
 			int start = findFreeExtent(allocatePages);
+
 			if(start == INVALID_PAGE) {
 				return null;
 			}

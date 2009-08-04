@@ -86,7 +86,6 @@ public class CoffeeFile {
 				startOffset + length);
 			length++;
 		}
-System.out.println("inserted bytes: " + length);
 	}
 
 	public void saveContents(String filename) throws IOException {
