@@ -178,14 +178,14 @@ public class CoffeeFS {
 		files.remove(file.getName());
 	}
 
-	public boolean extractFile(String inputFile, String outputFile) throws IOException {
-		CoffeeFile file = files.get(inputFile);
+	public boolean extractFile(String filename) throws IOException {
+		CoffeeFile file = files.get(filename);
 
 		if(file == null) {
 			return false;
 		}
 
-		file.saveContents(outputFile);
+		file.saveContents(filename);
 		return true;
 	}
 }
