@@ -38,7 +38,11 @@
 
 void wpcap_init(void);
 u16_t wpcap_poll(void);
+#if UIP_CONF_IPV6
+u8_t wpcap_send(uip_lladdr_t *lladdr);
+#else
 void wpcap_send(void);
+#endif
 void wpcap_exit(void);
 
 #endif /* __WPCAP_H__ */
