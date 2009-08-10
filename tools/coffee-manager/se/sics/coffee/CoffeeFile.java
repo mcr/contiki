@@ -107,8 +107,8 @@ public class CoffeeFile {
 			for(i = 0; i < microLog.getLogRecords(); i++) {
 				bytes = microLog.getRegion(i);
 				if(bytes == null) {
-					bytes = new byte[1];
-					coffeeFS.getImage().read(bytes, 1, i * microLog.getLogRecordSize());
+					bytes = new byte[microLog.getLogRecordSize()];
+					coffeeFS.getImage().read(bytes, bytes.length, i * microLog.getLogRecordSize());
 				}
 				fOut.write(bytes);
 			}
