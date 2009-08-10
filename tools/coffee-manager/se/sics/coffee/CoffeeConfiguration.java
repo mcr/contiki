@@ -63,8 +63,8 @@ public class CoffeeConfiguration {
 			new FileInputStream(filename);
 
 		prop.load(fstream);
-		for(int i = 0; i < validParameters.length; i++) {
-			if(prop.getProperty(validParameters[i]) == null) {
+		for (int i = 0; i < validParameters.length; i++) {
+			if (prop.getProperty(validParameters[i]) == null) {
 				throw new CoffeeException("missing the parameter \"" + validParameters[i] + "\" in the configuration file " + filename);
 			}
 		}
