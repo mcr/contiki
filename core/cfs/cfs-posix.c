@@ -49,7 +49,7 @@ cfs_open(const char *n, int f)
 {
   int s = 0;
   if(f == CFS_READ) {
-    s = O_RDONLY;
+    return open(n, O_RDONLY);
   } else if(f & CFS_WRITE) {
     s = O_CREAT;
     if(f & CFS_READ) {
@@ -62,8 +62,9 @@ cfs_open(const char *n, int f)
     } else {
       s |= O_TRUNC;
     }
+    return open(n, s, 0600);
   }
-  return open(n, s);
+  return -1;
 }
 /*---------------------------------------------------------------------------*/
 void
