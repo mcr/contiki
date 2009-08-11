@@ -53,7 +53,7 @@ public class SkyFlash extends MoteInterface {
   public int SIZE = 1024*1024;
 
   private SkyMote mote = null;
-  private CoojaM25P80 m24p80 = null;
+  protected CoojaM25P80 m24p80 = null;
 
   public SkyFlash(Mote mote) {
     this.mote = (SkyMote) mote;

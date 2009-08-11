@@ -49,6 +49,7 @@ import se.sics.cooja.mspmote.interfaces.MspClock;
 import se.sics.cooja.mspmote.interfaces.MspMoteID;
 import se.sics.cooja.mspmote.interfaces.SkyButton;
 import se.sics.cooja.mspmote.interfaces.SkyByteRadio;
+import se.sics.cooja.mspmote.interfaces.SkyCoffeeFilesystem;
 import se.sics.cooja.mspmote.interfaces.SkyFlash;
 import se.sics.cooja.mspmote.interfaces.SkyLED;
 import se.sics.cooja.mspmote.interfaces.SkySerial;
@@ -198,6 +199,7 @@ public class SkyMoteType extends MspMoteType {
         MspMoteID.class,
         SkyButton.class,
         SkyFlash.class,
+        SkyCoffeeFilesystem.class,
         SkyByteRadio.class,
         SkySerial.class,
         SkyLED.class

@@ -32,17 +32,31 @@
 package se.sics.cooja.mspmote.interfaces;
 
 import java.io.IOException;
+import java.util.Arrays;
+
 import org.apache.log4j.Logger;
 
+import se.sics.coffee.CoffeeConfiguration;
+import se.sics.coffee.CoffeeImage;
 import se.sics.mspsim.chip.M25P80;
 import se.sics.mspsim.core.*;
 
-public class CoojaM25P80 extends M25P80 {
+public class CoojaM25P80 extends M25P80 implements CoffeeImage {
   private static Logger logger = Logger.getLogger(CoojaM25P80.class);
 
   public static int SIZE = 1024*1024;
   private byte[] data = new byte[SIZE];
   private long pos;
+
+  private static CoffeeConfiguration COFFEE_CONF;
+  static {
+    /* XXX Current implementation only allows for a single coffee configuration */
+    try {
+      COFFEE_CONF = new CoffeeConfiguration("sky.properties");
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
 
   public CoojaM25P80(MSP430Core cpu) {
     super(cpu);
@@ -60,6 +74,38 @@ public class CoojaM25P80 extends M25P80 {
 
   public void write(byte[] b) throws IOException {
     System.arraycopy(b, 0, data, (int) pos, b.length);
+  }
+
+  /**
+   * XXX Coffee specific: uses start offset 
+   * @see se.sics.coffee.CoffeeImage#erase(int, int)
+   */
+  public void erase(int size, int offset) throws IOException {
+    Arrays.fill(data, CoffeeConfiguration.startOffset + offset, size, (byte)0);
+  }
+
+  /**
+   * XXX Coffee specific: uses start offset 
+   * @see se.sics.coffee.CoffeeImage#getConfiguration()
+   */
+  public CoffeeConfiguration getConfiguration() {
+    return COFFEE_CONF;
+  }
+
+  /**
+   * XXX Coffee specific: uses start offset 
+   * @see se.sics.coffee.CoffeeImage#read(byte[], int, int)
+   */
+  public void read(byte[] bytes, int size, int offset) throws IOException {
+    System.arraycopy(data, CoffeeConfiguration.startOffset + offset, bytes, 0, size);
+  }
+
+  /**
+   * XXX Coffee specific: uses start offset 
+   * @see se.sics.coffee.CoffeeImage#write(byte[], int, int)
+   */
+  public void write(byte[] bytes, int size, int offset) throws IOException {
+    System.arraycopy(bytes, 0, data, CoffeeConfiguration.startOffset + offset, size);
   }
 
 }
