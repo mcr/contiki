@@ -144,7 +144,7 @@ public class CoffeeManager {
 		}
 	}
 
-	private static void printStatistics(CoffeeFS coffeeFS) {
+	public static void printStatistics(CoffeeFS coffeeFS) {
 		int bytesWritten = 0;
 		int bytesReserved = 0;
 		int fileCount = 0;
@@ -177,7 +177,7 @@ public class CoffeeManager {
 		}
 	}
 
-	private static void printFiles(Map<String, CoffeeFile> files) {
+	public static void printFiles(Map<String, CoffeeFile> files) {
 		try {
 			Iterator<Map.Entry<String, CoffeeFile>> iterator = files.entrySet().iterator();
 			while (iterator.hasNext()) {

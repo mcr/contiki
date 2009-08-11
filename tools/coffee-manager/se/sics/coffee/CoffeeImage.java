@@ -38,7 +38,7 @@ package se.sics.coffee;
 
 import java.io.IOException;
 
-interface CoffeeImage {
+public interface CoffeeImage {
 	CoffeeConfiguration getConfiguration();
 	void read(byte[] bytes, int size, int offset) throws IOException;
 	void write(byte[] bytes, int size, int offset) throws IOException;

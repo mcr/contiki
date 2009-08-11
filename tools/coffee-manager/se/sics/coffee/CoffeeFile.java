@@ -94,14 +94,14 @@ public class CoffeeFile {
 		}
 	}
 
-	public void saveContents(String filename) throws IOException {
+	public void saveContents(File file) throws IOException {
 		int startOffset = header.getPage() *
 				  coffeeFS.getConfiguration().pageSize +
 				  header.rawLength();
 		int i;
 		byte[] bytes;
 
-		FileOutputStream fOut = new FileOutputStream(filename);
+		FileOutputStream fOut = new FileOutputStream(file);
 
 		if (microLog != null) {
 			for (i = 0; i < microLog.getLogRecords(); i++) {

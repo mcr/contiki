@@ -39,6 +39,8 @@ package se.sics.coffee;
 import java.io.*;
 import java.util.Properties;
 
+import se.sics.coffee.CoffeeFS.CoffeeException;
+
 public class CoffeeConfiguration {
 	public static final int FD_SET_SIZE = 256;
 	public static final int MAX_OPEN_FILES = 256;
