@@ -103,10 +103,10 @@ public class CoffeeFile {
 
 		FileOutputStream fOut = new FileOutputStream(filename);
 
-		if(microLog != null) {
-			for(i = 0; i < microLog.getLogRecords(); i++) {
+		if (microLog != null) {
+			for (i = 0; i < microLog.getLogRecords(); i++) {
 				bytes = microLog.getRegion(i);
-				if(bytes == null) {
+				if (bytes == null) {
 					bytes = new byte[microLog.getLogRecordSize()];
 					coffeeFS.getImage().read(bytes, bytes.length, i * microLog.getLogRecordSize());
 				}

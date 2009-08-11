@@ -59,10 +59,12 @@ public class CoffeeConfiguration {
 					    "default_log_size", "page_type_size"};
 		String property;
 		Properties prop = new Properties();
-		FileInputStream fstream =
-			new FileInputStream(filename);
+		InputStream stream = CoffeeConfiguration.class.getResourceAsStream("/" + filename);
+		if (stream == null) {
+			throw new CoffeeException("failed to load the configuration file " + filename);
+		}
 
-		prop.load(fstream);
+		prop.load(stream);
 		for (int i = 0; i < validParameters.length; i++) {
 			if (prop.getProperty(validParameters[i]) == null) {
 				throw new CoffeeException("missing the parameter \"" + validParameters[i] + "\" in the configuration file " + filename);

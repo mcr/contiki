@@ -81,8 +81,8 @@ public class CoffeeMicroLog extends CoffeeFile {
 		int headerSize = header.rawLength();
 		int indexSize = logRecords * 2;
 
-		for(int i = logRecords - 1; i >= 0; i--) {
-			if(index[i] - 1 == region) {
+		for (int i = logRecords - 1; i >= 0; i--) {
+			if (index[i] - 1 == region) {
 				byte[] bytes = new byte[logRecordSize];
 				coffeeFS.getImage().read(bytes, bytes.length, 
 					recordStart + i * logRecordSize);
