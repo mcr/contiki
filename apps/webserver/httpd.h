@@ -60,4 +60,8 @@ struct httpd_state {
 void httpd_init(void);
 void httpd_appcall(void *state);
 
+#if UIP_CONF_IPV6
+uint8_t httpd_sprint_ip6(uip_ip6addr_t addr, char * result);
+#endif /* UIP_CONF_IPV6 */
+
 #endif /* __HTTPD_H__ */

@@ -156,21 +156,36 @@ make_tcp_stats(void *arg)
 {
   struct uip_conn *conn;
   struct httpd_state *s = (struct httpd_state *)arg;
-    
   conn = &uip_conns[s->u.count];
+
+  #if UIP_CONF_IPV6
+  char buf[48];
+  httpd_sprint_ip6(conn->ripaddr, buf);
   return snprintf((char *)uip_appdata, uip_mss(),
-		 "<tr align=\"center\"><td>%d</td><td>%u.%u.%u.%u:%u</td><td>%s</td><td>%u</td><td>%u</td><td>%c %c</td></tr>\r\n",
-		 htons(conn->lport),
-		 conn->ripaddr.u8[0],
-		 conn->ripaddr.u8[1],
-		 conn->ripaddr.u8[2],
-		 conn->ripaddr.u8[3],
-		 htons(conn->rport),
-		 states[conn->tcpstateflags & UIP_TS_MASK],
-		 conn->nrtx,
-		 conn->timer,
-		 (uip_outstanding(conn))? '*':' ',
-		 (uip_stopped(conn))? '!':' ');
+         "<tr align=\"center\"><td>%d</td><td>%s:%u</td><td>%s</td><td>%u</td><td>%u</td><td>%c %c</td></tr>\r\n",
+         htons(conn->lport),
+         buf,
+         htons(conn->rport),
+         states[conn->tcpstateflags & UIP_TS_MASK],
+         conn->nrtx,
+         conn->timer,
+         (uip_outstanding(conn))? '*':' ',
+         (uip_stopped(conn))? '!':' ');
+#else
+  return snprintf((char *)uip_appdata, uip_mss(),
+         "<tr align=\"center\"><td>%d</td><td>%u.%u.%u.%u:%u</td><td>%s</td><td>%u</td><td>%u</td><td>%c %c</td></tr>\r\n",
+         htons(conn->lport),
+         conn->ripaddr.u8[0],
+         conn->ripaddr.u8[1],
+         conn->ripaddr.u8[2],
+         conn->ripaddr.u8[3],
+         htons(conn->rport),
+         states[conn->tcpstateflags & UIP_TS_MASK],
+         conn->nrtx,
+         conn->timer,
+        (uip_outstanding(conn))? '*':' ',
+        (uip_stopped(conn))? '!':' ');
+#endif /* UIP_CONF_IPV6 */
 }
 /*---------------------------------------------------------------------------*/
 static

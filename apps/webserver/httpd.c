@@ -32,7 +32,8 @@
  *
  * $Id$
  */
-
+ 
+#include <stdio.h>
 #include <string.h>
 
 #include "contiki-net.h"
@@ -336,4 +337,37 @@ httpd_init(void)
   memb_init(&conns);
   httpd_cgi_init();
 }
+#if UIP_CONF_IPV6
+/*---------------------------------------------------------------------------*/
+uint8_t
+httpd_sprint_ip6(uip_ip6addr_t addr, char * result)
+{
+  unsigned char i = 0;
+  unsigned char zerocnt = 0;
+  unsigned char numprinted = 0;
+  char * starting = result;
+
+  *result++='[';
+  while (numprinted < 8) {
+    if ((addr.u16[i] == 0) && (zerocnt == 0)) {
+      while(addr.u16[zerocnt + i] == 0) zerocnt++;
+      if (zerocnt == 1) {
+        *result++ = '0';
+         numprinted++;
+         break;
+      }
+      i += zerocnt;
+      numprinted += zerocnt;
+    } else {
+      result += sprintf(result, "%x", (unsigned int)(ntohs(addr.u16[i])));
+      i++;
+      numprinted++;
+    }
+    if (numprinted != 8) *result++ = ':';
+  }
+  *result++=']';
+  *result=0;
+  return (result - starting);
+}
+#endif /* UIP_CONF_IPV6 */
 /*---------------------------------------------------------------------------*/
