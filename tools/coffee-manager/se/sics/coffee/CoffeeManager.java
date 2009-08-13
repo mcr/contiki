@@ -86,7 +86,7 @@ public class CoffeeManager {
 				command = Command.REMOVE;
 				filename = args[i + 1];
 				i++;
-			} else if (args[i].equals("-i")) {
+			} else if (args[i].equals("-e")) {
 				command = Command.EXTRACT;
 				filename = args[i + 1];
 				i++;
