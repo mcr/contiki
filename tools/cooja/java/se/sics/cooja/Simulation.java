@@ -688,11 +688,15 @@ public class Simulation extends Observable implements Runnable {
    *          Mote to add
    */
   public void addMote(final Mote mote) {
-    if (maxMoteStartupDelay > 0 && mote.getInterfaces().getClock() != null) {
-      mote.getInterfaces().getClock().setDrift(
-          - getSimulationTime()
-          - randomGenerator.nextInt((int)maxMoteStartupDelay)
-      );
+    if (mote.getInterfaces().getClock() != null) {
+      if (maxMoteStartupDelay > 0) {
+        mote.getInterfaces().getClock().setDrift(
+            - getSimulationTime()
+            - randomGenerator.nextInt((int)maxMoteStartupDelay)
+        );
+      } else {
+        mote.getInterfaces().getClock().setDrift(-getSimulationTime());
+      }
     }
 
     if (!isRunning()) {
