@@ -304,9 +304,11 @@ public class MspCodeWatcher extends VisPlugin {
   private static File[] getSourceFiles(MspMote mote) {
     String[] sourceFiles = mote.getELF().getDebug().getSourceFiles();
     File contikiSource = mote.getType().getContikiSourceFile();
-    try {
-      contikiSource = contikiSource.getCanonicalFile();
-    } catch (IOException e1) {
+    if (contikiSource != null) {
+      try {
+        contikiSource = contikiSource.getCanonicalFile();
+      } catch (IOException e1) {
+      }
     }
     
     /* Verify that files exist */
