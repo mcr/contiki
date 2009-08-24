@@ -43,7 +43,7 @@ node_id_restore(void)
   uint16_t newid[2];
 
   infomem_read(newid, INFOMEM_NODE_ID, sizeof(newid));
-  node_id = ( newid[0] == 0xdead ) ? newid[1] : newid[0];
+  node_id = (newid[0] == 0xdead) ? newid[1] : 0;
 }
 /*---------------------------------------------------------------------------*/
 void
