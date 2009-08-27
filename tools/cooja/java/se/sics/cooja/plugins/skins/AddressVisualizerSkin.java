@@ -112,8 +112,12 @@ public class AddressVisualizerSkin implements VisualizerSkin {
     return null;
   }
 
-  public void paintSkin(Graphics g) {
+  public void paintBeforeMotes(Graphics g) {
+  }
+
+  public void paintAfterMotes(Graphics g) {
     FontMetrics fm = g.getFontMetrics();
+    g.setColor(Color.BLACK);
 
     /* Paint last output below motes */
     Mote[] allMotes = simulation.getMotes();

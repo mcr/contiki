@@ -103,7 +103,10 @@ public class LEDVisualizerSkin implements VisualizerSkin {
     return null;
   }
 
-  public void paintSkin(Graphics g) {
+  public void paintBeforeMotes(Graphics g) {
+  }
+
+  public void paintAfterMotes(Graphics g) {
     /* Paint LEDs left of each mote */
     Mote[] allMotes = simulation.getMotes();
     for (Mote mote: allMotes) {
@@ -140,10 +143,7 @@ public class LEDVisualizerSkin implements VisualizerSkin {
       } else {
         g.drawRect(x, y, 7, 4);
       }
-
     }
-
-    g.setColor(Color.BLACK);
   }
 
   public Visualizer getVisualizer() {
