@@ -29,6 +29,7 @@
  * $Id$
  */
 
+#include "contiki-conf.h"
 #include "sys/clock.h"
 #include "lib/simEnvChange.h"
 
@@ -52,7 +53,7 @@ clock_time(void)
 unsigned long
 clock_seconds(void)
 {
-  return 0;
+  return simCurrentTime / CLOCK_CONF_SECONDS;
 }
 /*-----------------------------------------------------------------------------------*/
 void
