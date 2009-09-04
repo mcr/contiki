@@ -446,13 +446,13 @@ dutycycle(void *ptr)
 	}
       }
 #endif /* WITH_PENDING_BROADCAST */
+    
+    /* Turn on the radio for sending a probe packet and 
+       anticipating a data packet from a neighbor. */
+    turn_radio_on();
 
     /* Send a probe packet. */
     send_probe();
-    
-    /* Turn on the radio for a while in anticipation of a data packet
-       from a neighbor. */
-    turn_radio_on();
 
     /* Set a timer so that we keep the radio on for LISTEN_TIME. */
     ctimer_set(t, LISTEN_TIME, (void (*)(void *))dutycycle, t);
