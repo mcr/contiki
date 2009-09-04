@@ -53,7 +53,7 @@ clock_time(void)
 unsigned long
 clock_seconds(void)
 {
-  return simCurrentTime / CLOCK_CONF_SECONDS;
+  return simCurrentTime / CLOCK_CONF_SECOND;
 }
 /*-----------------------------------------------------------------------------------*/
 void
