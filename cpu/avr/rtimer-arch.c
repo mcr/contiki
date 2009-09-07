@@ -45,7 +45,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-#include "lib/energest.h"
+#include "sys/energest.h"
 #include "sys/rtimer.h"
 #include "rtimer-arch.h"
 
