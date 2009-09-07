@@ -184,7 +184,7 @@ public class ContikiMoteCompileDialog extends AbstractCompileDialog {
     }
     return
     /*"make clean TARGET=cooja\n" + */
-    "make " + getExpectedFirmwareFile(source).getName() + " TARGET=cooja" + defines;
+    GUI.getExternalToolsSetting("PATH_MAKE") + " " + getExpectedFirmwareFile(source).getName() + " TARGET=cooja" + defines;
   }
 
   public File getExpectedFirmwareFile(File source) {
