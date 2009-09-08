@@ -86,4 +86,6 @@ typedef unsigned long clock_time_t;
 #define UIP_CONF_ND6_MAX_DEFROUTERS   2
 #endif /* UIP_CONF_IPV6 */
 
+#define CFS_CONF_OFFSET_TYPE	long
+
 #endif /* __CONTIKI_CONF_H__ */
