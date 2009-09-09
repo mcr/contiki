@@ -61,7 +61,6 @@ PROCESS_THREAD(sensortweet_process, ev, data)
 {
   char message[140];
   char username_password[MAX_USERNAME_PASSWORD];
-  int len;
   int temp;
   uint16_t humidity;
   uint16_t battery_indicator;

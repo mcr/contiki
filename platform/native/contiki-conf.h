@@ -40,7 +40,7 @@
 #define CC_CONF_FUNCTION_POINTER_ARGS  1
 #define CC_CONF_FASTCALL
 #define CC_CONF_VA_ARGS                1
-#define CC_CONF_INLINE                 inline
+/*#define CC_CONF_INLINE                 inline*/
 
 #define CCIF
 #define CLIF

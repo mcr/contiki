@@ -39,6 +39,7 @@
  */
 
 #include "sys/clock.h"
+#include <time.h>
 #include <sys/time.h>
 
 /*---------------------------------------------------------------------------*/
@@ -46,9 +47,8 @@ clock_time_t
 clock_time(void)
 {
   struct timeval tv;
-  struct timezone tz;
    
-  gettimeofday(&tv, &tz);
+  gettimeofday(&tv, NULL);
  
   return tv.tv_sec * 1000 + tv.tv_usec / 1000;
 }
@@ -57,9 +57,8 @@ unsigned long
 clock_seconds(void)
 {
   struct timeval tv;
-  struct timezone tz;
    
-  gettimeofday(&tv, &tz);
+  gettimeofday(&tv, NULL);
  
   return tv.tv_sec;
 }

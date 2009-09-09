@@ -87,7 +87,6 @@ PROCESS_THREAD(shell_unicast_send_process, ev, data)
   int len;
   const char *nextptr;
   struct unicast_msg *msg;
-  char buf[30];
   
   PROCESS_BEGIN();
   
