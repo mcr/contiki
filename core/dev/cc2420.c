@@ -418,9 +418,9 @@ cc2420_send(const void *payload, unsigned short payload_len)
       if(receive_on) {
 	ENERGEST_ON(ENERGEST_TYPE_LISTEN);
       } else {
-    /* We need to explicitly turn off the radio,
-     * since STXON[CCA] -> TX_ACTIVE -> RX_ACTIVE */
-    off();
+	/* We need to explicitly turn off the radio,
+	 * since STXON[CCA] -> TX_ACTIVE -> RX_ACTIVE */
+	off();
       }
 
       if(packetbuf_attr(PACKETBUF_ATTR_RADIO_TXPOWER) > 0) {
