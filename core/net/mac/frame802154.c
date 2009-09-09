@@ -274,7 +274,7 @@ frame802154_parse(uint8_t *data, uint8_t len, frame802154_t *pf)
   fcf.src_addr_mode = (p[1] >> 6) & 3;
 
   /* copy fcf and seqNum */
-  pf->fcf = fcf;
+  memcpy(&pf->fcf, &fcf, sizeof(frame802154_fcf_t));
   pf->seq = p[2];
   p += 3;                             /* Skip first three bytes */
 
