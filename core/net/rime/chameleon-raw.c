@@ -182,5 +182,11 @@ hdrsize(const struct packetbuf_attrlist *a)
   return size / 8;
 }
 /*---------------------------------------------------------------------------*/
+static void
+init(void)
+{
+
+}
+/*---------------------------------------------------------------------------*/
 CC_CONST_FUNCTION struct chameleon_module chameleon_raw = { input, output,
-							    hdrsize, NULL };
+							    hdrsize, init };
