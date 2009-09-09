@@ -33,11 +33,11 @@
 
 /**
  * \file
- *         A brief description of what this file is.
+ *         Implementation of timetable, a data structure containing timestamps for events
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
-
+#include "sys/clock.h"
 #include "sys/timetable.h"
 
 #include <stdio.h>
