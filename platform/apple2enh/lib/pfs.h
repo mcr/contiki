@@ -39,5 +39,6 @@
 int  __fastcall__ pfs_open(const char* name, int flags);
 void __fastcall__ pfs_close(int fd);
 int  __fastcall__ pfs_read(int fd, void* buf, unsigned int len);
+int  __fastcall__ pfs_seek(int fd, int offset, int whence);
 
 #endif /* __PFS_H__ */
