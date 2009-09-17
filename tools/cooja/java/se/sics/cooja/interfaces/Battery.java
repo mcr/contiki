@@ -118,16 +118,7 @@ public class Battery extends MoteInterface implements PolledAfterAllTicks {
       return;
     }
 
-    // If mote is dead, do nothing
-    if (mote.getState() == Mote.State.DEAD) {
-      return;
-    }
-
-    if (mote.getState() == Mote.State.ACTIVE) {
-      cpuEnergyConsumption += cpuEnergyConsumptionLPMPerMs;
-    } else {
-      cpuEnergyConsumption += cpuEnergyConsumptionAwakePerMs;
-    }
+    cpuEnergyConsumption += cpuEnergyConsumptionAwakePerMs;
 
     totalEnergyConsumption = cpuEnergyConsumption;
     for (MoteInterface intf : mote.getInterfaces().getInterfaces()) {

@@ -308,15 +308,7 @@ public class ContikiRadio extends Radio implements ContikiMoteInterface, PolledA
    * data to the mote.
    */
   private void lockInReceivingMode() {
-    // If mote is inactive, try to wake it up
-    if (mote.getState() != Mote.State.ACTIVE) {
-      if (RAISES_EXTERNAL_INTERRUPT) {
-        mote.scheduleImmediateWakeup();
-      }
-      if (mote.getState() != Mote.State.ACTIVE) {
-        return;
-      }
-    }
+    mote.scheduleImmediateWakeup();
 
     // Lock core radio in receiving loop
     myMoteMemory.setByteValueOf("simReceiving", (byte) 1);
