@@ -297,7 +297,7 @@ coffee_file_test(void)
     FAIL(-35);
   }
   if(total_read != APPEND_BYTES) {
-    FAIL(-35);
+    FAIL(-36);
   }
   cfs_close(afd);
 
