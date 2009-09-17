@@ -91,20 +91,6 @@ public abstract class AbstractApplicationMote implements Mote {
     }
   }
 
-  public void setState(State newState) {
-    logger.fatal("Application mote can not change state");
-  }
-
-  public State getState() {
-    return Mote.State.ACTIVE;
-  }
-
-  public void addStateObserver(Observer newObserver) {
-  }
-
-  public void deleteStateObserver(Observer newObserver) {
-  }
-
   public MoteInterfaceHandler getInterfaces() {
     return moteInterfaces;
   }
@@ -163,7 +149,7 @@ public abstract class AbstractApplicationMote implements Mote {
       element = new Element("interface_config");
       element.setText(moteInterface.getClass().getName());
 
-      Collection interfaceXML = moteInterface.getConfigXML();
+      Collection<Element> interfaceXML = moteInterface.getConfigXML();
       if (interfaceXML != null) {
         element.addContent(interfaceXML);
         config.add(element);
@@ -203,12 +189,12 @@ public abstract class AbstractApplicationMote implements Mote {
     return true;
   }
 
+  public int getID() {
+    return -1;
+  }
+  
   public String toString() {
-    if (getInterfaces().getMoteID() != null) {
-      return "Application Mote, ID=" + getInterfaces().getMoteID().getMoteID();
-    } else {
-      return "Application Mote, ID=null";
-    }
+    return "Application Mote, ID=" + getID();
   }
 
 }
