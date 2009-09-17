@@ -261,7 +261,7 @@ public class MicaZRadio extends Radio implements CustomDataRadio {
   }
 
   public int getCurrentOutputPowerIndicator() {
-    return 7; //cc2420.getOutputPowerIndicator();
+    return 31; //cc2420.getOutputPowerIndicator();
   }
 
   public int getOutputPowerIndicatorMax() {
