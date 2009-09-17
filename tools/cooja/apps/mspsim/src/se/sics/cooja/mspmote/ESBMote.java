@@ -67,12 +67,7 @@ public class ESBMote extends MspMote {
   }
 
   public String toString() {
-    MoteID moteID = getInterfaces() != null ? getInterfaces().getMoteID() : null;
-    if (moteID != null) {
-      return "ESB Mote, ID=" + moteID.getMoteID();
-    } else {
-      return "ESB Mote, ID=null";
-    }
+    return "ESB " + getID();
   }
 
 }

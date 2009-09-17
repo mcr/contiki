@@ -46,7 +46,7 @@ public class ScriptMote {
   public void setMoteMsg(Mote mote, String msg) {
     this.mote = mote;
     if (mote != null) {
-      id = mote.getInterfaces().getMoteID().getMoteID();
+      id = mote.getID();
     } else {
       id = -1;
     }

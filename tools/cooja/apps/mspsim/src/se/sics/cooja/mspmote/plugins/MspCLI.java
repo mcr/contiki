@@ -68,7 +68,7 @@ public class MspCLI extends VisPlugin {
   private LineListener myListener;
 
   public MspCLI(Mote mote, Simulation simulationToVisualize, GUI gui) {
-    super("Msp CLI (" + mote.getInterfaces().getMoteID().getMoteID() + ')', gui);
+    super("Msp CLI (" + mote.getID() + ')', gui);
     this.mspMote = (MspMote) mote;
 
     final Container panel = getContentPane();

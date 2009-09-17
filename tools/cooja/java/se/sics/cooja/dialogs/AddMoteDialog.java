@@ -504,20 +504,21 @@ public class AddMoteDialog extends JDialog {
             }
           }
 
-          // Set unique mote id's for all new motes
+          /* Set unique mote id's for all new motes 
+           * TODO ID should be provided differently; not rely on the unsafe MoteID interface */
           int nextMoteID = 1;
-          for (int i = 0; i < simulation.getMotesCount(); i++) {
-            MoteID moteID = simulation.getMote(i).getInterfaces()
-            .getMoteID();
-            if (moteID != null && moteID.getMoteID() >= nextMoteID) {
-              nextMoteID = moteID.getMoteID() + 1;
+          for (Mote m: simulation.getMotes()) {
+            int existing = m.getID();
+            if (existing >= nextMoteID) {
+              nextMoteID = existing + 1;
             }
           }
-
-          for (int i = 0; i < newMotes.size(); i++) {
-            MoteID moteID = newMotes.get(i).getInterfaces().getMoteID();
+          for (Mote m: newMotes) {
+            MoteID moteID = m.getInterfaces().getMoteID();
             if (moteID != null) {
               moteID.setMoteID(nextMoteID++);
+            } else {
+              logger.warn("Can't set mote ID (no mote ID interface): " + m);
             }
           }
 

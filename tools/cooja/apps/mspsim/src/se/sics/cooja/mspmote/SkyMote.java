@@ -36,7 +36,6 @@ import java.io.File;
 import org.apache.log4j.Logger;
 
 import se.sics.cooja.Simulation;
-import se.sics.cooja.interfaces.MoteID;
 import se.sics.mspsim.platform.sky.SkyNode;
 
 /**
@@ -71,12 +70,7 @@ public class SkyMote extends MspMote {
   }
 
   public String toString() {
-    MoteID moteID = getInterfaces() != null ? getInterfaces().getMoteID() : null;
-    if (moteID != null) {
-      return "Sky Mote, ID=" + moteID.getMoteID();
-    } else {
-      return "Sky Mote, ID=null";
-    }
+    return "Sky " + getID();
   }
 
 }

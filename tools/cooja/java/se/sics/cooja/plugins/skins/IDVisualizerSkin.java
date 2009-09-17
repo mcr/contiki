@@ -80,15 +80,10 @@ public class IDVisualizerSkin implements VisualizerSkin {
     /* Paint ID inside each mote */
     Mote[] allMotes = simulation.getMotes();
     for (Mote mote: allMotes) {
-      MoteID id = mote.getInterfaces().getMoteID();
-      if (id == null) {
-        continue;
-      }
-
       Position pos = mote.getInterfaces().getPosition();
       Point pixel = visualizer.transformPositionToPixel(pos);
 
-      String msg = "" + id.getMoteID();
+      String msg = "" + mote.getID();
       int msgWidth = fm.stringWidth(msg);
       g.drawString(msg, pixel.x - msgWidth/2, pixel.y + 5);
     }

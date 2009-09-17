@@ -105,10 +105,7 @@ public class EventListener extends VisPlugin {
 
     public void update(Observable obs, Object obj) {
       final MoteInterface moteInterface = (MoteInterface) obs;
-      int moteID = -1;
-      if (myMote.getInterfaces().getMoteID() != null) {
-        moteID = myMote.getInterfaces().getMoteID().getMoteID();
-      }
+      int moteID = myMote.getID();
 
       myParent.actOnChange("'" + GUI.getDescriptionOf(moteInterface.getClass())
           + "'" + " of mote '" + (moteID > 0 ? Integer.toString(moteID) : "?")

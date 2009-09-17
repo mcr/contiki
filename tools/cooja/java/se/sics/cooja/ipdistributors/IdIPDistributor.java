@@ -54,15 +54,12 @@ public class IdIPDistributor extends IPDistributor {
     generatedIPAddresses = new Vector<String>();
 
     for (int i=0; i < newMotes.size(); i++) {
-      if (newMotes.get(i).getInterfaces().getMoteID() != null) {
-        int moteId = newMotes.get(i).getInterfaces().getMoteID().getMoteID();
-        generatedIPAddresses.add("10." + 
-            (moteId / 256 % (256*256))
-            + "." + 
-            (moteId % 256)
-            + ".1");
-      } else
-        generatedIPAddresses.add("0.0.0.0");
+      int moteId = newMotes.get(i).getID();
+      generatedIPAddresses.add("10." + 
+          (moteId / 256 % (256*256))
+          + "." + 
+          (moteId % 256)
+          + ".1");
     }
 
   }

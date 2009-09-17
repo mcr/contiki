@@ -225,7 +225,7 @@ public class ContikiMote implements Mote {
   }
 
   public String toString() {
-    return "Contiki Mote ID=" + getID();
+    return "Contiki " + getID();
   }
 
   private TimeEvent tickMoteEvent = new MoteTimeEvent(this, 0) {

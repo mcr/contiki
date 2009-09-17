@@ -356,16 +356,8 @@ public class LogListener extends VisPlugin {
 
     public LogData(LogOutputEvent ev) {
       this.ev = ev;
-      this.strID = "ID:" + getMoteID(ev.getMote());
+      this.strID = "ID:" + ev.getMote().getID();
       this.strTime = "" + ev.getTime()/Simulation.MILLISECOND;
-    }
-
-    private static String getMoteID(Mote mote) {
-      MoteID moteID = mote.getInterfaces().getMoteID();
-      if (moteID != null) {
-        return Integer.toString(moteID.getMoteID());
-      }
-      return mote.toString();
     }
   }
 

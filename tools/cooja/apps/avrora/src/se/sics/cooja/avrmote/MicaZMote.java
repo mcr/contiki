@@ -280,12 +280,7 @@ public class MicaZMote implements Mote {
   }
 
   public String toString() {
-    MoteID moteID = getInterfaces() != null ? getInterfaces().getMoteID() : null;
-    if (moteID != null) {
-      return "MicaZ Mote, ID=" + moteID.getMoteID();
-    } else {
-      return "MicaZ Mote, ID=null";
-    }
+    return "MicaZ " + getID();
   }
 
 }
