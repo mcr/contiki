@@ -66,14 +66,6 @@ public class ESBMote extends MspMote {
     return true;
   }
 
-  protected MoteInterfaceHandler createMoteInterfaceHandler() {
-    /* Uses current mote type configuration */
-    MoteInterfaceHandler moteInterfaceHandler =
-      super.createMoteInterfaceHandler();
-
-    return moteInterfaceHandler;
-  }
-
   public String toString() {
     MoteID moteID = getInterfaces() != null ? getInterfaces().getMoteID() : null;
     if (moteID != null) {

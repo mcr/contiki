@@ -30,8 +30,10 @@
  */
 
 package se.sics.cooja.mspmote;
+
 import java.awt.Container;
 import java.io.File;
+
 import org.apache.log4j.Logger;
 
 import se.sics.cooja.GUI;
@@ -77,6 +79,9 @@ public class SkyCompileDialog extends AbstractCompileDialog {
   }
 
   public boolean canLoadFirmware(File file) {
+    if (file.getName().endsWith(".sky")) {
+      return true;
+    }
     if (ELF.isELF(file)) {
       return true;
     }

@@ -123,6 +123,7 @@ public abstract class MspMoteType implements MoteType {
   protected abstract MspMote createMote(Simulation simulation);
 
   public JPanel getTypeVisualizer() {
+    /* TODO Move to emulated layer */
     JPanel panel = new JPanel();
     JLabel label = new JLabel();
     JPanel smallPane;
@@ -255,11 +256,10 @@ public abstract class MspMoteType implements MoteType {
       } else if (name.equals("description")) {
         description = element.getText();
       } else if (name.equals("source")) {
-        File file = new File(element.getText());
-        if (!file.exists()) {
-          file = simulation.getGUI().restorePortablePath(file);
+        fileSource = new File(element.getText());
+        if (!fileSource.exists()) {
+          fileSource = simulation.getGUI().restorePortablePath(fileSource);
         }
-        fileSource = file;
       } else if (name.equals("command")) {
         /* Backwards compatibility: command is now commands */
         logger.warn("Old simulation config detected: old version only supports a single compile command");
@@ -267,11 +267,10 @@ public abstract class MspMoteType implements MoteType {
       } else if (name.equals("commands")) {
         compileCommands = element.getText();
       } else if (name.equals("firmware")) {
-        File file = new File(element.getText());
-        if (!file.exists()) {
-          file = simulation.getGUI().restorePortablePath(file);
+        fileFirmware = new File(element.getText());
+        if (!fileFirmware.exists()) {
+          fileFirmware = simulation.getGUI().restorePortablePath(fileSource);
         }
-        fileFirmware = file;
       } else if (name.equals("elf")) {
         /* Backwards compatibility: elf is now firmware */
         logger.warn("Old simulation config detected: firmware specified as elf");
@@ -300,8 +299,7 @@ public abstract class MspMoteType implements MoteType {
       }
     }
 
-    Class<? extends MoteInterface>[] intfClasses = new Class[intfClassList.size()];
-    intfClasses = intfClassList.toArray(intfClasses);
+    Class<? extends MoteInterface>[] intfClasses = intfClassList.toArray(new Class[0]);
 
     if (intfClasses.length == 0) {
       /* Backwards compatibility: No interfaces specifed */

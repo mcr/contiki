@@ -32,10 +32,11 @@
 package se.sics.cooja.mspmote;
 
 import java.io.File;
+
 import org.apache.log4j.Logger;
-import se.sics.cooja.MoteInterfaceHandler;
+
 import se.sics.cooja.Simulation;
-import se.sics.cooja.interfaces.*;
+import se.sics.cooja.interfaces.MoteID;
 import se.sics.mspsim.platform.sky.SkyNode;
 
 /**
@@ -58,20 +59,11 @@ public class SkyMote extends MspMote {
     try {
       skyNode = new SkyNode();
       prepareMote(fileELF, skyNode);
-
     } catch (Exception e) {
-      logger.fatal("Error when creating Sky mote:", e);
+      logger.fatal("Error when creating Sky mote: ", e);
       return false;
     }
     return true;
-  }
-
-  protected MoteInterfaceHandler createMoteInterfaceHandler() {
-    /* Uses current mote type configuration */
-    MoteInterfaceHandler moteInterfaceHandler =
-      super.createMoteInterfaceHandler();
-
-    return moteInterfaceHandler;
   }
 
   public void idUpdated(int newID) {
