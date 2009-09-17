@@ -121,11 +121,7 @@ public class Mote2MoteRelations extends MoteInterface {
       Mote destinationMote = null;
       Mote[] allMotes = Mote2MoteRelations.this.mote.getSimulation().getMotes();
       for (Mote m: allMotes) {
-        if (m.getInterfaces().getMoteID() == null) {
-          continue;
-        }
-
-        if (id.equals("" + m.getInterfaces().getMoteID().getMoteID())) {
+        if (id.equals("" + m.getID())) {
           destinationMote = m;
           break;
         }
