@@ -190,10 +190,15 @@ read_packet(void)
           /* Not broadcast or for our PAN */
           PRINTF("6MAC: for another pan %u\n", frame.dest_pid);
           return 0;
-
         }
         if(!is_broadcast_addr(frame.fcf.dest_addr_mode, frame.dest_addr.u8)) {
           packetbuf_set_addr(PACKETBUF_ADDR_RECEIVER, &frame.dest_addr);
+          if(!rimeaddr_cmp(packetbuf_addr(PACKETBUF_ADDR_RECEIVER),
+                           &rimeaddr_node_addr)) {
+            /* Not for this node */
+            PRINTF("6MAC: not for us\n");
+            return 0;
+          }
         }
       }
       packetbuf_set_addr(PACKETBUF_ADDR_SENDER, &frame.src_addr);
