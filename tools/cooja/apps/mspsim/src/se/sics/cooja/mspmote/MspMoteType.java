@@ -269,7 +269,7 @@ public abstract class MspMoteType implements MoteType {
       } else if (name.equals("firmware")) {
         fileFirmware = new File(element.getText());
         if (!fileFirmware.exists()) {
-          fileFirmware = simulation.getGUI().restorePortablePath(fileSource);
+          fileFirmware = simulation.getGUI().restorePortablePath(fileFirmware);
         }
       } else if (name.equals("elf")) {
         /* Backwards compatibility: elf is now firmware */
