@@ -248,6 +248,7 @@ public abstract class MspMote implements Mote, WatchpointMote {
     this.myCpu.setMonitorExec(true);
 
     int[] memory = myCpu.getMemory();
+    logger.info("Loading ELF from: " + fileELF.getAbsolutePath());
     if (GUI.isVisualizedInApplet()) {
       myELFModule = node.loadFirmware(new URL(GUI.getAppletCodeBase(), fileELF.getName()), memory);
     } else {
