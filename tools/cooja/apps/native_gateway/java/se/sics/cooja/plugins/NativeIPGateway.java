@@ -599,7 +599,7 @@ public class NativeIPGateway implements Plugin {
       }
 
       logger.info("> " + tunContikiApp.getName());
-      tunProcess = Runtime.getRuntime().exec(new String[] { tunContikiApp.getName() }, null, tunContikiAppDir);
+      tunProcess = Runtime.getRuntime().exec(new String[] { "./" + tunContikiApp.getName() }, null, tunContikiAppDir);
 
       /* Shutdown hook: kill minimal-net process */
       shutdownHook = new Thread(new Runnable() {
