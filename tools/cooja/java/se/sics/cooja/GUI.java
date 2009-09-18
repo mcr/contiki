@@ -4093,11 +4093,15 @@ public class GUI extends Observable {
     public StartPluginGUIAction(String name) {
       super(name);
     }
-    public void actionPerformed(ActionEvent e) {
-      Class<Plugin> pluginClass = 
-        (Class<Plugin>) ((JMenuItem) e.getSource()).getClientProperty("class");
-      Mote mote = (Mote) ((JMenuItem) e.getSource()).getClientProperty("mote");
-      tryStartPlugin(pluginClass, myGUI, mySimulation, mote);
+    public void actionPerformed(final ActionEvent e) {
+      new Thread(new Runnable() {
+        public void run() {
+          Class<Plugin> pluginClass = 
+            (Class<Plugin>) ((JMenuItem) e.getSource()).getClientProperty("class");
+          Mote mote = (Mote) ((JMenuItem) e.getSource()).getClientProperty("mote");
+          tryStartPlugin(pluginClass, myGUI, mySimulation, mote);
+        }
+      }).start();
     }
     public boolean shouldBeEnabled() {
       return getSimulation() != null;
