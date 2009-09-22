@@ -45,7 +45,6 @@ public class CoffeeConfiguration {
 	public static final int FD_SET_SIZE = 256;
 	public static final int MAX_OPEN_FILES = 256;
 	public static final int LOG_TABLE_LIMIT = 256;
-	public static final int DIR_CACHE_ENTRIES = 256;
 	public static final int NAME_LENGTH = 16;
 	public static int fsSize, sectorSize, pageSize;
 	public static int startOffset, pageTypeSize;
