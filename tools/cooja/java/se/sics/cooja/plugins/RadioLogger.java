@@ -137,10 +137,10 @@ public class RadioLogger extends VisPlugin {
             return "-";
           }
           if (dests.length == 1) {
-            return dests[0].getMote().getID();
+            return "" + dests[0].getMote().getID();
           }
           if (dests.length == 2) {
-            return dests[0].getMote().getID() + ',' + dests[1].getMote().getID();
+            return "" + dests[0].getMote().getID() + ',' + dests[1].getMote().getID();
           }
           return "[" + dests.length + " d]";
         } else if (col == COLUMN_DATA) {
@@ -381,7 +381,7 @@ public class RadioLogger extends VisPlugin {
     }
     StringBuilder sb = new StringBuilder();
     for (Radio dest: dests) {
-      sb.append(dest.getMote().getID() + ',');
+      sb.append(dest.getMote().getID()).append(',');
     }
     sb.setLength(sb.length()-1);
     return sb.toString();
