@@ -83,8 +83,8 @@ PROCESS_THREAD(sd_test, event, data)
       } else {
         printf("read error: %d (%s)\n", r, sd_error_string(r));
       }
-      etimer_reset(&et);
     }
+    etimer_reset(&et);
   }
 
   PROCESS_END();
