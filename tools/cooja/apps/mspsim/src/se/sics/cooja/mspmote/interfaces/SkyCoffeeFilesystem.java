@@ -36,7 +36,6 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
@@ -312,4 +311,30 @@ public class SkyCoffeeFilesystem extends MoteInterface {
       return getValueAt(0, c).getClass();
     }
   };
+  
+  public boolean extractFile(String coffeeFile, String diskFilename) {
+    try {
+      updateFS();
+      return coffeeFS.extractFile(coffeeFile, new File(diskFilename));
+    } catch (RuntimeException e) {
+      logger.fatal("Error: " + e.getMessage(), e);
+      return false;
+    } catch (IOException e) {
+      logger.fatal("Error: " + e.getMessage(), e);
+      return false;
+    }
+  }
+  
+  public boolean insertFile(String diskFilename) {
+    try {
+      return coffeeFS.insertFile(diskFilename) != null;
+    } catch (RuntimeException e) {
+      logger.fatal("Error: " + e.getMessage(), e);
+      return false;
+    } catch (IOException e) {
+      logger.fatal("Error: " + e.getMessage(), e);
+      return false;
+    }
+  }
+
 }

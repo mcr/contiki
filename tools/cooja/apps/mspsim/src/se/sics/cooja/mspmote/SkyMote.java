@@ -36,6 +36,7 @@ import java.io.File;
 import org.apache.log4j.Logger;
 
 import se.sics.cooja.Simulation;
+import se.sics.cooja.mspmote.interfaces.SkyCoffeeFilesystem;
 import se.sics.mspsim.platform.sky.SkyNode;
 
 /**
@@ -67,6 +68,10 @@ public class SkyMote extends MspMote {
 
   public void idUpdated(int newID) {
     skyNode.setNodeID(newID);
+  }
+
+  public SkyCoffeeFilesystem getFilesystem() {
+    return getInterfaces().getInterfaceOfType(SkyCoffeeFilesystem.class);
   }
 
   public String toString() {
