@@ -97,6 +97,7 @@ import se.sics.cooja.plugins.skins.GridVisualizerSkin;
 import se.sics.cooja.plugins.skins.IDVisualizerSkin;
 import se.sics.cooja.plugins.skins.LEDVisualizerSkin;
 import se.sics.cooja.plugins.skins.LogVisualizerSkin;
+import se.sics.cooja.plugins.skins.MoteTypeVisualizerSkin;
 import se.sics.cooja.plugins.skins.PositionVisualizerSkin;
 import se.sics.cooja.plugins.skins.TrafficVisualizerSkin;
 import se.sics.cooja.plugins.skins.UDGMVisualizerSkin;
@@ -157,6 +158,7 @@ public class Visualizer extends VisPlugin {
     registerVisualizerSkin(TrafficVisualizerSkin.class);
     registerVisualizerSkin(PositionVisualizerSkin.class);
     registerVisualizerSkin(GridVisualizerSkin.class);
+    registerVisualizerSkin(MoteTypeVisualizerSkin.class);
   }
   private ArrayList<VisualizerSkin> currentSkins = new ArrayList<VisualizerSkin>();
 
