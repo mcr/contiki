@@ -87,6 +87,8 @@ main(void)
 {
   struct ethernet_config *ethernet_config;
 
+  videomode(VIDEOMODE_80COL);
+
   close(STDIN_FILENO);
   close(STDOUT_FILENO);
 #if !UIP_LOGGING && !LOG_CONF_ENABLED
