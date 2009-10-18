@@ -38,7 +38,7 @@
  *         Adam Dunkels <adam@sics.se>
  */
 
-
+#include <string.h>
 #include "shell.h"
 #include "net/rime.h"
 
