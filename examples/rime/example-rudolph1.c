@@ -159,7 +159,7 @@ PROCESS_THREAD(example_rudolph1_process, ev, data)
   PROCESS_PAUSE();
 
   
-  rudolph1_open(&rudolph1, 128, &rudolph1_call);
+  rudolph1_open(&rudolph1, 140, &rudolph1_call);
   button_sensor.activate();
 
   rtimer_set(&t, RTIMER_NOW() + RTIMER_ARCH_SECOND, 1,

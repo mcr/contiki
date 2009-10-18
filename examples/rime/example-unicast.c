@@ -66,7 +66,7 @@ PROCESS_THREAD(example_unicast_process, ev, data)
     
   PROCESS_BEGIN();
 
-  unicast_open(&uc, 128, &unicast_callbacks);
+  unicast_open(&uc, 146, &unicast_callbacks);
 
   while(1) {
     static struct etimer et;

@@ -71,7 +71,7 @@ PROCESS_THREAD(example_collect_process, ev, data)
 {
   PROCESS_BEGIN();
 
-  collect_open(&tc, 128, &callbacks);
+  collect_open(&tc, 130, &callbacks);
 
   while(1) {
     static struct etimer et;

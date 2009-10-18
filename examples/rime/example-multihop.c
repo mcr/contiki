@@ -81,7 +81,7 @@
 
 #include <stdio.h>
 
-#define CHANNEL 128
+#define CHANNEL 135
 
 
 struct example_neighbor {

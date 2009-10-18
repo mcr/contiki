@@ -123,7 +123,7 @@ PROCESS_THREAD(test_runicast_process, ev, data)
 
   PROCESS_BEGIN();
 
-  runicast_open(&runicast, 128, &runicast_callbacks);
+  runicast_open(&runicast, 144, &runicast_callbacks);
 
   /* OPTIONAL: Sender history */
   list_init(history_table);

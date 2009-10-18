@@ -123,7 +123,7 @@ PROCESS_THREAD(example_rudolph0_process, ev, data)
   PROCESS_PAUSE();
 
   
-  rudolph0_open(&rudolph0, 128, &rudolph0_call);
+  rudolph0_open(&rudolph0, 138, &rudolph0_call);
   button_sensor.activate();
 
   while(1) {
