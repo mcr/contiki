@@ -33,10 +33,11 @@
 # $Id$
 #
 
-CFLAGS += -DWITH_PETSCII
-
 CONTIKI_CPU = $(CONTIKI)/cpu/6502
 include $(CONTIKI_CPU)/Makefile.6502
+
+CFLAGS  += -DWITH_PETSCII
+LDFLAGS += -t $(TARGET)
 
 ifeq ($(MAKECMDGOALS),disk)
   ifndef C1541
