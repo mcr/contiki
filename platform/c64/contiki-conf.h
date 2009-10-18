@@ -45,7 +45,6 @@
 #define CTK_CONF_WIDGETUP_KEY     CH_F5
 #define CTK_CONF_WIDGETDOWN_KEY   CH_F7
 
-#define MOUSE_CONF_DRIVER  "c64-1351.mou"
 #define MOUSE_CONF_XTOC(x) ((x) / 8)
 #define MOUSE_CONF_YTOC(y) ((y) / 8)
 

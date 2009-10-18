@@ -52,7 +52,7 @@ ctk_mouse_init(void)
 {
   struct mod_ctrl module_control = {cfs_read};
 
-  module_control.callerdata = cfs_open(MOUSE_CONF_DRIVER, CFS_READ);
+  module_control.callerdata = cfs_open(mouse_stddrv, CFS_READ);
   okay = module_control.callerdata >= 0;
   if(okay) {
     okay = mod_load(&module_control) == MLOAD_OK;

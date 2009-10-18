@@ -47,7 +47,6 @@
 #define CTK_CONF_WIDGETUP_KEY     0x01	/* Ctrl-A */
 #define CTK_CONF_WIDGETDOWN_KEY   '\t'	/* Tab or Ctrl-I */
 
-#define MOUSE_CONF_DRIVER  "a2e.stdmou.mou"
 #define MOUSE_CONF_XTOC(x) ((x) * 2 / 7)
 #define MOUSE_CONF_YTOC(y) ((y) / 8)
 
