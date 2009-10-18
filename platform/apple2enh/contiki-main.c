@@ -70,6 +70,9 @@ main(void)
 {
   struct ethernet_config *ethernet_config;
 
+  rebootafterexit();
+  videomode(VIDEOMODE_80COL);
+
 #if !WITH_PFS
   close(STDIN_FILENO);
   close(STDOUT_FILENO);
