@@ -79,11 +79,21 @@ public class MessageList extends JList {
 
   private JPopupMenu popup = null;
   private boolean hideNormal = false;
+
+  private int max = -1;
   
   public MessageList() {
     super.setModel(new MessageModel());
     setCellRenderer(new MessageRenderer());
     setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+  }
+
+  /**
+   * @param max Maximum number of messages
+   */
+  public MessageList(int max) {
+    this();
+    this.max = max;
   }
 
   public Color getForeground(int type) {
@@ -157,6 +167,10 @@ public class MessageList extends JList {
 
     while (messages.size() > getModel().getSize()) {
       ((DefaultListModel) getModel()).addElement(messages.get(getModel().getSize()));
+    }
+    while (max > 0 && getModel().getSize() > max) {
+      ((DefaultListModel) getModel()).removeElementAt(0);
+      messages.remove(0);
     }
 
     if (scroll) {
