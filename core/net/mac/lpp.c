@@ -734,6 +734,18 @@ read_packet(void)
       }
 
     } else if(hdr->type == TYPE_DATA) {
+      if(!rimeaddr_cmp(&hdr->receiver, &rimeaddr_null)) {
+        if(!rimeaddr_cmp(&hdr->receiver, &rimeaddr_node_addr)) {
+          /* Not broadcast or for us */
+          PRINTF("%d.%d: data not for us from %d.%d\n",
+                 rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1],
+                 hdr->sender.u8[0], hdr->sender.u8[1]);
+          return 0;
+        }
+        packetbuf_set_addr(PACKETBUF_ADDR_RECEIVER, &hdr->receiver);
+      }
+      packetbuf_set_addr(PACKETBUF_ADDR_SENDER, &hdr->sender);
+
       PRINTF("%d.%d: got data from %d.%d\n",
 	     rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1],
 	     hdr->sender.u8[0], hdr->sender.u8[1]);
