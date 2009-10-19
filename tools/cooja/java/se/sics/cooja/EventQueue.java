@@ -71,6 +71,7 @@ public class EventQueue {
       event.remove();
     }
     event.time = time;
+    event.removed = false;
     unsortedEvents.add(event);
     hasUnsortedEvents = true;
   }
