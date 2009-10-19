@@ -36,7 +36,14 @@
 #include "lib/simEnvChange.h"
 
 #define IMPLEMENT_PRINTF 1
+
+#if WITH_UIP
+/* uIP packets via SLIP */
+#include "uip.h"
+#define MAX_LOG_LENGTH (2*UIP_BUFSIZE)
+#else /* WITH_UIP */
 #define MAX_LOG_LENGTH 1024
+#endif /* WITH_UIP */
 
 const struct simInterface simlog_interface;
 
