@@ -105,6 +105,15 @@ struct xmac_hdr {
 
 #define DEFAULT_PERIOD (DEFAULT_OFF_TIME + DEFAULT_ON_TIME)
 
+/* On some platforms, we may end up with a DEFAULT_PERIOD that is 0
+   which will make compilation fail due to a modulo operation in the
+   code. To ensure that DEFAULT_PERIOD is greater than zero, we use
+   the construct below. */
+#if DEFAULT_PERIOD == 0
+#undef DEFAULT_PERIOD
+#define DEFAULT_PERIOD 1
+#endif
+
 /* The cycle time for announcements. */
 #define ANNOUNCEMENT_PERIOD 4 * CLOCK_SECOND
 
