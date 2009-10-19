@@ -140,7 +140,7 @@ public class NativeIPGateway implements Plugin {
 
   private SlipState readSlipState = SlipState.STATE_OK;
   private int readSlipLength = 0;
-  private final int READ_SLIP_BUFFER_SIZE = 256;
+  private final int READ_SLIP_BUFFER_SIZE = 2048;
   private byte[] readSlipBuffer = new byte[READ_SLIP_BUFFER_SIZE];
 
   public NativeIPGateway(Mote mote, Simulation simulation, final GUI gui) {
