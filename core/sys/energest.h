@@ -92,7 +92,7 @@ extern energest_t energest_leveldevice_current_leveltime[ENERGEST_CONF_LEVELDEVI
 			   energest_current_mode[type] = 1; \
                            } while(0)
 
-#define ENERGEST_OFF(type) do { \
+#define ENERGEST_OFF(type) if(energest_current_mode[type] != 0) do {	\
                            energest_total_time[type].current += (rtimer_clock_t)(RTIMER_NOW() - \
                            energest_current_time[type]); \
 			   energest_current_mode[type] = 0; \
