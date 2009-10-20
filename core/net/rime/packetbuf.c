@@ -52,6 +52,8 @@
 struct packetbuf_attr packetbuf_attrs[PACKETBUF_NUM_ATTRS];
 struct packetbuf_addr packetbuf_addrs[PACKETBUF_NUM_ADDRS];
 
+#define DEBUG_STRINGS 0
+#if DEBUG_STRINGS
 const char *packetbuf_attr_strings[] =
   {
     "PACKETBUF_ATTR_NONE",
@@ -85,6 +87,7 @@ const char *packetbuf_attr_strings[] =
 
     "PACKETBUF_ATTR_MAX",
   };
+#endif /* DEBUG_STRINGS */
 
 static uint16_t buflen, bufptr;
 static uint8_t hdrptr;
