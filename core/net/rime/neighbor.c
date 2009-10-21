@@ -53,7 +53,11 @@
 #include "net/rime/ctimer.h"
 #include "net/rime/collect.h"
 
+#ifdef NEIGHBOR_CONF_MAX_NEIGHBORS
+#define MAX_NEIGHBORS NEIGHBOR_CONF_MAX_NEIGHBORS
+#else /* NEIGHBOR_CONF_MAX_NEIGHBORS */
 #define MAX_NEIGHBORS 8
+#endif /* NEIGHBOR_CONF_MAX_NEIGHBORS */
 
 #define RTMETRIC_MAX COLLECT_MAX_DEPTH
 
