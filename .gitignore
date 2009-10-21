@@ -1,0 +1,10 @@
+*.a
+*.mc1322x
+*.bin
+*.map
+*.png
+*.log
+obj_mc1322x
+symbols.*
+Makefile.target
+
