@@ -542,10 +542,15 @@ public class NativeIPGateway extends VisPlugin {
 
   private void createTunInterfaceLinux() {
     /* Show progress bar while compiling */
-    final JDialog progressDialog = new JDialog(
-        (Window)GUI.getTopParentContainer(), 
-        "Starting Native IP Gateway plugin"
-    );
+    final JDialog progressDialog;
+    if (GUI.isVisualized()) {
+      progressDialog = new JDialog(
+          (Window)GUI.getTopParentContainer(), 
+          "Starting Native IP Gateway plugin"
+      );
+    } else {
+      progressDialog = null;
+    }
     final MessageList output = new MessageList();
     if (GUI.isVisualized()) {
       new RunnableInEDT<Boolean>() {
@@ -586,8 +591,10 @@ public class NativeIPGateway extends VisPlugin {
           true
       );
       if (p.exitValue() != 0) {
-        progressDialog.setVisible(false);
-        progressDialog.dispose();
+        if (GUI.isVisualized()) {
+          progressDialog.setVisible(false);
+          progressDialog.dispose();
+        }
         throw new Exception("Compile failed: " + tunContikiApp.getPath());
       }
 
