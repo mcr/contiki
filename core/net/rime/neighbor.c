@@ -150,6 +150,9 @@ neighbor_timedout_etx(struct neighbor *n, uint8_t etx)
 {
   if(n != NULL) {
     n->etxs[n->etxptr] += etx;
+    if(n->etxs[n->etxptr] > RTMETRIC_MAX / NEIGHBOR_ETX_SCALE) {
+      n->etxs[n->etxptr] = RTMETRIC_MAX / NEIGHBOR_ETX_SCALE;
+    }
     n->etxptr = (n->etxptr + 1) % NEIGHBOR_NUM_ETXS;
   }
 }
