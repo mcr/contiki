@@ -349,11 +349,6 @@ public class ScriptRunner extends VisPlugin {
       scriptTextArea.setEnabled(true);
       logger.info("Test script deactivated");
       setTitle("Contiki Test Editor");
-
-      /* Automatically exit COOJA */
-      if (!GUI.isVisualized()) {
-        System.exit(1);
-      }
     }
   }
 
