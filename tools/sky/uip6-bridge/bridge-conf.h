@@ -46,12 +46,12 @@
 #define UIP_CONF_LLH_LEN         14
 
 #undef XMAC_CONF_COMPOWER
-#define XMAC_CONF_COMPOWER 0
+#define XMAC_CONF_COMPOWER 1
 #undef XMAC_CONF_ANNOUNCEMENTS
 #define XMAC_CONF_ANNOUNCEMENTS 0
 
 #undef RF_CHANNEL
-#define RF_CHANNEL              24
+#define RF_CHANNEL              26
 
 #define CC2420_CONF_AUTOACK     1
 
