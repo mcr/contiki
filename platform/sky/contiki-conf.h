@@ -249,7 +249,7 @@ typedef unsigned long off_t;
 
 #define SPI_ENABLE()    ( P4OUT &= ~BV(CSN) ) /* ENABLE CSn (active low) */
 #define SPI_DISABLE()   ( P4OUT |=  BV(CSN) ) /* DISABLE CSn (active low) */
-#define SPI_ENABLED()   ( (P4OUT & BV(CSN)) != BV(CSN) )
+#define SPI_IS_ENABLED()   ( (P4OUT & BV(CSN)) != BV(CSN) )
 
 #ifdef PROJECT_CONF_H
 #include PROJECT_CONF_H
