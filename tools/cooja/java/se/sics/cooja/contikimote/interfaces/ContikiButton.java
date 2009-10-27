@@ -127,7 +127,7 @@ public class ContikiButton extends Button implements ContikiMoteInterface {
       moteMem.setByteValueOf("simButtonChanged", (byte) 1);
 
       /* If mote is inactive, wake it up */
-      mote.scheduleImmediateWakeup();
+      mote.requestImmediateWakeup();
 
       setChanged();
       notifyObservers();
@@ -141,7 +141,7 @@ public class ContikiButton extends Button implements ContikiMoteInterface {
       moteMem.setByteValueOf("simButtonChanged", (byte) 1);
 
       /* If mote is inactive, wake it up */
-      mote.scheduleImmediateWakeup();
+      mote.requestImmediateWakeup();
 
       setChanged();
       notifyObservers();

@@ -119,7 +119,7 @@ public class ContikiVib extends MoteInterface implements ContikiMoteInterface {
     if (moteMem.getByteValueOf("simVibIsActive") == 1) {
       moteMem.setByteValueOf("simVibChanged", (byte) 1);
 
-      mote.scheduleImmediateWakeup();
+      mote.requestImmediateWakeup();
     }
   }
 

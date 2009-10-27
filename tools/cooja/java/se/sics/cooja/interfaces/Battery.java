@@ -127,7 +127,7 @@ public class Battery extends MoteInterface implements PolledAfterAllTicks {
 
     /* Check if we are out of energy */
     if (getEnergyConsumption() > INITIAL_ENERGY) {
-      mote.scheduleImmediateWakeup();
+      mote.requestImmediateWakeup();
     }
 
     setChanged();

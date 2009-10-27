@@ -173,6 +173,7 @@ public class SkyByteRadio extends Radio implements CustomDataRadio {
       for (byte b: crossBufferedData) {
         cc2420.receivedByte(b);
       }
+      mote.requestImmediateWakeup();
       crossBufferedData = null;
     }
   };
@@ -217,6 +218,7 @@ public class SkyByteRadio extends Radio implements CustomDataRadio {
     for (byte b: packetData) {
       cc2420.receivedByte(b);
     }
+    mote.requestImmediateWakeup();
   }
 
   /* Custom data radio support */
@@ -232,6 +234,7 @@ public class SkyByteRadio extends Radio implements CustomDataRadio {
     if (data instanceof CC2420RadioByte) {
       lastIncomingByte = (CC2420RadioByte) data;
       cc2420.receivedByte(lastIncomingByte.getPacketData()[0]);
+      mote.requestImmediateWakeup();
     }
   }
 

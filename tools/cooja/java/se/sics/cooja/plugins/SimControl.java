@@ -122,7 +122,7 @@ public class SimControl extends VisPlugin {
           stopEvent.remove();
         }
 
-        long t = ((Number)e.getNewValue()).intValue()*Simulation.MILLISECOND;
+        final long t = ((Number)e.getNewValue()).intValue()*Simulation.MILLISECOND;
         if (t <= SimControl.this.simulation.getSimulationTime()) {
           /* No simulation stop scheduled */
           stopTimeTextField.setBackground(Color.LIGHT_GRAY);
@@ -131,7 +131,11 @@ public class SimControl extends VisPlugin {
           /* Schedule simulation stop */
           stopTimeTextField.setBackground(Color.WHITE);
           stopTimeTextField.setToolTipText("Simulation will stop at time (us): " + t);
-          SimControl.this.simulation.scheduleEvent(stopEvent, t);
+          SimControl.this.simulation.invokeSimulationThread(new Runnable() {
+            public void run() {
+              SimControl.this.simulation.scheduleEvent(stopEvent, t);
+            }
+          });
         }
       }
     });

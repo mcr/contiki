@@ -119,7 +119,7 @@ public class ContikiPIR extends PIR implements ContikiMoteInterface {
     if (moteMem.getByteValueOf("simPirIsActive") == 1) {
       moteMem.setByteValueOf("simPirChanged", (byte) 1);
 
-      mote.scheduleImmediateWakeup();
+      mote.requestImmediateWakeup();
     }
   }
 
