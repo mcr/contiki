@@ -162,16 +162,16 @@ public class UDGMVisualizerSkin implements VisualizerSkin {
 
     txRangeSpinner.addChangeListener(new ChangeListener() {
       public void stateChanged(ChangeEvent e) {
-        radioMedium.TRANSMITTING_RANGE = ((SpinnerNumberModel)
-            txRangeSpinner.getModel()).getNumber().doubleValue();
+        radioMedium.setTxRange(((SpinnerNumberModel)
+            txRangeSpinner.getModel()).getNumber().doubleValue());
         visualizer.repaint();
       }
     });
 
     interferenceRangeSpinner.addChangeListener(new ChangeListener() {
       public void stateChanged(ChangeEvent e) {
-        radioMedium.INTERFERENCE_RANGE = ((SpinnerNumberModel)
-            interferenceRangeSpinner.getModel()).getNumber().doubleValue();
+        radioMedium.setInterferenceRange(((SpinnerNumberModel)
+            interferenceRangeSpinner.getModel()).getNumber().doubleValue());
         visualizer.repaint();
       }
     });
