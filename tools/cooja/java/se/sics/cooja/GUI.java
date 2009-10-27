@@ -1960,6 +1960,21 @@ public class GUI extends Observable {
   }
 
   /**
+   * Returns started plugin with given class name, if any.
+   * 
+   * @param classname Class name
+   * @return Plugin instance
+   */
+  public Plugin getStartedPlugin(String classname) {
+    for (Plugin p: startedPlugins) {
+      if (p.getClass().getName().equals(classname)) {
+        return p;
+      }
+    }
+    return null;
+  }
+  
+  /**
    * Return a mote plugins submenu for given mote.
    *
    * @param mote Mote
