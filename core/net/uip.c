@@ -696,7 +696,7 @@ uip_process(u8_t flag)
 #if UIP_ACTIVE_OPEN
     } else if((uip_connr->tcpstateflags & UIP_TS_MASK) == UIP_SYN_SENT) {
       /* In the SYN_SENT state, we retransmit out SYN. */
-      UIP_TCP_BUF->flags = 0;
+      BUF->flags = 0;
       goto tcp_send_syn;
 #endif /* UIP_ACTIVE_OPEN */
     }
