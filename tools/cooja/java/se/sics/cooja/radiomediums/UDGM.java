@@ -288,7 +288,7 @@ public class UDGM extends AbstractRadioMedium {
         }
 
         if (!intfRadio.isInterfered()) {
-          logger.warn("Radio was not interfered: " + intfRadio);
+          /*logger.warn("Radio was not interfered: " + intfRadio);*/
           intfRadio.interfereAnyReception();
         }
       }
