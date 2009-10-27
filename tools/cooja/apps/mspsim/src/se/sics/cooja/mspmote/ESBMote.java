@@ -57,6 +57,7 @@ public class ESBMote extends MspMote {
   protected boolean initEmulator(File fileELF) {
     try {
       esbNode = new ESBNode();
+      registry = esbNode.getRegistry();
       prepareMote(fileELF, esbNode);
 
     } catch (Exception e) {

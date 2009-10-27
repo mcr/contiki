@@ -58,6 +58,7 @@ public class SkyMote extends MspMote {
   protected boolean initEmulator(File fileELF) {
     try {
       skyNode = new SkyNode();
+      registry = skyNode.getRegistry();
       prepareMote(fileELF, skyNode);
     } catch (Exception e) {
       logger.fatal("Error when creating Sky mote: ", e);
