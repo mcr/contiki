@@ -60,8 +60,9 @@ public class MicaClock extends Clock {
   }
 
   public long getTime() {
-    long time = (long) ((double)myMote.cycleCounter * Simulation.MILLISECOND / MspMote.NR_CYCLES_PER_MSEC);
-    return time > 0 ? time : 0;
+//    long time = (long) ((double)myMote.cycleCounter * Simulation.MILLISECOND / MspMote.NR_CYCLES_PER_MSEC);
+//    return time > 0 ? time : 0;
+    return 0;
   }
 
   public void setDrift(long drift) {
