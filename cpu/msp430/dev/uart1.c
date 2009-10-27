@@ -132,14 +132,14 @@ uart1_init(unsigned long ubr)
   /*
    * UMCTL1 values calculated using
    * http://mspgcc.sourceforge.net/baudrate.html
-   * Table assumes that F_CPU = 2,457,600 Hz.
+   * Table assumes that F_CPU = 3,900,000 Hz.
    */
   switch(ubr) {
   case UART1_BAUD2UBR(115200ul):
-    UMCTL1 = 0x4a;
+    UMCTL1 = 0xF7;
     break;
   case UART1_BAUD2UBR(57600ul):
-    UMCTL1 = 0x5b;
+    UMCTL1 = 0xED;
     break;
   default:
     /* 9600, 19200, 38400 don't require any correction */
