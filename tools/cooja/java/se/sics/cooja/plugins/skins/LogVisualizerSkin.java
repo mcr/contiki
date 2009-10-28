@@ -43,6 +43,7 @@ import org.apache.log4j.Logger;
 import se.sics.cooja.ClassDescription;
 import se.sics.cooja.Mote;
 import se.sics.cooja.Simulation;
+import se.sics.cooja.SimEventCentral.MoteCountListener;
 import se.sics.cooja.interfaces.Log;
 import se.sics.cooja.interfaces.Position;
 import se.sics.cooja.plugins.Visualizer;
@@ -67,17 +68,18 @@ public class LogVisualizerSkin implements VisualizerSkin {
       visualizer.repaint();
     }
   };
-  private Observer simObserver = new Observer() {
-    public void update(Observable obs, Object obj) {
-
-      /* Observe logs */
-      for (Mote mote: simulation.getMotes()) {
-        Log log = mote.getInterfaces().getLog();
-        if (log != null) {
-          log.addObserver(logObserver);
-        }
+  private MoteCountListener newMotesListener = new MoteCountListener() {
+    public void moteWasAdded(Mote mote) {
+      Log log = mote.getInterfaces().getLog();
+      if (log != null) {
+        log.addObserver(logObserver);
       }
-      visualizer.repaint();
+    }
+    public void moteWasRemoved(Mote mote) {
+      Log log = mote.getInterfaces().getLog();
+      if (log != null) {
+        log.deleteObserver(logObserver);
+      }
     }
   };
 
@@ -85,17 +87,16 @@ public class LogVisualizerSkin implements VisualizerSkin {
     this.simulation = simulation;
     this.visualizer = vis;
 
-    simulation.addObserver(simObserver);
-    simObserver.update(null, null);
+    simulation.getEventCentral().addMoteCountListener(newMotesListener);
+    for (Mote m: simulation.getMotes()) {
+      newMotesListener.moteWasAdded(m);
+    }
   }
 
   public void setInactive() {
-    simulation.deleteObserver(simObserver);
-    for (Mote mote: simulation.getMotes()) {
-      Log log = mote.getInterfaces().getLog();
-      if (log != null) {
-        log.deleteObserver(logObserver);
-      }
+    simulation.getEventCentral().removeMoteCountListener(newMotesListener);
+    for (Mote m: simulation.getMotes()) {
+      newMotesListener.moteWasRemoved(m);
     }
   }
 
