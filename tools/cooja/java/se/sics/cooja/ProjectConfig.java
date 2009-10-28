@@ -135,15 +135,19 @@ public class ProjectConfig {
    */
   public boolean appendProjectDir(File projectDir)
       throws FileNotFoundException, IOException {
-    myProjectDirHistory.add(projectDir);
-
-    File projectConfig = new File(projectDir.getPath(),
-        GUI.PROJECT_CONFIG_FILENAME);
-    if (projectConfig.exists()) {
-      return appendConfigFile(projectConfig);
+    if (projectDir == null) {
+      throw new FileNotFoundException("No project directory specified");
     }
-
-    return true;
+    if (!projectDir.exists()) {
+      throw new FileNotFoundException("Project directory does not exist: " + projectDir.getAbsolutePath());
+    }
+    
+    File projectConfig = new File(projectDir.getPath(), GUI.PROJECT_CONFIG_FILENAME);
+    if (!projectConfig.exists()) {
+      throw new FileNotFoundException("Project config does not exist: " + projectConfig.getAbsolutePath());
+    }
+    myProjectDirHistory.add(projectDir);
+    return appendConfigFile(projectConfig);
   }
 
 
