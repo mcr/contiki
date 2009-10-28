@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: CoffeeFS.java,v 1.5 2009/08/11 17:03:59 fros4943 Exp $
+ * $Id$
  *
  * @author Nicolas Tsiftes
  *

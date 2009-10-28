@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: button-sensor.c,v 1.3 2006/06/18 08:07:31 adamdunkels Exp $
+ * @(#)$Id$
  */
 
 #include "contiki-esb.h"

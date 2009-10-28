@@ -29,7 +29,7 @@
  *
  * This file is part of the Contiki OS
  *
- * $Id: ethernut-main.c,v 1.3 2009/03/17 20:32:22 adamdunkels Exp $
+ * $Id$
  *
  */
 

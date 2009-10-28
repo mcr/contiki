@@ -2,7 +2,7 @@
 # Makefile for PC-6001 using z80/SDCC
 # @author Takahide Matsutsuka <markn@markn.org>
 #
-# $Id: Makefile,v 1.6 2007/11/28 10:11:55 matsutsuka Exp $
+# $Id$
 #
 
 CONTIKI = ../..

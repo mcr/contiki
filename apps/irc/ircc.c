@@ -30,7 +30,7 @@
  * 
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: ircc.c,v 1.4 2008/11/28 00:15:43 adamdunkels Exp $
+ * $Id$
  */
 
 #include "contiki.h"

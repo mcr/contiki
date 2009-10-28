@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: radio-sensor.c,v 1.3 2007/11/28 21:26:35 nifi Exp $
+ * @(#)$Id$
  */
 
 #include "contiki-esb.h"

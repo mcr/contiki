@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: LED.java,v 1.1 2006/08/21 12:12:59 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja.interfaces;

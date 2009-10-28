@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: EventQueue.java,v 1.9 2009/10/27 10:06:59 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja;

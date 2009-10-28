@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: SkyLED.java,v 1.2 2008/10/28 17:04:08 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja.mspmote.interfaces;

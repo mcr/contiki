@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: RadioMedium.java,v 1.7 2009/05/26 14:17:29 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja;

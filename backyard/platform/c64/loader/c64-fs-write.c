@@ -45,7 +45,7 @@
  *
  * This file is part of the Contiki desktop environment 
  *
- * $Id: c64-fs-write.c,v 1.1 2007/05/23 23:11:28 oliverschmidt Exp $
+ * $Id$
  *
  */
 

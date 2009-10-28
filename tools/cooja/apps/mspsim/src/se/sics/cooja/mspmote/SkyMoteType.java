@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: SkyMoteType.java,v 1.11 2009/09/17 10:50:11 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja.mspmote;

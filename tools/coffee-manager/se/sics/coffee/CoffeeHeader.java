@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: CoffeeHeader.java,v 1.2 2009/08/10 12:51:52 nvt-se Exp $
+ * $Id$
  *
  * @author Nicolas Tsiftes
  *

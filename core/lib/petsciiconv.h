@@ -44,7 +44,7 @@
  *
  * This file is part of the Contiki desktop environment for the C64.
  *
- * $Id: petsciiconv.h,v 1.1 2006/06/17 22:41:18 adamdunkels Exp $
+ * $Id$
  *
  */
 #ifndef __PETSCIICONV_H__

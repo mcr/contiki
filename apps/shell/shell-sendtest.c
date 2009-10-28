@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: shell-sendtest.c,v 1.5 2008/11/17 22:52:10 oliverschmidt Exp $
+ * $Id$
  */
 
 /**

@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
  * SUCH DAMAGE. 
  *
- * @(#)$Id: cle.c,v 1.7 2007/06/04 17:48:19 bg- Exp $
+ * @(#)$Id$
  */
 
 /*

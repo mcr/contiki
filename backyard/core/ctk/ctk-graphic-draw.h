@@ -30,7 +30,7 @@
  * 
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: ctk-graphic-draw.h,v 1.1 2007/05/23 23:19:13 oliverschmidt Exp $
+ * $Id$
  */
 #ifndef __CTK_GRAPHIC_DRAW_H__
 #define __CTK_GRAPHIC_DRAW_H__

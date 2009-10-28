@@ -30,7 +30,7 @@
  *
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: shell-tcpsend.c,v 1.4 2009/03/17 21:49:44 adamdunkels Exp $
+ * $Id$
  */
 
 #include <string.h>

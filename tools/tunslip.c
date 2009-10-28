@@ -28,7 +28,7 @@
  *
  * This file is part of the uIP TCP/IP stack.
  *
- * $Id: tunslip.c,v 1.15 2008/02/24 21:13:36 adamdunkels Exp $
+ * $Id$
  *
  */
 

@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: sd-test.c,v 1.6 2009/10/01 16:40:25 nvt-se Exp $
+ * $Id$
  */
 
 /**

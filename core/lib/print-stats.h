@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: print-stats.h,v 1.1 2007/09/27 22:22:40 adamdunkels Exp $
+ * $Id$
  */
 
 /**

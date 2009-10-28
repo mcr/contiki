@@ -41,7 +41,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: packetqueue.h,v 1.3 2009/05/26 13:58:53 nvt-se Exp $
+ * $Id$
  */
 
 /**

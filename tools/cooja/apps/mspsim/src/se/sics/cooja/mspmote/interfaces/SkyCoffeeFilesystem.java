@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: SkyCoffeeFilesystem.java,v 1.2 2009/10/08 14:41:20 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja.mspmote.interfaces;

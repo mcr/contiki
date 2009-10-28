@@ -30,7 +30,7 @@
  * 
  * Author: Oliver Schmidt <ol.sc@web.de>
  *
- * $Id: ctk-conio-service.h,v 1.1 2007/05/23 23:19:13 oliverschmidt Exp $
+ * $Id$
  */
 #ifndef __CTK_CONIO_SERVICE_H__
 #define __CTK_CONIO_SERVICE_H__

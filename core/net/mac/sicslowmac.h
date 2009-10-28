@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: sicslowmac.h,v 1.1 2009/04/06 13:19:03 nifi Exp $
+ * $Id$
  */
 
 /**

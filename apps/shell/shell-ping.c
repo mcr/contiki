@@ -30,7 +30,7 @@
  *
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: shell-ping.c,v 1.2 2009/03/07 09:32:41 adamdunkels Exp $
+ * $Id$
  */
 
 #include <string.h>

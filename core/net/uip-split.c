@@ -30,7 +30,7 @@
  *
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: uip-split.c,v 1.2 2008/10/14 13:39:12 julienabeille Exp $
+ * $Id$
  */
 
 #include <string.h>

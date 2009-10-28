@@ -30,7 +30,7 @@
  * 
  * Author: Oliver Schmidt <ol.sc@web.de>
  *
- * $Id: mt-test.c,v 1.2 2007/09/11 12:55:57 matsutsuka Exp $
+ * $Id$
  */
 
 /**

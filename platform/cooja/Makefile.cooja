@@ -1,4 +1,4 @@
-# $Id: Makefile.cooja,v 1.35 2009/10/28 13:39:15 nifi Exp $
+# $Id$
 
 ## The COOJA Simulator Contiki platform Makefile
 ##

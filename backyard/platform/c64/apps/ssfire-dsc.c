@@ -29,7 +29,7 @@
  *
  * This file is part of the Contiki desktop environment
  *
- * $Id: ssfire-dsc.c,v 1.2 2007/09/06 01:36:11 matsutsuka Exp $
+ * $Id$
  *
  */
 

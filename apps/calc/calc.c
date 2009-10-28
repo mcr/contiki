@@ -29,7 +29,7 @@
  *
  * This an example program for the Contiki desktop OS
  *
- * $Id: calc.c,v 1.5 2008/02/08 22:48:47 oliverschmidt Exp $
+ * $Id$
  *
  */
 

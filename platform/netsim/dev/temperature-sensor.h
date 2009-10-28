@@ -29,14 +29,14 @@
  * This file is part of the Configurable Sensor Network Application
  * Architecture for sensor nodes running the Contiki operating system.
  *
- * $Id: temperature-sensor.h,v 1.1 2006/06/17 22:41:36 adamdunkels Exp $
+ * $Id$
  *
  * -----------------------------------------------------------------
  *
  * Author  : Adam Dunkels, Joakim Eriksson, Niclas Finne
  * Created : 2005-11-01
- * Updated : $Date: 2006/06/17 22:41:36 $
- *           $Revision: 1.1 $
+ * Updated : $Date$
+ *           $Revision$
  */
 
 #ifndef __TEMPERATURE_SENSOR_H__

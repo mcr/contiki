@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: tr1001-uip.h,v 1.2 2007/08/07 11:14:39 nifi Exp $
+ * @(#)$Id$
  */
 #ifndef __TR1001_UIP_H__
 #define __TR1001_UIP_H__

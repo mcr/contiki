@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: test-abc.c,v 1.4 2009/03/12 21:58:21 adamdunkels Exp $
+ * $Id$
  */
 
 /**

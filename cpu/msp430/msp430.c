@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: msp430.c,v 1.10 2009/02/04 18:28:44 joxe Exp $
+ * @(#)$Id$
  */
 #include <io.h>
 #include <signal.h>

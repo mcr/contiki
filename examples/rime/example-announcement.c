@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: example-announcement.c,v 1.1 2009/03/08 20:27:42 adamdunkels Exp $
+ * $Id$
  */
 
 /**

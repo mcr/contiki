@@ -54,7 +54,7 @@
  *  This file converts to and from a structure to a packed 802.15.4
  *  frame.
  *
- *    $Id: frame802154.h,v 1.2 2009/04/09 21:54:09 nifi Exp $
+ *    $Id$
 */
 
 

@@ -33,7 +33,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: sicslowpan.h,v 1.4 2009/04/06 13:11:20 nifi Exp $
+ * $Id$
  */
 /**
  * \file

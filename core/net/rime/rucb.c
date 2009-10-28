@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: rucb.c,v 1.10 2009/04/16 14:32:01 fros4943 Exp $
+ * $Id$
  */
 
 /**

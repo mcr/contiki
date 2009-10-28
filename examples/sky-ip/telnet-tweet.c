@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: telnet-tweet.c,v 1.1 2009/05/11 17:36:13 adamdunkels Exp $
+ * $Id$
  */
 
 /**

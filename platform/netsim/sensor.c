@@ -30,7 +30,7 @@
  *
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: sensor.c,v 1.1 2006/06/17 22:41:35 adamdunkels Exp $
+ * $Id$
  */
 #include "sensor.h"
 #include "dev/pir-sensor.h"

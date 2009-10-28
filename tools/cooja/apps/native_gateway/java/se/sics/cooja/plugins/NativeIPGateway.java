@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: NativeIPGateway.java,v 1.11 2009/10/21 16:43:24 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja.plugins;

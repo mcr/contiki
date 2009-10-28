@@ -32,8 +32,8 @@
  *
  * Author  : Joakim Eriksson
  * Created : 2008-03-27
- * Updated : $Date: 2008/07/03 23:40:12 $
- *           $Revision: 1.3 $
+ * Updated : $Date$
+ *           $Revision$
  */
 #include "lib/ifft.h"
 

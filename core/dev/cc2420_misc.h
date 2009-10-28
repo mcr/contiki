@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * @(#)$Id: cc2420_misc.h,v 1.1 2006/08/09 17:39:39 bg- Exp $
+ * @(#)$Id$
  */
 
 #ifndef CC2420_MISC_H

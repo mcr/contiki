@@ -1,4 +1,4 @@
-# $Id: Makefile.msp430,v 1.29 2009/09/03 17:41:58 adamdunkels Exp $
+# $Id$
 
 ifdef nodeid
 CFLAGS += -DNODEID=$(nodeid)

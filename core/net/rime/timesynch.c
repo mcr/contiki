@@ -34,7 +34,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: timesynch.c,v 1.8 2009/03/17 09:57:01 nifi Exp $
+ * $Id$
  */
 
 /**

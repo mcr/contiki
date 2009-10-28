@@ -28,7 +28,7 @@
  *
  * This file is part of the uIP TCP/IP stack.
  *
- * $Id: ajax-cgi.c,v 1.3 2009/05/11 17:38:29 adamdunkels Exp $
+ * $Id$
  *
  */
 

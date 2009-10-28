@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: BufferSettings.java,v 1.1 2009/07/03 13:37:41 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja.dialogs;

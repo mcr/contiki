@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: ppp-service.c,v 1.1 2007/05/26 07:14:40 oliverschmidt Exp $
+ * @(#)$Id$
  */
 
 #if 0

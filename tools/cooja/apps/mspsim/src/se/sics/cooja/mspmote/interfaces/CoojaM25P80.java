@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: CoojaM25P80.java,v 1.2 2009/08/11 17:09:16 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja.mspmote.interfaces;

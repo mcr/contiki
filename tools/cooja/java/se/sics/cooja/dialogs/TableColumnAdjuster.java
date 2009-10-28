@@ -26,14 +26,14 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: TableColumnAdjuster.java,v 1.1 2009/06/12 14:12:59 nifi Exp $
+ * $Id$
  *
  * -----------------------------------------------------------------
  *
  * Author  : Niclas Finne
  * Created : 2009-05-20
- * Updated : $Date: 2009/06/12 14:12:59 $
- *           $Revision: 1.1 $
+ * Updated : $Date$
+ *           $Revision$
  */
 
 package se.sics.cooja.dialogs;

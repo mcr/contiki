@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: SerialConsole.java,v 1.1 2008/07/09 23:18:07 nifi Exp $
+ * $Id$
  *
  * -----------------------------------------------------------------
  *
@@ -34,8 +34,8 @@
  *
  * Authors : Joakim Eriksson, Niclas Finne
  * Created : 4 jul 2008
- * Updated : $Date: 2008/07/09 23:18:07 $
- *           $Revision: 1.1 $
+ * Updated : $Date$
+ *           $Revision$
  */
 
 package se.sics.contiki.collect.gui;

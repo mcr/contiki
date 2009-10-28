@@ -29,7 +29,7 @@
  *
  * This file is part of the Contiki desktop environment
  *
- * $Id: shell-dsc.h,v 1.1 2006/06/17 22:41:12 adamdunkels Exp $
+ * $Id$
  *
  */
 #ifndef __SHELL_DSC_H__

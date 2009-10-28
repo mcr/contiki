@@ -29,7 +29,7 @@
  *
  * This file is part of the Contiki desktop OS
  *
- * $Id: c64-dio.h,v 1.1 2007/05/23 23:11:28 oliverschmidt Exp $
+ * $Id$
  *
  */
 #ifndef __C64_DIO_H__

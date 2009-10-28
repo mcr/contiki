@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: tcpdump.c,v 1.2 2006/10/09 11:53:56 adamdunkels Exp $
+ * @(#)$Id$
  */
 
 #include "contiki-net.h"

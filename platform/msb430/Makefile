@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.3 2007/08/17 13:10:16 nvt-se Exp $
+# $Id$
 
 all: test-abc
 upload: test-abc test-abc.u

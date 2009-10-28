@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: webserver-example.c,v 1.1 2006/06/17 22:41:25 adamdunkels Exp $
+ * $Id$
  */
 
 /**

@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: rtimer-arch.c,v 1.5 2009/09/07 12:02:58 joxe Exp $
+ * $Id$
  */
 
 /**

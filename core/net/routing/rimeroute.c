@@ -32,7 +32,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: rimeroute.c,v 1.2 2009/09/29 16:02:28 nvt-se Exp $
+ * $Id$
  */
 /**
  * \file

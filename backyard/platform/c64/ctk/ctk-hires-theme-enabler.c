@@ -29,7 +29,7 @@
  *
  * This file is part of the Contiki desktop OS for the C64
  *
- * $Id: ctk-hires-theme-enabler.c,v 1.1 2007/05/23 23:11:27 oliverschmidt Exp $
+ * $Id$
  *
  */
 

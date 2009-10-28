@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: codeprop.c,v 1.4 2007/04/26 12:56:28 bg- Exp $
+ * @(#)$Id$
  */
 #include <stdlib.h>
 #include <stdio.h>

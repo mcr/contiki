@@ -29,7 +29,7 @@
  *
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: ethernode-uip.h,v 1.2 2007/03/22 18:59:34 adamdunkels Exp $
+ * $Id$
  */
 #ifndef __ETHERNODE_UIP_H__
 #define __ETHERNODE_UIP_H__

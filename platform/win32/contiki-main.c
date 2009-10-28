@@ -30,7 +30,7 @@
  * 
  * Author: Oliver Schmidt <ol.sc@web.de>
  *
- * $Id: contiki-main.c,v 1.17 2008/02/10 22:48:17 oliverschmidt Exp $
+ * $Id$
  */
 
 #define WIN32_LEAN_AND_MEAN

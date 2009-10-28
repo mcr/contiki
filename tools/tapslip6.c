@@ -29,7 +29,7 @@
  *
  * This file is part of the uIP TCP/IP stack.
  *
- * $Id: tapslip6.c,v 1.1 2009/05/08 12:37:34 joxe Exp $
+ * $Id$
  *
  */
 

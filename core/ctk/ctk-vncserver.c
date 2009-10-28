@@ -41,7 +41,7 @@
  *
  * This file is part of the "ctk" console GUI toolkit for cc65
  *
- * $Id: ctk-vncserver.c,v 1.2 2006/08/30 22:24:12 oliverschmidt Exp $
+ * $Id$
  *
  */
 

@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
  * SUCH DAMAGE. 
  *
- * @(#)$Id: gateway.c,v 1.3 2007/05/21 14:14:16 bg- Exp $
+ * @(#)$Id$
  */
 
 /*
@@ -110,7 +110,7 @@ main(int argc, char **argv)
   leds_toggle(LEDS_ALL);
   slip_arch_init(BAUD2UBR(38400)); /* Must come before first printf */
   printf("Starting %s "
-         "($Id: gateway.c,v 1.3 2007/05/21 14:14:16 bg- Exp $)\n", __FILE__);
+         "($Id$)\n", __FILE__);
   ds2411_init();
   cc2420_init();
   xmem_init();

@@ -29,7 +29,7 @@
  *
  * This file is part of the uIP TCP/IP stack and the Contiki operating system.
  *
- * $Id: uiplib.c,v 1.1 2006/06/17 22:41:19 adamdunkels Exp $
+ * $Id$
  *
  */
 

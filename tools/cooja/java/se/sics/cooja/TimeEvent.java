@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: TimeEvent.java,v 1.4 2009/03/03 13:42:45 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja;

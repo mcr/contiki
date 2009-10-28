@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: rs232.c,v 1.3 2007/08/07 11:06:14 nifi Exp $
+ * @(#)$Id$
  */
 
 /** \addtogroup esbrs232

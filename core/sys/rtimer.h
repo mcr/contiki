@@ -48,7 +48,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: rtimer.h,v 1.9 2009/03/01 09:31:43 adamdunkels Exp $
+ * @(#)$Id$
  */
 #ifndef __RTIMER_H__
 #define __RTIMER_H__

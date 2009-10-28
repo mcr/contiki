@@ -30,7 +30,7 @@
 */
  
  
-/* $Id: malloc.c,v 1.1 2008/08/15 19:05:17 adamdunkels Exp $ */
+/* $Id$ */
 
 #include <stdlib.h>
 

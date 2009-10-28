@@ -29,7 +29,7 @@
  *
  * This file is part of the Contiki desktop environment
  *
- * $Id: netconf.c,v 1.8 2008/02/08 22:51:01 oliverschmidt Exp $
+ * $Id$
  *
  */
 

@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: sensor-template.c,v 1.1 2006/06/18 07:49:33 adamdunkels Exp $
+ * @(#)$Id$
  */
 
 #include "contiki-esb.h"

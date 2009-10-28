@@ -30,7 +30,7 @@
  *
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: ethernode.c,v 1.16 2008/08/15 19:54:58 adamdunkels Exp $
+ * $Id$
  */
 /**
  * \file

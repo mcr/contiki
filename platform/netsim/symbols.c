@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: symbols.c,v 1.1 2006/06/17 22:41:35 adamdunkels Exp $
+ * @(#)$Id$
  */
 #include "loader/symbols.h"
 const struct symbols symbols[] = {

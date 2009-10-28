@@ -29,7 +29,7 @@
  *
  * This file is part of the Contiki VNC client
  *
- * $Id: vnc-draw.c,v 1.1 2007/05/23 23:11:26 oliverschmidt Exp $
+ * $Id$
  *
  */
 

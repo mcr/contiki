@@ -30,7 +30,7 @@
  * 
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: lan91c96.h,v 1.1 2007/05/23 23:11:30 oliverschmidt Exp $
+ * $Id$
  */
 
 #ifndef __LAN91C96_H__

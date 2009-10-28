@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: rand.c,v 1.9 2007/09/04 08:48:54 bg- Exp $
+ * @(#)$Id$
  */
 
 #include <stdlib.h>

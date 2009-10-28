@@ -29,7 +29,7 @@
  *
  * This file is part of the "ctk" console GUI toolkit for cc65
  *
- * $Id: ctk-hires-asm.h,v 1.1 2007/05/23 23:11:27 oliverschmidt Exp $
+ * $Id$
  *
  */
 

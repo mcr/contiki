@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: Plugin.java,v 1.3 2008/12/16 15:07:14 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja;

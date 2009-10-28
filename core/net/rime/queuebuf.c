@@ -33,7 +33,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: queuebuf.c,v 1.15 2009/10/19 21:28:59 adamdunkels Exp $
+ * $Id$
  */
 
 /**

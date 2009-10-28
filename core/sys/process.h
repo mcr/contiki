@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: process.h,v 1.16 2008/10/14 12:46:39 nvt-se Exp $
+ * @(#)$Id$
  */
 
 /**

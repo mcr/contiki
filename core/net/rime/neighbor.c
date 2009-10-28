@@ -33,7 +33,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: neighbor.c,v 1.20 2009/10/22 13:11:20 zhitao Exp $
+ * $Id$
  */
 
 /**

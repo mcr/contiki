@@ -7,7 +7,7 @@
 #  Written and maintained by Lars Albertsson <lalle@sics.se>.
 #  
 
-# $Id: threads.py,v 1.1 2009/02/26 13:47:38 fros4943 Exp $
+# $Id$
 
 import signal
 import sys

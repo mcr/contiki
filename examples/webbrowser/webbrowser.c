@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: webbrowser.c,v 1.1 2007/12/15 22:05:34 oliverschmidt Exp $
+ * $Id$
  */
 
 #include "contiki-net.h"

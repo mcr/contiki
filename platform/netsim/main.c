@@ -30,7 +30,7 @@
  *
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: main.c,v 1.13 2008/11/09 12:30:32 adamdunkels Exp $
+ * $Id$
  */
 
 /**

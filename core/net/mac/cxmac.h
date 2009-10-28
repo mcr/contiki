@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: cxmac.h,v 1.2 2009/06/22 11:14:11 nifi Exp $
+ * $Id$
  */
 
 /**

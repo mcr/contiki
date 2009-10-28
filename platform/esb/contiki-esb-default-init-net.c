@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: contiki-esb-default-init-net.c,v 1.13 2009/07/07 13:06:56 nifi Exp $
+ * @(#)$Id$
  */
 
 #include "contiki-conf.h"

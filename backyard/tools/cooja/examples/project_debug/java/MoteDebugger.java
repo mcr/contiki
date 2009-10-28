@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: MoteDebugger.java,v 1.1 2009/05/18 14:48:10 fros4943 Exp $
+ * $Id$
  */
 
 import java.awt.event.*;

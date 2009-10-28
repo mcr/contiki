@@ -47,7 +47,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: rudolph0.h,v 1.10 2008/06/30 08:28:53 adamdunkels Exp $
+ * $Id$
  */
 
 /**

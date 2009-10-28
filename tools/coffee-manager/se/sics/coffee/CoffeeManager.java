@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: CoffeeManager.java,v 1.6 2009/08/13 12:15:35 nvt-se Exp $
+ * $Id$
  *
  * @author Nicolas Tsiftes
  *

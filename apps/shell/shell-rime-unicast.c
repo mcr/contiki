@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: shell-rime-unicast.c,v 1.2 2009/09/09 21:06:51 adamdunkels Exp $
+ * $Id$
  */
 
 /**

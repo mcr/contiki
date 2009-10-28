@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: CC2420RadioByte.java,v 1.1 2008/10/09 11:12:29 joxe Exp $
+ * $Id$
  */
 
 package se.sics.cooja.mspmote.interfaces;

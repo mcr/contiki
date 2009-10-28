@@ -8,7 +8,7 @@
 ;;; \author
 ;;;     Takahide Matsutsuka <markn@markn.org>
 ;;; 
-;;; $Id: crt0.S,v 1.3 2008/07/02 07:13:22 matsutsuka Exp $
+;;; $Id$
 ;;; 
         .module crt0
        	.globl	_main

@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: codeprop-otf.c,v 1.1 2009/07/11 14:18:50 ksb Exp $
+ * @(#)$Id$
  */
 
 /** \addtogroup esb

@@ -70,7 +70,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: elfloader.h,v 1.3 2008/01/24 13:09:33 adamdunkels Exp $
+ * @(#)$Id$
  */
 #ifndef __ELFLOADER_H__
 #define __ELFLOADER_H__

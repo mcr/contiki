@@ -30,7 +30,7 @@
  *
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: ethernode.h,v 1.4 2007/11/17 18:09:19 adamdunkels Exp $
+ * $Id$
  */
 #ifndef __ETHERNODE_H__
 #define __ETHERNODE_H__

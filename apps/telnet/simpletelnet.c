@@ -29,7 +29,7 @@
  *
  * This file is part of the Contiki desktop environment
  *
- * $Id: simpletelnet.c,v 1.5 2008/02/08 22:52:43 oliverschmidt Exp $
+ * $Id$
  *
  */
 

@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * @(#)$Id: contiki-sky-main.c,v 1.8 2008/12/16 17:05:14 nifi Exp $
+ * @(#)$Id$
  */
 
 #include <signal.h>
@@ -127,7 +127,7 @@ main(int argc, char **argv)
 #endif /* WITH_UIP */
   
   printf("Starting %s "
-	 "($Id: contiki-sky-main.c,v 1.8 2008/12/16 17:05:14 nifi Exp $)\n", __FILE__);
+	 "($Id$)\n", __FILE__);
   ds2411_init();
   sensors_light_init();
   sht11_init();

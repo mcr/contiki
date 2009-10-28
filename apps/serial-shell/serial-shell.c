@@ -33,7 +33,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: serial-shell.c,v 1.5 2009/03/17 15:56:32 adamdunkels Exp $
+ * $Id$
  */
 
 /**

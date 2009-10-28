@@ -27,7 +27,7 @@
 #
 # This file is part of the Contiki desktop environment
 #
-# $Id: Makefile,v 1.1 2008/01/05 21:08:26 oliverschmidt Exp $
+# $Id$
 #
 
 all: contiki-main

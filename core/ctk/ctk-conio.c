@@ -29,7 +29,7 @@
  *
  * This file is part of the "ctk" console GUI toolkit for cc65
  *
- * $Id: ctk-conio.c,v 1.11 2007/12/20 20:45:06 oliverschmidt Exp $
+ * $Id$
  *
  */
 

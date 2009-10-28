@@ -46,7 +46,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: abc.h,v 1.15 2009/03/12 21:58:20 adamdunkels Exp $
+ * $Id$
  */
 /**
  * \file

@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: ethernode-rime.h,v 1.1 2007/03/13 13:07:48 adamdunkels Exp $
+ * $Id$
  */
 
 /**

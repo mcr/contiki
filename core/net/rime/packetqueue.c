@@ -32,7 +32,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: packetqueue.c,v 1.1 2009/04/29 20:47:30 adamdunkels Exp $
+ * $Id$
  */
 
 /**

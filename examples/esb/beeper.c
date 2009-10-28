@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: beeper.c,v 1.2 2008/07/08 12:54:41 nifi Exp $
+ * @(#)$Id$
  */
 #include "contiki-esb.h"
 

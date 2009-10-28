@@ -1,4 +1,4 @@
-# $Id: Makefile.avr,v 1.17 2009/09/07 12:02:58 joxe Exp $
+# $Id$
 
 ### Check if we are running under Windows
 

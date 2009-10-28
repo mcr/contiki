@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: rime-udp.c,v 1.4 2009/06/24 16:31:49 nvt-se Exp $
+ * $Id$
  */
 
 /**

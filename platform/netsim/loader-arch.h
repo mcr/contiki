@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: loader-arch.h,v 1.1 2006/06/17 22:41:35 adamdunkels Exp $
+ * $Id$
  */
 
 /**

@@ -30,7 +30,7 @@
  *
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: nodes.c,v 1.8 2008/05/14 19:22:58 adamdunkels Exp $
+ * $Id$
  */
 #include <signal.h>
 #include <stdio.h>

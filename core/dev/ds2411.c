@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: ds2411.c,v 1.3 2009/06/23 13:12:37 joxe Exp $
+ * @(#)$Id$
  */
 /*
  * Device driver for the Dallas Semiconductor DS2411 chip. Heavily

@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: Visualizer.java,v 1.11 2009/10/16 13:14:54 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja.plugins;

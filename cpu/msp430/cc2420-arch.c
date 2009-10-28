@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * @(#)$Id: cc2420-arch.c,v 1.4 2009/04/02 22:39:29 joxe Exp $
+ * @(#)$Id$
  */
 
 #include <io.h>

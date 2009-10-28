@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: ctk-term.h,v 1.1 2007/05/26 21:54:33 oliverschmidt Exp $
+ * @(#)$Id$
  */
 #ifndef __CTK_TERM_H__
 #define __CTK_TERM_H__

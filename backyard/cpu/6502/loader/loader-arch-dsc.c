@@ -29,7 +29,7 @@
  *
  * This file is part of the Contiki desktop OS
  *
- * $Id: loader-arch-dsc.c,v 1.1 2007/05/23 23:50:02 oliverschmidt Exp $
+ * $Id$
  *
  */
 

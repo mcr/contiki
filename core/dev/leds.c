@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: leds.c,v 1.7 2009/02/24 21:30:20 adamdunkels Exp $
+ * @(#)$Id$
  */
 
 #include "dev/leds.h"

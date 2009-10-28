@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: VisPlugin.java,v 1.10 2009/06/30 12:46:26 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja;

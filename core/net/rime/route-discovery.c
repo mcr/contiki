@@ -33,7 +33,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: route-discovery.c,v 1.18 2009/10/08 16:30:26 nvt-se Exp $
+ * $Id$
  */
 
 /**

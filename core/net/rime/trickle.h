@@ -45,7 +45,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: trickle.h,v 1.11 2009/04/06 21:20:35 adamdunkels Exp $
+ * $Id$
  */
 
 /**

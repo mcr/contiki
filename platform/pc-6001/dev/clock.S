@@ -6,7 +6,7 @@
 ;;; 
 ;;; @author Takahide Matsutsuka <markn@markn.org>
 ;;; 
-;;; $Id: clock.S,v 1.1 2007/09/11 12:12:59 matsutsuka Exp $
+;;; $Id$
 ;;; 
 	.globl _clock_time
 

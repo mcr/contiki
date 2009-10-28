@@ -30,7 +30,7 @@
  *
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: uipbuf.h,v 1.1 2007/11/18 01:18:50 oliverschmidt Exp $
+ * $Id$
  */
 /**
  * \file

@@ -29,7 +29,7 @@
  *
  * This file is part of the Contiki desktop environment
  *
- * $Id: memstat-dsc.h,v 1.1 2007/05/23 23:47:44 oliverschmidt Exp $
+ * $Id$
  *
  */
 #ifndef __MEMSTAT_DSC_H__

@@ -30,7 +30,7 @@
  * 
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: cfs-init.h,v 1.1 2007/05/23 23:11:29 oliverschmidt Exp $
+ * $Id$
  */
 #ifndef __CFS_INIT_H__
 #define __CFS_INIT_H__

@@ -33,7 +33,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: announcement.c,v 1.1 2009/02/05 19:32:01 adamdunkels Exp $
+ * $Id$
  */
 
 /**

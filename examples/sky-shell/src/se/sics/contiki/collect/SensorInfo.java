@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: SensorInfo.java,v 1.2 2008/11/10 21:14:20 adamdunkels Exp $
+ * $Id$
  *
  * -----------------------------------------------------------------
  *
@@ -34,8 +34,8 @@
  *
  * Authors : Joakim Eriksson, Niclas Finne
  * Created : 20 aug 2008
- * Updated : $Date: 2008/11/10 21:14:20 $
- *           $Revision: 1.2 $
+ * Updated : $Date$
+ *           $Revision$
  */
 
 package se.sics.contiki.collect;

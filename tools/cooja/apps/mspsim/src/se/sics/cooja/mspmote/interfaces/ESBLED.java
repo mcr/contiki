@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: ESBLED.java,v 1.5 2009/03/09 17:14:35 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja.mspmote.interfaces;

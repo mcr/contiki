@@ -30,7 +30,7 @@
  * 
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: mtest.c,v 1.1 2007/05/23 23:11:24 oliverschmidt Exp $
+ * $Id$
  */
 #include "mt.h"
 

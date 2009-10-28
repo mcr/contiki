@@ -42,7 +42,7 @@
  *
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: etimer.c,v 1.3 2007/10/07 19:59:27 joxe Exp $
+ * $Id$
  */
 
 #include "contiki-conf.h"

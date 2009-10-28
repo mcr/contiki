@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: example-collect.c,v 1.9 2009/10/18 17:52:08 adamdunkels Exp $
+ * $Id$
  */
 
 /**

@@ -1,5 +1,5 @@
 /*
- * $Id: ppp_process.c,v 1.1 2007/05/26 07:14:40 oliverschmidt Exp $
+ * $Id$
  */
 
 #include "contiki.h"

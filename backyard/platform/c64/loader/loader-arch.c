@@ -39,7 +39,7 @@
  *
  * This file is part of the Contiki desktop OS
  *
- * $Id: loader-arch.c,v 1.1 2007/05/23 23:11:29 oliverschmidt Exp $
+ * $Id$
  *
  */
 

@@ -30,7 +30,7 @@
  * 
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: random.h,v 1.1 2006/06/17 22:41:35 adamdunkels Exp $
+ * $Id$
  */
 #ifndef __RANDOM_H__
 #define __RANDOM_H__

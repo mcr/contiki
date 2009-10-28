@@ -26,14 +26,14 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: radio-test.c,v 1.2 2006/10/09 11:55:30 adamdunkels Exp $
+ * $Id$
  *
  * -----------------------------------------------------------------
  *
  * Author  : Adam Dunkels, Joakim Eriksson, Niclas Finne
  * Created : 2006-03-07
- * Updated : $Date: 2006/10/09 11:55:30 $
- *           $Revision: 1.2 $
+ * Updated : $Date$
+ *           $Revision$
  *
  * Simple application to indicate connectivity between two nodes:
  *

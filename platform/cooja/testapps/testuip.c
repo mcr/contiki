@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: testuip.c,v 1.3 2009/05/19 17:54:08 fros4943 Exp $
+ * $Id$
  */
 
 #include <stdlib.h>

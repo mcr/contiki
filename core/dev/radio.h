@@ -42,7 +42,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: radio.h,v 1.5 2007/05/25 08:05:24 adamdunkels Exp $
+ * $Id$
  */
 
 /**

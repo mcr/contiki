@@ -26,14 +26,14 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: MessageList.java,v 1.14 2009/10/19 17:33:25 fros4943 Exp $
+ * $Id$
  *
  * -----------------------------------------------------------------
  *
  * Author  : Adam Dunkels, Joakim Eriksson, Niclas Finne, Fredrik Osterlind
  * Created : 2006-06-14
- * Updated : $Date: 2009/10/19 17:33:25 $
- *           $Revision: 1.14 $
+ * Updated : $Date$
+ *           $Revision$
  */
 
 package se.sics.cooja.dialogs;

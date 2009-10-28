@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: netsim-init.c,v 1.2 2007/03/22 18:59:34 adamdunkels Exp $
+ * @(#)$Id$
  */
 #include "init.h"
 #include "random.h"

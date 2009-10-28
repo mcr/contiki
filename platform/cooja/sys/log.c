@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: log.c,v 1.7 2009/10/19 18:00:49 fros4943 Exp $
+ * $Id$
  */
 
 #include <stdio.h>

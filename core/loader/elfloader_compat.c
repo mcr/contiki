@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: elfloader_compat.c,v 1.7 2008/02/07 15:53:43 oliverschmidt Exp $
+ * @(#)$Id$
  */
 
 /*

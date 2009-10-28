@@ -30,7 +30,7 @@
  *
  * Author: Oliver Schmidt <ol.sc@web.de>
  *
- * @(#)$Id: ethernet.c,v 1.6 2007/12/23 15:37:28 oliverschmidt Exp $
+ * @(#)$Id$
  */
 
 #include <modload.h>

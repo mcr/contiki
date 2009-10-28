@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: ESBMote.java,v 1.11 2009/10/27 10:02:48 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja.mspmote;

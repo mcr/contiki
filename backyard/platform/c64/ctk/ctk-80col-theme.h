@@ -29,7 +29,7 @@
  *
  * This file is part of the Contiki desktop OS for the C64
  *
- * $Id: ctk-80col-theme.h,v 1.1 2007/05/23 23:11:27 oliverschmidt Exp $
+ * $Id$
  *
  */
 #ifndef __CTK_80COL_THEME_H__

@@ -30,7 +30,7 @@
  *
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: uipbuf.c,v 1.1 2007/11/18 01:18:50 oliverschmidt Exp $
+ * $Id$
  */
 
 #if 0 /* This whole file is #ifdef'd out - the contents are to be removed */

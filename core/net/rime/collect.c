@@ -36,7 +36,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: collect.c,v 1.28 2009/05/30 19:54:05 nvt-se Exp $
+ * $Id$
  */
 
 /**

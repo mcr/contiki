@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: wpcap-drv.c,v 1.6 2009/08/11 16:06:17 dak664 Exp $
+ * @(#)$Id$
  */
 
 #include "contiki-net.h"

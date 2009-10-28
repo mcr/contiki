@@ -28,7 +28,7 @@
  *
  * This file is part of the uIP TCP/IP stack.
  *
- * $Id: rrnet-dump-drv.c,v 1.1 2007/05/23 23:11:30 oliverschmidt Exp $
+ * $Id$
  *
  */
 

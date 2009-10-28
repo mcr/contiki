@@ -29,7 +29,7 @@
  *
  * This file is part of the "contiki" web browser.
  *
- * $Id: webclient.c,v 1.7 2008/11/10 21:57:26 oliverschmidt Exp $
+ * $Id$
  *
  */
 

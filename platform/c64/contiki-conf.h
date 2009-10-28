@@ -30,7 +30,7 @@
  * 
  * Author: Oliver Schmidt <ol.sc@web.de>
  *
- * $Id: contiki-conf.h,v 1.16 2009/10/18 09:33:08 oliverschmidt Exp $
+ * $Id$
  */
 
 #ifndef __CONTIKI_CONF_H__

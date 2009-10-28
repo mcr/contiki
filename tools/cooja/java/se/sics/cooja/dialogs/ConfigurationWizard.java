@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: ConfigurationWizard.java,v 1.4 2009/04/20 16:09:10 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja.dialogs;

@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: Demo.java,v 1.4 2008/07/02 14:12:48 adamdunkels Exp $
+ * $Id$
  */
 
 /**

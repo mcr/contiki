@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: fft-test.c,v 1.2 2008/04/25 22:12:25 joxe Exp $
+ * $Id$
  *
  * -----------------------------------------------------------------
  * fft-test - a test program that use the sound sensor for sampling
@@ -35,8 +35,8 @@
  *
  * Author  : Joakim Eriksson
  * Created : 2008-04-04
- * Updated : $Date: 2008/04/25 22:12:25 $
- *           $Revision: 1.2 $
+ * Updated : $Date$
+ *           $Revision$
  */
 
 #include "contiki-esb.h"

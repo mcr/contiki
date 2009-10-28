@@ -1,5 +1,5 @@
 /* -*- C -*- */
-/* @(#)$Id: contiki-conf.h,v 1.62 2009/10/27 15:33:24 fros4943 Exp $ */
+/* @(#)$Id$ */
 
 #ifndef CONTIKI_CONF_H
 #define CONTIKI_CONF_H

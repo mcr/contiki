@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: TimeChartPanel.java,v 1.3 2008/08/29 10:00:23 nifi Exp $
+ * $Id$
  *
  * -----------------------------------------------------------------
  *
@@ -34,8 +34,8 @@
  *
  * Authors : Joakim Eriksson, Niclas Finne
  * Created : 3 jul 2008
- * Updated : $Date: 2008/08/29 10:00:23 $
- *           $Revision: 1.3 $
+ * Updated : $Date$
+ *           $Revision$
  */
 
 package se.sics.contiki.collect.gui;

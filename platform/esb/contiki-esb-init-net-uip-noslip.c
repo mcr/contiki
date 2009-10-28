@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: contiki-esb-init-net-uip-noslip.c,v 1.2 2007/08/07 11:17:54 nifi Exp $
+ * $Id$
  */
 
 #include "contiki-esb.h"

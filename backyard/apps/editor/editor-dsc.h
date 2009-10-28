@@ -29,7 +29,7 @@
  *
  * This file is part of the Contiki desktop environment
  *
- * $Id: editor-dsc.h,v 1.1 2007/05/23 23:34:33 oliverschmidt Exp $
+ * $Id$
  *
  */
 #ifndef __EDITOR_DSC_H__

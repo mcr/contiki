@@ -33,7 +33,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: multihop.c,v 1.6 2009/05/10 21:10:02 adamdunkels Exp $
+ * $Id$
  */
 
 /**

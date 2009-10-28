@@ -30,7 +30,7 @@
  *
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: ether.c,v 1.15 2009/03/17 15:56:32 adamdunkels Exp $
+ * $Id$
  */
 /**
  * \file

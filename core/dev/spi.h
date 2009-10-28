@@ -1,5 +1,5 @@
 /* -*- C -*- */
-/* @(#)$Id: spi.h,v 1.6 2009/09/07 11:31:26 nifi Exp $ */
+/* @(#)$Id$ */
 
 #ifndef SPI_H
 #define SPI_H

@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: cfs-cooja.c,v 1.10 2009/09/08 15:08:20 zhitao Exp $
+ * $Id$
  */
 #include <string.h>
 #include "lib/simEnvChange.h"

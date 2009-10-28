@@ -29,7 +29,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: elfloader-arch-otf.h,v 1.1 2009/07/11 14:18:50 ksb Exp $
+ * @(#)$Id$
  */
 /**
  * \addtogroup elfloader

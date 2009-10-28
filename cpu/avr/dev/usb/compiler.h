@@ -13,9 +13,9 @@
  *      Support email: avr@atmel.com
  *
  * $Name:  $
- * $Revision: 1.1 $
- * $RCSfile: compiler.h,v $
- * $Date: 2008/10/14 20:16:36 $  \n
+ * $Revision$
+ * $RCSfile$
+ * $Date$  \n
  *
  * Copyright (c) 2008, Atmel Corporation All rights reserved.
  *

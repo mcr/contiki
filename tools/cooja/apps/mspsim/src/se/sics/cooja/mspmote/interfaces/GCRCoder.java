@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: GCRCoder.java,v 1.1 2008/02/07 14:54:16 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja.mspmote.interfaces;

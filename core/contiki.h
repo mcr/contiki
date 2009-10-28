@@ -30,7 +30,7 @@
  *
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: contiki.h,v 1.5 2008/07/03 23:36:30 adamdunkels Exp $
+ * $Id$
  */
 #ifndef __CONTIKI_H__
 #define __CONTIKI_H__

@@ -33,7 +33,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: mesh.c,v 1.18 2009/09/09 21:10:21 adamdunkels Exp $
+ * $Id$
  */
 
 /**

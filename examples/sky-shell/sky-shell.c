@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: sky-shell.c,v 1.11 2009/10/27 14:13:30 adamdunkels Exp $
+ * $Id$
  */
 
 /**

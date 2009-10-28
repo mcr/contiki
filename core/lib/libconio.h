@@ -29,7 +29,7 @@
  *
  * This file is part of the Contiki desktop environment
  *
- * $Id: libconio.h,v 1.2 2008/10/15 14:17:28 nvt-se Exp $
+ * $Id$
  *
  */
 

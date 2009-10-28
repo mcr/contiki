@@ -42,7 +42,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: rtimer.c,v 1.5 2007/10/23 20:33:19 adamdunkels Exp $
+ * @(#)$Id$
  */
 
 #include "sys/rtimer.h"

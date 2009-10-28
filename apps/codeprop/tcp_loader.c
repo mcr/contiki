@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: tcp_loader.c,v 1.3 2006/12/20 13:38:34 bg- Exp $
+ * @(#)$Id$
  */
 
 #include <stdio.h>

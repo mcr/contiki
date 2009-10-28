@@ -29,7 +29,7 @@
  *
  * This file is part of the "contiki" web browser.
  *
- * $Id: webclient.h,v 1.1 2006/06/17 22:41:14 adamdunkels Exp $
+ * $Id$
  *
  */
 #ifndef __WEBCLIENT_H__

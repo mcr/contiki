@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: test-button.c,v 1.1 2007/03/23 00:06:12 adamdunkels Exp $
+ * $Id$
  */
 
 /**

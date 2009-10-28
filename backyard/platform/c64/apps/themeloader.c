@@ -29,7 +29,7 @@
  *
  * This file is part of the Contiki desktop environment
  *
- * $Id: themeloader.c,v 1.1 2007/05/23 23:11:25 oliverschmidt Exp $
+ * $Id$
  *
  */
 

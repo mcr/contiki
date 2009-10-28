@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: CoffeeMicroLog.java,v 1.2 2009/08/11 14:42:58 nvt-se Exp $
+ * $Id$
  *
  * @author Nicolas Tsiftes
  *

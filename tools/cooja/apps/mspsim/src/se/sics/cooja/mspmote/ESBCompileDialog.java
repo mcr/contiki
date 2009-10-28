@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: ESBCompileDialog.java,v 1.3 2009/03/11 17:46:59 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja.mspmote;

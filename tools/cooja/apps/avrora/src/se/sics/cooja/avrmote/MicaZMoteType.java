@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: MicaZMoteType.java,v 1.6 2009/09/17 10:45:14 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja.avrmote;

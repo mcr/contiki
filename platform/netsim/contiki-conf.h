@@ -35,7 +35,7 @@
  *
  * This file is part of the Contiki desktop OS
  *
- * $Id: contiki-conf.h,v 1.11 2009/03/12 21:58:21 adamdunkels Exp $
+ * $Id$
  *
  */
 

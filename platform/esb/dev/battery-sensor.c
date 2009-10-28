@@ -26,14 +26,14 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: battery-sensor.c,v 1.4 2007/05/22 21:06:57 adamdunkels Exp $
+ * $Id$
  *
  * -----------------------------------------------------------------
  *
  * Author  : Adam Dunkels, Joakim Eriksson, Niclas Finne
  * Created : 2005-11-01
- * Updated : $Date: 2007/05/22 21:06:57 $
- *           $Revision: 1.4 $
+ * Updated : $Date$
+ *           $Revision$
  */
 
 #include "dev/battery-sensor.h"

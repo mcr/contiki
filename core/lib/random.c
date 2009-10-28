@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: random.c,v 1.3 2009/02/11 11:09:59 adamdunkels Exp $
+ * @(#)$Id$
  */
 
 

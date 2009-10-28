@@ -47,7 +47,7 @@
  *
  * This file is part of the uIP TCP/IP stack.
  *
- * $Id: uip.h,v 1.24 2009/04/06 13:18:50 nvt-se Exp $
+ * $Id$
  *
  */
 

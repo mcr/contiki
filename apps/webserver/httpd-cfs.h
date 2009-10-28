@@ -28,7 +28,7 @@
  *
  * This file is part of the uIP TCP/IP stack.
  *
- * $Id: httpd-cfs.h,v 1.2 2007/04/23 23:08:44 oliverschmidt Exp $
+ * $Id$
  *
  */
 

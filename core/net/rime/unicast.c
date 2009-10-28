@@ -34,7 +34,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: unicast.c,v 1.2 2009/03/12 21:58:21 adamdunkels Exp $
+ * $Id$
  */
 
 /**

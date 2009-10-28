@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: RadioByte.java,v 1.1 2009/02/24 07:49:42 joxe Exp $
+ * $Id$
  */
 
 package se.sics.cooja.avrmote.interfaces;

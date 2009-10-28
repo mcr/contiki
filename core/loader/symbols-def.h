@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: symbols-def.h,v 1.3 2007/01/12 13:55:04 bg- Exp $
+ * @(#)$Id$
  */
 #ifndef __SYMBOLS_DEF_H__
 #define __SYMBOLS_DEF_H__

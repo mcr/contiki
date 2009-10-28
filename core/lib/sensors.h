@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: sensors.h,v 1.2 2007/11/17 18:05:56 adamdunkels Exp $
+ * @(#)$Id$
  */
 
 #ifndef __SENSORS_H__

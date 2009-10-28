@@ -33,7 +33,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: ctimer.c,v 1.5 2007/11/13 15:13:03 nifi Exp $
+ * $Id$
  */
 
 /**

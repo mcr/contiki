@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: simEnvChange.h,v 1.8 2009/05/26 14:08:51 fros4943 Exp $
+ * $Id$
  */
 
 #ifndef __SIMENVCHANGE_H__

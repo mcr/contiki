@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: FormulaViewer.java,v 1.3 2008/02/18 08:21:59 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.mrm;

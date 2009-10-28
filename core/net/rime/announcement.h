@@ -54,7 +54,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: announcement.h,v 1.4 2009/05/26 13:58:53 nvt-se Exp $
+ * $Id$
  */
 
 /**

@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: IdIPDistributor.java,v 1.2 2009/09/17 13:20:03 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja.ipdistributors;

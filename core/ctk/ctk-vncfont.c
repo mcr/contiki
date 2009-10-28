@@ -29,7 +29,7 @@
  *
  * This file is part of the Contiki VNC server
  *
- * $Id: ctk-vncfont.c,v 1.1 2006/06/17 22:41:16 adamdunkels Exp $
+ * $Id$
  *
  */
 

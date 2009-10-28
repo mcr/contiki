@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: shell-run.c,v 1.1 2008/02/08 12:49:54 oliverschmidt Exp $
+ * $Id$
  */
 
 #include <string.h>

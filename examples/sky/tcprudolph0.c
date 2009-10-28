@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: tcprudolph0.c,v 1.12 2009/02/27 14:28:02 nvt-se Exp $
+ * @(#)$Id$
  */
 
 #include <stdio.h>

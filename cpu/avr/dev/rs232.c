@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: rs232.c,v 1.5 2009/03/17 20:32:22 adamdunkels Exp $
+ * @(#)$Id$
  */
 
 #include <stdio.h>

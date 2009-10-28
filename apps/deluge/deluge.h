@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: deluge.h,v 1.3 2009/03/01 12:49:43 nvt-se Exp $
+ * $Id$
  */
 
 /**

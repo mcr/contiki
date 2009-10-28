@@ -30,7 +30,7 @@
  * 
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: cfs-cbm.h,v 1.1 2007/05/23 23:11:29 oliverschmidt Exp $
+ * $Id$
  */
 #ifndef __CFS_CBM_H__
 #define __CFS_CBM_H__

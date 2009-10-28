@@ -30,7 +30,7 @@
  *
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: uip-fw.c,v 1.11 2008/02/08 09:12:57 nifi Exp $
+ * $Id$
  */
 /**
  * \addtogroup uip

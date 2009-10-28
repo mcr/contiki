@@ -7,7 +7,7 @@
 ;;; 
 ;;; @author Takahide Matsutsuka <markn@markn.org>
 ;;; 
-;;; $Id: rs232-asm.S,v 1.3 2007/11/28 09:39:30 matsutsuka Exp $
+;;; $Id$
 ;;; 
 	
 	;; definitions of PC-6001 BIOS routines

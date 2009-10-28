@@ -30,7 +30,7 @@
 ; 
 ; Author: Oliver Schmidt <ol.sc@web.de>
 ;
-; $Id: pfs.S,v 1.1 2008/01/01 18:49:51 oliverschmidt Exp $
+; $Id$
 ;
 ;---------------------------------------------------------------------
 	.constructor init_pfs

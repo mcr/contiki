@@ -33,7 +33,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: packetbuf.c,v 1.4 2009/10/20 08:06:43 adamdunkels Exp $
+ * $Id$
  */
 
 /**

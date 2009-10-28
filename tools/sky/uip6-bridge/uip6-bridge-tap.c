@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: uip6-bridge-tap.c,v 1.1 2009/05/08 12:49:36 joxe Exp $
+ * $Id$
  *
  */
 

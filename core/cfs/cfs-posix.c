@@ -30,7 +30,7 @@
  *
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: cfs-posix.c,v 1.15 2009/08/10 09:50:55 nvt-se Exp $
+ * $Id$
  */
 
 #include <stdio.h>

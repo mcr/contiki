@@ -43,7 +43,7 @@
  *
  * This file is part of the Mycal Modified uIP TCP/IP stack.
  *
- * $Id: ipcp.h,v 1.1 2007/05/26 07:14:39 oliverschmidt Exp $
+ * $Id$
  *
  */
 #include "net/uip.h"

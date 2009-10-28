@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki desktop OS.
  *
- * $Id: telnetd.c,v 1.13 2008/10/31 18:07:13 adamdunkels Exp $
+ * $Id$
  *
  */
 

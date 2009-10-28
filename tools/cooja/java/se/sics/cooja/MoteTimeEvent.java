@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: MoteTimeEvent.java,v 1.1 2009/05/26 14:19:17 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja;

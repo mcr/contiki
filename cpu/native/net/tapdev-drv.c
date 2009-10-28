@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: tapdev-drv.c,v 1.5 2008/10/14 14:38:10 julienabeille Exp $
+ * @(#)$Id$
  */
 
 #include "contiki-net.h"

@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: shell-download.c,v 1.2 2009/04/20 13:18:07 fros4943 Exp $
+ * $Id$
  */
 
 /**

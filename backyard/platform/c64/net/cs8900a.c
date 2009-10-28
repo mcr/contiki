@@ -28,7 +28,7 @@
  *
  * This file is part of the C64 RealAudio server demo project.
  *
- * $Id: cs8900a.c,v 1.1 2007/05/23 23:11:29 oliverschmidt Exp $
+ * $Id$
  *
  */
 

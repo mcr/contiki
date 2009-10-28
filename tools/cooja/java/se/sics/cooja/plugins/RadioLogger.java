@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: RadioLogger.java,v 1.24 2009/09/24 08:56:17 nifi Exp $
+ * $Id$
  */
 
 package se.sics.cooja.plugins;

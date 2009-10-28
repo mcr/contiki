@@ -30,7 +30,7 @@
  * 
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: ctk-80col.c,v 1.1 2007/05/23 23:11:27 oliverschmidt Exp $
+ * $Id$
  */
 
 #include "contiki.h"

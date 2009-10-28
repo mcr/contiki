@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: shell-rime-netcmd.c,v 1.8 2009/04/06 23:29:31 adamdunkels Exp $
+ * $Id$
  */
 
 /**

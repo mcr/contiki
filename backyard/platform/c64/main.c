@@ -29,7 +29,7 @@
  *
  * This file is part of the Contiki operating system
  *
- * $Id: main.c,v 1.1 2007/05/23 23:11:23 oliverschmidt Exp $
+ * $Id$
  *
  */
 

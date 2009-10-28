@@ -30,7 +30,7 @@
  *
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: httpd-cfs.c,v 1.1 2009/03/12 19:15:25 adamdunkels Exp $
+ * $Id$
  */
 
 #include <string.h>

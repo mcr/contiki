@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: chameleon.c,v 1.6 2009/03/12 21:58:20 adamdunkels Exp $
+ * $Id$
  */
 
 /**

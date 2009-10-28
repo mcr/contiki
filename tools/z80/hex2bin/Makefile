@@ -2,7 +2,7 @@
 # Makefile for hexameter
 # @author Takahide Matsutsuka <markn@markn.org>
 #
-# $Id: Makefile,v 1.2 2008/07/20 07:44:39 matsutsuka Exp $
+# $Id$
 #
 
 CFLAGS		= -std=c99 -g -mno-cygwin -Wall

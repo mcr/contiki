@@ -30,7 +30,7 @@
  * 
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: irc.c,v 1.10 2008/11/28 00:14:57 adamdunkels Exp $
+ * $Id$
  */
 
 #include <string.h>

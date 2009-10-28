@@ -38,7 +38,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: neighbor.h,v 1.11 2008/02/24 22:05:27 adamdunkels Exp $
+ * $Id$
  */
 
 /**

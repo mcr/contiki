@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: button-sensor.h,v 1.3 2006/06/18 08:07:31 adamdunkels Exp $
+ * @(#)$Id$
  */
 #ifndef __BUTTON_SENSOR_H__
 #define __BUTTON_SENSOR_H__

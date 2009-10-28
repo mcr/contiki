@@ -43,7 +43,7 @@
  *
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: list.c,v 1.2 2008/12/16 09:59:42 joxe Exp $
+ * $Id$
  */
 #include "lib/list.h"
 

@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: elfloader-arch.h,v 1.4 2007/03/24 15:21:34 oliverschmidt Exp $
+ * @(#)$Id$
  */
 /**
  * \addtogroup elfloader

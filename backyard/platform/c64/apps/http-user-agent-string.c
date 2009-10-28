@@ -30,7 +30,7 @@
  * 
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: http-user-agent-string.c,v 1.1 2007/05/23 23:11:24 oliverschmidt Exp $
+ * $Id$
  */
 char http_user_agent_fields[100] = 
 /* "Connection: close\r\nUser-Agent: Contiki/1.1-rc0 (Commodore 64; http://dunkels.com/adam/contiki/)\r\n\r\n" */

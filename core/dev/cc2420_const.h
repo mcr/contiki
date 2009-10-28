@@ -28,7 +28,7 @@
  *
  */
 
-/* @(#)$Id: cc2420_const.h,v 1.3 2008/07/02 09:03:49 adamdunkels Exp $ */
+/* @(#)$Id$ */
 
 #ifndef CC2420_CONST_H
 #define CC2420_CONST_H

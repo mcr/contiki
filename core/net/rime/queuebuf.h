@@ -41,7 +41,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: queuebuf.h,v 1.6 2009/03/12 21:58:21 adamdunkels Exp $
+ * $Id$
  */
 
 /**

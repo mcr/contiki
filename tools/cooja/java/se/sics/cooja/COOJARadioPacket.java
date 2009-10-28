@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: COOJARadioPacket.java,v 1.1 2008/03/18 12:47:10 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja;

@@ -30,7 +30,7 @@
 #
 # Author: Oliver Schmidt <ol.sc@web.de>
 #
-# $Id: Makefile.c64,v 1.6 2009/10/18 09:58:21 oliverschmidt Exp $
+# $Id$
 #
 
 CONTIKI_CPU = $(CONTIKI)/cpu/6502

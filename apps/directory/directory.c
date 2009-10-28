@@ -29,7 +29,7 @@
  *
  * This file is part of the Contiki desktop environment
  *
- * $Id: directory.c,v 1.6 2008/02/08 22:49:29 oliverschmidt Exp $
+ * $Id$
  *
  */
 

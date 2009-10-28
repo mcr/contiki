@@ -30,7 +30,7 @@
  *
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: cooja_mt.c,v 1.2 2009/09/03 12:57:57 nvt-se Exp $
+ * $Id$
  */
 /*
  * This file is ripped from mt.c of the Contiki Multi-threading library.

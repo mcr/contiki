@@ -33,7 +33,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: polite-announcement.c,v 1.5 2009/05/08 08:52:55 adamdunkels Exp $
+ * $Id$
  */
 
 /**

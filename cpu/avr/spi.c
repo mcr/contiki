@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
  * SUCH DAMAGE. 
  *
- * @(#)$Id: spi.c,v 1.1 2007/01/25 18:22:55 bg- Exp $
+ * @(#)$Id$
  */
 
 #include <avr/io.h>

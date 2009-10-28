@@ -30,7 +30,7 @@
  *
  * Author: Oliver Schmidt <ol.sc@web.de>
  *
- * @(#)$Id: 6502def.h,v 1.17 2009/03/01 12:26:53 oliverschmidt Exp $
+ * @(#)$Id$
  */
 
 #ifndef __6502DEF_H__

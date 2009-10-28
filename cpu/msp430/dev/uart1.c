@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * @(#)$Id: uart1.c,v 1.13 2009/10/27 16:25:28 fros4943 Exp $
+ * @(#)$Id$
  */
 
 /*

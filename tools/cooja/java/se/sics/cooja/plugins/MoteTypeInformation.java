@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: MoteTypeInformation.java,v 1.4 2008/02/11 14:37:17 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja.plugins;

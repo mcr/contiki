@@ -30,7 +30,7 @@
  *
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: shell-netstat.c,v 1.1 2009/05/10 21:02:24 adamdunkels Exp $
+ * $Id$
  */
 
 #include <string.h>

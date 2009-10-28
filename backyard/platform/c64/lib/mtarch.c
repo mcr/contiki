@@ -30,7 +30,7 @@
  * 
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: mtarch.c,v 1.1 2007/05/23 23:11:28 oliverschmidt Exp $
+ * $Id$
  */
 #include "mtarch.h"
 #include <string.h>

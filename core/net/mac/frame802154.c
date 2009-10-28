@@ -44,7 +44,7 @@
  *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
  *
- *  $Id: frame802154.c,v 1.3 2009/09/09 21:08:46 adamdunkels Exp $
+ *  $Id$
 */
 /*
  *  \brief This file is where the main functions that relate to frame

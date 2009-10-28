@@ -30,7 +30,7 @@
  *
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: contiki-main.c,v 1.33 2009/03/17 15:56:32 adamdunkels Exp $
+ * $Id$
  */
 
 #include "contiki.h"

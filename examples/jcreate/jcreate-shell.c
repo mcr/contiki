@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: jcreate-shell.c,v 1.2 2009/06/18 09:01:16 adamdunkels Exp $
+ * $Id$
  */
 
 /**

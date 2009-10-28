@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: CompileContiki.java,v 1.4 2009/04/01 14:00:00 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja.dialogs;

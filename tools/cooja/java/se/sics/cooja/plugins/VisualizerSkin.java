@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: VisualizerSkin.java,v 1.3 2009/08/27 13:57:42 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja.plugins;

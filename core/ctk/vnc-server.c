@@ -28,7 +28,7 @@
  *
  * This file is part of the uIP TCP/IP stack.
  *
- * $Id: vnc-server.c,v 1.2 2007/08/30 14:39:17 matsutsuka Exp $
+ * $Id$
  *
  */
 

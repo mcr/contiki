@@ -64,7 +64,7 @@
  *
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: list.h,v 1.3 2009/05/06 15:07:35 adamdunkels Exp $
+ * $Id$
  */
 #ifndef __LIST_H__
 #define __LIST_H__

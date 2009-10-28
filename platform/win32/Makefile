@@ -30,7 +30,7 @@
 #
 # Author: Oliver Schmidt <ol.sc@web.de>
 #
-# $Id: Makefile,v 1.9 2008/11/10 22:10:33 oliverschmidt Exp $
+# $Id$
 #
 
 PRGS = about calc dhcp directory email ftp irc netconf processes shell \

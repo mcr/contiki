@@ -29,7 +29,7 @@
  *
  * This file is part of the Contiki desktop environment
  *
- * $Id: conio.h,v 1.1 2008/01/05 21:08:26 oliverschmidt Exp $
+ * $Id$
  *
  */
 #ifndef __CONIO_H__

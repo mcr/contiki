@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: cc2420-aes.h,v 1.2 2008/07/02 09:02:39 nifi Exp $
+ * $Id$
  */
 
 /**

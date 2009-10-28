@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: rs232-putchar.c,v 1.1 2006/10/09 09:19:02 nifi Exp $
+ * @(#)$Id$
  */
 
 #include "dev/rs232.h"

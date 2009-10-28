@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: irq.c,v 1.4 2008/04/25 15:53:55 joxe Exp $
+ * @(#)$Id$
  */
 #include "lib/sensors.h"
 #include "dev/irq.h"

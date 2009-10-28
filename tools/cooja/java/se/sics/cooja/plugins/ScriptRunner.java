@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: ScriptRunner.java,v 1.23 2009/10/23 11:55:53 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja.plugins;

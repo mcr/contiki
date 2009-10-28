@@ -34,7 +34,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: runicast.c,v 1.6 2009/04/06 21:19:34 adamdunkels Exp $
+ * $Id$
  */
 
 /**

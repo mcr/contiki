@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * @(#)$Id: sht11.h,v 1.2 2008/07/08 08:23:47 adamdunkels Exp $
+ * @(#)$Id$
  */
 
 #ifndef SHT11_H

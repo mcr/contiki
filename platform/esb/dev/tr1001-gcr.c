@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: tr1001-gcr.c,v 1.13 2008/07/08 12:27:22 nifi Exp $
+ * @(#)$Id$
  */
 /**
  * \addtogroup esb

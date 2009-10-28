@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: GridVisualizerSkin.java,v 1.1 2009/08/27 13:59:48 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja.plugins.skins;

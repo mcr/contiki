@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: ContikiMoteCompileDialog.java,v 1.4 2009/09/07 15:05:05 nvt-se Exp $
+ * $Id$
  */
 
 package se.sics.cooja.dialogs;

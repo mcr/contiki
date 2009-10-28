@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: SerialConnection.java,v 1.3 2008/09/03 13:35:21 nifi Exp $
+ * $Id$
  *
  * -----------------------------------------------------------------
  *
@@ -34,8 +34,8 @@
  *
  * Authors : Joakim Eriksson, Niclas Finne
  * Created : 5 jul 2008
- * Updated : $Date: 2008/09/03 13:35:21 $
- *           $Revision: 1.3 $
+ * Updated : $Date$
+ *           $Revision$
  */
 
 package se.sics.contiki.collect;

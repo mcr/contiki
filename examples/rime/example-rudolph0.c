@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: example-rudolph0.c,v 1.3 2009/10/18 17:52:09 adamdunkels Exp $
+ * $Id$
  */
 
 /**

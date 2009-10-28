@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: clock.c,v 1.17 2008/12/02 12:44:48 joxe Exp $
+ * @(#)$Id$
  */
 
 

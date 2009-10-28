@@ -30,7 +30,7 @@
  *
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: psock.h,v 1.6 2009/05/06 15:07:09 adamdunkels Exp $
+ * $Id$
  */
 
 /**

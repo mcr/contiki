@@ -42,7 +42,7 @@
  *
  * This file is part of the Mycal Modified uIP TCP/IP stack.
  *
- * $Id: ppp.h,v 1.1 2007/05/26 07:14:40 oliverschmidt Exp $
+ * $Id$
  *
  */
 #include "net/uip.h"

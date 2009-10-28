@@ -26,7 +26,7 @@
    * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
    * SUCH DAMAGE.
    *
-   * $Id: SerialUI.java,v 1.2 2009/06/02 09:34:12 fros4943 Exp $
+   * $Id$
    */
 
 package se.sics.cooja.dialogs;

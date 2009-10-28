@@ -6,7 +6,7 @@
 #  
 
 
-# $Id: linux.py,v 1.1 2009/02/26 13:47:38 fros4943 Exp $
+# $Id$
 
 import errno
 import glob

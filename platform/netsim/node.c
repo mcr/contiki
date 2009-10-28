@@ -30,7 +30,7 @@
  *
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: node.c,v 1.10 2008/01/04 23:23:29 oliverschmidt Exp $
+ * $Id$
  */
 #include "node.h"
 #include "contiki.h"

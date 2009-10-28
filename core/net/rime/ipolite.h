@@ -81,7 +81,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: ipolite.h,v 1.8 2009/03/12 21:58:21 adamdunkels Exp $
+ * $Id$
  */
 
 /**

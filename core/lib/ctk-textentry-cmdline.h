@@ -29,7 +29,7 @@
  *
  * This file is part of the Contiki desktop environment
  *
- * $Id: ctk-textentry-cmdline.h,v 1.2 2009/02/24 21:30:02 adamdunkels Exp $
+ * $Id$
  *
  */
 #ifndef __CTK_TEXTENTRY_CMDLINE_H__

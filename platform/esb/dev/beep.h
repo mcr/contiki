@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: beep.h,v 1.4 2006/07/07 06:36:38 nifi Exp $
+ * @(#)$Id$
  */
 /**
  * \addtogroup esb

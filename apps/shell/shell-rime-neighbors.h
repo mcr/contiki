@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: shell-rime-neighbors.h,v 1.1 2009/05/10 21:04:06 adamdunkels Exp $
+ * $Id$
  */
 
 /**

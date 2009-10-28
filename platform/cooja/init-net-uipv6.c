@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: init-net-uipv6.c,v 1.1 2009/04/01 13:50:12 fros4943 Exp $
+ * $Id$
  */
 
 #include "contiki.h"

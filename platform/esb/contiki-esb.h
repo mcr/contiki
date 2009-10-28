@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: contiki-esb.h,v 1.5 2009/03/17 20:19:11 adamdunkels Exp $
+ * @(#)$Id$
  */
 #ifndef __CONTIKI_ESB_H__
 #define __CONTIKI_ESB_H__

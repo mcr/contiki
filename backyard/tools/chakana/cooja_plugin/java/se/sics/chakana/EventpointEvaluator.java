@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: EventpointEvaluator.java,v 1.1 2009/02/26 13:47:38 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.chakana;

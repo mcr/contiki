@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: SerialPort.java,v 1.1 2008/09/17 12:04:27 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja.interfaces;

@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: cooja-radio.h,v 1.5 2009/04/01 13:44:34 fros4943 Exp $
+ * $Id$
  */
 
 #ifndef __COOJA_RADIO_H__

@@ -41,7 +41,7 @@
  *
  * This file is part of the uIP TCP/IP stack.
  *
- * $Id: uip6.c,v 1.7 2009/10/27 22:34:08 adamdunkels Exp $
+ * $Id$
  *
  */
 

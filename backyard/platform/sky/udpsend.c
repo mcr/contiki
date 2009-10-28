@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: udpsend.c,v 1.1 2008/05/27 13:16:34 adamdunkels Exp $
+ * @(#)$Id$
  */
 
 /* Set the IP destination address to something different from the

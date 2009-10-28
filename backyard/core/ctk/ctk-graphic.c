@@ -29,7 +29,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: ctk-graphic.c,v 1.1 2007/05/23 23:19:13 oliverschmidt Exp $
+ * $Id$
  *
  */
 

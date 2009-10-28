@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: ContikiIPAddress.java,v 1.6 2009/04/01 17:43:18 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja.contikimote.interfaces;

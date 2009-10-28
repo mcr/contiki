@@ -29,7 +29,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: elfloader-otf.c,v 1.2 2009/02/27 14:28:02 nvt-se Exp $
+ * @(#)$Id$
  */
 
 #include "contiki.h"

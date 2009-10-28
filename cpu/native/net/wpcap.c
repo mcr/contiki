@@ -30,7 +30,7 @@
  *
  * Author: Oliver Schmidt <ol.sc@web.de>
  *
- * $Id: wpcap.c,v 1.18 2009/08/13 18:41:00 dak664 Exp $
+ * $Id$
  */
 
 #define WIN32_LEAN_AND_MEAN

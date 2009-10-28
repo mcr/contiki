@@ -31,7 +31,7 @@
  * Author:   Adam Dunkels <adam@sics.se>
  *           Simon Barner <barner@in.tum.de>
  *
- * @(#)$Id: rs232.h,v 1.6 2008/11/29 18:36:12 c_oflynn Exp $
+ * @(#)$Id$
  */
 
 #ifndef __RS232_H__

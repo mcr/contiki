@@ -30,7 +30,7 @@
  * 
  * Author: Oliver Schmidt <ol.sc@web.de>
  *
- * $Id: config.c,v 1.6 2007/12/23 12:33:57 oliverschmidt Exp $
+ * $Id$
  */
 
 #include <stdlib.h>

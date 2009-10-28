@@ -30,7 +30,7 @@
  * 
  * Author: Oliver Schmidt <ol.sc@web.de>
  *
- * $Id: multi-threading.c,v 1.4 2008/05/26 09:12:22 oliverschmidt Exp $
+ * $Id$
  */
 
 /**

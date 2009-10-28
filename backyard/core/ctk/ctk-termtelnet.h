@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: ctk-termtelnet.h,v 1.1 2007/05/26 21:46:28 oliverschmidt Exp $
+ * @(#)$Id$
  */
 #ifndef __CTK_TERMTELNET_H__
 #define __CTK_TERMTELNET_H__

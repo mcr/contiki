@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: rucb.h,v 1.3 2008/07/03 21:52:25 adamdunkels Exp $
+ * $Id$
  */
 
 /**

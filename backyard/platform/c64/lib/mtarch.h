@@ -30,7 +30,7 @@
  * 
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: mtarch.h,v 1.1 2007/05/23 23:11:28 oliverschmidt Exp $
+ * $Id$
  */
 #ifndef __MTARCH_H__
 #define __MTARCH_H__

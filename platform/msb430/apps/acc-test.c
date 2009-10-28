@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: acc-test.c,v 1.1 2008/03/27 13:08:35 nvt-se Exp $
+ * $Id$
  */
 
 #include "contiki.h"

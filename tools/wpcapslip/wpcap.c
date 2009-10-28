@@ -30,7 +30,7 @@
  *
  * Author: Oliver Schmidt <ol.sc@web.de>
  *
- * $Id: wpcap.c,v 1.4 2009/04/29 11:56:14 adamdunkels Exp $
+ * $Id$
  */
 
 

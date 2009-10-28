@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: DummyInterface.java,v 1.3 2009/05/26 14:34:43 fros4943 Exp $
+ * $Id$
  */
 
 import java.util.*;

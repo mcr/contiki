@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: AbstractionLevelDescription.java,v 1.1 2008/02/07 10:29:40 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja;

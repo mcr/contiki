@@ -30,7 +30,7 @@
  *
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: ethernode-uip.c,v 1.6 2008/01/04 21:59:13 oliverschmidt Exp $
+ * $Id$
  */
 
 #include "contiki.h"

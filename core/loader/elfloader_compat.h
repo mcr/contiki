@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: elfloader_compat.h,v 1.1 2006/12/20 13:38:33 bg- Exp $
+ * @(#)$Id$
  */
 #ifndef __ELFLOADER_H__
 #define __ELFLOADER_H__

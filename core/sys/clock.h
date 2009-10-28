@@ -53,7 +53,7 @@
  *
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: clock.h,v 1.11 2009/01/24 15:20:11 adamdunkels Exp $
+ * $Id$
  */
 #ifndef __CLOCK_H__
 #define __CLOCK_H__

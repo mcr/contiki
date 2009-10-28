@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: sky-shell-exec.c,v 1.1 2009/03/26 12:46:20 fros4943 Exp $
+ * $Id$
  */
 
 #include "contiki.h"

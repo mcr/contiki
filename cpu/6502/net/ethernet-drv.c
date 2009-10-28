@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: ethernet-drv.c,v 1.2 2007/11/27 20:54:10 oliverschmidt Exp $
+ * @(#)$Id$
  */
 
 #include <stdio.h>

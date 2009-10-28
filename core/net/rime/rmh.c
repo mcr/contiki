@@ -33,7 +33,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: rmh.c,v 1.9 2009/03/21 20:53:06 nvt-se Exp $
+ * $Id$
  */
 
 /**

@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: vib-sensor.c,v 1.3 2007/03/28 09:58:47 nifi Exp $
+ * @(#)$Id$
  */
 
 #include "contiki-esb.h"

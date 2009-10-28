@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: WatchpointMote.java,v 1.1 2009/06/11 10:02:11 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja;

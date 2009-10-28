@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: twitter.c,v 1.2 2009/05/11 17:31:13 adamdunkels Exp $
+ * $Id$
  */
 
 /**

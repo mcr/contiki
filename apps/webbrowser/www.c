@@ -29,7 +29,7 @@
  *
  * This file is part of the Contiki desktop environment
  *
- * $Id: www.c,v 1.10 2009/02/25 08:52:27 adamdunkels Exp $
+ * $Id$
  *
  */
 

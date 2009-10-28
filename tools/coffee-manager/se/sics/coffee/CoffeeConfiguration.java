@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: CoffeeConfiguration.java,v 1.5 2009/09/22 16:31:36 nvt-se Exp $
+ * $Id$
  *
  * @author Nicolas Tsiftes
  *

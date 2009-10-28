@@ -29,7 +29,7 @@
  *
  * This file is part of the Contiki OS.
  *
- * $Id: webserver-nogui.c,v 1.2 2009/06/19 17:11:28 dak664 Exp $
+ * $Id$
  *
  */
 

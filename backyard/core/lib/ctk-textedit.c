@@ -43,7 +43,7 @@
  *
  * This file is part of the Contiki desktop environment
  *
- * $Id: ctk-textedit.c,v 1.1 2007/11/20 20:41:54 oliverschmidt Exp $
+ * $Id$
  *
  */
 

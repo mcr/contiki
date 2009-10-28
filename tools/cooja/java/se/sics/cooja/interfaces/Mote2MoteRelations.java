@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: Mote2MoteRelations.java,v 1.2 2009/09/17 11:07:58 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja.interfaces;

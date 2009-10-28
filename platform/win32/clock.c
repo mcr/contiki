@@ -30,7 +30,7 @@
  *
  * Author: Oliver Schmidt <ol.sc@web.de>
  *
- * $Id: clock.c,v 1.2 2008/07/10 17:08:54 adamdunkels Exp $
+ * $Id$
  */
 
 #define WIN32_LEAN_AND_MEAN

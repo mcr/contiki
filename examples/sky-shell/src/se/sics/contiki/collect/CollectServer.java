@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: CollectServer.java,v 1.9 2008/11/10 21:14:20 adamdunkels Exp $
+ * $Id$
  *
  * -----------------------------------------------------------------
  *
@@ -34,8 +34,8 @@
  *
  * Authors : Joakim Eriksson, Niclas Finne
  * Created : 3 jul 2008
- * Updated : $Date: 2008/11/10 21:14:20 $
- *           $Revision: 1.9 $
+ * Updated : $Date$
+ *           $Revision$
  */
 
 package se.sics.contiki.collect;

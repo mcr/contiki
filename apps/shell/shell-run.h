@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: shell-run.h,v 1.1 2008/02/08 12:49:54 oliverschmidt Exp $
+ * $Id$
  */
 
 #ifndef __SHELL_RUN_H__

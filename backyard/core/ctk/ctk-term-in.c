@@ -30,7 +30,7 @@
  * 
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: ctk-term-in.c,v 1.1 2007/05/26 21:54:33 oliverschmidt Exp $
+ * $Id$
  */
 #include <string.h>
 #include "ctk/ctk.h"

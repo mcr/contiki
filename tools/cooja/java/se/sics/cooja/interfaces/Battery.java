@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: Battery.java,v 1.10 2009/10/27 10:11:17 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja.interfaces;

@@ -45,7 +45,7 @@
  *  \file
  *  \brief This file contains radio driver code.
  *
- *   $Id: rf230bb.h,v 1.1 2009/07/08 16:17:07 dak664 Exp $
+ *   $Id$
  */
 
 #ifndef RADIO_H

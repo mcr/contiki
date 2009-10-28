@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: symtab.h,v 1.4 2007/01/12 13:55:05 bg- Exp $
+ * @(#)$Id$
  */
 #ifndef __SYMTAB_H__
 #define __SYMTAB_H__

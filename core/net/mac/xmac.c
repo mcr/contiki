@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: xmac.c,v 1.39 2009/10/19 21:27:02 adamdunkels Exp $
+ * $Id$
  */
 
 /**

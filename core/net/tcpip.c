@@ -29,7 +29,7 @@
  * This file is part of the Contiki operating system.
  *
  *
- * $Id: tcpip.c,v 1.21 2009/04/13 19:54:07 nvt-se Exp $
+ * $Id$
  */
 /**
  * \file

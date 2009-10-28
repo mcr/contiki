@@ -29,7 +29,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: slip.h,v 1.1 2009/05/08 12:49:36 joxe Exp $
+ * @(#)$Id$
  */
 
 #ifndef __SLIP_H__

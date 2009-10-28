@@ -42,7 +42,7 @@
  *
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: timer.c,v 1.5 2009/01/24 15:20:11 adamdunkels Exp $
+ * $Id$
  */
 
 #include "contiki-conf.h"

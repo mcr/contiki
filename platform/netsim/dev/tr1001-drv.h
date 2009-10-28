@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: tr1001-drv.h,v 1.1 2006/06/17 22:41:36 adamdunkels Exp $
+ * @(#)$Id$
  */
 #ifndef __TR1001_DRV_H__
 #define __TR1001_DRV_H__

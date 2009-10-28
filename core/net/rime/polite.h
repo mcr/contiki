@@ -81,7 +81,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: polite.h,v 1.7 2009/03/12 21:58:21 adamdunkels Exp $
+ * $Id$
  */
 
 /**

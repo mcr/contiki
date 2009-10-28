@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: init.h,v 1.3 2007/11/17 18:09:18 adamdunkels Exp $
+ * @(#)$Id$
  */
 #ifndef __INIT_H__
 #define __INIT_H__

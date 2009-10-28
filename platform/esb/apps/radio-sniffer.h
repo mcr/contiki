@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: radio-sniffer.h,v 1.1 2006/10/09 10:08:40 adamdunkels Exp $
+ * $Id$
  */
 
 /**

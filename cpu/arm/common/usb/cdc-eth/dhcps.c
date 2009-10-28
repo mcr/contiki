@@ -29,7 +29,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: dhcps.c,v 1.1 2009/07/11 14:37:11 ksb Exp $
+ * @(#)$Id$
  */
 
 #include <stdio.h>

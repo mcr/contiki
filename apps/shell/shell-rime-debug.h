@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: shell-rime-debug.h,v 1.1 2008/07/04 08:23:00 adamdunkels Exp $
+ * $Id$
  */
 
 /**

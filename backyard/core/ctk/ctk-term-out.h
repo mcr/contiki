@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: ctk-term-out.h,v 1.1 2007/05/26 21:54:33 oliverschmidt Exp $
+ * @(#)$Id$
  */
 #ifndef __CTK_TERM_OUT_H__
 #define __CTK_TERM_OUT_H__

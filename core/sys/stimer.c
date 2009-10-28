@@ -42,7 +42,7 @@
  *
  * Author: Adam Dunkels <adam@sics.se>, Nicolas Tsiftes <nvt@sics.se>
  *
- * $Id: stimer.c,v 1.2 2008/11/05 19:34:36 nvt-se Exp $
+ * $Id$
  */
 
 #include "contiki-conf.h"

@@ -29,7 +29,7 @@
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
  * OF SUCH DAMAGE.
  *
- * $Id: flash.c,v 1.2 2007/11/17 10:28:04 adamdunkels Exp $
+ * $Id$
  *
  * Author: Adam Dunkels <adam@sics.se>
  *

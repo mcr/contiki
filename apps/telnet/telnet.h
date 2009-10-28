@@ -28,7 +28,7 @@
  *
  * This file is part of the uIP TCP/IP stack.
  *
- * $Id: telnet.h,v 1.2 2009/03/05 23:56:56 adamdunkels Exp $
+ * $Id$
  *
  */
 #ifndef __TELNET_H__

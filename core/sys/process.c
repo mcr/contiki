@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: process.c,v 1.9 2009/02/20 21:24:17 adamdunkels Exp $
+ * @(#)$Id$
  */
 
 /**

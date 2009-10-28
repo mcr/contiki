@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: sensor-output.c,v 1.3 2007/10/26 12:37:48 joxe Exp $
+ * @(#)$Id$
  */
 #include "contiki-esb.h"
 

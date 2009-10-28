@@ -30,7 +30,7 @@
  *
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: ether.h,v 1.9 2008/05/14 19:22:58 adamdunkels Exp $
+ * $Id$
  */
 #ifndef __ETHER_H__
 #define __ETHER_H__

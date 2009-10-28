@@ -66,7 +66,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: runicast.h,v 1.5 2009/03/12 21:58:21 adamdunkels Exp $
+ * $Id$
  */
 
 /**

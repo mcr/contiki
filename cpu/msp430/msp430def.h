@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
  * SUCH DAMAGE. 
  *
- * @(#)$Id: msp430def.h,v 1.3 2009/04/06 13:07:37 nifi Exp $
+ * @(#)$Id$
  */
 
 #ifndef MSP430DEF_H

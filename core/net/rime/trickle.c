@@ -33,7 +33,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: trickle.c,v 1.17 2009/04/06 21:20:35 adamdunkels Exp $
+ * $Id$
  */
 
 /**

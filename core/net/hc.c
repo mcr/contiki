@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: hc.c,v 1.4 2007/08/30 14:39:17 matsutsuka Exp $
+ * @(#)$Id$
  */
 
 /**

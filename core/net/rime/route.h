@@ -39,7 +39,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: route.h,v 1.12 2009/08/20 20:27:17 oliverschmidt Exp $
+ * $Id$
  */
 
 /**

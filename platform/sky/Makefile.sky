@@ -1,4 +1,4 @@
-# $Id: Makefile.sky,v 1.27 2009/08/25 16:24:49 adamdunkels Exp $
+# $Id$
 
 
 ARCH=msp430.c leds.c watchdog.c light.c spi.c ds2411.c \

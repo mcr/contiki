@@ -30,7 +30,7 @@
  * 
  * Author: Oliver Schmidt <ol.sc@web.de>
  *
- * $Id: pfs.h,v 1.2 2009/09/13 19:07:34 oliverschmidt Exp $
+ * $Id$
  */
 
 #ifndef __PFS_H__

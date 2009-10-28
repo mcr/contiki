@@ -29,7 +29,7 @@
  *
  * This file is part of the Contiki desktop environment
  *
- * $Id: eth64-dsc.c,v 1.2 2007/09/06 01:36:12 matsutsuka Exp $
+ * $Id$
  *
  */
 

@@ -30,7 +30,7 @@
  * 
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: ftpc.h,v 1.1 2006/06/17 22:41:11 adamdunkels Exp $
+ * $Id$
  */
 #ifndef __FTPC_H__
 #define __FTPC_H__

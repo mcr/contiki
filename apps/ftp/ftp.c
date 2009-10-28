@@ -30,7 +30,7 @@
  * 
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: ftp.c,v 1.6 2008/02/08 22:50:23 oliverschmidt Exp $
+ * $Id$
  */
 /* Note to self: It would be nice to have a "View" option in the download dialog. */
 

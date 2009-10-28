@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki desktop OS.
  *
- * $Id: config.c,v 1.1 2007/05/23 23:11:24 oliverschmidt Exp $
+ * $Id$
  *
  */
 

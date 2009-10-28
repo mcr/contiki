@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: loadable_prg.c,v 1.1 2008/05/27 13:16:34 adamdunkels Exp $
+ * @(#)$Id$
  */
 
 #include <stdio.h>

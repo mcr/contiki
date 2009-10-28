@@ -30,7 +30,7 @@
 ; 
 ; Author: Oliver Schmidt <ol.sc@web.de>
 ;
-; $Id: log-asm.S,v 1.1 2007/12/21 00:43:57 oliverschmidt Exp $
+; $Id$
 ;
 ;---------------------------------------------------------------------       
 	.importzp ptr1

@@ -33,8 +33,8 @@
  *
  * Author  : Joakim Eriksson
  * Created : 2008-03-27
- * Updated : $Date: 2008/04/25 22:12:25 $
- *           $Revision: 1.2 $
+ * Updated : $Date$
+ *           $Revision$
  */
 
 #ifndef IFFT_H

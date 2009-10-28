@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: codeprop-tmp.c,v 1.5 2009/02/27 14:28:02 nvt-se Exp $
+ * @(#)$Id$
  */
 
 /** \addtogroup esb

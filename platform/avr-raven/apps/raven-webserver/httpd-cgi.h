@@ -28,7 +28,7 @@
  *
  * This file is part of the uIP TCP/IP stack.
  *
- * $Id: httpd-cgi.h,v 1.1 2009/03/12 19:15:25 adamdunkels Exp $
+ * $Id$
  *
  */
 

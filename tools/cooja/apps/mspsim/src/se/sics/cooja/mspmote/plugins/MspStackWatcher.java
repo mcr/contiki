@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: MspStackWatcher.java,v 1.6 2009/10/27 10:13:34 fros4943 Exp $
+ * $Id$
  */
 
 package se.sics.cooja.mspmote.plugins;

@@ -28,10 +28,10 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: rand.h,v 1.5 2009/02/11 11:09:59 adamdunkels Exp $
+ * @(#)$Id$
  */
 /* -*- C -*- */
-/* @(#)$Id: rand.h,v 1.5 2009/02/11 11:09:59 adamdunkels Exp $ */
+/* @(#)$Id$ */
 
 #ifndef RAND_H
 #define RAND_H

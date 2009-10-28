@@ -7,7 +7,7 @@
  *
  * Created on : 17-mar-2009
  *
- * $Id: printf-arch.c 191 2009-03-31 14:06:54Z umanzoli $
+ * $Id$
  */
 
 /*

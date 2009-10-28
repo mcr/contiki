@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: xmac.h,v 1.7 2009/03/23 21:06:26 adamdunkels Exp $
+ * $Id$
  */
 
 /**

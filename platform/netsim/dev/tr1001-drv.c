@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: tr1001-drv.c,v 1.2 2006/10/10 15:58:31 adamdunkels Exp $
+ * @(#)$Id$
  */
 
 #include "contiki-esb.h"

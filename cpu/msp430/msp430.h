@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: msp430.h,v 1.2 2008/02/03 20:58:11 adamdunkels Exp $
+ * $Id$
  */
 
 /**

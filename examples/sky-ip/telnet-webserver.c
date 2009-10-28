@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: telnet-webserver.c,v 1.1 2008/02/24 21:33:57 adamdunkels Exp $
+ * $Id$
  */
 
 /**

@@ -7,7 +7,7 @@
 ;;; 
 ;;; @author Takahide Matsutsuka <markn@markn.org>
 ;;; 
-;;; $Id: libconio_arch-asm.cS,v 1.2 2007/09/29 04:10:00 matsutsuka Exp $
+;;; $Id$
 ;;;
 
 	;; uses preprocessor to enable definitions

@@ -57,7 +57,7 @@
  *
  * This file is part of the uIP TCP/IP stack.
  *
- * $Id: resolv.c,v 1.7 2007/11/17 18:05:21 adamdunkels Exp $
+ * $Id$
  *
  */
 

@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: init-net-uip.c,v 1.4 2009/04/23 09:15:51 fros4943 Exp $
+ * $Id$
  */
 
 #include "contiki.h"

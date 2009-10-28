@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: uaodv.c,v 1.36 2007/11/28 12:52:34 adamdunkels Exp $
+ * $Id$
  */
 
 /**

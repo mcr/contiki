@@ -31,14 +31,14 @@
  *
  * This is a dummy non-functional dummy implementation.
  *
- * $Id: leds-arch.c,v 1.1 2006/12/22 17:05:31 barner Exp $
+ * $Id$
  *
  * -----------------------------------------------------------------
  *
  * Author  : Adam Dunkels, Joakim Eriksson, Niclas Finne, Simon Barner
  * Created : 2005-11-03
- * Updated : $Date: 2006/12/22 17:05:31 $
- *           $Revision: 1.1 $
+ * Updated : $Date$
+ *           $Revision$
  */
 
 #include "contiki-conf.h"

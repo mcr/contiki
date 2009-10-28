@@ -30,7 +30,7 @@
 #
 # Author: Oliver Schmidt <ol.sc@web.de>
 #
-# $Id: Makefile.apple2enh,v 1.8 2009/10/18 10:06:44 oliverschmidt Exp $
+# $Id$
 #
 
 CONTIKI_SOURCEFILES += log-asm.S pfs.S

@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: ExternalToolsDialog.java,v 1.12 2008/11/04 15:01:08 adamdunkels Exp $
+ * $Id$
  */
 
 package se.sics.cooja.dialogs;

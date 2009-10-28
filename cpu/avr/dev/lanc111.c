@@ -35,7 +35,7 @@
  */
 
 /*
- * $Log: lanc111.c,v $
+ * $Log$
  * Revision 1.1  2006/06/17 22:41:21  adamdunkels
  * Import of the contiki-2.x development code from the SICS internal CVS server
  *

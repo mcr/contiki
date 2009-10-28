@@ -30,7 +30,7 @@
  *
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: shell-irc.c,v 1.1 2008/11/28 00:16:15 adamdunkels Exp $
+ * $Id$
  */
 
 #include <string.h>

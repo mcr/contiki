@@ -30,7 +30,7 @@
  * 
  * Author: Adam Dunkels <adam@sics.se>
  *
- * $Id: ctk-draw-service.h,v 1.1 2007/05/23 23:19:13 oliverschmidt Exp $
+ * $Id$
  */
 #ifndef __CTK_DRAW_SERVICE_H__
 #define __CTK_DRAW_SERVICE_H__

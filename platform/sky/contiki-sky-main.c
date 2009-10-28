@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * @(#)$Id: contiki-sky-main.c,v 1.57 2009/10/19 20:55:52 adamdunkels Exp $
+ * @(#)$Id$
  */
 
 #include <signal.h>

@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
  * SUCH DAMAGE. 
  *
- * @(#)$Id: cmod.c,v 1.4 2007/05/28 16:22:15 bg- Exp $
+ * @(#)$Id$
  */
 
 #include <stdio.h>
