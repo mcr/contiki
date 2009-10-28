@@ -4,7 +4,7 @@
 #define HAVE_STDINT_H
 #include "msp430def.h"
 
-#define WITH_SDC			0
+#define WITH_SD				0
 
 #define ENERGEST_CONF_ON		1
 
@@ -17,15 +17,15 @@
 #define INFOMEM_BLOCK_SIZE		128
 #define INFOMEM_NODE_ID			0x0000 /* - 0x0004 */
 
-#define CFS_SD_CONF_OFFSET		0x0000
-
 #define CC_CONF_REGISTER_ARGS		1
 #define CC_CONF_FUNCTION_POINTER_ARGS	1
 #define CC_CONF_INLINE			inline
 #define CC_CONF_VA_ARGS			1
 
-#define LPP_CONF_LISTEN_TIME CLOCK_SECOND / 32
-#define LPP_CONF_OFF_TIME CLOCK_SECOND
+#define LPP_CONF_LISTEN_TIME		CLOCK_SECOND / 32
+#define LPP_CONF_OFF_TIME		CLOCK_SECOND
+#define QUEUEBUF_CONF_NUM		4
+
 
 #define CCIF
 #define CLIF
@@ -82,21 +82,5 @@ typedef int bool;
 #define LEDS_CONF_RED			0x80
 #define LEDS_CONF_GREEN			0x00
 #define LEDS_CONF_YELLOW		0x00
-
-#define SD_LED_READ_ON			(LEDS_PxOUT &=~LEDS_CONF_RED)
-#define SD_LED_READ_OFF			(LEDS_PxOUT |= LEDS_CONF_RED)
-#define SD_LED_WRITE_ON			SD_LED_READ_ON
-#define SD_LED_WRITE_OFF		SD_LED_READ_OFF
-
-#define SD_READ_BYTE			0
-#define	SD_READ_ANY			1
-#define SD_INFO				0
-#define SD_WRITE			1
-#define SD_FIND_FILE			0
-#define SD_ERASE			0			
-#define	SD_CACHE			0
-#define SPI_WRITE			SD_WRITE
-#define SPI_DMA_READ			0
-#define SPI_DMA_WRITE			0
 
 #endif /* !CONTIKI_CONF_H */

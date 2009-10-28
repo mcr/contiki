@@ -1,12 +1,14 @@
 /* -*- C -*- */
-/* @(#)$Id: contiki-conf.h,v 1.53 2009/05/18 10:32:56 fros4943 Exp $ */
+/* @(#)$Id: contiki-conf.h,v 1.62 2009/10/27 15:33:24 fros4943 Exp $ */
 
 #ifndef CONTIKI_CONF_H
 #define CONTIKI_CONF_H
 
+/* Specifies the default MAC driver */
+#define MAC_CONF_DRIVER xmac_driver
+
 #define XMAC_CONF_COMPOWER 1
 #define XMAC_CONF_ANNOUNCEMENTS 1
-#define RIME_CONF_NO_POLITE_ANNOUCEMENTS 1
 
 #define PACKETBUF_CONF_ATTRS_INLINE 1
 
@@ -25,6 +27,9 @@
 #define TIMESYNCH_CONF_ENABLED 1
 #define CC2420_CONF_TIMESTAMPS 1
 #define CC2420_CONF_CHECKSUM   0
+#define RIME_CONF_NO_POLITE_ANNOUCEMENTS 1
+#else
+#define RIME_CONF_NO_POLITE_ANNOUCEMENTS 0
 #endif /* !WITH_UIP6 */
 
 #define CFS_CONF_OFFSET_TYPE	long
@@ -78,7 +83,9 @@
 #define UIP_CONF_LL_802154              1
 #define UIP_CONF_LLH_LEN                0
 
-#define UIP_CONF_ROUTER			1
+#ifndef UIP_CONF_ROUTER
+#define UIP_CONF_ROUTER			0
+#endif
 
 #define UIP_CONF_IPV6                   1
 #define UIP_CONF_IPV6_QUEUE_PKT         1
@@ -163,10 +170,12 @@ typedef unsigned long off_t;
 #define SPI_TXBUF U0TXBUF
 #define SPI_RXBUF U0RXBUF
 
-				/* USART0 Tx buffer ready? */
+				/* USART0 Tx ready? */
 #define	SPI_WAITFOREOTx() while ((U0TCTL & TXEPT) == 0)
-				/* USART0 Rx buffer ready? */
+				/* USART0 Rx ready? */
 #define	SPI_WAITFOREORx() while ((IFG1 & URXIFG0) == 0)
+				/* USART0 Tx buffer ready? */
+#define SPI_WAITFORTxREADY() while ((IFG1 & UTXIFG0) == 0)
 
 #define SCK            1  /* P3.1 - Output: SPI Serial Clock (SCLK) */
 #define MOSI           2  /* P3.2 - Output: SPI Master out - slave in (MOSI) */
@@ -240,6 +249,7 @@ typedef unsigned long off_t;
 
 #define SPI_ENABLE()    ( P4OUT &= ~BV(CSN) ) /* ENABLE CSn (active low) */
 #define SPI_DISABLE()   ( P4OUT |=  BV(CSN) ) /* DISABLE CSn (active low) */
+#define SPI_IS_ENABLED()   ( (P4OUT & BV(CSN)) != BV(CSN) )
 
 #ifdef PROJECT_CONF_H
 #include PROJECT_CONF_H

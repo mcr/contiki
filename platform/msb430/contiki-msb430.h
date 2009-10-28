@@ -48,15 +48,12 @@
 #include "dev/serial-line.h"
 #include "dev/slip.h"
 
-#ifdef WITH_SDC
-#include "dev/sd/sd.h"
-#include "dev/sd/sdspi.h"
-#endif
-
 #include "lib/sensors.h"
-
 #include "net/rime.h"
-
 #include "node-id.h"
+
+#if WITH_SD
+#include "dev/sd.h"
+#endif /* WITH_SD */
 
 #endif /* !CONTIKI_MSB430_H */

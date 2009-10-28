@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: lpp.c,v 1.22 2009/05/10 21:09:05 adamdunkels Exp $
+ * $Id: lpp.c,v 1.26 2009/10/19 11:25:54 nifi Exp $
  */
 
 /**
@@ -137,6 +137,8 @@ struct lpp_hdr {
   rimeaddr_t receiver;
 };
 
+static uint8_t lpp_is_on;
+
 static struct compower_activity current_packet;
 
 static const struct radio_driver *radio;
@@ -189,7 +191,9 @@ turn_radio_on(void)
 static void
 turn_radio_off(void)
 {
-  radio->off();
+  if(lpp_is_on) {
+    radio->off();
+  }
   /*  leds_off(LEDS_YELLOW);*/
 }
 /*---------------------------------------------------------------------------*/
@@ -426,14 +430,14 @@ static int
 dutycycle(void *ptr)
 {
   struct ctimer *t = ptr;
-  
+  struct queue_list_item *p;
+	
   PT_BEGIN(&dutycycle_pt);
 
   while(1) {
 
 #if WITH_PENDING_BROADCAST
     {
-	struct queue_list_item *p;
 	/* Before sending the probe, we mark all broadcast packets in
 	   our output queue to be pending. This means that they are
 	   ready to be sent, once we know that no neighbor is
@@ -446,13 +450,13 @@ dutycycle(void *ptr)
 	}
       }
 #endif /* WITH_PENDING_BROADCAST */
+    
+    /* Turn on the radio for sending a probe packet and 
+       anticipating a data packet from a neighbor. */
+    turn_radio_on();
 
     /* Send a probe packet. */
     send_probe();
-    
-    /* Turn on the radio for a while in anticipation of a data packet
-       from a neighbor. */
-    turn_radio_on();
 
     /* Set a timer so that we keep the radio on for LISTEN_TIME. */
     ctimer_set(t, LISTEN_TIME, (void (*)(void *))dutycycle, t);
@@ -730,6 +734,18 @@ read_packet(void)
       }
 
     } else if(hdr->type == TYPE_DATA) {
+      if(!rimeaddr_cmp(&hdr->receiver, &rimeaddr_null)) {
+        if(!rimeaddr_cmp(&hdr->receiver, &rimeaddr_node_addr)) {
+          /* Not broadcast or for us */
+          PRINTF("%d.%d: data not for us from %d.%d\n",
+                 rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1],
+                 hdr->sender.u8[0], hdr->sender.u8[1]);
+          return 0;
+        }
+        packetbuf_set_addr(PACKETBUF_ADDR_RECEIVER, &hdr->receiver);
+      }
+      packetbuf_set_addr(PACKETBUF_ADDR_SENDER, &hdr->sender);
+
       PRINTF("%d.%d: got data from %d.%d\n",
 	     rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1],
 	     hdr->sender.u8[0], hdr->sender.u8[1]);
@@ -803,6 +819,7 @@ set_receive_function(void (* recv)(const struct mac_driver *))
 static int
 on(void)
 {
+  lpp_is_on = 1;
   turn_radio_on();
   return 1;
 }
@@ -810,6 +827,7 @@ on(void)
 static int
 off(int keep_radio_on)
 {
+  lpp_is_on = 0;
   if(keep_radio_on) {
     turn_radio_on();
   } else {
@@ -818,8 +836,9 @@ off(int keep_radio_on)
   return 1;
 }
 /*---------------------------------------------------------------------------*/
-static const struct mac_driver lpp_driver = {
+const struct mac_driver lpp_driver = {
   "LPP",
+  lpp_init,
   send_packet,
   read_packet,
   set_receive_function,
@@ -842,6 +861,8 @@ lpp_init(const struct radio_driver *d)
   radio->set_receive_function(input_packet);
   restart_dutycycle(random_rand() % OFF_TIME);
 
+  lpp_is_on = 1;
+  
   announcement_register_listen_callback(listen_callback);
 
   memb_init(&queued_packets_memb);

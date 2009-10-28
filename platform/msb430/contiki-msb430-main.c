@@ -46,11 +46,14 @@
 #include "contiki.h"
 #include "contiki-msb430.h"
 #include "dev/adc.h"
+#include "dev/sd.h"
 #include "dev/serial-line.h"
 #include "dev/sht11.h"
 #include "dev/watchdog.h"
 
 extern volatile bool uart_edge;
+
+extern void init_net(void);
 
 SENSORS(NULL);
 
@@ -68,10 +71,9 @@ msb_ports_init(void)
 int
 main(void)
 {
-#ifdef WITH_SDC
-  sd_cache_t sd_cache;
+#if WITH_SD
   int r;
-#endif
+#endif /* WITH_SD */
 
   msp430_cpu_init();	
   watchdog_stop();
@@ -87,11 +89,10 @@ main(void)
   leds_init();
   leds_on(LEDS_ALL);
 
-  // low level
   irq_init();
   process_init();
 
-  // serial interface
+  /* serial interface */
   rs232_set_input(serial_line_input_byte);
   rs232_init();
   serial_line_init();
@@ -100,6 +101,24 @@ main(void)
   uart_unlock(UART_MODE_RS232);
 #if WITH_UIP
   slip_arch_init(BAUD2UBR(115200));
+#endif
+
+
+#if WITH_SD
+  r = sd_initialize();
+  if(r < 0) {
+    printf("Failed to initialize the SD driver: %s\n", sd_error_string(r));
+  } else {
+    sd_offset_t capacity;
+    printf("The SD driver was successfully initialized\n");
+    capacity = sd_get_capacity();
+    if(capacity < 0) {
+      printf("Failed to get the SD card capacity: %s\n", sd_error_string(r));
+    } else {
+      printf("SD card capacity: %u MB\n",
+	(unsigned)(capacity / (1024UL * 1024)));
+    }
+  }
 #endif
 
   /* System services */
@@ -117,17 +136,6 @@ main(void)
 #endif /* PROFILE_CONF_ON */
  
   leds_off(LEDS_ALL);
-
-#if WITH_SDC
-  sdspi_init();
-  sd_init();
-  r = sd_init_card(&sd_cache);
-  if (r == SD_INIT_SUCCESS) {
-    printf("Found SD card (%lu bytes)\n", sd_get_size());
-  } else {
-    printf("SD card initialization failed: %d\n", r);
-  }
-#endif
 
   printf(CONTIKI_VERSION_STRING " started. Node id %u, using %s.\n", 
          node_id, rime_mac->name);

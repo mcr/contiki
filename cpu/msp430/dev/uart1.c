@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * @(#)$Id: uart1.c,v 1.11 2009/03/02 22:01:26 adamdunkels Exp $
+ * @(#)$Id: uart1.c,v 1.13 2009/10/27 16:25:28 fros4943 Exp $
  */
 
 /*
@@ -39,7 +39,6 @@
 
 #include "sys/energest.h"
 #include "dev/uart1.h"
-#include "dev/leds.h"
 #include "dev/watchdog.h"
 
 #include "lib/ringbuf.h"
@@ -133,14 +132,14 @@ uart1_init(unsigned long ubr)
   /*
    * UMCTL1 values calculated using
    * http://mspgcc.sourceforge.net/baudrate.html
-   * Table assumes that F_CPU = 2,457,600 Hz.
+   * Table assumes that F_CPU = 3,900,000 Hz.
    */
   switch(ubr) {
   case UART1_BAUD2UBR(115200ul):
-    UMCTL1 = 0x4a;
+    UMCTL1 = 0xF7;
     break;
   case UART1_BAUD2UBR(57600ul):
-    UMCTL1 = 0x5b;
+    UMCTL1 = 0xED;
     break;
   default:
     /* 9600, 19200, 38400 don't require any correction */
@@ -162,8 +161,8 @@ uart1_init(unsigned long ubr)
   
   IE2 |= URXIE1;                        /* Enable USART1 RX interrupt  */
 #if TX_WITH_INTERRUPT
-  IE2 |= UTXIE1;                        /* Enable USART1 RX interrupt  */
   ringbuf_init(&txbuf, txbuf_data, sizeof(txbuf_data));
+  IE2 |= UTXIE1;                        /* Enable USART1 TX interrupt  */
 #endif /* TX_WITH_INTERRUPT */
 }
 /*---------------------------------------------------------------------------*/

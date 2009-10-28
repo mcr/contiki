@@ -33,7 +33,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: neighbor.c,v 1.18 2009/04/06 21:19:00 adamdunkels Exp $
+ * $Id: neighbor.c,v 1.20 2009/10/22 13:11:20 zhitao Exp $
  */
 
 /**
@@ -53,7 +53,11 @@
 #include "net/rime/ctimer.h"
 #include "net/rime/collect.h"
 
+#ifdef NEIGHBOR_CONF_MAX_NEIGHBORS
+#define MAX_NEIGHBORS NEIGHBOR_CONF_MAX_NEIGHBORS
+#else /* NEIGHBOR_CONF_MAX_NEIGHBORS */
 #define MAX_NEIGHBORS 8
+#endif /* NEIGHBOR_CONF_MAX_NEIGHBORS */
 
 #define RTMETRIC_MAX COLLECT_MAX_DEPTH
 
@@ -146,6 +150,9 @@ neighbor_timedout_etx(struct neighbor *n, uint8_t etx)
 {
   if(n != NULL) {
     n->etxs[n->etxptr] += etx;
+    if(n->etxs[n->etxptr] > RTMETRIC_MAX / NEIGHBOR_ETX_SCALE) {
+      n->etxs[n->etxptr] = RTMETRIC_MAX / NEIGHBOR_ETX_SCALE;
+    }
     n->etxptr = (n->etxptr + 1) % NEIGHBOR_NUM_ETXS;
   }
 }

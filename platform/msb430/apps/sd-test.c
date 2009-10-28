@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007, Swedish Institute of Computer Science.
+ * Copyright (c) 2009, Swedish Institute of Computer Science.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,59 +28,64 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: sd-test.c,v 1.1 2008/10/28 12:56:57 nvt-se Exp $
- *
- * \file
- *	A simple example of using the SD card on the MSB430 platform.
- * \author
- *	Nicolas Tsiftes <nvt@sics.se>
+ * $Id: sd-test.c,v 1.6 2009/10/01 16:40:25 nvt-se Exp $
  */
 
+/**
+ * \file
+ *         Test for an SD driver.
+ * \author
+ *         Nicolas Tsiftes <nvt@sics.se>
+ */
+
+
 #include "contiki.h"
-#include "net/rime.h"
-#include "dev/sd/sd.h"
-#include "dev/msb430-uart1.h"
+#include "dev/sd.h"
+#include "lib/random.h"
 
 #include <stdio.h>
+#include <string.h>
 
-#define BLOCK_SIZE	512
+PROCESS(sd_test, "SD test process");
+AUTOSTART_PROCESSES(&sd_test);
 
-/*---------------------------------------------------------------------------*/
-PROCESS(test_sd_process, "SD test");
-AUTOSTART_PROCESSES(&test_sd_process);
-/*---------------------------------------------------------------------------*/
-PROCESS_THREAD(test_sd_process, ev, data)
+PROCESS_THREAD(sd_test, event, data)
 {
-  static char buf[BLOCK_SIZE];
+  static unsigned long iter;
+  static unsigned long offset;
+  char buf[SD_BLOCK_SIZE];
   static struct etimer et;
-  static int r;
-  static unsigned iter;
+  int r, buflen;
 
   PROCESS_BEGIN();
 
-  printf("starting the SD test\n");
+  etimer_set(&et, CLOCK_SECOND);
 
-  while(1) {
-    printf("\n\nIteration %u\n", ++iter);
-    sprintf(buf, "Testing the SD memory #%u.", iter);
-
-    etimer_set(&et, CLOCK_SECOND);
+  offset = 0;
+  for(iter = 1;; iter++) {
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
 
-    r = sd_write_block(BLOCK_SIZE, &buf);
-    if(r != SD_WRITE_SUCCESS) {
-      printf("sd_write_block failed: %d\n", r);
+    memset(buf, 0, sizeof(buf));
+    buflen = sprintf(buf, "(%ld) Testing the SD card (%ld)", iter, iter);
+
+    if((iter & 7) == 0) {
+      offset = random_rand() & 0xffff;
+    } else {
+      offset += random_rand() & 0xff;
     }
-	  
-    memset(buf, 0, sizeof (buf));
-    r = sd_read_block(&buf, BLOCK_SIZE);
-    printf("Read %d bytes\n", r);
+
+    r = sd_write(offset, buf, buflen + 1);
     if(r > 0) {
-      buf[sizeof(buf) - 1] = '\0';
-      printf("Contents of the buffer: %s\n", buf);
+      memset(buf, 0, sizeof(buf));
+      r = sd_read(offset, buf, buflen + 1);
+      if(r > 0) {
+        printf("read %s (offset %lu)\n", buf, offset);
+      } else {
+        printf("read error: %d (%s)\n", r, sd_error_string(r));
+      }
     }
+    etimer_reset(&et);
   }
 
   PROCESS_END();
 }
-/*---------------------------------------------------------------------------*/

@@ -26,20 +26,25 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: MspMote.java,v 1.28 2009/04/29 20:04:56 fros4943 Exp $
+ * $Id: MspMote.java,v 1.34 2009/10/27 10:02:48 fros4943 Exp $
  */
 
 package se.sics.cooja.mspmote;
+
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Hashtable;
 import java.util.Observable;
-import java.util.Observer;
 import java.util.Vector;
+
 import org.apache.log4j.Logger;
 import org.jdom.Element;
+
 import se.sics.cooja.GUI;
 import se.sics.cooja.Mote;
 import se.sics.cooja.MoteInterface;
@@ -47,15 +52,21 @@ import se.sics.cooja.MoteInterfaceHandler;
 import se.sics.cooja.MoteMemory;
 import se.sics.cooja.MoteType;
 import se.sics.cooja.Simulation;
+import se.sics.cooja.Watchpoint;
+import se.sics.cooja.WatchpointMote;
 import se.sics.cooja.interfaces.IPAddress;
-import se.sics.cooja.mspmote.interfaces.TR1001Radio;
+import se.sics.cooja.motes.AbstractEmulatedMote;
+import se.sics.cooja.mspmote.plugins.MspBreakpointContainer;
 import se.sics.mspsim.cli.CommandHandler;
 import se.sics.mspsim.cli.LineListener;
 import se.sics.mspsim.cli.LineOutputStream;
 import se.sics.mspsim.core.EmulationException;
 import se.sics.mspsim.core.MSP430;
 import se.sics.mspsim.platform.GenericNode;
+import se.sics.mspsim.ui.JFrameWindowManager;
+import se.sics.mspsim.util.ComponentRegistry;
 import se.sics.mspsim.util.ConfigManager;
+import se.sics.mspsim.util.DebugInfo;
 import se.sics.mspsim.util.ELF;
 import se.sics.mspsim.util.MapEntry;
 import se.sics.mspsim.util.MapTable;
@@ -63,17 +74,12 @@ import se.sics.mspsim.util.MapTable;
 /**
  * @author Fredrik Osterlind
  */
-public abstract class MspMote implements Mote {
+public abstract class MspMote extends AbstractEmulatedMote implements Mote, WatchpointMote {
   private static Logger logger = Logger.getLogger(MspMote.class);
 
-  /* 3.900 MHz according to Contiki's speed sync loop*/
-  public static long NR_CYCLES_PER_MSEC = 3900;
+  private final static int EXECUTE_DURATION_US = 1; /* We always execute in 1 us steps */
 
-  /* Cycle counter */
-  public long cycleCounter = 0;
-  public long cycleDrift = 0;
-
-  private Simulation mySimulation = null;
+  private Simulation simulation;
   private CommandHandler commandHandler;
   private LineListener commandListener;
   private MSP430 myCpu = null;
@@ -81,9 +87,8 @@ public abstract class MspMote implements Mote {
   private MspMoteMemory myMemory = null;
   private MoteInterfaceHandler myMoteInterfaceHandler = null;
   private ELF myELFModule = null;
-
-  protected TR1001Radio myRadio = null; /* TODO Only used by ESB (TR1001) */
-
+  public ComponentRegistry registry = null;
+  
   /* Stack monitoring variables */
   private boolean stopNextInstruction = false;
   private boolean monitorStackUsage = false;
@@ -91,32 +96,45 @@ public abstract class MspMote implements Mote {
   private int heapStartAddress;
   private StackOverflowObservable stackOverflowObservable = new StackOverflowObservable();
 
-  /**
-   * Abort current tick immediately.
-   * May for example be called by a breakpoint handler.
-   */
-  public void stopNextInstruction() {
-    stopNextInstruction = true;
-  }
+  private MspBreakpointContainer breakpointsContainer;
 
   public MspMote() {
+    simulation = null;
     myMoteType = null;
-    mySimulation = null;
     myCpu = null;
     myMemory = null;
     myMoteInterfaceHandler = null;
+
+    /* Scheduled from setConfigXML */
   }
 
   public MspMote(MspMoteType moteType, Simulation simulation) {
+    this.simulation = simulation;
     myMoteType = moteType;
-    mySimulation = simulation;
-  }
 
+    /* Schedule us immediately */
+    requestImmediateWakeup();
+  }
+  
   protected void initMote() {
     if (myMoteType != null) {
       initEmulator(myMoteType.getContikiFirmwareFile());
       myMoteInterfaceHandler = createMoteInterfaceHandler();
+
+      /* TODO Setup COOJA-specific window manager */
+      registry.registerComponent("windowManager", new JFrameWindowManager());
+
+      /* Create watchpoint container */
+      breakpointsContainer = new MspBreakpointContainer(this, getFirmwareDebugInfo(this));
     }
+  }
+
+  /**
+   * Abort execution immediately.
+   * May for example be called by a breakpoint handler.
+   */
+  public void stopNextInstruction() {
+    stopNextInstruction = true;
   }
 
   protected MoteInterfaceHandler createMoteInterfaceHandler() {
@@ -164,11 +182,11 @@ public abstract class MspMote implements Mote {
   }
 
   public Simulation getSimulation() {
-    return mySimulation;
+    return simulation;
   }
 
   public void setSimulation(Simulation simulation) {
-    mySimulation = simulation;
+    this.simulation = simulation;
   }
 
   /* Stack monitoring variables */
@@ -237,6 +255,7 @@ public abstract class MspMote implements Mote {
     this.myCpu.setMonitorExec(true);
 
     int[] memory = myCpu.getMemory();
+    logger.info("Loading ELF from: " + fileELF.getAbsolutePath());
     if (GUI.isVisualizedInApplet()) {
       myELFModule = node.loadFirmware(new URL(GUI.getAppletCodeBase(), fileELF.getName()), memory);
     } else {
@@ -255,14 +274,6 @@ public abstract class MspMote implements Mote {
     myCpu.reset();
   }
 
-  public void setState(State newState) {
-    logger.warn("Msp motes can't change state");
-  }
-
-  public State getState() {
-    return Mote.State.ACTIVE;
-  }
-
   /* called when moteID is updated */
   public void idUpdated(int newID) {
   }
@@ -273,12 +284,6 @@ public abstract class MspMote implements Mote {
 
   public void setType(MoteType type) {
     myMoteType = (MspMoteType) type;
-  }
-
-  public void addStateObserver(Observer newObserver) {
-  }
-
-  public void deleteStateObserver(Observer newObserver) {
   }
 
   public MoteInterfaceHandler getInterfaces() {
@@ -297,74 +302,64 @@ public abstract class MspMote implements Mote {
    */
   protected abstract boolean initEmulator(File ELFFile);
 
-  private int[] pcHistory = new int[5];
-
-  /* return false when done - e.g. true means more work to do before finished with this tick */
-  private boolean firstTick = true;
   public boolean tick(long simTime) {
+    throw new RuntimeException("Obsolete method");
+  }
+
+  private long lastExecute = -1; /* Last time mote executed */
+  private long nextExecute;
+  public void execute(long t) {
+    /* Wait until mote boots */
+    if (myMoteInterfaceHandler.getClock().getTime() < 0) {
+      scheduleNextWakeup(t - myMoteInterfaceHandler.getClock().getTime());
+      return;
+    }
+
     if (stopNextInstruction) {
       stopNextInstruction = false;
+      sendCLICommandAndPrint("trace 1000");
       throw new RuntimeException("MSPSim requested simulation stop");
+    } 
+
+    if (lastExecute < 0) {
+      /* Always execute one microsecond the first time */
+      lastExecute = t;
+    }
+    if (t < lastExecute) {
+      throw new RuntimeException("Bad event ordering: " + lastExecute + " < " + t);
     }
 
-    /* Nodes may be added in an ongoing simulation:
-     * Update cycle drift to current simulation time */
-    if (firstTick) {
-      firstTick = false;
-      cycleDrift += (-NR_CYCLES_PER_MSEC*simTime);
-    }
+    /* TODO Poll mote interfaces? */
 
-    long maxSimTimeCycles = NR_CYCLES_PER_MSEC * (simTime + 1) + cycleDrift;
-
-    if (maxSimTimeCycles <= cycleCounter) {
-      return false;
-    }
-
-    // Leave control to emulated CPU
-    cycleCounter += 1;
-
-    MSP430 cpu = getCPU();
-    if (cpu.cycles > cycleCounter) {
-      /* CPU already ticked too far - just wait it out */
-      return true;
-    }
-    myMoteInterfaceHandler.doActiveActionsBeforeTick();
-
-    /* Experimental program counter history */
-    for (int i=pcHistory.length-1; i > 0; i--) {
-      pcHistory[i] = pcHistory[i-1];
-    }
-    pcHistory[0] = cpu.reg[MSP430.PC];
-
+    /* Execute MSPSim-based mote */
+    /* TODO Try-catch overhead */
     try {
-      cpu.step(cycleCounter);
+      nextExecute = 
+        t + EXECUTE_DURATION_US + 
+        myCpu.stepMicros(t - lastExecute, EXECUTE_DURATION_US);
+      lastExecute = t;
     } catch (EmulationException e) {
       if (e.getMessage().startsWith("Bad operation")) {
         /* Experimental: print program counter history */
-        LineListener oldListener = commandListener;
-        LineListener tmpListener = new LineListener() {
-          public void lineRead(String line) {
-            logger.fatal(line);
-          }
-        };
-        setCLIListener(tmpListener);
-        logger.fatal("Bad operation detected. Program counter history:");
-        for (int element : pcHistory) {
-          sendCLICommand("line " + element);
-        }
-        setCLIListener(oldListener);
+        sendCLICommandAndPrint("trace 1000");
       }
 
       throw (RuntimeException)
       new RuntimeException("Emulated exception: " + e.getMessage()).initCause(e);
     }
 
-    /* Check if radio has pending incoming bytes */
-    if (myRadio != null && myRadio.hasPendingBytes()) {
-      myRadio.tryDeliverNextByte(cpu.cycles);
-    }
+    /* TODO Poll mote interfaces? */
 
-    if (monitorStackUsage) {
+    /* Schedule wakeup */
+    if (nextExecute <= t) {
+      throw new RuntimeException(t + ": MSPSim requested early wakeup: " + nextExecute);
+    }
+    /*logger.debug(t + ": Schedule next wakeup at " + nextExecute);*/
+    scheduleNextWakeup(nextExecute);
+    
+    
+    /* XXX TODO Reimplement stack monitoring using MSPSim internals */
+    /*if (monitorStackUsage) {
       int newStack = cpu.reg[MSP430.SP];
       if (newStack < stackPointerLow && newStack > 0) {
         stackPointerLow = cpu.reg[MSP430.SP];
@@ -376,11 +371,29 @@ public abstract class MspMote implements Mote {
           getSimulation().stopSimulation();
         }
       }
-    }
-
-    return true;
+    }*/
   }
+  
+  private void sendCLICommandAndPrint(String comamnd) {
+    /* Backup listener */
+    LineListener oldListener = commandListener;
 
+    
+    setCLIListener(new LineListener() {
+      public void lineRead(String line) {
+        logger.fatal(line);
+      }
+    });
+    sendCLICommand(comamnd);
+
+    /* Restore listener */
+    setCLIListener(oldListener);
+  }
+  
+  public int getID() {
+    return getInterfaces().getMoteID().getMoteID();
+  }
+  
   public boolean setConfigXML(Simulation simulation, Collection<Element> configXML, boolean visAvailable) {
     for (Element element: configXML) {
       String name = element.getName();
@@ -394,6 +407,11 @@ public abstract class MspMote implements Mote {
         initEmulator(myMoteType.getContikiFirmwareFile());
         myMoteInterfaceHandler = createMoteInterfaceHandler();
 
+        /* Create watchpoint container */
+        breakpointsContainer = new MspBreakpointContainer(this, getFirmwareDebugInfo(this));
+        
+      } else if ("breakpoints".equals(element.getName())) {
+        breakpointsContainer.setConfigXML(element.getChildren(), visAvailable);
       } else if (name.equals("interface_config")) {
         String intfClass = element.getText().trim();
         if (intfClass.equals("se.sics.cooja.mspmote.interfaces.MspIPAddress")) {
@@ -412,6 +430,8 @@ public abstract class MspMote implements Mote {
       }
     }
 
+    /* Schedule us immediately */
+    requestImmediateWakeup();
     return true;
   }
 
@@ -423,6 +443,11 @@ public abstract class MspMote implements Mote {
     // Mote type identifier
     element = new Element("motetype_identifier");
     element.setText(getType().getIdentifier());
+    config.add(element);
+
+    /* Breakpoints */
+    element = new Element("breakpoints");
+    element.addContent(breakpointsContainer.getConfigXML());
     config.add(element);
 
     // Mote interfaces
@@ -438,6 +463,72 @@ public abstract class MspMote implements Mote {
     }
 
     return config;
+  }
+
+
+  /* Watchpoints: Forward to breakpoint container */
+  public void addWatchpointListener(ActionListener listener) {
+    breakpointsContainer.addWatchpointListener(listener);
+  }
+
+  public Watchpoint getLastWatchpoint() {
+    return breakpointsContainer.getLastWatchpoint();
+  }
+
+  public Mote getMote() {
+    return breakpointsContainer.getMote();
+  }
+
+  public ActionListener[] getWatchpointListeners() {
+    return breakpointsContainer.getWatchpointListeners();
+  }
+
+  public void removeWatchpointListener(ActionListener listener) {
+    breakpointsContainer.removeWatchpointListener(listener);
+  }
+
+  public MspBreakpointContainer getBreakpointsContainer() {
+    return breakpointsContainer;
+  }
+
+  private static Hashtable<File, Hashtable<Integer, Integer>> getFirmwareDebugInfo(MspMote mote) {
+    /* Fetch all executable addresses */
+    ArrayList<Integer> addresses = mote.getELF().getDebug().getExecutableAddresses();
+
+    Hashtable<File, Hashtable<Integer, Integer>> fileToLineHash =
+      new Hashtable<File, Hashtable<Integer, Integer>>();
+
+    for (int address: addresses) {
+      DebugInfo info = mote.getELF().getDebugInfo(address);
+
+      if (info != null && info.getPath() != null && info.getFile() != null && info.getLine() >= 0) {
+
+        /* Nasty Cygwin-Windows fix */
+        String path = info.getPath();
+        if (path.contains("/cygdrive/")) {
+          int index = path.indexOf("/cygdrive/");
+          char driveCharacter = path.charAt(index+10);
+
+          path = path.replace("/cygdrive/" + driveCharacter + "/", driveCharacter + ":/");
+        }
+
+        File file = new File(path, info.getFile());
+        try {
+          file = file.getCanonicalFile();
+        } catch (IOException e) {
+        }
+
+        Hashtable<Integer, Integer> lineToAddrHash = fileToLineHash.get(file);
+        if (lineToAddrHash == null) {
+          lineToAddrHash = new Hashtable<Integer, Integer>();
+          fileToLineHash.put(file, lineToAddrHash);
+        }
+
+        lineToAddrHash.put(info.getLine(), address);
+      }
+    }
+
+    return fileToLineHash;
   }
 
 }

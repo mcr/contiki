@@ -41,7 +41,7 @@
  *
  * This file is part of the uIP TCP/IP stack.
  *
- * $Id: uip.c,v 1.15 2008/10/15 08:08:32 adamdunkels Exp $
+ * $Id: uip.c,v 1.18 2009/10/27 23:09:58 adamdunkels Exp $
  *
  */
 
@@ -693,6 +693,12 @@ uip_process(u8_t flag)
 	uip_flags = UIP_POLL;
 	UIP_APPCALL();
 	goto appsend;
+#if UIP_ACTIVE_OPEN
+    } else if((uip_connr->tcpstateflags & UIP_TS_MASK) == UIP_SYN_SENT) {
+      /* In the SYN_SENT state, we retransmit out SYN. */
+      BUF->flags = 0;
+      goto tcp_send_syn;
+#endif /* UIP_ACTIVE_OPEN */
     }
     goto drop;
     
@@ -903,9 +909,16 @@ uip_process(u8_t flag)
 #if UIP_BROADCAST
     DEBUG_PRINTF("UDP IP checksum 0x%04x\n", uip_ipchksum());
     if(BUF->proto == UIP_PROTO_UDP &&
-       uip_ipaddr_cmp(&BUF->destipaddr, &uip_broadcast_addr)
-       /*&&
-	 uip_ipchksum() == 0xffff*/) {
+       (uip_ipaddr_cmp(&BUF->destipaddr, &uip_broadcast_addr) ||
+	(BUF->destipaddr.u8[0] & 224) == 224)) {  /* XXX this is a
+						     hack to be able
+						     to receive UDP
+						     multicast
+						     packets. We check
+						     for the bit
+						     pattern of the
+						     multicast
+						     prefix. */
       goto udp_input;
     }
 #endif /* UIP_BROADCAST */
@@ -1814,7 +1827,7 @@ uip_process(u8_t flag)
      to set the appropriate TCP sequence numbers in the TCP header. */
  tcp_send_ack:
   BUF->flags = TCP_ACK;
-
+  
  tcp_send_nodata:
   uip_len = UIP_IPTCPH_LEN;
 
@@ -1852,7 +1865,7 @@ uip_process(u8_t flag)
     BUF->wnd[0] = ((UIP_RECEIVE_WINDOW) >> 8);
     BUF->wnd[1] = ((UIP_RECEIVE_WINDOW) & 0xff);
   }
-
+  
  tcp_send_noconn:
   BUF->ttl = UIP_TTL;
 #if UIP_CONF_IPV6

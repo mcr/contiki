@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: NativeIPGateway.java,v 1.4 2009/04/23 08:59:22 fros4943 Exp $
+ * $Id: NativeIPGateway.java,v 1.11 2009/10/21 16:43:24 fros4943 Exp $
  */
 
 package se.sics.cooja.plugins;
@@ -34,50 +34,55 @@ package se.sics.cooja.plugins;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Vector;
-import java.io.*;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JInternalFrame;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
-import javax.swing.event.InternalFrameEvent;
-import javax.swing.event.InternalFrameListener;
 
 import jpcap.JpcapCaptor;
 import jpcap.JpcapSender;
 import jpcap.NetworkInterface;
 import jpcap.packet.EthernetPacket;
 import jpcap.packet.IPPacket;
+
 import org.apache.log4j.Logger;
 import org.jdom.Element;
 
 import se.sics.cooja.ClassDescription;
 import se.sics.cooja.GUI;
 import se.sics.cooja.Mote;
-import se.sics.cooja.Plugin;
 import se.sics.cooja.PluginType;
 import se.sics.cooja.Simulation;
+import se.sics.cooja.VisPlugin;
+import se.sics.cooja.GUI.RunnableInEDT;
+import se.sics.cooja.dialogs.CompileContiki;
+import se.sics.cooja.dialogs.MessageList;
 import se.sics.cooja.interfaces.SerialPort;
-import se.sics.cooja.util.StringUtils;
 
 @ClassDescription("Open Native IP Gateway")
 @PluginType(PluginType.MOTE_PLUGIN)
-public class NativeIPGateway implements Plugin {
-  private static Logger logger = Logger.getLogger(NativeIPGateway.class);
-
+public class NativeIPGateway extends VisPlugin {
   private static final long serialVersionUID = 1L;
+  private static Logger logger = Logger.getLogger(NativeIPGateway.class);
 
   private final static int IP_HEADER_LEN = 20;
 
@@ -89,16 +94,14 @@ public class NativeIPGateway implements Plugin {
   private final static int LABEL_WIDTH = 170;
   private final static int LABEL_HEIGHT = 20;
 
-  private Object coojaTag = null; /* Used by Cooja for book-keeping */
-
   private Mote mote;
   private SerialPort serialPort = null;
   private boolean registeredGateway = false;
 
-  private NetworkInterface[] networkInterfacesAll;
+  private ArrayList<NetworkInterfaceW> networkInterfacesAll;
 
-  private NetworkInterface networkInterface = null;
-  private NetworkInterface loopbackInterface = null;
+  private NetworkInterfaceW networkInterface = null;
+  private NetworkInterfaceW loopbackInterface = null;
   private Thread captureThread = null;
   private JpcapCaptor captor = null;
   private JpcapSender sender = null;
@@ -108,8 +111,8 @@ public class NativeIPGateway implements Plugin {
   private boolean shutdownCaptureThread = false;
 
   private int inPkts = 0, outPkts = 0;
+  private int inBytes = 0, outBytes = 0;
 
-  private JInternalFrame pluginGUI = null;
   private JLabel gatewayLabel = null;
   private JLabel interfaceLabel = null;
   private JLabel macLabel = null;
@@ -125,16 +128,18 @@ public class NativeIPGateway implements Plugin {
   private String restoreRoutesCmd = null;
 
   private Process tunProcess = null;
+  private Thread shutdownHook = null;
   private final static String TUNNEL_APP_TARGET = "minimal-net";
   private boolean shouldDisableLoopbackForwarding = false;
   private boolean shouldEnableRPFilter = false;
 
   private SlipState readSlipState = SlipState.STATE_OK;
   private int readSlipLength = 0;
-  private final int READ_SLIP_BUFFER_SIZE = 256;
+  private final int READ_SLIP_BUFFER_SIZE = 2048;
   private byte[] readSlipBuffer = new byte[READ_SLIP_BUFFER_SIZE];
 
   public NativeIPGateway(Mote mote, Simulation simulation, final GUI gui) {
+    super("Native IP Gateway (" + mote + ")", gui, false);
     this.mote = mote;
 
     /* Native OS - plugin depends on platform specific commands */
@@ -172,7 +177,7 @@ public class NativeIPGateway implements Plugin {
             }
           }
         } catch (IOException e) {
-          e.printStackTrace();
+          logger.fatal("Error when updating native route: " + e.getMessage(), e);
         }
       }
     });
@@ -200,23 +205,30 @@ public class NativeIPGateway implements Plugin {
     configureLoopbackInterface();
 
     /* Network interfaces list */
-    networkInterfacesAll = JpcapCaptor.getDeviceList();
-    if (networkInterfacesAll == null || networkInterfacesAll.length == 0) {
+    NetworkInterface[] intfs = JpcapCaptor.getDeviceList();
+    if (intfs == null || intfs.length == 0) {
       throw new RuntimeException("No network interfaces found");
     }
+    networkInterfacesAll = new ArrayList<NetworkInterfaceW>();
+    for (NetworkInterface i: intfs) {
+      networkInterfacesAll.add(new NetworkInterfaceW(i));
+    }
+
     selectNICComboBox = new JComboBox();
 
-    NetworkInterface tunnelInterface = null;
-    for (NetworkInterface intf : networkInterfacesAll) {
-      if (!ON_WINDOWS && intf.name.equals("lo")) {
+    NetworkInterfaceW tunnelInterface = null;
+    for (NetworkInterfaceW intf : networkInterfacesAll) {
+      if (!ON_WINDOWS && intf.intf.name.equals("lo")) {
         loopbackInterface = intf;
       }
-      if ((intf.name != null && intf.name.equals("tap0")) ||
-          (intf.description != null && intf.description.contains("VMware Virtual Ethernet Adapter"))) {
+      if (intf.intf.name != null && intf.intf.name.equals("tap0")) {
+        tunnelInterface = intf;
+      }
+      if (intf.intf.description != null && intf.intf.description.contains("VMware Virtual Ethernet Adapter")) {
         tunnelInterface = intf;
       }
 
-      selectNICComboBox.addItem(intf.description + " (" + intf.name + ")");
+      selectNICComboBox.addItem(intf);
     }
     selectNICComboBox.addItemListener(new ItemListener() {
       public void itemStateChanged(ItemEvent e) {
@@ -225,51 +237,20 @@ public class NativeIPGateway implements Plugin {
         }
 
         /* Detect selected network interface */
-        String descr = (String) ((JComboBox)e.getSource()).getSelectedItem();
-        NetworkInterface selected = null;
-        for (NetworkInterface networkInterface2 : networkInterfacesAll) {
-          String label = networkInterface2.description + " (" + networkInterface2.name + ")";
-          if (label.equals(descr)) {
-            selected = networkInterface2;
-            break;
-          }
-        }
-        if (selected == null) {
-          logger.fatal("Unknown network interface: " + descr);
+        NetworkInterfaceW intf = 
+          (NetworkInterfaceW) ((JComboBox)e.getSource()).getSelectedItem();
+        if (networkInterface == intf) {
+          /* Already selected */
           return;
         }
 
         /* Activate network interface */
-        if (selected == networkInterface) {
-          return;
-        }
-        startCapturingPackets(selected);
+        startCapturingPackets(intf);
       }
     });
 
     /* GUI components */
     if (GUI.isVisualized()) {
-      pluginGUI = new JInternalFrame(
-          "Native IP Gateway (" + mote + ")",
-          true, true, true, true);
-      pluginGUI.addInternalFrameListener(new InternalFrameListener() {
-        public void internalFrameClosing(InternalFrameEvent e) {
-          gui.removePlugin(NativeIPGateway.this, true);
-        }
-        public void internalFrameClosed(InternalFrameEvent e) { }
-        public void internalFrameOpened(InternalFrameEvent e) { }
-        public void internalFrameIconified(InternalFrameEvent e) { }
-        public void internalFrameDeiconified(InternalFrameEvent e) { }
-        public void internalFrameActivated(InternalFrameEvent e) {
-          /* Highlight mote in COOJA */
-          if (NativeIPGateway.this.coojaTag != null && coojaTag instanceof Mote) {
-            gui.signalMoteHighlight((Mote) coojaTag);
-          }
-        }
-        public void internalFrameDeactivated(InternalFrameEvent e) { }
-      }
-      );
-
       JPanel mainPane = new JPanel();
       mainPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
       mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.Y_AXIS));
@@ -280,37 +261,58 @@ public class NativeIPGateway implements Plugin {
       addComponent(mainPane, "Route to/Capture on: ", selectNICComboBox);
       addComponent(mainPane, "Auto-register native route: ", autoRegisterRoutes);
 
-      addInfo(mainPane, "", "");
+      mainPane.add(Box.createVerticalStrut(10));
       interfaceLabel = addInfo(mainPane, "Network Interface:", "?");
       gatewayLabel = addInfo(mainPane, "Network Gateway:", "?");
       macLabel = addInfo(mainPane, "Network MAC: ", "?");
+      mainPane.add(Box.createVerticalStrut(10));
       inLabel = addInfo(mainPane, "Packets to simulation:", "0");
       inLabel.setToolTipText(null);
       outLabel = addInfo(mainPane, "Packets from simulation:", "0");
       outLabel.setToolTipText(null);
 
-      pluginGUI.getContentPane().add(BorderLayout.CENTER,
+      getContentPane().add(BorderLayout.CENTER,
           new JScrollPane(mainPane,
               JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
               JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED));
 
-      pluginGUI.pack();
-      pluginGUI.setSize(pluginGUI.getWidth()+10, pluginGUI.getHeight()+10);
+      pack();
+      setSize(getWidth()+10, getHeight()+10);
     }
 
     /* Start capturing network traffic for simulated network */
     if (tunnelInterface != null) {
       startCapturingPackets(tunnelInterface);
     } else {
-      startCapturingPackets(networkInterfacesAll[0]);
+      startCapturingPackets(networkInterfacesAll.get(0));
     }
   }
 
-  public JInternalFrame getGUI() {
-    return pluginGUI;
+  /**
+   * Network Interface Wrapper
+   */
+  private class NetworkInterfaceW {
+    NetworkInterface intf;
+    public NetworkInterfaceW(NetworkInterface intf) {
+      this.intf = intf;
+    }
+    public String toString() {
+      if (ON_WINDOWS && intf.name != null && intf.description != null) {
+        return intf.description + ": " + intf.name;
+      } else if (intf.name != null && intf.description != null) {
+        return intf.name + ": " + intf.description;
+      }
+      if (intf.name != null) {
+        return intf.name;
+      }
+      if (intf.description != null) {
+        return intf.description;
+      }
+      return "Unknown";
+    }
   }
 
-  private void startCapturingPackets(NetworkInterface intf) {
+  private void startCapturingPackets(NetworkInterfaceW intf) {
     /* Wait for old capture thread to exit */
     if (captureThread != null &&
         captureThread.isAlive()) {
@@ -318,7 +320,7 @@ public class NativeIPGateway implements Plugin {
       try {
         captureThread.join();
       } catch (InterruptedException e) {
-        e.printStackTrace();
+        logger.fatal("Error while capturing packets: " + e.getMessage(), e);
       }
     }
     captureThread = null;
@@ -332,7 +334,7 @@ public class NativeIPGateway implements Plugin {
 
         /*logger.info("Capture thread started");*/
         try {
-          captor = JpcapCaptor.openDevice(networkInterface, 65535, true, 20);
+          captor = JpcapCaptor.openDevice(networkInterface.intf, 65535, true, 20);
           captor.setNonBlockingMode(false);
           captor.setPacketReadTimeout(20);
           String[] ipSplit = moteIP.split("\\.");
@@ -342,7 +344,7 @@ public class NativeIPGateway implements Plugin {
           String filter = "ip and dst net " + ipSplit[0] + "." + ipSplit[1];
           captor.setFilter(filter, true);
         } catch (IOException e) {
-          e.printStackTrace();
+          logger.fatal("Error when creating captor instance: " + e.getMessage(), e);
           return;
         }
 
@@ -372,9 +374,9 @@ public class NativeIPGateway implements Plugin {
 
       if (sender == null) {
         if (loopbackInterface != null) {
-          sender = JpcapSender.openDevice(loopbackInterface);
+          sender = JpcapSender.openDevice(loopbackInterface.intf);
         } else {
-          sender = JpcapSender.openDevice(networkInterface);
+          sender = JpcapSender.openDevice(networkInterface.intf);
         }
       }
     } catch (IOException e) {
@@ -387,7 +389,7 @@ public class NativeIPGateway implements Plugin {
       }
     }
 
-    System.arraycopy(networkInterface.mac_address, 0, networkInterfaceMAC, 0, 6);
+    System.arraycopy(networkInterface.intf.mac_address, 0, networkInterfaceMAC, 0, 6);
 
     if (autoRegisterRoutes.isSelected()) {
       updateNativeRoute();
@@ -395,11 +397,11 @@ public class NativeIPGateway implements Plugin {
 
     /* Update GUI */
     if (GUI.isVisualized()) {
-      interfaceLabel.setText(networkInterface.description);
-      interfaceLabel.setToolTipText(networkInterface.description);
-      if (networkInterface.addresses.length > 0) {
-        gatewayLabel.setText(networkInterface.addresses[0].address.getHostAddress());
-        gatewayLabel.setToolTipText(networkInterface.addresses[0].address.getHostAddress());
+      interfaceLabel.setText("" + networkInterface);
+      interfaceLabel.setToolTipText(networkInterface.intf.description);
+      if (networkInterface.intf.addresses.length > 0) {
+        gatewayLabel.setText(networkInterface.intf.addresses[0].address.getHostAddress());
+        gatewayLabel.setToolTipText(networkInterface.intf.addresses[0].address.getHostAddress());
       } else {
         gatewayLabel.setText("[no gateway]");
         gatewayLabel.setToolTipText("");
@@ -417,7 +419,7 @@ public class NativeIPGateway implements Plugin {
           ":" + Integer.toHexString(networkInterfaceMAC[4]&0xFF) +
           ":" + Integer.toHexString(networkInterfaceMAC[5]&0xFF));
 
-      selectNICComboBox.setSelectedItem(networkInterface.description + " (" + networkInterface.name + ")");
+      selectNICComboBox.setSelectedItem(networkInterface);
     }
   }
 
@@ -461,10 +463,8 @@ public class NativeIPGateway implements Plugin {
       logger.info("Enabled forwarding on loopback interface.");
 
       shouldDisableLoopbackForwarding = true;
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
+    } catch (Exception e) {
+      logger.fatal("Error when enabling forwarding: " + e.getMessage(), e);
     }
   }
 
@@ -479,10 +479,8 @@ public class NativeIPGateway implements Plugin {
       Process process = Runtime.getRuntime().exec(new String[] { "bash", "-c", "echo 0 > " + forwardingFile.getPath() });
       process.waitFor();
       logger.info("Disabled forwarding on loopback interface.");
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
+    } catch (Exception e) {
+      logger.fatal("Error when disabling forwarding: " + e.getMessage(), e);
     }
   }
 
@@ -513,10 +511,8 @@ public class NativeIPGateway implements Plugin {
       logger.info("Disabled RP filter on loopback interface.");
 
       shouldEnableRPFilter = true;
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
+    } catch (Exception e) {
+      logger.fatal("Error when disabling loopback RP filter: " + e.getMessage(), e);
     }
   }
 
@@ -531,10 +527,8 @@ public class NativeIPGateway implements Plugin {
       Process process = Runtime.getRuntime().exec(new String[] { "bash", "-c", "echo 1 > " + filterFile.getPath() });
       process.waitFor();
       logger.info("Enabled RP filter on loopback interface.");
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
+    } catch (Exception e) {
+      logger.fatal("Error when enabling loopback RP filter: " + e.getMessage(), e);
     }
   }
 
@@ -547,42 +541,96 @@ public class NativeIPGateway implements Plugin {
   }
 
   private void createTunInterfaceLinux() {
+    /* Show progress bar while compiling */
+    final JDialog progressDialog;
+    if (GUI.isVisualized()) {
+      progressDialog = new JDialog(
+          (Window)GUI.getTopParentContainer(), 
+          "Starting Native IP Gateway plugin"
+      );
+    } else {
+      progressDialog = null;
+    }
+    final MessageList output = new MessageList();
+    if (GUI.isVisualized()) {
+      new RunnableInEDT<Boolean>() {
+        public Boolean work() {
+          JProgressBar progressBar = new JProgressBar(0, 100);
+          progressBar.setValue(0);
+          progressBar.setString("Compiling hello-world.minimal-net...");
+          progressBar.setStringPainted(true);
+          progressBar.setIndeterminate(true);
+          progressDialog.getContentPane().add(BorderLayout.NORTH, progressBar);
+          progressDialog.getContentPane().add(BorderLayout.CENTER, new JScrollPane(output));
+          progressDialog.setSize(350, 150);
+          progressDialog.setLocationRelativeTo((Window)GUI.getTopParentContainer());
+          progressDialog.setVisible(true);
+          GUI.setProgressMessage("Compiling hello-world.minimal-net (Native IP Gateway)");
+          return true;
+        }
+      }.invokeAndWait();
+    }
+
     try {
       /* Create tunnel interface by starting any Contiki minimal-net application.
        * We use the hello-world application.
        *
        * The Contiki node should have the IP address 192.168.1.2. */
-      String tunContikiApp = "hello-world." + TUNNEL_APP_TARGET;
       File tunContikiAppDir =
         new File(GUI.getExternalToolsSetting("PATH_CONTIKI"), "examples/hello-world");
-
+      File tunContikiApp = new File(tunContikiAppDir, "hello-world." + TUNNEL_APP_TARGET);
       /*logger.info("Creating tap0 via " + tunContikiAppDir + "/" + tunContikiApp);*/
-
-      String[] compileCmd = new String[3];
-      compileCmd[0] = "make";
-      compileCmd[1] = tunContikiApp;
-      compileCmd[2] = "TARGET=" + TUNNEL_APP_TARGET;
-      logger.info("> " + compileCmd[0] + " " + compileCmd[1] + " " + compileCmd[2]);
-      Process compileProcess = Runtime.getRuntime().exec(compileCmd, null, tunContikiAppDir);
-      compileProcess.waitFor();
-      boolean compileOK = compileProcess.exitValue() == 0;
-
-      if (!compileOK) {
-        throw new Exception(tunContikiAppDir + "/" + tunContikiApp + " compilation failed");
+      Process p = CompileContiki.compile(
+          GUI.getExternalToolsSetting("PATH_MAKE") + " " + tunContikiApp.getName()  + " TARGET=" + TUNNEL_APP_TARGET,
+          null,
+          null /* Do not observe output firmware file */,
+          tunContikiAppDir,
+          null,
+          null,
+          output,
+          true
+      );
+      if (p.exitValue() != 0) {
+        if (GUI.isVisualized()) {
+          progressDialog.setVisible(false);
+          progressDialog.dispose();
+        }
+        throw new Exception("Compile failed: " + tunContikiApp.getPath());
       }
 
-      String[] tunAppCmd = new String[1];
-      tunAppCmd[0] = "./" + tunContikiApp;
-      logger.info("> " + tunAppCmd[0]);
-      tunProcess = Runtime.getRuntime().exec(tunAppCmd, null, tunContikiAppDir);
+      logger.info("> " + tunContikiApp.getName());
+      tunProcess = Runtime.getRuntime().exec(new String[] { "./" + tunContikiApp.getName() }, null, tunContikiAppDir);
 
+      /* Shutdown hook: kill minimal-net process */
+      shutdownHook = new Thread(new Runnable() {
+        public void run() {
+          if (tunProcess == null) {
+            return;
+          }
+          tunProcess.destroy();
+          tunProcess = null;
+        }
+      });
+      Runtime.getRuntime().addShutdownHook(shutdownHook);
+      
       /* Waiting some time - otherwise pcap may not discover the new interface */
       Thread.sleep(250);
 
-      logger.info("Created tap0 via " + tunContikiAppDir + "/" + tunContikiApp);
+      logger.info("Created tap0 via " + tunContikiApp.getAbsolutePath());
     } catch (Exception e) {
       logger.fatal("Error when creating tap0: " + e.getMessage());
       logger.fatal("Try using an already existing network interface");
+    }
+    
+    /* Hide progress bar */
+    if (GUI.isVisualized()) {
+      new RunnableInEDT<Boolean>() {
+        public Boolean work() {
+          progressDialog.setVisible(false);
+          progressDialog.dispose();
+          return true;
+        }
+      }.invokeAndWait();
     }
   }
 
@@ -614,7 +662,7 @@ public class NativeIPGateway implements Plugin {
       return;
     }
 
-    if (networkInterface.addresses.length <= 0) {
+    if (networkInterface.intf.addresses.length <= 0) {
       return;
     }
 
@@ -630,12 +678,10 @@ public class NativeIPGateway implements Plugin {
       /*logger.info("Deleting old route: '" + restoreRoutesCmd + "'");*/
       try {
         logger.info("> " + restoreRoutesCmd);
-        Process routeProcess = Runtime.getRuntime().exec(restoreRoutesCmd);
-        routeProcess.waitFor();
-      } catch (IOException e) {
-        e.printStackTrace();
-      } catch (InterruptedException e) {
-        e.printStackTrace();
+        Process process = Runtime.getRuntime().exec(restoreRoutesCmd);
+        process.waitFor();
+      } catch (Exception e) {
+        logger.fatal("Error when updating native route: " + e.getMessage(), e);
       }
       restoreRoutesCmd = null;
     }
@@ -647,9 +693,9 @@ public class NativeIPGateway implements Plugin {
     /*logger.info("Simulation IP net : " + moteNetIP);*/
 
     String gatewayIP =
-      (0xFF&networkInterface.addresses[0].address.getAddress()[0]) + "." +
-      (0xFF&networkInterface.addresses[0].address.getAddress()[1]) + "." +
-      (0xFF&networkInterface.addresses[0].address.getAddress()[2]) + "." +
+      (0xFF&networkInterface.intf.addresses[0].address.getAddress()[0]) + "." +
+      (0xFF&networkInterface.intf.addresses[0].address.getAddress()[1]) + "." +
+      (0xFF&networkInterface.intf.addresses[0].address.getAddress()[2]) + "." +
       "254"; /* Non-existing gateway - just make the packets go away */
     /*logger.info("Gateway IP: " + gatewayIP);*/
 
@@ -660,13 +706,11 @@ public class NativeIPGateway implements Plugin {
       logger.info("Registering route to simulated network");
       String cmd = "route add " + moteNetIP + " mask " + NETMASK + " " + gatewayIP;
       logger.info("> " + cmd);
-      Process routeProcess = Runtime.getRuntime().exec(cmd);
-      routeProcess.waitFor();
+      Process process = Runtime.getRuntime().exec(cmd);
+      process.waitFor();
       restoreRoutesCmd = "route delete " + moteNetIP;
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
+    } catch (Exception e) {
+      logger.fatal("Error when adding route: " + e.getMessage(), e);
     }
   }
 
@@ -678,9 +722,9 @@ public class NativeIPGateway implements Plugin {
     /*logger.info("Simulation IP net : " + moteNetIP);*/
 
     String gatewayIP =
-      (0xFF&networkInterface.addresses[0].address.getAddress()[0]) + "." +
-      (0xFF&networkInterface.addresses[0].address.getAddress()[1]) + "." +
-      (0xFF&networkInterface.addresses[0].address.getAddress()[2]) + "." +
+      (0xFF&networkInterface.intf.addresses[0].address.getAddress()[0]) + "." +
+      (0xFF&networkInterface.intf.addresses[0].address.getAddress()[1]) + "." +
+      (0xFF&networkInterface.intf.addresses[0].address.getAddress()[2]) + "." +
       "2";
     /*logger.info("Gateway IP: " + gatewayIP);*/
 
@@ -698,10 +742,13 @@ public class NativeIPGateway implements Plugin {
       logger.info("> " + cmd);
       process = Runtime.getRuntime().exec(cmd);
       process.waitFor();
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
+
+      cmd = "arp -s " + gatewayIP + " -Ds " + networkInterface.intf.name;
+      logger.info("> " + cmd);
+      process = Runtime.getRuntime().exec(cmd);
+      process.waitFor();
+    } catch (Exception e) {
+      logger.fatal("Error when adding route: " + e.getMessage(), e);
     }
   }
 
@@ -726,10 +773,11 @@ public class NativeIPGateway implements Plugin {
     writeAsSlip(packetData, serialPort);
 
     inPkts++;
+    inBytes += packet.len;
 
     /* Update GUI */
     if (GUI.isVisualized()) {
-      inLabel.setText("" + inPkts);
+      inLabel.setText(inPkts + " (" + inBytes + " bytes)");
     }
   }
 
@@ -777,10 +825,11 @@ public class NativeIPGateway implements Plugin {
     /*logger.info("Sending packet (" + packet.len + " bytes) to native network: " + sender);*/
     sender.sendPacket(packet);
     outPkts++;
+    outBytes += packet.len;
 
     /* Update GUI */
     if (GUI.isVisualized()) {
-      outLabel.setText("" + outPkts);
+      outLabel.setText(outPkts + " (" + outBytes + " bytes)");
     }
   }
 
@@ -894,8 +943,8 @@ public class NativeIPGateway implements Plugin {
     for (Element element : configXML) {
       if (element.getName().equals("network_interface")) {
         boolean ok = false;
-        for (NetworkInterface intf: networkInterfacesAll) {
-          if (intf.name.equals(element.getText())) {
+        for (NetworkInterfaceW intf: networkInterfacesAll) {
+          if (intf.intf.name.equals(element.getText())) {
             startCapturingPackets(intf);
             ok = true;
             break;
@@ -903,7 +952,7 @@ public class NativeIPGateway implements Plugin {
         }
         if (!ok) {
           logger.warn("Network interface not available: " + element.getText());
-          logger.warn("Instead capturing on default network interface: " + networkInterface.name);
+          logger.warn("Instead capturing on default network interface: " + networkInterface);
         }
       } else if (element.getName().equals("register_routes")) {
         autoRegisterRoutes.setSelected(Boolean.parseBoolean(element.getText()));
@@ -920,7 +969,7 @@ public class NativeIPGateway implements Plugin {
     Element element;
 
     element = new Element("network_interface");
-    element.setText(networkInterface.name);
+    element.setText(networkInterface.intf.name);
     config.add(element);
 
     element = new Element("register_routes");
@@ -948,25 +997,20 @@ public class NativeIPGateway implements Plugin {
       /*logger.info("Deleting old route: '" + restoreRoutesCmd + "'");*/
       try {
         logger.info("> " + restoreRoutesCmd);
-        Process routeProcess = Runtime.getRuntime().exec(restoreRoutesCmd);
-        routeProcess.waitFor();
-      } catch (IOException e) {
-        e.printStackTrace();
-      } catch (InterruptedException e) {
-        e.printStackTrace();
+        Process process = Runtime.getRuntime().exec(restoreRoutesCmd);
+        process.waitFor();
+      } catch (Exception e) {
+        logger.fatal("Error when deleting route: " + e.getMessage(), e);
       }
       restoreRoutesCmd = null;
     }
 
     deleteTunInterface();
-  }
-
-  public void tagWithObject(Object tag) {
-    this.coojaTag = tag;
-  }
-
-  public Object getTag() {
-    return coojaTag;
+    
+    if (shutdownHook != null) {
+      Runtime.getRuntime().removeShutdownHook(shutdownHook);
+      shutdownHook = null;
+    }
   }
 
 }

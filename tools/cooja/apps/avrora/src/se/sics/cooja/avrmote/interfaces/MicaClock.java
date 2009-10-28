@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: MicaClock.java,v 1.2 2009/03/11 14:12:19 fros4943 Exp $
+ * $Id: MicaClock.java,v 1.5 2009/10/27 10:20:25 fros4943 Exp $
  */
 
 package se.sics.cooja.avrmote.interfaces;
@@ -39,6 +39,7 @@ import org.jdom.Element;
 import se.sics.cooja.*;
 import se.sics.cooja.avrmote.MicaZMote;
 import se.sics.cooja.interfaces.Clock;
+import se.sics.cooja.mspmote.MspMote;
 
 
 /**
@@ -50,8 +51,8 @@ public class MicaClock extends Clock {
 
   private MicaZMote myMote;
 
-  public MicaClock(MicaZMote mote) {
-    myMote = mote;
+  public MicaClock(Mote mote) {
+    myMote = (MicaZMote) mote;
   }
 
   public void setTime(long newTime) {
@@ -59,16 +60,17 @@ public class MicaClock extends Clock {
   }
 
   public long getTime() {
-    int time = (int) ((myMote.cycleCounter) / MicaZMote.NR_CYCLES_PER_MSEC);
-    return time > 0 ? time : 0;
+//    long time = (long) ((double)myMote.cycleCounter * Simulation.MILLISECOND / MspMote.NR_CYCLES_PER_MSEC);
+//    return time > 0 ? time : 0;
+    return 0;
   }
 
-  public void setDrift(int drift) {
-    myMote.cycleDrift = MicaZMote.NR_CYCLES_PER_MSEC * drift;
+  public void setDrift(long drift) {
+    myMote.usDrift = drift;
   }
 
-  public int getDrift() {
-    return (int) (myMote.cycleDrift / MicaZMote.NR_CYCLES_PER_MSEC);
+  public long getDrift() {
+    return myMote.usDrift;
   }
 
   public JPanel getInterfaceVisualizer() {

@@ -52,9 +52,10 @@
 #define COFFEE_MAX_OPEN_FILES		6
 #define COFFEE_FD_SET_SIZE		8
 #define COFFEE_LOG_TABLE_LIMIT		256
-#define COFFEE_DIR_CACHE_ENTRIES	16
 #define COFFEE_DYN_SIZE			4*1024
 #define COFFEE_LOG_SIZE			1024
+
+#define COFFEE_MICRO_LOGS		1
 
 /* Flash operations. */
 #define COFFEE_WRITE(buf, size, offset)				\
@@ -68,6 +69,5 @@
 
 /* Coffee types. */
 typedef int16_t coffee_page_t;
-typedef int32_t coffee_offset_t;
 
 #endif /* !COFFEE_ARCH_H */

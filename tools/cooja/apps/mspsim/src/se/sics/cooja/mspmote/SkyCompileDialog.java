@@ -26,14 +26,17 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: SkyCompileDialog.java,v 1.3 2009/04/20 16:04:46 joxe Exp $
+ * $Id: SkyCompileDialog.java,v 1.5 2009/09/17 10:50:11 fros4943 Exp $
  */
 
 package se.sics.cooja.mspmote;
+
 import java.awt.Container;
 import java.io.File;
+
 import org.apache.log4j.Logger;
 
+import se.sics.cooja.GUI;
 import se.sics.cooja.MoteInterface;
 import se.sics.cooja.MoteType;
 import se.sics.cooja.Simulation;
@@ -76,6 +79,9 @@ public class SkyCompileDialog extends AbstractCompileDialog {
   }
 
   public boolean canLoadFirmware(File file) {
+    if (file.getName().endsWith(".sky")) {
+      return true;
+    }
     if (ELF.isELF(file)) {
       return true;
     }
@@ -86,7 +92,7 @@ public class SkyCompileDialog extends AbstractCompileDialog {
     /* TODO Split into String[] */
     return
     /*"make clean TARGET=sky\n" + */
-    "make " + getExpectedFirmwareFile(source).getName() + " TARGET=sky";
+    GUI.getExternalToolsSetting("PATH_MAKE") + " " + getExpectedFirmwareFile(source).getName() + " TARGET=sky";
   }
 
   public File getExpectedFirmwareFile(File source) {

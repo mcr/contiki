@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: example-trickle.c,v 1.2 2009/03/12 21:58:21 adamdunkels Exp $
+ * $Id: example-trickle.c,v 1.3 2009/10/18 17:52:09 adamdunkels Exp $
  */
 
 /**

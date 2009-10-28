@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: MicaZRadio.java,v 1.3 2009/04/16 14:28:12 fros4943 Exp $
+ * $Id: MicaZRadio.java,v 1.5 2009/09/17 12:09:14 fros4943 Exp $
  */
 
 package se.sics.cooja.avrmote.interfaces;
@@ -89,9 +89,9 @@ public class MicaZRadio extends Radio implements CustomDataRadio {
   Medium.Transmitter trans;
   CC2420Radio.Receiver recv;
 
-  public MicaZRadio(MicaZMote mote) {
-    this.mote = mote;
-    micaz = mote.getMicaZ();
+  public MicaZRadio(Mote mote) {
+    this.mote = (MicaZMote) mote;
+    micaz = this.mote.getMicaZ();
     cc2420 = (CC2420Radio) micaz.getDevice("radio");
     trans = cc2420.getTransmitter();
     recv = (CC2420Radio.Receiver) cc2420.getReceiver();
@@ -261,7 +261,7 @@ public class MicaZRadio extends Radio implements CustomDataRadio {
   }
 
   public int getCurrentOutputPowerIndicator() {
-    return 7; //cc2420.getOutputPowerIndicator();
+    return 31; //cc2420.getOutputPowerIndicator();
   }
 
   public int getOutputPowerIndicatorMax() {

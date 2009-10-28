@@ -28,7 +28,7 @@
  *
  * This file is part of the Contiki operating system.
  *
- * $Id: example-mesh.c,v 1.4 2009/03/12 21:58:21 adamdunkels Exp $
+ * $Id: example-mesh.c,v 1.5 2009/10/18 17:52:08 adamdunkels Exp $
  */
 
 /**
@@ -63,7 +63,6 @@ timedout(struct mesh_conn *c)
 {
   printf("packet timedout\n");
 }
-
 static void
 recv(struct mesh_conn *c, const rimeaddr_t *from, uint8_t hops)
 {
@@ -76,14 +75,13 @@ recv(struct mesh_conn *c, const rimeaddr_t *from, uint8_t hops)
 }
 
 const static struct mesh_callbacks callbacks = {recv, sent, timedout};
-
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(example_mesh_process, ev, data)
 {
   PROCESS_EXITHANDLER(mesh_close(&mesh);)
   PROCESS_BEGIN();
 
-  mesh_open(&mesh, 128, &callbacks);
+  mesh_open(&mesh, 132, &callbacks);
 
 //  button_sensor.activate();
 

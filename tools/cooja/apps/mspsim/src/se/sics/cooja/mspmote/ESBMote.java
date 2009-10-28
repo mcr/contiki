@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: ESBMote.java,v 1.8 2009/04/20 16:12:01 fros4943 Exp $
+ * $Id: ESBMote.java,v 1.11 2009/10/27 10:02:48 fros4943 Exp $
  */
 
 package se.sics.cooja.mspmote;
@@ -57,6 +57,7 @@ public class ESBMote extends MspMote {
   protected boolean initEmulator(File fileELF) {
     try {
       esbNode = new ESBNode();
+      registry = esbNode.getRegistry();
       prepareMote(fileELF, esbNode);
 
     } catch (Exception e) {
@@ -66,21 +67,8 @@ public class ESBMote extends MspMote {
     return true;
   }
 
-  protected MoteInterfaceHandler createMoteInterfaceHandler() {
-    /* Uses current mote type configuration */
-    MoteInterfaceHandler moteInterfaceHandler =
-      super.createMoteInterfaceHandler();
-
-    return moteInterfaceHandler;
-  }
-
   public String toString() {
-    MoteID moteID = getInterfaces() != null ? getInterfaces().getMoteID() : null;
-    if (moteID != null) {
-      return "ESB Mote, ID=" + moteID.getMoteID();
-    } else {
-      return "ESB Mote, ID=null";
-    }
+    return "ESB " + getID();
   }
 
 }

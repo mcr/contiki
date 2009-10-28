@@ -26,7 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: IDVisualizerSkin.java,v 1.1 2009/04/14 15:40:26 fros4943 Exp $
+ * $Id: IDVisualizerSkin.java,v 1.3 2009/09/17 13:20:59 fros4943 Exp $
  */
 
 package se.sics.cooja.plugins.skins;
@@ -70,21 +70,20 @@ public class IDVisualizerSkin implements VisualizerSkin {
     return null;
   }
 
-  public void paintSkin(Graphics g) {
-    FontMetrics fm = g.getFontMetrics();
+  public void paintBeforeMotes(Graphics g) {
+  }
 
+  public void paintAfterMotes(Graphics g) {
+    FontMetrics fm = g.getFontMetrics();
+    g.setColor(Color.BLACK);
+    
     /* Paint ID inside each mote */
     Mote[] allMotes = simulation.getMotes();
     for (Mote mote: allMotes) {
-      MoteID id = mote.getInterfaces().getMoteID();
-      if (id == null) {
-        continue;
-      }
-
       Position pos = mote.getInterfaces().getPosition();
       Point pixel = visualizer.transformPositionToPixel(pos);
 
-      String msg = "" + id.getMoteID();
+      String msg = "" + mote.getID();
       int msgWidth = fm.stringWidth(msg);
       g.drawString(msg, pixel.x - msgWidth/2, pixel.y + 5);
     }

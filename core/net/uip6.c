@@ -41,7 +41,7 @@
  *
  * This file is part of the uIP TCP/IP stack.
  *
- * $Id: uip6.c,v 1.5 2009/04/06 13:18:51 nvt-se Exp $
+ * $Id: uip6.c,v 1.7 2009/10/27 22:34:08 adamdunkels Exp $
  *
  */
 
@@ -901,6 +901,12 @@ uip_process(u8_t flag)
       uip_flags = UIP_POLL;
       UIP_APPCALL();
       goto appsend;
+#if UIP_ACTIVE_OPEN
+    } else if((uip_connr->tcpstateflags & UIP_TS_MASK) == UIP_SYN_SENT) {
+      /* In the SYN_SENT state, we retransmit out SYN. */
+      UIP_TCP_BUF->flags = 0;
+      goto tcp_send_syn;
+#endif /* UIP_ACTIVE_OPEN */
     }
     goto drop;
 #endif /* UIP_TCP */
@@ -1092,6 +1098,9 @@ uip_process(u8_t flag)
       PRINTF("Forwarding packet to ");
       PRINT6ADDR(&UIP_IP_BUF->destipaddr);
       PRINTF("\n");
+
+      /* Decrement the TTL (time-to-live) value in the IP header */
+      UIP_IP_BUF->ttl = UIP_IP_BUF->ttl - 1;
       UIP_STAT(++uip_stat.ip.forwarded);
       goto send;
     } else if(!uip_is_addr_linklocal_allnodes_mcast(&UIP_IP_BUF->destipaddr)) {
