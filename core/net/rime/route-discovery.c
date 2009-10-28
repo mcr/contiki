@@ -123,7 +123,7 @@ send_rrep(struct route_discovery_conn *c, rimeaddr_t *dest)
 	   rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1],
 	   dest->u8[0],dest->u8[1],
 	   rt->nexthop.u8[0],rt->nexthop.u8[1]);
-    unicast_send(&c->rrepconn, &rt->nexthop); 
+    unicast_send(&c->rrepconn, &rt->nexthop);
   } else {
     PRINTF("%d.%d: no route for rrep to %d.%d\n",
 	   rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1],

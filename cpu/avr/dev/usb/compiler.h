@@ -12,7 +12,7 @@
  *      Atmel Corporation: http://www.atmel.com \n
  *      Support email: avr@atmel.com
  *
- * $Name:  $
+ * $Name$
  * $Revision$
  * $RCSfile$
  * $Date$  \n

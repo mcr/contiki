@@ -61,7 +61,7 @@ public class RimeAddress extends MoteInterface {
     moteMem = (AddressMemory) mote.getMemory();
 
     /* Detect startup address (only zeroes) */
-    TimeEvent updateWhenAddressReady = new TimeEvent(0) {
+    TimeEvent updateWhenAddressReady = new MoteTimeEvent(mote, 0) {
       public void execute(long t) {
         String addrString = getAddressString();
         addrString = addrString.replace(".", "");
