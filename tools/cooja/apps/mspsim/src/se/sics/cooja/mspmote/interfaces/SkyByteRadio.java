@@ -162,7 +162,7 @@ public class SkyByteRadio extends Radio implements CustomDataRadio {
 
   private byte[] crossBufferedData = null;
 
-  private TimeEvent deliverPacketDataEvent = new TimeEvent(0) {
+  private TimeEvent deliverPacketDataEvent = new MoteTimeEvent(mote, 0) {
     public void execute(long t) {
 
       if (crossBufferedData == null) {

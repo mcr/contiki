@@ -49,6 +49,7 @@ import org.jdom.Element;
 
 import se.sics.cooja.ClassDescription;
 import se.sics.cooja.Mote;
+import se.sics.cooja.MoteTimeEvent;
 import se.sics.cooja.RadioPacket;
 import se.sics.cooja.Simulation;
 import se.sics.cooja.TimeEvent;
@@ -154,7 +155,7 @@ public class TR1001Radio extends Radio implements USARTListener,
     }
 
     /* Feed incoming bytes to radio "slowly" via time events */
-    TimeEvent receiveCrosslevelDataEvent = new TimeEvent(0) {
+    TimeEvent receiveCrosslevelDataEvent = new MoteTimeEvent(mote, 0) {
       public void execute(long t) {
         /* Stop receiving data when buffer is empty */
         if (byteList.isEmpty() || isInterfered) {
@@ -339,7 +340,7 @@ public class TR1001Radio extends Radio implements USARTListener,
     return mote.getInterfaces().getPosition();
   }
 
-  private TimeEvent followupTransmissionEvent = new TimeEvent(0) {
+  private TimeEvent followupTransmissionEvent = new MoteTimeEvent(mote, 0) {
     public void execute(long t) {
 
       if (isTransmitting()) {

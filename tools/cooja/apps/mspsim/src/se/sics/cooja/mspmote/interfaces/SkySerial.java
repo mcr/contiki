@@ -37,6 +37,7 @@ import org.apache.log4j.Logger;
 
 import se.sics.cooja.ClassDescription;
 import se.sics.cooja.Mote;
+import se.sics.cooja.MoteTimeEvent;
 import se.sics.cooja.Simulation;
 import se.sics.cooja.TimeEvent;
 import se.sics.cooja.dialogs.SerialUI;
@@ -136,7 +137,7 @@ public class SkySerial extends SerialUI implements SerialPort {
     mote.requestImmediateWakeup();
   }
 
-  private TimeEvent writeDataEvent = new TimeEvent(0) {
+  private TimeEvent writeDataEvent = new MoteTimeEvent(mote, 0) {
     public void execute(long t) {
       tryWriteNextByte();
       if (!incomingData.isEmpty()) {

@@ -59,7 +59,7 @@ public class IPAddress extends MoteInterface {
     moteMem = (AddressMemory) mote.getMemory();
 
     /* Detect startup IP (only zeroes) */
-    TimeEvent updateWhenAddressReady = new TimeEvent(0) {
+    TimeEvent updateWhenAddressReady = new MoteTimeEvent(mote, 0) {
       public void execute(long t) {
         if (!isVersion4() && !isVersion6()) {
           return;
