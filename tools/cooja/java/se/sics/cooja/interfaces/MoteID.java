@@ -31,6 +31,12 @@
 
 package se.sics.cooja.interfaces;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Vector;
+
+import org.jdom.Element;
+
 import se.sics.cooja.*;
 
 /**
@@ -49,8 +55,23 @@ public abstract class MoteID extends MoteInterface {
   
   /**
    * Sets mote ID to given number.
-   * @param newID New mote ID number
+   * @param id New mote ID number
    */
-  public abstract void setMoteID(int newID);
+  public abstract void setMoteID(int id);
   
+  public Collection<Element> getConfigXML() {
+    ArrayList<Element> config = new ArrayList<Element>();
+    Element element = new Element("id");
+    element.setText(Integer.toString(getMoteID()));
+    config.add(element);
+    return config;
+  }
+
+  public void setConfigXML(Collection<Element> configXML, boolean visAvailable) {
+    for (Element element : configXML) {
+      if (element.getName().equals("id")) {
+        setMoteID(Integer.parseInt(element.getText()));
+      }
+    }
+  }
 }
