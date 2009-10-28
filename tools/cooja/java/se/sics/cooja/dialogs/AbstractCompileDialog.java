@@ -155,6 +155,7 @@ public abstract class AbstractCompileDialog extends JDialog {
           String path = GUI.getExternalToolsSetting("COMPILE_LAST_FILE", null);
           if (path != null) {
             lastFile = new File(path);
+            lastFile = gui.restorePortablePath(lastFile);
           }
         }
 
@@ -495,7 +496,7 @@ public abstract class AbstractCompileDialog extends JDialog {
     }
 
     lastFile = file;
-    GUI.setExternalToolsSetting("COMPILE_LAST_FILE", lastFile.getAbsolutePath());
+    GUI.setExternalToolsSetting("COMPILE_LAST_FILE", gui.createPortablePath(lastFile).getPath());
 
     if (file.getName().endsWith(".c")) {
       setDialogState(DialogState.SELECTED_SOURCE);
