@@ -36,8 +36,7 @@ $(CONTIKI)/tools/cooja/dist/cooja.jar:
 .PHONY: $(MAKECMDGOALS)
 .PRECIOUS: $(MAKECMDGOALS)
 $(MAKECMDGOALS): $(CONTIKI)/tools/cooja/dist/cooja.jar
-	(cd $(CONTIKI)/tools/cooja/build && \
-	 java -mx512m -jar ../dist/cooja.jar -quickstart='$(abspath $(firstword $(MAKECMDGOALS)))')
+	 java -mx512m -jar $< -quickstart='$(firstword $(MAKECMDGOALS))' -contiki='$(CONTIKI)'
 
 endif ## QUICKSTART
 
