@@ -66,8 +66,10 @@ public class ScriptRunner extends VisPlugin {
   private static Logger logger = Logger.getLogger(ScriptRunner.class);
 
   final String[] EXAMPLE_SCRIPTS = new String[] {
-      "basic.js", "Basic example script",
+      "basic.js", "Various commands",
       "helloworld.js", "Wait for 'Hello, world'",
+      "log_all.js", "Just log all printf()'s and timeout",
+      "shell.js", "Basic shell interaction",
   };
 
   private Simulation simulation;
