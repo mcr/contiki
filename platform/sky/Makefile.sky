@@ -79,9 +79,15 @@ sky-motelist:
 sky-motes:
 	@echo $(MOTES)
 
+ifdef MOTE
+%.upload: %.ihex
+	cp $< $(IHEXFILE)
+	$(MAKE) sky-u.$(subst /,-,$(word $(MOTE), $(MOTES)))
+else # MOTE
 %.upload: %.ihex
 	cp $< $(IHEXFILE)
 	$(MAKE) sky-reset sky-upload
+endif # MOTE
 
 sky-upload: sky-reset
 	$(MAKE) -j $(NUMPAR) sky-upload-sequence
