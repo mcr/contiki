@@ -32,15 +32,17 @@
 package se.sics.cooja.avrmote.interfaces;
 
 import java.util.Collection;
+
 import javax.swing.JPanel;
+
 import org.apache.log4j.Logger;
 import org.jdom.Element;
 
-import se.sics.cooja.*;
+import se.sics.cooja.ClassDescription;
+import se.sics.cooja.Mote;
+import se.sics.cooja.Simulation;
 import se.sics.cooja.avrmote.MicaZMote;
 import se.sics.cooja.interfaces.Clock;
-import se.sics.cooja.mspmote.MspMote;
-
 
 /**
  * @author Fredrik Osterlind, Joakim Eriksson
@@ -49,9 +51,13 @@ import se.sics.cooja.mspmote.MspMote;
 public class MicaClock extends Clock {
   private static Logger logger = Logger.getLogger(MicaClock.class);
 
+  private Simulation simulation;
   private MicaZMote myMote;
 
+  private long timeDrift; /* Microseconds */
+  
   public MicaClock(Mote mote) {
+    simulation = mote.getSimulation();
     myMote = (MicaZMote) mote;
   }
 
@@ -60,17 +66,15 @@ public class MicaClock extends Clock {
   }
 
   public long getTime() {
-//    long time = (long) ((double)myMote.cycleCounter * Simulation.MILLISECOND / MspMote.NR_CYCLES_PER_MSEC);
-//    return time > 0 ? time : 0;
-    return 0;
+    return simulation.getSimulationTime() + timeDrift;
   }
 
   public void setDrift(long drift) {
-    myMote.usDrift = drift;
+    timeDrift = drift;
   }
 
   public long getDrift() {
-    return myMote.usDrift;
+    return timeDrift;
   }
 
   public JPanel getInterfaceVisualizer() {
