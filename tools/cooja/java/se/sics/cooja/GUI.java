@@ -3953,8 +3953,11 @@ public class GUI extends Observable {
       String fileCanonical = file.getCanonicalPath();
       if (!fileCanonical.startsWith(configCanonical)) {
         /* SPECIAL CASE: Allow one parent directory */
-        configCanonical = configPath.getParentFile().getCanonicalPath();
-        id += "/..";
+        File parent = new File(configCanonical).getParentFile();
+        if (parent != null) {
+          configCanonical = parent.getCanonicalPath();
+          id += "/..";
+        }
       }
       if (!fileCanonical.startsWith(configCanonical)) {
         /* File is not in a config subdirectory */
