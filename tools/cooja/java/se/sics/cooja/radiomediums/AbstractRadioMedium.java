@@ -268,6 +268,7 @@ public abstract class AbstractRadioMedium extends RadioMedium {
         updateSignalStrengths();
 
         /* Notify observers */
+        lastConnection = null;
         radioMediumObservable.setRadioMediumChangedAndNotify();
 
       } else if (event == Radio.RadioEvent.TRANSMISSION_FINISHED) {

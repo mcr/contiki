@@ -31,14 +31,16 @@ package se.sics.cooja.util;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.URL;
 
 /**
  * Some utility methods for generating hex dumps.
  *
- * @author Niclas Finne
+ * @author Niclas Finne, Fredrik Osterlind
  */
 public class StringUtils {
 
@@ -150,6 +152,17 @@ public class StringUtils {
       return sb.toString();
     } catch (IOException e) {
       return null;
+    }
+  }
+  
+  public static boolean saveToFile(File file, String text) {
+    try {
+      PrintWriter outStream = new PrintWriter(new FileWriter(file));
+      outStream.print(text);
+      outStream.close();
+      return true;
+    } catch (Exception ex) {
+      return false;
     }
   }
 }

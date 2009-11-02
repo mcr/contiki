@@ -132,6 +132,7 @@ import se.sics.cooja.plugins.MoteTypeInformation;
 import se.sics.cooja.plugins.ScriptRunner;
 import se.sics.cooja.plugins.SimControl;
 import se.sics.cooja.plugins.SimInformation;
+import se.sics.cooja.util.ExecuteJAR;
 
 /**
  * Main file of COOJA Simulator. Typically contains a visualizer for the
@@ -230,8 +231,8 @@ public class GUI extends Observable {
   private static Logger logger = Logger.getLogger(GUI.class);
 
   // External tools setting names
-  private static Properties defaultExternalToolsSettings;
-  private static Properties currentExternalToolsSettings;
+  public static Properties defaultExternalToolsSettings;
+  public static Properties currentExternalToolsSettings;
 
   private static final String externalToolsSettingNames[] = new String[] {
     "PATH_CONTIKI", "PATH_COOJA_CORE_RELATIVE",
@@ -402,19 +403,19 @@ public class GUI extends Observable {
         File projectDir = restorePortablePath(new File(p));
         currentProjectDirs.add(projectDir);
       }
+    }
 
-      // Load extendable parts (using current project config)
-      try {
-        reparseProjectConfig();
-      } catch (ParseProjectsException e) {
-        logger.fatal("Error when loading projects: " + e.getMessage(), e);
-        if (isVisualized()) {
-          JOptionPane.showMessageDialog(GUI.getTopParentContainer(),
-              "Default projects could not load, reconfigure project directories:" +
-              "\n\tMenu->Settings->Manage project directories" +
-              "\n\nSee console for stack trace with more information.",
-              "Project loading error", JOptionPane.ERROR_MESSAGE);
-        }
+    /* Parse current project configuration */
+    try {
+      reparseProjectConfig();
+    } catch (ParseProjectsException e) {
+      logger.fatal("Error when loading projects: " + e.getMessage(), e);
+      if (isVisualized()) {
+        JOptionPane.showMessageDialog(GUI.getTopParentContainer(),
+            "Default projects could not load, reconfigure project directories:" +
+            "\n\tMenu->Settings->Manage project directories" +
+            "\n\nSee console for stack trace with more information.",
+            "Project loading error", JOptionPane.ERROR_MESSAGE);
       }
     }
 
@@ -631,6 +632,7 @@ public class GUI extends Observable {
     guiActions.add(reloadRandomSimulationAction);
     guiActions.add(saveSimulationAction);
     guiActions.add(closePluginsAction);
+    guiActions.add(exportExecutableJARAction);
     guiActions.add(exitCoojaAction);
     guiActions.add(startStopSimulationAction);
     guiActions.add(removeAllMotesAction);
@@ -683,6 +685,7 @@ public class GUI extends Observable {
     menu.addSeparator();
 
     menu.add(new JMenuItem(closePluginsAction));
+    menu.add(new JMenuItem(exportExecutableJARAction));
 
     menu.addSeparator();
 
@@ -1043,7 +1046,7 @@ public class GUI extends Observable {
     return myDesktopPane;
   }
 
-  private static void setLookAndFeel() {
+  public static void setLookAndFeel() {
 
     JFrame.setDefaultLookAndFeelDecorated(true);
     JDialog.setDefaultLookAndFeelDecorated(true);
@@ -1119,7 +1122,7 @@ public class GUI extends Observable {
     return desktop;
   }
 
-  private static Simulation quickStartSimulationConfig(File config, boolean vis) {
+  public static Simulation quickStartSimulationConfig(File config, boolean vis) {
     logger.info("> Starting COOJA");
     JDesktopPane desktop = createDesktopPane();
     if (vis) {
@@ -1968,7 +1971,11 @@ public class GUI extends Observable {
     }
     return null;
   }
-  
+
+  public Plugin[] getStartedPlugins() {
+    return startedPlugins.toArray(new Plugin[0]);
+  }
+
   /**
    * Return a mote plugins submenu for given mote.
    *
@@ -2588,7 +2595,7 @@ public class GUI extends Observable {
    * @return Value
    */
   public static String getExternalToolsSetting(String name) {
-    return currentExternalToolsSettings.getProperty(name);
+    return getExternalToolsSetting(name, null);
   }
 
   /**
@@ -3294,32 +3301,12 @@ public class GUI extends Observable {
    * @param file
    *          File to write
    */
-  public void saveSimulationConfig(File file) {
+   public void saveSimulationConfig(File file) {
     this.currentConfigFile = file; /* Used to generate config relative paths */
 
     try {
-      // Create simulation config
-      Element root = new Element("simconf");
-
-      /* Store project directories meta data */
-      for (File project: currentProjectDirs) {
-        Element projectElement = new Element("project");
-        projectElement.addContent(createPortablePath(project).getPath().replaceAll("\\\\", "/"));
-        root.addContent(projectElement);
-      }
-
-      Element simulationElement = new Element("simulation");
-      simulationElement.addContent(mySimulation.getConfigXML());
-      root.addContent(simulationElement);
-
-      // Create started plugins config
-      Collection<Element> pluginsConfig = getPluginsConfigXML();
-      if (pluginsConfig != null) {
-        root.addContent(pluginsConfig);
-      }
-
       // Create and write to document
-      Document doc = new Document(root);
+      Document doc = new Document(extractSimulationConfig());
       FileOutputStream out = new FileOutputStream(file);
       XMLOutputter outputter = new XMLOutputter();
       outputter.setFormat(Format.getPrettyFormat());
@@ -3331,6 +3318,30 @@ public class GUI extends Observable {
       logger.warn("Exception while saving simulation config: " + e);
       e.printStackTrace();
     }
+  }
+  
+  public Element extractSimulationConfig() {
+    // Create simulation config
+    Element root = new Element("simconf");
+
+    /* Store project directories meta data */
+    for (File project: currentProjectDirs) {
+      Element projectElement = new Element("project");
+      projectElement.addContent(createPortablePath(project).getPath().replaceAll("\\\\", "/"));
+      root.addContent(projectElement);
+    }
+
+    Element simulationElement = new Element("simulation");
+    simulationElement.addContent(mySimulation.getConfigXML());
+    root.addContent(simulationElement);
+
+    // Create started plugins config
+    Collection<Element> pluginsConfig = getPluginsConfigXML();
+    if (pluginsConfig != null) {
+      root.addContent(pluginsConfig);
+    }
+
+    return root;
   }
 
   /**
@@ -3942,12 +3953,15 @@ public class GUI extends Observable {
       String fileCanonical = file.getCanonicalPath();
       if (!fileCanonical.startsWith(configCanonical)) {
         /* SPECIAL CASE: Allow one parent directory */
-        configCanonical = configPath.getParentFile().getCanonicalPath();
-        id += "/..";
+        File parent = new File(configCanonical).getParentFile();
+        if (parent != null) {
+          configCanonical = parent.getCanonicalPath();
+          id += "/..";
+        }
       }
       if (!fileCanonical.startsWith(configCanonical)) {
         /* File is not in a config subdirectory */
-        logger.info("File is not in a config subdirectory: " + file.getAbsolutePath());
+        /*logger.info("File is not in a config subdirectory: " + file.getAbsolutePath());*/
         return null;
       }
 
@@ -4140,6 +4154,80 @@ public class GUI extends Observable {
     }
     public boolean shouldBeEnabled() {
       return !startedPlugins.isEmpty();
+    }
+  };
+  GUIAction exportExecutableJARAction = new GUIAction("Export simulation as executable JAR") {
+    public void actionPerformed(ActionEvent e) {
+      getSimulation().stopSimulation();
+
+      /* Info message */
+      String[] options = new String[] { "OK", "Cancel" };
+      int n = JOptionPane.showOptionDialog(
+          GUI.getTopParentContainer(),
+          "This function attempts to build an executable COOJA JAR from the current simulation.\n" +
+          "The JAR will contain all simulation dependencies, including project JAR files and mote firmware files.\n" +
+          "\nExecutable simulations can be used to run already prepared simulations on several computers.\n" +
+          "\nThis is an experimental feature!",
+          "Export simulation to executable JAR", JOptionPane.OK_CANCEL_OPTION,
+          JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+      if (n != JOptionPane.OK_OPTION) {
+        return;
+      }
+
+      /* Select output file */
+      JFileChooser fc = new JFileChooser();
+      FileFilter jarFilter = new FileFilter() {
+        public boolean accept(File file) {
+          if (file.isDirectory()) {
+            return true;
+          }
+          if (file.getName().endsWith(".jar")) {
+            return true;
+          }
+          return false;
+        }
+        public String getDescription() {
+          return "Java archive";
+        }
+        public String toString() {
+          return ".jar";
+        }
+      };
+      fc.setFileFilter(jarFilter);
+      fc.setSelectedFile(new File("cooja_simulation.jar"));
+      int returnVal = fc.showSaveDialog(GUI.getTopParentContainer());
+      if (returnVal != JFileChooser.APPROVE_OPTION) {
+        return;
+      }
+      File outputFile = fc.getSelectedFile();
+      if (outputFile.exists()) {
+        options = new String[] { "Overwrite", "Cancel" };
+        n = JOptionPane.showOptionDialog(
+            GUI.getTopParentContainer(),
+            "A file with the same name already exists.\nDo you want to remove it?",
+            "Overwrite existing file?", JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        if (n != JOptionPane.YES_OPTION) {
+          return;
+        }
+        outputFile.delete();
+      }
+      
+      final File finalOutputFile = outputFile;
+      new Thread() {
+        public void run() {
+          try {
+            ExecuteJAR.buildExecutableJAR(GUI.this, finalOutputFile);   
+          } catch (RuntimeException ex) {
+            JOptionPane.showMessageDialog(GUI.getTopParentContainer(),
+                ex.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+          }
+        }
+      }.start();
+    }
+    public boolean shouldBeEnabled() {
+      return getSimulation() != null;
     }
   };
   GUIAction exitCoojaAction = new GUIAction("Exit", KeyEvent.VK_X, KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK)) {

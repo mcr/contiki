@@ -133,6 +133,9 @@ public class SimControl extends VisPlugin {
           stopTimeTextField.setToolTipText("Simulation will stop at time (us): " + t);
           SimControl.this.simulation.invokeSimulationThread(new Runnable() {
             public void run() {
+              if (stopEvent.isScheduled()) {
+                stopEvent.remove();
+              }
               SimControl.this.simulation.scheduleEvent(stopEvent, t);
             }
           });
