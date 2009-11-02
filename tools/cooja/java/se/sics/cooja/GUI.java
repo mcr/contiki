@@ -3961,7 +3961,7 @@ public class GUI extends Observable {
       }
       if (!fileCanonical.startsWith(configCanonical)) {
         /* File is not in a config subdirectory */
-        logger.info("File is not in a config subdirectory: " + file.getAbsolutePath());
+        /*logger.info("File is not in a config subdirectory: " + file.getAbsolutePath());*/
         return null;
       }
 
