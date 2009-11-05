@@ -129,7 +129,7 @@ public class AddressVisualizerSkin implements VisualizerSkin {
 
   private static String getMoteString(Mote mote) {
     IPAddress ipAddr = mote.getInterfaces().getIPAddress();
-    if (ipAddr != null) {
+    if (ipAddr != null && ipAddr.getIPString() != null) {
       return ipAddr.getIPString();
     }
 
