@@ -59,7 +59,7 @@ PROCESS_THREAD(sd_test, event, data)
 
   PROCESS_BEGIN();
 
-  etimer_set(&et, CLOCK_SECOND);
+  etimer_set(&et, CLOCK_SECOND / 16);
 
   offset = 0;
   for(iter = 1;; iter++) {
@@ -83,8 +83,10 @@ PROCESS_THREAD(sd_test, event, data)
       } else {
         printf("read error: %d (%s)\n", r, sd_error_string(r));
       }
+    } else {
+      printf("write error: %d (%s)\n", r, sd_error_string(r));
     }
-    etimer_reset(&et);
+    etimer_restart(&et);
   }
 
   PROCESS_END();
