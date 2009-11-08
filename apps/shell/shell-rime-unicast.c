@@ -133,7 +133,7 @@ PROCESS_THREAD(shell_unicast_send_process, ev, data)
 }
 /*---------------------------------------------------------------------------*/
 static void
-recv_uc(struct unicast_conn *c, rimeaddr_t *from)
+recv_uc(struct unicast_conn *c, const rimeaddr_t *from)
 {
   struct unicast_msg *msg;
 #define OUTPUT_BLOB_HDRSIZE 6

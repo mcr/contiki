@@ -117,7 +117,8 @@ static void
 memcpy_misaligned(void *dest, const void *source, int len)
 {
   int i;
-  u8_t *destptr, *sourceptr;
+  uint8_t *destptr;
+  const uint8_t *sourceptr;
   if(((int)dest & 1) == 1 ||
      ((int)source & 1) == 1) {
     destptr = dest;
@@ -316,7 +317,7 @@ process_incoming_packet(void)
   struct datapath_msg msg_copy;
 
   now = timesynch_time();
-  memcpy_misaligned(&msg_copy, (u8_t *)msg, sizeof(msg_copy));
+  memcpy_misaligned(&msg_copy, (uint8_t *)msg, sizeof(msg_copy));
   stats.received++;
   stats.total_tx_latency += msg_copy.rx - msg_copy.tx;
   stats.total_rx_latency += now - msg_copy.rx;

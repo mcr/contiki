@@ -142,7 +142,7 @@ PROCESS_THREAD(shell_sendcmd_process, ev, data)
 }
 /*---------------------------------------------------------------------------*/
 static void
-recv_uc(struct unicast_conn *c, rimeaddr_t *from)
+recv_uc(struct unicast_conn *c, const rimeaddr_t *from)
 {
   struct cmd_msg *msg;
   uint16_t crc;

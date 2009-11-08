@@ -419,8 +419,8 @@ send_collect(void *dummy)
 }
 /*---------------------------------------------------------------------------*/
 static int
-recv_netflood(struct netflood_conn *c, rimeaddr_t *from,
-	      rimeaddr_t *originator, uint8_t seqno, uint8_t hops)
+recv_netflood(struct netflood_conn *c, const rimeaddr_t *from,
+	      const rimeaddr_t *originator, uint8_t seqno, uint8_t hops)
 {
   struct netflood_msg *msg;
   
