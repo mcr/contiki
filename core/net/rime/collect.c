@@ -227,7 +227,8 @@ update_rtmetric(struct collect_conn *tc)
 }
 /*---------------------------------------------------------------------------*/
 static void
-node_packet_received(struct runicast_conn *c, rimeaddr_t *from, uint8_t seqno)
+node_packet_received(struct runicast_conn *c, const rimeaddr_t *from,
+		     uint8_t seqno)
 {
   struct collect_conn *tc = (struct collect_conn *)
     ((char *)c - offsetof(struct collect_conn, runicast_conn));
@@ -295,7 +296,8 @@ node_packet_received(struct runicast_conn *c, rimeaddr_t *from, uint8_t seqno)
 }
 /*---------------------------------------------------------------------------*/
 static void
-node_packet_sent(struct runicast_conn *c, rimeaddr_t *to, uint8_t transmissions)
+node_packet_sent(struct runicast_conn *c, const rimeaddr_t *to,
+		 uint8_t transmissions)
 {
   struct collect_conn *tc = (struct collect_conn *)
     ((char *)c - offsetof(struct collect_conn, runicast_conn));
@@ -318,7 +320,8 @@ node_packet_sent(struct runicast_conn *c, rimeaddr_t *to, uint8_t transmissions)
 }
 /*---------------------------------------------------------------------------*/
 static void
-node_packet_timedout(struct runicast_conn *c, rimeaddr_t *to, uint8_t transmissions)
+node_packet_timedout(struct runicast_conn *c, const rimeaddr_t *to,
+		     uint8_t transmissions)
 {
   struct collect_conn *tc = (struct collect_conn *)
     ((char *)c - offsetof(struct collect_conn, runicast_conn));
@@ -339,7 +342,8 @@ node_packet_timedout(struct runicast_conn *c, rimeaddr_t *to, uint8_t transmissi
 /*---------------------------------------------------------------------------*/
 #if !COLLECT_ANNOUNCEMENTS
 static void
-adv_received(struct neighbor_discovery_conn *c, rimeaddr_t *from, uint16_t rtmetric)
+adv_received(struct neighbor_discovery_conn *c, const rimeaddr_t *from,
+	     uint16_t rtmetric)
 {
   struct collect_conn *tc = (struct collect_conn *)
     ((char *)c - offsetof(struct collect_conn, neighbor_discovery_conn));
@@ -360,7 +364,7 @@ adv_received(struct neighbor_discovery_conn *c, rimeaddr_t *from, uint16_t rtmet
 }
 #else
 static void
-received_announcement(struct announcement *a, rimeaddr_t *from,
+received_announcement(struct announcement *a, const rimeaddr_t *from,
 		      uint16_t id, uint16_t value)
 {
   struct collect_conn *tc = (struct collect_conn *)

@@ -80,7 +80,7 @@ struct broadcast_conn;
  */
 struct broadcast_callbacks {
   /** Called when a packet has been received by the broadcast module. */
-  void (* recv)(struct broadcast_conn *ptr, rimeaddr_t *sender);
+  void (* recv)(struct broadcast_conn *ptr, const rimeaddr_t *sender);
 };
 
 struct broadcast_conn {

@@ -71,7 +71,7 @@ struct unicast_conn;
                         BROADCAST_ATTRIBUTES
 
 struct unicast_callbacks {
-  void (* recv)(struct unicast_conn *c, rimeaddr_t *from);
+  void (* recv)(struct unicast_conn *c, const rimeaddr_t *from);
 };
 
 struct unicast_conn {

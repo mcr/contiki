@@ -73,7 +73,7 @@ void rucb_open(struct rucb_conn *c, uint16_t channel,
 	      const struct rucb_callbacks *u);
 void rucb_close(struct rucb_conn *c);
 
-int rucb_send(struct rucb_conn *c, rimeaddr_t *receiver);
+int rucb_send(struct rucb_conn *c, const rimeaddr_t *receiver);
 
 
 #endif /* __RUCB_H__ */

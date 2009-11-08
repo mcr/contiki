@@ -72,7 +72,7 @@
 struct announcement;
 
 typedef void (*announcement_callback_t)(struct announcement *a,
-					rimeaddr_t *from,
+					const rimeaddr_t *from,
 					uint16_t id, uint16_t val);
 
 /**
@@ -211,7 +211,7 @@ struct announcement *announcement_list(void);
  *             neighbor has been heard.
  *
  */
-void announcement_heard(rimeaddr_t *from, uint16_t id, uint16_t value);
+void announcement_heard(const rimeaddr_t *from, uint16_t id, uint16_t value);
 
 /**
  * \brief      Register a listen callback with the announcement module

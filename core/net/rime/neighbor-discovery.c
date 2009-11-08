@@ -103,7 +103,7 @@ send_adv(void *ptr)
 }
 /*---------------------------------------------------------------------------*/
 static void
-adv_packet_received(struct broadcast_conn *ibc, rimeaddr_t *from)
+adv_packet_received(struct broadcast_conn *ibc, const rimeaddr_t *from)
 {
   struct neighbor_discovery_conn *c = (struct neighbor_discovery_conn *)ibc;
   struct adv_msg *msg = packetbuf_dataptr();

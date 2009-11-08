@@ -64,7 +64,7 @@
 struct route_discovery_conn;
 
 struct route_discovery_callbacks {
-  void (* new_route)(struct route_discovery_conn *c, rimeaddr_t *to);
+  void (* new_route)(struct route_discovery_conn *c, const rimeaddr_t *to);
   void (* timedout)(struct route_discovery_conn *c);
 };
 

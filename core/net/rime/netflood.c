@@ -73,7 +73,7 @@ send(struct netflood_conn *c)
 }
 /*---------------------------------------------------------------------------*/
 static void
-recv_from_ipolite(struct ipolite_conn *ipolite, rimeaddr_t *from)
+recv_from_ipolite(struct ipolite_conn *ipolite, const rimeaddr_t *from)
 {
   struct netflood_conn *c = (struct netflood_conn *)ipolite;
   struct netflood_hdr *hdr = packetbuf_dataptr();

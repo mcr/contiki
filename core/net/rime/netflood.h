@@ -88,8 +88,8 @@ struct netflood_conn;
                                 IPOLITE_ATTRIBUTES
 
 struct netflood_callbacks {
-  int (* recv)(struct netflood_conn *c, rimeaddr_t *from,
-	       rimeaddr_t *originator, uint8_t seqno, uint8_t hops);
+  int (* recv)(struct netflood_conn *c, const rimeaddr_t *from,
+	       const rimeaddr_t *originator, uint8_t seqno, uint8_t hops);
   void (* sent)(struct netflood_conn *c);
   void (* dropped)(struct netflood_conn *c);
 };
