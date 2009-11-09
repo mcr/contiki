@@ -87,7 +87,7 @@ enum {
   CTRL_COMMAND_CLEAR,
   CTRL_COMMAND_STATS,
   CTRL_COMMAND_STATS_REPLY
-} datapath_commands;
+} ctrlpath_commands;
 
 struct ctrl_msg {
   uint8_t command;
