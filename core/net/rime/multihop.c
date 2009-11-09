@@ -66,7 +66,7 @@ static const struct packetbuf_attrlist attributes[] =
 
 /*---------------------------------------------------------------------------*/
 void
-data_packet_received(struct unicast_conn *uc, rimeaddr_t *from)
+data_packet_received(struct unicast_conn *uc, const rimeaddr_t *from)
 {
   struct multihop_conn *c = (struct multihop_conn *)uc;
   rimeaddr_t *nexthop;

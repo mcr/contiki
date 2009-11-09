@@ -64,6 +64,8 @@ void write_to_serial(int outfd, void *inbuf, int len);
 //#define PROGRESS(s) fprintf(stderr, s)
 #define PROGRESS(s) do { } while (0)
 
+#define USAGE_STRING "usage: tapslip6 [-B baudrate] [-s siodev] [-t tundev] ipaddress netmask"
+
 char tundev[32] = { "tap0" };
 
 int
@@ -512,7 +514,7 @@ main(int argc, char **argv)
     case '?':
     case 'h':
     default:
-      err(1, "usage: tapslip6 [-B baudrate] [-s siodev] [-t tundev] ipaddress netmask");
+      errx(1, USAGE_STRING);
       break;
     }
   }
@@ -520,7 +522,7 @@ main(int argc, char **argv)
   argv += (optind - 1);
 
   if(argc != 3 && argc != 4) {
-    err(1, "usage: tapslip6 [-s siodev] [-t tundev] ipaddress netmask ");
+    errx(1, USAGE_STRING);
   }
   ipaddr = argv[1];
   netmask = argv[2];

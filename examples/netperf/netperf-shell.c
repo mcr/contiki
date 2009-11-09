@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009, Swedish Institute of Computer Science
+ * Copyright (c) 2008, Swedish Institute of Computer Science.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,67 +28,46 @@
  *
  * This file is part of the Contiki operating system.
  *
+ * $Id$
  */
 
 /**
  * \file
- *	Architecture-dependent functions for SD over SPI.
+ *         netperf shell
  * \author
- * 	Nicolas Tsiftes <nvt@sics.se>
+ *         Adam Dunkels <adam@sics.se>
  */
 
 #include "contiki.h"
-#include "msb430-uart1.h"
-#include "sd-arch.h"
+#include "shell.h"
+#include "serial-shell.h"
 
-#define SPI_IDLE	0xff
-
-int
-sd_arch_init(void)
+/*---------------------------------------------------------------------------*/
+PROCESS(netperf_shell_process, "netperf shell");
+AUTOSTART_PROCESSES(&netperf_shell_process);
+/*---------------------------------------------------------------------------*/
+PROCESS_THREAD(netperf_shell_process, ev, data)
 {
-  P2SEL &= ~64;
-  P2DIR &= ~64;
+  PROCESS_BEGIN();
 
-  P5SEL |= 14;
-  P5SEL &= ~1;
-  P5OUT |= 1;
-  P5DIR |= 13;
-  P5DIR &= ~2;
+  serial_shell_init();
+  shell_blink_init();
+  /*  shell_file_init();
+      shell_coffee_init();*/
+  /*  shell_download_init();
+      shell_rime_sendcmd_init();*/
+  shell_ps_init();
+  shell_reboot_init();
+  shell_rime_init();
+  shell_rime_netcmd_init();
+  shell_rime_ping_init();
+  shell_rime_debug_init(); 
+  shell_rime_sniff_init();
+  shell_text_init();
+  shell_time_init();
+  shell_sendtest_init();
+  shell_netperf_init();
 
-  uart_set_speed(UART_MODE_SPI, 2, 0, 0);
-
-  return 0;
+  PROCESS_END();
 }
-
-
-void
-sd_arch_spi_write(int c)
-{
-  UART_TX = c;
-  UART_WAIT_TXDONE();
-}
-
-void
-sd_arch_spi_write_block(uint8_t *bytes, int amount)
-{
-  int i;
-  volatile char dummy;
-
-  for(i = 0; i < amount; i++) {
-    UART_TX = bytes[i];
-    UART_WAIT_TXDONE();
-    UART_WAIT_RX();
-    dummy = UART_RX;
-  }
-}
-
-
-unsigned
-sd_arch_spi_read(void)
-{
-  if((U1IFG & URXIFG1) == 0) {
-    UART_TX = SPI_IDLE;
-    UART_WAIT_RX();
-  }
-  return UART_RX;
-}
+/*---------------------------------------------------------------------------*/

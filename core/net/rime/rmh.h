@@ -80,9 +80,9 @@ struct rmh_conn;
 struct rmh_callbacks {
   void (* recv)(struct rmh_conn *ptr, rimeaddr_t *sender, uint8_t hops);
   rimeaddr_t *(* forward)(struct rmh_conn *ptr,
-			  rimeaddr_t *originator,
-			  rimeaddr_t *dest,
-			  rimeaddr_t *prevhop,
+			  const rimeaddr_t *originator,
+			  const rimeaddr_t *dest,
+			  const rimeaddr_t *prevhop,
 			  uint8_t hops);
 };
 

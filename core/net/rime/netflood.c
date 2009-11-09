@@ -73,45 +73,47 @@ send(struct netflood_conn *c)
 }
 /*---------------------------------------------------------------------------*/
 static void
-recv_from_ipolite(struct ipolite_conn *ipolite, rimeaddr_t *from)
+recv_from_ipolite(struct ipolite_conn *ipolite, const rimeaddr_t *from)
 {
   struct netflood_conn *c = (struct netflood_conn *)ipolite;
-  struct netflood_hdr *hdr = packetbuf_dataptr();
+  struct netflood_hdr hdr;
   uint8_t hops;
   struct queuebuf *queuebuf;
 
-  hops = hdr->hops;
+  memcpy(&hdr, packetbuf_dataptr(), sizeof(struct netflood_hdr));
+  hops = hdr.hops;
 
   /* Remember packet if we need to forward it. */
   queuebuf = queuebuf_new_from_packetbuf();
 
   packetbuf_hdrreduce(sizeof(struct netflood_hdr));
   if(c->u->recv != NULL) {
-    if(!(rimeaddr_cmp(&hdr->originator, &c->last_originator) &&
-	 hdr->originator_seqno <= c->last_originator_seqno)) {
+    if(!(rimeaddr_cmp(&hdr.originator, &c->last_originator) &&
+	 hdr.originator_seqno <= c->last_originator_seqno)) {
 
-      if(c->u->recv(c, from, &hdr->originator, hdr->originator_seqno,
+      if(c->u->recv(c, from, &hdr.originator, hdr.originator_seqno,
 		    hops)) {
 	
 	if(queuebuf != NULL) {
 	  queuebuf_to_packetbuf(queuebuf);
 	  queuebuf_free(queuebuf);
 	  queuebuf = NULL;
-	  hdr = packetbuf_dataptr();
+	  memcpy(&hdr, packetbuf_dataptr(), sizeof(struct netflood_hdr));
 	  
 	  /* Rebroadcast received packet. */
 	  if(hops < HOPS_MAX) {
 	    PRINTF("%d.%d: netflood rebroadcasting %d.%d/%d (%d.%d/%d) hops %d\n",
 		   rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1],
-		   hdr->originator.u8[0], hdr->originator.u8[1],
-		   hdr->originator_seqno,
+		   hdr.originator.u8[0], hdr.originator.u8[1],
+		   hdr.originator_seqno,
 		   c->last_originator.u8[0], c->last_originator.u8[1],
 		   c->last_originator_seqno,
 		  hops);
-	    hdr->hops++;
+	    hdr.hops++;
+	    memcpy(packetbuf_dataptr(), &hdr, sizeof(struct netflood_hdr));
 	    send(c);
-	    rimeaddr_copy(&c->last_originator, &hdr->originator);
-	    c->last_originator_seqno = hdr->originator_seqno;
+	    rimeaddr_copy(&c->last_originator, &hdr.originator);
+	    c->last_originator_seqno = hdr.originator_seqno;
 	  }
 	}
       }

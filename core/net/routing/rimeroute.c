@@ -80,7 +80,7 @@ void uip_log(char *msg);
 #define PACKET_TIMEOUT		(CLOCK_SECOND * RIMEROUTE_CONF_DISCOVERY_TIMEOUT)
 #endif /* RIMEROUTE_CONF_DISCOVERY_TIMEOUT */
 
-static void found_route(struct route_discovery_conn *, rimeaddr_t *);
+static void found_route(struct route_discovery_conn *, const rimeaddr_t *);
 static void route_timed_out(struct route_discovery_conn *);
 
 static int activate(void);
@@ -123,7 +123,7 @@ PROCESS_THREAD(rimeroute_process, ev, data)
 }
 
 static void
-found_route(struct route_discovery_conn *rdc, rimeaddr_t *dest)
+found_route(struct route_discovery_conn *rdc, const rimeaddr_t *dest)
 {
 }
 

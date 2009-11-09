@@ -133,7 +133,7 @@ run_trickle(struct trickle_conn *c)
 }
 /*---------------------------------------------------------------------------*/
 static void
-recv(struct broadcast_conn *bc, rimeaddr_t *from)
+recv(struct broadcast_conn *bc, const rimeaddr_t *from)
 {
   struct trickle_conn *c = (struct trickle_conn *)bc;
   uint16_t seqno = packetbuf_attr(PACKETBUF_ATTR_EPACKET_ID);

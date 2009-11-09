@@ -186,7 +186,7 @@ PROCESS_THREAD(shell_download_process, ev, data)
 }
 /*---------------------------------------------------------------------------*/
 static void
-request_recv(struct runicast_conn *c, rimeaddr_t *from, uint8_t seqno)
+request_recv(struct runicast_conn *c, const rimeaddr_t *from, uint8_t seqno)
 {
   const char *filename;
   uint8_t seq;
@@ -225,13 +225,15 @@ request_recv(struct runicast_conn *c, rimeaddr_t *from, uint8_t seqno)
 }
 /*---------------------------------------------------------------------------*/
 static void
-request_sent(struct runicast_conn *c, rimeaddr_t *to, uint8_t retransmissions)
+request_sent(struct runicast_conn *c, const rimeaddr_t *to,
+	     uint8_t retransmissions)
 {
   process_poll(&shell_download_process);
 }
 /*---------------------------------------------------------------------------*/
 static void
-request_timedout(struct runicast_conn *c, rimeaddr_t *to, uint8_t retransmissions)
+request_timedout(struct runicast_conn *c, const rimeaddr_t *to,
+		 uint8_t retransmissions)
 {
   shell_output_str(&download_command, "download: request timed out", "");
   downloading = 0;

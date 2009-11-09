@@ -115,7 +115,7 @@ send_adv(clock_time_t interval)
 }
 /*---------------------------------------------------------------------------*/
 static void
-adv_packet_received(struct ipolite_conn *ipolite, rimeaddr_t *from)
+adv_packet_received(struct ipolite_conn *ipolite, const rimeaddr_t *from)
 {
   struct announcement_msg *adata = packetbuf_dataptr();
   int i;

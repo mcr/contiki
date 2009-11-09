@@ -42,7 +42,7 @@
 
 #include "sd-arch.h"
 
-#define SD_BLOCK_SIZE				512
+#define SD_DEFAULT_BLOCK_SIZE			512
 #define SD_REGISTER_SIZE			16
 
 /* API return codes. */
@@ -51,17 +51,18 @@
 #define SD_INIT_ERROR_NO_CARD			-1
 #define SD_INIT_ERROR_ARCH			-2
 #define SD_INIT_ERROR_NO_IF_COND		-3
+#define SD_INIT_ERROR_NO_BLOCK_SIZE    -4
 
-#define SD_WRITE_ERROR_NO_CMD_RESPONSE		-4
-#define SD_WRITE_ERROR_NO_BLOCK_RESPONSE	-5
-#define SD_WRITE_ERROR_PROGRAMMING		-6
-#define SD_WRITE_ERROR_TOKEN			-7
-#define SD_WRITE_ERROR_NO_TOKEN			-8
+#define SD_WRITE_ERROR_NO_CMD_RESPONSE		-5
+#define SD_WRITE_ERROR_NO_BLOCK_RESPONSE	-6
+#define SD_WRITE_ERROR_PROGRAMMING		-7
+#define SD_WRITE_ERROR_TOKEN			-8
+#define SD_WRITE_ERROR_NO_TOKEN			-9
 
-#define SD_READ_ERROR_NO_CMD_RESPONSE		-9
-#define SD_READ_ERROR_INVALID_SIZE		-10
-#define SD_READ_ERROR_TOKEN			-11
-#define SD_READ_ERROR_NO_TOKEN			-12
+#define SD_READ_ERROR_NO_CMD_RESPONSE		-10
+#define SD_READ_ERROR_INVALID_SIZE		-11
+#define SD_READ_ERROR_TOKEN			-12
+#define SD_READ_ERROR_NO_TOKEN			-13
 
 /* Type definition. */
 typedef uint32_t sd_offset_t;

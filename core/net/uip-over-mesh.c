@@ -78,7 +78,7 @@ static uip_ipaddr_t netaddr, netmask;
 
 /*---------------------------------------------------------------------------*/
 static void
-recv_data(struct unicast_conn *c, rimeaddr_t *from)
+recv_data(struct unicast_conn *c, const rimeaddr_t *from)
 {
   struct route_entry *e;
   rimeaddr_t source;
@@ -112,7 +112,7 @@ send_data(rimeaddr_t *next)
 }
 /*---------------------------------------------------------------------------*/
 static void
-new_route(struct route_discovery_conn *c, rimeaddr_t *to)
+new_route(struct route_discovery_conn *c, const rimeaddr_t *to)
 {
   struct route_entry *rt;
   

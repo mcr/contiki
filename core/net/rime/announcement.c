@@ -123,7 +123,7 @@ announcement_list(void)
 }
 /*---------------------------------------------------------------------------*/
 void
-announcement_heard(rimeaddr_t *from, uint16_t id, uint16_t value)
+announcement_heard(const rimeaddr_t *from, uint16_t id, uint16_t value)
 {
   struct announcement *a;
   for(a = list_head(announcements); a != NULL; a = a->next) {

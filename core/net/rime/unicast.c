@@ -64,7 +64,7 @@ static const struct packetbuf_attrlist attributes[] =
 
 /*---------------------------------------------------------------------------*/
 static void
-recv_from_broadcast(struct broadcast_conn *broadcast, rimeaddr_t *from)
+recv_from_broadcast(struct broadcast_conn *broadcast, const rimeaddr_t *from)
 {
   struct unicast_conn *c = (struct unicast_conn *)broadcast;
 

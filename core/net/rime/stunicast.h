@@ -82,7 +82,7 @@ struct stunicast_conn;
 #define STUNICAST_ATTRIBUTES  UNICAST_ATTRIBUTES
 
 struct stunicast_callbacks {
-  void (* recv)(struct stunicast_conn *c, rimeaddr_t *from);
+  void (* recv)(struct stunicast_conn *c, const rimeaddr_t *from);
   void (* sent)(struct stunicast_conn *c);
 };
 
@@ -98,11 +98,11 @@ void stunicast_open(struct stunicast_conn *c, uint16_t channel,
 	       const struct stunicast_callbacks *u);
 void stunicast_close(struct stunicast_conn *c);
 
-int stunicast_send_stubborn(struct stunicast_conn *c, rimeaddr_t *receiver,
+int stunicast_send_stubborn(struct stunicast_conn *c, const rimeaddr_t *receiver,
 		      clock_time_t rxmittime);
 void stunicast_cancel(struct stunicast_conn *c);
 
-int stunicast_send(struct stunicast_conn *c, rimeaddr_t *receiver);
+int stunicast_send(struct stunicast_conn *c, const rimeaddr_t *receiver);
 
 void stunicast_set_timer(struct stunicast_conn *c, clock_time_t t);
 

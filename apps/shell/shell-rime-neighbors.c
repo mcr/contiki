@@ -52,7 +52,7 @@ static uint8_t listening_for_neighbors = 0;
 
 /*---------------------------------------------------------------------------*/
 static void
-received_announcement(struct announcement *a, rimeaddr_t *from,
+received_announcement(struct announcement *a, const rimeaddr_t *from,
 		      uint16_t id, uint16_t value)
 {
   struct {
