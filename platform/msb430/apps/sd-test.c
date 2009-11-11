@@ -49,11 +49,13 @@
 PROCESS(sd_test, "SD test process");
 AUTOSTART_PROCESSES(&sd_test);
 
+#define BUF_SIZE	64
+
 PROCESS_THREAD(sd_test, event, data)
 {
   static unsigned long iter;
   static unsigned long offset;
-  char buf[SD_BLOCK_SIZE];
+  char buf[BUF_SIZE];
   static struct etimer et;
   int r, buflen;
 
