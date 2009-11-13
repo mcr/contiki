@@ -68,5 +68,10 @@ struct mac_driver {
   int (* off)(int keep_radio_on);
 };
 
+/* Generic MAC return values. */
+enum {
+  MAC_TX_OK,
+  MAC_TX_ERR,
+};
 
 #endif /* __MAC_H__ */
