@@ -119,16 +119,17 @@ public class RadioConnection {
   /**
    * Removes destination radio.
    *
-   * @param radio
-   *          Radio
+   * @param radio Radio
+   * @return True if radio was removed
    */
-  public void removeDestination(Radio radio) {
+  public boolean removeDestination(Radio radio) {
     int idx = destinations.indexOf(radio);
     if (idx < 0) {
-      return; 
+      return false; 
     }
     destinations.remove(idx);
     destinationDelays.remove(idx);
+    return true;
   }
 
   /**
