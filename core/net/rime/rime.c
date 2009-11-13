@@ -133,24 +133,26 @@ rime_init(const struct mac_driver *m)
 #endif /* ! RIME_CONF_NO_POLITE_ANNOUCEMENTS */
 }
 /*---------------------------------------------------------------------------*/
-void
+int
 rime_output(void)
 {
   struct rime_sniffer *s;
-    
+
   RIMESTATS_ADD(tx);
   packetbuf_compact();
 
   if(rime_mac) {
-    if(rime_mac->send()) {
+    if(rime_mac->send() == MAC_TX_OK) {
       /* Call sniffers, but only if the packet was sent. */
       for(s = list_head(sniffers); s != NULL; s = s->next) {
-	if(s->output_callback != NULL) {
-	  s->output_callback();
-	}
+        if(s->output_callback != NULL) {
+          s->output_callback();
+        }
       }
+      return RIME_OK;
     }
   }
+  return RIME_ERR;
 }
 /*---------------------------------------------------------------------------*/
 /** @} */

@@ -106,7 +106,7 @@ void rime_input(void);
 void rime_driver_send(void);
 
 void rime_set_output(void (*output_function)(void));
-void rime_output(void);
+int rime_output(void);
 
 extern const struct mac_driver *rime_mac;
 
