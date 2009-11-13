@@ -387,6 +387,12 @@ cc2420_send(const void *payload, unsigned short payload_len)
 
   for(i = LOOP_20_SYMBOLS; i > 0; i--) {
     if(SFD_IS_1) {
+      if(!(status() & BV(CC2420_TX_ACTIVE))) {
+        /* SFD went high yet we are not transmitting!
+         * => We started receiving a packet right now */
+        return RADIO_TX_ERR;
+      }
+
 #if CC2420_CONF_TIMESTAMPS
       rtimer_clock_t txtime = timesynch_time();
 #endif /* CC2420_CONF_TIMESTAMPS */
@@ -429,7 +435,7 @@ cc2420_send(const void *payload, unsigned short payload_len)
       }
 
       RELEASE_LOCK();
-      return 0;
+      return RADIO_TX_OK;
     }
   }
 
@@ -444,7 +450,7 @@ cc2420_send(const void *payload, unsigned short payload_len)
   }
 
   RELEASE_LOCK();
-  return -3;			/* Transmission never started! */
+  return RADIO_TX_ERR;          /* Transmission never started! */
 }
 /*---------------------------------------------------------------------------*/
 int
