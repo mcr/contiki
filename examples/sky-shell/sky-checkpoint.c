@@ -75,11 +75,11 @@ PROCESS_THREAD(sky_shell_process, ev, data)
   PROCESS_BEGIN();
 
   serial_shell_init();
-  shell_blink_init();
+  /*shell_blink_init();*/
   shell_file_init();
   shell_coffee_init();
-  shell_ps_init();
-  shell_reboot_init();
+  /*shell_ps_init();*/
+  /*shell_reboot_init();*/
   shell_rime_init();
   /*shell_rime_netcmd_init();*/
   /*shell_rime_ping_init();*/
@@ -87,7 +87,7 @@ PROCESS_THREAD(sky_shell_process, ev, data)
   /*shell_rime_sniff_init();*/
   shell_rime_sendcmd_init();
   shell_download_init();
-  shell_sky_init();
+  /*shell_sky_init();*/
   shell_text_init();
   shell_time_init();
   shell_checkpoint_init();
