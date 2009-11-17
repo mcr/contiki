@@ -40,7 +40,6 @@ import avrora.arch.avr.AVRProperties;
 import avrora.core.SourceMapping;
 import avrora.core.SourceMapping.Location;
 import avrora.sim.AtmelInterpreter;
-import avrora.sim.State;
 import avrora.sim.Simulator.Watch;
 /**
  * @author Joakim Eriksson
