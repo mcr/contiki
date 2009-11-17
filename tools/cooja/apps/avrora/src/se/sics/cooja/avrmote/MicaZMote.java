@@ -45,11 +45,9 @@ import se.sics.cooja.MoteMemory;
 import se.sics.cooja.MoteType;
 import se.sics.cooja.Simulation;
 import se.sics.cooja.motes.AbstractEmulatedMote;
-import se.sics.cooja.mspmote.MspMoteMemory;
 import avrora.arch.avr.AVRProperties;
 import avrora.core.LoadableProgram;
 import avrora.sim.AtmelInterpreter;
-import avrora.sim.Interpreter;
 import avrora.sim.Simulator;
 import avrora.sim.State;
 import avrora.sim.mcu.Microcontroller;
@@ -165,6 +163,7 @@ public class MicaZMote extends AbstractEmulatedMote implements Mote {
 
   /* called when moteID is updated */
   public void idUpdated(int newID) {
+      
   }
 
   public MoteType getType() {

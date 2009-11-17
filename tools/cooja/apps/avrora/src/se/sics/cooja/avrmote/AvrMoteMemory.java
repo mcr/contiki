@@ -40,6 +40,8 @@ import avrora.arch.avr.AVRProperties;
 import avrora.core.SourceMapping;
 import avrora.core.SourceMapping.Location;
 import avrora.sim.AtmelInterpreter;
+import avrora.sim.State;
+import avrora.sim.Simulator.Watch;
 /**
  * @author Joakim Eriksson
  */
@@ -54,6 +56,10 @@ public class AvrMoteMemory implements MoteMemory, AddressMemory {
         memoryMap = map;
         this.interpreter = interpreter;
         this.avrProperties = avrProperties;
+    }
+
+    public void insertWatch(Watch w, int address) {
+        interpreter.getSimulator().insertWatch(w, address);
     }
     
     public void clearMemory() {
