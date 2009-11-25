@@ -610,7 +610,9 @@ public class Simulation extends Observable implements Runnable {
       if (element.getName().equals("mote")) {
         Class<? extends Mote> moteClass = myGUI.tryLoadClass(this, Mote.class,
             element.getText().trim());
-
+        if (moteClass == null) {
+          throw new Exception("Could not load mote class: " + element.getText().trim());
+        }
         Mote mote = moteClass.getConstructor((Class[]) null).newInstance((Object[]) null);
         if (mote.setConfigXML(this, element.getChildren(), visAvailable)) {
           addMote(mote);

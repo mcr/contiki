@@ -302,7 +302,7 @@ public class GUI extends Observable {
 
   private Vector<File> currentProjectDirs = new Vector<File>();
 
-  private ClassLoader projectDirClassLoader;
+  public ClassLoader projectDirClassLoader;
 
   private Vector<Class<? extends MoteType>> moteTypeClasses = new Vector<Class<? extends MoteType>>();
 
@@ -2846,12 +2846,9 @@ public class GUI extends Observable {
   /**
    * Help method that tries to load and initialize a class with given name.
    *
-   * @param <N>
-   *          Class extending given class type
-   * @param classType
-   *          Class type
-   * @param className
-   *          Class name
+   * @param <N> Class extending given class type
+   * @param classType Class type
+   * @param className Class name
    * @return Class extending given class type or null if not found
    */
   public <N extends Object> Class<? extends N> tryLoadClass(
