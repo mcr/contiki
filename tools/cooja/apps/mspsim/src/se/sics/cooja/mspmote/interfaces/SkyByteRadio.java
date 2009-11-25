@@ -173,7 +173,11 @@ public class SkyByteRadio extends Radio implements CustomDataRadio {
 
       /*logger.info("Delivering buffered packet data now: " + mote.getSimulation().getSimulationTime());*/
       for (byte b: crossBufferedData) {
-        cc2420.receivedByte(b);
+        if (isInterfered()) {
+          cc2420.receivedByte((byte)0xFF);
+        } else {
+          cc2420.receivedByte(b);
+        }
       }
       mote.requestImmediateWakeup();
       crossBufferedData = null;
@@ -218,7 +222,11 @@ public class SkyByteRadio extends Radio implements CustomDataRadio {
 
     /* Delivering data immediately */
     for (byte b: packetData) {
-      cc2420.receivedByte(b);
+      if (isInterfered()) {
+        cc2420.receivedByte((byte)0xFF);
+      } else {
+        cc2420.receivedByte(b);
+      }
     }
     mote.requestImmediateWakeup();
   }
@@ -235,7 +243,11 @@ public class SkyByteRadio extends Radio implements CustomDataRadio {
   public void receiveCustomData(Object data) {
     if (data instanceof CC2420RadioByte) {
       lastIncomingByte = (CC2420RadioByte) data;
-      cc2420.receivedByte(lastIncomingByte.getPacketData()[0]);
+      if (isInterfered()) {
+        cc2420.receivedByte((byte)0xFF);
+      } else {
+        cc2420.receivedByte(lastIncomingByte.getPacketData()[0]);
+      }
       mote.requestImmediateWakeup();
     }
   }
