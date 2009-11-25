@@ -186,8 +186,10 @@ public abstract class AbstractRadioMedium extends RadioMedium {
     for (RadioConnection conn : activeConnections) {
       if (conn.isDestination(radio)) {
         conn.addInterfered(radio);
+        if (!radio.isInterfered()) {
+          radio.interfereAnyReception();
+        }
       }
-      radio.interfereAnyReception();
     }
   }
 
