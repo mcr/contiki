@@ -4263,7 +4263,8 @@ public class GUI extends Observable {
         }
       };
       fc.setFileFilter(jarFilter);
-      fc.setSelectedFile(new File("cooja_simulation.jar"));
+      File suggest = new File(getExternalToolsSetting("EXECUTE_JAR_LAST", "cooja_simulation.jar"));
+      fc.setSelectedFile(suggest);
       int returnVal = fc.showSaveDialog(GUI.getTopParentContainer());
       if (returnVal != JFileChooser.APPROVE_OPTION) {
         return;
@@ -4283,6 +4284,7 @@ public class GUI extends Observable {
       }
       
       final File finalOutputFile = outputFile;
+      setExternalToolsSetting("EXECUTE_JAR_LAST", outputFile.getPath());
       new Thread() {
         public void run() {
           try {
