@@ -224,6 +224,9 @@ public class TrafficVisualizerSkin implements VisualizerSkin {
       /* Paint history in gray */
       RadioConnection[] historyArr = history.toArray(new RadioConnection[0]);
       for (RadioConnection conn : historyArr) {
+        if (conn == null) {
+          continue;
+        }
         g.setColor(COLOR_HISTORY);
         Radio source = conn.getSource();
         Point sourcePoint = visualizer.transformPositionToPixel(source.getPosition());
