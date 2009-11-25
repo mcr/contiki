@@ -144,6 +144,9 @@ public class SkyByteRadio extends Radio implements CustomDataRadio {
         if (isReceiverOn()) {
           lastEvent = RadioEvent.HW_ON;
         } else {
+          if (isTransmitting()) {
+            logger.fatal("Turning off radio while transmitting");
+          }
           lastEvent = RadioEvent.HW_OFF;
         }
         lastEventTime = SkyByteRadio.this.mote.getSimulation().getSimulationTime();
