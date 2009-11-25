@@ -41,6 +41,7 @@ import org.apache.log4j.Logger;
 import org.jdom.Element;
 
 import se.sics.cooja.*;
+import se.sics.cooja.MoteType.MoteTypeCreationException;
 import se.sics.cooja.interfaces.ApplicationRadio;
 import se.sics.cooja.interfaces.MoteID;
 import se.sics.cooja.interfaces.Position;
@@ -67,7 +68,8 @@ public abstract class AbstractApplicationMoteType implements MoteType {
     this.description = "Application Mote Type #" + identifier;
   }
 
-  public boolean configureAndInit(Container parentContainer, Simulation simulation, boolean visAvailable) {
+  public boolean configureAndInit(Container parentContainer, Simulation simulation, boolean visAvailable) 
+  throws MoteTypeCreationException {
     if (identifier == null) {
       /* Create unique identifier */
       int counter = 0;
@@ -202,7 +204,8 @@ public abstract class AbstractApplicationMoteType implements MoteType {
   }
 
   public boolean setConfigXML(Simulation simulation,
-      Collection<Element> configXML, boolean visAvailable) {
+      Collection<Element> configXML, boolean visAvailable)
+  throws MoteTypeCreationException {
     for (Element element : configXML) {
       String name = element.getName();
       if (name.equals("identifier")) {
