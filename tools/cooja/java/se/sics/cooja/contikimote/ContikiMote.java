@@ -31,6 +31,7 @@
 
 package se.sics.cooja.contikimote;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Vector;
 
@@ -174,16 +175,10 @@ public class ContikiMote extends AbstractWakeupMote implements Mote {
    * @return Current simulation config
    */
   public Collection<Element> getConfigXML() {
-    Vector<Element> config = new Vector<Element>();
-
+    ArrayList<Element> config = new ArrayList<Element>();
     Element element;
 
-    // Mote type identifier
-    element = new Element("motetype_identifier");
-    element.setText(getType().getIdentifier());
-    config.add(element);
-
-    // Mote interfaces
+    /* Mote interfaces */
     for (MoteInterface moteInterface: getInterfaces().getInterfaces()) {
       element = new Element("interface_config");
       element.setText(moteInterface.getClass().getName());
@@ -200,15 +195,14 @@ public class ContikiMote extends AbstractWakeupMote implements Mote {
 
   public boolean setConfigXML(Simulation simulation, Collection<Element> configXML, boolean visAvailable) {
     this.simulation = simulation;
+    myMemory = myType.createInitialMemory();
+    myInterfaceHandler = new MoteInterfaceHandler(this, myType.getMoteInterfaceClasses());
 
     for (Element element: configXML) {
       String name = element.getName();
 
       if (name.equals("motetype_identifier")) {
-        myType = (ContikiMoteType) simulation.getMoteType(element.getText());
-        myMemory = myType.createInitialMemory();
-        myInterfaceHandler = new MoteInterfaceHandler(this, myType.getMoteInterfaceClasses());
-
+        /* Ignored: handled by simulation */
       } else if (name.equals("interface_config")) {
         Class<? extends MoteInterface> moteInterfaceClass =
           simulation.getGUI().tryLoadClass(this, MoteInterface.class, element.getText().trim());
