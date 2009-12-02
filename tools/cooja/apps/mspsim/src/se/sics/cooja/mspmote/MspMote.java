@@ -55,6 +55,7 @@ import se.sics.cooja.Watchpoint;
 import se.sics.cooja.WatchpointMote;
 import se.sics.cooja.interfaces.IPAddress;
 import se.sics.cooja.motes.AbstractEmulatedMote;
+import se.sics.cooja.mspmote.interfaces.MspSerial;
 import se.sics.cooja.mspmote.plugins.MspBreakpointContainer;
 import se.sics.mspsim.cli.CommandHandler;
 import se.sics.mspsim.cli.LineListener;
@@ -412,6 +413,12 @@ public abstract class MspMote extends AbstractEmulatedMote implements Mote, Watc
         String intfClass = element.getText().trim();
         if (intfClass.equals("se.sics.cooja.mspmote.interfaces.MspIPAddress")) {
           intfClass = IPAddress.class.getName();
+        }
+        if (intfClass.equals("se.sics.cooja.mspmote.interfaces.ESBLog")) {
+          intfClass = MspSerial.class.getName();
+        }
+        if (intfClass.equals("se.sics.cooja.mspmote.interfaces.SkySerial")) {
+          intfClass = MspSerial.class.getName();
         }
         Class<? extends MoteInterface> moteInterfaceClass = simulation.getGUI().tryLoadClass(
               this, MoteInterface.class, intfClass);
