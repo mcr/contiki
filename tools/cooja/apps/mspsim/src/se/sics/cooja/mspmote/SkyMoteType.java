@@ -126,7 +126,7 @@ public class SkyMoteType extends MspMoteType {
         setDescription("Sky Mote Type #" + getIdentifier());
       }
 
-      return SkyCompileDialog.showDialog(parentContainer, simulation, this);
+      return MspCompileDialog.showDialog(parentContainer, simulation, this, "sky");
     }
 
     /* Not visualized: Compile Contiki immediately */

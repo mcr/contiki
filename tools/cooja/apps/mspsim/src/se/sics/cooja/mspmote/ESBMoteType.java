@@ -130,7 +130,7 @@ public class ESBMoteType extends MspMoteType {
         setDescription("ESB Mote Type #" + getIdentifier());
       }
 
-      return ESBCompileDialog.showDialog(parentContainer, simulation, this);
+      return MspCompileDialog.showDialog(parentContainer, simulation, this, "esb");
     }
 
     /* Not visualized: Compile Contiki immediately */
