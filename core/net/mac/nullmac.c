@@ -47,7 +47,7 @@ static void (* receiver_callback)(const struct mac_driver *);
 static int
 send_packet(void)
 {
-  if (radio->send(packetbuf_hdrptr(), packetbuf_totlen()) == RADIO_TX_OK) {
+  if(radio->send(packetbuf_hdrptr(), packetbuf_totlen()) == RADIO_TX_OK) {
     return MAC_TX_OK;
   }
   return MAC_TX_ERR;
