@@ -295,7 +295,6 @@ powercycle_turn_radio_on(void)
 static char
 powercycle(struct rtimer *t, void *ptr)
 {
-  int r;
 #if WITH_TIMESYNCH
   rtimer_clock_t should_be, adjust;
 #endif /* WITH_TIMESYNCH */
