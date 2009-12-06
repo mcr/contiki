@@ -511,10 +511,6 @@ send_packet(void)
     return MAC_TX_ERR;
   }
 
-  /* By setting we_are_sending to one, we ensure that the rtimer
-     powercycle interrupt do not interfere with us sending the packet. */
-  we_are_sending = 1;
-
 #if WITH_STREAMING
   if(is_streaming == 1 &&
      (rimeaddr_cmp(packetbuf_addr(PACKETBUF_ADDR_RECEIVER),
@@ -576,6 +572,10 @@ send_packet(void)
   }
 #endif /* WITH_ENCOUNTER_OPTIMIZATION */
 
+  /* By setting we_are_sending to one, we ensure that the rtimer
+     powercycle interrupt do not interfere with us sending the packet. */
+  we_are_sending = 1;
+  
   t0 = RTIMER_NOW();
   strobes = 0;
 
