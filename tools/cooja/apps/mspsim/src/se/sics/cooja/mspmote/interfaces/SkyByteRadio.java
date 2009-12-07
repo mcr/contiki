@@ -436,6 +436,12 @@ public class SkyByteRadio extends Radio implements CustomDataRadio {
   }
 
   public boolean isReceiverOn() {
-    return mote.skyNode.radio.getMode() != CC2420.MODE_TXRX_OFF;
+    if (mote.skyNode.radio.getMode() == CC2420.MODE_POWER_OFF) {
+      return false;
+    }
+    if (mote.skyNode.radio.getMode() == CC2420.MODE_TXRX_OFF) {
+      return false;
+    }
+    return true;
   }
 }
