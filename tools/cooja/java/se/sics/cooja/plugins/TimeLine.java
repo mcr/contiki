@@ -743,6 +743,9 @@ public class TimeLine extends VisPlugin {
             if (moteRadio.isTransmitting()) {
               ev = new RadioRXTXEvent(
                   simulation.getSimulationTime(), RXTXRadioEvent.TRANSMITTING);
+            } else if (!moteRadio.isReceiverOn()) {
+              ev = new RadioRXTXEvent(
+                  simulation.getSimulationTime(), RXTXRadioEvent.IDLE);
             } else if (moteRadio.isInterfered()) {
               ev = new RadioRXTXEvent(
                   simulation.getSimulationTime(), RXTXRadioEvent.INTERFERED);
