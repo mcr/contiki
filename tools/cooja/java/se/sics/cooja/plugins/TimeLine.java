@@ -340,6 +340,11 @@ public class TimeLine extends VisPlugin {
               w, 1
           );
           timeline.scrollRectToVisible(r);
+          
+          /* Time ruler */
+          mousePixelPositionX = centerPixel;
+          mouseDownPixelPositionX = centerPixel;
+          mousePixelPositionY = timeline.getHeight();
         }
       });
     }
@@ -371,6 +376,12 @@ public class TimeLine extends VisPlugin {
               centerPixel - w/2, 0, 
               w, 1
           );
+
+          /* Time ruler */
+          mousePixelPositionX = centerPixel;
+          mouseDownPixelPositionX = centerPixel;
+          mousePixelPositionY = timeline.getHeight();
+          
           timeline.scrollRectToVisible(r);
         }
       });
@@ -577,7 +588,15 @@ public class TimeLine extends VisPlugin {
         all.onTimeTX += stats.onTimeTX;
         all.onTimeInterfered += stats.onTimeInterfered;
       }
-      logger.info("SUMMARY");
+      all.onTimeBlueLED /= allStats.size();
+      all.onTimeGreenLED /= allStats.size();
+      all.onTimeBlueLED /= allStats.size();
+      all.radioOn /= allStats.size();
+      all.onTimeRX /= allStats.size();
+      all.onTimeTX /= allStats.size();
+      all.onTimeInterfered /= allStats.size();
+
+      logger.info("SIMULATION AVERAGE:");
       logger.info(all.toString());
     }
   };
