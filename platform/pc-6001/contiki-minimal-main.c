@@ -43,7 +43,7 @@
 #include "program-handler.h"
 #include "tinysample-dsc.h"
 
-extern struct process *tiny_process;
+PROCESS_NAME(tiny_process);
 /*---------------------------------------------------------------------------*/
 int
 main(void)

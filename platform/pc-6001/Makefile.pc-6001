@@ -102,15 +102,15 @@ CONTIKI_CASMFILES += ctk-conio_arch-asm.cS libconio_arch-asm.cS\
 
 CONTIKI_SOURCEFILES += $(CONTIKI_TARGET_SOURCEFILES)
 
-CLEAN += *.rom *.p6 *.asm
+CLEAN += *.rom *.p6
 
 contiki: $(HEX2BIN) contiki.p6
 
 .SUFFIXES:
 
-%.p6:	%.ihx
+%.p6:	$(OBJECTDIR)/%.ihx
 	$(HEX2BIN) $(HEX2BINFLAGS) $< $(HEX2BINDIR)/ihx/suffix.ihx
-%.rom:	%.ihx
+%.rom:	$(OBJECTDIR)/%.ihx
 	$(HEX2BIN) $(HEX2BINFLAGS) $<
 
 $(HEX2BIN):
