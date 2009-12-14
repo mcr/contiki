@@ -652,6 +652,21 @@ public class TimeLine extends VisPlugin {
       plugin.trySelectTime(popupLocation.x*currentPixelDivisor);
     }
   };
+  private Action logListenerAction = new AbstractAction("to Log Listener") {
+    public void actionPerformed(ActionEvent e) {
+      LogListener plugin = (LogListener) simulation.getGUI().getStartedPlugin(LogListener.class.getName());
+      if (plugin == null) {
+        logger.fatal("No Log Listener plugin");
+        return;
+      }
+      if (popupLocation == null) {
+        return;
+      }
+
+      /* Select simulation time */
+      plugin.trySelectTime(popupLocation.x*currentPixelDivisor);
+    }
+  };
   
   private void numberMotesWasUpdated() {
     /* Plugin title */
@@ -1050,6 +1065,7 @@ public class TimeLine extends VisPlugin {
       popupMenu.addSeparator();
 
       popupMenu.add(new JMenuItem(radioLoggerAction));
+      popupMenu.add(new JMenuItem(logListenerAction));
 
       addMouseListener(new MouseAdapter() {
         public void mouseClicked(MouseEvent e) {
