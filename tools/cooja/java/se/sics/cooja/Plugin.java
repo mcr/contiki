@@ -54,6 +54,16 @@ public interface Plugin {
    */
   public JInternalFrame getGUI();
 
+
+  /**
+   * This method is called to activate a new plugin, after constructing it.
+   * If a simulation is loaded, this method is called after {@link #setConfigXML(Collection, boolean)}.
+   * 
+   * @see #setConfigXML(Collection, boolean)
+   * @see #closePlugin()
+   */
+  public void startPlugin();
+
   /**
    * This method is called when an opened plugin is about to close.
    * It should release any resources such as registered observers or
