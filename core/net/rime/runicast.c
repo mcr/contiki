@@ -213,7 +213,8 @@ int
 runicast_send(struct runicast_conn *c, const rimeaddr_t *receiver,
 	      uint8_t max_retransmissions)
 {
-  if (runicast_is_transmitting(c)) {
+  int ret;
+  if(runicast_is_transmitting(c)) {
     PRINTF("%d.%d: runicast: already transmitting\n",
         rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1]);
     return 0;
@@ -228,7 +229,11 @@ runicast_send(struct runicast_conn *c, const rimeaddr_t *receiver,
   PRINTF("%d.%d: runicast: sending packet %d\n",
 	 rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1],
 	 c->sndnxt);
-  return stunicast_send_stubborn(&c->c, receiver, REXMIT_TIME);
+  ret = stunicast_send_stubborn(&c->c, receiver, REXMIT_TIME);
+  if(!ret) {
+    c->is_tx = 0;
+  }
+  return ret;
 }
 /*---------------------------------------------------------------------------*/
 /** @} */
