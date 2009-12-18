@@ -109,7 +109,11 @@ found_route(struct route_discovery_conn *rdc, const rimeaddr_t *dest)
     queuebuf_to_packetbuf(c->queued_data);
     queuebuf_free(c->queued_data);
     c->queued_data = NULL;
-    multihop_send(&c->multihop, dest);
+    if(multihop_send(&c->multihop, dest)) {
+      c->cb->sent(c);
+    } else {
+      c->cb->timedout(c);
+    }
   }
 }
 /*---------------------------------------------------------------------------*/
@@ -177,7 +181,7 @@ mesh_send(struct mesh_conn *c, const rimeaddr_t *to)
 			     PACKET_TIMEOUT);
     return 0;
   }
-
+  c->cb->sent(c);
   return 1;
 }
 /*---------------------------------------------------------------------------*/
