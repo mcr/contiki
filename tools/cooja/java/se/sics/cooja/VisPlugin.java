@@ -32,10 +32,11 @@
 package se.sics.cooja;
 
 import java.util.Collection;
+
 import javax.swing.JInternalFrame;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
-import javax.swing.event.InternalFrameListener;
+
 import org.jdom.Element;
 
 import se.sics.cooja.plugins.SimControl;
@@ -103,6 +104,11 @@ public abstract class VisPlugin extends JInternalFrame implements Plugin {
     return tag;
   }
 
-  public class PluginRequiresVisualizationException extends RuntimeException {
+  public void startPlugin() {
+  }
+  public void closePlugin() {
+  }
+  
+  public static class PluginRequiresVisualizationException extends RuntimeException {
   }
 }

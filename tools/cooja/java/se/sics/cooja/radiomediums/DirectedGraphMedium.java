@@ -318,7 +318,6 @@ public class DirectedGraphMedium extends AbstractRadioMedium {
           }
         }
         if (otherConnection != null) {
-          otherConnection.removeDestination(dest.radio);
           otherConnection.addInterfered(dest.radio);
         }
         continue;

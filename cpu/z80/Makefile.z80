@@ -19,24 +19,28 @@ CUSTOM_RULE_ALLOBJS_TO_TARGETLIB=1
 CUSTOM_RULE_LINK=1
 
 ### Default flags
-CFLAGS  += --std-c99 -mz80
-# --peep-file $(CONTIKI_CPU)/z80peephole.def
+CFLAGS  += --std-c99 -mz80 --opt-code-size
+CFLAGS	+= --peep-file $(CONTIKI_CPU)/z80peephole.def --fverbose-asm
 ASFLAGS +=
 LDFLAGS += -mz80 --out-fmt-ihx --no-std-crt0
 AROPTS   = -a
 
+ifdef CONTIKI_PROJECT
+  CFLAGS += -DAUTOSTART_ENABLE=1
+  CONTIKI_SOURCEFILES += $(CONTIKI_PROJECT).c
+endif
+
 ### CPU-dependent cleanup files
-CLEAN += *.lnk *.sym *.lib contiki.ihx
+CLEAN += *.ihx *.lnk *.sym contiki-$(TARGET).lib *.$(TARGET)
 
 ### CPU-dependent directories
 CONTIKI_CPU_DIRS = . dev lib loader
 
 ### CPU-dependent source files
 CONTIKI_SOURCEFILES += strcasecmp.c mtarch.c uip_arch.c \
-	libconio_z80.c log-conio.c rs232.c \
-	mef.c
+	libconio_z80.c log-conio.c rs232.c
+
 CONTIKI_ASMFILES += uip_arch-asm.S crt0.S 
-#crt-prg.S
 
 CONTIKI_ASMOBJECTFILES = ${addprefix $(OBJECTDIR)/,$(CONTIKI_ASMFILES:.S=.o)}
 
@@ -69,17 +73,11 @@ contiki-$(TARGET).lib: $(CONTIKI_OBJECTFILES) $(PROJECT_OBJECTFILES) $(CONTIKI_A
 	rm -f $@
 	for target in $^; do echo $$target >> $@; done
 
+#CUSTOM_RULE_LINK (workaround for compiling examples)
+$(CONTIKI_PROJECT): $(CONTIKI_PROJECT).ihx
+	mv $(CONTIKI_PROJECT).ihx $(CONTIKI_PROJECT).$(TARGET)
+
 #CUSTOM_RULE_LINK
-contiki.ihx: contiki-$(TARGET).lib $(OBJECTDIR)/crt0.o
+%.ihx: contiki-$(TARGET).lib
 	$(CC) $(LDFLAGS)  -o $@ $(OBJECTDIR)/crt0.o -lcontiki-$(TARGET).lib
-	$(LD) -nf contiki
-
-LDPFLAGS = -mz80 --out-fmt-ihx --no-std-crt0 --code-loc 0 --data-loc 0
-
-test.ihx: contiki-$(TARGET).lib $(OBJECTDIR)/crt-prg.o
-	$(CC) $(LDPFLAGS)  -o $@ $(OBJECTDIR)/crt-prg.o -lcontiki-$(TARGET).lib
-	$(LD) -nf test
-
-%.ihx: contiki-$(TARGET).lib $(OBJECTDIR)/%*.o
-	$(CC) $(LDPFLAGS)  -o $@ $(OBJECTDIR)/$*.o -lcontiki-$(TARGET).lib
 	$(LD) -nf $*

@@ -47,9 +47,9 @@ import se.sics.cooja.interfaces.Position;
 import se.sics.cooja.interfaces.RimeAddress;
 import se.sics.cooja.mspmote.interfaces.ESBButton;
 import se.sics.cooja.mspmote.interfaces.ESBLED;
-import se.sics.cooja.mspmote.interfaces.ESBLog;
 import se.sics.cooja.mspmote.interfaces.MspClock;
 import se.sics.cooja.mspmote.interfaces.MspMoteID;
+import se.sics.cooja.mspmote.interfaces.MspSerial;
 import se.sics.cooja.mspmote.interfaces.TR1001Radio;
 
 @ClassDescription("ESB Mote Type")
@@ -130,7 +130,7 @@ public class ESBMoteType extends MspMoteType {
         setDescription("ESB Mote Type #" + getIdentifier());
       }
 
-      return ESBCompileDialog.showDialog(parentContainer, simulation, this);
+      return MspCompileDialog.showDialog(parentContainer, simulation, this, "esb");
     }
 
     /* Not visualized: Compile Contiki immediately */
@@ -192,7 +192,7 @@ public class ESBMoteType extends MspMoteType {
         Position.class,
         RimeAddress.class,
         IPAddress.class,
-        ESBLog.class,
+        MspSerial.class,
         MspClock.class,
         ESBLED.class,
         ESBButton.class,

@@ -82,6 +82,7 @@ import javax.swing.DefaultDesktopManager;
 import javax.swing.InputMap;
 import javax.swing.JApplet;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
@@ -266,6 +267,8 @@ public class GUI extends Observable {
     "COMMAND_VAR_NAME_ADDRESS",
     "COMMAND_DATA_START", "COMMAND_DATA_END",
     "COMMAND_BSS_START", "COMMAND_BSS_END",
+    
+    "HIDE_WARNINGS"
   };
 
   private static final int FRAME_NEW_OFFSET = 30;
@@ -299,7 +302,7 @@ public class GUI extends Observable {
 
   private Vector<File> currentProjectDirs = new Vector<File>();
 
-  private ClassLoader projectDirClassLoader;
+  public ClassLoader projectDirClassLoader;
 
   private Vector<Class<? extends MoteType>> moteTypeClasses = new Vector<Class<? extends MoteType>>();
 
@@ -1580,23 +1583,16 @@ public class GUI extends Observable {
    * @param mote Mote
    */
   public void closeMotePlugins(Mote mote) {
-    Vector<Plugin> pluginsToRemove = new Vector<Plugin>();
-
-    for (Plugin startedPlugin : startedPlugins) {
-      int pluginType = startedPlugin.getClass().getAnnotation(PluginType.class).value();
-
+    for (Plugin p: startedPlugins.toArray(new Plugin[0])) {
+      int pluginType = p.getClass().getAnnotation(PluginType.class).value();
       if (pluginType != PluginType.MOTE_PLUGIN) {
         continue;
       }
 
-      Mote pluginMote = (Mote) startedPlugin.getTag();
+      Mote pluginMote = (Mote) p.getTag();
       if (pluginMote == mote) {
-        pluginsToRemove.add(startedPlugin);
+        removePlugin(p, false);
       }
-    }
-
-    for (Plugin pluginToRemove: pluginsToRemove) {
-      removePlugin(pluginToRemove, false);
     }
   }
 
@@ -1644,10 +1640,10 @@ public class GUI extends Observable {
    * @param argMote Plugin mote argument
    * @return Started plugin
    */
-  public Plugin tryStartPlugin(final Class<? extends Plugin> pluginClass,
-      final GUI argGUI, final Simulation argSimulation, final Mote argMote) {
+  private Plugin tryStartPlugin(final Class<? extends Plugin> pluginClass,
+      final GUI argGUI, final Simulation argSimulation, final Mote argMote, boolean activate) {
     try {
-      return startPlugin(pluginClass, argGUI, argSimulation, argMote);
+      return startPlugin(pluginClass, argGUI, argSimulation, argMote, activate);
     } catch (PluginConstructionException ex) {
       if (GUI.isVisualized()) {
         GUI.showErrorDialog(GUI.getTopParentContainer(), "Error when starting plugin", ex, false);
@@ -1667,6 +1663,18 @@ public class GUI extends Observable {
     return null;
   }
 
+  public Plugin tryStartPlugin(final Class<? extends Plugin> pluginClass,
+      final GUI argGUI, final Simulation argSimulation, final Mote argMote) {
+    return tryStartPlugin(pluginClass, argGUI, argSimulation, argMote, true);
+  }
+
+  public Plugin startPlugin(final Class<? extends Plugin> pluginClass,
+      final GUI argGUI, final Simulation argSimulation, final Mote argMote) 
+  throws PluginConstructionException 
+  {
+    return startPlugin(pluginClass, argGUI, argSimulation, argMote, true);
+  }
+
   /**
    * Starts given plugin. If visualized, the plugin is also shown.
    * 
@@ -1678,8 +1686,8 @@ public class GUI extends Observable {
    * @return Started plugin
    * @throws PluginConstructionException At errors
    */
-  public Plugin startPlugin(final Class<? extends Plugin> pluginClass,
-      final GUI argGUI, final Simulation argSimulation, final Mote argMote)
+  private Plugin startPlugin(final Class<? extends Plugin> pluginClass,
+      final GUI argGUI, final Simulation argSimulation, final Mote argMote, boolean activate)
   throws PluginConstructionException
   {
 
@@ -1747,15 +1755,19 @@ public class GUI extends Observable {
       throw ex;
     }
 
+    if (activate) {
+      plugin.startPlugin();
+    }
+
     // Add to active plugins list
     startedPlugins.add(plugin);
     updateGUIComponentState();
 
     // Show plugin if visualizer type
-    if (plugin.getGUI() != null) {
+    if (activate && plugin.getGUI() != null) {
       myGUI.showPlugin(plugin);
     }
-
+    
     return plugin;
   }
 
@@ -2032,25 +2044,38 @@ public class GUI extends Observable {
 
   /**
    * Creates a new mote type of the given mote type class.
-   *
-   * @param moteTypeClass
-   *          Mote type class
+   * This may include displaying a dialog for user configurations.
+   * 
+   * If mote type is created successfully, the add motes dialog will appear.
+   * 
+   * @param moteTypeClass Mote type class
    */
   public void doCreateMoteType(Class<? extends MoteType> moteTypeClass) {
+    doCreateMoteType(moteTypeClass, true);
+  }
+  
+  /**
+   * Creates a new mote type of the given mote type class.
+   * This may include displaying a dialog for user configurations.
+   * 
+   * @param moteTypeClass Mote type class
+   * @param addMotes Show add motes dialog after successfully adding mote type  
+   */
+  public void doCreateMoteType(Class<? extends MoteType> moteTypeClass, boolean addMotes) {
     if (mySimulation == null) {
       logger.fatal("Can't create mote type (no simulation)");
       return;
     }
-
-    // Stop simulation (if running)
     mySimulation.stopSimulation();
 
     // Create mote type
     MoteType newMoteType = null;
-    boolean moteTypeOK = false;
     try {
       newMoteType = moteTypeClass.newInstance();
-      moteTypeOK = newMoteType.configureAndInit(GUI.getTopParentContainer(), mySimulation, isVisualized());
+      if (!newMoteType.configureAndInit(GUI.getTopParentContainer(), mySimulation, isVisualized())) {
+        return;
+      }
+      mySimulation.addMoteType(newMoteType);
     } catch (Exception e) {
       logger.fatal("Exception when creating mote type", e);
       if (isVisualized()) {
@@ -2059,11 +2084,8 @@ public class GUI extends Observable {
       return;
     }
 
-    // Add mote type to simulation
-    if (moteTypeOK) {
-      mySimulation.addMoteType(newMoteType);
-
-      /* Allow user to immediately add motes */
+    /* Allow user to immediately add motes */
+    if (addMotes) {
       doAddMotes(newMoteType);
     }
   }
@@ -2115,6 +2137,7 @@ public class GUI extends Observable {
     // Delete simulation
     mySimulation.deleteObservers();
     mySimulation.stopSimulation();
+    mySimulation.removed();
 
     /* Clear current mote relations */
     MoteRelation relations[] = getMoteRelations();
@@ -2214,6 +2237,8 @@ public class GUI extends Observable {
       }
     }
 
+    addToFileHistory(configFile);
+
     final JDialog progressDialog;
     final String progressTitle = configFile == null
     ? "Loading" : ("Loading " + configFile.getAbsolutePath());
@@ -2223,18 +2248,7 @@ public class GUI extends Observable {
 
       progressDialog = new RunnableInEDT<JDialog>() {
         public JDialog work() {
-          final JDialog progressDialog;
-
-          if (GUI.getTopParentContainer() instanceof Window) {
-            progressDialog = new JDialog((Window) GUI.getTopParentContainer(), progressTitle, ModalityType.APPLICATION_MODAL);
-          } else if (GUI.getTopParentContainer() instanceof Frame) {
-            progressDialog = new JDialog((Frame) GUI.getTopParentContainer(), progressTitle, ModalityType.APPLICATION_MODAL);
-          } else if (GUI.getTopParentContainer() instanceof Dialog) {
-            progressDialog = new JDialog((Dialog) GUI.getTopParentContainer(), progressTitle, ModalityType.APPLICATION_MODAL);
-          } else {
-            logger.warn("No parent container");
-            progressDialog = new JDialog((Frame) null, progressTitle, ModalityType.APPLICATION_MODAL);
-          }
+          final JDialog progressDialog = new JDialog((Window) GUI.getTopParentContainer(), progressTitle, ModalityType.APPLICATION_MODAL);
 
           JPanel progressPanel = new JPanel(new BorderLayout());
           JProgressBar progressBar;
@@ -2252,9 +2266,6 @@ public class GUI extends Observable {
               if (loadThread.isAlive()) {
                 loadThread.interrupt();
                 doRemoveSimulation(false);
-              }
-              if (progressDialog.isDisplayable()) {
-                progressDialog.dispose();
               }
             }
           });
@@ -2293,9 +2304,19 @@ public class GUI extends Observable {
       try {
         shouldRetry = false;
         myGUI.doRemoveSimulation(false);
+        PROGRESS_WARNINGS.clear();
         newSim = loadSimulationConfig(fileToLoad, quick);
         myGUI.setSimulation(newSim, false);
-        addToFileHistory(fileToLoad);
+        
+        /* Optionally show compilation warnings */
+        boolean hideWarn = Boolean.parseBoolean(
+            GUI.getExternalToolsSetting("HIDE_WARNINGS", "false")
+        );
+        if (quick && !hideWarn && !PROGRESS_WARNINGS.isEmpty()) {
+          showWarningsDialog(frame, PROGRESS_WARNINGS.toArray(new String[0]));
+        }
+        PROGRESS_WARNINGS.clear();
+        
       } catch (UnsatisfiedLinkError e) {
         shouldRetry = showErrorDialog(GUI.getTopParentContainer(), "Simulation load error", e, true);
       } catch (SimulationCreationException e) {
@@ -2343,12 +2364,23 @@ public class GUI extends Observable {
           try {
             shouldRetry = false;
             myGUI.doRemoveSimulation(false);
+            PROGRESS_WARNINGS.clear();
             Simulation newSim = loadSimulationConfig(root, true, new Long(randomSeed));
             myGUI.setSimulation(newSim, false);
 
             if (autoStart) {
               newSim.startSimulation();
             }
+            
+            /* Optionally show compilation warnings */
+            boolean hideWarn = Boolean.parseBoolean(
+                GUI.getExternalToolsSetting("HIDE_WARNINGS", "false")
+            );
+            if (!hideWarn && !PROGRESS_WARNINGS.isEmpty()) {
+              showWarningsDialog(frame, PROGRESS_WARNINGS.toArray(new String[0]));
+            }
+            PROGRESS_WARNINGS.clear();
+            
           } catch (UnsatisfiedLinkError e) {
             shouldRetry = showErrorDialog(frame, "Simulation reload error", e, true);
 
@@ -2379,9 +2411,6 @@ public class GUI extends Observable {
         if (loadThread.isAlive()) {
           loadThread.interrupt();
           doRemoveSimulation(false);
-        }
-        if (progressDialog.isDisplayable()) {
-          progressDialog.dispose();
         }
       }
     });
@@ -2542,6 +2571,10 @@ public class GUI extends Observable {
       if (n != JOptionPane.YES_OPTION) {
         return;
       }
+    }
+
+    if (getSimulation() != null) {
+      doRemoveSimulation(false);
     }
 
     // Clean up resources
@@ -2829,12 +2862,9 @@ public class GUI extends Observable {
   /**
    * Help method that tries to load and initialize a class with given name.
    *
-   * @param <N>
-   *          Class extending given class type
-   * @param classType
-   *          Class type
-   * @param className
-   *          Class name
+   * @param <N> Class extending given class type
+   * @param classType Class type
+   * @param className Class name
    * @return Class extending given class type or null if not found
    */
   public <N extends Object> Class<? extends N> tryLoadClass(
@@ -3178,15 +3208,13 @@ public class GUI extends Observable {
 
       return loadSimulationConfig(root, quick, null);
     } catch (JDOMException e) {
-      logger.fatal("Config not wellformed: " + e.getMessage());
-      return null;
+      throw (SimulationCreationException) new SimulationCreationException("Config not wellformed").initCause(e);
     } catch (IOException e) {
-      logger.fatal("Load simulation error: " + e.getMessage());
-      return null;
+      throw (SimulationCreationException) new SimulationCreationException("Load simulation error").initCause(e);
     }
   }
 
-  private Simulation loadSimulationConfig(StringReader stringReader, boolean quick)
+  public Simulation loadSimulationConfig(StringReader stringReader, boolean quick)
   throws SimulationCreationException {
     try {
       SAXBuilder builder = new SAXBuilder();
@@ -3203,7 +3231,7 @@ public class GUI extends Observable {
     }
   }
 
-  private Simulation loadSimulationConfig(Element root, boolean quick, Long manualRandomSeed)
+  public Simulation loadSimulationConfig(Element root, boolean quick, Long manualRandomSeed)
   throws SimulationCreationException {
     Simulation newSim = null;
 
@@ -3503,7 +3531,7 @@ public class GUI extends Observable {
         }
 
         /* Start plugin */
-        final Plugin startedPlugin = tryStartPlugin(pluginClass, this, simulation, mote);
+        final Plugin startedPlugin = tryStartPlugin(pluginClass, this, simulation, mote, false);
         if (startedPlugin == null) {
           continue;
         }
@@ -3515,6 +3543,9 @@ public class GUI extends Observable {
           }
         }
 
+        /* Activate plugin */
+        startedPlugin.startPlugin();
+        
         /* If Cooja not visualized, ignore window configuration */
         if (startedPlugin.getGUI() == null) {
           continue;
@@ -3561,6 +3592,7 @@ public class GUI extends Observable {
               }
             } catch (Exception e) { }
 
+            showPlugin(startedPlugin);
             return true;
           }
         }.invokeAndWait();
@@ -3705,6 +3737,53 @@ public class GUI extends Observable {
 
   }
 
+  private static void showWarningsDialog(final Frame parent, final String[] warnings) {
+    new RunnableInEDT<Boolean>() {
+      public Boolean work() {
+        final JDialog dialog = new JDialog((Frame)parent, "Compilation warnings", false);
+        Box buttonBox = Box.createHorizontalBox();
+
+        /* Warnings message list */
+        MessageList compilationOutput = new MessageList();
+        for (String w: warnings) {
+          compilationOutput.addMessage(w, MessageList.ERROR);
+        }
+        compilationOutput.addPopupMenuItem(null, true);
+
+        /* Checkbox */
+        buttonBox.add(Box.createHorizontalGlue());
+        JCheckBox hideButton = new JCheckBox("Hide compilation warnings", false);
+        hideButton.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent e) {
+            GUI.setExternalToolsSetting("HIDE_WARNINGS",
+                "" + ((JCheckBox)e.getSource()).isSelected());
+          };
+        });
+        buttonBox.add(Box.createHorizontalStrut(10));
+        buttonBox.add(hideButton);
+
+        /* Close on escape */
+        AbstractAction closeAction = new AbstractAction(){
+          public void actionPerformed(ActionEvent e) {
+            dialog.dispose();
+          }
+        };
+        InputMap inputMap = dialog.getRootPane().getInputMap(
+            JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false), "close");
+        dialog.getRootPane().getActionMap().put("close", closeAction);
+
+        /* Layout */
+        dialog.getContentPane().add(BorderLayout.CENTER, new JScrollPane(compilationOutput));
+        dialog.getContentPane().add(BorderLayout.SOUTH, buttonBox);
+        dialog.setSize(700, 500);
+        dialog.setLocationRelativeTo(parent);
+        dialog.setVisible(true);
+        return true;
+      }
+    }.invokeAndWait();
+  }
+  
   /**
    * Runs work method in event dispatcher thread.
    * Worker method returns a value.
@@ -4002,10 +4081,17 @@ public class GUI extends Observable {
   }
 
   private static JProgressBar PROGRESS_BAR = null;
+  private static ArrayList<String> PROGRESS_WARNINGS = new ArrayList<String>();
   public static void setProgressMessage(String msg) {
+    setProgressMessage(msg, MessageList.NORMAL);
+  }
+  public static void setProgressMessage(String msg, int type) {
     if (PROGRESS_BAR != null && PROGRESS_BAR.isShowing()) {
       PROGRESS_BAR.setString(msg);
       PROGRESS_BAR.setStringPainted(true);
+    }
+    if (type != MessageList.NORMAL) {
+      PROGRESS_WARNINGS.add(msg);
     }
   }
 
@@ -4194,7 +4280,8 @@ public class GUI extends Observable {
         }
       };
       fc.setFileFilter(jarFilter);
-      fc.setSelectedFile(new File("cooja_simulation.jar"));
+      File suggest = new File(getExternalToolsSetting("EXECUTE_JAR_LAST", "cooja_simulation.jar"));
+      fc.setSelectedFile(suggest);
       int returnVal = fc.showSaveDialog(GUI.getTopParentContainer());
       if (returnVal != JFileChooser.APPROVE_OPTION) {
         return;
@@ -4214,6 +4301,7 @@ public class GUI extends Observable {
       }
       
       final File finalOutputFile = outputFile;
+      setExternalToolsSetting("EXECUTE_JAR_LAST", outputFile.getPath());
       new Thread() {
         public void run() {
           try {

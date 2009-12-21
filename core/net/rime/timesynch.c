@@ -69,7 +69,7 @@ timesynch_set_authority_level(int level)
 rtimer_clock_t
 timesynch_time(void)
 {
-  return rtimer_arch_now() + offset;
+  return RTIMER_NOW() + offset;
 }
 /*---------------------------------------------------------------------------*/
 rtimer_clock_t

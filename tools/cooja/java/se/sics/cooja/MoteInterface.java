@@ -117,21 +117,6 @@ public abstract class MoteInterface extends Observable {
   public abstract void releaseInterfaceVisualizer(JPanel panel);
 
   /**
-   * Returns total energy (mQ) consumed by this interface.
-   *
-   * The interface is responsible to gather information about the current
-   * internal state, and calculate whatever energy it needs in that state and
-   * during one tick.
-   *
-   * This method is typically used battery interface, to keep track of the
-   * mote energy consumption.
-   *
-   * @see se.sics.cooja.interfaces.Battery
-   * @return Total energy consumption of mote interface
-   */
-  public abstract double energyConsumption();
-
-  /**
    * Returns XML elements representing the current config of this mote
    * interface. This is fetched by the simulator for example when saving a
    * simulation configuration file. For example an IP interface may return one
@@ -155,5 +140,12 @@ public abstract class MoteInterface extends Observable {
    */
   public abstract void setConfigXML(Collection<Element> configXML,
       boolean visAvailable);
+  
+  /**
+   * Called to free resources used by the mote interface.
+   * This method is called when the mote is removed from the simulation.
+   */
+  public void removed() {
+  }
 
 }

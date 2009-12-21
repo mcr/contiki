@@ -32,8 +32,8 @@
 package se.sics.cooja.avrmote;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.jdom.Element;
@@ -45,11 +45,13 @@ import se.sics.cooja.MoteMemory;
 import se.sics.cooja.MoteType;
 import se.sics.cooja.Simulation;
 import se.sics.cooja.motes.AbstractEmulatedMote;
+import avrora.arch.avr.AVRProperties;
 import avrora.core.LoadableProgram;
-import avrora.sim.Interpreter;
+import avrora.sim.AtmelInterpreter;
 import avrora.sim.Simulator;
 import avrora.sim.State;
-import avrora.sim.mcu.Microcontroller;
+import avrora.sim.mcu.AtmelMicrocontroller;
+import avrora.sim.mcu.EEPROM;
 import avrora.sim.platform.MicaZ;
 import avrora.sim.platform.PlatformFactory;
 
@@ -64,13 +66,16 @@ public class MicaZMote extends AbstractEmulatedMote implements Mote {
 
   private Simulation mySimulation = null;
   private MoteInterfaceHandler myMoteInterfaceHandler;
-  private Microcontroller myCpu = null;
+  private AtmelMicrocontroller myCpu = null;
   private MicaZ micaZ = null;
   private LoadableProgram program = null;
-  private Interpreter interpreter = null;
-
+  private AtmelInterpreter interpreter = null;
+  private AvrMoteMemory myMemory = null;
+  private AVRProperties avrProperties = null;
   private MicaZMoteType myMoteType = null;
 
+  private EEPROM eeprom = null;
+  
   /* Stack monitoring variables */
   private boolean stopNextInstruction = false;
 
@@ -143,12 +148,21 @@ public class MicaZMote extends AbstractEmulatedMote implements Mote {
     program.load();
     PlatformFactory factory = new MicaZ.Factory();
     micaZ = (MicaZ) factory.newPlatform(1, program.getProgram());
-    myCpu = micaZ.getMicrocontroller();
+    myCpu = (AtmelMicrocontroller) micaZ.getMicrocontroller();
+    eeprom = (EEPROM) myCpu.getDevice("eeprom");
+    
+    avrProperties = (AVRProperties) myCpu.getProperties();
     Simulator sim = myCpu.getSimulator();
-    interpreter = sim.getInterpreter();
+    interpreter = (AtmelInterpreter) sim.getInterpreter();
 //     State state = interpreter.getState();
+    myMemory = new AvrMoteMemory(program.getProgram().getSourceMapping(), avrProperties, interpreter);
   }
 
+  public void setEEPROM(int address, int i) {
+      byte[] eedata = eeprom.getContent();
+      eedata[address] = (byte) i;
+  }
+  
   public void setState(State newState) {
     logger.warn("MicaZ motes can't change state");
   }
@@ -159,6 +173,7 @@ public class MicaZMote extends AbstractEmulatedMote implements Mote {
 
   /* called when moteID is updated */
   public void idUpdated(int newID) {
+      
   }
 
   public MoteType getType() {
@@ -166,6 +181,7 @@ public class MicaZMote extends AbstractEmulatedMote implements Mote {
   }
 
   public void setType(MoteType type) {
+    myMoteType = (MicaZMoteType) type;
   }
 
   public MoteInterfaceHandler getInterfaces() {
@@ -210,18 +226,15 @@ public class MicaZMote extends AbstractEmulatedMote implements Mote {
   }
   
   public boolean setConfigXML(Simulation simulation, Collection<Element> configXML, boolean visAvailable) {
+    setSimulation(simulation);
+    initEmulator(myMoteType.getContikiFirmwareFile());
+    myMoteInterfaceHandler = createMoteInterfaceHandler();
+
     for (Element element: configXML) {
       String name = element.getName();
 
       if (name.equals("motetype_identifier")) {
-
-        setSimulation(simulation);
-        myMoteType = (MicaZMoteType) simulation.getMoteType(element.getText());
-        getType().setIdentifier(element.getText());
-
-        initEmulator(myMoteType.getContikiFirmwareFile());
-        myMoteInterfaceHandler = createMoteInterfaceHandler();
-
+        /* Ignored: handled by simulation */
       } else if (name.equals("interface_config")) {
         Class<? extends MoteInterface> moteInterfaceClass = simulation.getGUI().tryLoadClass(
               this, MoteInterface.class, element.getText().trim());
@@ -242,16 +255,10 @@ public class MicaZMote extends AbstractEmulatedMote implements Mote {
   }
 
   public Collection<Element> getConfigXML() {
-    Vector<Element> config = new Vector<Element>();
-
+    ArrayList<Element> config = new ArrayList<Element>();
     Element element;
 
-    // Mote type identifier
-    element = new Element("motetype_identifier");
-    element.setText(getType().getIdentifier());
-    config.add(element);
-
-    // Mote interfaces
+    /* Mote interfaces */
     for (MoteInterface moteInterface: getInterfaces().getInterfaces()) {
       element = new Element("interface_config");
       element.setText(moteInterface.getClass().getName());
@@ -267,12 +274,11 @@ public class MicaZMote extends AbstractEmulatedMote implements Mote {
   }
 
   public MoteMemory getMemory() {
-    /* TODO Implement */
-    return null;
+    return myMemory;
   }
 
   public void setMemory(MoteMemory memory) {
-    /* TODO Implement */
+    myMemory = (AvrMoteMemory) memory;
   }
 
   public String toString() {

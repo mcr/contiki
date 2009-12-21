@@ -104,6 +104,8 @@ public class ArrayUtils {
     try {
       FileOutputStream writer = new FileOutputStream(dest);
       writer.write(data);
+      writer.flush();
+      writer.close();
       return true;
     } catch (IOException e) {
       return false;

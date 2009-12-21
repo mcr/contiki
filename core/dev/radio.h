@@ -75,6 +75,12 @@ struct radio_driver {
   int (* off)(void);
 };
 
+/* Generic radio return values. */
+enum {
+  RADIO_TX_OK,
+  RADIO_TX_ERR,
+};
+
 #endif /* __RADIO_H__ */
 
 /** @} */

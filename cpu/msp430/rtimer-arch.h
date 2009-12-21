@@ -44,7 +44,7 @@
 #include <io.h>
 #include "sys/rtimer.h"
 
-#define RTIMER_ARCH_SECOND 4096
+#define RTIMER_ARCH_SECOND (4096U*2)
 
 #define rtimer_arch_now() (TAR)
 

@@ -49,6 +49,7 @@
 #include "net/rime.h"
 #include "net/sicslowpan.h"
 #include "net/rime/route.h"
+#include "net/rime/rime-udp.h"
 
 #define DEBUG 0
 #if DEBUG
@@ -73,6 +74,12 @@ void uip_log(char *msg);
 #endif /* UIP_LOGGING == 1 */
 
 #define ROUTE_DISCOVERY_CHANNEL	70
+
+#ifndef RIMEROUTE_CONF_CACHE_TIMEOUT
+#define CACHE_TIMEOUT		600
+#else
+#define CACHE_TIMEOUT		RIMEROUTE_CONF_CACHE_TIMEOUT
+#endif /* !RIMEROUTE_CONF_CACHE_TIMEOUT */
 
 #ifndef RIMEROUTE_CONF_DISCOVERY_TIMEOUT
 #define PACKET_TIMEOUT		(CLOCK_SECOND * 10)
@@ -105,8 +112,12 @@ PROCESS_THREAD(rimeroute_process, ev, data)
 
   rimeroute_event = process_alloc_event();
 
+  rime_init(rime_udp_init(NULL));
+  /* Cache routes for 10 minutes */
+  route_set_lifetime(CACHE_TIMEOUT);
+
   route_discovery_open(&route_discovery_conn,
-                       CLOCK_SECOND * 10,
+                       PACKET_TIMEOUT,
                        ROUTE_DISCOVERY_CHANNEL,
                        &route_discovery_callbacks);
 
@@ -137,8 +148,7 @@ static int
 activate(void)
 {
   PRINTF("Rimeroute started\n");
-  /* Cache routes for 10 minutes */
-  route_set_lifetime(600);
+
   process_start(&rimeroute_process, NULL);
 
   return 0;

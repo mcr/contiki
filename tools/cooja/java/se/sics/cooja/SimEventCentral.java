@@ -240,9 +240,10 @@ public class SimEventCentral {
       /* Start observing all log interfaces */
       Mote[] motes = simulation.getMotes();
       for (Mote m: motes) {
-        Log log = m.getInterfaces().getLog();
-        if (log != null) {
-          moteObservations.add(new MoteObservation(m, log, logOutputObserver));
+        for (MoteInterface mi: m.getInterfaces().getInterfaces()) {
+          if (mi instanceof Log) {
+            moteObservations.add(new MoteObservation(m, mi, logOutputObserver));
+          }
         }
       }
     }
@@ -303,10 +304,12 @@ public class SimEventCentral {
   /* HELP METHODS: MAINTAIN OBSERVERS */
   private void moteWasAdded(Mote mote) {
     if (logOutputListeners.length > 0) {
-      /* Add another log output observation */
-      Log log = mote.getInterfaces().getLog();
-      if (log != null) {
-        moteObservations.add(new MoteObservation(mote, log, logOutputObserver));
+      /* Add another log output observation.
+       * (Supports multiple log interfaces per mote) */
+      for (MoteInterface mi: mote.getInterfaces().getInterfaces()) {
+        if (mi instanceof Log) {
+          moteObservations.add(new MoteObservation(mote, mi, logOutputObserver));
+        }
       }
     }
 

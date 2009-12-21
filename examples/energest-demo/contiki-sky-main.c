@@ -109,6 +109,17 @@ set_rime_addr(void)
   rimeaddr_set_node_addr(&addr);
 }
 /*---------------------------------------------------------------------------*/
+static void
+print_processes(struct process * const processes[])
+{
+  printf("Starting");
+  while(*processes != NULL) {
+    printf(" '%s'", (*processes)->name);
+    processes++;
+  }
+  putchar('\n');
+}
+/*---------------------------------------------------------------------------*/
 int
 main(int argc, char **argv)
 {
@@ -184,7 +195,7 @@ main(int argc, char **argv)
 
   button_sensor.activate();
   
-  printf("Autostarting processes\n");
+  print_processes(autostart_processes);
   autostart_start(autostart_processes);
 
   energest_init();

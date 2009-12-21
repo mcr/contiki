@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009, Swedish Institute of Computer Science.
+ * Copyright (c) 2007, Swedish Institute of Computer Science.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,23 +29,31 @@
  * $Id$
  */
 
-package se.sics.cooja.avrmote.interfaces;
-import se.sics.cooja.RadioPacket;
+package se.sics.cooja.emulatedmote;
+import org.apache.log4j.Logger;
 
-/* TODO: this should be a "standard" class in COOJA core */
-public class RadioByte implements RadioPacket {
-  private byte[] data = new byte[1];
+/**
+ * Ported from contiki-2.x/core/lib/crc16.[ch].
+ *
+ * @author Fredrik Osterlind
+ */
+public class CRCCoder {
 
-  public RadioByte(byte data) {
-    this.data[0] = data;
-  }
+    private static Logger logger = Logger.getLogger(CRCCoder.class);
 
-  public RadioByte(int intData) {
-    this.data[0] = (byte) intData;
-  }
-
-  public byte[] getPacketData() {
-    return data;
-  }
-
+    /**
+     * Updates given accumulated CRC16 checksum with given byte.
+     *
+     * @param b Byte to be added to CRC
+     * @param acc Accumulated CRC that is to be updated
+     * @return New accumulated CRC
+     */
+    public static short crc16Add(byte b, short acc) {
+        acc ^= 0xff & b;
+        acc  = (short) ((0xff & (acc >> 8)) | (0xff00 & (acc << 8)));
+        acc ^= 0xffff & ((acc & 0xff00) << 4);
+        acc ^= (0xffff & (0xff & (acc >> 8)) >> 4);
+        acc ^= 0xffff & ((0xffff & (acc & 0xff00)) >>> 5);
+        return acc;
+    }
 }

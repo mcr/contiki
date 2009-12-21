@@ -75,9 +75,9 @@ public class SkyByteRadio extends Radio implements CustomDataRadio {
 
   private boolean isReceiving = false;
 
-  private CC2420RadioByte lastOutgoingByte = null;
+  private byte lastOutgoingByte;
 
-  private CC2420RadioByte lastIncomingByte = null;
+  private byte lastIncomingByte;
 
   private RadioPacket lastOutgoingPacket = null;
 
@@ -95,13 +95,14 @@ public class SkyByteRadio extends Radio implements CustomDataRadio {
         if (len == 0) {
           lastEventTime = SkyByteRadio.this.mote.getSimulation().getSimulationTime();
           lastEvent = RadioEvent.TRANSMISSION_STARTED;
+          isTransmitting = true;
           /*logger.debug("----- SKY TRANSMISSION STARTED -----");*/
           setChanged();
           notifyObservers();
         }
 
         /* send this byte to all nodes */
-        lastOutgoingByte = new CC2420RadioByte(data);
+        lastOutgoingByte = data;
         lastEventTime = SkyByteRadio.this.mote.getSimulation().getSimulationTime();
         lastEvent = RadioEvent.CUSTOM_DATA_TRANSMITTED;
         setChanged();
@@ -129,6 +130,7 @@ public class SkyByteRadio extends Radio implements CustomDataRadio {
 
           lastEventTime = SkyByteRadio.this.mote.getSimulation().getSimulationTime();
           /*logger.debug("----- SKY TRANSMISSION FINISHED -----");*/
+          isTransmitting = false;
           lastEvent = RadioEvent.TRANSMISSION_FINISHED;
           setChanged();
           notifyObservers();
@@ -142,6 +144,9 @@ public class SkyByteRadio extends Radio implements CustomDataRadio {
         if (isReceiverOn()) {
           lastEvent = RadioEvent.HW_ON;
         } else {
+          if (isTransmitting()) {
+            logger.fatal("Turning off radio while transmitting");
+          }
           lastEvent = RadioEvent.HW_OFF;
         }
         lastEventTime = SkyByteRadio.this.mote.getSimulation().getSimulationTime();
@@ -171,7 +176,11 @@ public class SkyByteRadio extends Radio implements CustomDataRadio {
 
       /*logger.info("Delivering buffered packet data now: " + mote.getSimulation().getSimulationTime());*/
       for (byte b: crossBufferedData) {
-        cc2420.receivedByte(b);
+        if (isInterfered()) {
+          cc2420.receivedByte((byte)0xFF);
+        } else {
+          cc2420.receivedByte(b);
+        }
       }
       mote.requestImmediateWakeup();
       crossBufferedData = null;
@@ -216,7 +225,11 @@ public class SkyByteRadio extends Radio implements CustomDataRadio {
 
     /* Delivering data immediately */
     for (byte b: packetData) {
-      cc2420.receivedByte(b);
+      if (isInterfered()) {
+        cc2420.receivedByte((byte)0xFF);
+      } else {
+        cc2420.receivedByte(b);
+      }
     }
     mote.requestImmediateWakeup();
   }
@@ -231,11 +244,17 @@ public class SkyByteRadio extends Radio implements CustomDataRadio {
   }
 
   public void receiveCustomData(Object data) {
-    if (data instanceof CC2420RadioByte) {
-      lastIncomingByte = (CC2420RadioByte) data;
-      cc2420.receivedByte(lastIncomingByte.getPacketData()[0]);
-      mote.requestImmediateWakeup();
+    if (!(data instanceof Byte)) {
+      logger.fatal("Bad custom data: " + data);
+      return;
     }
+    lastIncomingByte = (Byte) data;
+    if (isInterfered()) {
+      cc2420.receivedByte((byte)0xFF);
+    } else {
+      cc2420.receivedByte(lastIncomingByte);
+    }
+    mote.requestImmediateWakeup();
   }
 
   /* General radio support */
@@ -262,10 +281,7 @@ public class SkyByteRadio extends Radio implements CustomDataRadio {
   }
 
   public void signalReceptionStart() {
-    cc2420.setCCA(true);
-//    hasFailedReception = mode == CC2420.MODE_TXRX_OFF;
     isReceiving = true;
-    /* TODO cc2420.setSFD(true); */
 
     lastEventTime = mote.getSimulation().getSimulationTime();
     lastEvent = RadioEvent.RECEPTION_STARTED;
@@ -277,9 +293,7 @@ public class SkyByteRadio extends Radio implements CustomDataRadio {
   public void signalReceptionEnd() {
     /* Deliver packet data */
     isReceiving = false;
-//    hasFailedReception = false;
     isInterfered = false;
-    cc2420.setCCA(false);
 
     lastEventTime = mote.getSimulation().getSimulationTime();
     lastEvent = RadioEvent.RECEPTION_FINISHED;
@@ -295,9 +309,7 @@ public class SkyByteRadio extends Radio implements CustomDataRadio {
   public void interfereAnyReception() {
     isInterfered = true;
     isReceiving = false;
-//    hasFailedReception = false;
     lastIncomingPacket = null;
-    cc2420.setCCA(true);
 
     lastEventTime = mote.getSimulation().getSimulationTime();
     lastEvent = RadioEvent.RECEPTION_INTERFERED;
@@ -424,6 +436,12 @@ public class SkyByteRadio extends Radio implements CustomDataRadio {
   }
 
   public boolean isReceiverOn() {
-    return mote.skyNode.radio.getMode() != CC2420.MODE_TXRX_OFF;
+    if (mote.skyNode.radio.getMode() == CC2420.MODE_POWER_OFF) {
+      return false;
+    }
+    if (mote.skyNode.radio.getMode() == CC2420.MODE_TXRX_OFF) {
+      return false;
+    }
+    return true;
   }
 }

@@ -40,7 +40,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Observable;
-import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.jdom.Element;
@@ -56,6 +55,7 @@ import se.sics.cooja.Watchpoint;
 import se.sics.cooja.WatchpointMote;
 import se.sics.cooja.interfaces.IPAddress;
 import se.sics.cooja.motes.AbstractEmulatedMote;
+import se.sics.cooja.mspmote.interfaces.MspSerial;
 import se.sics.cooja.mspmote.plugins.MspBreakpointContainer;
 import se.sics.mspsim.cli.CommandHandler;
 import se.sics.mspsim.cli.LineListener;
@@ -81,7 +81,7 @@ public abstract class MspMote extends AbstractEmulatedMote implements Mote, Watc
 
   private Simulation simulation;
   private CommandHandler commandHandler;
-  private LineListener commandListener;
+  private ArrayList<LineListener> commandListeners = new ArrayList<LineListener>();
   private MSP430 myCpu = null;
   private MspMoteType myMoteType = null;
   private MspMoteMemory myMemory = null;
@@ -148,11 +148,15 @@ public abstract class MspMote extends AbstractEmulatedMote implements Mote, Watc
   }
 
   public boolean hasCLIListener() {
-    return this.commandListener != null;
+    return !commandListeners.isEmpty();
   }
 
-  public void setCLIListener(LineListener listener) {
-    this.commandListener = listener;
+  public void addCLIListener(LineListener listener) {
+    commandListeners.add(listener);
+  }
+
+  public void removeCLIListener(LineListener listener) {
+    commandListeners.remove(listener);
   }
 
   /**
@@ -237,11 +241,12 @@ public abstract class MspMote extends AbstractEmulatedMote implements Mote, Watc
    */
   protected void prepareMote(File fileELF, GenericNode node) throws IOException {
     LineOutputStream lout = new LineOutputStream(new LineListener() {
-      @Override
       public void lineRead(String line) {
-        LineListener listener = commandListener;
-        if (listener != null) {
-          listener.lineRead(line);
+        for (LineListener l: commandListeners.toArray(new LineListener[0])) {
+          if (l == null) {
+            continue;
+          }
+          l.lineRead(line);
         }
       }});
     PrintStream out = new PrintStream(lout);
@@ -374,20 +379,15 @@ public abstract class MspMote extends AbstractEmulatedMote implements Mote, Watc
     }*/
   }
   
-  private void sendCLICommandAndPrint(String comamnd) {
-    /* Backup listener */
-    LineListener oldListener = commandListener;
-
-    
-    setCLIListener(new LineListener() {
+  private void sendCLICommandAndPrint(String cmd) {
+    LineListener tmp = new LineListener() {
       public void lineRead(String line) {
         logger.fatal(line);
       }
-    });
-    sendCLICommand(comamnd);
-
-    /* Restore listener */
-    setCLIListener(oldListener);
+    };
+    commandListeners.add(tmp);
+    sendCLICommand(cmd);
+    commandListeners.remove(tmp);
   }
   
   public int getID() {
@@ -395,27 +395,30 @@ public abstract class MspMote extends AbstractEmulatedMote implements Mote, Watc
   }
   
   public boolean setConfigXML(Simulation simulation, Collection<Element> configXML, boolean visAvailable) {
+    setSimulation(simulation);
+    initEmulator(myMoteType.getContikiFirmwareFile());
+    myMoteInterfaceHandler = createMoteInterfaceHandler();
+
+    /* Create watchpoint container */
+    breakpointsContainer = new MspBreakpointContainer(this, getFirmwareDebugInfo(this));
+
     for (Element element: configXML) {
       String name = element.getName();
 
       if (name.equals("motetype_identifier")) {
-
-        setSimulation(simulation);
-        myMoteType = (MspMoteType) simulation.getMoteType(element.getText());
-        getType().setIdentifier(element.getText());
-
-        initEmulator(myMoteType.getContikiFirmwareFile());
-        myMoteInterfaceHandler = createMoteInterfaceHandler();
-
-        /* Create watchpoint container */
-        breakpointsContainer = new MspBreakpointContainer(this, getFirmwareDebugInfo(this));
-        
+        /* Ignored: handled by simulation */
       } else if ("breakpoints".equals(element.getName())) {
         breakpointsContainer.setConfigXML(element.getChildren(), visAvailable);
       } else if (name.equals("interface_config")) {
         String intfClass = element.getText().trim();
         if (intfClass.equals("se.sics.cooja.mspmote.interfaces.MspIPAddress")) {
           intfClass = IPAddress.class.getName();
+        }
+        if (intfClass.equals("se.sics.cooja.mspmote.interfaces.ESBLog")) {
+          intfClass = MspSerial.class.getName();
+        }
+        if (intfClass.equals("se.sics.cooja.mspmote.interfaces.SkySerial")) {
+          intfClass = MspSerial.class.getName();
         }
         Class<? extends MoteInterface> moteInterfaceClass = simulation.getGUI().tryLoadClass(
               this, MoteInterface.class, intfClass);
@@ -436,14 +439,8 @@ public abstract class MspMote extends AbstractEmulatedMote implements Mote, Watc
   }
 
   public Collection<Element> getConfigXML() {
-    Vector<Element> config = new Vector<Element>();
-
+    ArrayList<Element> config = new ArrayList<Element>();
     Element element;
-
-    // Mote type identifier
-    element = new Element("motetype_identifier");
-    element.setText(getType().getIdentifier());
-    config.add(element);
 
     /* Breakpoints */
     element = new Element("breakpoints");

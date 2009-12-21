@@ -130,10 +130,6 @@ public abstract class AbstractApplicationMote extends AbstractWakeupMote impleme
     ArrayList<Element> config = new ArrayList<Element>();
     Element element;
 
-    element = new Element("motetype_identifier");
-    element.setText(getType().getIdentifier());
-    config.add(element);
-
     for (MoteInterface moteInterface: moteInterfaces.getInterfaces()) {
       element = new Element("interface_config");
       element.setText(moteInterface.getClass().getName());
@@ -152,14 +148,14 @@ public abstract class AbstractApplicationMote extends AbstractWakeupMote impleme
       Collection<Element> configXML, boolean visAvailable) {
     this.simulation = simulation;
     this.memory = new SectionMoteMemory(new Properties());
+    moteInterfaces = new MoteInterfaceHandler(this, moteType.getMoteInterfaceClasses());
+    moteInterfaces.getRadio().addObserver(radioDataObserver);
 
     for (Element element : configXML) {
       String name = element.getName();
 
       if (name.equals("motetype_identifier")) {
-        moteType = simulation.getMoteType(element.getText());
-        moteInterfaces = new MoteInterfaceHandler(this, moteType.getMoteInterfaceClasses());
-        moteInterfaces.getRadio().addObserver(radioDataObserver);
+        /* Ignored: handled by simulation */
       } else if (name.equals("interface_config")) {
         Class<? extends MoteInterface> moteInterfaceClass =
           simulation.getGUI().tryLoadClass(this, MoteInterface.class, element.getText().trim());

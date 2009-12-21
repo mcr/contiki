@@ -122,18 +122,9 @@ public abstract class RadioMedium {
   public abstract void deleteRadioMediumObserver(Observer observer);
 
   /**
-   * Returns all connections made during last tick loop.
-   *
-   * Typically a radio medium is a tick observer and transfers data between
-   * radios after each tick loop. When these calculations are finished, it will
-   * in turn notify all radio medium observers. A radio medium observer may get
-   * information about which connections were made by using this method. Observe
-   * that this method may return null of no connections were made.
-   *
-   * @see RadioConnection
-   * @return All connections made during last tick loop or null if none
+   * @return Last radio connection finished in the radio medium
    */
-  public abstract RadioConnection[] getLastTickConnections();
+  public abstract RadioConnection getLastConnection();
 
   /**
    * Returns XML elements representing the current config of this radio medium.

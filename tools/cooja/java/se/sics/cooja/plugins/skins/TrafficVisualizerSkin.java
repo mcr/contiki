@@ -81,7 +81,7 @@ public class TrafficVisualizerSkin implements VisualizerSkin {
 
   private Box counters;
 
-  private final static int HISTORY_SIZE = 8;
+  private final static int HISTORY_SIZE = 16;
   private boolean showHistory = false;
   private ArrayDeque<RadioConnection> history = new ArrayDeque<RadioConnection>();
 
@@ -118,11 +118,9 @@ public class TrafficVisualizerSkin implements VisualizerSkin {
         interferedCounter.setText("INT: " +  + radioMedium.COUNTER_INTERFERED);
 
         if (showHistory) {
-          RadioConnection[] past = radioMedium.getLastTickConnections();
-          if (past != null) {
-            for (RadioConnection con: past) {
-              history.add(con);
-            }
+          RadioConnection last = radioMedium.getLastConnection();
+          if (last != null) {
+            history.add(last);
             while (history.size() > HISTORY_SIZE) {
               history.removeFirst();
             }
@@ -226,6 +224,9 @@ public class TrafficVisualizerSkin implements VisualizerSkin {
       /* Paint history in gray */
       RadioConnection[] historyArr = history.toArray(new RadioConnection[0]);
       for (RadioConnection conn : historyArr) {
+        if (conn == null) {
+          continue;
+        }
         g.setColor(COLOR_HISTORY);
         Radio source = conn.getSource();
         Point sourcePoint = visualizer.transformPositionToPixel(source.getPosition());
@@ -245,7 +246,7 @@ public class TrafficVisualizerSkin implements VisualizerSkin {
         if (conn == null) {
           continue;
         }
-        Radio source = conn.getSource(); // XXX Must not be null!
+        Radio source = conn.getSource();
         Point sourcePoint = visualizer.transformPositionToPixel(source.getPosition());
         for (Radio destRadio : conn.getDestinations()) {
           if (destRadio == null) {

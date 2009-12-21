@@ -61,7 +61,6 @@
 #include "net/mac/sicslowmac.h"
 #if UIP_CONF_ROUTER
 #include "net/routing/rimeroute.h"
-#include "net/rime/rime-udp.h"
 #endif /* UIP_CONF_ROUTER*/
 #endif /* WITH_UIP6 */
 
@@ -302,7 +301,6 @@ main(int argc, char **argv)
   }
   
 #if UIP_CONF_ROUTER
-  rime_init(rime_udp_init(NULL));
   uip_router_register(&rimeroute);
 #endif /* UIP_CONF_ROUTER */
 #else /* WITH_UIP6 */

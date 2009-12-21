@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, Swedish Institute of Computer Science.
+ * Copyright (c) 2009, Swedish Institute of Computer Science
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,28 +26,11 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id$
+ * @(#)$Id$
  */
+#ifndef CC2420_ARCH_SFD_H
+#define CC2420_ARCH_SFD_H
 
-package se.sics.cooja.mspmote.interfaces;
-import se.sics.cooja.RadioPacket;
+void cc2420_arch_sfd_init(void);
 
-public class CC2420RadioPacket implements RadioPacket {
-  private byte[] data;
-
-  public CC2420RadioPacket(byte[] data) {
-    this.data = data;
-  }
-
-  public CC2420RadioPacket(int[] intData) {
-    this.data = new byte[intData.length];
-    for (int i=0; i < intData.length; i++) {
-      this.data[i] = (byte) intData[i];
-    }
-  }
-
-  public byte[] getPacketData() {
-    return data;
-  }
-
-}
+#endif /* CC2420_ARCH_SFD_H */

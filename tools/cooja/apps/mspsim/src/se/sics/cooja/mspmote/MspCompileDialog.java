@@ -34,24 +34,21 @@ package se.sics.cooja.mspmote;
 import java.awt.Container;
 import java.io.File;
 
-import org.apache.log4j.Logger;
-
 import se.sics.cooja.GUI;
 import se.sics.cooja.MoteInterface;
-import se.sics.cooja.MoteType;
 import se.sics.cooja.Simulation;
 import se.sics.cooja.dialogs.AbstractCompileDialog;
-import se.sics.mspsim.util.ELF;
 
-public class SkyCompileDialog extends AbstractCompileDialog {
-  private static Logger logger = Logger.getLogger(SkyCompileDialog.class);
+public class MspCompileDialog extends AbstractCompileDialog {
+  private String target;
 
   public static boolean showDialog(
       Container parent,
       Simulation simulation,
-      MoteType moteType) {
+      MspMoteType moteType,
+      String target) {
 
-    final AbstractCompileDialog dialog = new SkyCompileDialog(parent, simulation, moteType);
+    final AbstractCompileDialog dialog = new MspCompileDialog(parent, simulation, moteType, target);
 
     /* Show dialog and wait for user */
     dialog.setVisible(true); /* BLOCKS */
@@ -63,26 +60,23 @@ public class SkyCompileDialog extends AbstractCompileDialog {
     return true;
   }
 
-  private SkyCompileDialog(Container parent, Simulation simulation, MoteType moteType) {
+  private MspCompileDialog(Container parent, Simulation simulation, MspMoteType moteType, String target) {
     super(parent, simulation, moteType);
+    
+    this.target = target;
 
-    /* Add all available Sky mote interfaces
-     * Selected by default unless interfaces already configured */
+    /* Select all mote interfaces */
     boolean selected = true;
     if (moteIntfBox.getComponentCount() > 0) {
       selected = false;
     }
-
-    for (Class<? extends MoteInterface> intfClass: ((SkyMoteType)moteType).getAllMoteInterfaceClasses()) {
+    for (Class<? extends MoteInterface> intfClass: moteType.getAllMoteInterfaceClasses()) {
       addMoteInterface(intfClass, selected);
     }
   }
 
   public boolean canLoadFirmware(File file) {
-    if (file.getName().endsWith(".sky")) {
-      return true;
-    }
-    if (ELF.isELF(file)) {
+    if (file.getName().endsWith("." + target)) {
       return true;
     }
     return false;
@@ -91,12 +85,12 @@ public class SkyCompileDialog extends AbstractCompileDialog {
   public String getDefaultCompileCommands(File source) {
     /* TODO Split into String[] */
     return
-    /*"make clean TARGET=sky\n" + */
-    GUI.getExternalToolsSetting("PATH_MAKE") + " " + getExpectedFirmwareFile(source).getName() + " TARGET=sky";
+    GUI.getExternalToolsSetting("PATH_MAKE") + " " + 
+    getExpectedFirmwareFile(source).getName() + " TARGET=" + target;
   }
 
   public File getExpectedFirmwareFile(File source) {
-    return ((SkyMoteType)moteType).getExpectedFirmwareFile(source);
+    return ((MspMoteType)moteType).getExpectedFirmwareFile(source);
   }
 
   public void writeSettingsToMoteType() {

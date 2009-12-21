@@ -90,7 +90,7 @@
 #ifdef LPP_CONF_OFF_TIME
 #define OFF_TIME LPP_CONF_OFF_TIME
 #else
-#define OFF_TIME (CLOCK_SECOND / 2)
+#define OFF_TIME (CLOCK_SECOND / 2 - LISTEN_TIME)
 #endif /* LPP_CONF_OFF_TIME */
 
 #define PACKET_LIFETIME (LISTEN_TIME + OFF_TIME)
@@ -314,7 +314,7 @@ turn_radio_on_for_neighbor(rimeaddr_t *neighbor, struct queue_list_item *i)
 	 time with modulo OFF_TIME. */
 
       now = clock_time();
-      wait = ((clock_time_t)(e->time - now)) % (OFF_TIME);
+      wait = ((clock_time_t)(e->time - now)) % (OFF_TIME + LISTEN_TIME) - LISTEN_TIME;
 
       /*      printf("now %d e %d e-n %d w %d %d\n", now, e->time, e->time - now, (e->time - now) % (OFF_TIME), wait);
       

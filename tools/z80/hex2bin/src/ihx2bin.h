@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003-2007, Takahide Matsutsuka.
+ * Copyright (c) 2003-2008, Takahide Matsutsuka.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without

@@ -148,10 +148,9 @@ public class MRM extends AbstractRadioMedium {
             }
           }
           if (existingConn != null) {
-            // Change radio from receiving to interfered
-            existingConn.removeDestination(listeningRadio);
+            /* Flag radio as interfered */
             existingConn.addInterfered(listeningRadio);
-
+            listeningRadio.interfereAnyReception();
           }
         } else {
           // Radio OK to receive

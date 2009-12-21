@@ -33,11 +33,11 @@ package se.sics.cooja.interfaces;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Vector;
 
 import org.jdom.Element;
 
-import se.sics.cooja.*;
+import se.sics.cooja.ClassDescription;
+import se.sics.cooja.MoteInterface;
 
 /**
  * A MoteID represents a mote ID number. An implementation should notify all

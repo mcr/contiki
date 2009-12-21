@@ -42,8 +42,6 @@
 #include "sys/etimer.h"
 #include "rtimer-arch.h"
 
-/* 38400 cycles @ 2.4576MHz with divisor 8 ==> 1/8 s */
-/* #define INTERVAL (307200ULL / CLOCK_SECOND) */
 #define INTERVAL (RTIMER_ARCH_SECOND / CLOCK_SECOND)
 
 #define MAX_TICKS (~((clock_time_t)0) / 2)
@@ -56,11 +54,14 @@ static unsigned short last_tar = 0;
 /*---------------------------------------------------------------------------*/
 interrupt(TIMERA1_VECTOR) timera1 (void) {
   ENERGEST_ON(ENERGEST_TYPE_IRQ);
+
   if(TAIV == 2) {
+
+    eint();
 
     /* HW timer bug fix: Interrupt handler called before TR==CCR.
      * Occurrs when timer state is toggled between STOP and CONT. */
-    while (TACTL & MC1 && TACCR1 - TAR == 1);
+    while(TACTL & MC1 && TACCR1 - TAR == 1);
 
     /* Make sure interrupt time is future */
     do {
@@ -88,6 +89,10 @@ interrupt(TIMERA1_VECTOR) timera1 (void) {
       LPM4_EXIT;
     }
   }
+  /*  if(process_nevents() >= 0) {
+    LPM4_EXIT;
+    }*/
+    
   ENERGEST_OFF(ENERGEST_TYPE_IRQ);
 }
 /*---------------------------------------------------------------------------*/
@@ -129,8 +134,8 @@ clock_init(void)
   /* Select SMCLK (2.4576MHz), clear TAR */
   /* TACTL = TASSEL1 | TACLR | ID_3; */
   
-  /* Select ACLK 32768Hz clock, divide by 8 */
-  TACTL = TASSEL0 | TACLR | ID_3;
+  /* Select ACLK 32768Hz clock, divide by 4 */
+  TACTL = TASSEL0 | TACLR | ID_2;
 
   /* Initialize ccr1 to create the X ms interval. */
   /* CCR1 interrupt enabled, interrupt occurs when timer equals CCR1. */

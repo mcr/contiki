@@ -35,7 +35,6 @@ import org.apache.log4j.Logger;
 
 import se.sics.cooja.ConvertedRadioPacket;
 import se.sics.cooja.RadioPacket;
-import se.sics.cooja.util.StringUtils;
 
 /**
  * Converts radio packets between X-MAC/CC24240/Sky and COOJA.

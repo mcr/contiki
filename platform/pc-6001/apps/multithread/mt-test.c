@@ -63,14 +63,14 @@ static char buf[20];
 void
 println(char *str1)
 {
-  static unsigned int i;
+  unsigned int i;
   
   for(i = 1; i < WIN_YSIZE; i++) {
-    memcpy(log + (i - 1) * WIN_XSIZE, log + i * WIN_XSIZE, WIN_XSIZE);
+    memcpy(&log[(i - 1) * WIN_XSIZE], &log[i * WIN_XSIZE], WIN_XSIZE);
   }
-  memset(log + (WIN_YSIZE - 1) * WIN_XSIZE, 0, WIN_XSIZE);
+  memset(&log[(WIN_YSIZE - 1) * WIN_XSIZE], 0, WIN_XSIZE);
 
-  strncpy(log + (WIN_YSIZE - 1) * WIN_XSIZE, str1, WIN_XSIZE);
+  strncpy(&log[(WIN_YSIZE - 1) * WIN_XSIZE], str1, WIN_XSIZE);
 
   CTK_WIDGET_REDRAW(&loglabel);
 }

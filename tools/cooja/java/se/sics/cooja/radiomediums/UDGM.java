@@ -195,27 +195,32 @@ public class UDGM extends AbstractRadioMedium {
         continue;
       }
 
-      /* Fail if radio is turned off */ 
-      if (!recv.isReceiverOn()) {
-        /* Special case: allow connection if source is Contiki radio, 
-         * and destination is something else (byte radio).
-         * Allows cross-level communication with power-saving MACs. */
-        if (sender instanceof ContikiRadio &&
-            !(recv instanceof ContikiRadio)) {
-          /*logger.info("Special case: creating connection to turned off radio");*/
-        } else {
-          continue;
-        }
-      }
+      /* Fail if radio is turned off */
+//      if (!recv.isReceiverOn()) {
+//        /* Special case: allow connection if source is Contiki radio, 
+//         * and destination is something else (byte radio).
+//         * Allows cross-level communication with power-saving MACs. */
+//        if (sender instanceof ContikiRadio &&
+//            !(recv instanceof ContikiRadio)) {
+//          /*logger.info("Special case: creating connection to turned off radio");*/
+//        } else {
+//          recv.interfereAnyReception();
+//          continue;
+//        }
+//      }
 
       double distance = senderPos.getDistanceTo(recvPos);
       if (distance <= moteTransmissionRange) {
         /* Within transmission range */
 
-        if (recv.isInterfered()) {
+        if (!recv.isReceiverOn()) {
+          newConnection.addInterfered(recv);
+          recv.interfereAnyReception();
+        } else if (recv.isInterfered()) {
           /* Was interfered: keep interfering */
           newConnection.addInterfered(recv);
-
+        } else if (recv.isTransmitting()) {
+          newConnection.addInterfered(recv);
         } else if (recv.isReceiving() ||
             (SUCCESS_RATIO_RX < 1.0 && random.nextDouble() > SUCCESS_RATIO_RX)) {
           /* Was receiving, or reception failed: start interfering */
@@ -224,12 +229,8 @@ public class UDGM extends AbstractRadioMedium {
 
           /* Interfere receiver in all other active radio connections */
           for (RadioConnection conn : getActiveConnections()) {
-            for (Radio dstRadio : conn.getDestinations()) {
-              if (dstRadio == recv) {
-                conn.removeDestination(recv);
-                conn.addInterfered(recv);
-                break;
-              }
+            if (conn.isDestination(recv)) {
+              conn.addInterfered(recv);
             }
           }
 
@@ -249,7 +250,7 @@ public class UDGM extends AbstractRadioMedium {
 
   public void updateSignalStrengths() {
     /* Override: uses distance as signal strength factor */
-
+    
     /* Reset signal strengths */
     for (Radio radio : getRegisteredRadios()) {
       radio.setCurrentSignalStrength(SS_NOTHING);
@@ -258,7 +259,9 @@ public class UDGM extends AbstractRadioMedium {
     /* Set signal strength to below strong on destinations */
     RadioConnection[] conns = getActiveConnections();
     for (RadioConnection conn : conns) {
-      conn.getSource().setCurrentSignalStrength(SS_STRONG);
+      if (conn.getSource().getCurrentSignalStrength() < SS_STRONG) {
+        conn.getSource().setCurrentSignalStrength(SS_STRONG);
+      }
       for (Radio dstRadio : conn.getDestinations()) {
         double dist = conn.getSource().getPosition().getDistanceTo(dstRadio.getPosition());
 
@@ -267,7 +270,9 @@ public class UDGM extends AbstractRadioMedium {
         double distFactor = dist/maxTxDist;
 
         double signalStrength = SS_STRONG + distFactor*(SS_WEAK - SS_STRONG);
-        dstRadio.setCurrentSignalStrength(signalStrength);
+        if (dstRadio.getCurrentSignalStrength() < signalStrength) {
+          dstRadio.setCurrentSignalStrength(signalStrength);
+        }
       }
     }
 
@@ -282,9 +287,14 @@ public class UDGM extends AbstractRadioMedium {
 
         if (distFactor < 1) {
           double signalStrength = SS_STRONG + distFactor*(SS_WEAK - SS_STRONG);
-          intfRadio.setCurrentSignalStrength(signalStrength);
+          if (intfRadio.getCurrentSignalStrength() < signalStrength) {
+            intfRadio.setCurrentSignalStrength(signalStrength);
+          }
         } else {
           intfRadio.setCurrentSignalStrength(SS_WEAK);
+          if (intfRadio.getCurrentSignalStrength() < SS_WEAK) {
+            intfRadio.setCurrentSignalStrength(SS_WEAK);
+          }
         }
 
         if (!intfRadio.isInterfered()) {

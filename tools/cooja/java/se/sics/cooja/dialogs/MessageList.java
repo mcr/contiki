@@ -179,7 +179,7 @@ public class MessageList extends JList {
   }
 
   public void addMessage(final String message, final int type) {
-    GUI.setProgressMessage(message);
+    GUI.setProgressMessage(message, type);
 
     MessageContainer msg = new MessageContainer(message, type);
     messages.add(msg);

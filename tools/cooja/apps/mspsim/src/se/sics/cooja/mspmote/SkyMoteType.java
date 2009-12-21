@@ -64,7 +64,7 @@ import se.sics.cooja.mspmote.interfaces.SkyByteRadio;
 import se.sics.cooja.mspmote.interfaces.SkyCoffeeFilesystem;
 import se.sics.cooja.mspmote.interfaces.SkyFlash;
 import se.sics.cooja.mspmote.interfaces.SkyLED;
-import se.sics.cooja.mspmote.interfaces.SkySerial;
+import se.sics.cooja.mspmote.interfaces.MspSerial;
 
 @ClassDescription("Sky Mote Type")
 @AbstractionLevelDescription("Emulated level")
@@ -126,7 +126,7 @@ public class SkyMoteType extends MspMoteType {
         setDescription("Sky Mote Type #" + getIdentifier());
       }
 
-      return SkyCompileDialog.showDialog(parentContainer, simulation, this);
+      return MspCompileDialog.showDialog(parentContainer, simulation, this, "sky");
     }
 
     /* Not visualized: Compile Contiki immediately */
@@ -213,7 +213,7 @@ public class SkyMoteType extends MspMoteType {
         SkyFlash.class,
         SkyCoffeeFilesystem.class,
         SkyByteRadio.class,
-        SkySerial.class,
+        MspSerial.class,
         SkyLED.class
     };
   }
