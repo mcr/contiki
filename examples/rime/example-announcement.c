@@ -54,7 +54,7 @@ PROCESS(example_announcement_process, "Example announcement process");
 AUTOSTART_PROCESSES(&example_announcement_process);
 /*---------------------------------------------------------------------------*/
 static void
-received_announcement(struct announcement *a, rimeaddr_t *from,
+received_announcement(struct announcement *a, const rimeaddr_t *from,
 		      uint16_t id, uint16_t value)
 {
   /* We set our own announced value to one plus that of our neighbor. */
