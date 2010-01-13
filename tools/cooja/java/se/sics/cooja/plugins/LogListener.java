@@ -146,7 +146,7 @@ public class LogListener extends VisPlugin {
         } else if (col == COLUMN_DATA) {
           return log.ev.getMessage();
         } else if (col == COLUMN_CONCAT) {
-          return log.strID + '§' + log.ev.getMessage();
+          return log.strID + ' ' + log.ev.getMessage();
         }
         return null;
       }
