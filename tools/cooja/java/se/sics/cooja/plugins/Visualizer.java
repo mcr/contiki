@@ -36,8 +36,10 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
+import java.awt.RenderingHints;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -203,6 +205,7 @@ public class Visualizer extends VisPlugin {
           resetViewport--;
         }
 
+        ((Graphics2D)g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         for (VisualizerSkin skin: currentSkins) {
           skin.paintBeforeMotes(g);
         }
