@@ -231,7 +231,7 @@ PROCESS_THREAD(sky_shell_process, ev, data)
   shell_text_init();
   shell_time_init();
 
-  acc_sensor.activate();
+  SENSORS_ACTIVATE(&acc_sensor);
   shell_register_command(&acc_command);
   shell_register_command(&poke_command);
   shell_register_command(&peek_command);
