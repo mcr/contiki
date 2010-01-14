@@ -30,61 +30,51 @@
  *
  * @(#)$Id$
  */
+
+#include <stdlib.h>
+
+#include <io.h>
+
+#include "contiki.h"
 #include "lib/sensors.h"
-#include "dev/hwconf.h"
-#include "dev/button-sensor.h"
-#include <signal.h>
+#include "dev/light.h"
 
-const struct sensors_sensor button_sensor;
+const struct sensors_sensor light_sensor;
 
-static struct timer debouncetimer;
-static void* status(int type);
-
-HWCONF_PIN(BUTTON, 2, 7);
-HWCONF_IRQ(BUTTON, 2, 7);
-
-/*---------------------------------------------------------------------------*/
-interrupt(PORT2_VECTOR)
-     irq_p2(void)
+/*
+ * Initialize periodic readings from the 2 photo diodes. The most
+ * recent readings will be stored in ADC internal registers/memory.
+ */
+void
+static light_sensor_init(void)
 {
-  ENERGEST_ON(ENERGEST_TYPE_IRQ);
+  P6SEL |= 0x30;
+  P6DIR = 0xff;
+  P6OUT = 0x00;
 
-  if(BUTTON_CHECK_IRQ()) {
-    if(timer_expired(&debouncetimer)) {
-      timer_set(&debouncetimer, CLOCK_SECOND / 4);
-      sensors_changed(&button_sensor);
-      LPM4_EXIT;
-    }
-  }
-  P2IFG = 0x00;
-  ENERGEST_OFF(ENERGEST_TYPE_IRQ);
+  /* Set up the ADC. */
+  ADC12CTL0 = REF2_5V + SHT0_6 + SHT1_6 + MSC; // Setup ADC12, ref., sampling time
+  ADC12CTL1 = SHP + CONSEQ_3 + CSTARTADD_0;	// Use sampling timer, repeat-sequenc-of-channels
+
+  ADC12MCTL0 = (INCH_4 + SREF_0); // photodiode 1 (P64)
+  ADC12MCTL1 = (INCH_5 + SREF_0); // photodiode 2 (P65)
+
+  ADC12CTL0 |= ADC12ON + REFON;
+
+  ADC12CTL0 |= ENC;		// enable conversion
+  ADC12CTL0 |= ADC12SC;		// sample & convert
 }
-/*---------------------------------------------------------------------------*/
 
+/*---------------------------------------------------------------------------*/
 static unsigned int
 value(int type)
 {
-  return BUTTON_READ() || !timer_expired(&debouncetimer);
-}
-/*---------------------------------------------------------------------------*/
-static int
-configure(int type, void *c)
-{
+  /* should be constants */
   switch (type) {
-  case SENSORS_ACTIVE:
-    if (c) {
-      if(!status(SENSORS_ACTIVE)) {
-	timer_set(&debouncetimer, 0);
-	BUTTON_IRQ_EDGE_SELECTD();
-
-	BUTTON_SELECT();
-	BUTTON_MAKE_INPUT();
-
-	BUTTON_ENABLE_IRQ();
-      }
-    } else {
-      BUTTON_DISABLE_IRQ();
-    }
+/* Photosynthetically Active Radiation. */
+  case 0:   return ADC12MEM0;
+/* Total Solar Radiation. */
+  case 1:   return ADC12MEM1;
   }
   return 0;
 }
@@ -95,10 +85,28 @@ status(int type)
   switch (type) {
   case SENSORS_ACTIVE:
   case SENSORS_READY:
-    return BUTTON_IRQ_ENABLED();
+    return (ADC12CTL0 & (ADC12ON + REFON)) == (ADC12ON + REFON);
   }
   return NULL;
 }
+
 /*---------------------------------------------------------------------------*/
-SENSORS_SENSOR(button_sensor, BUTTON_SENSOR,
+static int
+configure(int type, void *c)
+{
+  switch (type) {
+  case SENSORS_ACTIVE:
+    if (c) {
+      if (!status(SENSORS_ACTIVE)) {
+	light_sensor_init();
+      }
+    } else {
+      /* shut down sensing */
+      ADC12CTL0 = 0;
+    }
+  }
+  return 0;
+}
+/*---------------------------------------------------------------------------*/
+SENSORS_SENSOR(light_sensor, "Light",
 	       value, configure, status);
