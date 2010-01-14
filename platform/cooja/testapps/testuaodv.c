@@ -62,12 +62,12 @@ PROCESS_THREAD(test_uaodv_process, ev, data)
   uip_ipaddr(&addr, 10,10,10,4);
   out_conn = udp_new(&addr, HTONS(COOJA_PORT), NULL);
 
-  button_sensor.activate();
+  button_sensor.configure(SENSORS_ACTIVE, 1);
 
   while(1) {
     PROCESS_WAIT_EVENT();
 
-    if(ev == sensors_event && data == &button_sensor && button_sensor.value(0)) {
+    if(ev == sensors_event && data == &button_sensor) {
       struct uaodv_rt_entry *route;
 
       uip_ipaddr(&addr, 10,10,10,4);

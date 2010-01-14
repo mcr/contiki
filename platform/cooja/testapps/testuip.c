@@ -50,7 +50,7 @@ PROCESS_THREAD(test_uip_process, ev, data)
   printf("uIP test process started\n");
 
   broadcast_conn = udp_broadcast_new(COOJA_PORT, NULL);
-  button_sensor.activate();
+  button_sensor.configure(SENSORS_ACTIVE, 1);
 
   while(1) {
     PROCESS_WAIT_EVENT();
@@ -61,14 +61,12 @@ PROCESS_THREAD(test_uip_process, ev, data)
       break;
     }
 
-    if(ev == sensors_event && data == &button_sensor && button_sensor.value(0)) {
+    if(ev == sensors_event && data == &button_sensor) {
       printf("button clicked, sending packet\n");
 
       tcpip_poll_udp(broadcast_conn);
       PROCESS_WAIT_UNTIL(ev == tcpip_event && uip_poll());
       uip_send("cooyah COOJA", 12);
-    } else if(ev == sensors_event && data == &button_sensor && !button_sensor.value(0)) {
-      printf("button released, ignoring event\n");
     } else if(ev == sensors_event) {
       printf("unknown sensor event: %s\n", ((struct sensors_sensor *)data)->type);
     } else if(ev == tcpip_event && uip_newdata()) {

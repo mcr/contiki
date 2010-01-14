@@ -44,12 +44,12 @@ PROCESS_THREAD(test_button_process, ev, data)
   PROCESS_BEGIN();
 
   printf("Starting Button test process (counter=%i)\n", counter);
-  button_sensor.activate();
+  button_sensor.configure(SENSORS_ACTIVE, 1);
 
   while(1) {
     PROCESS_WAIT_EVENT();
 
-    if (ev == sensors_event && data == &button_sensor && button_sensor.value(0)) {
+    if(ev == sensors_event && data == &button_sensor) {
       counter++;
       printf("Button pressed (counter=%i)\n", counter);
     }
