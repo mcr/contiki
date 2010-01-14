@@ -54,6 +54,6 @@ static CC_INLINE int  name##_IRQ_ENABLED() {return P##port##IE & (1 << bit);} \
 static CC_INLINE void name##_IRQ_EDGE_SELECTD() {P##port##IES |= 1 << bit;}   \
 static CC_INLINE void name##_IRQ_EDGE_SELECTU() {P##port##IES &= ~(1 << bit);}\
 static CC_INLINE int  name##_CHECK_IRQ() {return P##port##IFG & (1 << bit);} \
-static CC_INLINE int  name##_IRQ_PORT() {return IRQ_PORT##port;}
+static CC_INLINE int  name##_IRQ_PORT() {return port;}
 
 #endif /* __HWCONF_H__ */
