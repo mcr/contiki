@@ -251,8 +251,10 @@ main(int argc, char **argv)
   /*
    * Initialize light and humidity/temp sensors.
    */
-  sensors_light_init();
-  battery_sensor.activate();
+  /*
+    light_sensor.configure(SENSORS_ACTIVE, (void *) 1);
+    battery_sensor.configure(SENSORS_ACTIVE, (void *) 1);
+  */
   sht11_init();
 
   ctimer_init();
@@ -353,7 +355,7 @@ main(int argc, char **argv)
   }
 #endif /* WITH_UIP */
 
-  button_sensor.activate();
+  button_sensor.configure(SENSORS_ACTIVE, (void *) 1);
 
   energest_init();
   ENERGEST_ON(ENERGEST_TYPE_CPU);
