@@ -60,7 +60,7 @@ struct sensors_sensor {
   int          (* status)    (int type);
 };
 
-struct sensors_sensor *sensors_find(char *type);
+struct sensors_sensor *sensors_find(const char *type);
 struct sensors_sensor *sensors_next(const struct sensors_sensor *s);
 struct sensors_sensor *sensors_first(void);
 

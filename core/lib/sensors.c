@@ -83,7 +83,7 @@ sensors_changed(const struct sensors_sensor *s)
 }
 /*---------------------------------------------------------------------------*/
 struct sensors_sensor *
-sensors_find(char *prefix)
+sensors_find(const char *prefix)
 {
   int i;
   unsigned short len;
