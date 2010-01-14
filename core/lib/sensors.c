@@ -41,7 +41,6 @@
 
 extern struct sensors_sensor *sensors[];
 extern unsigned char sensors_flags[];
-extern struct process *sensors_selecting_proc[];
 
 #define FLAG_CHANGED    0x80
 
@@ -107,8 +106,6 @@ PROCESS_THREAD(sensors_process, ev, data)
   static int events;
 
   PROCESS_BEGIN();
-
-  sensors_platform_init();
 
   sensors_event = process_alloc_event();
 
