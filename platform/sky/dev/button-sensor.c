@@ -60,8 +60,7 @@ interrupt(PORT2_VECTOR)
   ENERGEST_OFF(ENERGEST_TYPE_IRQ);
 }
 /*---------------------------------------------------------------------------*/
-
-static unsigned int
+static int
 value(int type)
 {
   return BUTTON_READ() || !timer_expired(&debouncetimer);
@@ -85,6 +84,7 @@ configure(int type, int c)
     } else {
       BUTTON_DISABLE_IRQ();
     }
+    return 1;
   }
   return 0;
 }

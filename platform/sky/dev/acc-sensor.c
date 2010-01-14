@@ -38,9 +38,6 @@
 
 #include "dev/acc-sensor.h"
 #include <io.h>
-#include "dev/irq.h"
-
-#include <stdio.h>
 
 const struct sensors_sensor acc_sensor;
 static uint8_t active;

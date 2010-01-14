@@ -49,8 +49,9 @@ const struct sensors_sensor ctsrts_sensor;
 
 HWCONF_PIN(RS232RTS, 1, 7);
 
-HWCONF_PIN(RS232CTS, 1, 6);
-HWCONF_IRQ(RS232CTS, 1, 6);
+#define RS232CTS_IRQ() 6
+HWCONF_PIN(RS232CTS, 1, RS232CTS_IRQ());
+HWCONF_IRQ(RS232CTS, 1, RS232CTS_IRQ());
 
 /*---------------------------------------------------------------------------*/
 static int
@@ -104,12 +105,12 @@ configure(int type, int value)
           RS232CTS_IRQ_EDGE_SELECTU();
         }
 
-        irq_port1_activate(RS232CTS_IRQ_PORT(), irq);
+        irq_port1_activate(RS232CTS_IRQ(), irq);
         RS232CTS_ENABLE_IRQ();
       }
     } else {
       RS232CTS_DISABLE_IRQ();
-      irq_port1_deactivate(RS232CTS_IRQ_PORT());
+      irq_port1_deactivate(RS232CTS_IRQ());
     }
     return 1;
   }

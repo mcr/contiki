@@ -32,14 +32,13 @@
  */
 
 #include "lib/sensors.h"
-#include "dev/irq.h"
 #include "dev/cc2420.h"
 #include "dev/radio-sensor.h"
 
 const struct sensors_sensor radio_sensor;
 
 /*---------------------------------------------------------------------------*/
-static unsigned int
+static int
 value(int type)
 {
   switch(type) {
@@ -60,7 +59,7 @@ configure(int type, int c)
 static int
 status(int type)
 {
-  return NULL;
+  return 0;
 }
 /*---------------------------------------------------------------------------*/
 SENSORS_SENSOR(radio_sensor, RADIO_SENSOR,

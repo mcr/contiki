@@ -38,7 +38,6 @@
 
 #include "dev/battery-sensor.h"
 #include <io.h>
-#include "dev/irq.h"
 
 const struct sensors_sensor battery_sensor;
 static uint8_t active;
