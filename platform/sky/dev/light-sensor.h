@@ -26,8 +26,6 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * This file is part of the Configurable Sensor Network Application
- * Architecture for sensor nodes running the Contiki operating system.
  *
  * $Id$
  *
@@ -46,6 +44,8 @@
 
 extern const struct sensors_sensor light_sensor;
 
+#define LIGHT_SENSOR_PHOTOSYNTHETIC 0
+#define LIGHT_SENSOR_TOTAL_SOLAR    1
 
 
 #endif /* __LIGHT-SENSOR_H__ */
