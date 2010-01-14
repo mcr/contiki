@@ -29,7 +29,6 @@
  * $Id$
  */
 
-#include "lib/sensors.h"
 #include "dev/pir-sensor.h"
 #include "lib/simEnvChange.h"
 
@@ -42,52 +41,35 @@ char simPirIsActive;
 char simPirValue = 0;
 
 /*---------------------------------------------------------------------------*/
-static void
-init(void)
-{
-  simPirIsActive = 1;
-}
-/*---------------------------------------------------------------------------*/
 static int
-irq(void)
-{
-  return 0;
-}
-/*---------------------------------------------------------------------------*/
-static void
-activate(void)
-{
-  simPirIsActive = 1;
-}
-/*---------------------------------------------------------------------------*/
-static void
-deactivate(void)
-{
-  simPirIsActive = 0;
-}
-/*---------------------------------------------------------------------------*/
-static int
-active(void)
-{
-  return simPirIsActive;
-}
-/*---------------------------------------------------------------------------*/
-static unsigned int
 value(int type)
 {
   return simPirValue;
 }
 /*---------------------------------------------------------------------------*/
 static int
-configure(int type, void *c)
+configure(int type, int c)
 {
+  switch(type) {
+  case SENSORS_HW_INIT:
+    simPirIsActive = 0;
+    return 1;
+  case SENSORS_ACTIVE:
+    simPirIsActive = c;
+    return 1;
+  }
   return 0;
 }
 /*---------------------------------------------------------------------------*/
-static void *
+static int
 status(int type)
 {
-  return NULL;
+  switch(type) {
+  case SENSORS_ACTIVE:
+  case SENSORS_READY:
+    return simPirIsActive;
+  }
+  return 0;
 }
 /*---------------------------------------------------------------------------*/
 static void
@@ -95,7 +77,7 @@ doInterfaceActionsBeforeTick(void)
 {
   // Check if PIR value has changed
   if (simPirIsActive && simPirChanged) {
-    simPirValue = !simPirValue;
+    simPirValue++;
 
     sensors_changed(&pir_sensor);
     simPirChanged = 0;
@@ -113,5 +95,4 @@ SIM_INTERFACE(pir_interface,
 	doInterfaceActionsAfterTick);
 
 SENSORS_SENSOR(pir_sensor, PIR_SENSOR,
-	       init, irq, activate, deactivate, active,
-	       value, configure, status);
+               value, configure, status);

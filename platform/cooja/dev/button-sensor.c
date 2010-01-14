@@ -42,7 +42,7 @@ char simButtonChanged;
 char simButtonIsDown;
 char simButtonIsActive;
 /*---------------------------------------------------------------------------*/
-static unsigned int
+static int
 value(int type)
 {
   return simButtonIsDown || !timer_expired(&debouncetimer);
@@ -53,9 +53,11 @@ configure(int type, int c)
 {
   if(type == SENSORS_ACTIVE) {
     simButtonIsActive = c;
+    return 1;
   } else if(type == SENSORS_HW_INIT) {
     simButtonIsActive = 1;
     timer_set(&debouncetimer, 0);
+    return 1;
   }
   return 0;
 }
