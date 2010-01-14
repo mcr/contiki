@@ -52,9 +52,9 @@ PROCESS_THREAD(blinker_process, ev, data)
   etimer_stop(&pir_timer);
   etimer_stop(&vib_timer);
   etimer_set(&etimer, CLOCK_SECOND * 4);
-  button_sensor.activate();
-  vib_sensor.activate();
-  pir_sensor.activate();
+  button_sensor.configure(SENSORS_ACTIVE, 1);
+  vib_sensor.configure(SENSORS_ACTIVE, 1);
+  pir_sensor.configure(SENSORS_ACTIVE, 1);
 
   while(1) {
 
