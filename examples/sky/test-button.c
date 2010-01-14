@@ -40,6 +40,7 @@
 
 #include "contiki.h"
 #include "dev/button-sensor.h"
+#include "dev/light-sensor.h"
 #include "dev/leds.h"
 
 /*---------------------------------------------------------------------------*/
@@ -50,12 +51,13 @@ PROCESS_THREAD(test_button_process, ev, data)
 {
   PROCESS_BEGIN();
 
-  button_sensor.activate();
+  SENSORS_ACTIVATE(light_sensor);
   
   while(1) {
     PROCESS_WAIT_EVENT_UNTIL(ev == sensors_event &&
 			     data == &button_sensor);
     leds_toggle(LEDS_ALL);
+    printf("Light: %d\n", light_sensor.value(0));
   }
   
   PROCESS_END();
