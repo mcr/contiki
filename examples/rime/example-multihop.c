@@ -220,8 +220,8 @@ PROCESS_THREAD(example_multihop_process, ev, data)
 			received_announcement);
 
   /* Activate the button sensor. We use the button to drive traffic -
-     when the btton is pressed, a packet is sent. */
-  button_sensor.activate();
+     when the button is pressed, a packet is sent. */
+  button_sensor.configure(SENSORS_ACTIVE, (void *) 1);
 
   /* Loop forever, send a packet when the button is pressed. */
   while(1) {

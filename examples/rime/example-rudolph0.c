@@ -124,7 +124,7 @@ PROCESS_THREAD(example_rudolph0_process, ev, data)
 
   
   rudolph0_open(&rudolph0, 138, &rudolph0_call);
-  button_sensor.activate();
+  button_sensor.configure(SENSORS_ACTIVE, (void *) 1);
 
   while(1) {
     PROCESS_WAIT_EVENT_UNTIL(ev == sensors_event &&
