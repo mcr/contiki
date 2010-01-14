@@ -31,82 +31,67 @@
  * @(#)$Id$
  */
 
-#include "contiki-esb.h"
+#include "dev/vib-sensor.h"
+#include "dev/irq.h"
+#include "dev/hwconf.h"
 
 const struct sensors_sensor vib_sensor;
 
 static unsigned int vib;
-static unsigned char flags;
 
-HWCONF_PIN(VIB, 1, 4);
-HWCONF_IRQ(VIB, 1, 4);
+#define VIB_IRQ() 4
+HWCONF_PIN(VIB, 1, VIB_IRQ());
+HWCONF_IRQ(VIB, 1, VIB_IRQ());
 
 /*---------------------------------------------------------------------------*/
 static int
 irq(void)
 {
-  if(VIB_CHECK_IRQ()) {
-    ++vib;
-    if(flags & VIB_ENABLE_EVENT) {
-      sensors_changed(&vib_sensor);
-    }
-    return 1;
-  }
-  return 0;
-}
-/*---------------------------------------------------------------------------*/
-static void
-init(void)
-{
-  flags = VIB_ENABLE_EVENT;
-  vib = 0;
-  VIB_SELECT();
-  VIB_MAKE_INPUT();
-}
-/*---------------------------------------------------------------------------*/
-static void
-activate(void)
-{
-  sensors_add_irq(&vib_sensor, VIB_IRQ_PORT());
-  VIB_ENABLE_IRQ();
-}
-/*---------------------------------------------------------------------------*/
-static void
-deactivate(void)
-{
-  VIB_DISABLE_IRQ();
-  sensors_remove_irq(&vib_sensor, VIB_IRQ_PORT());
+  ++vib;
+  sensors_changed(&vib_sensor);
+  return 1;
 }
 /*---------------------------------------------------------------------------*/
 static int
-active(void)
-{
-  return VIB_IRQ_ENABLED();
-}
-/*---------------------------------------------------------------------------*/
-static unsigned int
 value(int type)
 {
   return vib;
 }
 /*---------------------------------------------------------------------------*/
 static int
-configure(int type, void *c)
+configure(int type, int value)
 {
-  if(c) {
-    flags |= type & 0xff;
-  } else {
-    flags &= ~type & 0xff;
+  switch (type) {
+  case SENSORS_HW_INIT:
+    vib = 0;
+    VIB_SELECT();
+    VIB_MAKE_INPUT();
+    return 1;
+  case SENSORS_ACTIVE:
+    if (value) {
+      if(!VIB_IRQ_ENABLED()) {
+        irq_port1_activate(VIB_IRQ(), irq);
+        VIB_ENABLE_IRQ();
+      }
+    } else {
+      VIB_DISABLE_IRQ();
+      irq_port1_deactivate(VIB_IRQ());
+    }
+    return 1;
   }
-  return 1;
+  return 0;
 }
 /*---------------------------------------------------------------------------*/
-static void *
+static int
 status(int type)
 {
-  return (void *) (((int) (flags & type)) & 0xff);
+  switch (type) {
+  case SENSORS_ACTIVE:
+  case SENSORS_READY:
+    return VIB_IRQ_ENABLED();
+  }
+  return 0;
 }
 /*---------------------------------------------------------------------------*/
 SENSORS_SENSOR(vib_sensor, VIB_SENSOR,
-	       init, irq, activate, deactivate, active,
-	       value, configure, status);
+               value, configure, status);

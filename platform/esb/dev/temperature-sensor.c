@@ -40,62 +40,52 @@
 #include "dev/ds1629.h"
 
 const struct sensors_sensor temperature_sensor;
-static unsigned char flags;
+static int active;
 
 /*---------------------------------------------------------------------------*/
-static void
-init(void)
-{
-  flags = 0;
-  ds1629_init();
-}
-/*---------------------------------------------------------------------------*/
 static int
-irq(void)
-{
-  return 0;
-}
-/*---------------------------------------------------------------------------*/
-static void
-activate(void)
-{
-  flags |= 1;
-  ds1629_start();
-}
-/*---------------------------------------------------------------------------*/
-static void
-deactivate(void)
-{
-  flags &= ~1;
-}
-/*---------------------------------------------------------------------------*/
-static int
-active(void)
-{
-  return (flags & 1);
-}
-/*---------------------------------------------------------------------------*/
-static unsigned int
 value(int type)
 {
   unsigned int temp;
-  signed int t = ds1629_temperature();
+  signed int t;
+
+  t = ds1629_temperature();
   temp = ((t / 128) * 50);
   return temp;
 }
 /*---------------------------------------------------------------------------*/
 static int
-configure(int type, void *c)
+configure(int type, int value)
 {
+  switch (type) {
+  case SENSORS_HW_INIT:
+    active = 0;
+    ds1629_init();
+    return 1;
+  case SENSORS_ACTIVE:
+    if (value) {
+      if(!active) {
+        active = 1;
+        ds1629_start();
+      }
+    } else {
+      active = 0;
+    }
+    return 1;
+  }
   return 0;
 }
 /*---------------------------------------------------------------------------*/
-static void *
+static int
 status(int type)
 {
-  return NULL;
+  switch (type) {
+  case SENSORS_ACTIVE:
+  case SENSORS_READY:
+    return active;
+  }
+  return 0;
 }
 /*---------------------------------------------------------------------------*/
 SENSORS_SENSOR(temperature_sensor, TEMPERATURE_SENSOR,
-	       init, irq, activate, deactivate, active,
-	       value, configure, status);
+               value, configure, status);

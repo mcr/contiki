@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005, Swedish Institute of Computer Science
+ * Copyright (c) 2009, Swedish Institute of Computer Science
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,13 +30,18 @@
  *
  * @(#)$Id$
  */
-#ifndef __PIR_SENSOR_H__
-#define __PIR_SENSOR_H__
+#ifndef __IRQ_H__
+#define __IRQ_H__
 
-#include "lib/sensors.h"
+void irq_init(void);
 
-extern const struct sensors_sensor pir_sensor;
+void irq_port1_activate(unsigned char irqno, int (* irq)(void));
+void irq_port1_deactivate(unsigned char irqno);
 
-#define PIR_SENSOR "PIR"
+void irq_adc12_activate(unsigned char adcno, unsigned char config,
+                        int (* irq)(void));
+void irq_adc12_deactivate(unsigned char adcno);
 
-#endif /* __PIR_SENSOR_H__ */
+int irq_adc12_active(unsigned char adcno);
+
+#endif /* __IRQ_H__ */
