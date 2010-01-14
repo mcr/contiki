@@ -82,7 +82,7 @@ value(int type)
 }
 /*---------------------------------------------------------------------------*/
 static int
-configure(int type, void *c)
+configure(int type, int c)
 {
   switch(type) {
   case SENSORS_ACTIVE:
@@ -95,13 +95,13 @@ configure(int type, void *c)
   return 0;
 }
 /*---------------------------------------------------------------------------*/
-static void *
+static int
 status(int type)
 {
   switch (type) {
   case SENSORS_ACTIVE:
   case SENSORS_READY:
-    return (void *) active;
+    return active;
   }
   return NULL;
 }

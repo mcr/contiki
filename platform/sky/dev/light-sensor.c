@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005, Swedish Institute of Computer Science
+ * Copyright (c) 2005-2010, Swedish Institute of Computer Science
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -66,7 +66,7 @@ static light_sensor_init(void)
 }
 
 /*---------------------------------------------------------------------------*/
-static unsigned int
+static int
 value(int type)
 {
   /* should be constants */
@@ -79,7 +79,7 @@ value(int type)
   return 0;
 }
 /*---------------------------------------------------------------------------*/
-static void *
+static int
 status(int type)
 {
   switch (type) {
@@ -87,12 +87,12 @@ status(int type)
   case SENSORS_READY:
     return (ADC12CTL0 & (ADC12ON + REFON)) == (ADC12ON + REFON);
   }
-  return NULL;
+  return 0;
 }
 
 /*---------------------------------------------------------------------------*/
 static int
-configure(int type, void *c)
+configure(int type, int c)
 {
   switch (type) {
   case SENSORS_ACTIVE:
