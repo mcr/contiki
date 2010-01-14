@@ -42,7 +42,7 @@
 #include "msp430def.h"
 
 #ifndef RF_CHANNEL
-#define RF_CHANNEL              16
+#define RF_CHANNEL              26
 #endif /* RF_CHANNEL */
 
 #define ELFLOADER_CONF_TEXT_IN_ROM 0
