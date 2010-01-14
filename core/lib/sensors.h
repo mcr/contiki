@@ -41,8 +41,8 @@
 #define SENSORS_ACTIVE 129 /* ACTIVE => 0 -> turn off, 1 -> turn on */
 #define SENSORS_READY 130 /* read only */
 
-#define SENSORS_ACTIVATE(sensor) (sensor)->configure(SENSORS_ACTIVE, 1)
-#define SENSORS_DEACTIVATE(sensor) (sensor)->configure(SENSORS_ACTIVE, 0)
+#define SENSORS_ACTIVATE(sensor) (sensor).configure(SENSORS_ACTIVE, 1)
+#define SENSORS_DEACTIVATE(sensor) (sensor).configure(SENSORS_ACTIVE, 0)
 
 #define SENSORS_SENSOR(name, type, value, configure, status)        \
 const struct sensors_sensor name = { type, value, configure, status }
