@@ -528,14 +528,19 @@ public class Simulation extends Observable implements Runnable {
 
       // Random seed
       if (element.getName().equals("randomseed")) {
-        if (manualRandomSeed != null) {
-          setRandomSeed(manualRandomSeed);
-        } else if (element.getText().equals("generated")) {
+        long newSeed;
+        
+        if (element.getText().equals("generated")) {
           randomSeedGenerated = true;
-          setRandomSeed(new Random().nextLong());
+          newSeed = new Random().nextLong();
         } else {
-          setRandomSeed(Long.parseLong(element.getText()));
+          newSeed = Long.parseLong(element.getText());
         }
+        if (manualRandomSeed != null) {
+          newSeed = manualRandomSeed;
+        }
+
+        setRandomSeed(newSeed);
       }
 
       // Max mote startup delay
