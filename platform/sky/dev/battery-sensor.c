@@ -74,7 +74,7 @@ deactivate(void)
   active = 0;
 }
 /*---------------------------------------------------------------------------*/
-static unsigned int
+static int
 value(int type)
 {
   return ADC12MEM2/*battery_value*/;
@@ -102,7 +102,7 @@ status(int type)
   case SENSORS_READY:
     return active;
   }
-  return NULL;
+  return 0;
 }
 /*---------------------------------------------------------------------------*/
 SENSORS_SENSOR(battery_sensor, BATTERY_SENSOR,
