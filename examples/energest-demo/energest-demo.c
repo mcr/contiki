@@ -340,7 +340,7 @@ PROCESS_THREAD(user_process, ev, data)
 
   printf("Node id %d\n", node_id);
   
-  button_sensor.activate();
+  SENSORS_ACTIVATE(button_sensor);
   state = RADIO_OFF;
   
   while(1) {

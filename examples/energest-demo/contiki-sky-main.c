@@ -37,7 +37,10 @@
 
 #include "contiki.h"
 
+#include "dev/battery-sensor.h"
 #include "dev/button-sensor.h"
+#include "dev/light-sensor.h"
+#include "dev/sht11-sensor.h"
 #include "dev/ds2411.h"
 #include "dev/sht11.h"
 #include "dev/leds.h"
@@ -59,7 +62,7 @@
 
 /*#include "codeprop/codeprop.h"*/
 
-SENSORS(&button_sensor);
+SENSORS(&button_sensor, &light_sensor, &battery_sensor, &sht11_sensor);
 
 extern int lpm_en;
 
@@ -140,8 +143,7 @@ main(int argc, char **argv)
   printf("Starting %s "
 	 "($Id$)\n", __FILE__);
   ds2411_init();
-  sensors_light_init();
-  sht11_init();
+
   xmem_init();
   leds_toggle(LEDS_RED | LEDS_GREEN | LEDS_BLUE);
 
@@ -172,6 +174,14 @@ main(int argc, char **argv)
   process_init();
   process_start(&etimer_process, NULL);
   process_start(&sensors_process, NULL);
+
+  /*
+   * Initialize light and humidity/temp sensors.
+   */
+
+  SENSORS_ACTIVATE(light_sensor);
+  SENSORS_ACTIVATE(sht11_sensor);
+
   ctimer_init();
 
   set_rime_addr();
@@ -193,7 +203,7 @@ main(int argc, char **argv)
   process_start(&slip_process, NULL);
 #endif /* WITH_UIP */
 
-  button_sensor.activate();
+  SENSORS_ACTIVATE(button_sensor);
   
   print_processes(autostart_processes);
   autostart_start(autostart_processes);
