@@ -92,13 +92,19 @@ public class SkyByteRadio extends Radio implements CustomDataRadio {
       int expLen = 0;
       byte[] buffer = new byte[127 + 15];
       public void receivedByte(byte data) {
-        if (len == 0) {
+        if (!isTransmitting()) {
           lastEventTime = SkyByteRadio.this.mote.getSimulation().getSimulationTime();
           lastEvent = RadioEvent.TRANSMISSION_STARTED;
           isTransmitting = true;
           /*logger.debug("----- SKY TRANSMISSION STARTED -----");*/
           setChanged();
           notifyObservers();
+        }
+
+        if (len >= buffer.length) {
+          /* Bad size packet, too large */
+          logger.debug("Error: bad size: " + len + ", dropping outgoing byte: " + data);
+          return;
         }
 
         /* send this byte to all nodes */
@@ -144,8 +150,16 @@ public class SkyByteRadio extends Radio implements CustomDataRadio {
         if (isReceiverOn()) {
           lastEvent = RadioEvent.HW_ON;
         } else {
+          /* Radio was turned off during transmission.
+           * May for example happen if watchdog triggers */
           if (isTransmitting()) {
             logger.fatal("Turning off radio while transmitting");
+            lastEventTime = SkyByteRadio.this.mote.getSimulation().getSimulationTime();
+            /*logger.debug("----- SKY TRANSMISSION FINISHED -----");*/
+            isTransmitting = false;
+            lastEvent = RadioEvent.TRANSMISSION_FINISHED;
+            setChanged();
+            notifyObservers();
           }
           lastEvent = RadioEvent.HW_OFF;
         }
