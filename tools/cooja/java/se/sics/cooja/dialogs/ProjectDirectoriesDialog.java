@@ -137,7 +137,7 @@ public class ProjectDirectoriesDialog extends JDialog {
 
     buttonPane.add(Box.createRigidArea(new Dimension(10, 0)));
 
-    button = new JButton("Set default");
+    button = new JButton("Save as default");
     button.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         Object[] options = { "Ok", "Cancel" };
