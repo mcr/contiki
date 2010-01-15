@@ -72,23 +72,6 @@ public interface Plugin {
   public void closePlugin();
 
   /**
-   * This method is used by the simulator for book-keeping purposes, and should
-   * normally not be called by the plugin itself.
-   *
-   * @param tag
-   *          Object
-   */
-  public void tagWithObject(Object tag);
-
-  /**
-   * This method is used by the simulator for book-keeping purposes, and should
-   * normally not be called by the plugin itself.
-   *
-   * @return Object
-   */
-  public Object getTag();
-
-  /**
    * Returns XML elements representing the current config of this plugin. This
    * is fetched by the simulator for example when saving a simulation
    * configuration file. For example a plugin may return the current size and
