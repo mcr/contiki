@@ -46,7 +46,7 @@ import se.sics.cooja.*;
  */
 @ClassDescription("Mote Information")
 @PluginType(PluginType.MOTE_PLUGIN)
-public class MoteInformation extends VisPlugin {
+public class MoteInformation extends VisPlugin implements MotePlugin {
   private static Logger logger = Logger.getLogger(MoteInformation.class);
 
   private static final long serialVersionUID = 1L;
@@ -169,6 +169,10 @@ public class MoteInformation extends VisPlugin {
         logger.warn("Could not release panel");
       }
     }
+  }
+
+  public Mote getMote() {
+    return mote;
   }
 
 }

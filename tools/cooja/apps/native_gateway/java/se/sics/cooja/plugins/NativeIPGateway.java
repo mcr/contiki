@@ -70,6 +70,7 @@ import org.jdom.Element;
 import se.sics.cooja.ClassDescription;
 import se.sics.cooja.GUI;
 import se.sics.cooja.Mote;
+import se.sics.cooja.MotePlugin;
 import se.sics.cooja.PluginType;
 import se.sics.cooja.Simulation;
 import se.sics.cooja.VisPlugin;
@@ -80,7 +81,7 @@ import se.sics.cooja.interfaces.SerialPort;
 
 @ClassDescription("Open Native IP Gateway")
 @PluginType(PluginType.MOTE_PLUGIN)
-public class NativeIPGateway extends VisPlugin {
+public class NativeIPGateway extends VisPlugin implements MotePlugin {
   private static final long serialVersionUID = 1L;
   private static Logger logger = Logger.getLogger(NativeIPGateway.class);
 
@@ -1011,6 +1012,10 @@ public class NativeIPGateway extends VisPlugin {
       Runtime.getRuntime().removeShutdownHook(shutdownHook);
       shutdownHook = null;
     }
+  }
+
+  public Mote getMote() {
+    return mote;
   }
 
 }
