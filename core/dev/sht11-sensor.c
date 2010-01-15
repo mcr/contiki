@@ -59,7 +59,10 @@ value(int type)
     /* Total Solar Radiation. */
   case SHT11_SENSOR_HUMIDITY:
     return sht11_humidity();
-  }
+
+  case SHT11_SENSOR_BATTERY_INDICATOR:
+    return sht11_sreg() & 0x40? 1: 0;
+}
   return 0;
 }
 /*---------------------------------------------------------------------------*/
@@ -76,7 +79,7 @@ status(int type)
 
 /*---------------------------------------------------------------------------*/
 static int
-configure(int type, void *c)
+configure(int type, int c)
 {
   switch(type) {
   case SENSORS_ACTIVE:

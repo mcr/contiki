@@ -44,8 +44,9 @@
 
 extern const struct sensors_sensor sht11_sensor;
 
-#define SHT11_SENSOR_TEMP       0
-#define SHT11_SENSOR_HUMIDITY   1
+#define SHT11_SENSOR_TEMP              0
+#define SHT11_SENSOR_HUMIDITY          1
+#define SHT11_SENSOR_BATTERY_INDICATOR 2
 
 
 #endif /* __SHT11-SENSOR_H__ */
