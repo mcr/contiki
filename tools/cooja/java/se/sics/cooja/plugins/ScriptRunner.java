@@ -70,6 +70,7 @@ public class ScriptRunner extends VisPlugin {
       "helloworld.js", "Wait for 'Hello, world'",
       "log_all.js", "Just log all printf()'s and timeout",
       "shell.js", "Basic shell interaction",
+      "plugins.js", "Interact with surrounding COOJA plugins",
   };
 
   private Simulation simulation;
