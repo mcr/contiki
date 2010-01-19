@@ -35,6 +35,7 @@
 #include "dev/spi.h"
 #include "dev/cc2420.h"
 
+uint8_t cc2420_arch_sfd_counter;
 uint16_t cc2420_arch_sfd_start_time;
 uint16_t cc2420_arch_sfd_end_time;
 
@@ -48,8 +49,10 @@ cc24240_timerb1_interrupt(void)
   /* always read TBIV to clear IFG */
   tbiv = TBIV;
   if(SFD_IS_1) {
+    cc2420_arch_sfd_counter++;
     cc2420_arch_sfd_start_time = TBCCR1;
   } else {
+    cc2420_arch_sfd_counter = 0;
     cc2420_arch_sfd_end_time = TBCCR1;
   }
   ENERGEST_OFF(ENERGEST_TYPE_IRQ);
