@@ -72,6 +72,10 @@ public class MspDebugOutput extends Log {
     this.mote = (MspMote) mote;
     this.mem = (MspMoteMemory) this.mote.getMemory();
 
+    if (!mem.variableExists(CONTIKI_POINTER)) {
+      /* Disabled */
+      return;
+    }
     this.mote.getCPU().setBreakPoint(mem.getVariableAddress(CONTIKI_POINTER),
         new CPUMonitor() {
       public void cpuAction(int type, int adr, int data) {
@@ -87,7 +91,6 @@ public class MspDebugOutput extends Log {
         }
       }
     });
-    
   }
 
   private String extractString(MspMoteMemory mem, int address) {
