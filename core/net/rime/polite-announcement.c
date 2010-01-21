@@ -120,15 +120,20 @@ adv_packet_received(struct ipolite_conn *ipolite, const rimeaddr_t *from)
   struct announcement_msg adata;
   int i;
 
+  /* Copy number of announcements */
   memcpy(&adata, packetbuf_dataptr(), sizeof(struct announcement_msg));
   PRINTF("%d.%d: adv_packet_received from %d.%d with %d announcements\n",
 	 rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1],
 	 from->u8[0], from->u8[1], adata.num);
 
   for(i = 0; i < adata.num; ++i) {
+    struct announcement_data data;
+
+    /* Copy announcements */
+    memcpy(&data, &((struct announcement_msg *)packetbuf_dataptr())->data[i], sizeof(struct announcement_data));
     announcement_heard(from,
-		       adata.data[i].id,
-		       adata.data[i].value);
+		       data.id,
+		       data.value);
   }
 }
 /*---------------------------------------------------------------------------*/
