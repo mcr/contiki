@@ -187,7 +187,6 @@ public class MspBreakpointContainer implements WatchpointMote {
   protected void signalBreakpointTrigger(MspBreakpoint b) {
     if (b.stopsSimulation() && mspMote.getSimulation().isRunning()) {
       /* Stop simulation immediately */
-      mspMote.getSimulation().stopSimulation();
       mspMote.stopNextInstruction();
     }
 
