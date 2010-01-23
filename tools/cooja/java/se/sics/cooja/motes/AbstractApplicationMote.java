@@ -72,7 +72,9 @@ public abstract class AbstractApplicationMote extends AbstractWakeupMote impleme
     public void update(Observable obs, Object obj) {
       ApplicationRadio radio = (ApplicationRadio) obs;
       if (radio.getLastEvent() == Radio.RadioEvent.RECEPTION_FINISHED) {
-        receivedPacket(radio.getLastPacketReceived());
+        /* only send in packets when they exist */
+        if (radio.getLastPacketReceived() != null)
+            receivedPacket(radio.getLastPacketReceived());
       } else if (radio.getLastEvent() == Radio.RadioEvent.TRANSMISSION_FINISHED) {
         sentPacket(radio.getLastPacketTransmitted());
       }
