@@ -42,6 +42,7 @@ import org.jdom.Element;
 
 import se.sics.cooja.*;
 import se.sics.cooja.MoteType.MoteTypeCreationException;
+import se.sics.cooja.interfaces.ApplicationLED;
 import se.sics.cooja.interfaces.ApplicationRadio;
 import se.sics.cooja.interfaces.MoteID;
 import se.sics.cooja.interfaces.Position;
@@ -56,7 +57,7 @@ public abstract class AbstractApplicationMoteType implements MoteType {
   private String description = null;
 
   private final Class<? extends MoteInterface>[] moteInterfaceClasses =
-    new Class[] { SimpleMoteID.class, Position.class, ApplicationRadio.class };
+    new Class[] { SimpleMoteID.class, Position.class, ApplicationRadio.class, ApplicationLED.class};
 
   public AbstractApplicationMoteType() {
     super();
