@@ -633,15 +633,9 @@ public class Simulation extends Observable implements Runnable {
         if (moteType == null) {
           throw new Exception("No mote type for mote: " + moteClassName);
         }
-        
-        /* Load mote class using mote type's class loader */
-        Class<? extends Mote> moteClass = myGUI.tryLoadClass(moteType, Mote.class, moteClassName);
-        if (moteClass == null) {
-          throw new Exception("Could not load mote class: " + element.getText().trim());
-        }
-
-        Mote mote = moteClass.getConstructor((Class[]) null).newInstance((Object[]) null);
-        mote.setType(moteType);
+       
+        /* Create mote using mote type */
+        Mote mote = moteType.generateMote(this);
         if (mote.setConfigXML(this, element.getChildren(), visAvailable)) {
           addMote(mote);
         } else {
