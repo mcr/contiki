@@ -83,6 +83,8 @@ public class ApplicationRadio extends Radio {
   private double outputPower = 0;
   private int outputPowerIndicator = 100;
 
+private int interfered;
+
   public ApplicationRadio(Mote mote) {
     this.mote = mote;
     this.simulation = mote.getSimulation();
@@ -117,10 +119,17 @@ public class ApplicationRadio extends Radio {
   }
 
   public void signalReceptionEnd() {
+      //System.out.println("SignalReceptionEnded for node: " + mote.getID() + " intf:" + interfered);
     if (isInterfered() || packetToMote == null) {
-      isInterfered = false;
+      interfered--;
+      if (interfered == 0) isInterfered = false;
+      if (interfered < 0) {
+          isInterfered = false;
+          //logger.warn("Interfered got lower than 0!!!");
+          interfered = 0;
+      }
       packetToMote = null;
-      return;
+      if (interfered > 0) return;
     }
 
     isReceiving = false;
@@ -154,7 +163,9 @@ public class ApplicationRadio extends Radio {
     return lastEvent;
   }
 
+  /* Note: this must be called exactly as many times as the reception ended */
   public void interfereAnyReception() {
+    interfered++;
     if (!isInterfered()) {
       isInterfered = true;
 
