@@ -46,9 +46,17 @@
 #include "8051def.h"
 
 #define inline
+#ifdef SDCC
+#ifdef HAVE_SDCC_BANKING
+#else
+#define __banked 
+#endif
+#else
+#define __banked 
+#endif
 
-void bus_init(void);
-void flash_read(uint8_t *buf, uint32_t address, uint8_t size);
+void bus_init(void) __banked;
+void flash_read(uint8_t *buf, uint32_t address, uint8_t size) __banked;
 void cc2430_clock_ISR( void ) __interrupt (ST_VECTOR);
 
 #endif /* __BUS_H__ */
