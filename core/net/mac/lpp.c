@@ -882,6 +882,12 @@ off(int keep_radio_on)
   return 1;
 }
 /*---------------------------------------------------------------------------*/
+static unsigned short
+channel_check_interval(void)
+{
+  return OFF_TIME + LISTEN_TIME;
+}
+/*---------------------------------------------------------------------------*/
 const struct mac_driver lpp_driver = {
   "LPP",
   lpp_init,
@@ -890,6 +896,7 @@ const struct mac_driver lpp_driver = {
   set_receive_function,
   on,
   off,
+  channel_check_interval,
 };
 /*---------------------------------------------------------------------------*/
 static void

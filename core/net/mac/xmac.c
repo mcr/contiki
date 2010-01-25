@@ -920,6 +920,12 @@ turn_off(int keep_radio_on)
   }
 }
 /*---------------------------------------------------------------------------*/
+static unsigned short
+channel_check_interval(void)
+{
+  return (1ul * CLOCK_SECOND * DEFAULT_PERIOD) / RTIMER_ARCH_SECOND;
+}
+/*---------------------------------------------------------------------------*/
 const struct mac_driver xmac_driver =
   {
     "X-MAC",
@@ -928,5 +934,6 @@ const struct mac_driver xmac_driver =
     read_packet,
     set_receive_function,
     turn_on,
-    turn_off
+    turn_off,
+    channel_check_interval,
   };
