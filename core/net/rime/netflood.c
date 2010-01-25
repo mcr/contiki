@@ -148,7 +148,7 @@ void
 netflood_open(struct netflood_conn *c, clock_time_t queue_time,
 	uint16_t channel, const struct netflood_callbacks *u)
 {
-  ipolite_open(&c->c, channel, &netflood);
+  ipolite_open(&c->c, channel, 1, &netflood);
   c->u = u;
   c->queue_time = queue_time;
 }
