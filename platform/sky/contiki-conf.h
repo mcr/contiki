@@ -5,6 +5,7 @@
 #define CONTIKI_CONF_H
 
 /* Specifies the default MAC driver */
+#define MAC_CONF_CSMA             1
 #define MAC_CONF_DRIVER xmac_driver
 
 #define XMAC_CONF_COMPOWER 1
