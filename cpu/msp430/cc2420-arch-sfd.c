@@ -35,9 +35,9 @@
 #include "dev/spi.h"
 #include "dev/cc2420.h"
 
-uint8_t cc2420_arch_sfd_counter;
-uint16_t cc2420_arch_sfd_start_time;
-uint16_t cc2420_arch_sfd_end_time;
+volatile uint8_t cc2420_arch_sfd_counter;
+volatile uint16_t cc2420_arch_sfd_start_time;
+volatile uint16_t cc2420_arch_sfd_end_time;
 
 /*---------------------------------------------------------------------------*/
 /* SFD interrupt for timestamping radio packets */

@@ -31,9 +31,9 @@
 #ifndef CC2420_ARCH_SFD_H
 #define CC2420_ARCH_SFD_H
 
-extern uint8_t cc2420_arch_sfd_counter;
-extern uint16_t cc2420_arch_sfd_start_time;
-extern uint16_t cc2420_arch_sfd_end_time;
+extern volatile uint8_t cc2420_arch_sfd_counter;
+extern volatile uint16_t cc2420_arch_sfd_start_time;
+extern volatile uint16_t cc2420_arch_sfd_end_time;
 
 void cc2420_arch_sfd_init(void);
 
