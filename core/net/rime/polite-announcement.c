@@ -62,7 +62,11 @@ struct announcement_data {
   uint16_t value;
 };
 
+#ifdef POLITE_ANNOUNCEMENT_CONF_MAX_DUPS
+#define NUM_DUPS POLITE_ANNOUNCEMENT_CONF_MAX_DUPS
+#else /* POLITE_ANNOUNCEMENT_CONF_MAX_DUPS */
 #define NUM_DUPS 5
+#endif /* POLITE_ANNOUNCEMENT_CONF_MAX_DUPS */
 
 #define ANNOUNCEMENT_MSG_HEADERLEN 2
 struct announcement_msg {
