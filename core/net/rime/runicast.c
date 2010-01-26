@@ -51,7 +51,11 @@
 
 #define RUNICAST_PACKET_ID_BITS 2
 
+#ifdef RUNICAST_CONF_REXMIT_TIME
+#define REXMIT_TIME RUNICAST_CONF_REXMIT_TIME
+#else /* RUNICAST_CONF_REXMIT_TIME */
 #define REXMIT_TIME CLOCK_SECOND
+#endif /* RUNICAST_CONF_REXMIT_TIME */
 
 static const struct packetbuf_attrlist attributes[] =
   {
