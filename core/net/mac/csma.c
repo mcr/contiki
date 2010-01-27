@@ -50,6 +50,8 @@
 #include "lib/list.h"
 #include "lib/memb.h"
 
+#include <string.h>
+
 struct queued_packet {
   struct queued_packet *next;
   struct queuebuf *buf;
@@ -181,7 +183,7 @@ channel_check_interval(void)
 static char namebuf[NAMEBUF_LEN];
 const struct mac_driver csma_driver = {
   namebuf,
-  csma_init,
+  (const struct mac_driver *(*)(const struct radio_driver *psc))csma_init,
   send_packet,
   read_packet,
   set_receive_function,
