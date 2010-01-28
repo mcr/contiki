@@ -55,5 +55,6 @@
 
 #define CC2420_CONF_AUTOACK     1
 
-
+#undef UIP_CONF_BUFFER_SIZE
+#define UIP_CONF_BUFFER_SIZE  256
 #endif /* __BRIDGE_CONF_H__ */
