@@ -40,8 +40,6 @@
 
 #include "pfs.h"
 
-#define UIP_CONF_LOGGING 0
-
 #define CTK_CONF_MENU_KEY         CH_ESC
 #define CTK_CONF_WINDOWSWITCH_KEY 0x17	/* Ctrl-W */
 #define CTK_CONF_WIDGETUP_KEY     0x01	/* Ctrl-A */

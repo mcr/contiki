@@ -68,8 +68,10 @@ typedef unsigned short uip_stats_t;
 
 #if WITH_LOGGING
 #define LOG_CONF_ENABLED 1
+#define UIP_CONF_LOGGING 1
 #else /* WITH_LOGGING */
 #define LOG_CONF_ENABLED 0
+#define UIP_CONF_LOGGING 0
 #endif /* WITH_LOGGING */
 
 #if MTU_SIZE

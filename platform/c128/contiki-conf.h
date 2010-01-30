@@ -38,8 +38,6 @@
 
 #include "6502def.h"
 
-#define UIP_CONF_LOGGING 0
-
 #define CTK_CONF_MENU_KEY         CH_F1
 #define CTK_CONF_WINDOWSWITCH_KEY CH_F3
 #define CTK_CONF_WIDGETUP_KEY     CH_F5
