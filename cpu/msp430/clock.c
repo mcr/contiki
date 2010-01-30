@@ -63,9 +63,7 @@ interrupt(TIMERA1_VECTOR) timera1 (void) {
 
     /* Make sure interrupt time is future */
     do {
-      TACTL &= ~MC1;
       TACCR1 += INTERVAL;
-      TACTL |= MC1;
       ++count;
 
       /* Make sure the CLOCK_CONF_SECOND is a power of two, to ensure

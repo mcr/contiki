@@ -82,7 +82,6 @@ rtimer_arch_schedule(rtimer_clock_t t)
 {
   PRINTF("rtimer_arch_schedule time %u\n", t);
 
-  TACTL &= ~MC1;
   TACCR0 = t;
-  TACTL |= MC1;
 }
+/*---------------------------------------------------------------------------*/
