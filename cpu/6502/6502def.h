@@ -99,11 +99,9 @@ typedef unsigned short uip_stats_t;
 #endif /* WITH_CLIENT */
 
 #if WITH_DNS
-#define UIP_CONF_UDP           1
-#define UIP_CONF_UDP_CHECKSUMS 1
+#define UIP_CONF_UDP 1
 #else /* WITH_DNS */
-#define UIP_CONF_UDP           0
-#define UIP_CONF_UDP_CHECKSUMS 0
+#define UIP_CONF_UDP 0
 #endif /* WITH_DNS */
 
 #define CTK_CONF_WIDGET_FLAGS 0
