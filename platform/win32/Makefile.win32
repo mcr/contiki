@@ -55,6 +55,10 @@ ifdef PLATFORM_BUILD
              -u _cfs_open -u _cfs_opendir -u _uiplib_ipaddrconv
 endif
 
+### Set a target-specific variable value
+${foreach PRG,$(PRGS),${addprefix $(OBJECTDIR)/, \
+                      $(${call appname,$(PRG)_src:.c=.o})}}: CFLAGS += -D_USRDLL
+
 ### Generate the module-link prerequisites
 define prg_template
 $(1).prg: $${addprefix $$(OBJECTDIR)/,$$($(2)_src:.c=.o)}
