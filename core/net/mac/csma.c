@@ -124,8 +124,9 @@ send_packet(void)
     ctimer_set(&q->retransmit_timer, time,
 	       retransmit_packet, q);
     list_add(packet_list, q);
+  } else {
+    queuebuf_free(buf);
   }
-  queuebuf_free(buf);
   return ret;
 }
 #else /* CSMA_CONF_REXMIT */
