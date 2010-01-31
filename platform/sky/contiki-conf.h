@@ -5,11 +5,13 @@
 #define CONTIKI_CONF_H
 
 /* Specifies the default MAC driver */
-#define MAC_CONF_CSMA             1
-#define MAC_CONF_DRIVER xmac_driver
+#define MAC_CONF_CSMA               1
+#define MAC_CONF_DRIVER             xmac_driver
 
-#define XMAC_CONF_COMPOWER 1
-#define XMAC_CONF_ANNOUNCEMENTS 1
+#define XMAC_CONF_COMPOWER          1
+#define XMAC_CONF_ANNOUNCEMENTS     1
+#define CXMAC_CONF_COMPOWER         1
+#define CXMAC_CONF_ANNOUNCEMENTS    1
 
 #define PACKETBUF_CONF_ATTRS_INLINE 1
 
