@@ -100,8 +100,16 @@ static unsigned char iconx, icony;
 #define ICONY_MAX    height
 #endif /* CTK_CONF_ICONS */
 
+#ifndef ctk_arch_keyavail
+unsigned char ctk_arch_keyavail(void);
+#endif /* ctk_arch_keyavail */
+
+#ifndef ctk_arch_getkey
+ctk_arch_key_t ctk_arch_getkey(void);
+#endif /* ctk_arch_getkey */
+
 #ifndef ctk_arch_isprint
-unsigned char ctk_arch_isprint(char c);
+unsigned char ctk_arch_isprint(ctk_arch_key_t key);
 #endif /* ctk_arch_isprint */
 
 PROCESS(ctk_process, "CTK Contiki GUI");
