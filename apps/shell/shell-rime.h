@@ -48,8 +48,11 @@ void shell_rime_init(void);
 /* Rime channel used by the 'unicast' debug command, which uses 1 channel */
 #define SHELL_RIME_CHANNEL_UNICAST   20
 
+/* Rime channel used by the 'runicast' debug command, which uses 1 channel */
+#define SHELL_RIME_CHANNEL_RUNICAST  SHELL_RIME_CHANNEL_UNICAST + 1
+
 /* Rime channel used by the 'broadcast' debug command, which uses 1 channel */
-#define SHELL_RIME_CHANNEL_BROADCAST SHELL_RIME_CHANNEL_UNICAST + 1
+#define SHELL_RIME_CHANNEL_BROADCAST SHELL_RIME_CHANNEL_RUNICAST + 1
 
 /* Rime channel used by the 'nodes' command, which uses 1 channel */
 #define SHELL_RIME_CHANNEL_NODES     SHELL_RIME_CHANNEL_BROADCAST + 1
