@@ -369,6 +369,7 @@ struct shell_input {
 #include "shell-ps.h"
 #include "shell-reboot.h"
 #include "shell-rime-debug.h"
+#include "shell-rime-debug-runicast.h"
 #include "shell-rime-neighbors.h"
 #include "shell-rime-netcmd.h"
 #include "shell-rime-ping.h"
