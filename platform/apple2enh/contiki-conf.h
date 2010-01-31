@@ -48,9 +48,13 @@
 #define MOUSE_CONF_XTOC(x) ((x) * 2 / 7)
 #define MOUSE_CONF_YTOC(y) ((y) / 8)
 
+#define IRC_CONF_WIDTH  80
+#define IRC_CONF_HEIGHT 23
+
 #define WEBSERVER_CONF_CGI_CONNS UIP_CONNS
 #define WEBSERVER_CONF_CFS_CONNS 7
 
+#define WWW_CONF_WEBPAGE_WIDTH      80
 #define WWW_CONF_WEBPAGE_HEIGHT     19
 #define WWW_CONF_HISTORY_SIZE        4
 #define WWW_CONF_MAX_URLLEN         78
