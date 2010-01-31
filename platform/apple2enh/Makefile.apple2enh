@@ -50,7 +50,7 @@ ifeq ($(MAKECMDGOALS),disk)
   endif
 endif
 
-TRIM_PROJECT := ${shell echo $(CONTIKI_PROJECT) | sed 's!\(.\{1,8\}\).*!\1!'}
+TRIM_PROJECT := ${shell echo $(CONTIKI_PROJECT) | sed 's!\([^-]\{1,8\}\).*!\1!'}
 
 disk: all
 	cp $(CONTIKI)/tools/$(TARGET)/prodos.dsk contiki.dsk
