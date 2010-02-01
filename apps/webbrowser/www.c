@@ -301,6 +301,7 @@ open_url(void)
     file = "/";
   }
   
+#if UIP_UDP
   /* Try to lookup the hostname. If it fails, we initiate a hostname
      lookup and print out an informative message on the statusbar. */
   if(uiplib_ipaddrconv(host, (unsigned char *)addr) == 0) {
@@ -310,6 +311,9 @@ open_url(void)
       return;
     }
   }
+#else /* UIP_UDP */
+  uiplib_ipaddrconv(host, (unsigned char *)addr);
+#endif /* UIP_UDP */
 
   /* The hostname we present in the hostname table, so we send out the
      initial GET request. */
@@ -510,6 +514,7 @@ PROCESS_THREAD(www_process, ev, data)
 	petsciiconv_topetscii(statustexturl, sizeof(statustexturl));
 	show_statustext(statustexturl);
       }
+#if UIP_UDP
     } else if(ev == resolv_event_found) {
       /* Either found a hostname, or not. */
       if((char *)data != NULL &&
@@ -518,6 +523,7 @@ PROCESS_THREAD(www_process, ev, data)
       } else {
 	show_statustext("Host not found.");
       }
+#endif /* UIP_UDP */
     } else if(ev == ctk_signal_window_close ||
 	      ev == PROCESS_EVENT_EXIT) {
       quit();
