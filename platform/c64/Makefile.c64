@@ -41,7 +41,7 @@ LDFLAGS += -t $(TARGET)
 
 ifeq ($(MAKECMDGOALS),disk)
   ifndef C1541
-    ${error C1541 not defined! You must specify where the VICE c1541 resides}
+    ${error C1541 not defined! You must specify where VICE c1541 resides}
   endif
 endif
 
