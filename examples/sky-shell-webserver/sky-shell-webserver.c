@@ -59,7 +59,6 @@ PROCESS_THREAD(sky_shell_process, ev, data)
 
   serial_shell_init();
 
-  shell_file_init();
   shell_wget_init();
   shell_text_init();
 
