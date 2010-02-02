@@ -81,7 +81,7 @@ static struct recent_packet recent_packets[NUM_RECENT_PACKETS];
 static uint8_t recent_packet_ptr;
 
 #define FORWARD_PACKET_LIFETIME (CLOCK_SECOND * 16)
-#define MAX_FORWARDING_QUEUE 4
+#define MAX_FORWARDING_QUEUE 6
 PACKETQUEUE(forwarding_queue, MAX_FORWARDING_QUEUE);
 
 #define SINK 0
