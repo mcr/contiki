@@ -184,7 +184,7 @@ channel_check_interval(void)
 static char namebuf[NAMEBUF_LEN];
 const struct mac_driver csma_driver = {
   namebuf,
-  (const struct mac_driver *(*)(const struct radio_driver *psc))csma_init,
+  NULL,
   send_packet,
   read_packet,
   set_receive_function,
