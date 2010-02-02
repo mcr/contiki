@@ -33,7 +33,8 @@
 
 /**
  * \file
- *         A brief description of what this file is.
+ *         An example of how to use the button and light sensor on
+ *         the Tmote Sky platform.
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
@@ -58,7 +59,7 @@ PROCESS_THREAD(test_button_process, ev, data)
     PROCESS_WAIT_EVENT_UNTIL(ev == sensors_event &&
 			     data == &button_sensor);
     leds_toggle(LEDS_ALL);
-    if (!active) {
+    if(!active) {
       /* activate light sensor */
       SENSORS_ACTIVATE(light_sensor);
       printf("Light: %d\n", light_sensor.value(0));
