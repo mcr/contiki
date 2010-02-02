@@ -72,7 +72,7 @@ configure(int type, int c)
 {
   switch(type) {
   case SENSORS_ACTIVE:
-    if (c) {
+    if(c) {
       activate();
     } else {
       deactivate();
@@ -84,7 +84,7 @@ configure(int type, int c)
 static int
 status(int type)
 {
-  switch (type) {
+  switch(type) {
   case SENSORS_ACTIVE:
   case SENSORS_READY:
     return active;

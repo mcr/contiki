@@ -42,23 +42,10 @@
 
 const struct sensors_sensor light_sensor;
 
-/*
- * Initialize periodic readings from the 2 photo diodes. The most
- * recent readings will be stored in ADC internal registers/memory.
- */
-static void
-light_sensor_init(void)
-{
-  ADC12MCTL0 = (INCH_4 + SREF_0); // photodiode 1 (P64)
-  ADC12MCTL1 = (INCH_5 + SREF_0); // photodiode 2 (P65)
-
-  sky_sensors_activate(0x30);
-}
 /*---------------------------------------------------------------------------*/
 static int
 value(int type)
 {
-
   switch(type) {
     /* Photosynthetically Active Radiation. */
   case LIGHT_SENSOR_PHOTOSYNTHETIC:
@@ -90,7 +77,11 @@ configure(int type, int c)
   case SENSORS_ACTIVE:
     if(c) {
       if(!status(SENSORS_ACTIVE)) {
-	light_sensor_init();
+
+	ADC12MCTL0 = (INCH_4 + SREF_0); // photodiode 1 (P64)
+	ADC12MCTL1 = (INCH_5 + SREF_0); // photodiode 2 (P65)
+
+	sky_sensors_activate(0x30);
       }
     } else {
       sky_sensors_deactivate(0x30);
