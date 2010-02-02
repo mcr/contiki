@@ -147,7 +147,7 @@ struct cxmac_config cxmac_config = {
 };
 
 #include <stdio.h>
-static struct rtimer rt;
+
 static struct pt pt;
 
 static volatile uint8_t cxmac_is_on = 0;
@@ -292,7 +292,7 @@ static char cpowercycle(void *ptr);
 static void
 cschedule_powercycle(clock_time_t time)
 {
-  int r;
+
   if(cxmac_is_on) {
     if(time == 0) {
       time = 1;
