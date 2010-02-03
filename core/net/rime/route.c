@@ -192,6 +192,13 @@ route_refresh(struct route_entry *e)
        out. */
     e->time = 0;
     e->decay = 0;
+    
+    PRINTF("route_refresh: time %d last %d decay %d for entry to %d.%d with nexthop %d.%d and cost %d\n",
+           e->time, e->time_last_decay, e->decay,
+           e->dest.u8[0], e->dest.u8[1],
+           e->nexthop.u8[0], e->nexthop.u8[1],
+           e->cost);
+
   }
 }
 /*---------------------------------------------------------------------------*/
