@@ -33,16 +33,16 @@
 
 /**
  * \file
- *         Text-related shell commands
+ *         Shell commands for base64 decoding
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
 
-#ifndef __SHELL_TEXT_H__
-#define __SHELL_TEXT_H__
+#ifndef __SHELL_BASE64_H__
+#define __SHELL_BASE64_H__
 
 #include "shell.h"
 
-void shell_text_init(void);
+void shell_base64_init(void);
 
-#endif /* __SHELL_TEXT_H__ */
+#endif /* __SHELL_BASE64_H__ */
