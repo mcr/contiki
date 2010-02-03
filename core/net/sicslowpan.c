@@ -1141,8 +1141,8 @@ output(uip_lladdr_t *localdest)
   rime_ptr = packetbuf_dataptr();
 
   if(UIP_IP_BUF->proto == UIP_PROTO_TCP) {
-    packetbuf_set_attr(PACKETBUF_ATTR_PACKET_TYPE,
-		       PACKETBUF_ATTR_PACKET_TYPE_STREAM);
+    /*    packetbuf_set_attr(PACKETBUF_ATTR_PACKET_TYPE,
+          PACKETBUF_ATTR_PACKET_TYPE_STREAM);*/
   }
     
   /*
