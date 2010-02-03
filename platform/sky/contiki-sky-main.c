@@ -211,8 +211,6 @@ set_gateway(void)
     uip_over_mesh_set_gateway(&rimeaddr_node_addr);
     uip_over_mesh_make_announced_gateway();
     is_gateway = 1;
-
-    rime_mac->off(1);
   }
 }
 #endif /* WITH_UIP */
