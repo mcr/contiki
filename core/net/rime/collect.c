@@ -419,6 +419,7 @@ collect_open(struct collect_conn *tc, uint16_t channels,
 #else
   neighbor_discovery_start(&tc->neighbor_discovery_conn, tc->rtmetric);
 #endif /* COLLECT_ANNOUNCEMENTS */
+  neighbor_init();
 }
 /*---------------------------------------------------------------------------*/
 void
