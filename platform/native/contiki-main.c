@@ -57,7 +57,8 @@ main(void)
 {
   printf("Starting Contiki\n");
   process_init();
-
+  ctimer_init();
+  
   procinit_init();
   
   autostart_start(autostart_processes);
