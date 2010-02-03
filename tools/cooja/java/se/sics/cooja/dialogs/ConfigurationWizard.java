@@ -71,6 +71,8 @@ import se.sics.cooja.MoteType.MoteTypeCreationException;
 import se.sics.cooja.contikimote.ContikiMoteType;
 import se.sics.cooja.contikimote.ContikiMoteType.CommunicationStack;
 
+/* TODO Test common section */
+
 public class ConfigurationWizard extends JDialog {
   private static final long serialVersionUID = 1L;
 
@@ -475,7 +477,7 @@ public class ConfigurationWizard extends JDialog {
       suggestions = LINK_COMMAND_1_suggestions;
     } else if (name.equals("LINK_COMMAND_2")) {
       suggestions = LINK_COMMAND_2_suggestions;
-    } else if (name.equals("PARSE_WITH_COMMAN")) {
+    } else if (name.equals("PARSE_WITH_COMMAND")) {
       suggestions = PARSE_WITH_COMMAND_suggestions;
     } else if (name.equals("AR_COMMAND_1")) {
       suggestions = AR_COMMAND_1_suggestions;
