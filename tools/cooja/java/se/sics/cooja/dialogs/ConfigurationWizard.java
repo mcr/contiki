@@ -668,7 +668,7 @@ public class ConfigurationWizard extends JDialog {
     testOutput.addMessage("### Loading Java library class: se/sics/cooja/corecomm/" + javaLibraryName);
     Class<? extends CoreComm> javaLibraryClass = null;
     try {
-      javaLibraryClass = CoreComm.loadClassFile(javaLibraryName);
+      javaLibraryClass = (Class<? extends CoreComm>) CoreComm.loadClassFile(javaLibraryName);
     } catch (MoteTypeCreationException e) {
       e.printStackTrace(errorStream);
       testOutput.addMessage("### Error: " + e.getMessage(), MessageList.ERROR);

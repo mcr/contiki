@@ -52,7 +52,8 @@ public interface VisualizerSkin {
    * @param sim Simulation
    * @param visualizer Visualizer plugin
    *
-   * @see #paintSkin(Graphics)
+   * @see #paintBeforeMotes(Graphics)
+   * @see #paintAfterMotes(Graphics)
    * @see #setInactive()
    */
   public void setActive(Simulation sim, Visualizer visualizer);

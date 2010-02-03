@@ -948,7 +948,7 @@ public class Simulation extends Observable implements Runnable {
    * Returns current simulation time rounded to milliseconds.
    * 
    * @see #getSimulationTime()
-   * @return
+   * @return Time rounded to milliseconds
    */
   public long getSimulationTimeMillis() {
     return currentSimulationTime / MILLISECOND;

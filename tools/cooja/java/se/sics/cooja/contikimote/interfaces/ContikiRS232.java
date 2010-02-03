@@ -60,7 +60,7 @@ import se.sics.cooja.interfaces.PolledAfterActiveTicks;
  *
  * This observable notifies observers when a serial message is sent from the mote.
  *
- * @see #getSerialMessages()
+ * @see #getLastLogMessage()
  *
  * @author Fredrik Osterlind
  */

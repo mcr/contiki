@@ -2334,7 +2334,7 @@ public class GUI extends Observable {
    * Reloading a simulation may include recompiling Contiki.
    *
    * @param autoStart Start executing simulation when loaded
-   * @param newSeed Change simulation seed
+   * @param randomSeed Simulation's next random seed
    */
   public void reloadCurrentSimulation(final boolean autoStart, final long randomSeed) {
     if (getSimulation() == null) {
@@ -2437,7 +2437,7 @@ public class GUI extends Observable {
    * Reloading a simulation may include recompiling Contiki.
    * The same random seed is used.
    *
-   * @see #reloadCurrentSimulation(boolean, boolean)
+   * @see #reloadCurrentSimulation(boolean, long)
    * @param autoStart Start executing simulation when loaded
    */
   public void reloadCurrentSimulation(boolean autoStart) {

@@ -279,15 +279,13 @@ public abstract class CoreComm {
   /**
    * Loads given Java class file from disk.
    *
-   * @param classFile
-   *          Java class (without extension)
+   * @param className Java class name
    * @return Loaded class
-   * @throws MoteTypeCreationException
-   *           If error occurs
+   * @throws MoteTypeCreationException If error occurs
    */
-  public static Class loadClassFile(String className)
+  public static Class<?> loadClassFile(String className)
       throws MoteTypeCreationException {
-    Class loadedClass = null;
+    Class<?> loadedClass = null;
     try {
       ClassLoader urlClassLoader = new URLClassLoader(
           new URL[] { new File(".").toURI().toURL() },

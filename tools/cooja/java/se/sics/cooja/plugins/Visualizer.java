@@ -112,8 +112,8 @@ import se.sics.cooja.plugins.skins.UDGMVisualizerSkin;
  *
  * Observes the simulation and all mote positions.
  *
- * @see #registerMoteMenuAction(MoteMenuAction)
- * @see #registerSimulationMenuAction(SimulationMenuAction)
+ * @see #registerMoteMenuAction(Class)
+ * @see #registerSimulationMenuAction(Class)
  * @see #registerVisualizerSkin(Class)
  * @see UDGMVisualizerSkin
  * @author Fredrik Osterlind
