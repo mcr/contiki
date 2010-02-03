@@ -47,7 +47,7 @@
 #include "net/rime/route.h"
 #include "net/rime/trickle.h"
 
-#define ROUTE_TRICKLE_INTERVAL CLOCK_SECOND * 8
+#define ROUTE_TRICKLE_INTERVAL CLOCK_SECOND * 32
 #define ROUTE_DISCOVERY_INTERVAL CLOCK_SECOND * 4
 #define ROUTE_TIMEOUT CLOCK_SECOND * 4
 
@@ -256,6 +256,7 @@ uip_over_mesh_send(void)
      waiting for an ACK. */
   if(BUF->proto == UIP_PROTO_TCP) {
     packetbuf_set_attr(PACKETBUF_ATTR_ERELIABLE, 1);
+    packetbuf_set_attr(PACKETBUF_ATTR_RELIABLE, 1);
     packetbuf_set_attr(PACKETBUF_ATTR_PACKET_TYPE, PACKETBUF_ATTR_PACKET_TYPE_STREAM);
   }
 
