@@ -120,24 +120,6 @@ public interface Mote {
   public void setSimulation(Simulation simulation);
 
   /**
-   * Ticks this mote and increases any internal time to given argument.
-   *
-   * Each mote implementation may handle calls to this method differently, but
-   * typically the simulated mote should at least handle one event.
-   *
-   * This method is responsible for updating the mote interfaces.
-   *
-   * A call to this method typically polls all interfaces, activates the memory,
-   * lets the underlying mote software handle one event, fetches the updated
-   * memory and finally polls all interfaces again.
-   *
-   * @param simTime
-   *          New simulation time
-   * @return True is mote accepts another immediate tick
-   */
-  public boolean tick(long simTime);
-
-  /**
    * Returns XML elements representing the current config of this mote. This is
    * fetched by the simulator for example when saving a simulation configuration
    * file. For example a mote may return the configs of all its interfaces. This

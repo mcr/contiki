@@ -308,10 +308,6 @@ public abstract class MspMote extends AbstractEmulatedMote implements Mote, Watc
    */
   protected abstract boolean initEmulator(File ELFFile);
 
-  public boolean tick(long simTime) {
-    throw new RuntimeException("Obsolete method");
-  }
-
   private long lastExecute = -1; /* Last time mote executed */
   private long nextExecute;
   public void execute(long t) {
