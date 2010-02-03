@@ -310,7 +310,10 @@ public abstract class MspMote extends AbstractEmulatedMote implements Mote, Watc
 
   private long lastExecute = -1; /* Last time mote executed */
   private long nextExecute;
-  public void execute(long t) {
+  public void execute(long time) {
+    execute(time, EXECUTE_DURATION_US);
+  }
+  public void execute(long t, int duration) {
     /* Wait until mote boots */
     if (myMoteInterfaceHandler.getClock().getTime() < 0) {
       scheduleNextWakeup(t - myMoteInterfaceHandler.getClock().getTime());
@@ -336,8 +339,8 @@ public abstract class MspMote extends AbstractEmulatedMote implements Mote, Watc
     /* TODO Try-catch overhead */
     try {
       nextExecute = 
-        t + EXECUTE_DURATION_US + 
-        myCpu.stepMicros(t - lastExecute, EXECUTE_DURATION_US);
+        t + duration + 
+        myCpu.stepMicros(t - lastExecute, duration);
       lastExecute = t;
     } catch (EmulationException e) {
       if (e.getMessage().startsWith("Bad operation")) {
@@ -350,7 +353,7 @@ public abstract class MspMote extends AbstractEmulatedMote implements Mote, Watc
     }
 
     /* Schedule wakeup */
-    if (nextExecute <= t) {
+    if (nextExecute < t) {
       throw new RuntimeException(t + ": MSPSim requested early wakeup: " + nextExecute);
     }
     /*logger.debug(t + ": Schedule next wakeup at " + nextExecute);*/
