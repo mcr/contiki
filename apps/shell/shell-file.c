@@ -33,7 +33,7 @@
 
 /**
  * \file
- *         A brief description of what this file is.
+ *         File-related shell commands
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
