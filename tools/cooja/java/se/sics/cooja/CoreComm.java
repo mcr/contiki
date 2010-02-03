@@ -35,6 +35,7 @@ import java.net.*;
 import java.util.Vector;
 
 import se.sics.cooja.MoteType.MoteTypeCreationException;
+import se.sics.cooja.contikimote.ContikiMoteType;
 import se.sics.cooja.dialogs.MessageList;
 
 /**
@@ -347,7 +348,7 @@ public abstract class CoreComm {
 
   /**
    * Ticks a mote once. This should not be used directly, but instead via
-   * Mote.tick().
+   * {@link ContikiMoteType#tick()}.
    */
   public abstract void tick();
 

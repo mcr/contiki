@@ -492,7 +492,7 @@ public class ContikiMoteType implements MoteType {
 
   /**
    * Ticks the currently loaded mote. This should not be used directly, but
-   * rather via ContikiMote.tick().
+   * rather via {@link ContikiMote#execute(long)}.
    */
   public void tick() {
     myCoreComm.tick();
