@@ -394,7 +394,6 @@ public abstract class MspMote extends AbstractEmulatedMote implements Mote, Watc
   
   public boolean setConfigXML(Simulation simulation, Collection<Element> configXML, boolean visAvailable) {
     setSimulation(simulation);
-    initEmulator(myMoteType.getContikiFirmwareFile());
     myMoteInterfaceHandler = createMoteInterfaceHandler();
 
     /* Create watchpoint container */
