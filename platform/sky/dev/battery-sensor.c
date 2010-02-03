@@ -37,6 +37,7 @@
  */
 
 #include "dev/battery-sensor.h"
+#include "dev/sky-sensors.h"
 #include <io.h>
 
 const struct sensors_sensor battery_sensor;
