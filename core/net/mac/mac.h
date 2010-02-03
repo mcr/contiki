@@ -80,6 +80,9 @@ enum {
      collision. */
   MAC_TX_COLLISION,
 
+  /**< The MAC layer did not get an acknowledgement for the packet. */
+  MAC_TX_NOACK,
+
   /**< The MAC layer transmission could not be performed because of an
      error. The upper layer may try again later. */
   MAC_TX_ERR,

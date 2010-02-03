@@ -738,7 +738,11 @@ send_packet(void)
 
   LEDS_OFF(LEDS_BLUE);
   if(collisions == 0) {
-    return MAC_TX_OK;
+    if(!is_broadcast && !got_strobe_ack) {
+      return MAC_TX_NOACK;
+    } else {
+      return MAC_TX_OK;
+    }
   } else {
     someone_is_sending++;
     return MAC_TX_COLLISION;
