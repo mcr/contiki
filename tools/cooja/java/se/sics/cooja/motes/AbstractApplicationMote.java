@@ -47,6 +47,7 @@ import se.sics.cooja.RadioPacket;
 import se.sics.cooja.SectionMoteMemory;
 import se.sics.cooja.Simulation;
 import se.sics.cooja.interfaces.ApplicationRadio;
+import se.sics.cooja.interfaces.ApplicationSerialPort;
 import se.sics.cooja.interfaces.Radio;
 
 /**
@@ -96,6 +97,10 @@ public abstract class AbstractApplicationMote extends AbstractWakeupMote impleme
     requestImmediateWakeup();
   }
 
+  public void log(String msg) {
+    ((ApplicationSerialPort)moteInterfaces.getLog()).triggerLog(msg);
+  }
+  
   public MoteInterfaceHandler getInterfaces() {
     return moteInterfaces;
   }

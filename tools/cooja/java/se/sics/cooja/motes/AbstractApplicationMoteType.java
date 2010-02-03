@@ -53,6 +53,7 @@ import se.sics.cooja.ProjectConfig;
 import se.sics.cooja.Simulation;
 import se.sics.cooja.interfaces.ApplicationLED;
 import se.sics.cooja.interfaces.ApplicationRadio;
+import se.sics.cooja.interfaces.ApplicationSerialPort;
 import se.sics.cooja.interfaces.MoteID;
 import se.sics.cooja.interfaces.Position;
 
@@ -65,8 +66,13 @@ public abstract class AbstractApplicationMoteType implements MoteType {
   private String identifier = null;
   private String description = null;
 
-  private final Class<? extends MoteInterface>[] moteInterfaceClasses =
-    new Class[] { SimpleMoteID.class, Position.class, ApplicationRadio.class, ApplicationLED.class};
+  private final Class<? extends MoteInterface>[] moteInterfaceClasses = new Class[] { 
+      SimpleMoteID.class,
+      Position.class,
+      ApplicationSerialPort.class,
+      ApplicationRadio.class,
+      ApplicationLED.class
+  };
 
   public AbstractApplicationMoteType() {
     super();
