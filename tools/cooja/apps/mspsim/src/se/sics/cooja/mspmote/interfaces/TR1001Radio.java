@@ -58,6 +58,7 @@ import se.sics.cooja.interfaces.CustomDataRadio;
 import se.sics.cooja.interfaces.Position;
 import se.sics.cooja.interfaces.Radio;
 import se.sics.cooja.mspmote.MspMote;
+import se.sics.cooja.mspmote.MspMoteTimeEvent;
 import se.sics.mspsim.core.IOUnit;
 import se.sics.mspsim.core.USART;
 import se.sics.mspsim.core.USARTListener;
@@ -142,8 +143,10 @@ public class TR1001Radio extends Radio implements USARTListener, CustomDataRadio
     }
 
     /* Feed incoming bytes to radio "slowly" via time events */
-    TimeEvent receiveCrosslevelDataEvent = new MoteTimeEvent(mote, 0) {
+    TimeEvent receiveCrosslevelDataEvent = new MspMoteTimeEvent(mote, 0) {
       public void execute(long t) {
+        super.execute(t);
+        
         /* Stop receiving data when buffer is empty */
         if (data.isEmpty()) {
           return;
