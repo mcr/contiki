@@ -37,12 +37,12 @@ import org.apache.log4j.Logger;
 
 import se.sics.cooja.ClassDescription;
 import se.sics.cooja.Mote;
-import se.sics.cooja.MoteTimeEvent;
 import se.sics.cooja.Simulation;
 import se.sics.cooja.TimeEvent;
 import se.sics.cooja.dialogs.SerialUI;
 import se.sics.cooja.interfaces.SerialPort;
 import se.sics.cooja.mspmote.MspMote;
+import se.sics.cooja.mspmote.MspMoteTimeEvent;
 import se.sics.mspsim.core.IOUnit;
 import se.sics.mspsim.core.USART;
 import se.sics.mspsim.core.USARTListener;
@@ -137,8 +137,10 @@ public class MspSerial extends SerialUI implements SerialPort {
     mote.requestImmediateWakeup();
   }
 
-  private TimeEvent writeDataEvent = new MoteTimeEvent(mote, 0) {
+  private TimeEvent writeDataEvent = new MspMoteTimeEvent(mote, 0) {
     public void execute(long t) {
+      super.execute(t);
+      
       tryWriteNextByte();
       if (!incomingData.isEmpty()) {
         simulation.scheduleEvent(this, t+DELAY_INCOMING_DATA);
