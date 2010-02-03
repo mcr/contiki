@@ -137,7 +137,7 @@ PT_THREAD(handle_output(struct httpd_state *s))
       PT_WAIT_THREAD(&s->outputpt,
                      send_headers(s, http_header_404));
       PT_WAIT_THREAD(&s->outputpt,
-                     send_string("Not found"));
+                     send_string(s, "Not found"));
       uip_close();
       webserver_log_file(&uip_conn->ripaddr, "404 (no notfound.html)");
       PT_EXIT(&s->outputpt);
