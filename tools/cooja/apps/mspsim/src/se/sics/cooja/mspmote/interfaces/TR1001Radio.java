@@ -183,13 +183,20 @@ public class TR1001Radio extends Radio implements USARTListener, CustomDataRadio
 
     receivedByte = isInterfered ? CORRUPTED_DATA : (Byte) data;
 
-    if (radioUSART.isReceiveFlagCleared()) {
-      /*logger.info("----- TR1001 RECEIVED BYTE -----");*/
-      radioUSART.byteReceived(receivedByte);
-    } else {
-      logger.warn(mote.getSimulation().getSimulationTime() + ": ----- TR1001 RECEIVED BYTE DROPPED -----");
-    }
-    mote.requestImmediateWakeup();
+    final byte finalByte = receivedByte;
+    mote.getSimulation().scheduleEvent(new MspMoteTimeEvent(mote, 0) {
+      public void execute(long t) {
+        super.execute(t);
+
+        if (radioUSART.isReceiveFlagCleared()) {
+          /*logger.info("----- TR1001 RECEIVED BYTE -----");*/
+          radioUSART.byteReceived(finalByte);
+        } else {
+          logger.warn(mote.getSimulation().getSimulationTime() + ": ----- TR1001 RECEIVED BYTE DROPPED -----");
+        }
+        mote.requestImmediateWakeup();
+      }
+    }, mote.getSimulation().getSimulationTime());
   }
 
   /* USART listener support */
