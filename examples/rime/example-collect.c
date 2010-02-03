@@ -71,11 +71,12 @@ PROCESS_THREAD(example_collect_process, ev, data)
 {
   PROCESS_BEGIN();
 
+  SENSORS_ACTIVATE(button_sensor);
+  
   collect_open(&tc, 130, &callbacks);
 
   while(1) {
     static struct etimer et;
-    uint16_t tmp;
 
     /* Send a packet every 16 seconds; first wait 8 seconds, than a
        random time between 0 and 8 seconds. */
