@@ -315,7 +315,26 @@ public class Simulation extends Observable implements Runnable {
   }
 
   /**
+   * Stops simulation and conditionally blocks until stopped.
+   * 
+   * @param block Blocks if true
+   * 
+   * @see #stopSimulation()
+   */
+  public void stopSimulation(boolean block) {
+    if (!isRunning()) {
+      return;
+    }
+    if (block) {
+      stopSimulation();
+    } else {
+      stopSimulation = true;
+    }
+  }
+
+  /**
    * Stops this simulation (notifies observers).
+   * Method blocks until simulation has stopped.
    */
   public void stopSimulation() {
     if (isRunning()) {
