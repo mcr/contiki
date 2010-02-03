@@ -282,6 +282,8 @@ public class Simulation extends Observable implements Runnable {
       if (!GUI.isVisualized()) {
 	/* Quit simulator if in test mode */
 	System.exit(1);
+      } else {
+        GUI.showErrorDialog(GUI.getTopParentContainer(), "Simulation error", e, false);
       }
     }
     isRunning = false;
