@@ -297,15 +297,8 @@ public class LogListener extends VisPlugin {
   }
 
   private void updateTitle() {
-    int observing = simulation.getEventCentral().getLogOutputObservationsCount();
-    int tot = simulation.getMotesCount();
-    if (observing == tot) {
-      setTitle("Log Listener (listening on all " + simulation.getMotesCount() + " motes)");
-    } else {
-      setTitle("Log Listener (listening on " 
-          + simulation.getEventCentral().getLogOutputObservationsCount() + "/"
-          + simulation.getMotesCount() + " motes)");
-    }
+    setTitle("Log Listener (listening on " 
+        + simulation.getEventCentral().getLogOutputObservationsCount() + " log interfaces)");
   }
 
   public void closePlugin() {
