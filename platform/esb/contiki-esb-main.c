@@ -56,7 +56,6 @@
 
 #if DCOSYNCH_ENABLED
 static struct timer dco_timer;
-static char dco_enabled = 0;
 #endif /* DCOSYNCH_ENABLED */
 
 SENSORS(&button_sensor, &sound_sensor, &vib_sensor,
