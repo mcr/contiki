@@ -1106,6 +1106,12 @@ uip_process(u8_t flag)
   uip_len = uip_len - UIP_IPUDPH_LEN;
 #endif /* UIP_UDP_CHECKSUMS */
 
+  /* Make sure that the UDP destination port number is not zero. */
+  if(UDPBUF->destport == 0) {
+    UIP_LOG("udp: zero port.");
+    goto drop;
+  }
+
   /* Demultiplex this UDP packet between the UDP "connections". */
   for(uip_udp_conn = &uip_udp_conns[0];
       uip_udp_conn < &uip_udp_conns[UIP_UDP_CONNS];
@@ -1219,6 +1225,12 @@ uip_process(u8_t flag)
     UIP_STAT(++uip_stat.tcp.drop);
     UIP_STAT(++uip_stat.tcp.chkerr);
     UIP_LOG("tcp: bad checksum.");
+    goto drop;
+  }
+
+  /* Make sure that the TCP port number is not zero. */
+  if(BUF->destport == 0 || BUF->srcport == 0) {
+    UIP_LOG("tcp: zero port.");
     goto drop;
   }
   
