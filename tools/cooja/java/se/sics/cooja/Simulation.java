@@ -503,7 +503,6 @@ public class Simulation extends Observable implements Runnable {
     // Motes
     for (Mote mote : motes) {
       element = new Element("mote");
-      element.setText(mote.getClass().getName());
 
       Collection<Element> moteConfig = mote.getConfigXML();
       if (moteConfig == null) {
@@ -641,20 +640,22 @@ public class Simulation extends Observable implements Runnable {
 
       /* Mote */
       if (element.getName().equals("mote")) {
-        String moteClassName = element.getText().trim();
-        
+
         /* Read mote type identifier */
         MoteType moteType = null;
         for (Element subElement: (Collection<Element>) element.getChildren()) {
           if (subElement.getName().equals("motetype_identifier")) {
             moteType = getMoteType(subElement.getText());
+            if (moteType == null) {
+              throw new Exception("No mote type '" + subElement.getText() + "' for mote");
+            }
             break;
           }
         }
         if (moteType == null) {
-          throw new Exception("No mote type for mote: " + moteClassName);
+          throw new Exception("No mote type specified for mote");
         }
-       
+    
         /* Create mote using mote type */
         Mote mote = moteType.generateMote(this);
         if (mote.setConfigXML(this, element.getChildren(), visAvailable)) {
