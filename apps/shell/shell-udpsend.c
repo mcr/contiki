@@ -84,13 +84,17 @@ PROCESS_THREAD(shell_udpsend_process, ev, data)
 		     "udpsend <server> <port> [localport]: server as address", "");
     PROCESS_EXIT();
   }
+  if(next - (char *)data > sizeof(server)) {
+    shell_output_str(&udpsend_command, "Too long input", "");
+    PROCESS_EXIT();
+  }
   strncpy(server, data, sizeof(server));
   /* NULL-terminate the server string. */
   server[next - (char *)data] = 0;
   ++next;
   port = shell_strtolong(next, &nextptr);
 
-  uiplib_ipaddrconv(server, (u8_t *)&serveraddr);
+  uiplib_ipaddrconv(server, (uint8_t *)&serveraddr);
   udpconn = udp_new(&serveraddr, htons(port), NULL);
   
   if(next != nextptr) {
