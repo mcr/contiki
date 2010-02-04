@@ -84,9 +84,9 @@ PROCESS_THREAD(shell_udpsend_process, ev, data)
 		     "udpsend <server> <port> [localport]: server as address", "");
     PROCESS_EXIT();
   }
-  /* NULL-terminate the server string before copying. */
-  *next = 0;
   strncpy(server, data, sizeof(server));
+  /* NULL-terminate the server string. */
+  server[next - (char *)data] = 0;
   ++next;
   port = shell_strtolong(next, &nextptr);
 
