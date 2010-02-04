@@ -78,7 +78,7 @@ public class MspSerial extends SerialUI implements SerialPort {
         }
         public void stateChanged(int state) {
           if (state == USARTListener.RXFLAG_CLEARED) {
-            tryWriteNextByte();
+            /*tryWriteNextByte();*/
           }
         }
       });
