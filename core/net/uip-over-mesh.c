@@ -257,7 +257,7 @@ uip_over_mesh_send(void)
   if(BUF->proto == UIP_PROTO_TCP) {
     packetbuf_set_attr(PACKETBUF_ATTR_ERELIABLE, 1);
     packetbuf_set_attr(PACKETBUF_ATTR_RELIABLE, 1);
-    packetbuf_set_attr(PACKETBUF_ATTR_PACKET_TYPE, PACKETBUF_ATTR_PACKET_TYPE_STREAM);
+    /*    packetbuf_set_attr(PACKETBUF_ATTR_PACKET_TYPE, PACKETBUF_ATTR_PACKET_TYPE_STREAM);*/
   }
 
   rt = route_lookup(&receiver);
