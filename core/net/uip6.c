@@ -200,10 +200,10 @@ struct uip_conn *uip_conn;
 static u8_t c;
 #endif
 
-#if UIP_ACTIVE_OPEN
+#if UIP_ACTIVE_OPEN || UIP_UDP
 /* Keeps track of the last port used for a new connection. */
 static u16_t lastport;
-#endif /* UIP_ACTIVE_OPEN */
+#endif /* UIP_ACTIVE_OPEN || UIP_UDP */
 /** @} */
 
 /*---------------------------------------------------------------------------*/
