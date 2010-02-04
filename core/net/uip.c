@@ -378,9 +378,9 @@ uip_init(void)
   for(c = 0; c < UIP_CONNS; ++c) {
     uip_conns[c].tcpstateflags = UIP_CLOSED;
   }
-#if UIP_ACTIVE_OPEN
+#if UIP_ACTIVE_OPEN || UIP_UDP
   lastport = 1024;
-#endif /* UIP_ACTIVE_OPEN */
+#endif /* UIP_ACTIVE_OPEN || UIP_UDP */
 
 #if UIP_UDP
   for(c = 0; c < UIP_UDP_CONNS; ++c) {
