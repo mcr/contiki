@@ -242,8 +242,4 @@ public class SkyFlash extends MoteInterface {
     return fileData;
   }
 
-  public double energyConsumption() {
-    return 0;
-  }
-
 }

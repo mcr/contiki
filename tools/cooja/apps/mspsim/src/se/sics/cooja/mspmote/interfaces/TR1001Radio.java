@@ -435,10 +435,6 @@ public class TR1001Radio extends Radio implements USARTListener, CustomDataRadio
     this.deleteObserver(observer);
   }
 
-  public double energyConsumption() {
-    return 0;
-  }
-
   public Collection<Element> getConfigXML() {
     return null;
   }
