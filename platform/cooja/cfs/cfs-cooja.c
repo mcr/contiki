@@ -49,7 +49,7 @@ static struct filestate file;
 const struct simInterface cfs_interface;
 
 // COOJA variables
-#define CFS_BUF_SIZE 1000000
+#define CFS_BUF_SIZE 1000 /* Configure CFS size here and in ContikiCFS.java */
 char simCFSData[CFS_BUF_SIZE] = { 0 };
 char simCFSChanged = 0;
 int simCFSRead = 0;
