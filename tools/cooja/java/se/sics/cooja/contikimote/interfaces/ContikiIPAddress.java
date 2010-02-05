@@ -76,9 +76,4 @@ public class ContikiIPAddress extends IPAddress implements ContikiMoteInterface 
     /*return new String[]{"ip_interface"};*/
     return null;
   }
-
-  public double energyConsumption() {
-    // Virtual interface, does not require any energy
-    return 0.0;
-  }
 }
