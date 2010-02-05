@@ -168,10 +168,6 @@ public class Position extends MoteInterface {
     this.deleteObserver(observer);
   }
 
-  public double energyConsumption() {
-    return 0.0;
-  }
-
   public Collection<Element> getConfigXML() {
     Vector<Element> config = new Vector<Element>();
     Element element;

@@ -245,9 +245,6 @@ public abstract class AbstractApplicationMoteType implements MoteType {
     public void setMoteID(int newID) {
       this.id = newID;
     }
-    public double energyConsumption() {
-      return 0;
-    }
     public JPanel getInterfaceVisualizer() {
       return null;
     }

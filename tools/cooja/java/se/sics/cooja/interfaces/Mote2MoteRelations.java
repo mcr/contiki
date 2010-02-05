@@ -225,10 +225,6 @@ public class Mote2MoteRelations extends MoteInterface {
     this.deleteObserver(observer);
   }
 
-  public double energyConsumption() {
-    return 0;
-  }
-
   public Collection<Element> getConfigXML() {
     return null;
   }

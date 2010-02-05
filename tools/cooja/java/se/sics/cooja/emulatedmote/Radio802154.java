@@ -193,8 +193,6 @@ public abstract class Radio802154 extends Radio implements CustomDataRadio {
 
     public abstract void setCurrentSignalStrength(double signalStrength);
 
-    public abstract double energyConsumption();
- 
     /* need to add a few more methods later??? */
     public void signalReceptionStart() {
         isReceiving = true;
