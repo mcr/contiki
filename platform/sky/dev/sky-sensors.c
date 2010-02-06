@@ -61,7 +61,7 @@ sky_sensors_activate(uint8_t type)
     ADC12CTL0 = REF2_5V + SHT0_6 + SHT1_6 + MSC; /* Setup ADC12, ref., sampling time */
     ADC12CTL1 = SHP + CONSEQ_3 + CSTARTADD_0;	/* Use sampling timer, repeat-sequenc-of-channels */
     /* convert up to MEM4 */
-    ADC12MCTL4 |= EOS;
+    ADC12MCTL9 |= EOS;
 
     ADC12CTL0 |= ADC12ON + REFON;
     ADC12CTL0 |= ENC;		/* enable conversion */
