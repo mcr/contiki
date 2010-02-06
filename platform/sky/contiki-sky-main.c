@@ -323,9 +323,11 @@ main(int argc, char **argv)
     uip_netif_addr_add(&ipaddr, 16, 0, TENTATIVE);
     printf("Tentative IPv6 address ");
     for(i = 0; i < 7; ++i) {
-      printf("%04x:", ipaddr.u16[i]);
+      printf("%02x%02x:",
+             ipaddr.u8[i * 2], ipaddr.u8[i * 2 + 1]);
     }
-    printf("%04x\n", ipaddr.u16[7]);
+    printf("%02x%02x\n",
+           ipaddr.u8[7 * 2], ipaddr.u8[7 * 2 + 1]);
   }
 
   
