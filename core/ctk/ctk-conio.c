@@ -77,6 +77,7 @@ ctk_draw_init(void)
   (void)textcolor(WINDOWCOLOR_FOCUS);
   screensize(&sizex, &sizey);
   ctk_draw_clear(0, sizey);
+  gotoxy(0, 0);
 }
 /*-----------------------------------------------------------------------------------*/
 static void
