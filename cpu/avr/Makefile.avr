@@ -32,7 +32,7 @@ ifdef USB
 override RF230BB = 0
 CONTIKI_CPU_DIRS            += dev/usb dev/usb/serial dev/usb/rndis dev/usb/storage
 CONTIKI_TARGET_SOURCEFILES  += $(USB)
-AVR        = clock.c mtarch.c eeprom.c flash.c leds-arch.c 
+AVR        = clock.c mtarch.c eeprom.c flash.c leds-arch.c watchdog.c
 endif
 
 #For a coffee file system, the application makefile can define COFFEE_FILES=n
