@@ -74,6 +74,7 @@ ctk_draw_init(void)
 {
   (void)bgcolor(SCREENCOLOR);
   (void)bordercolor(BORDERCOLOR);
+  (void)textcolor(WINDOWCOLOR_FOCUS);
   screensize(&sizex, &sizey);
   ctk_draw_clear(0, sizey);
 }
@@ -440,7 +441,6 @@ ctk_draw_clear(unsigned char y1, unsigned char y2)
 {
   unsigned char i;
  
-  (void)textcolor(BACKGROUNDCOLOR);
   for(i = y1; i < y2; ++i) {
     cclearxy(0, i, sizex);
   }
