@@ -84,7 +84,10 @@ MEMB(refbufmem, struct queuebuf_ref, QUEUEBUF_REF_NUM);
 #define PRINTF(...)
 #endif
 
-#define QUEUEBUF_STATS 1
+#ifdef QUEUEBUF_CONF_STATS
+#define QUEUEBUF_STATS QUEUEBUF_CONF_STATS
+#endif /* QUEUEBUF_CONF_STATS */
+
 #if QUEUEBUF_STATS
 uint8_t queuebuf_len, queuebuf_ref_len, queuebuf_max_len;
 #endif /* QUEUEBUF_STATS */
