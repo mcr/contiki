@@ -57,13 +57,13 @@ value(int type)
 static int
 configure(int type, int value)
 {
-  switch (type) {
+  switch(type) {
   case SENSORS_HW_INIT:
     active = 0;
     ds1629_init();
     return 1;
   case SENSORS_ACTIVE:
-    if (value) {
+    if(value) {
       if(!active) {
         active = 1;
         ds1629_start();
@@ -79,7 +79,7 @@ configure(int type, int value)
 static int
 status(int type)
 {
-  switch (type) {
+  switch(type) {
   case SENSORS_ACTIVE:
   case SENSORS_READY:
     return active;

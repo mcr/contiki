@@ -68,14 +68,14 @@ value(int type)
 static int
 configure(int type, int value)
 {
-  switch (type) {
+  switch(type) {
   case SENSORS_HW_INIT:
     BUTTON_IRQ_EDGE_SELECTD();
     BUTTON_SELECT();
     BUTTON_MAKE_INPUT();
     return 1;
   case SENSORS_ACTIVE:
-    if (value) {
+    if(value) {
       if(!BUTTON_IRQ_ENABLED()) {
         timer_set(&debouncetimer, 0);
         BUTTON_ENABLE_IRQ();
@@ -91,7 +91,7 @@ configure(int type, int value)
 static int
 status(int type)
 {
-  switch (type) {
+  switch(type) {
   case SENSORS_ACTIVE:
   case SENSORS_READY:
     return BUTTON_IRQ_ENABLED();

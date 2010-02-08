@@ -61,14 +61,14 @@ value(int type)
 static int
 configure(int type, int value)
 {
-  switch (type) {
+  switch(type) {
   case SENSORS_HW_INIT:
     vib = 0;
     VIB_SELECT();
     VIB_MAKE_INPUT();
     return 1;
   case SENSORS_ACTIVE:
-    if (value) {
+    if(value) {
       if(!VIB_IRQ_ENABLED()) {
         irq_port1_activate(VIB_IRQ(), irq);
         VIB_ENABLE_IRQ();
@@ -85,7 +85,7 @@ configure(int type, int value)
 static int
 status(int type)
 {
-  switch (type) {
+  switch(type) {
   case SENSORS_ACTIVE:
   case SENSORS_READY:
     return VIB_IRQ_ENABLED();

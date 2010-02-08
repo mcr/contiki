@@ -67,27 +67,27 @@ irq(void)
     }
   }
 
-/*   if (micdiff > MIC_MIN_SENS) { */
+/*   if(micdiff > MIC_MIN_SENS) { */
 /*     sensors_changed(&sound_sensor); */
 /*   } */
 
-/*     if (micdiff > (avgmax >> 2)) { */
-/*       if (micdiff % 10 == 0) beep_beep(10); */
+/*     if(micdiff > (avgmax >> 2)) { */
+/*       if(micdiff % 10 == 0) beep_beep(10); */
 /*       // Subtract a little... */
 /*       micdiff = micdiff - (micdiff >> 4); */
 /*     } */
 
-/*     if (micmax < micdiff) { */
+/*     if(micmax < micdiff) { */
 /*       micmax = micdiff; */
 /*     } */
 
-/*   if (micdiff > 2000) { */
+/*   if(micdiff > 2000) { */
 /*     leds_on(LEDS_GREEN); */
 /*   } */
-/*   if (micdiff > 3000) { */
+/*   if(micdiff > 3000) { */
 /*     leds_on(LEDS_YELLOW); */
 /*   } */
-/*   if (micdiff > 4000) { */
+/*   if(micdiff > 4000) { */
 /*     leds_on(LEDS_RED); */
 /*   } */
 
@@ -108,14 +108,14 @@ value(int type)
 static int
 configure(int type, int value)
 {
-  switch (type) {
+  switch(type) {
   case SENSORS_HW_INIT:
     /* Initialization of ADC12 done by irq */
     mode = 0;
     buffer_size = 0;
     return 1;
   case SENSORS_ACTIVE:
-    if (value) {
+    if(value) {
       if(!irq_adc12_active(4)) {
         sound = micdiff = micmax = 0;
         mode = 0;
@@ -136,7 +136,7 @@ configure(int type, int value)
 static int
 status(int type)
 {
-  switch (type) {
+  switch(type) {
   case SENSORS_ACTIVE:
     return irq_adc12_active(4);
   case SENSORS_READY:

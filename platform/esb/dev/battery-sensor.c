@@ -60,12 +60,12 @@ value(int type)
 static int
 configure(int type, int value)
 {
-  switch (type) {
+  switch(type) {
   case SENSORS_HW_INIT:
     battery_value = 0;
     return 1;
   case SENSORS_ACTIVE:
-    if (value) {
+    if(value) {
       if(!irq_adc12_active(6)) {
         irq_adc12_activate(6, (INCH_4 + SREF_0), irq);
       }
@@ -80,7 +80,7 @@ configure(int type, int value)
 static int
 status(int type)
 {
-  switch (type) {
+  switch(type) {
   case SENSORS_ACTIVE:
   case SENSORS_READY:
     return irq_adc12_active(6);
