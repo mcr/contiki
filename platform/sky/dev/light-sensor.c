@@ -31,13 +31,11 @@
  * @(#)$Id$
  */
 
-#include <stdlib.h>
-
 #include <io.h>
 
 #include "contiki.h"
 #include "lib/sensors.h"
-#include "sky-sensors.h"
+#include "dev/sky-sensors.h"
 #include "dev/light-sensor.h"
 
 const struct sensors_sensor light_sensor;
