@@ -48,6 +48,7 @@
 #include <string.h>
 
 #include "contiki.h"
+#include "dev/watchdog.h"
 #include "net/tcpip.h"
 #include "net/uip.h"
 #include "net/uip-netif.h"
@@ -1373,7 +1374,7 @@ input(const struct mac_driver *r)
        * the packet is a fragment that does not belong to the packet
        * being reassembled or the packet is not a fragment.
        */
-      PRINTFI("sicslowpan input: Dropping 6lowpan packet\n");
+      PRINTFI("sicslowpan input: Dropping 6lowpan packet that is not a fragment of the packet currently being reassembled\n");
       return;
     }
   } else {
