@@ -17,6 +17,15 @@ CONTIKI_TARGET_SOURCEFILES += $(SENSORS) $(ESB) \
         contiki-esb-default-init-lowlevel.c \
         contiki-esb-default-init-apps.c \
 	rs232.c rs232-putchar.c fader.c $(CONTIKI_TARGET_MAIN)
+
+ifdef WITH_CODEPROP
+CONTIKI_TARGET_DIRS += ../../apps/codeprop
+CONTIKI_TARGET_SOURCEFILES += codeprop-tmp.c
+ifndef NETSTACK
+NETSTACK = uip
+endif
+endif
+
 ifeq ($(NETSTACK),uip)
 CONTIKI_TARGET_SOURCEFILES += contiki-esb-init-net-uip.c uip-ipchksum.c
 else
