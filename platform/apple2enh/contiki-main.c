@@ -73,12 +73,6 @@ main(void)
   rebootafterexit();
   videomode(VIDEOMODE_80COL);
 
-#if !WITH_PFS
-  close(STDIN_FILENO);
-  close(STDOUT_FILENO);
-  close(STDERR_FILENO);
-#endif /* !WITH_PFS */
-
   process_init();
 
 #if 1

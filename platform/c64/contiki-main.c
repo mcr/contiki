@@ -87,12 +87,6 @@ main(void)
 {
   struct ethernet_config *ethernet_config;
 
-  close(STDIN_FILENO);
-  close(STDOUT_FILENO);
-#if !UIP_LOGGING && !LOG_CONF_ENABLED
-  close(STDERR_FILENO);
-#endif /* !UIP_LOGGING && !LOG_CONF_ENABLED */
-
   process_init();
 
 #if 1

@@ -33,7 +33,7 @@
 # $Id$
 #
 
-CONTIKI_SOURCEFILES += log-asm.S pfs.S
+CONTIKI_SOURCEFILES += pfs.S
 HIGHCODE_SOURCEFILES = process.c etimer.c uip_arp.c
 
 CONTIKI_CPU = $(CONTIKI)/cpu/6502
