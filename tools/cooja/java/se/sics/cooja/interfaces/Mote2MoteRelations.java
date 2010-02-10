@@ -106,6 +106,9 @@ public class Mote2MoteRelations extends MoteInterface {
         gui.removeMoteRelation(Mote2MoteRelations.this.mote, mote);
       }
       public void newLogOutput(LogOutputEvent ev) {
+        if (ev.getMote() != Mote2MoteRelations.this.mote) {
+          return;
+        }
         handleNewLog(ev.msg);
       }
       public void removedLogOutput(LogOutputEvent ev) {
@@ -131,6 +134,10 @@ public class Mote2MoteRelations extends MoteInterface {
       return;
     }
 
+    if (msg.startsWith("DEBUG: ")) {
+      msg = msg.substring("DEBUG: ".length());
+    }
+    
     if (!msg.startsWith("#L ")) {
       return;
     }
