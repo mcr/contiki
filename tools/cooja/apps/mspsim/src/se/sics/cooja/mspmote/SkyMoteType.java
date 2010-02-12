@@ -216,7 +216,7 @@ public class SkyMoteType extends MspMoteType {
         SkyByteRadio.class,
         MspSerial.class,
         SkyLED.class,
-        MspDebugOutput.class /* EXPERIMENTAL */
+        /*MspDebugOutput.class*/ /* EXPERIMENTAL: Enable me for COOJA_DEBUG(..) */
     };
   }
 
