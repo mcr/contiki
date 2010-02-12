@@ -162,8 +162,9 @@ PROCESS_THREAD(wget_process, ev, data)
     if(ev == 0) {
       fputs("\nGet url:", stdout);
       gets(url);
-      fputs("Save as:", stdout);
+      fputs("\nSave as:", stdout);
       gets(name);
+      puts("");
       file = cfs_open(name, CFS_WRITE);
       if(file == -1) {
         printf("Open error with '%s'\n", name);
