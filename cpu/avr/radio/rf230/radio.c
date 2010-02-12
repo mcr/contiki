@@ -258,7 +258,7 @@ radio_trx_end_event(uint32_t const isr_timestamp)
     if (rx_mode){
         /* radio has received frame, store it away */
 #if RADIOSTATS
-        RF230_rssi=rssi_val;
+        RF230_rsigsi=rssi_val;
         RF230_receivepackets++;
 #endif
         parsed_frame.time = isr_timestamp;
