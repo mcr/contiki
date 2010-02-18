@@ -1,6 +1,8 @@
 #ifndef __CONTIKI_CONF_H__
 #define __CONTIKI_CONF_H__
 
+#define NETSTACK_CONF_RADIO   ethernode_driver
+
 #define XMAC_CONF_ON_TIME RTIMER_SECOND
 #define XMAC_CONF_OFF_TIME RTIMER_SECOND * 2
 
