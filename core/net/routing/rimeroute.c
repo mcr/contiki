@@ -112,7 +112,7 @@ PROCESS_THREAD(rimeroute_process, ev, data)
 
   rimeroute_event = process_alloc_event();
 
-  rime_init(rime_udp_init(NULL));
+  //  rime_init(rime_udp_init(NULL));
   /* Cache routes for 10 minutes */
   route_set_lifetime(CACHE_TIMEOUT);
 
