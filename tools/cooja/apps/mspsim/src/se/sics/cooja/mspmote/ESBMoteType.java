@@ -43,6 +43,7 @@ import se.sics.cooja.dialogs.MessageList;
 import se.sics.cooja.dialogs.MessageList.MessageContainer;
 import se.sics.cooja.interfaces.IPAddress;
 import se.sics.cooja.interfaces.Mote2MoteRelations;
+import se.sics.cooja.interfaces.MoteAttributes;
 import se.sics.cooja.interfaces.Position;
 import se.sics.cooja.interfaces.RimeAddress;
 import se.sics.cooja.mspmote.interfaces.ESBButton;
@@ -198,7 +199,8 @@ public class ESBMoteType extends MspMoteType {
         ESBButton.class,
         MspMoteID.class,
         TR1001Radio.class,
-        Mote2MoteRelations.class
+        Mote2MoteRelations.class,
+        MoteAttributes.class
     };
   }
 

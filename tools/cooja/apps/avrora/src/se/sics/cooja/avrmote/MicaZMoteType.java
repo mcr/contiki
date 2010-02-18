@@ -66,6 +66,8 @@ import se.sics.cooja.avrmote.interfaces.MicaZRadio;
 import se.sics.cooja.dialogs.CompileContiki;
 import se.sics.cooja.dialogs.MessageList;
 import se.sics.cooja.dialogs.MessageList.MessageContainer;
+import se.sics.cooja.interfaces.Mote2MoteRelations;
+import se.sics.cooja.interfaces.MoteAttributes;
 import se.sics.cooja.interfaces.Position;
 
 /**
@@ -419,7 +421,9 @@ public class MicaZMoteType implements MoteType {
         MicaZLED.class,
         MicaZRadio.class,
         MicaClock.class,
-        MicaSerial.class
+        MicaSerial.class,
+        Mote2MoteRelations.class,
+        MoteAttributes.class
     };
   }
 

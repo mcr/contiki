@@ -54,6 +54,8 @@ import se.sics.cooja.Simulation;
 import se.sics.cooja.interfaces.ApplicationLED;
 import se.sics.cooja.interfaces.ApplicationRadio;
 import se.sics.cooja.interfaces.ApplicationSerialPort;
+import se.sics.cooja.interfaces.Mote2MoteRelations;
+import se.sics.cooja.interfaces.MoteAttributes;
 import se.sics.cooja.interfaces.MoteID;
 import se.sics.cooja.interfaces.Position;
 
@@ -71,7 +73,9 @@ public abstract class AbstractApplicationMoteType implements MoteType {
       Position.class,
       ApplicationSerialPort.class,
       ApplicationRadio.class,
-      ApplicationLED.class
+      ApplicationLED.class,
+      Mote2MoteRelations.class,
+      MoteAttributes.class
   };
 
   public AbstractApplicationMoteType() {
