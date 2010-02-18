@@ -143,7 +143,11 @@ PROCESS_THREAD(shell_sense_process, ev, data)
 
   msg.len = 7;
   msg.clock = clock_time();
+#if TIMESYNCH_CONF_ENABLED
   msg.timesynch_time = timesynch_time();
+#else /* TIMESYNCH_CONF_ENABLED */
+  msg.timesynch_time = 0;
+#endif /* TIMESYNCH_CONF_ENABLED */
   msg.light1 = light_sensor.value(0);
   msg.light2 = light_sensor.value(1);
   msg.temp = sht11_temp();
