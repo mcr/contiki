@@ -40,8 +40,6 @@
  *         Joakim Eriksson <joakime@sics.se>
  */
 
-#include <io.h>
-
 #include "net/netstack.h"
 #include "dev/leds.h"
 #include "dev/radio.h"

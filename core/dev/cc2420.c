@@ -58,8 +58,6 @@
 
 #define WITH_SEND_CCA 0
 
-#include "cc2420-arch-sfd.h"
-
 #if CC2420_CONF_TIMESTAMPS
 #include "net/rime/timesynch.h"
 #define TIMESTAMP_LEN 3
