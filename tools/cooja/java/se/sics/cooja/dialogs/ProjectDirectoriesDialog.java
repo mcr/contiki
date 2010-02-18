@@ -48,7 +48,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -137,7 +136,7 @@ public class ProjectDirectoriesDialog extends JDialog {
 
     buttonPane.add(Box.createRigidArea(new Dimension(10, 0)));
 
-    button = new JButton("Set default");
+    button = new JButton("Save as default");
     button.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         Object[] options = { "Ok", "Cancel" };
@@ -153,9 +152,9 @@ public class ProjectDirectoriesDialog extends JDialog {
         newDefaultProjectDirs = newDefaultProjectDirs.replace('\\', '/');
 
         String question = "External tools setting DEFAULT_PROJECTDIRS will change from:\n"
-          + GUI.getExternalToolsSetting("DEFAULT_PROJECTDIRS")
-          + "\n to:\n"
-          + newDefaultProjectDirs;
+          + GUI.getExternalToolsSetting("DEFAULT_PROJECTDIRS", "").replace(';', '\n')
+          + "\n\n to:\n\n"
+          + newDefaultProjectDirs.replace(';', '\n');
         String title = "Change external tools settings?";
         int answer = JOptionPane.showOptionDialog(ProjectDirectoriesDialog.this, question, title,
             JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null,

@@ -30,7 +30,7 @@
  *
  * @(#)$$
  */
-#define DEBUG 0
+#define DEBUG 1
 #if DEBUG
 #define PRINTF(FORMAT,args...) printf_P(PSTR(FORMAT),##args)
 int pingtimer1=0,pingtimer2=0;
@@ -54,9 +54,30 @@ extern int rf230_interrupt_flag;
 #ifdef RF230BB        //radio driver using contiki core mac
 #include "radio/rf230bb/rf230bb.h"
 #include "net/mac/frame802154.h"
+#include "net/mac/framer-802154.h"
+//#include "net/mac/framer-nullmac.h"
+//#include "net/mac/framer.h"
 #include "net/sicslowpan.h"
 #include "net/uip-netif.h"
+//#include "net/mac/lpp.h"
+#include "net/mac/cxmac.h"
 #include "net/mac/sicslowmac.h"
+//#include "dev/xmem.h"
+#include "net/rime.h"
+
+#if WITH_NULLMAC
+#define MAC_DRIVER nullmac_driver
+#endif /* WITH_NULLMAC */
+
+#ifndef MAC_DRIVER
+#ifdef MAC_CONF_DRIVER
+#define MAC_DRIVER MAC_CONF_DRIVER
+#else
+#define MAC_DRIVER sicslowmac_driver
+//#define MAC_DRIVER cxmac_driver
+#endif /* MAC_CONF_DRIVER */
+#endif /* MAC_DRIVER */
+
 #else                 //radio driver using Atmel/Cisco 802.15.4'ish MAC
 #include <stdbool.h>
 #include "mac.h"
@@ -79,6 +100,7 @@ extern int rf230_interrupt_flag;
 
 #if WEBSERVER
 #include "httpd-fs.h"
+#include "httpd-cgi.h"
 #endif
 
 #ifdef COFFEE_FILES
@@ -115,23 +137,6 @@ extern uint8_t domain_name[30];
 uint8_t mac_address[8] EEMEM = {0x02, 0x11, 0x22, 0xff, 0xfe, 0x33, 0x44, 0x55};
 #endif
 
-/*-----------------------Initial contiki processes--------------------------*/
-#ifdef RAVEN_LCD_INTERFACE
-#ifdef RF230BB
-PROCINIT(&etimer_process, &tcpip_process, &raven_lcd_process);
-#else
-PROCINIT(&etimer_process, &mac_process, &tcpip_process, &raven_lcd_process);
-#endif /*RF230BB*/
-#else
-#ifdef RF230BB
-PROCINIT(&etimer_process, &tcpip_process);
-#elif WEBSERVER    //TODO:get hello-world to compile with ipv6
-PROCINIT(&etimer_process, &mac_process, &tcpip_process);
-#else
-PROCINIT(&etimer_process);
-#endif /*RF230BB*/
-#endif /*RAVEN_LCD_INTERFACE*/
-
 /*-------------------------Low level initialization------------------------*/
 /*------Done in a subroutine to keep main routine stack usage small--------*/
 void initialize(void)
@@ -152,18 +157,19 @@ void initialize(void)
   clock_init();
   printf_P(PSTR("\n*******Booting %s*******\n"),CONTIKI_VERSION_STRING);
 
+/* rtimers not used yet */
+//  rtimer_init();
+
  /* Initialize process subsystem */
   process_init();
+ /* etimers must be started before ctimer_init */
+  process_start(&etimer_process, NULL);
 
 #ifdef RF230BB
 {
+  ctimer_init();
   /* Start radio and radio receive process */
   rf230_init();
-  sicslowpan_init(sicslowmac_init(&rf230_driver));
-//  ctimer_init();
-//  sicslowpan_init(lpp_init(&rf230_driver));
-//  rime_init(sicslowmac_driver.init(&rf230_driver));
-//  rime_init(lpp_init(&rf230_driver));
 
   /* Set addresses BEFORE starting tcpip process */
 
@@ -177,27 +183,45 @@ void initialize(void)
   rf230_set_pan_addr(IEEE802154_PANID, 0, (uint8_t *)&addr.u8);
 
   rf230_set_channel(24);
+
   rimeaddr_set_node_addr(&addr); 
+//  set_rime_addr();
   PRINTF("MAC address %x:%x:%x:%x:%x:%x:%x:%x\n",addr.u8[0],addr.u8[1],addr.u8[2],addr.u8[3],addr.u8[4],addr.u8[5],addr.u8[6],addr.u8[7]);
 
+  framer_set(&framer_802154);
+  queuebuf_init();
  // uip_ip6addr(&ipprefix, 0xaaaa, 0, 0, 0, 0, 0, 0, 0);
  // uip_netif_addr_add(&ipprefix, UIP_DEFAULT_PREFIX_LEN, 0, AUTOCONF);
  // uip_nd6_prefix_add(&ipprefix, UIP_DEFAULT_PREFIX_LEN, 0);
  // PRINTF("Prefix %x::/%u\n",ipprefix.u16[0],UIP_DEFAULT_PREFIX_LEN);
 
 #if UIP_CONF_ROUTER
+#warning Routing enabled
+  PRINTF("Routing Enabled\n")
   rime_init(rime_udp_init(NULL));
   uip_router_register(&rimeroute);
 #endif
 
-  PRINTF("Driver: %s, Channel: %u\n", sicslowmac_driver.name, rf230_get_channel()); 
+  sicslowpan_init(MAC_DRIVER.init(&rf230_driver));
+  
+  PRINTF("Driver: %s, Channel: %u\n\r", MAC_DRIVER.name, rf230_get_channel()); 
+ //PRINTF("Driver: %s, Channel: %u\n", sicslowmac_driver.name, rf230_get_channel()); 
 }
 #endif /*RF230BB*/
 
-  /* Register initial processes */
-  procinit_init(); 
+#if RF230BB
+  process_start(&tcpip_process, NULL);
+#else
+/* mac process must be started before tcpip process! */
+  process_start(&mac_process, NULL);
+  process_start(&tcpip_process, NULL);
 
-  /* Autostart processes */
+#endif
+#ifdef RAVEN_LCD_INTERFACE
+  process_start(&raven_lcd_process, NULL);
+#endif
+
+  /* Autostart other processes */
   autostart_start(autostart_processes);
 
   //Give ourselves a prefix
@@ -221,7 +245,12 @@ void initialize(void)
 #endif
 
 /*--------------------------Announce the configuration---------------------*/
+#define ANNOUNCE_BOOT 1    //adds about 400 bytes to program size
+#if ANNOUNCE_BOOT
+
 #if WEBSERVER
+
+  uint8_t i;
   char buf[80];
   unsigned int size;
    eeprom_read_block (buf,server_name, sizeof(server_name));
@@ -241,10 +270,47 @@ void initialize(void)
 #elif COFFEE_FILES==4
    printf_P(PSTR(".%s online with dynamic %u KB program memory file system\n"),buf,size>>10);
 #endif
+
+/* Add prefixes for testing */
+#if 0
+{  
+  uip_ip6addr_t ipaddr;
+  uip_ip6addr(&ipaddr, 0xaaaa, 0, 0, 0, 0, 0, 0, 0);
+  uip_netif_addr_autoconf_set(&ipaddr, &uip_lladdr);
+  uip_netif_addr_add(&ipaddr, 16, 0, TENTATIVE);
+}
+#endif
+#if 0
+{
+  uip_ip6addr_t ipaddr;
+  uip_ip6addr(&ipaddr, 0xaaaa, 0, 0, 0, 0, 0, 0, 0);
+  uip_netif_addr_add(&ipaddr, UIP_DEFAULT_PREFIX_LEN, 0, AUTOCONF);
+  uip_nd6_prefix_add(&ipaddr, UIP_DEFAULT_PREFIX_LEN, 0);
+}
+#endif
+
+  for(i = 0; i < UIP_CONF_NETIF_MAX_ADDRESSES; i ++) {
+   if(uip_netif_physical_if.addresses[i].state != NOT_USED) {
+      httpd_cgi_sprint_ip6(*(uip_ipaddr_t*)&uip_netif_physical_if.addresses[i],buf);
+      printf_P(PSTR("IPv6 Address: %s\n"),buf);
+   }
+  }
 #else
    printf_P(PSTR("Online\n"));
 #endif /* WEBSERVER */
+
+#endif /* ANNOUNCE_BOOT */
+
 }
+#if RF230BB
+extern uint8_t rf230processflag;      //for debugging process call problems
+#endif
+/*---------------------------------------------------------------------------*/
+void log_message(char *m1, char *m2)
+{
+  printf_P(PSTR("%s%s\n"), m1, m2);
+}
+extern uint8_t rtimerworks;
 /*-------------------------------------------------------------------------*/
 /*------------------------- Main Scheduler loop----------------------------*/
 /*-------------------------------------------------------------------------*/
@@ -254,8 +320,20 @@ main(void)
   initialize();
   while(1) {
     process_run();
+#if 0
+    if (rtimerworks>200) {
+      printf("%d",rtimerworks);
+      rtimerworks=0;
+    }
+#endif
+#if RF230BB
+    if (rf230processflag) {
+      printf("rf230p%d",rf230processflag);
+      rf230processflag=0;
+  }
+#endif
 
-#if DEBUG
+#if 0
     if (rf230_interrupt_flag) {
       if (rf230_interrupt_flag!=11) {
         PRINTF("*****Radio interrupt %u\n",rf230_interrupt_flag);

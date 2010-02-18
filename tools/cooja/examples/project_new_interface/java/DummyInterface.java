@@ -94,10 +94,6 @@ public class DummyInterface extends MoteInterface implements ContikiMoteInterfac
   public void releaseInterfaceVisualizer(JPanel panel) {
   }
 
-  public double energyConsumption() {
-    return 0; /* My total energy consumption is always zero */
-  }
-
   public Collection<Element> getConfigXML() {
     return null;
   }

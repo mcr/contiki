@@ -45,7 +45,6 @@ import se.sics.cooja.Mote;
 import se.sics.cooja.RadioConnection;
 import se.sics.cooja.Simulation;
 import se.sics.cooja.SimEventCentral.MoteCountListener;
-import se.sics.cooja.contikimote.interfaces.ContikiRadio;
 import se.sics.cooja.interfaces.Position;
 import se.sics.cooja.interfaces.Radio;
 import se.sics.cooja.plugins.Visualizer;
@@ -77,7 +76,8 @@ import se.sics.cooja.radiomediums.DirectedGraphMedium.DestinationRadio;
  * @see #SS_WEAK
  * @see #SS_NOTHING
  *
- * @see DirectedGraphMedium, UDGMVisualizerSkin
+ * @see DirectedGraphMedium
+ * @see UDGMVisualizerSkin
  * @author Fredrik Osterlind
  */
 @ClassDescription("Unit Disk Graph Medium (UDGM)")

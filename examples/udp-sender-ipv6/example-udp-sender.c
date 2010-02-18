@@ -30,6 +30,7 @@
 #include "contiki.h"
 #include "contiki-lib.h"
 #include "contiki-net.h"
+#include "net/uip-netif.h"
 
 #include <string.h>
 
@@ -46,42 +47,45 @@
 #endif
 
 #define UDP_NB 5
-#define UDP_MAX_DATA_LEN 32
 
 static struct etimer udp_periodic_timer;
 
 static struct uip_udp_conn *udpconn;
 static u8_t count = 0;
 
-PROCESS(udp_process_sender, "UPD test sender");
+PROCESS(udp_process_sender, "UDP test sender");
 AUTOSTART_PROCESSES(&udp_process_sender);
 
 /*---------------------------------------------------------------------------*/
 static u8_t
 udphandler(process_event_t ev, process_data_t data)
 {
-  if (etimer_expired(&udp_periodic_timer)) {
+  if(etimer_expired(&udp_periodic_timer)) {
     printf("Event timer expired\n");
     count=0;
   }
 
-  if (ev == tcpip_event) {
+  if(ev == tcpip_event) {
     if(uip_newdata()) {
       ((char *)uip_appdata)[uip_datalen()] = 0;
       printf("Sender received: '%s'\n", uip_appdata);
     }
   }
 
-  if(count < UDP_NB){
+  if(count < UDP_NB) {
     count++;
 
     printf("Sender sending to: ");
     PRINT6ADDR(&udpconn->ripaddr);
     printf("\n");
+#if SEND_TOO_LARGE_PACKET_TO_TEST_FRAGMENTATION
+    uip_udp_packet_send(udpconn, "Sender says Hi!", UIP_APPDATA_SIZE);
+#else /* SEND_TOO_LARGE_PACKET_TO_TEST_FRAGMENTATION */
     uip_udp_packet_send(udpconn, "Sender says Hi!", strlen("Sender says Hi!"));
+#endif /* SEND_TOO_LARGE_PACKET_TO_TEST_FRAGMENTATION */
   }
 
-  etimer_restart(&udp_periodic_timer);
+  etimer_set(&udp_periodic_timer, 13*CLOCK_SECOND + random_rand()%(4*CLOCK_SECOND));
   return 0;
 }
 /*---------------------------------------------------------------------------*/

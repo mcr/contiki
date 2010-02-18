@@ -81,6 +81,7 @@ void
 rtimer_arch_schedule(rtimer_clock_t t)
 {
   PRINTF("rtimer_arch_schedule time %u\n", t);
-  
+
   TACCR0 = t;
 }
+/*---------------------------------------------------------------------------*/

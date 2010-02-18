@@ -255,5 +255,6 @@ struct sicslowpan_addr_context {
  */
 void sicslowpan_init(const struct mac_driver *m);
 
+extern const struct mac_driver *sicslowpan_mac;
 #endif /* __SICSLOWPAN_H__ */
 /** @} */

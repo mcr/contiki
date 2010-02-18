@@ -66,7 +66,7 @@ PROCESS_THREAD(beeper_process, ev, data)
   etimer_set(&etimer, CLOCK_SECOND / 2);
   PT_INIT(&beeper_pt);
   
-  button_sensor.activate();
+  button_sensor.configure(SENSORS_ACTIVE, 1);
   
   while(1) {
 

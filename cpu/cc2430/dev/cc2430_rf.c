@@ -3,6 +3,9 @@
  *         CC2430 RF driver
  * \author
  *         Zach Shelby <zach@sensinode.com>
+ *
+ *  bankable code for cc2430 rf driver.  this code can be placed in any bank.
+ *
  */
 
 #include <stdio.h>
@@ -11,22 +14,12 @@
 #include "dev/radio.h"
 #include "dev/cc2430_rf.h"
 #include "cc2430_sfr.h"
-#include "dev/leds.h"
 #include "sys/clock.h"
 
 #include "net/rime/packetbuf.h"
 #include "net/rime/rimestats.h"
 
-static void (* receiver_callback)(const struct radio_driver *);
-
-void cc2430_rf_set_receiver(void (* recv)(const struct radio_driver *));
-int cc2430_rf_on(void);
-int cc2430_rf_off(void);
-int cc2430_rf_read(void *buf, unsigned short bufsize);
-int cc2430_rf_send(const void *data, unsigned short len);
-
-void cc2430_rf_init(void);
-
+extern void (* receiver_callback)(const struct radio_driver *);
 #ifndef RF_DEFAULT_POWER
 #define RF_DEFAULT_POWER 100
 #endif
@@ -45,12 +38,21 @@ void cc2430_rf_init(void);
 #else
 #define CHECKSUM_LEN 2
 #endif /* CC2430_CONF_CHECKSUM */
-
+#if DEBUG_LEDS
+/* moved leds code to BANK1 to make space for cc2430_rf_process in HOME */
+/* can't call code in BANK1 from alternate banks unless it is marked with __banked */
+#include "dev/leds.h"
 #define RF_RX_LED_ON()		leds_on(LEDS_RED);
 #define RF_RX_LED_OFF()		leds_off(LEDS_RED);
 #define RF_TX_LED_ON()		leds_on(LEDS_GREEN);
 #define RF_TX_LED_OFF()		leds_off(LEDS_GREEN);
-
+#else
+#define RF_RX_LED_ON()		
+#define RF_RX_LED_OFF()		
+#define RF_TX_LED_ON()		
+#define RF_TX_LED_OFF()		
+#endif
+#include "dev/brione_lcd.h"
 #define DEBUG 1
 #if DEBUG
 #define PRINTF(...) printf(__VA_ARGS__)
@@ -77,7 +79,7 @@ uint8_t rf_softack;
 uint16_t rf_panid;
 
 /*---------------------------------------------------------------------------*/
-PROCESS(cc2430_rf_process, "CC2430 RF driver");
+PROCESS_NAME(cc2430_rf_process);
 /*---------------------------------------------------------------------------*/
 
 const struct radio_driver cc2430_rf_driver =
@@ -90,27 +92,8 @@ const struct radio_driver cc2430_rf_driver =
   };
 
 /*---------------------------------------------------------------------------*/
-PROCESS_THREAD(cc2430_rf_process, ev, data)
-{
-  PROCESS_BEGIN();
-
-  while(1) {
-    PROCESS_YIELD_UNTIL(ev == PROCESS_EVENT_POLL);
-
-    if(receiver_callback != NULL) {
-      PRINTF("cc2430_rf_process: calling receiver callback\n");
-      receiver_callback(&cc2430_rf_driver);
-    } else {
-      PRINTF("cc2430_rf_process: no receiver callback\n");
-      cc2430_rf_command(ISFLUSHRX);
-    }
-  }
-
-  PROCESS_END();
-}
-/*---------------------------------------------------------------------------*/
 void
-cc2430_rf_init(void)
+cc2430_rf_init(void) __banked
 {
   if(rf_initialized) {
     return;
@@ -142,7 +125,6 @@ cc2430_rf_init(void)
   rf_manfid = CHVER;
   rf_manfid <<= 8;
   rf_manfid += CHIPID;
-
   cc2430_rf_channel_set(RF_DEFAULT_CHANNEL);
   cc2430_rf_command(ISFLUSHTX);
   cc2430_rf_command(ISFLUSHRX);
@@ -159,33 +141,25 @@ cc2430_rf_init(void)
   RF_TX_LED_OFF();
   RF_RX_LED_OFF();
   rf_initialized = 1;
-
   process_start(&cc2430_rf_process, NULL);
 }
 /*---------------------------------------------------------------------------*/
-void
-cc2430_rf_set_receiver(void (* recv)(const struct radio_driver *))
-{
-  receiver_callback = recv;
-}
-/*---------------------------------------------------------------------------*/
 int
-cc2430_rf_send(const void *payload, unsigned short payload_len)
+cc2430_rf_send_b(void *payload, unsigned short payload_len) __banked
 {
   uint8_t i, counter;
-
+  
   if(rf_flags & TX_ACK) {
     return -1;
   }
   if((rf_flags & RX_ACTIVE) == 0) {
     cc2430_rf_rx_enable();
   }
-
   /* Check packet attributes */
   /*printf("packetbuf_attr: txpower = %d\n", packetbuf_attr(PACKETBUF_ATTR_RADIO_TXPOWER));*/
   /* Should set TX power according to this if > 0 */
 
-  PRINTF("cc2430_rf: sending %d byte payload\n", payload_len);
+  PRINTF("cc2430_rf: sending %ud byte payload\n", payload_len);
 
   RIMESTATS_ADD(lltx);
 
@@ -230,7 +204,7 @@ cc2430_rf_send(const void *payload, unsigned short payload_len)
 }
 /*---------------------------------------------------------------------------*/
 int
-cc2430_rf_read(void *buf, unsigned short bufsize)
+cc2430_rf_read_banked(void *buf, unsigned short bufsize) __banked
 {
   uint8_t i, len;
 #if CC2420_CONF_CHECKSUM
@@ -241,7 +215,6 @@ cc2430_rf_read(void *buf, unsigned short bufsize)
 
   /* Check the length */
   len = RFD;
-  PRINTF("cc2430_rf: received %d bytes\n", len);
 
   /* Check for validity */
   if(len > CC2430_MAX_PACKET_LEN) {
@@ -280,7 +253,6 @@ cc2430_rf_read(void *buf, unsigned short bufsize)
     checksum = RFD * 256;
     checksum += RFD;
 #endif /* CC2430_CONF_CHECKSUM */
-
   packetbuf_set_attr(PACKETBUF_ATTR_RSSI, ((int8_t) RFD) - 45);
   packetbuf_set_attr(PACKETBUF_ATTR_LINK_QUALITY, RFD);
 
@@ -294,27 +266,13 @@ cc2430_rf_read(void *buf, unsigned short bufsize)
 
   return (len - CHECKSUM_LEN);
 }
-/*---------------------------------------------------------------------------*/
-int
-cc2430_rf_off(void)
-{
-  return cc2430_rf_rx_disable();
-}
-/*---------------------------------------------------------------------------*/
-int
-cc2430_rf_on(void)
-{
-  return cc2430_rf_rx_enable();
-}
-/*---------------------------------------------------------------------------*/
-
 /**
  * Execute a single CSP command.
  *
  * \param command command to execute
  *
  */
-void cc2430_rf_command(uint8_t command)
+void cc2430_rf_command(uint8_t command) __banked
 {
   if(command >= 0xE0) {	/*immediate strobe*/
     uint8_t fifo_count;
@@ -344,6 +302,8 @@ void cc2430_rf_command(uint8_t command)
   }
 }
 /*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+
 /**
  * Select RF channel.
  *
@@ -428,7 +388,7 @@ cc2430_rf_power_set(uint8_t new_power)
  * \return pdFALSE	bus not free
  */
 int8_t
-cc2430_rf_rx_enable(void)
+cc2430_rf_rx_enable(void) __banked
 {
   PRINTF("cc2430_rf_rx_enable called\n");
   if(!(rf_flags & RX_ACTIVE)) {
@@ -444,6 +404,7 @@ cc2430_rf_rx_enable(void)
     cc2430_rf_command(ISRXON);
     cc2430_rf_command(ISFLUSHRX);
   }
+  PRINTF("cc2430_rf_rx_enable done\n");
   return 1;
 }
 /*---------------------------------------------------------------------------*/
@@ -454,7 +415,7 @@ cc2430_rf_rx_enable(void)
  * \return pdTRUE
  * \return pdFALSE	bus not free
  */
-int8_t cc2430_rf_rx_disable(void)
+int8_t cc2430_rf_rx_disable(void) __banked
 {
   cc2430_rf_command(ISSTOP);	/*make sure CSP is not running*/
   cc2430_rf_command(ISRFOFF);
@@ -625,61 +586,12 @@ cc2430_rf_cca_check(uint8_t backoff_count, uint8_t slotted)
  *\param pending set up pending flag if pending > 0.
  */
 void
-cc2430_rf_send_ack(uint8_t pending)
+cc2430_rf_send_ack(uint8_t pending) __banked
 {
   if(pending) {
     cc2430_rf_command(ISACKPEND);
   } else {
     cc2430_rf_command(ISACK);
   }
-}
-/*---------------------------------------------------------------------------*/
-/**
- * RF interrupt service routine.
- *
- */
-void
-cc2430_rf_ISR( void ) __interrupt (RF_VECTOR)
-{
-  EA = 0;
-  if(RFIF & IRQ_TXDONE) {
-    RF_TX_LED_OFF();
-    RFIF &= ~IRQ_TXDONE;
-    cc2430_rf_command(ISFLUSHTX);
-  }
-  if(RFIF & IRQ_FIFOP) {
-    if(RFSTATUS & FIFO) {
-      RF_RX_LED_ON();
-      /* Poll the RF process which calls cc2430_rf_read() */
-      process_poll(&cc2430_rf_process);
-    } else {
-      cc2430_rf_command(ISFLUSHRX);
-      cc2430_rf_command(ISFLUSHRX);
-      RFIF &= ~IRQ_FIFOP;
-    }
-  }
-  S1CON &= ~(RFIF_0 | RFIF_1);
-  EA = 1;
-}
-/*---------------------------------------------------------------------------*/
-/**
- * RF error interrupt service routine.
- *
- */
-void
-cc2430_rf_error_ISR( void ) __interrupt (RFERR_VECTOR)
-{
-  EA = 0;
-  TCON_RFERRIF = 0;
-#ifdef HAVE_RF_ERROR
-  rf_error = 254;
-#endif
-  cc2430_rf_command(ISRFOFF);
-  cc2430_rf_command(ISFLUSHRX);
-  cc2430_rf_command(ISFLUSHRX);
-  cc2430_rf_command(ISRXON);
-  RF_RX_LED_OFF();
-  RF_TX_LED_OFF();
-  EA = 1;
 }
 /*---------------------------------------------------------------------------*/

@@ -110,9 +110,7 @@ void
 rime_init(const struct mac_driver *m)
 {
   queuebuf_init();
-  route_init();
   packetbuf_clear();
-  neighbor_init();
   announcement_init();
   rime_mac = m;
   rime_mac->set_receive_function(input);

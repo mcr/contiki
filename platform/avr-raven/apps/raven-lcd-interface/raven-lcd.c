@@ -88,8 +88,10 @@ static struct{
 #define UIP_IP_BUF                ((struct uip_ip_hdr *)&uip_buf[UIP_LLH_LEN])
 #define UIP_ICMP_BUF            ((struct uip_icmp_hdr *)&uip_buf[uip_l2_l3_hdr_len])
 #define PING6_DATALEN 16
-#define CMD_PING 0x81
+
 #define CMD_TEMP 0x80
+#define CMD_PING 0x81
+#define CMD_ADC2 0x82
 
 #define SOF_CHAR 1
 #define EOF_CHAR 4
@@ -167,8 +169,8 @@ send_frame(uint8_t cmd, uint8_t len, uint8_t *payload)
 static u8_t
 raven_gui_loop(process_event_t ev, process_data_t data)
 {
-
-    switch (ev){
+  if(ev == tcpip_icmp6_event) {
+    switch(*((uint8_t *)data)) {
     case ICMP6_ECHO_REQUEST:
         /* We have received a ping request over the air. Send frame back to 3290 */
         send_frame(PING_REQUEST, 0, 0);
@@ -177,6 +179,9 @@ raven_gui_loop(process_event_t ev, process_data_t data)
         /* We have received a ping reply over the air.  Send frame back to 3290 */
         send_frame(PING_REPLY, 1, &seqno);
         break;
+    }
+  } else {
+    switch(ev){
     case SERIAL_CMD:        
         /* Check for command from serial port, execute it. */
         if (cmd.done){
@@ -191,6 +196,10 @@ raven_gui_loop(process_event_t ev, process_data_t data)
                 /* Set temperature string in web server */
                 web_set_temp((char *)cmd.frame);
                 break;
+            case CMD_ADC2:
+                /* Set ext voltage string in web server */
+                web_set_voltage((char *)cmd.frame);
+                break;
             default:
                 break;
             }
@@ -201,7 +210,8 @@ raven_gui_loop(process_event_t ev, process_data_t data)
     default:
         break;
     }
-    return 0;
+  }
+  return 0;
 }
 
 /*---------------------------------------------------------------------------*/

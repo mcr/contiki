@@ -116,7 +116,7 @@ PROCESS_THREAD(example_rucb_process, ev, data)
 
   
   rucb_open(&rucb, 137, &rucb_call);
-  button_sensor.activate();
+  SENSORS_ACTIVATE(button_sensor);
 
   PROCESS_PAUSE();
 

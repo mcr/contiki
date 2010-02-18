@@ -31,13 +31,14 @@
 
 package se.sics.cooja.contikimote.interfaces;
 
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Collection;
-import javax.swing.*;
-import org.apache.log4j.Logger;
+import javax.swing.JButton;
+import javax.swing.JPanel;
 import org.jdom.Element;
-
-import se.sics.cooja.*;
+import se.sics.cooja.Mote;
+import se.sics.cooja.SectionMoteMemory;
 import se.sics.cooja.contikimote.ContikiMote;
 import se.sics.cooja.contikimote.ContikiMoteInterface;
 import se.sics.cooja.interfaces.PIR;
@@ -63,19 +64,9 @@ import se.sics.cooja.interfaces.PIR;
  * @author Fredrik Osterlind
  */
 public class ContikiPIR extends PIR implements ContikiMoteInterface {
-  private static Logger logger = Logger.getLogger(ContikiPIR.class);
-
-  /**
-   * Approximate energy consumption of an active PIR sensor. ESB measured energy
-   * consumption is 0.4 mA. TODO Measure energy consumption
-   */
-  public final double ENERGY_CONSUMPTION_PIR_mA;
-
-  private double energyActivePerTick = -1;
 
   private ContikiMote mote;
   private SectionMoteMemory moteMem;
-  private double myEnergyConsumption = 0.0;
 
   /**
    * Creates an interface to the PIR at mote.
@@ -86,16 +77,8 @@ public class ContikiPIR extends PIR implements ContikiMoteInterface {
    * @see se.sics.cooja.MoteInterfaceHandler
    */
   public ContikiPIR(Mote mote) {
-    // Read class configurations of this mote type
-    ENERGY_CONSUMPTION_PIR_mA = mote.getType().getConfig().getDoubleValue(
-        ContikiPIR.class, "ACTIVE_CONSUMPTION_mA");
-
     this.mote = (ContikiMote) mote;
     this.moteMem = (SectionMoteMemory) mote.getMemory();
-
-    if (energyActivePerTick < 0) {
-      energyActivePerTick = ENERGY_CONSUMPTION_PIR_mA * 0.001;
-    }
   }
 
   public static String[] getCoreInterfaceDependencies() {
@@ -106,15 +89,13 @@ public class ContikiPIR extends PIR implements ContikiMoteInterface {
    * Simulates a change in the PIR sensor.
    */
   public void triggerChange() { 
-    mote.getSimulation().scheduleEvent(pirEvent, mote.getSimulation().getSimulationTime());
+    mote.getSimulation().invokeSimulationThread(new Runnable() {
+      public void run() {
+        doTriggerChange();
+      }
+    });
   }
 
-  private TimeEvent pirEvent = new MoteTimeEvent(mote, 0) {
-    public void execute(long t) {
-      doTriggerChange();
-    }
-  };
-  
   public void doTriggerChange() { 
     if (moteMem.getByteValueOf("simPirIsActive") == 1) {
       moteMem.setByteValueOf("simPirChanged", (byte) 1);
@@ -122,8 +103,6 @@ public class ContikiPIR extends PIR implements ContikiMoteInterface {
       mote.requestImmediateWakeup();
     }
   }
-
-  /* TODO Energy consumption of active PIR */
 
   public JPanel getInterfaceVisualizer() {
     JPanel panel = new JPanel();
@@ -141,10 +120,6 @@ public class ContikiPIR extends PIR implements ContikiMoteInterface {
   }
 
   public void releaseInterfaceVisualizer(JPanel panel) {
-  }
-
-  public double energyConsumption() {
-    return myEnergyConsumption;
   }
 
   public Collection<Element> getConfigXML() {

@@ -144,10 +144,6 @@ public class MicaZRadio extends Radio802154 {
     //cc2420.setRSSI((int) signalStrength);
   }
 
-  public double energyConsumption() {
-    return 1.0;
-  }
-
   protected void handleEndOfReception() {
       /* tell the receiver that the packet is ended */
       recv.nextByte(false, (byte)0);

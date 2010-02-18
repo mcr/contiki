@@ -101,10 +101,6 @@ public class SkyCoffeeFilesystem extends MoteInterface {
     adjuster.packColumns();
   }
 
-  public double energyConsumption() {
-    return 0;
-  }
-
   public Collection<Element> getConfigXML() {
     return null;
   }

@@ -46,9 +46,9 @@ PROCESS_THREAD(sensor_output_process, ev, data)
   PROCESS_BEGIN();
 
   /* Activate some sensors to get sensor events */
-  button_sensor.activate();
-  pir_sensor.activate();
-  vib_sensor.activate();
+  button_sensor.configure(SENSORS_ACTIVE, 1);
+  pir_sensor.configure(SENSORS_ACTIVE, 1);
+  vib_sensor.configure(SENSORS_ACTIVE, 1);
 
   while(1) {
     PROCESS_WAIT_EVENT_UNTIL(ev == sensors_event);

@@ -288,7 +288,7 @@ public class CreateSimDialog extends JDialog {
     randomSeed = numberField;
 
     randomSeedGenerated = new JCheckBox();
-    randomSeedGenerated.setToolTipText("Autmatically generate random seed at simulation load");
+    randomSeedGenerated.setToolTipText("Automatically generate random seed at simulation load");
     randomSeedGenerated.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         if (((JCheckBox)e.getSource()).isSelected()) {

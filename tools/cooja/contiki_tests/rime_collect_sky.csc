@@ -21,7 +21,8 @@
       <identifier>sky1</identifier>
       <description>Sky Mote Type #1</description>
       <source>../../../examples/rime/example-collect.c</source>
-      <commands>make example-collect.sky TARGET=sky</commands>
+      <commands>make clean TARGET=sky
+make example-collect.sky TARGET=sky</commands>
       <firmware>../../../examples/rime/example-collect.sky</firmware>
       <moteinterface>se.sics.cooja.interfaces.Position</moteinterface>
       <moteinterface>se.sics.cooja.interfaces.IPAddress</moteinterface>
@@ -451,7 +452,10 @@ while(nodes_starting) {
 }
 
 /* Create sink */
-log.log("All nodes booted, creating sink at node " + id + "\n");
+sink = id;
+GENERATE_MSG(1000, "continue");
+YIELD_THEN_WAIT_UNTIL(msg.equals("continue"));
+log.log("All nodes booted, creating sink at node " + sink + "\n");
 mote.getInterfaces().getButton().clickButton()
 
 while(true) {

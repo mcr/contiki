@@ -40,8 +40,6 @@
 
 #include "pfs.h"
 
-#define UIP_CONF_LOGGING 0
-
 #define CTK_CONF_MENU_KEY         CH_ESC
 #define CTK_CONF_WINDOWSWITCH_KEY 0x17	/* Ctrl-W */
 #define CTK_CONF_WIDGETUP_KEY     0x01	/* Ctrl-A */
@@ -50,13 +48,23 @@
 #define MOUSE_CONF_XTOC(x) ((x) * 2 / 7)
 #define MOUSE_CONF_YTOC(y) ((y) / 8)
 
-#define WEBSERVER_CONF_CGI_CONNS UIP_CONNS
-#define WEBSERVER_CONF_CFS_CONNS 7
+#define EMAIL_CONF_WIDTH  79
+#define EMAIL_CONF_HEIGHT 19
+#define EMAIL_CONF_ERASE   0
 
+#define IRC_CONF_WIDTH  80
+#define IRC_CONF_HEIGHT 23
+
+#define WEBSERVER_CONF_CGI_CONNS UIP_CONNS
+#define WEBSERVER_CONF_CFS_CONNS 8 - 3
+
+#define WWW_CONF_WEBPAGE_WIDTH      80
 #define WWW_CONF_WEBPAGE_HEIGHT     19
 #define WWW_CONF_HISTORY_SIZE        4
 #define WWW_CONF_MAX_URLLEN         78
 #define WWW_CONF_MAX_NUMPAGEWIDGETS 20
+#define WWW_CONF_RENDERSTATE         1
+#define WWW_CONF_FORMS               1
 #define WWW_CONF_MAX_FORMACTIONLEN  20
 #define WWW_CONF_MAX_FORMNAMELEN    20
 #define WWW_CONF_MAX_INPUTNAMELEN   20

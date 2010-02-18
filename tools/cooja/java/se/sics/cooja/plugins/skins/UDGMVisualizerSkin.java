@@ -65,7 +65,7 @@ import se.sics.cooja.radiomediums.UDGM;
  * success ratio.
  * 
  * To also see radio traffic, this skin can be combined with {@link
- * TrafficVisualizerSkin()}.
+ * TrafficVisualizerSkin}.
  * 
  * @see TrafficVisualizerSkin
  * @see UDGM

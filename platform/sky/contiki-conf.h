@@ -4,15 +4,39 @@
 #ifndef CONTIKI_CONF_H
 #define CONTIKI_CONF_H
 
-/* Specifies the default MAC driver */
-#define MAC_CONF_DRIVER xmac_driver
 
-#define XMAC_CONF_COMPOWER 1
-#define XMAC_CONF_ANNOUNCEMENTS 1
+
+/* Specifies the default MAC driver */
+#define MAC_CONF_CSMA               1
+
+#define XMAC_CONF_COMPOWER          1
+#define CXMAC_CONF_COMPOWER         1
+
+
+#if WITH_UIP6
+#define MAC_CONF_DRIVER             cxmac_driver
+#define MAC_CONF_CHANNEL_CHECK_RATE 8
+#define RIME_CONF_NO_POLITE_ANNOUCEMENTS 0
+#define CXMAC_CONF_ANNOUNCEMENTS    0
+#define XMAC_CONF_ANNOUNCEMENTS     0
+#else /* WITH_UIP6 */
+#define MAC_CONF_DRIVER             xmac_driver
+#define MAC_CONF_CHANNEL_CHECK_RATE 4
+#define TIMESYNCH_CONF_ENABLED 1
+#define CC2420_CONF_TIMESTAMPS 1
+#define CC2420_CONF_CHECKSUM   0
+#define RIME_CONF_NO_POLITE_ANNOUCEMENTS 1
+#define XMAC_CONF_ANNOUNCEMENTS     1
+#define CXMAC_CONF_ANNOUNCEMENTS    1
+#endif /* WITH_UIP6 */
+
+#define QUEUEBUF_CONF_NUM          16
 
 #define PACKETBUF_CONF_ATTRS_INLINE 1
 
-#define QUEUEBUF_CONF_NUM          16
+#ifndef RF_CHANNEL
+#define RF_CHANNEL              26
+#endif /* RF_CHANNEL */
 
 #define IEEE802154_CONF_PANID       0xABCD
 
@@ -23,14 +47,6 @@
 #define DCOSYNCH_CONF_ENABLED 1
 #define DCOSYNCH_CONF_PERIOD 30
 
-#ifndef WITH_UIP6
-#define TIMESYNCH_CONF_ENABLED 1
-#define CC2420_CONF_TIMESTAMPS 1
-#define CC2420_CONF_CHECKSUM   0
-#define RIME_CONF_NO_POLITE_ANNOUCEMENTS 1
-#else
-#define RIME_CONF_NO_POLITE_ANNOUCEMENTS 0
-#endif /* !WITH_UIP6 */
 
 #define CFS_CONF_OFFSET_TYPE	long
 
@@ -40,10 +56,6 @@
 #define HAVE_STDINT_H
 #define MSP430_MEMCPY_WORKAROUND 1
 #include "msp430def.h"
-
-#ifndef RF_CHANNEL
-#define RF_CHANNEL              26
-#endif /* RF_CHANNEL */
 
 #define ELFLOADER_CONF_TEXT_IN_ROM 0
 #define ELFLOADER_CONF_DATAMEMORY_SIZE 0x400
@@ -96,16 +108,19 @@
 #define UIP_CONF_ND6_MAX_NEIGHBORS      4
 #define UIP_CONF_ND6_MAX_DEFROUTERS     2
 #define UIP_CONF_IP_FORWARD             0
-#define UIP_CONF_BUFFER_SIZE		256
+#define UIP_CONF_BUFFER_SIZE		240
 
 #define SICSLOWPAN_CONF_COMPRESSION_IPV6        0
 #define SICSLOWPAN_CONF_COMPRESSION_HC1         1
 #define SICSLOWPAN_CONF_COMPRESSION_HC01        2
 #define SICSLOWPAN_CONF_COMPRESSION             SICSLOWPAN_CONF_COMPRESSION_HC01
-#define SICSLOWPAN_CONF_FRAG                    0
+#ifndef SICSLOWPAN_CONF_FRAG
+#define SICSLOWPAN_CONF_FRAG                    1
+#define SICSLOWPAN_CONF_MAXAGE                  8
+#endif /* SICSLOWPAN_CONF_FRAG */
 #define SICSLOWPAN_CONF_CONVENTIONAL_MAC	1
 #define SICSLOWPAN_CONF_MAX_ADDR_CONTEXTS       2
-#else
+#else /* WITH_UIP6 */
 #define UIP_CONF_IP_FORWARD      1
 #define UIP_CONF_BUFFER_SIZE     108
 #endif /* WITH_UIP6 */
@@ -114,8 +129,8 @@
 
 #define UIP_CONF_DHCP_LIGHT
 #define UIP_CONF_LLH_LEN         0
-#define UIP_CONF_RECEIVE_WINDOW  60
-#define UIP_CONF_TCP_MSS         60
+#define UIP_CONF_RECEIVE_WINDOW  48
+#define UIP_CONF_TCP_MSS         48
 #define UIP_CONF_MAX_CONNECTIONS 4
 #define UIP_CONF_MAX_LISTENPORTS 8
 #define UIP_CONF_UDP_CONNS       12

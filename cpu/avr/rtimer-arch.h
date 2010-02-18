@@ -36,7 +36,10 @@
 
 #include <avr/interrupt.h>
 
+/* Will affect radio on/off timing for cx-mac */
 #define RTIMER_ARCH_SECOND (8192)
+
+
 
 /* Handle that not all AVRs have TCNT3 - this should be configuratble
    in contiki-conf later! */

@@ -38,6 +38,8 @@
 #include "dev/spi.h"
 #include "dev/cc2420.h"
 
+#define CONF_SFD_TIMESTAMPS 0
+
 #ifdef CONF_SFD_TIMESTAMPS
 #include "cc2420-arch-sfd.h"
 #endif
@@ -62,7 +64,7 @@ cc2420_arch_init(void)
   /* all input by default, set these as output */
   P4DIR |= BV(CSN) | BV(VREG_EN) | BV(RESET_N);
 
-#ifdef CONF_SFD_TIMESTAMPS
+#if CONF_SFD_TIMESTAMPS
   cc2420_arch_sfd_init();
 #endif
 

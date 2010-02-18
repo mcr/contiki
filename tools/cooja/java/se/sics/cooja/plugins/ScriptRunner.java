@@ -46,23 +46,41 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.script.ScriptException;
-import javax.swing.*;
+import javax.swing.AbstractAction;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTextArea;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
 import org.apache.log4j.Logger;
 import org.jdom.Element;
 
-import se.sics.cooja.*;
+import se.sics.cooja.ClassDescription;
+import se.sics.cooja.GUI;
+import se.sics.cooja.PluginType;
+import se.sics.cooja.Simulation;
+import se.sics.cooja.VisPlugin;
 import se.sics.cooja.dialogs.MessageList;
-import se.sics.cooja.plugins.ScriptParser.ScriptSyntaxErrorException;
 import se.sics.cooja.util.StringUtils;
 
 @ClassDescription("Contiki Test Editor")
 @PluginType(PluginType.SIM_PLUGIN)
 public class ScriptRunner extends VisPlugin {
+  private static final long serialVersionUID = 7614358340336799109L;
   private static Logger logger = Logger.getLogger(ScriptRunner.class);
 
   final String[] EXAMPLE_SCRIPTS = new String[] {
@@ -70,6 +88,7 @@ public class ScriptRunner extends VisPlugin {
       "helloworld.js", "Wait for 'Hello, world'",
       "log_all.js", "Just log all printf()'s and timeout",
       "shell.js", "Basic shell interaction",
+      "plugins.js", "Interact with surrounding COOJA plugins",
   };
 
   private Simulation simulation;
@@ -162,7 +181,7 @@ public class ScriptRunner extends VisPlugin {
         }
         lineTextArea.setText(txt);
         
-        ScriptParser parser;
+        /*ScriptParser parser;
         try {
           parser = new ScriptParser(scriptTextArea.getText());
           String tooltip = parser.getJSCode();
@@ -171,7 +190,7 @@ public class ScriptRunner extends VisPlugin {
           lineTextArea.setToolTipText(tooltip);
         } catch (ScriptSyntaxErrorException e) {
           lineTextArea.setToolTipText("Unable to generate code: " + e.getMessage());
-        }
+        }*/
       }
 
       public void changedUpdate(DocumentEvent e) {
@@ -532,12 +551,19 @@ public class ScriptRunner extends VisPlugin {
   }
 
   public Collection<Element> getConfigXML() {
-    Vector<Element> config = new Vector<Element>();
+    ArrayList<Element> config = new ArrayList<Element>();
     Element element;
 
-    element = new Element("script");
-    element.setText(scriptTextArea.getText());
-    config.add(element);
+    if (scriptFile != null) {
+      element = new Element("scriptfile");
+      element.setText(simulation.getGUI().createPortablePath(scriptFile).getPath().replace('\\', '/'));
+      config.add(element);
+      StringUtils.saveToFile(scriptFile, scriptTextArea.getText());
+    } else {
+      element = new Element("script");
+      element.setText(scriptTextArea.getText());
+      config.add(element);
+    }
 
     element = new Element("active");
     element.setText("" + (engine != null));
@@ -550,6 +576,7 @@ public class ScriptRunner extends VisPlugin {
     setScriptActive(false);
   }
 
+  private File scriptFile = null;
   public boolean setConfigXML(Collection<Element> configXML, boolean visAvailable) {
     for (Element element : configXML) {
       String name = element.getName();
@@ -557,6 +584,15 @@ public class ScriptRunner extends VisPlugin {
         if (!element.getText().isEmpty()) {
           updateScript(element.getText());
         }
+      } else if ("scriptfile".equals(name)) {
+        File file = simulation.getGUI().restorePortablePath(new File(element.getText().trim()));
+        String script = StringUtils.loadFromFile(file);
+        if (script == null) {
+          logger.fatal("Failed to load script from: " + file.getAbsolutePath());
+        } else {
+          updateScript(script);
+        }
+        scriptFile = file;
       } else if ("active".equals(name)) {
         boolean active = Boolean.parseBoolean(element.getText());
         if (GUI.isVisualized()) {

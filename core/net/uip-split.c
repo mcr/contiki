@@ -53,7 +53,7 @@ uip_split_output(void)
 
   /* We only try to split maximum sized TCP segments. */
   if(BUF->proto == UIP_PROTO_TCP &&
-     uip_len == UIP_BUFSIZE - UIP_LLH_LEN) {
+     uip_len == UIP_TCP_MSS + UIP_TCPIP_HLEN) {
 
     tcplen = uip_len - UIP_TCPIP_HLEN;
     /* Split the segment in two. If the original packet length was

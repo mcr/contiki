@@ -57,8 +57,6 @@ interrupt(TIMERA1_VECTOR) timera1 (void) {
 
   if(TAIV == 2) {
 
-    eint();
-
     /* HW timer bug fix: Interrupt handler called before TR==CCR.
      * Occurrs when timer state is toggled between STOP and CONT. */
     while(TACTL & MC1 && TACCR1 - TAR == 1);
@@ -88,6 +86,7 @@ interrupt(TIMERA1_VECTOR) timera1 (void) {
       etimer_request_poll();
       LPM4_EXIT;
     }
+
   }
   /*  if(process_nevents() >= 0) {
     LPM4_EXIT;

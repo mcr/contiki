@@ -35,6 +35,7 @@ import java.net.*;
 import java.util.Vector;
 
 import se.sics.cooja.MoteType.MoteTypeCreationException;
+import se.sics.cooja.contikimote.ContikiMoteType;
 import se.sics.cooja.dialogs.MessageList;
 
 /**
@@ -279,15 +280,13 @@ public abstract class CoreComm {
   /**
    * Loads given Java class file from disk.
    *
-   * @param classFile
-   *          Java class (without extension)
+   * @param className Java class name
    * @return Loaded class
-   * @throws MoteTypeCreationException
-   *           If error occurs
+   * @throws MoteTypeCreationException If error occurs
    */
-  public static Class loadClassFile(String className)
+  public static Class<?> loadClassFile(String className)
       throws MoteTypeCreationException {
-    Class loadedClass = null;
+    Class<?> loadedClass = null;
     try {
       ClassLoader urlClassLoader = new URLClassLoader(
           new URL[] { new File(".").toURI().toURL() },
@@ -349,7 +348,7 @@ public abstract class CoreComm {
 
   /**
    * Ticks a mote once. This should not be used directly, but instead via
-   * Mote.tick().
+   * {@link ContikiMoteType#tick()}.
    */
   public abstract void tick();
 

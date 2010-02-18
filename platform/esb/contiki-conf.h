@@ -32,12 +32,6 @@
    of two (see clock.c for details). */
 #define CLOCK_CONF_SECOND 64
 
-#define IRQ_PORT1_VECTOR 1
-
-#define IRQ_PORT1 0x01
-#define IRQ_PORT2 0x02
-#define IRQ_ADC   0x03
-
 #define NODE_ID_EEPROM_OFFSET     0x0010 /* - 0x0014 */
 #define CFS_EEPROM_CONF_OFFSET    0x0040
 
@@ -87,6 +81,7 @@ typedef unsigned short uip_stats_t;
 
 #define LOADER_CONF_ARCH "loader/loader-arch.h"
 
+#define ELFLOADER_CONF_TEXT_IN_ROM 1
 #define ELFLOADER_CONF_DATAMEMORY_SIZE 100
 #define ELFLOADER_CONF_TEXTMEMORY_SIZE 0x1000
 

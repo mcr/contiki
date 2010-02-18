@@ -109,6 +109,7 @@ typedef unsigned long clock_time_t;
 
 #define PACKETBUF_CONF_SIZE        128
 #define PACKETBUF_CONF_HDR_SIZE    32
+#define QUEUEBUF_CONF_STATS        1
 
 #define UIP_CONF_UIP_IP4ADDR_T_WITH_U32 1
 

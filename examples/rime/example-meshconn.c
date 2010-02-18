@@ -95,8 +95,6 @@ PROCESS_THREAD(test_meshconn_process, ev, data)
 
   meshconn_open(&meshconn, 128, &callbacks);
 
-  /* button_sensor.activate();*/
-
   while(1) {
     rimeaddr_t addr;
     static struct etimer et;

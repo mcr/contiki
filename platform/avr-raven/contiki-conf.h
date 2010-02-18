@@ -51,6 +51,7 @@ typedef int32_t s32_t;
  */
 #define MCU_MHZ 8
 #define PLATFORM PLATFORM_AVR
+/*TODO:Who defines RAVEN_REVISION = RAVEN_D needed by hal.h? */
 
 /* Clock ticks per second */
 #define CLOCK_CONF_SECOND 125
@@ -70,7 +71,7 @@ typedef int32_t s32_t;
 #define CLIF
 
 #define RIMEADDR_CONF_SIZE       8
-//#define PACKETBUF_CONF_HDR_SIZE    0           //undefine when using the barebones driver
+#define PACKETBUF_CONF_HDR_SIZE    0           //RF230 handles headers internally
 
 /* 0 for IPv6, or 1 for HC1, 2 for HC01 */
 #define SICSLOWPAN_CONF_COMPRESSION_IPV6 0 
@@ -79,15 +80,44 @@ typedef int32_t s32_t;
 
 #define SICSLOWPAN_CONF_COMPRESSION       SICSLOWPAN_CONF_COMPRESSION_HC01 
 #define SICSLOWPAN_CONF_MAX_ADDR_CONTEXTS 2
-#define SICSLOWPAN_CONF_FRAG              1     //set zero for sky equivalence with barebones driver
+#define SICSLOWPAN_CONF_FRAG              1
 
+/* Below will prevent fragmentation of TCP packets, undef for faster page loads, simpler wireshark captures */
+//#define UIP_CONF_TCP_MSS 48
+
+/* Fragmentation uses queuebuf.c to save packets */
+#define QUEUEBUF_CONF_NUM 1
+#define QUEUEBUF_CONF_REF_NUM 1
+
+/* Logging adds 200 bytes to program size */
+#define LOG_CONF_ENABLED 1
+
+/* RF230BB reduces program size by 6.5KB, RAM by 500 bytes */
 #ifdef RF230BB
-#define SICSLOWPAN_CONF_CONVENTIONAL_MAC    1   //for barebones driver
+#define SICSLOWPAN_CONF_CONVENTIONAL_MAC    1   //for barebones driver, sicslowpan calls radio->read function
+#undef PACKETBUF_CONF_HDR_SIZE                  //RF230BB takes the packetbuf default for header size
+#define UIP_CONF_ROUTER 0
+#if 0
+/* Specifies the default MAC driver */
+//no auto_ack gives bad FCS for some reason?
+//#define RF230_CONF_NO_AUTO_ACK      1
+#define MAC_CONF_CSMA               1
+#define XMAC_CONF_COMPOWER          1
+#define CXMAC_CONF_COMPOWER         1
+#define MAC_CONF_DRIVER             cxmac_driver
+#define MAC_CONF_CHANNEL_CHECK_RATE 8
+//following gives 50% duty cycle, undef for 5%
+#define CXMAC_CONF_ON_TIME (RTIMER_ARCH_SECOND / 16)
+#define RIME_CONF_NO_POLITE_ANNOUCEMENTS 0
+#define CXMAC_CONF_ANNOUNCEMENTS    0
+#define XMAC_CONF_ANNOUNCEMENTS     0
+#endif
+
+//#undef SICSLOWPAN_CONF_FRAG
 //#define SICSLOWPAN_CONF_FRAG              0   //for sky equivalence with barebones driver
 //#define UIP_CONF_BUFFER_SIZE            256   //for sky equivalence with barebones driver
 //#define UIP_CONF_ROUTER 1
-#define UIP_CONF_ROUTER 0 
-#endif
+#endif /*RF230BB */
 
 #define SICSLOWPAN_CONF_MAXAGE 5
 

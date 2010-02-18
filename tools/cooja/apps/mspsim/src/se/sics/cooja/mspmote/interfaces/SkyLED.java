@@ -97,10 +97,6 @@ public class SkyLED extends LED {
     return redOn;
   }
 
-  public double energyConsumption() {
-    return 0;
-  }
-
   public JPanel getInterfaceVisualizer() {
     final JPanel panel = new JPanel() {
       public void paintComponent(Graphics g) {

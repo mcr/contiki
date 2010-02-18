@@ -48,6 +48,7 @@
 #include <string.h>
 
 #include "contiki.h"
+#include "dev/watchdog.h"
 #include "net/tcpip.h"
 #include "net/uip.h"
 #include "net/uip-netif.h"
@@ -142,7 +143,7 @@ void uip_log(char *msg);
  *  @{
  */
 /** A pointer to the mac driver */
-static const struct mac_driver *mac;
+const struct mac_driver *sicslowpan_mac;
 
 /**
  * A pointer to the rime buffer.
@@ -1109,11 +1110,15 @@ send_packet(rimeaddr_t *dest)
    */
   packetbuf_set_addr(PACKETBUF_ADDR_RECEIVER, dest);
 
-  if(mac != NULL) {
+  if(sicslowpan_mac != NULL) {
   /** \todo: Fix sending delays so they aren't blocking, or even better would
    *         be to figure out how to get rid of delays entirely */
-    mac->send();
+    sicslowpan_mac->send();
   }
+
+  /* If we are sending multiple packets in a row, we need to let the
+     watchdog know that we are still alive. */
+  watchdog_periodic();
 }
 
 /** \brief Take an IP packet and format it to be sent on an 802.15.4
@@ -1141,8 +1146,8 @@ output(uip_lladdr_t *localdest)
   rime_ptr = packetbuf_dataptr();
 
   if(UIP_IP_BUF->proto == UIP_PROTO_TCP) {
-    packetbuf_set_attr(PACKETBUF_ATTR_PACKET_TYPE,
-		       PACKETBUF_ATTR_PACKET_TYPE_STREAM);
+    /*    packetbuf_set_attr(PACKETBUF_ATTR_PACKET_TYPE,
+          PACKETBUF_ATTR_PACKET_TYPE_STREAM);*/
   }
     
   /*
@@ -1172,6 +1177,7 @@ output(uip_lladdr_t *localdest)
   
   if(uip_len - uncomp_hdr_len > MAC_MAX_PAYLOAD - rime_hdr_len) {
 #if SICSLOWPAN_CONF_FRAG
+    struct queuebuf *q;
     /*
      * The outbound IPv6 packet is too large to fit into a single 15.4
      * packet, so we fragment it into multiple packets and send them.
@@ -1204,7 +1210,15 @@ output(uip_lladdr_t *localdest)
     memcpy(rime_ptr + rime_hdr_len,
            (void *)UIP_IP_BUF + uncomp_hdr_len, rime_payload_len);
     packetbuf_set_datalen(rime_payload_len + rime_hdr_len);
+    q = queuebuf_new_from_packetbuf();
+    if(q == NULL) {
+      PRINTFO("could not allocate queuebuf for first fragment, dropping packet\n");
+      return 0;
+    }
     send_packet(&dest);
+    queuebuf_to_packetbuf(q);
+    queuebuf_free(q);
+    q = NULL;
 
     /* set processed_ip_len to what we already sent from the IP payload*/
     processed_ip_len = rime_payload_len + uncomp_hdr_len;
@@ -1235,7 +1249,15 @@ output(uip_lladdr_t *localdest)
       memcpy(rime_ptr + rime_hdr_len,
              (void *)UIP_IP_BUF + processed_ip_len, rime_payload_len);
       packetbuf_set_datalen(rime_payload_len + rime_hdr_len);
+      q = queuebuf_new_from_packetbuf();
+      if(q == NULL) {
+        PRINTFO("could not allocate queuebuf, dropping fragment\n");
+        return 0;
+      }
       send_packet(&dest);
+      queuebuf_to_packetbuf(q);
+      queuebuf_free(q);
+      q = NULL;
       processed_ip_len += rime_payload_len;
     }
     
@@ -1352,7 +1374,7 @@ input(const struct mac_driver *r)
        * the packet is a fragment that does not belong to the packet
        * being reassembled or the packet is not a fragment.
        */
-      PRINTFI("sicslowpan input: Dropping 6lowpan packet\n");
+      PRINTFI("sicslowpan input: Dropping 6lowpan packet that is not a fragment of the packet currently being reassembled\n");
       return;
     }
   } else {
@@ -1466,10 +1488,10 @@ void
 sicslowpan_init(const struct mac_driver *m)
 {
   /* remember the mac driver */
-  mac = m;
+  sicslowpan_mac = m;
  
   /* Set our input function as the receive function of the MAC. */
-  mac->set_receive_function(input);
+  sicslowpan_mac->set_receive_function(input);
 
   /*
    * Set out output function as the function to be called from uIP to

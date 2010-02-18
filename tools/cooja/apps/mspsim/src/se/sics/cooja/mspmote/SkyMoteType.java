@@ -55,9 +55,11 @@ import se.sics.cooja.dialogs.MessageList;
 import se.sics.cooja.dialogs.MessageList.MessageContainer;
 import se.sics.cooja.interfaces.IPAddress;
 import se.sics.cooja.interfaces.Mote2MoteRelations;
+import se.sics.cooja.interfaces.MoteAttributes;
 import se.sics.cooja.interfaces.Position;
 import se.sics.cooja.interfaces.RimeAddress;
 import se.sics.cooja.mspmote.interfaces.MspClock;
+import se.sics.cooja.mspmote.interfaces.MspDebugOutput;
 import se.sics.cooja.mspmote.interfaces.MspMoteID;
 import se.sics.cooja.mspmote.interfaces.SkyButton;
 import se.sics.cooja.mspmote.interfaces.SkyByteRadio;
@@ -207,6 +209,7 @@ public class SkyMoteType extends MspMoteType {
         RimeAddress.class,
         IPAddress.class,
         Mote2MoteRelations.class,
+        MoteAttributes.class,
         MspClock.class,
         MspMoteID.class,
         SkyButton.class,
@@ -214,7 +217,8 @@ public class SkyMoteType extends MspMoteType {
         SkyCoffeeFilesystem.class,
         SkyByteRadio.class,
         MspSerial.class,
-        SkyLED.class
+        SkyLED.class,
+        /*MspDebugOutput.class*/ /* EXPERIMENTAL: Enable me for COOJA_DEBUG(..) */
     };
   }
 

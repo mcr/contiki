@@ -41,7 +41,9 @@
  * sufficient for now.
  */
 
-#include "contiki-esb.h"
+#include "dev/hwconf.h"
+#include "dev/irq.h"
+#include "sys/energest.h"
 
 HWCONF_PIN(SENSORSWITCH, 5, 5);
 
@@ -51,6 +53,8 @@ esb_sensors_init(void)
 {
   SENSORSWITCH_SELECT();
   SENSORSWITCH_MAKE_OUTPUT();
+
+  irq_init();
 }
 /*---------------------------------------------------------------------------*/
 void

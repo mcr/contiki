@@ -37,8 +37,6 @@
 
 #include "contiki.h"
 
-#include "dev/battery-sensor.h"
-#include "dev/button-sensor.h"
 #include "dev/cc2420.h"
 #include "dev/ds2411.h"
 #include "dev/leds.h"
@@ -50,6 +48,7 @@
 #include "dev/watchdog.h"
 #include "dev/xmem.h"
 #include "lib/random.h"
+#include "net/mac/csma.h"
 #include "net/mac/frame802154.h"
 #include "net/mac/framer-802154.h"
 #include "net/mac/framer-nullmac.h"
@@ -71,6 +70,12 @@
 #include "cfs/cfs-coffee.h"
 #include "sys/autostart.h"
 #include "sys/profile.h"
+
+
+#include "dev/battery-sensor.h"
+#include "dev/button-sensor.h"
+#include "dev/light-sensor.h"
+#include "dev/sht11-sensor.h"
 
 SENSORS(&button_sensor);
 
@@ -115,6 +120,15 @@ static uint8_t is_gateway;
 #endif /* MAC_CONF_DRIVER */
 #endif /* MAC_DRIVER */
 
+#ifndef MAC_CSMA
+#ifdef MAC_CONF_CSMA
+#define MAC_CSMA MAC_CONF_CSMA
+#else
+#define MAC_CSMA 1
+#endif /* MAC_CONF_CSMA */
+#endif /* MAC_CSMA */
+
+
 extern const struct mac_driver MAC_DRIVER;
 
 /*---------------------------------------------------------------------------*/
@@ -137,11 +151,13 @@ void uip_log(char *msg) { puts(msg); }
 #define RF_CHANNEL              26
 #endif
 /*---------------------------------------------------------------------------*/
+#if 0
 void
 force_inclusion(int d1, int d2)
 {
   snprintf(NULL, 0, "%d", d1 % d2);
 }
+#endif
 /*---------------------------------------------------------------------------*/
 static void
 set_rime_addr(void)
@@ -195,8 +211,6 @@ set_gateway(void)
     uip_over_mesh_set_gateway(&rimeaddr_node_addr);
     uip_over_mesh_make_announced_gateway();
     is_gateway = 1;
-
-    rime_mac->off(1);
   }
 }
 #endif /* WITH_UIP */
@@ -248,13 +262,6 @@ main(int argc, char **argv)
   process_start(&etimer_process, NULL);
   process_start(&sensors_process, NULL);
 
-  /*
-   * Initialize light and humidity/temp sensors.
-   */
-  sensors_light_init();
-  battery_sensor.activate();
-  sht11_init();
-
   ctimer_init();
 
   cc2420_init();
@@ -282,8 +289,16 @@ main(int argc, char **argv)
 
   /* Setup X-MAC for 802.15.4 */
   queuebuf_init();
+#if MAC_CSMA
+  sicslowpan_init(csma_init(MAC_DRIVER.init(&cc2420_driver)));
+#else /* MAC_CSMA */
   sicslowpan_init(MAC_DRIVER.init(&cc2420_driver));
-  printf(" %s channel %u\n", MAC_DRIVER.name, RF_CHANNEL);
+#endif /* MAC_CSMA */ 
+  printf(" %s, channel check rate %d Hz, radio channel %u\n",
+         sicslowpan_mac->name,
+         CLOCK_SECOND / (sicslowpan_mac->channel_check_interval() == 0? 1:
+                         sicslowpan_mac->channel_check_interval()),
+         RF_CHANNEL);
 
   process_start(&tcpip_process, NULL);
 
@@ -300,12 +315,36 @@ main(int argc, char **argv)
 	   uip_netif_physical_if.addresses[0].ipaddr.u8[15]);
   }
   
+  if(0) {
+    uip_ipaddr_t ipaddr;
+    int i;
+    uip_ip6addr(&ipaddr, 0xaaaa, 0, 0, 0, 0, 0, 0, 0);
+    uip_netif_addr_autoconf_set(&ipaddr, &uip_lladdr);
+    uip_netif_addr_add(&ipaddr, 16, 0, TENTATIVE);
+    printf("Tentative IPv6 address ");
+    for(i = 0; i < 7; ++i) {
+      printf("%02x%02x:",
+             ipaddr.u8[i * 2], ipaddr.u8[i * 2 + 1]);
+    }
+    printf("%02x%02x\n",
+           ipaddr.u8[7 * 2], ipaddr.u8[7 * 2 + 1]);
+  }
+
+  
 #if UIP_CONF_ROUTER
   uip_router_register(&rimeroute);
 #endif /* UIP_CONF_ROUTER */
 #else /* WITH_UIP6 */
+#if MAC_CSMA
+  rime_init(csma_init(MAC_DRIVER.init(&cc2420_driver)));
+#else /* MAC_CSMA */
   rime_init(MAC_DRIVER.init(&cc2420_driver));
-  printf(" %s channel %u\n", rime_mac->name, RF_CHANNEL);
+#endif /* MAC_CSMA */
+  printf(" %s, channel check rate %d Hz, radio channel %u\n",
+         rime_mac->name,
+         CLOCK_SECOND / (rime_mac->channel_check_interval() == 0? 1:
+                         rime_mac->channel_check_interval()),
+         RF_CHANNEL);
 #endif /* WITH_UIP6 */
 
 #if !WITH_UIP && !WITH_UIP6
@@ -352,8 +391,6 @@ main(int argc, char **argv)
 	   uip_ipaddr_to_quad(&hostaddr));
   }
 #endif /* WITH_UIP */
-
-  button_sensor.activate();
 
   energest_init();
   ENERGEST_ON(ENERGEST_TYPE_CPU);

@@ -128,7 +128,7 @@ PROCESS_THREAD(radio_test_process, ev, data)
 
   abc_open(&abc, PORT, &abc_call);
   etimer_set(&send_timer, CLOCK_SECOND);
-  button_sensor.activate();
+  SENSORS_ACTIVATE(button_sensor);
 
   while(1) {
     PROCESS_WAIT_EVENT();

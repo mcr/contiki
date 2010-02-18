@@ -120,6 +120,12 @@ packetbuf_clear(void)
   packetbuf_attr_clear();
 }
 /*---------------------------------------------------------------------------*/
+void
+packetbuf_clear_hdr(void)
+{
+  hdrptr = PACKETBUF_HDR_SIZE;
+}
+/*---------------------------------------------------------------------------*/
 int
 packetbuf_copyfrom(const void *from, uint16_t len)
 {

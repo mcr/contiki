@@ -192,10 +192,6 @@ public class MicaZMote extends AbstractEmulatedMote implements Mote {
     myMoteInterfaceHandler = moteInterfaceHandler;
   }
 
-  public boolean tick(long simTime) {
-    throw new RuntimeException("Obsolete method");
-  }
-
   private long cyclesExecuted = 0;
   private long cyclesUntil = 0;
   public void execute(long t) {

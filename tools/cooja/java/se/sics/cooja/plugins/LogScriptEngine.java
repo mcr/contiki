@@ -31,6 +31,9 @@
 
 package se.sics.cooja.plugins;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.lang.reflect.UndeclaredThrowableException;
 import java.util.Hashtable;
 import java.util.Observable;
@@ -359,6 +362,16 @@ public class LogScriptEngine {
       public void log(String msg) {
         if (scriptLogObserver != null) {
           scriptLogObserver.update(null, msg);
+        }
+      }
+      public void append(String filename, String msg) {
+        try{
+          FileWriter fstream = new FileWriter(filename, true);
+          BufferedWriter out = new BufferedWriter(fstream);
+          out.write(msg);
+          out.close();
+        } catch (Exception e) {
+          logger.warn("Test append failed: " + filename + ": " + e.getMessage());
         }
       }
       public void testOK() {

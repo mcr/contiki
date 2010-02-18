@@ -220,8 +220,9 @@ PROCESS_THREAD(example_multihop_process, ev, data)
 			received_announcement);
 
   /* Activate the button sensor. We use the button to drive traffic -
+<<<<<<< HEAD:examples/rime/example-multihop.c
      when the btton is pressed, a packet is sent. */
-//  button_sensor.activate();
+//  SENSORS_ACTIVATE(button_sensor);
 
   /* Loop forever, send a packet when the button is pressed. */
   while(1) {

@@ -69,6 +69,7 @@ import se.sics.cooja.AddressMemory;
 import se.sics.cooja.ClassDescription;
 import se.sics.cooja.GUI;
 import se.sics.cooja.Mote;
+import se.sics.cooja.MotePlugin;
 import se.sics.cooja.PluginType;
 import se.sics.cooja.Simulation;
 import se.sics.cooja.VisPlugin;
@@ -84,7 +85,7 @@ import se.sics.cooja.AddressMemory.UnknownVariableException;
  */
 @ClassDescription("Variable Watcher")
 @PluginType(PluginType.MOTE_PLUGIN)
-public class VariableWatcher extends VisPlugin {
+public class VariableWatcher extends VisPlugin implements MotePlugin {
   private static final long serialVersionUID = 1L;
 
   private AddressMemory moteMemory;
@@ -114,6 +115,8 @@ public class VariableWatcher extends VisPlugin {
 
   private NumberFormat integerFormat;
 
+  private Mote mote;
+  
   /**
    * @param moteToView Mote
    * @param simulation Simulation
@@ -121,7 +124,7 @@ public class VariableWatcher extends VisPlugin {
    */
   public VariableWatcher(Mote moteToView, Simulation simulation, GUI gui) {
     super("Variable Watcher (" + moteToView + ")", gui);
-
+    this.mote = moteToView;
     moteMemory = (AddressMemory) moteToView.getMemory();
 
     JLabel label;
@@ -588,6 +591,9 @@ public class VariableWatcher extends VisPlugin {
     return true;
   }
 
+  public Mote getMote() {
+    return mote;
+  }
 }
 
 /* Limit JTextField input class */

@@ -114,7 +114,7 @@ struct xmac_hdr {
 #ifdef XMAC_CONF_OFF_TIME
 #define DEFAULT_OFF_TIME (XMAC_CONF_OFF_TIME)
 #else
-#define DEFAULT_OFF_TIME (RTIMER_ARCH_SECOND / 2 - DEFAULT_ON_TIME)
+#define DEFAULT_OFF_TIME (RTIMER_ARCH_SECOND / MAC_CHANNEL_CHECK_RATE - DEFAULT_ON_TIME)
 #endif
 
 #define DEFAULT_PERIOD (DEFAULT_OFF_TIME + DEFAULT_ON_TIME)
@@ -205,7 +205,6 @@ static struct compower_activity current_packet;
 #endif /* XMAC_CONF_COMPOWER */
 
 #if WITH_ENCOUNTER_OPTIMIZATION
-#define ENCOUNTER_LIFETIME (60 * CLOCK_SECOND)
 
 #include "lib/list.h"
 #include "lib/memb.h"
@@ -214,7 +213,6 @@ struct encounter {
   struct encounter *next;
   rimeaddr_t neighbor;
   rtimer_clock_t time;
-  struct ctimer remove_timer;
 };
 
 #define MAX_ENCOUNTERS 4
@@ -397,16 +395,6 @@ format_announcement(char *hdr)
 /*---------------------------------------------------------------------------*/
 #if WITH_ENCOUNTER_OPTIMIZATION
 static void
-remove_encounter(void *encounter)
-{
-  struct encounter *e = encounter;
-
-  ctimer_stop(&e->remove_timer);
-  list_remove(encounter_list, e);
-  memb_free(&encounter_memb, e);
-}
-/*---------------------------------------------------------------------------*/
-static void
 register_encounter(const rimeaddr_t *neighbor, rtimer_clock_t time)
 {
   struct encounter *e;
@@ -415,7 +403,6 @@ register_encounter(const rimeaddr_t *neighbor, rtimer_clock_t time)
   for(e = list_head(encounter_list); e != NULL; e = e->next) {
     if(rimeaddr_cmp(neighbor, &e->neighbor)) {
       e->time = time;
-      ctimer_set(&e->remove_timer, ENCOUNTER_LIFETIME, remove_encounter, e);
       break;
     }
   }
@@ -428,7 +415,6 @@ register_encounter(const rimeaddr_t *neighbor, rtimer_clock_t time)
     }
     rimeaddr_copy(&e->neighbor, neighbor);
     e->time = time;
-    ctimer_set(&e->remove_timer, ENCOUNTER_LIFETIME, remove_encounter, e);
     list_add(encounter_list, e);
   }
 }
@@ -695,7 +681,11 @@ send_packet(void)
 
   LEDS_OFF(LEDS_BLUE);
   if(collisions == 0) {
-    return MAC_TX_OK;
+    if(!is_broadcast && !got_strobe_ack) {
+      return MAC_TX_NOACK;
+    } else {
+      return MAC_TX_OK;
+    }
   } else {
     someone_is_sending++;
     return MAC_TX_COLLISION;
@@ -939,6 +929,12 @@ turn_off(int keep_radio_on)
   }
 }
 /*---------------------------------------------------------------------------*/
+static unsigned short
+channel_check_interval(void)
+{
+  return (1ul * CLOCK_SECOND * DEFAULT_PERIOD) / RTIMER_ARCH_SECOND;
+}
+/*---------------------------------------------------------------------------*/
 const struct mac_driver xmac_driver =
   {
     "X-MAC",
@@ -947,5 +943,6 @@ const struct mac_driver xmac_driver =
     read_packet,
     set_receive_function,
     turn_on,
-    turn_off
+    turn_off,
+    channel_check_interval,
   };

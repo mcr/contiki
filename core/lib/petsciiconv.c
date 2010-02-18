@@ -89,15 +89,17 @@ petsciiconv_toascii(char *buf, unsigned int len)
       c = 0x0d;
     } else if(c == 0x0d) {
       c = 0x0a;
-    } 
-    switch (c & 0xe0) {
-    case 0x40:                
-    case 0x60:
-      c ^= 0x20;
-      break;
-    case 0xc0:               
-      c ^= 0x80;
-      break;
+    }
+    if(c != 0x40) {
+      switch (c & 0xe0) {
+      case 0x40:                
+      case 0x60:
+        c ^= 0x20;
+        break;
+      case 0xc0:               
+        c ^= 0x80;
+        break;
+      }
     }
     *ptr = c & 0x7f;
     ++ptr;

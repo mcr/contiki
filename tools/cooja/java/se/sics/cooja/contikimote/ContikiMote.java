@@ -229,7 +229,4 @@ public class ContikiMote extends AbstractWakeupMote implements Mote {
     return "Contiki " + getID();
   }
 
-  public boolean tick(long simTime) {
-    throw new RuntimeException("Obsolete method");
-  }
 }

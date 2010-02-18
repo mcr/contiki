@@ -41,6 +41,11 @@
 
 #include "lib/sensors.h"
 
+#define ADC0 0
+#define ADC1 1
+#define ADC2 2
+#define ADC3 3
+
 extern const struct sensors_sensor ext_sensor;
 
 #define EXT_SENSOR "Ext"

@@ -33,15 +33,13 @@
 #ifndef __SOUND_SENSOR_H__
 #define __SOUND_SENSOR_H__
 
-#include "contiki-esb.h"
+#include "lib/sensors.h"
 
 extern const struct sensors_sensor sound_sensor;
 
 #define SOUND_SENSOR "Sound"
-#define SOUND_SET_BUFFER_PTR 1
-#define SOUND_SET_BUFFER_SIZE 2
-#define SOUND_START_SAMPLE 3
-#define SOUND_SET_DIV 4
-#define SOUND_SAMPLING 1
+
+void sound_sensor_start_sample();
+void sound_sensor_set_buffer(int16_t *buffer, int buf_size, int divider);
 
 #endif /* __SOUND_SENSOR_H__ */

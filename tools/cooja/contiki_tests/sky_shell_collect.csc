@@ -21,7 +21,8 @@
       <identifier>sky1</identifier>
       <description>Sky Mote Type #1</description>
       <source>../../../examples/sky-shell/sky-shell.c</source>
-      <commands>make sky-shell.sky TARGET=sky</commands>
+      <commands>make clean TARGET=sky
+make sky-shell.sky TARGET=sky</commands>
       <firmware>../../../examples/sky-shell/sky-shell.sky</firmware>
       <moteinterface>se.sics.cooja.interfaces.Position</moteinterface>
       <moteinterface>se.sics.cooja.interfaces.IPAddress</moteinterface>
@@ -350,8 +351,7 @@
   <plugin>
     se.sics.cooja.plugins.ScriptRunner
     <plugin_config>
-      <script>TIMEOUT(500000, print_stats());
-
+      <script>
 function
 print_stats()
 {
@@ -394,8 +394,9 @@ print_stats()
 	  "% tx " + 100 * total_transmit / (total_cpu + total_lpm) +
   	  "% average latency " + total_latency / (4096 * total_received) +
 	  " ms \n");
-	  
 }
+
+TIMEOUT(500000, print_stats());
 
 /* Conf. */
 booted = new Array();

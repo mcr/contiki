@@ -21,7 +21,8 @@
       <identifier>sky1</identifier>
       <description>Sky Mote Type #1</description>
       <source>../../../examples/rime/example-trickle.c</source>
-      <commands>make example-trickle.sky TARGET=sky</commands>
+      <commands>make clean TARGET=sky
+make example-trickle.sky TARGET=sky</commands>
       <firmware>../../../examples/rime/example-trickle.sky</firmware>
       <moteinterface>se.sics.cooja.interfaces.Position</moteinterface>
       <moteinterface>se.sics.cooja.interfaces.IPAddress</moteinterface>
@@ -230,6 +231,8 @@ for (i=1; i &lt;= 10; i++) {
 }
 
 WAIT_UNTIL(id == 1 &amp;&amp; msg.contains('Starting'));
+GENERATE_MSG(1000, "continue");
+YIELD_THEN_WAIT_UNTIL(msg.equals("continue"));
 log.log("Node 1 started. Clicking node button.\n");
 mote.getInterfaces().getButton().clickButton()
 

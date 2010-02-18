@@ -56,6 +56,12 @@
 #define MAIL_HEIGHT 17
 #endif
 
+#ifdef EMAIL_CONF_ERASE
+#define MAIL_ERASE EMAIL_CONF_ERASE
+#else
+#define MAIL_ERASE 1
+#endif
+
 #if (MAIL_WIDTH - 9) < 39
 #define TEXTENTRY_WIDTH (MAIL_WIDTH - 9)
 #else
@@ -97,9 +103,10 @@ struct ctk_textentry mailtextentry =
   {CTK_TEXTENTRY_INPUT(0, 3, MAIL_WIDTH - 1, MAIL_HEIGHT, mail, MAIL_WIDTH - 1, \
 		       ctk_textentry_multiline_input)};
 
-
 static struct ctk_button sendbutton =
   {CTK_BUTTON(0, MAIL_HEIGHT + 4, 4, "Send")};
+
+#if MAIL_ERASE
 static struct ctk_button erasebutton =
   {CTK_BUTTON(MAIL_WIDTH - 6, MAIL_HEIGHT + 4, 5, "Erase")};
 
@@ -113,6 +120,7 @@ static struct ctk_button eraseyesbutton =
   {CTK_BUTTON(4, 4, 3, "Yes")};
 static struct ctk_button erasenobutton =
   {CTK_BUTTON(18, 4, 2, "No")};
+#endif /* MAIL_ERASE */
 
 /* The setup window. */
 static struct ctk_window setupwindow;
@@ -153,7 +161,8 @@ static struct ctk_textentry pop3passwordtextentry =
 */
 
 static struct ctk_button setupokbutton =
-  {CTK_BUTTON(24, 15, 2, "Ok")};
+/*  {CTK_BUTTON(24, 15, 2, "Ok")};*/
+  {CTK_BUTTON(24, 6, 2, "Ok")};
 
 PROCESS(email_process, "E-mail client");
 
@@ -193,6 +202,8 @@ applyconfig(void)
   uiplib_ipaddrconv(smtpserver, (unsigned char *)addr);
 #endif /* UIP_UDP */
   smtp_configure("contiki", addrptr);
+
+  petsciiconv_toascii(fromaddress, sizeof(fromaddress));
 }
 /*-----------------------------------------------------------------------------------*/
 static void
@@ -220,6 +231,7 @@ PROCESS_THREAD(email_process, ev, data)
 
   PROCESS_BEGIN();
   
+#if MAIL_ERASE
   /* Create the "Really erase message?" dialog. */
   ctk_dialog_new(&erasedialog, 26, 6);
   CTK_WIDGET_ADD(&erasedialog, &erasedialoglabel1);
@@ -227,27 +239,28 @@ PROCESS_THREAD(email_process, ev, data)
   CTK_WIDGET_ADD(&erasedialog, &eraseyesbutton);
   CTK_WIDGET_ADD(&erasedialog, &erasenobutton);
   CTK_WIDGET_FOCUS(&erasedialog, &erasenobutton);
+#endif /* MAIL_ERASE */
   
   /* Create setup window. */
-  ctk_window_new(&setupwindow, 28, 16, "E-mail setup");
+/*  ctk_window_new(&setupwindow, 28, 16, "E-mail setup");*/
+  ctk_window_new(&setupwindow, 28, 7, "E-mail setup");
   
   CTK_WIDGET_ADD(&setupwindow, &fromaddresslabel);
   CTK_WIDGET_ADD(&setupwindow, &fromaddresstextentry);
   CTK_WIDGET_ADD(&setupwindow, &smtpserverlabel);
   CTK_WIDGET_ADD(&setupwindow, &smtpservertextentry);
-  /*	  CTK_WIDGET_ADD(&setupwindow, &pop3serverlabel);*/
-  /*    CTK_WIDGET_ADD(&setupwindow, &pop3servertextentry);*/
-  /*	  CTK_WIDGET_ADD(&setupwindow, &pop3userlabel);*/
-  /*    CTK_WIDGET_ADD(&setupwindow, &pop3usertextentry);*/
-  /*    CTK_WIDGET_ADD(&setupwindow, &pop3passwordlabel);*/
-  /*    CTK_WIDGET_ADD(&setupwindow, &pop3passwordtextentry);*/
+/*  CTK_WIDGET_ADD(&setupwindow, &pop3serverlabel);*/
+/*  CTK_WIDGET_ADD(&setupwindow, &pop3servertextentry);*/
+/*  CTK_WIDGET_ADD(&setupwindow, &pop3userlabel);*/
+/*  CTK_WIDGET_ADD(&setupwindow, &pop3usertextentry);*/
+/*  CTK_WIDGET_ADD(&setupwindow, &pop3passwordlabel);*/
+/*  CTK_WIDGET_ADD(&setupwindow, &pop3passwordtextentry);*/
   CTK_WIDGET_ADD(&setupwindow, &setupokbutton);
   
   CTK_WIDGET_FOCUS(&setupwindow, &fromaddresstextentry);
   
   
   /* Create compose window. */
-  
   ctk_window_new(&composewindow, MAIL_WIDTH + 1, MAIL_HEIGHT + 5, "Compose e-mail");
   
   CTK_WIDGET_ADD(&composewindow, &tolabel);
@@ -265,8 +278,10 @@ PROCESS_THREAD(email_process, ev, data)
   CTK_WIDGET_ADD(&composewindow, &statuslabel);
   
   CTK_WIDGET_ADD(&composewindow, &sendbutton);
+#if MAIL_ERASE
   CTK_WIDGET_ADD(&composewindow, &erasebutton);
-  
+#endif /* MAIL_ERASE */
+
   erase_message();
   
   /* Create and add the menu */
@@ -292,6 +307,7 @@ PROCESS_THREAD(email_process, ev, data)
 	smtp_send(to, cc, fromaddress, subject, mail, MAIL_WIDTH, MAIL_HEIGHT);
 	ctk_label_set_text(&statuslabel, "Sending message...");
 	CTK_WIDGET_REDRAW(&statuslabel);
+#if MAIL_ERASE
       } else if(w == (struct ctk_widget *)&erasebutton) {
 	ctk_dialog_open(&erasedialog);      
       } else if(w == (struct ctk_widget *)&eraseyesbutton) {
@@ -299,6 +315,7 @@ PROCESS_THREAD(email_process, ev, data)
 	ctk_dialog_close();
       } else if(w == (struct ctk_widget *)&erasenobutton) {
 	ctk_dialog_close();
+#endif /* MAIL_ERASE */
       } else if(w == (struct ctk_widget *)&setupokbutton) {
 	applyconfig();
 	ctk_window_close(&setupwindow);

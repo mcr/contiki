@@ -81,7 +81,7 @@ static struct recent_packet recent_packets[NUM_RECENT_PACKETS];
 static uint8_t recent_packet_ptr;
 
 #define FORWARD_PACKET_LIFETIME (CLOCK_SECOND * 16)
-#define MAX_FORWARDING_QUEUE 4
+#define MAX_FORWARDING_QUEUE 6
 PACKETQUEUE(forwarding_queue, MAX_FORWARDING_QUEUE);
 
 #define SINK 0
@@ -289,6 +289,9 @@ node_packet_received(struct runicast_conn *c, const rimeaddr_t *from,
     if(packetqueue_enqueue_packetbuf(&forwarding_queue, FORWARD_PACKET_LIFETIME,
 				     tc)) {
       send_queued_packet();
+    } else {
+      PRINTF("%d.%d: packet dropped: no queue buffer available\n",
+	   rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1]);
     }
   }
   
@@ -326,7 +329,7 @@ node_packet_timedout(struct runicast_conn *c, const rimeaddr_t *to,
   struct collect_conn *tc = (struct collect_conn *)
     ((char *)c - offsetof(struct collect_conn, runicast_conn));
 
-  PRINTF("%d.%d: timedout after %d retransmissions\n",
+  PRINTF("%d.%d: timedout after %d retransmissions: packet dropped\n",
 	 rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1], transmissions);
   
   tc->forwarding = 0;
@@ -419,6 +422,7 @@ collect_open(struct collect_conn *tc, uint16_t channels,
 #else
   neighbor_discovery_start(&tc->neighbor_discovery_conn, tc->rtmetric);
 #endif /* COLLECT_ANNOUNCEMENTS */
+  neighbor_init();
 }
 /*---------------------------------------------------------------------------*/
 void
@@ -481,6 +485,9 @@ collect_send(struct collect_conn *tc, int rexmits)
 				       tc)) {
 	send_queued_packet();
 	return 1;
+      } else {
+        PRINTF("%d.%d: drop originated packet: no queuebuf\n",
+               rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1]);
       }
     } else {
       /*      printf("Didn't find any neighbor\n");*/
@@ -490,6 +497,9 @@ collect_send(struct collect_conn *tc, int rexmits)
       if(packetqueue_enqueue_packetbuf(&forwarding_queue, FORWARD_PACKET_LIFETIME,
 				       tc)) {
 	return 1;
+      } else {
+        PRINTF("%d.%d: drop originated packet: no queuebuf\n",
+               rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1]);
       }
     }
   }

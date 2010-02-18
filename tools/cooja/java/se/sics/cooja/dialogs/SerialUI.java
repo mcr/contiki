@@ -263,10 +263,6 @@ public abstract class SerialUI extends Log implements SerialPort {
     this.deleteObserver(observer);
   }
 
-  public double energyConsumption() {
-    return 0;
-  }
-
   public Collection<Element> getConfigXML() {
     return null;
   }

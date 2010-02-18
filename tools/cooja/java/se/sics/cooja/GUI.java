@@ -256,17 +256,20 @@ public class GUI extends Observable {
     "DEFAULT_PROJECTDIRS",
     "CORECOMM_TEMPLATE_FILENAME",
 
+    "PARSE_WITH_COMMAND",
+
     "MAPFILE_DATA_START", "MAPFILE_DATA_SIZE",
     "MAPFILE_BSS_START", "MAPFILE_BSS_SIZE",
+    "MAPFILE_COMMON_START", "MAPFILE_COMMON_SIZE",
     "MAPFILE_VAR_NAME",
     "MAPFILE_VAR_ADDRESS_1", "MAPFILE_VAR_ADDRESS_2",
     "MAPFILE_VAR_SIZE_1", "MAPFILE_VAR_SIZE_2",
 
-    "PARSE_WITH_COMMAND",
     "PARSE_COMMAND",
     "COMMAND_VAR_NAME_ADDRESS",
     "COMMAND_DATA_START", "COMMAND_DATA_END",
     "COMMAND_BSS_START", "COMMAND_BSS_END",
+    "COMMAND_COMMON_START", "COMMAND_COMMON_END",
     
     "HIDE_WARNINGS"
   };
@@ -1584,12 +1587,11 @@ public class GUI extends Observable {
    */
   public void closeMotePlugins(Mote mote) {
     for (Plugin p: startedPlugins.toArray(new Plugin[0])) {
-      int pluginType = p.getClass().getAnnotation(PluginType.class).value();
-      if (pluginType != PluginType.MOTE_PLUGIN) {
+      if (!(p instanceof MotePlugin)) {
         continue;
       }
 
-      Mote pluginMote = (Mote) p.getTag();
+      Mote pluginMote = ((MotePlugin)p).getMote();
       if (pluginMote == mote) {
         removePlugin(p, false);
       }
@@ -1715,9 +1717,6 @@ public class GUI extends Observable {
         plugin = 
           pluginClass.getConstructor(new Class[] { Mote.class, Simulation.class, GUI.class })
           .newInstance(argMote, argSimulation, argGUI);
-
-        /* Tag plugin with mote */
-        plugin.tagWithObject(argMote);
 
       } else if (pluginType == PluginType.SIM_PLUGIN
           || pluginType == PluginType.SIM_STANDARD_PLUGIN) {
@@ -2335,7 +2334,7 @@ public class GUI extends Observable {
    * Reloading a simulation may include recompiling Contiki.
    *
    * @param autoStart Start executing simulation when loaded
-   * @param newSeed Change simulation seed
+   * @param randomSeed Simulation's next random seed
    */
   public void reloadCurrentSimulation(final boolean autoStart, final long randomSeed) {
     if (getSimulation() == null) {
@@ -2438,7 +2437,7 @@ public class GUI extends Observable {
    * Reloading a simulation may include recompiling Contiki.
    * The same random seed is used.
    *
-   * @see #reloadCurrentSimulation(boolean, boolean)
+   * @see #reloadCurrentSimulation(boolean, long)
    * @param autoStart Start executing simulation when loaded
    */
   public void reloadCurrentSimulation(boolean autoStart) {
@@ -3378,11 +3377,10 @@ public class GUI extends Observable {
    * @return Config or null
    */
   public Collection<Element> getPluginsConfigXML() {
-    Vector<Element> config = new Vector<Element>();
-
-    // Loop through all started plugins
-    // (Only return config of non-GUI plugins)
+    ArrayList<Element> config = new ArrayList<Element>();
     Element pluginElement, pluginSubElement;
+
+    /* Loop over all plugins */
     for (Plugin startedPlugin : startedPlugins) {
       int pluginType = startedPlugin.getClass().getAnnotation(PluginType.class).value();
 
@@ -3396,10 +3394,9 @@ public class GUI extends Observable {
       pluginElement.setText(startedPlugin.getClass().getName());
 
       // Create mote argument config (if mote plugin)
-      if (pluginType == PluginType.MOTE_PLUGIN
-          && startedPlugin.getTag() != null) {
+      if (pluginType == PluginType.MOTE_PLUGIN) {
         pluginSubElement = new Element("mote_arg");
-        Mote taggedMote = (Mote) startedPlugin.getTag();
+        Mote taggedMote = ((MotePlugin) startedPlugin).getMote();
         for (int moteNr = 0; moteNr < mySimulation.getMotesCount(); moteNr++) {
           if (mySimulation.getMote(moteNr) == taggedMote) {
             pluginSubElement.setText(Integer.toString(moteNr));

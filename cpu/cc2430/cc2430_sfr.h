@@ -122,6 +122,7 @@ __sfr __at (0x9E)   T2PEROF2;
 #define PEROF20	0x01
 
 __sfr __at (0x9F) FMAP;
+__sfr __at (0x9F) PSBANK;
 
 __sfr __at (0xA0) P2   ;
 /* P2 */
@@ -699,5 +700,7 @@ __xdata __at (0xDFC1) unsigned char   U0BUF_SHADOW;
 __xdata __at (0xDFD9) unsigned char RFD_SHADOW;
 
 __xdata __at (0xDFF9) unsigned char U1BUF_SHADOW;
+
+__xdata __at (0xDFBA) unsigned int ADC_SHADOW;
 
 #endif /*REG_CC2430*/

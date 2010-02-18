@@ -210,23 +210,32 @@ uint8_t send_encapsulated_command(uint16_t wLength)
 
 	uint8_t nb_counter;
 
+    //Clear NAK bit
+    Usb_ack_nak_in();
 
-	while (wLength) {
-		nb_counter = EP_CONTROL_LENGTH;
+    while (wLength) {
+        nb_counter = EP_CONTROL_LENGTH;
 
-		//Wait for data to come in
-		while (!(Is_usb_receive_out()));
-			
-		while(nb_counter && wLength) {			
-			encapsulated_buffer[i] = Usb_read_byte();
-			i++;
-			wLength--;
-			nb_counter--;
-		}
-		
-		Usb_ack_receive_out();
+        //Wait for data to come in or nak
+        while((!Is_usb_receive_out()) & (!Is_usb_receive_nak_in()));
 
-	}
+        //Received OUT
+        if (Is_usb_receive_out()) {
+            while(nb_counter && wLength) {
+                encapsulated_buffer[i] = Usb_read_byte();
+                i++;
+                wLength--;
+                nb_counter--;
+            }
+
+            Usb_ack_receive_out();
+
+            //Received NAK, no more data
+            } else  {
+                Usb_ack_nak_in();
+                break;
+            }
+    }
 
 	Usb_send_control_in();
 
@@ -828,7 +837,7 @@ uint8_t rndis_send_status(rndis_Status_t stat)
  */
 void rndis_packetFilter(uint32_t newfilter)
 {
-
+#if !RF230BB
 	if (newfilter & NDIS_PACKET_TYPE_PROMISCUOUS) {
 		rxMode = RX_ON; 
 		radio_set_trx_state(RX_ON);
@@ -836,7 +845,7 @@ void rndis_packetFilter(uint32_t newfilter)
 		rxMode = RX_AACK_ON;
 		radio_set_trx_state(RX_AACK_ON);
 	}
-
+#endif
 }
 
 /** @} */
