@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007, Swedish Institute of Computer Science.
+ * Copyright (c) 2010, Swedish Institute of Computer Science.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,55 +33,54 @@
 
 /**
  * \file
- *         CC2420 driver header file
+ *         Include file for the Contiki low-layer network stack (NETSTACK)
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
 
-#ifndef __CC2420_H__
-#define __CC2420_H__
+#ifndef NETSTACK_H
+#define NETSTACK_H
 
-#include "contiki.h"
+#include "contiki-conf.h"
+
+#ifndef NETSTACK_NETWORK
+#ifdef NETSTACK_CONF_NETWORK
+#define NETSTACK_NETWORK NETSTACK_CONF_NETWORK
+#else /* NETSTACK_CONF_NETWORK */
+#define NETSTACK_NETWORK rime_driver
+#endif /* NETSTACK_CONF_NETWORK */
+#endif /* NETSTACK_NETWORK */
+
+#ifndef NETSTACK_MAC
+#ifdef NETSTACK_CONF_MAC
+#define NETSTACK_MAC NETSTACK_CONF_MAC
+#else /* NETSTACK_CONF_MAC */
+#define NETSTACK_MAC     nullrdc_driver
+#endif /* NETSTACK_CONF_MAC */
+#endif /* NETSTACK_MAC */
+
+#ifndef NETSTACK_RDC
+#ifdef NETSTACK_CONF_RDC
+#define NETSTACK_RDC NETSTACK_CONF_RDC
+#else /* NETSTACK_CONF_RDC */
+#define NETSTACK_RDC     nullmac_driver
+#endif /* NETSTACK_CONF_RDC */
+#endif /* NETSTACK_RDC */
+
+#ifndef NETSTACK_RADIO
+#ifdef NETSTACK_CONF_RADIO
+#define NETSTACK_RADIO NETSTACK_CONF_RADIO
+#else /* NETSTACK_CONF_RADIO */
+#define NETSTACK_RADIO   cc2420_driver
+#endif /* NETSTACK_CONF_RADIO */
+#endif /* NETSTACK_RADIO */
+
+#include "net/mac/mac.h"
 #include "dev/radio.h"
 
-int cc2420_init(void);
+extern const struct mac_driver   NETSTACK_NETWORK;
+extern const struct mac_driver   NETSTACK_RDC;
+extern const struct mac_driver   NETSTACK_MAC;
+extern const struct radio_driver NETSTACK_RADIO;
 
-#define CC2420_MAX_PACKET_LEN      127
-
-void cc2420_set_channel(int channel);
-int cc2420_get_channel(void);
-
-void cc2420_set_pan_addr(unsigned pan,
-				unsigned addr,
-				const uint8_t *ieee_addr);
-
-extern signed char cc2420_last_rssi;
-extern uint8_t cc2420_last_correlation;
-
-int cc2420_rssi(void);
-
-extern const struct radio_driver cc2420_driver;
-
-/**
- * \param power Between 1 and 31.
- */
-void cc2420_set_txpower(uint8_t power);
-int cc2420_get_txpower(void);
-#define CC2420_TXPOWER_MAX  31
-#define CC2420_TXPOWER_MIN   0
-
-/**
- * Interrupt function, called from the simple-cc2420-arch driver.
- *
- */
-int cc2420_interrupt(void);
-
-/* XXX hack: these will be made as Chameleon packet attributes */
-extern rtimer_clock_t cc2420_time_of_arrival,
-  cc2420_time_of_departure;
-extern int cc2420_authority_level_of_sender;
-
-int cc2420_on(void);
-int cc2420_off(void);
-
-#endif /* __CC2420_H__ */
+#endif /* NETSTACK_H */

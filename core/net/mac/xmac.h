@@ -60,10 +60,6 @@ struct xmac_config {
 
 extern const struct mac_driver xmac_driver;
 
-const struct mac_driver *xmac_init(const struct radio_driver *d);
-
-extern struct xmac_config xmac_config;
-
 void xmac_set_announcement_radio_txpower(int txpower);
 
 #endif /* __XMAC_H__ */

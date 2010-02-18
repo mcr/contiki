@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007, Swedish Institute of Computer Science.
+ * Copyright (c) 2010, Swedish Institute of Computer Science.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 /**
  * \file
- *         The Contiki power-saving MAC protocol
+ *         The Contiki power-saving MAC protocol (ContikiMAC)
  * \author
  *         Adam Dunkels <adam@sics.se>
  */

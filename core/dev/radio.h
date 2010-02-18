@@ -59,14 +59,30 @@
  * The structure of a device driver for a radio in Contiki.
  */
 struct radio_driver {
-  /** Send a packet */
+
+  int (* init)(void);
+  
+  /** Prepare the radio with a packet to be sent. */
+  int (* prepare)(const void *payload, unsigned short payload_len);
+
+  /** Send the packet that has previously been prepared. */
+  int (* transmit)(unsigned short transmit_len);
+
+  /** Prepare & transmit a packet. */
   int (* send)(const void *payload, unsigned short payload_len);
 
   /** Read a received packet into a buffer. */
   int (* read)(void *buf, unsigned short buf_len);
 
-  /** Set a function to be called when a packet has been received. */
-  void (* set_receive_function)(void (*f)(const struct radio_driver *d));
+  /** Perform a Clear-Channel Assessment (CCA) to find out if there is
+      a packet in the air or not. */
+  int (* channel_clear)(void);
+
+  /** Check if the radio driver is currently receiving a packet */
+  int (* receiving_packet)(void);
+
+  /** Check if the radio driver has just received a packet */
+  int (* pending_packet)(void);
 
   /** Turn the radio on. */
   int (* on)(void);
@@ -82,6 +98,7 @@ enum {
 };
 
 #endif /* __RADIO_H__ */
+
 
 /** @} */
 /** @} */

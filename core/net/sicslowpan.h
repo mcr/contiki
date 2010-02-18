@@ -249,11 +249,7 @@ struct sicslowpan_addr_context {
 
 /** @} */
 
-/**
- * \brief 6lowpan init function
- * \param m is the MAC layer "driver"
- */
-void sicslowpan_init(const struct mac_driver *m);
+extern const struct mac_driver sicslowpan_driver;
 
 extern const struct mac_driver *sicslowpan_mac;
 #endif /* __SICSLOWPAN_H__ */

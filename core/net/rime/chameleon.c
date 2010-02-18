@@ -141,10 +141,8 @@ chameleon_output(struct channel *c)
     printhdr(packetbuf_hdrptr(), packetbuf_hdrlen());
 #endif /* DEBUG */
     if(ret) {
-      if (rime_output() == RIME_OK) {
-        return 1;
-      }
-      return 0;
+      rime_output();
+      return 1;
     }
   }
   return 0;

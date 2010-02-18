@@ -33,55 +33,18 @@
 
 /**
  * \file
- *         CC2420 driver header file
+ *         A MAC protocol implementation that does not do anything.
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
 
-#ifndef __CC2420_H__
-#define __CC2420_H__
+#ifndef __NULLRDC_H__
+#define __NULLRDC_H__
 
-#include "contiki.h"
+#include "net/mac/mac.h"
 #include "dev/radio.h"
 
-int cc2420_init(void);
+extern const struct mac_driver nullrdc_driver;
 
-#define CC2420_MAX_PACKET_LEN      127
 
-void cc2420_set_channel(int channel);
-int cc2420_get_channel(void);
-
-void cc2420_set_pan_addr(unsigned pan,
-				unsigned addr,
-				const uint8_t *ieee_addr);
-
-extern signed char cc2420_last_rssi;
-extern uint8_t cc2420_last_correlation;
-
-int cc2420_rssi(void);
-
-extern const struct radio_driver cc2420_driver;
-
-/**
- * \param power Between 1 and 31.
- */
-void cc2420_set_txpower(uint8_t power);
-int cc2420_get_txpower(void);
-#define CC2420_TXPOWER_MAX  31
-#define CC2420_TXPOWER_MIN   0
-
-/**
- * Interrupt function, called from the simple-cc2420-arch driver.
- *
- */
-int cc2420_interrupt(void);
-
-/* XXX hack: these will be made as Chameleon packet attributes */
-extern rtimer_clock_t cc2420_time_of_arrival,
-  cc2420_time_of_departure;
-extern int cc2420_authority_level_of_sender;
-
-int cc2420_on(void);
-int cc2420_off(void);
-
-#endif /* __CC2420_H__ */
+#endif /* __NULLRDC_H__ */

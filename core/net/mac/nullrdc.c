@@ -33,55 +33,69 @@
 
 /**
  * \file
- *         CC2420 driver header file
+ *         A MAC protocol that does not do anything.
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
 
-#ifndef __CC2420_H__
-#define __CC2420_H__
+#include "net/mac/nullrdc.h"
+#include "net/rime/packetbuf.h"
+#include "net/netstack.h"
 
-#include "contiki.h"
-#include "dev/radio.h"
-
-int cc2420_init(void);
-
-#define CC2420_MAX_PACKET_LEN      127
-
-void cc2420_set_channel(int channel);
-int cc2420_get_channel(void);
-
-void cc2420_set_pan_addr(unsigned pan,
-				unsigned addr,
-				const uint8_t *ieee_addr);
-
-extern signed char cc2420_last_rssi;
-extern uint8_t cc2420_last_correlation;
-
-int cc2420_rssi(void);
-
-extern const struct radio_driver cc2420_driver;
-
-/**
- * \param power Between 1 and 31.
- */
-void cc2420_set_txpower(uint8_t power);
-int cc2420_get_txpower(void);
-#define CC2420_TXPOWER_MAX  31
-#define CC2420_TXPOWER_MIN   0
-
-/**
- * Interrupt function, called from the simple-cc2420-arch driver.
- *
- */
-int cc2420_interrupt(void);
-
-/* XXX hack: these will be made as Chameleon packet attributes */
-extern rtimer_clock_t cc2420_time_of_arrival,
-  cc2420_time_of_departure;
-extern int cc2420_authority_level_of_sender;
-
-int cc2420_on(void);
-int cc2420_off(void);
-
-#endif /* __CC2420_H__ */
+/*---------------------------------------------------------------------------*/
+static void
+send_packet(mac_callback_t sent, void *ptr)
+{
+  int ret;
+  if(NETSTACK_RADIO.send(packetbuf_hdrptr(), packetbuf_totlen()) == RADIO_TX_OK) {
+    ret = MAC_TX_OK;
+  } else {
+    ret =  MAC_TX_ERR;
+  }
+  mac_call_sent_callback(sent, ptr, ret, 1);
+}
+/*---------------------------------------------------------------------------*/
+static void
+packet_input(void)
+{
+  NETSTACK_MAC.input();
+}
+/*---------------------------------------------------------------------------*/
+static int
+on(void)
+{
+  return NETSTACK_RADIO.on();
+}
+/*---------------------------------------------------------------------------*/
+static int
+off(int keep_radio_on)
+{
+  if(keep_radio_on) {
+    return NETSTACK_RADIO.on();
+  } else {
+    return NETSTACK_RADIO.off();
+  }
+}
+/*---------------------------------------------------------------------------*/
+static unsigned short
+channel_check_interval(void)
+{
+  return 0;
+}
+/*---------------------------------------------------------------------------*/
+static void
+init(void)
+{
+  on();
+}
+/*---------------------------------------------------------------------------*/
+const struct mac_driver nullrdc_driver = {
+  "nullrdc",
+  init,
+  send_packet,
+  packet_input,
+  on,
+  off,
+  channel_check_interval,
+};
+/*---------------------------------------------------------------------------*/

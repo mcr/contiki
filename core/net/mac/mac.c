@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007, Swedish Institute of Computer Science.
+ * Copyright (c) 2010, Swedish Institute of Computer Science.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,57 +31,32 @@
  * $Id$
  */
 
-/**
- * \file
- *         CC2420 driver header file
- * \author
- *         Adam Dunkels <adam@sics.se>
- */
+#include "net/mac/mac.h"
 
-#ifndef __CC2420_H__
-#define __CC2420_H__
+#include <stdio.h>
 
-#include "contiki.h"
-#include "dev/radio.h"
+/*---------------------------------------------------------------------------*/
+void
+mac_call_sent_callback(mac_callback_t sent, void *ptr, int status, int num_tx)
+{
+  /*  printf("mac_callback_t %p ptr %p status %d num_tx %d\n",
+      sent, ptr, status, num_tx);*/
+  /*  switch(status) {
+  case MAC_TX_COLLISION:
+    printf("mac: collision after %d tx\n", num_tx);
+    break; 
+  case MAC_TX_NOACK:
+    printf("mac: noack after %d tx\n", num_tx);
+    break;
+  case MAC_TX_OK:
+    printf("mac: sent after %d tx\n", num_tx);
+    break;
+  default:
+    printf("mac: error %d after %d tx\n", status, num_tx);
+    }*/
 
-int cc2420_init(void);
-
-#define CC2420_MAX_PACKET_LEN      127
-
-void cc2420_set_channel(int channel);
-int cc2420_get_channel(void);
-
-void cc2420_set_pan_addr(unsigned pan,
-				unsigned addr,
-				const uint8_t *ieee_addr);
-
-extern signed char cc2420_last_rssi;
-extern uint8_t cc2420_last_correlation;
-
-int cc2420_rssi(void);
-
-extern const struct radio_driver cc2420_driver;
-
-/**
- * \param power Between 1 and 31.
- */
-void cc2420_set_txpower(uint8_t power);
-int cc2420_get_txpower(void);
-#define CC2420_TXPOWER_MAX  31
-#define CC2420_TXPOWER_MIN   0
-
-/**
- * Interrupt function, called from the simple-cc2420-arch driver.
- *
- */
-int cc2420_interrupt(void);
-
-/* XXX hack: these will be made as Chameleon packet attributes */
-extern rtimer_clock_t cc2420_time_of_arrival,
-  cc2420_time_of_departure;
-extern int cc2420_authority_level_of_sender;
-
-int cc2420_on(void);
-int cc2420_off(void);
-
-#endif /* __CC2420_H__ */
+  if(sent) {
+    sent(ptr, status, num_tx);
+  }
+}
+/*---------------------------------------------------------------------------*/
