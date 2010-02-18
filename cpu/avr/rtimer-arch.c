@@ -44,6 +44,7 @@
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <stdio.h>
 
 #include "sys/energest.h"
 #include "sys/rtimer.h"
@@ -68,7 +69,7 @@
 #define ETIFR TIFR3
 #define TICIE3 ICIE3
 #endif
-
+uint8_t rtimerworks;
 /*---------------------------------------------------------------------------*/
 #ifdef TCNT3
 ISR (TIMER3_COMPA_vect) {
@@ -76,7 +77,7 @@ ISR (TIMER3_COMPA_vect) {
 
   ETIMSK &= ~((1 << OCIE3A) | (1 << OCIE3B) | (1 << TOIE3) |
       (1 << TICIE3) | (1 << OCIE3C));
-
+rtimerworks++;
   /* Call rtimer callback */
   rtimer_run_next();
 
@@ -97,6 +98,7 @@ rtimer_arch_init(void)
   cli ();
 
 #ifdef TCNT3
+rtimerworks=240;
 
   ETIMSK &= ~((1 << OCIE3A) | (1 << OCIE3B) | (1 << TOIE3) |
       (1 << TICIE3) | (1 << OCIE3C));
@@ -132,6 +134,7 @@ rtimer_arch_schedule(rtimer_clock_t t)
   cli ();
 
 #ifdef TCNT3
+rtimerworks=250;
   /* Set compare register */
   OCR3A = t;
   ETIFR |= (1 << ICF3) | (1 << OCF3A) | (1 << OCF3B) | (1 << TOV3) |
@@ -145,4 +148,5 @@ rtimer_arch_schedule(rtimer_clock_t t)
 
   /* Restore interrupt state */
   SREG = sreg;
+  printf("rs%d",t);
 }
