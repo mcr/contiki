@@ -3654,6 +3654,17 @@ public class GUI extends Observable {
         Box buttonBox = Box.createHorizontalBox();
 
         if (exception != null) {
+          /* Contiki error */
+          if (exception instanceof ContikiError) {
+            String contikiError = ((ContikiError) exception).getContikiError();
+            MessageList list = new MessageList();
+            for (String l: contikiError.split("\n")) {
+              list.addMessage(l);
+            }
+            list.addPopupMenuItem(null, true);
+            tabbedPane.addTab("Contiki error", new JScrollPane(list));
+          }
+          
           /* Compilation output */
           MessageList compilationOutput = null;
           if (exception instanceof MoteTypeCreationException
@@ -3666,7 +3677,7 @@ public class GUI extends Observable {
           }
           if (compilationOutput != null) {
             compilationOutput.addPopupMenuItem(null, true);
-            tabbedPane.addTab("Compilation output", null, new JScrollPane(compilationOutput), null);
+            tabbedPane.addTab("Compilation output", new JScrollPane(compilationOutput));
           }
 
           /* Stack trace */
@@ -3674,7 +3685,7 @@ public class GUI extends Observable {
           PrintStream printStream = stackTrace.getInputStream(MessageList.NORMAL);
           exception.printStackTrace(printStream);
           stackTrace.addPopupMenuItem(null, true);
-          tabbedPane.addTab("Java stack trace", null, new JScrollPane(stackTrace), null);
+          tabbedPane.addTab("Java stack trace", new JScrollPane(stackTrace));
 
           /* Exception message */
           buttonBox.add(Box.createHorizontalStrut(10));
