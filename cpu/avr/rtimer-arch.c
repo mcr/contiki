@@ -148,5 +148,5 @@ rtimerworks=250;
 
   /* Restore interrupt state */
   SREG = sreg;
-  printf("rs%d",t);
+ // printf("rs%d",t);
 }
