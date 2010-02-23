@@ -84,4 +84,6 @@ extern int cc2420_authority_level_of_sender;
 int cc2420_on(void);
 int cc2420_off(void);
 
+void cc2420_set_cca_threshold(int value);
+
 #endif /* __CC2420_H__ */
