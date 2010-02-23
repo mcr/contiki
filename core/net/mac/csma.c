@@ -256,21 +256,14 @@ channel_check_interval(void)
   return 0;
 }
 /*---------------------------------------------------------------------------*/
-#define NAMEBUF_LEN 16
-static char namebuf[NAMEBUF_LEN];
 static void
 init(void)
 {
   memb_init(&packet_memb);
-
-  /*  PRINTF("CSMA with MAC %s, channel check rate %d Hz\n", mac->name,
-      CLOCK_SECOND / channel_check_interval());*/
-  memcpy(namebuf, "CSMA ", 5);
-  memcpy(namebuf + 5, NETSTACK_RDC.name, NAMEBUF_LEN - 6);
 }
 /*---------------------------------------------------------------------------*/
 const struct mac_driver csma_driver = {
-  namebuf,
+  "CSMA",
   init,
   send_packet,
   input_packet,
