@@ -45,4 +45,11 @@
 
 void powertrace_start(clock_time_t perioc);
 
+typedef enum {
+  POWERTRACE_ON,
+  POWERTRACE_OFF
+} powertrace_onoff_t;
+
+void powertrace_sniff(powertrace_onoff_t onoff);
+
 #endif /* POWERTRACE_H */
