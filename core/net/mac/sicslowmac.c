@@ -238,6 +238,12 @@ init(void)
   NETSTACK_RADIO.on();
 }
 /*---------------------------------------------------------------------------*/
+static unsigned short
+channel_check_interval(void)
+{
+  return 0;
+}
+/*---------------------------------------------------------------------------*/
 const struct rdc_driver sicslowmac_driver = {
   "sicslowmac",
   init,
@@ -245,5 +251,6 @@ const struct rdc_driver sicslowmac_driver = {
   input_packet,
   on,
   off,
+  channel_check_interval
 };
 /*---------------------------------------------------------------------------*/
