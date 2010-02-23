@@ -240,7 +240,8 @@ void announcement_register_listen_callback(void (*callback)(int time));
  *
  */
 void announcement_register_observer_callback(void (*observer)(uint16_t id,
-							      uint16_t value));
+							      uint16_t newvalue,
+                                                              uint16_t oldvalue));
 
 /**
  * @}
