@@ -89,7 +89,7 @@ init(void)
   on();
 }
 /*---------------------------------------------------------------------------*/
-const struct mac_driver nullrdc_driver = {
+const struct rdc_driver nullrdc_driver = {
   "nullrdc",
   init,
   send_packet,

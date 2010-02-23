@@ -188,13 +188,9 @@ rime_output(struct channel *c)
   return 0;
 }
 /*---------------------------------------------------------------------------*/
-const struct mac_driver rime_driver = {
+const struct network_driver rime_driver = {
   "Rime",
   init,
-  NULL,
-  input,
-  NULL,
-  NULL,
-  NULL,
+  input
 };
 /** @} */

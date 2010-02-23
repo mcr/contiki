@@ -238,7 +238,7 @@ init(void)
   NETSTACK_RADIO.on();
 }
 /*---------------------------------------------------------------------------*/
-const struct mac_driver sicslowmac_driver = {
+const struct rdc_driver sicslowmac_driver = {
   "sicslowmac",
   init,
   send_packet,

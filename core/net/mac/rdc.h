@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007, Swedish Institute of Computer Science.
+ * Copyright (c) 2010, Swedish Institute of Computer Science.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,32 +33,41 @@
 
 /**
  * \file
- *         A simple power saving MAC protocol based on X-MAC [SenSys 2006]
+ *         RDC driver header file
  * \author
  *         Adam Dunkels <adam@sics.se>
+ *         Niclas Finne <nfi@sics.se>
  */
 
-#ifndef __CXMAC_H__
-#define __CXMAC_H__
+#ifndef __RDC_H__
+#define __RDC_H__
 
-#include "sys/rtimer.h"
-#include "net/mac/rdc.h"
-#include "dev/radio.h"
+#include "contiki-conf.h"
+#include "net/mac/mac.h"
 
-#define CXMAC_RECEIVER "cxmac.recv"
-#define CXMAC_STROBES "cxmac.strobes"
-#define CXMAC_SEND_WITH_ACK "cxmac.send.ack"
-#define CXMAC_SEND_WITH_NOACK "cxmac.send.noack"
+/**
+ * The structure of a RDC (radio duty cycling) driver in Contiki.
+ */
+struct rdc_driver {
+  char *name;
 
+  /** Initialize the RDC driver */
+  void (* init)(void);
 
-struct cxmac_config {
-  rtimer_clock_t on_time;
-  rtimer_clock_t off_time;
-  rtimer_clock_t strobe_time;
-  rtimer_clock_t strobe_wait_time;
+  /** Send a packet from the Rime buffer  */
+  void (* send)(mac_callback_t sent_callback, void *ptr);
+
+  /** Callback for getting notified of incoming packet. */
+  void (* input)(void);
+
+  /** Turn the MAC layer on. */
+  int (* on)(void);
+
+  /** Turn the MAC layer off. */
+  int (* off)(int keep_radio_on);
+
+  /** Returns the channel check interval, expressed in clock_time_t ticks. */
+  unsigned short (* channel_check_interval)(void);
 };
 
-extern const struct rdc_driver cxmac_driver;
-
-
-#endif /* __CXMAC_H__ */
+#endif /* __RDC_H__ */

@@ -105,7 +105,7 @@ static struct rime_sniffer name = { NULL, input_callback, output_callback }
 void rime_sniffer_add(struct rime_sniffer *s);
 void rime_sniffer_remove(struct rime_sniffer *s);
 
-extern const struct mac_driver rime_driver;
+extern const struct network_driver rime_driver;
 
 /* Generic Rime return values. */
 enum {

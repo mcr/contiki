@@ -913,7 +913,7 @@ init(void)
   list_init(pending_packets_list);
 }
 /*---------------------------------------------------------------------------*/
-const struct mac_driver lpp_driver = {
+const struct rdc_driver lpp_driver = {
   "LPP",
   init,
   send_packet,

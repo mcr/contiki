@@ -42,9 +42,9 @@
 #define __CONTIKIMAC_H__
 
 #include "sys/rtimer.h"
-#include "net/mac/mac.h"
+#include "net/mac/rdc.h"
 #include "dev/radio.h"
 
-extern const struct mac_driver contikimac_driver;
+extern const struct rdc_driver contikimac_driver;
 
 #endif /* __CONTIKIMAC_H__ */

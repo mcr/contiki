@@ -911,7 +911,7 @@ channel_check_interval(void)
   return (1ul * CLOCK_SECOND * DEFAULT_PERIOD) / RTIMER_ARCH_SECOND;
 }
 /*---------------------------------------------------------------------------*/
-const struct mac_driver cxmac_driver =
+const struct rdc_driver cxmac_driver =
   {
     "CX-MAC",
     cxmac_init,

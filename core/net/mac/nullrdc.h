@@ -41,10 +41,9 @@
 #ifndef __NULLRDC_H__
 #define __NULLRDC_H__
 
-#include "net/mac/mac.h"
+#include "net/mac/rdc.h"
 #include "dev/radio.h"
 
-extern const struct mac_driver nullrdc_driver;
-
+extern const struct rdc_driver nullrdc_driver;
 
 #endif /* __NULLRDC_H__ */

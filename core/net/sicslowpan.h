@@ -249,7 +249,7 @@ struct sicslowpan_addr_context {
 
 /** @} */
 
-extern const struct mac_driver sicslowpan_driver;
+extern const struct network_driver sicslowpan_driver;
 
 extern const struct mac_driver *sicslowpan_mac;
 #endif /* __SICSLOWPAN_H__ */

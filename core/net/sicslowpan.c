@@ -1518,14 +1518,10 @@ sicslowpan_init(void)
 #endif /*SICSLOWPAN_CONF_COMPRESSION == SICSLOWPAN_CONF_COMPRESSION_HC01*/
 }
 /*--------------------------------------------------------------------*/
-const struct mac_driver sicslowpan_driver = {
-  "Rime",
+const struct network_driver sicslowpan_driver = {
+  "sicslowpan",
   sicslowpan_init,
-  NULL,
-  input,
-  NULL,
-  NULL,
-  NULL,
+  input
 };
 /*--------------------------------------------------------------------*/
 /** @} */
