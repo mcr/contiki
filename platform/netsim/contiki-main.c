@@ -127,7 +127,8 @@ contiki_main(int flag)
  
   ctimer_init();
 
-  netstack_init();
+  NETSTACK_MAC.init();
+  NETSTACK_RDC.init();
 
   uip_over_mesh_init(2);
   uip_over_mesh_set_net(&meshif.ipaddr, &meshif.netmask);
