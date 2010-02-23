@@ -71,7 +71,7 @@
 #ifdef NETSTACK_CONF_RADIO
 #define NETSTACK_RADIO NETSTACK_CONF_RADIO
 #else /* NETSTACK_CONF_RADIO */
-#define NETSTACK_RADIO   cc2420_driver
+#define NETSTACK_RADIO   nullradio_driver
 #endif /* NETSTACK_CONF_RADIO */
 #endif /* NETSTACK_RADIO */
 
