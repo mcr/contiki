@@ -52,6 +52,10 @@ public class StringUtils {
     // Prevent instances of this class
   }
 
+  public static String toHex(byte data) {
+      return "" + HEX[(data >> 4) & 0xf] + HEX[data & 0xf];
+  }
+  
   public static String toHex(byte[] data) {
     char[] buf = new char[data.length * 2];
     for (int i = 0, j = 0, n = data.length; i < n; i++, j += 2) {
