@@ -121,7 +121,10 @@ timer_restart(struct timer *t)
 int
 timer_expired(struct timer *t)
 {
-  return (clock_time_t)(clock_time() - t->start) >= (clock_time_t)t->interval;
+  clock_time_t diff = clock_time() - t->start;
+  /* This somewhat ugly way of returning (diff >= t->interval) is
+     required to avoid an internal error in mspgcc. */
+  return diff > t->interval || diff == t->interval;
 }
 /*---------------------------------------------------------------------------*/
 /**
