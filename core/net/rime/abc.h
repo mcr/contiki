@@ -72,6 +72,7 @@ struct abc_conn;
 struct abc_callbacks {
   /** Called when a packet has been received by the abc module. */
   void (* recv)(struct abc_conn *ptr);
+  void (* sent)(struct abc_conn *ptr, int status, int num_tx);
 };
 
 struct abc_conn {
@@ -133,8 +134,10 @@ int abc_send(struct abc_conn *c);
  *             directly.
  *
  */
+
 void abc_input(struct channel *channel);
 
+void abc_sent(struct channel *channel, int status, int num_tx);
 
 #endif /* __ABC_H__ */
 /** @} */

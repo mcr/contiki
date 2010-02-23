@@ -83,7 +83,7 @@ struct stunicast_conn;
 
 struct stunicast_callbacks {
   void (* recv)(struct stunicast_conn *c, const rimeaddr_t *from);
-  void (* sent)(struct stunicast_conn *c);
+  void (* sent)(struct stunicast_conn *c, int status, int num_tx);
 };
 
 struct stunicast_conn {

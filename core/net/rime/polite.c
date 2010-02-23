@@ -82,6 +82,12 @@ recv(struct abc_conn *abc)
 }
 /*---------------------------------------------------------------------------*/
 static void
+sent(struct abc_conn *c, int status, int num_tx)
+{
+
+}
+/*---------------------------------------------------------------------------*/
+static void
 send(void *ptr)
 {
   struct polite_conn *c = ptr;
@@ -97,7 +103,7 @@ send(void *ptr)
   }
 }
 /*---------------------------------------------------------------------------*/
-static const struct abc_callbacks abc = { recv };
+static const struct abc_callbacks abc = { recv, sent };
 /*---------------------------------------------------------------------------*/
 void
 polite_open(struct polite_conn *c, uint16_t channel,

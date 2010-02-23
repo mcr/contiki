@@ -72,6 +72,7 @@ struct unicast_conn;
 
 struct unicast_callbacks {
   void (* recv)(struct unicast_conn *c, const rimeaddr_t *from);
+  void (* sent)(struct unicast_conn *ptr, int status, int num_tx);
 };
 
 struct unicast_conn {
