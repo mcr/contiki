@@ -139,6 +139,9 @@ void
 neighbor_update(struct neighbor *n, uint8_t rtmetric)
 {
   if(n != NULL) {
+    PRINTF("%d.%d: neighbor_update %d.%d rtmetric %d\n",
+           rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1],
+           n->addr.u8[0], n->addr.u8[1], rtmetric);
     n->rtmetric = rtmetric;
     n->time = 0;
   }
