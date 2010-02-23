@@ -331,7 +331,7 @@ main(int argc, char **argv)
   NETSTACK_MAC.init();
   NETSTACK_NETWORK.init();
 
-  printf(" %s, channel check rate %d Hz, radio channel %u\n",
+  printf(" %s, channel check rate %lu Hz, radio channel %u\n",
          rime_mac->name,
          CLOCK_SECOND / (rime_mac->channel_check_interval() == 0? 1:
                          rime_mac->channel_check_interval()),
