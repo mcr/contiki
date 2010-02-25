@@ -108,7 +108,7 @@ public class StringUtils {
       }
       sb.append("  ");
       for (int i = 0; i < n; i++) {
-        if (data[j + i] > 32) {
+        if (data[j + i] >= 32) {
           sb.append((char)(data[j + i] & 0xff));
         } else {
           sb.append('.');
