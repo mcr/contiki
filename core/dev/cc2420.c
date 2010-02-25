@@ -586,8 +586,6 @@ PROCESS_THREAD(cc2420_process, ev, data)
 #if CC2420_TIMETABLE_PROFILING
     TIMETABLE_TIMESTAMP(cc2420_timetable, "poll");
 #endif /* CC2420_TIMETABLE_PROFILING */
-
-    pending = 0;
     
     PRINTF("cc2420_process: calling receiver callback\n");
 
@@ -617,13 +615,15 @@ cc2420_read(void *buf, unsigned short bufsize)
   uint16_t checksum;
 #endif /* CC2420_CONF_CHECKSUM */
 
+  pending = 0;
+  
   if(!FIFOP_IS_1) {
     /* If FIFOP is 0, there is no packet in the RXFIFO. */
     return 0;
   }
 
   GET_LOCK();
-
+  
   cc2420_packets_read++;
   
   getrxbyte(&len);
