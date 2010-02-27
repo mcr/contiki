@@ -101,10 +101,10 @@ printhdr(uint8_t *hdr, int len)
 }
 #endif /* DEBUG */
 /*---------------------------------------------------------------------------*/
-void
-chameleon_input(void)
+struct channel *
+chameleon_parse(void)
 {
-  struct channel *c;
+  struct channel *c = NULL;
   PRINTF("%d.%d: chameleon_input\n",
 	 rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1]);
 #if DEBUG
@@ -117,16 +117,16 @@ chameleon_input(void)
 	     rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1],
 	     c->channelno);
       packetbuf_set_attr(PACKETBUF_ATTR_CHANNEL, c->channelno);
-      abc_input(c);
     } else {
       PRINTF("%d.%d: chameleon_input channel not found for incoming packet\n",
 	     rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1]);
     }
   }
+  return c;
 }
 /*---------------------------------------------------------------------------*/
 int
-chameleon_output(struct channel *c)
+chameleon_create(struct channel *c)
 {
   int ret;
 
@@ -141,10 +141,7 @@ chameleon_output(struct channel *c)
     printhdr(packetbuf_hdrptr(), packetbuf_hdrlen());
 #endif /* DEBUG */
     if(ret) {
-      if (rime_output() == RIME_OK) {
-        return 1;
-      }
-      return 0;
+      return 1;
     }
   }
   return 0;

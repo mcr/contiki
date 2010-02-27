@@ -126,8 +126,9 @@ contiki_main(int flag)
   uip_init();
  
   ctimer_init();
-  rime_init(nullmac_init(&ethernode_driver));
-  /*  rime_init(lpp_init(&ethernode_driver));*/
+
+  NETSTACK_MAC.init();
+  NETSTACK_RDC.init();
 
   uip_over_mesh_init(2);
   uip_over_mesh_set_net(&meshif.ipaddr, &meshif.netmask);

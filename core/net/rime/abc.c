@@ -83,7 +83,7 @@ abc_send(struct abc_conn *c)
   PRINTF("%d.%d: abc: abc_send on channel %d\n",
 	 rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1],
 	 c->channel.channelno);
-  return chameleon_output(&c->channel);
+  return rime_output(&c->channel);
 }
 /*---------------------------------------------------------------------------*/
 void
@@ -102,6 +102,19 @@ abc_input(struct channel *channel)
 #endif
 
   c->u->recv(c);
+}
+/*---------------------------------------------------------------------------*/
+void
+abc_sent(struct channel *channel, int status, int num_tx)
+{
+  struct abc_conn *c = (struct abc_conn *)channel;
+  PRINTF("%d.%d: abc: abc_sent on channel %d\n",
+	 rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1],
+	 channel->channelno);
+
+  if(c->u->sent) {
+    c->u->sent(c, status, num_tx);
+  }
 }
 /*---------------------------------------------------------------------------*/
 

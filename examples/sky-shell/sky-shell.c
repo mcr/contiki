@@ -179,7 +179,11 @@ PROCESS_THREAD(shell_sky_alldata_process, ev, data)
   
   msg.len = sizeof(struct sky_alldata_msg) / sizeof(uint16_t);
   msg.clock = clock_time();
+#if TIMESYNCH_CONF_ENABLED
   msg.timesynch_time = timesynch_time();
+#else /* TIMESYNCH_CONF_ENABLED */
+  msg.timesynch_time = 0;
+#endif /* TIMESYNCH_CONF_ENABLED */
   msg.light1 = light_sensor.value(LIGHT_SENSOR_PHOTOSYNTHETIC);
   msg.light2 = light_sensor.value(LIGHT_SENSOR_TOTAL_SOLAR);
   msg.temp = sht11_sensor.value(SHT11_SENSOR_TEMP);

@@ -93,6 +93,12 @@ recv(struct broadcast_conn *broadcast, const rimeaddr_t *from)
 }
 /*---------------------------------------------------------------------------*/
 static void
+sent(struct broadcast_conn *bc, int status, int num_tx)
+{
+
+}
+/*---------------------------------------------------------------------------*/
+static void
 send(void *ptr)
 {
   struct ipolite_conn *c = ptr;
@@ -112,7 +118,7 @@ send(void *ptr)
   }
 }
 /*---------------------------------------------------------------------------*/
-static const struct broadcast_callbacks broadcast = { recv };
+static const struct broadcast_callbacks broadcast = { recv, sent };
 /*---------------------------------------------------------------------------*/
 void
 ipolite_open(struct ipolite_conn *c, uint16_t channel, uint8_t dups,

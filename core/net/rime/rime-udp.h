@@ -46,6 +46,4 @@
 
 extern const struct mac_driver rime_udp_driver;
 
-const struct mac_driver *rime_udp_init(const struct radio_driver *r);
-
 #endif /* __UDPMAC_H__ */

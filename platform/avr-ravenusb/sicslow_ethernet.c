@@ -310,7 +310,8 @@ void mac_ethernetSetup(void)
   usbstick_mode.sicslowpan = 1;
   usbstick_mode.sendToRf = 1;
   usbstick_mode.translate = 1;
-  usbstick_mode.raw = 1;
+//usbstick_mode.raw = 1;
+  usbstick_mode.raw = 0; //default: don't report raw frames until they are entirely correct
 
 #if !RF230BB
   sicslowinput = pinput;
@@ -342,7 +343,7 @@ void mac_ethernetToLowpan(uint8_t * ethHeader)
   //If not IPv6 we don't do anything
   if (((struct uip_eth_hdr *) ethHeader)->type != HTONS(UIP_ETHTYPE_IPV6)) {
     PRINTF("eth2low: Packet is not IPv6, dropping\n\r");
-        printf("!ipv6");
+  //      printf("!ipv6");
 #if !RF230BB
     rndis_stat.txbad++;
 #endif

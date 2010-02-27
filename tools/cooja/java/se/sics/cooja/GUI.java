@@ -63,6 +63,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.security.AccessControlException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -2178,6 +2179,11 @@ public class GUI extends Observable {
       return;
     }
 
+    /* Warn about memory usage */
+    if (warnMemory()) {
+      return;
+    }
+
     /* Remove current simulation */
     if (!doRemoveSimulation(true)) {
       return;
@@ -2342,6 +2348,11 @@ public class GUI extends Observable {
       return;
     }
 
+    /* Warn about memory usage */
+    if (warnMemory()) {
+      return;
+    }
+    
     final JDialog progressDialog = new JDialog(frame, "Reloading", true);
     final Thread loadThread = new Thread(new Runnable() {
       public void run() {
@@ -2430,6 +2441,33 @@ public class GUI extends Observable {
 
     loadThread.start();
     progressDialog.setVisible(true);
+  }
+
+  private boolean warnMemory() {
+    long max = Runtime.getRuntime().maxMemory();
+    long used  = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+    double memRatio = (double) used / (double) max;
+    if (memRatio < 0.8) {
+      return false;
+    }
+
+    DecimalFormat format = new DecimalFormat("0.000");
+    logger.warn("Reboot COOJA to avoid out of memory error! (memory usage: " + format.format(100*memRatio) + "%)");
+    if (isVisualized()) {
+      int n = JOptionPane.showOptionDialog(
+          GUI.getTopParentContainer(),
+          "Reboot COOJA to avoid out of memory error!\n" +
+          "Current memory usage: " + format.format(100*memRatio) + "%.",
+          "Out of memory warning",
+          JOptionPane.YES_NO_OPTION,
+          JOptionPane.WARNING_MESSAGE, null,
+          new String[] { "Continue", "Abort"}, "Abort");
+      if (n != JOptionPane.YES_OPTION) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   /**
@@ -3654,6 +3692,17 @@ public class GUI extends Observable {
         Box buttonBox = Box.createHorizontalBox();
 
         if (exception != null) {
+          /* Contiki error */
+          if (exception instanceof ContikiError) {
+            String contikiError = ((ContikiError) exception).getContikiError();
+            MessageList list = new MessageList();
+            for (String l: contikiError.split("\n")) {
+              list.addMessage(l);
+            }
+            list.addPopupMenuItem(null, true);
+            tabbedPane.addTab("Contiki error", new JScrollPane(list));
+          }
+          
           /* Compilation output */
           MessageList compilationOutput = null;
           if (exception instanceof MoteTypeCreationException
@@ -3666,7 +3715,7 @@ public class GUI extends Observable {
           }
           if (compilationOutput != null) {
             compilationOutput.addPopupMenuItem(null, true);
-            tabbedPane.addTab("Compilation output", null, new JScrollPane(compilationOutput), null);
+            tabbedPane.addTab("Compilation output", new JScrollPane(compilationOutput));
           }
 
           /* Stack trace */
@@ -3674,7 +3723,7 @@ public class GUI extends Observable {
           PrintStream printStream = stackTrace.getInputStream(MessageList.NORMAL);
           exception.printStackTrace(printStream);
           stackTrace.addPopupMenuItem(null, true);
-          tabbedPane.addTab("Java stack trace", null, new JScrollPane(stackTrace), null);
+          tabbedPane.addTab("Java stack trace", new JScrollPane(stackTrace));
 
           /* Exception message */
           buttonBox.add(Box.createHorizontalStrut(10));

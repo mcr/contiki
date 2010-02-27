@@ -61,7 +61,8 @@ int
 serial_line_input_byte(unsigned char c)
 {
   static uint8_t overflow = 0; /* Buffer overflow: ignore until END */
-  if (IGNORE_CHAR(c)) {
+  
+  if(IGNORE_CHAR(c)) {
     return 0;
   }
 
@@ -92,12 +93,12 @@ PROCESS_THREAD(serial_line_process, ev, data)
   PROCESS_BEGIN();
 
   serial_line_event_message = process_alloc_event();
-  ptr=0;
+  ptr = 0;
 
   while(1) {
-
     /* Fill application buffer until newline or empty */
     int c = ringbuf_get(&rxbuf);
+    
     if(c == -1) {
       /* Buffer empty, wait for poll */
       PROCESS_YIELD();

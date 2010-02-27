@@ -242,7 +242,7 @@ ether_client_poll(void)
   FD_SET(sc, &fdset);
 
   tv.tv_sec = 0;
-  tv.tv_usec = 10000;
+  tv.tv_usec = 1000;
   
   ret = select(sc + 1, &fdset, NULL, NULL, &tv);
 

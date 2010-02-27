@@ -55,8 +55,8 @@ init_net(void)
   rimeaddr_t rimeaddr;
   int i;
 
-  tr1001_init();
-  rime_init(MAC_DRIVER.init(&tr1001_driver));
+  netstack_init();
+
   rimeaddr.u8[0] = node_id & 0xff;
   rimeaddr.u8[1] = node_id >> 8;
   rimeaddr_set_node_addr(&rimeaddr);

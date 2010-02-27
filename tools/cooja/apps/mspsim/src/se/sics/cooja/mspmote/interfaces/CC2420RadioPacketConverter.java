@@ -50,7 +50,7 @@ public class CC2420RadioPacketConverter {
   public static final boolean WITH_SYNCH = true;
   public static final boolean WITH_XMAC = false; /* XXX No longer supported. Cross-level requires NULLMAC */
   public static final boolean WITH_CHECKSUM = false; /* Contiki checksum. Not CC2420's built-in. */
-  public static final boolean WITH_TIMESTAMP = true;
+  public static final boolean WITH_TIMESTAMP = false; /* Contiki timestamp */
   public static final boolean WITH_FOOTER = true; /* CC2420's checksum */
 
   public static byte[] fromCoojaToCC2420(RadioPacket packet) {

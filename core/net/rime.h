@@ -76,7 +76,7 @@
  *             This function should be called from the system boot up
  *             code to initialize Rime.
  */
-void rime_init(const struct mac_driver *);
+int rime_init(void);
 
 /**
  * \brief      Send an incoming packet to Rime
@@ -89,24 +89,7 @@ void rime_init(const struct mac_driver *);
  */
 void rime_input(void);
 
-/**
- * \brief      Rime calls this function to send out a packet
- *
- *             This function must be implemented by the driver running
- *             below Rime. It is called by anonymous broadcast (abc) to
- *             send out a packet. The packet is consecutive in the
- *             packetbuf. A pointer to the first byte of the packet is 
- *             obtained from the packetbuf_hdrptr() function. The length 
- *             of the packet to send is obtained with the packetbuf_totlen()
- *             function.
- *
- *             The driver, which typically is a MAC protocol, may
- *             queue the packet by using the queuebuf functions.
- */
-void rime_driver_send(void);
-
-void rime_set_output(void (*output_function)(void));
-int rime_output(void);
+int rime_output(struct channel *c);
 
 extern const struct mac_driver *rime_mac;
 
@@ -122,6 +105,7 @@ static struct rime_sniffer name = { NULL, input_callback, output_callback }
 void rime_sniffer_add(struct rime_sniffer *s);
 void rime_sniffer_remove(struct rime_sniffer *s);
 
+extern const struct network_driver rime_driver;
 
 /* Generic Rime return values. */
 enum {

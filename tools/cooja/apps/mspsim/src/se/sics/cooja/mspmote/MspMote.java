@@ -44,6 +44,7 @@ import java.util.Observable;
 import org.apache.log4j.Logger;
 import org.jdom.Element;
 
+import se.sics.cooja.ContikiError;
 import se.sics.cooja.GUI;
 import se.sics.cooja.Mote;
 import se.sics.cooja.MoteInterface;
@@ -343,13 +344,9 @@ public abstract class MspMote extends AbstractEmulatedMote implements Mote, Watc
         myCpu.stepMicros(t - lastExecute, duration);
       lastExecute = t;
     } catch (EmulationException e) {
-      if (e.getMessage().startsWith("Bad operation")) {
-        /* Experimental: print program counter history */
-        /*sendCLICommandAndPrint("trace 1000");*/ /* TODO Enable */
-      }
-
-      throw (RuntimeException)
-      new RuntimeException("Emulated exception: " + e.getMessage()).initCause(e);
+      String stackTraceOutput = sendCLICommandAndPrint("stacktrace");
+      throw (ContikiError)
+      new ContikiError(stackTraceOutput).initCause(e);
     }
 
     /* Schedule wakeup */
@@ -376,15 +373,19 @@ public abstract class MspMote extends AbstractEmulatedMote implements Mote, Watc
     }*/
   }
   
-  private void sendCLICommandAndPrint(String cmd) {
+  private String sendCLICommandAndPrint(String cmd) {
+    final StringBuilder sb = new StringBuilder();
     LineListener tmp = new LineListener() {
       public void lineRead(String line) {
         logger.fatal(line);
+        sb.append(line + "\n");
       }
     };
     commandListeners.add(tmp);
     sendCLICommand(cmd);
     commandListeners.remove(tmp);
+    
+    return sb.toString();
   }
   
   public int getID() {

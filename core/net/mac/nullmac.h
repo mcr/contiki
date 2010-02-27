@@ -46,6 +46,5 @@
 
 extern const struct mac_driver nullmac_driver;
 
-const struct mac_driver *nullmac_init(const struct radio_driver *r);
 
 #endif /* __NULLMAC_H__ */

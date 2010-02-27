@@ -43,7 +43,10 @@
 #include "dev/cc2420.h"
 #include "net/mac/nullmac.h"
 #include "net/mac/lpp.h"
+#include "net/mac/cxmac.h"
+#include "net/mac/csma.h"
 #include "net/rime.h"
+#include "net/netstack.h"
 
 #ifndef RF_CHANNEL
 #define RF_CHANNEL              26
@@ -53,13 +56,10 @@ void
 init_net(void)
 {
   rimeaddr_t rimeaddr;
-  cc2420_init();
+
+  netstack_init();
   cc2420_set_channel(RF_CHANNEL);
-#if WITH_NULLMAC
-  rime_init(nullmac_init(&cc2420_driver));
-#else
-  rime_init(lpp_init(&cc2420_driver));
-#endif
+
   rimeaddr.u8[0] = node_id & 0xff;
   rimeaddr.u8[1] = node_id >> 8;
   rimeaddr_set_node_addr(&rimeaddr);

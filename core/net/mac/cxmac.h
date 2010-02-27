@@ -42,7 +42,7 @@
 #define __CXMAC_H__
 
 #include "sys/rtimer.h"
-#include "net/mac/mac.h"
+#include "net/mac/rdc.h"
 #include "dev/radio.h"
 
 #define CXMAC_RECEIVER "cxmac.recv"
@@ -58,12 +58,7 @@ struct cxmac_config {
   rtimer_clock_t strobe_wait_time;
 };
 
-extern const struct mac_driver cxmac_driver;
+extern const struct rdc_driver cxmac_driver;
 
-const struct mac_driver *cxmac_init(const struct radio_driver *d);
-
-extern struct cxmac_config cxmac_config;
-
-void cxmac_set_announcement_radio_txpower(int txpower);
 
 #endif /* __CXMAC_H__ */

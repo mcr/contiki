@@ -46,11 +46,9 @@
 #ifndef __SICSLOWMAC_H__
 #define __SICSLOWMAC_H__
 
-#include "net/mac/mac.h"
+#include "net/mac/rdc.h"
 #include "dev/radio.h"
 
-extern const struct mac_driver sicslowmac_driver;
-
-const struct mac_driver *sicslowmac_init(const struct radio_driver *r);
+extern const struct rdc_driver sicslowmac_driver;
 
 #endif /* __SICSLOWMAC_H__ */

@@ -56,7 +56,7 @@ struct chameleon_module {
 void chameleon_init(const struct chameleon_module *header_processing_module);
 
 int chameleon_hdrsize(const struct packetbuf_attrlist attrlist[]);
-void chameleon_input(void);
-int chameleon_output(struct channel *c);
+struct channel *chameleon_parse(void);
+int chameleon_create(struct channel *c);
 
 #endif /* __CHAMELEON_H__ */

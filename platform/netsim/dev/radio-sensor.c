@@ -36,31 +36,25 @@
 
 const struct sensors_sensor radio_sensor;
 
-unsigned int radio_sensor_signal;
+unsigned int radio_sensor_signal = 0;
 
 /*---------------------------------------------------------------------------*/
-static void
-init(void)
-{
-  radio_sensor_signal = 0;
-}
-/*---------------------------------------------------------------------------*/
-static unsigned int
+static int
 value(int type)
 {
   return radio_sensor_signal;
 }
 /*---------------------------------------------------------------------------*/
 static int
-configure(int type, void *c)
+configure(int type, int c)
 {
   return 0;
 }
 /*---------------------------------------------------------------------------*/
-static void *
+static int
 status(int type)
 {
-  return NULL;
+  return 0;
 }
 /*---------------------------------------------------------------------------*/
 SENSORS_SENSOR(radio_sensor, RADIO_SENSOR,

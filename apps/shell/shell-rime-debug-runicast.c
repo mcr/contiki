@@ -128,7 +128,9 @@ recv_ruc(struct runicast_conn *c, const rimeaddr_t *from, uint8_t seqno)
 {
   struct collect_msg *msg;
   rtimer_clock_t latency;
+#if TIMESYNCH_CONF_ENABLED
   rtimer_clock_t timestamp;
+#endif /* TIMESYNCH_CONF_ENABLED */
   
   msg = packetbuf_dataptr();
 

@@ -43,6 +43,15 @@
  *         Adam Dunkels <adam@sics.se>
  */
 
+#define DEBUG 0
+#if DEBUG
+#include <stdio.h>
+#define PRINTF(...) printf(__VA_ARGS__)
+#else
+#define PRINTF(...)
+#endif
+
+#include "net/netstack.h"
 #include "net/rime.h"
 #include "net/rime/chameleon.h"
 #include "net/rime/neighbor.h"
@@ -70,7 +79,7 @@ const struct mac_driver *rime_mac;
 #ifdef RIME_CONF_POLITE_ANNOUNCEMENT_MAX_TIME
 #define POLITE_ANNOUNCEMENT_MAX_TIME RIME_CONF_POLITE_ANNOUNCEMENT_MAX_TIME
 #else /* RIME_CONF_POLITE_ANNOUNCEMENT_MAX_TIME */
-#define POLITE_ANNOUNCEMENT_MAX_TIME CLOCK_SECOND * 64
+#define POLITE_ANNOUNCEMENT_MAX_TIME CLOCK_SECOND * 128
 #endif /* RIME_CONF_POLITE_ANNOUNCEMENT_MAX_TIME */
 
 
@@ -90,31 +99,33 @@ rime_sniffer_remove(struct rime_sniffer *s)
 }
 /*---------------------------------------------------------------------------*/
 static void
-input(const struct mac_driver *r)
+input(void)
 {
-  int len;
   struct rime_sniffer *s;
-  len = rime_mac->read();
-  if(len > 0) {
-    for(s = list_head(sniffers); s != NULL; s = s->next) {
-      if(s->input_callback != NULL) {
-	s->input_callback();
-      }
+  struct channel *c;
+
+  RIMESTATS_ADD(rx);
+  c = chameleon_parse();
+  
+  for(s = list_head(sniffers); s != NULL; s = s->next) {
+    if(s->input_callback != NULL) {
+      s->input_callback();
     }
-    RIMESTATS_ADD(rx);
-    chameleon_input();
+  }
+  
+  if(c != NULL) {
+    abc_input(c);
   }
 }
 /*---------------------------------------------------------------------------*/
-void
-rime_init(const struct mac_driver *m)
+static void
+init(void)
 {
   queuebuf_init();
   packetbuf_clear();
   announcement_init();
-  rime_mac = m;
-  rime_mac->set_receive_function(input);
 
+  rime_mac = &NETSTACK_MAC;
   chameleon_init(&chameleon_bitopt);
 #if ! RIME_CONF_NO_POLITE_ANNOUCEMENTS
   /* XXX This is initializes the transmission of announcements but it
@@ -131,26 +142,55 @@ rime_init(const struct mac_driver *m)
 #endif /* ! RIME_CONF_NO_POLITE_ANNOUCEMENTS */
 }
 /*---------------------------------------------------------------------------*/
-int
-rime_output(void)
+static void
+packet_sent(void *ptr, int status, int num_tx)
 {
-  struct rime_sniffer *s;
+  struct channel *c = ptr;
 
-  RIMESTATS_ADD(tx);
-  packetbuf_compact();
-
-  if(rime_mac) {
-    if(rime_mac->send() == MAC_TX_OK) {
-      /* Call sniffers, but only if the packet was sent. */
-      for(s = list_head(sniffers); s != NULL; s = s->next) {
-        if(s->output_callback != NULL) {
-          s->output_callback();
-        }
+  
+  switch(status) {
+  case MAC_TX_COLLISION:
+    PRINTF("rime: collision after %d tx\n", num_tx);
+    break; 
+  case MAC_TX_NOACK:
+    PRINTF("rime: noack after %d tx\n", num_tx);
+    break;
+  case MAC_TX_OK:
+    PRINTF("rime: sent after %d tx\n", num_tx);
+    break;
+  default:
+    PRINTF("rime: error %d after %d tx\n", status, num_tx);
+  }
+  
+  if(status == MAC_TX_OK) {
+    struct rime_sniffer *s;
+    /* Call sniffers, but only if the packet was sent. */
+    for(s = list_head(sniffers); s != NULL; s = s->next) {
+      if(s->output_callback != NULL) {
+        s->output_callback();
       }
-      return RIME_OK;
     }
   }
-  return RIME_ERR;
+  
+  abc_sent(c, status, num_tx);
 }
 /*---------------------------------------------------------------------------*/
+int
+rime_output(struct channel *c)
+{
+  RIMESTATS_ADD(tx);
+  if(chameleon_create(c)) {
+    packetbuf_compact();
+
+    NETSTACK_MAC.send(packet_sent, c);
+    return 1;
+  }
+  return 0;
+}
+/*---------------------------------------------------------------------------*/
+const struct network_driver rime_driver = {
+  "Rime",
+  init,
+  input
+};
 /** @} */

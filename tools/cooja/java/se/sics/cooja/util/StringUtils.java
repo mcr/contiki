@@ -52,6 +52,10 @@ public class StringUtils {
     // Prevent instances of this class
   }
 
+  public static String toHex(byte data) {
+      return "" + HEX[(data >> 4) & 0xf] + HEX[data & 0xf];
+  }
+  
   public static String toHex(byte[] data) {
     char[] buf = new char[data.length * 2];
     for (int i = 0, j = 0, n = data.length; i < n; i++, j += 2) {
@@ -104,7 +108,7 @@ public class StringUtils {
       }
       sb.append("  ");
       for (int i = 0; i < n; i++) {
-        if (data[j + i] > 32) {
+        if (data[j + i] >= 32) {
           sb.append((char)(data[j + i] & 0xff));
         } else {
           sb.append('.');

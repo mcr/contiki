@@ -56,4 +56,6 @@
 
 #include "net/rime.h"
 
+#include "net/netstack.h"
+
 #endif /* __CONTIKI_NET_H__ */

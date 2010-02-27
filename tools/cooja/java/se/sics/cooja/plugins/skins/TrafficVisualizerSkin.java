@@ -212,9 +212,6 @@ public class TrafficVisualizerSkin implements VisualizerSkin {
   }
 
   public void paintBeforeMotes(Graphics g) {
-  }
-
-  public void paintAfterMotes(Graphics g) {
     if (simulation == null) {
       /* Skin was never activated */
       return;
@@ -270,6 +267,9 @@ public class TrafficVisualizerSkin implements VisualizerSkin {
     }
   }
 
+  public void paintAfterMotes(Graphics g) {
+  }
+  
   public static class ToggleHistoryAction implements SimulationMenuAction {
     public boolean isEnabled(Visualizer visualizer, Simulation simulation) {
       return true;

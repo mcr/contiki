@@ -44,7 +44,7 @@
 #include "contiki.h"
 #include "dev/radio.h"
 
-void cc2420_init(void);
+int cc2420_init(void);
 
 #define CC2420_MAX_PACKET_LEN      127
 
@@ -83,5 +83,7 @@ extern int cc2420_authority_level_of_sender;
 
 int cc2420_on(void);
 int cc2420_off(void);
+
+void cc2420_set_cca_threshold(int value);
 
 #endif /* __CC2420_H__ */

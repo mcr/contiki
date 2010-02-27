@@ -42,7 +42,6 @@
 #include "dev/vib-sensor.h"
 
 const struct sensors_sensor vib_sensor;
-static unsigned int vib;
 
 /*---------------------------------------------------------------------------*/
 void
@@ -51,22 +50,22 @@ vib_sensor_changed(void)
   sensors_changed(&vib_sensor);
 }
 /*---------------------------------------------------------------------------*/
-static unsigned int
+static int
 value(int type)
 {
   return 0;
 }
 /*---------------------------------------------------------------------------*/
 static int
-configure(int type, void *c)
+configure(int type, int c)
 {
   return 0;
 }
 /*---------------------------------------------------------------------------*/
-static void *
+static int
 status(int type)
 {
-  return NULL;
+  return 0;
 }
 /*---------------------------------------------------------------------------*/
 SENSORS_SENSOR(vib_sensor, VIB_SENSOR,

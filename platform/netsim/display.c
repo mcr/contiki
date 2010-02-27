@@ -525,8 +525,9 @@ stdin_callback(gpointer data, gint source, GdkInputCondition condition)
 {
   char buf[1000];
   int len;
-  
+
   len = read(STDIN_FILENO, &buf, sizeof(buf));
+  printf("read len %d\n", len);
   buf[len] = 0;
   ether_send_serial(buf);
 }

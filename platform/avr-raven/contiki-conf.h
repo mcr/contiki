@@ -51,7 +51,7 @@ typedef int32_t s32_t;
  */
 #define MCU_MHZ 8
 #define PLATFORM PLATFORM_AVR
-/*TODO:Who defines RAVEN_REVISION = RAVEN_D needed by hal.h? */
+#define RAVEN_REVISION RAVEN_D
 
 /* Clock ticks per second */
 #define CLOCK_CONF_SECOND 125
@@ -73,14 +73,17 @@ typedef int32_t s32_t;
 #define RIMEADDR_CONF_SIZE       8
 #define PACKETBUF_CONF_HDR_SIZE    0           //RF230 handles headers internally
 
-/* 0 for IPv6, or 1 for HC1, 2 for HC01 */
-#define SICSLOWPAN_CONF_COMPRESSION_IPV6 0 
-#define SICSLOWPAN_CONF_COMPRESSION_HC1  1 
-#define SICSLOWPAN_CONF_COMPRESSION_HC01 2
-
-#define SICSLOWPAN_CONF_COMPRESSION       SICSLOWPAN_CONF_COMPRESSION_HC01 
+#define SICSLOWPAN_CONF_COMPRESSION       SICSLOWPAN_COMPRESSION_HC06
 #define SICSLOWPAN_CONF_MAX_ADDR_CONTEXTS 2
 #define SICSLOWPAN_CONF_FRAG              1
+
+/* Network setup for IPv6 */
+#define NETSTACK_CONF_NETWORK sicslowpan_driver
+//#define NETSTACK_CONF_MAC     nullmac_driver
+#define NETSTACK_CONF_MAC     csma_driver
+//#define NETSTACK_CONF_RDC     contikimac_driver
+#define NETSTACK_CONF_RDC     sicslowmac_driver
+#define NETSTACK_CONF_RADIO   rf230_driver
 
 /* Below will prevent fragmentation of TCP packets, undef for faster page loads, simpler wireshark captures */
 //#define UIP_CONF_TCP_MSS 48
@@ -93,10 +96,11 @@ typedef int32_t s32_t;
 #define LOG_CONF_ENABLED 1
 
 /* RF230BB reduces program size by 6.5KB, RAM by 500 bytes */
-#ifdef RF230BB
+#if RF230BB
 #define SICSLOWPAN_CONF_CONVENTIONAL_MAC    1   //for barebones driver, sicslowpan calls radio->read function
 #undef PACKETBUF_CONF_HDR_SIZE                  //RF230BB takes the packetbuf default for header size
 #define UIP_CONF_ROUTER 0
+
 #if 0
 /* Specifies the default MAC driver */
 //no auto_ack gives bad FCS for some reason?
@@ -137,7 +141,7 @@ typedef int32_t s32_t;
 #define UIP_CONF_IPV6_REASSEMBLY 0
 #define UIP_CONF_NETIF_MAX_ADDRESSES  3
 #define UIP_CONF_ND6_MAX_PREFIXES     3
-#define UIP_CONF_ND6_MAX_NEIGHBORS    4  
+#define UIP_CONF_ND6_MAX_NEIGHBORS    4
 #define UIP_CONF_ND6_MAX_DEFROUTERS   2
 #define UIP_CONF_ICMP6           1
 

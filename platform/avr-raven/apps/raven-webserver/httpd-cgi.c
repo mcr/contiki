@@ -62,7 +62,9 @@ extern char TCPBUF[512];
 #endif
 
 /* RADIOSTATS must also be set in clock.c and the radio driver */
-#define RADIOSTATS 0
+#if RF230BB
+#define RADIOSTATS 1
+#endif
 
 static struct httpd_cgi_call *calls = NULL;
 

@@ -62,6 +62,7 @@
 
 #include "net/rime/announcement.h"
 #include "net/rime/runicast.h"
+#include "net/rime/neighbor-discovery.h"
 
 #define COLLECT_ATTRIBUTES  { PACKETBUF_ADDR_ESENDER,    PACKETBUF_ADDRSIZE }, \
                             { PACKETBUF_ATTR_EPACKET_ID, PACKETBUF_ATTR_BIT * 4 }, \
@@ -77,7 +78,11 @@ struct collect_callbacks {
 
 struct collect_conn {
   struct runicast_conn runicast_conn;
+#if ! COLLECT_CONF_ANNOUNCEMENTS
+  struct neighbor_discovery_conn neighbor_discovery_conn;
+#else /* ! COLLECT_CONF_ANNOUNCEMENTS */
   struct announcement announcement;
+#endif /* COLLECT_CONF_ANNOUNCEMENTS */
   const struct collect_callbacks *cb;
   struct ctimer t;
   uint16_t rtmetric;
@@ -86,7 +91,7 @@ struct collect_conn {
 };
 
 void collect_open(struct collect_conn *c, uint16_t channels,
-	       const struct collect_callbacks *callbacks);
+                  const struct collect_callbacks *callbacks);
 void collect_close(struct collect_conn *c);
 
 int collect_send(struct collect_conn *c, int rexmits);
