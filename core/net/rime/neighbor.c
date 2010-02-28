@@ -68,7 +68,7 @@ LIST(neighbors_list);
 
 static struct ctimer t;
 
-static int max_time = 120;
+static int max_time = 1800;
 
 #define DEBUG 0
 #if DEBUG
