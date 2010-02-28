@@ -86,6 +86,9 @@ enum {
   /**< The MAC layer did not get an acknowledgement for the packet. */
   MAC_TX_NOACK,
 
+  /**< The MAC layer deferred the transmission for a later time. */
+  MAC_TX_DEFERRED,
+
   /**< The MAC layer transmission could not be performed because of an
      error. The upper layer may try again later. */
   MAC_TX_ERR,
