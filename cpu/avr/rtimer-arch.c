@@ -66,7 +66,6 @@
 #endif
 
 #if defined(__AVR_AT90USB1287__)
-#warning AT90USB1287 rtimers not tested
 #define ETIMSK TIMSK3
 #define ETIFR TIFR3
 #define TICIE3 ICIE3

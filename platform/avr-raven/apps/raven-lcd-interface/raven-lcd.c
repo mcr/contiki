@@ -101,7 +101,8 @@ void rs232_send(uint8_t port, unsigned char c);
 
 /*---------------------------------------------------------------------------*/
 /* Sends a ping packet out the radio */
-static void
+/* Useful for debugging so allow external calls */
+void
 raven_ping6(void)
 {
     /* ping the router */
