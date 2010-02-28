@@ -101,7 +101,9 @@ phase_wait(struct phase_list *list,
       expected = now + wait - wait_before;
       if(!RTIMER_CLOCK_LT(expected, now)) {
         /* Wait until the receiver is expected to be awake */
-        while(RTIMER_CLOCK_LT(RTIMER_NOW(), expected));
+        while(RTIMER_CLOCK_LT(RTIMER_NOW(), expected)) {
+          watchdog_periodic();
+        }
       }
     }
   }
