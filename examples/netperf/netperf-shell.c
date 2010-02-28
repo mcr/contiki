@@ -65,7 +65,7 @@ PROCESS_THREAD(netperf_shell_process, ev, data)
   shell_rime_sniff_init();
   shell_text_init();
   shell_time_init();
-  shell_sendtest_init();
+  /*  shell_sendtest_init();*/
   shell_netperf_init();
 
   PROCESS_END();
