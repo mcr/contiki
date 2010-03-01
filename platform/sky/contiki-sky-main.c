@@ -50,9 +50,6 @@
 #include "lib/random.h"
 #include "net/netstack.h"
 #include "net/mac/frame802154.h"
-#include "net/mac/framer-802154.h"
-#include "net/mac/framer-nullmac.h"
-#include "net/mac/framer.h"
 
 #if WITH_UIP6
 #include "net/sicslowpan.h"
@@ -271,8 +268,6 @@ main(int argc, char **argv)
 	 ds2411_id[0], ds2411_id[1], ds2411_id[2], ds2411_id[3],
 	 ds2411_id[4], ds2411_id[5], ds2411_id[6], ds2411_id[7]);*/
 
-  framer_set(&framer_802154);
-  
 #if WITH_UIP6
   memcpy(&uip_lladdr.addr, ds2411_id, sizeof(uip_lladdr.addr));
   /* Setup nullmac-like MAC for 802.15.4 */

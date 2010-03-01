@@ -75,8 +75,17 @@
 #endif /* NETSTACK_CONF_RADIO */
 #endif /* NETSTACK_RADIO */
 
+#ifndef NETSTACK_FRAMER
+#ifdef NETSTACK_CONF_FRAMER
+#define NETSTACK_FRAMER NETSTACK_CONF_FRAMER
+#else /* NETSTACK_CONF_FRAMER */
+#define NETSTACK_FRAMER   framer_nullmac
+#endif /* NETSTACK_CONF_FRAMER */
+#endif /* NETSTACK_FRAMER */
+
 #include "net/mac/mac.h"
 #include "net/mac/rdc.h"
+#include "net/mac/framer.h"
 #include "dev/radio.h"
 
 /**
@@ -96,6 +105,7 @@ extern const struct network_driver NETSTACK_NETWORK;
 extern const struct rdc_driver     NETSTACK_RDC;
 extern const struct mac_driver     NETSTACK_MAC;
 extern const struct radio_driver   NETSTACK_RADIO;
+extern const struct framer         NETSTACK_FRAMER;
 
 void netstack_init(void);
 

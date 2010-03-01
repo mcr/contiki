@@ -49,10 +49,4 @@ struct framer {
 
 };
 
-extern const struct framer *framer_current;
-
-const struct framer *framer_get(void);
-
-void framer_set(const struct framer *f);
-
 #endif /* __FRAMER_H__ */
