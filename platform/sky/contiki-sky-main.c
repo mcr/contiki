@@ -55,9 +55,6 @@
 #include "net/sicslowpan.h"
 #include "net/uip-netif.h"
 #include "net/mac/sicslowmac.h"
-#if UIP_CONF_ROUTER
-#include "net/routing/rimeroute.h"
-#endif /* UIP_CONF_ROUTER*/
 #endif /* WITH_UIP6 */
 
 #include "net/rime.h"
@@ -75,6 +72,20 @@
 #include "dev/sht11-sensor.h"
 
 SENSORS(&button_sensor);
+
+#if UIP_CONF_ROUTER
+
+#ifndef UIP_ROUTER_MODULE
+#ifdef UIP_CONF_ROUTER_MODULE
+#define UIP_ROUTER_MODULE UIP_CONF_ROUTER_MODULE
+#else /* UIP_CONF_ROUTER_MODULE */
+#define UIP_ROUTER_MODULE rimeroute
+#endif /* UIP_CONF_ROUTER_MODULE */
+#endif /* UIP_ROUTER_MODULE */
+
+extern const struct uip_router UIP_ROUTER_MODULE;
+
+#endif /* UIP_CONF_ROUTER */
 
 #if DCOSYNCH_CONF_ENABLED
 static struct timer mgt_timer;
@@ -318,7 +329,7 @@ main(int argc, char **argv)
 
   
 #if UIP_CONF_ROUTER
-  uip_router_register(&rimeroute);
+  uip_router_register(&UIP_ROUTER_MODULE);
 #endif /* UIP_CONF_ROUTER */
 #else /* WITH_UIP6 */
 
