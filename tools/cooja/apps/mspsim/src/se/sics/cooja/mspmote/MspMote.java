@@ -263,6 +263,7 @@ public abstract class MspMote extends AbstractEmulatedMote implements Mote, Watc
 
     int[] memory = myCpu.getMemory();
     logger.info("Loading ELF from: " + fileELF.getAbsolutePath());
+    GUI.setProgressMessage("Loading " + fileELF.getName());
     if (GUI.isVisualizedInApplet()) {
       myELFModule = node.loadFirmware(new URL(GUI.getAppletCodeBase(), fileELF.getName()), memory);
     } else {
@@ -373,7 +374,7 @@ public abstract class MspMote extends AbstractEmulatedMote implements Mote, Watc
     }*/
   }
   
-  private String sendCLICommandAndPrint(String cmd) {
+  public String sendCLICommandAndPrint(String cmd) {
     final StringBuilder sb = new StringBuilder();
     LineListener tmp = new LineListener() {
       public void lineRead(String line) {
