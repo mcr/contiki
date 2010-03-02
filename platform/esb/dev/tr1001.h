@@ -49,7 +49,7 @@ extern const struct radio_driver tr1001_driver;
  * Turns on reception of bytes and installs the receive interrupt
  * handler.
  */
-void tr1001_init(void);
+int tr1001_init(void);
 
 /**
  * Set the speed of the TR1001 radio device.
