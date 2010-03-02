@@ -167,7 +167,7 @@ rrep_packet_received(struct unicast_conn *uc, const rimeaddr_t *from)
   struct route_entry *rt;
   rimeaddr_t dest;
   struct route_discovery_conn *c = (struct route_discovery_conn *)
-    ((char *)uc - offsetof(struct route_discovery_conn, rrepconn));
+    ((long *)uc - offsetof(struct route_discovery_conn, rrepconn));
 
   PRINTF("%d.%d: rrep_packet_received from %d.%d towards %d.%d len %d\n",
 	 rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1],
@@ -211,7 +211,7 @@ rreq_packet_received(struct netflood_conn *nf, const rimeaddr_t *from,
 {
   struct route_msg *msg = packetbuf_dataptr();
   struct route_discovery_conn *c = (struct route_discovery_conn *)
-    ((char *)nf - offsetof(struct route_discovery_conn, rreqconn));
+    ((long *)nf - offsetof(struct route_discovery_conn, rreqconn));
 
   PRINTF("%d.%d: rreq_packet_received from %d.%d hops %d rreq_id %d last %d.%d/%d\n",
 	 rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1],

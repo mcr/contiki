@@ -34,5 +34,5 @@
 #include "webserver-nogui.h"
 
 /*---------------------------------------------------------------------------*/
-AUTOSTART_PROCESSES(&webserver_nogui_process);
+//AUTOSTART_PROCESSES(&webserver_nogui_process);
 /*---------------------------------------------------------------------------*/

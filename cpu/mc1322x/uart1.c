@@ -2,6 +2,10 @@
 #include "uart1.h"
 #include "utils.h"
 #include "gpio.h"
+#include "isr.h"
+
+char tx_buf[1024];
+int head, tail;
 
 void uart1_init(void) {
 	uint8_t i;
@@ -23,11 +27,37 @@ void uart1_init(void) {
 	reg32(UART1_CON) = 0x00000003; /* enable receive and transmit */
 	reg32(GPIO_FUNC_SEL0) = ( (0x01 << (14*2)) | (0x01 << (15*2)) ); /* set GPIO15-14 to UART (UART1 TX and RX)*/
 
+	/* interrupt when 28 bytes are free */
+	reg32(UT1CON) = 28;
+
+	head = tail = 0;
+}
+
+void uart1_isr(void) {
+ 	while( reg32(UT1CON) != 0 ) {
+		if (head == tail) {
+			disable_irq(UART1);
+			return;
+		}
+		reg32(UART1_DATA) = tx_buf[tail];
+		tail++;		
+		if (tail >= sizeof(tx_buf))
+			tail = 0;
+	}
+	enable_irq(UART1);
 }
 
 int uart1_putchar(int c) {
- 	while( reg32(UT1CON) == 31 );
-	reg32(UART1_DATA) = c;
+	int h = head;
+	h = head + 1;
+	if (h >= sizeof(tx_buf))
+		h = 0;
+	if (h == tail) /* drop chars when no room */
+		return;
+	tx_buf[head] = c;
+	head = h;
+
+	uart1_isr();
 	return c;
 }
 

@@ -86,7 +86,7 @@ struct mesh_conn {
   struct queuebuf *queued_data;
   rimeaddr_t queued_data_dest;
   const struct mesh_callbacks *cb;
-};
+} __attribute__ ((__packed__));
 
 /**
  * \brief      Open a mesh connection

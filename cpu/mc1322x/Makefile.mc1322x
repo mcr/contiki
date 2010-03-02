@@ -37,7 +37,7 @@ LINKERSCRIPT = $(CONTIKI_CPU)/mc1322x.lds
 
 STARTUP=${addprefix $(OBJECTDIR)/,startup.o}
 
-ARCH_FLAGS= -mcpu=arm7tdmi-s -mthumb-interwork -march=armv4t -mtune=arm7tdmi-s -DCONFIG_ARM -D__ARM__
+ARCH_FLAGS= -mcpu=arm7tdmi-s -mthumb-interwork -march=armv4t -mtune=arm7tdmi-s -DCONFIG_ARM -D__ARM__ -Wcast-align
 THUMB_FLAGS=-mthumb -mcallee-super-interworking
 ARM_FLAGS=
 
@@ -50,7 +50,7 @@ CFLAGSNO = -I. -I$(CONTIKI)/core -I$(CONTIKI_CPU) -I$(CONTIKI_CPU)/loader \
            -Werror $(ARCH_FLAGS) -g 
 
 CFLAGS  += $(CFLAGSNO) -Os -DRUN_AS_SYSTEM -DROM_RUN -fno-strict-aliasing  -fno-common -ffixed-r8 -msoft-float -DTEXT_BASE=$(TEXT_BASE) -fno-builtin-printf -fno-builtin-sprintf
-LDFLAGS += -T $(LINKERSCRIPT) -nostartfiles -static
+LDFLAGS += -T $(LINKERSCRIPT) -nostartfiles -static -Wl,-Map=contiki-$(TARGET).map,-export-dynamic
 AFLAGS := $(AFLAGS_DEBUG) -D__ASSEMBLY__ $(CPPFLAGS) -gstabs
 
 CDEPFLAGS = $(CFLAGS) -D __MAKING_DEPS__
@@ -81,17 +81,20 @@ CUSTOM_RULE_C_TO_CO=yes
 %.co: %.c
 	$(CC) $(CFLAGS) $(THUMB_FLAGS) $< -c -o $@
 
+.PRECIOUS: %.bin
+.PRECIOUS: %.ihex
 
-%.ihex: %.$(TARGET)
+%.ihex: %.elf
 	$(OBJCOPY) $^ -O ihex $@
 
-%.bin: %.$(TARGET)
+%.bin: %.elf
 	$(OBJCOPY) -O binary $< $@
 
 symbols.c:
 	@${CONTIKI}/tools/make-empty-symbols
  
-%.$(TARGET): %.co $(PROJECT_OBJECTFILES) contiki-$(TARGET).a $(STARTUP) $(OBJECTDIR)/symbols.o
-	$(CC) $(LDFLAGS) $(CFLAGS) -nostartfiles -o $@ $(filter-out %.a,$^) $(filter %.a,$^) $(filter %.a,$^)
+%.elf: %.co $(PROJECT_OBJECTFILES) contiki-$(TARGET).a $(STARTUP) $(OBJECTDIR)/symbols.o
+	$(CC) $(LDFLAGS) $(CFLAGS) -nostartfiles -o $@ $(filter-out %.a,$^) $(filter %.a,$^) $(filter %.a,$^) 
 
-
+%.$(TARGET): %.elf %.bin %.ihex
+	@

@@ -1181,7 +1181,7 @@ output(uip_lladdr_t *localdest)
      */
 
     /* Create 1st Fragment */
-    PRINTFO("sicslowpan output: 1rst fragment ");
+    PRINTFO("sicslowpan output: first fragment ");
 
     /* move HC1/HC01/IPv6 header */
     memmove(rime_ptr + SICSLOWPAN_FRAG1_HDR_LEN, rime_ptr, rime_hdr_len);
@@ -1221,6 +1221,7 @@ output(uip_lladdr_t *localdest)
           ((SICSLOWPAN_DISPATCH_FRAGN << 8) | uip_len));
     rime_payload_len = (MAC_MAX_PAYLOAD - rime_hdr_len) & 0xf8;
     while(processed_ip_len < uip_len){
+packetbuf_clear();
       PRINTFO("sicslowpan output: fragment ");
 /*       RIME_FRAG_BUF->offset = processed_ip_len >> 3; */
       RIME_FRAG_PTR[RIME_FRAG_OFFSET] = processed_ip_len >> 3;
@@ -1235,6 +1236,7 @@ output(uip_lladdr_t *localdest)
       memcpy(rime_ptr + rime_hdr_len,
              (void *)UIP_IP_BUF + processed_ip_len, rime_payload_len);
       packetbuf_set_datalen(rime_payload_len + rime_hdr_len);
+
       send_packet(&dest);
       processed_ip_len += rime_payload_len;
     }
@@ -1443,7 +1445,7 @@ input(const struct mac_driver *r)
    * the IP stack
    */
   if(processed_ip_len == 0 || (processed_ip_len == sicslowpan_len)){
-    PRINTFI("sicslowpan input: IP packet ready (length %d)\n",
+    PRINTF("sicslowpan input: IP packet ready (length %d)\n",
            sicslowpan_len);
     memcpy((void *)UIP_IP_BUF, (void *)SICSLOWPAN_IP_BUF, sicslowpan_len);
     uip_len = sicslowpan_len;

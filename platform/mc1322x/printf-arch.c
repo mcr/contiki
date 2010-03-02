@@ -367,7 +367,8 @@ out:
 	return pc;
 }
 
-/*
+#define BLOCK_MEM_SIZE 1024
+
 int sprintf( char *out, const char *format, ... )
 {
 	int		retval = 0;
@@ -383,7 +384,6 @@ int sprintf( char *out, const char *format, ... )
 
 	return retval;
 }
-*/
 
 static uint8_t ll;
 

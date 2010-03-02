@@ -8,11 +8,17 @@
 #define INTBASE (0x80020000)
 #define INTCNTL_OFF (0x0)
 #define INTENNUM_OFF (0x8)
+#define INTDISNUM_OFF (0xC)
+#define INTENABLE_OFF (0x10)
 #define INTSRC_OFF (0x30)
+#define NIPEND_OFF (0x38)
 
 #define INTCNTL  (INTBASE + INTCNTL_OFF)
 #define INTENNUM (INTBASE + INTENNUM_OFF)
-#define INTSRC   (INTBASE + INTSRC_OFF) 
+#define INTDISNUM (INTBASE + INTDISNUM_OFF)
+#define INTENABLE (INTBASE + INTENABLE_OFF)
+#define INTSRC   (INTBASE + INTSRC_OFF)
+#define NIPEND (INTBASE + NIPEND_OFF)
 
 enum interrupt_nums {
 	INT_NUM_ASM = 0,
@@ -32,18 +38,16 @@ enum interrupt_nums {
 #define global_irq_enable() (clear_bit(reg32(INTCNTL),20))
 
 #define enable_irq(irq) (reg32(INTENNUM) = INT_NUM_##irq)
+#define disable_irq(irq) (reg32(INTDISNUM) = INT_NUM_##irq)
 
-#define tmr_irq() (bit_is_set(reg32(INTSRC),INT_NUM_TMR))
 
 extern void tmr0_isr(void) __attribute__((weak));
 extern void tmr1_isr(void) __attribute__((weak));
 extern void tmr2_isr(void) __attribute__((weak));
 extern void tmr3_isr(void) __attribute__((weak));
-
 extern void rtc_isr(void) __attribute__((weak));
-
-#define crm_irq() (bit_is_set(reg32(INTSRC),INT_NUM_CRM))
-
+extern void uart1_isr(void) __attribute__((weak));
+extern void maca_isr(void) __attribute__((weak));
 
 #endif
 

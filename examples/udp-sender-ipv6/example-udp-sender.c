@@ -101,7 +101,7 @@ PROCESS_THREAD(udp_process_sender, ev, data)
       UDP_ADDR_A,UDP_ADDR_B,UDP_ADDR_C,UDP_ADDR_D,
       UDP_ADDR_E,UDP_ADDR_F,UDP_ADDR_G,UDP_ADDR_H);
 #else /* UDP_ADDR_A */
-  uip_ip6addr(&ipaddr,0xfe80,0,0,0,0x6466,0x6666,0x6666,0x6666);
+  uip_ip6addr(&ipaddr,0xFE80,0,0,0,0x2,0x03ff,0xfe03,0x0303);
 #endif /* UDP_ADDR_A */
 
   /* new connection with remote host */

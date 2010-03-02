@@ -48,7 +48,7 @@
 #include <stdlib.h>
 
 
-#define DEBUG 0
+#define DEBUG 1
 #if DEBUG
 #include <stdio.h>
 #define PRINTF(...) printf(__VA_ARGS__)
@@ -252,7 +252,7 @@ uip_netif_addr_autoconf_set(uip_ipaddr_t *ipaddr, uip_lladdr_t *lladdr)
   UIP_LOG("CAN NOT BUIL INTERFACE IDENTIFIER");
   UIP_LOG("THE STACK IS GOING TO SHUT DOWN");
   UIP_LOG("THE HOST WILL BE UNREACHABLE");
-  exit(-1);
+  //exit(-1);
 #endif
 }
 
@@ -408,7 +408,7 @@ uip_netif_dad_failed(uip_ipaddr_t *ipaddr)
     dad_ns = 0;
   }
   
-  exit(-1);
+  //exit(-1);
 }
 
 

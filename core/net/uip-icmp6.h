@@ -98,7 +98,7 @@
 /** \brief ICMPv6 Error message constant part */
 struct uip_icmp6_error{
   u32_t param;
-};
+} __attribute__ ((__packed__));
 
 /** \name ICMPv6 RFC4443 Message processing and sending */
 /** @{ */

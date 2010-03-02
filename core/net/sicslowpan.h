@@ -186,7 +186,7 @@
 struct sicslowpan_iphc_hdr {
   u8_t dispatch;
   u8_t encoding[2];
-};
+} __attribute__ ((__packed__));
 
 /* struct sicslowpan_nhc_udp_comp_hdr { */
 /*   u8_t nhcid; */
@@ -201,7 +201,7 @@ struct sicslowpan_addr_context {
   u8_t used;
   u8_t number;
   u8_t prefix[8];
-};
+} __attribute__ ((__packed__));
 
 /**
  * \name Address compressibility test functions

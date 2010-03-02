@@ -89,3 +89,18 @@ clock_time(void)
   return current_clock;
 }
 
+unsigned long
+clock_seconds(void)
+{
+	return 0;
+}
+
+int raise(void)
+{
+	return 0;
+}
+
+void uip_log(char *msg)
+{
+  printf("uip: %s\n", msg);
+}

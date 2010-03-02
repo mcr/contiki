@@ -50,7 +50,7 @@
 struct hc_hdr {
   u16_t flagsport;
   uip_ipaddr_t srcipaddr;
-};
+} __attribute__ ((__packed__));
 
 struct udpip_hdr {
   /* IP header. */
@@ -69,7 +69,7 @@ struct udpip_hdr {
     destport;
   u16_t udplen;
   u16_t udpchksum;
-};
+} __attribute__ ((__packed__));
 
 #include <stdio.h>
 

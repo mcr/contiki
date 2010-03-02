@@ -235,7 +235,7 @@ static void
 recv_ipolite(struct ipolite_conn *ipolite, const rimeaddr_t *from)
 {
   struct rudolph1_conn *c = (struct rudolph1_conn *)
-    ((char *)ipolite - offsetof(struct rudolph1_conn, ipolite));
+    ((long *)ipolite - offsetof(struct rudolph1_conn, ipolite)/sizeof(long));
   struct rudolph1_datapacket *p = packetbuf_dataptr();
 
   PRINTF("%d.%d: Got ipolite type %d\n",

@@ -4,7 +4,15 @@
 *.map
 *.png
 *.log
+*.bin
+*.map
+*.png
+*.log
+*.elf
+*.ihex
 obj_mc1322x
 symbols.*
 Makefile.target
+doc/html
+patches-*
 

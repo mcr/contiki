@@ -403,7 +403,7 @@ send_probe(void)
 
 
   /* Construct the announcements */
-  adata = (struct announcement_msg *)((char *)hdr + sizeof(struct lpp_hdr));
+  adata = (struct announcement_msg *)((long *)hdr + sizeof(struct lpp_hdr)/sizeof(long));
   
   adata->num = 0;
   for(a = announcement_list(); a != NULL; a = a->next) {

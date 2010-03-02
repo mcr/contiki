@@ -235,7 +235,7 @@ extern struct etimer uip_nd6_timer_periodic;
 struct uip_nd6_ns {
   u32_t reserved;
   uip_ipaddr_t tgtipaddr;
-};
+}  __attribute__ ((__packed__));
 
 /**
  * \brief A neighbor advertisement constant part.
@@ -246,7 +246,7 @@ struct uip_nd6_na {
   u8_t flagsreserved;
   u8_t reserved[3];
   uip_ipaddr_t tgtipaddr;
-};
+}  __attribute__ ((__packed__));
 
 /** 
  * \brief A router solicitation  constant part
@@ -255,7 +255,7 @@ struct uip_nd6_na {
  */
 struct uip_nd6_rs {
   u32_t reserved;
-};
+}  __attribute__ ((__packed__));
 
 /**
  * \brief A router advertisement constant part
@@ -268,7 +268,7 @@ struct uip_nd6_ra {
   u16_t router_lifetime;
   u32_t reachable_time;
   u32_t retrans_timer;
-};
+}  __attribute__ ((__packed__));
 
 /**
  * \brief A redirect message constant part
@@ -279,7 +279,7 @@ struct uip_nd6_redirect {
   u32_t reserved;
   uip_ipaddr_t tgtipaddress;  
   uip_ipaddr_t destipaddress;  
-};
+}  __attribute__ ((__packed__));
 /** @} */
 
 /**
@@ -291,7 +291,7 @@ struct uip_nd6_redirect {
 struct uip_nd6_opt_hdr {
   u8_t type;
   u8_t len;
-};
+} __attribute__ ((__packed__));
 
 /** \brief ND option prefix information */
 struct uip_nd6_opt_prefix_info {
@@ -303,7 +303,7 @@ struct uip_nd6_opt_prefix_info {
   u32_t preferredlt;
   u32_t reserved2;
   uip_ipaddr_t prefix;
-};
+}  __attribute__ ((__packed__));
 
 /** \brief ND option MTU */
 struct uip_nd6_opt_mtu {
@@ -311,21 +311,21 @@ struct uip_nd6_opt_mtu {
   u8_t len;
   u16_t reserved;
   u32_t mtu;
-};
+} __attribute__ ((__packed__));
 
 /** \brief ND option: both TLLAO and SLLAO */
 struct uip_nd6_opt_llao {
   u8_t type;
   u8_t len;
   uip_lladdr_t addr;
-};
+} __attribute__ ((__packed__));
 
 /** \struct Redirected header option */
 struct uip_nd6_opt_redirected_hdr {
   u8_t type;
   u8_t len;
   u8_t reserved[6];
-};
+} __attribute__ ((__packed__));
 /** @} */
 
 /**

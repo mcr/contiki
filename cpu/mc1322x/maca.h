@@ -153,7 +153,13 @@ enum maca_tmren_bits {
 	maca_tmren_sft    = 2,
 };
 
-  
+enum maca_status_bits {
+	maca_status_ovr   = 12,
+	maca_status_busy  = 13,
+	maca_status_crc   = 14,
+	maca_status_to    = 15,
+};
+
 #define action_complete_irq()     bit_is_set(reg32(MACA_IRQ),maca_irq_acpl)
 #define filter_failed_irq()       bit_is_set(reg32(MACA_IRQ),maca_irq_flt)
 #define checksum_failed_irq()     bit_is_set(reg32(MACA_IRQ),maca_irq_crc)
@@ -165,7 +171,6 @@ enum maca_tmren_bits {
 void reset_maca(void);
 void init_phy(void);
 void vreg_init(void);
-void ResumeMACASync(void);
 void radio_init(void);
 uint32_t init_from_flash(uint32_t addr);
 void set_power(uint8_t power);
