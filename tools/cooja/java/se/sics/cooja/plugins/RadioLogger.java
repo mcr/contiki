@@ -397,10 +397,15 @@ public class RadioLogger extends VisPlugin {
     PacketAnalyzer.Packet packet = new PacketAnalyzer.Packet(data, PacketAnalyzer.MAC_LEVEL);
 
     if (analyzePacket(packet, brief, verbose)) {
-        conn.data = (data.length < 10 ? " " : "") + data.length + ": " + brief;
         if (packet.hasMoreData()) {
-            conn.data += ": " + StringUtils.toHex(packet.getPayload(), 4);
+            byte[] payload = packet.getPayload();
+            brief.append(StringUtils.toHex(payload, 4));
+            verbose.append("<b>Payload (")
+            .append(payload.length).append(" bytes)</b><br><pre>")
+            .append(StringUtils.hexDump(payload))
+            .append("</pre>");
         }
+        conn.data = (data.length < 10 ? " " : "") + data.length + ": " + brief;
         if (verbose.length() > 0) {
             conn.tooltip = verbose.toString();
         }
@@ -420,7 +425,8 @@ public class RadioLogger extends VisPlugin {
                   analyzer.analyzePacket(packet, brief, verbose);
                   /* continue another round if more bytes left */
                   analyze = packet.hasMoreData();
-                  brief.append("|");
+                  brief.append('|');
+                  verbose.append("<p>");
                   break;
               }
           }
