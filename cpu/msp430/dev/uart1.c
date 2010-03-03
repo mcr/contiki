@@ -89,6 +89,9 @@ uart1_writeb(unsigned char c)
      the first byte into the UART. */
   if(transmitting == 0) {
     transmitting = 1;
+
+    /* Loop until the transmission buffer is available. */
+    while((IFG2 & UTXIFG1) == 0);
     TXBUF1 = ringbuf_get(&txbuf);
   }
 
