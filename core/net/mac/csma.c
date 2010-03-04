@@ -230,7 +230,7 @@ send_packet(mac_callback_t sent, void *ptr)
 static void
 send_packet(mac_callback_t sent, void *ptr)
 {
-  NETSTACK_RDC.send(NULL, NULL);
+  NETSTACK_RDC.send(sent, ptr);
 }
 #endif /* CSMA_CONF_REXMIT */
 /*---------------------------------------------------------------------------*/
