@@ -188,4 +188,11 @@ public abstract class AbstractApplicationMote extends AbstractWakeupMote impleme
     return "AppMote " + getID();
   }
 
+  /* These methods should be overriden to allow application motes receiving serial data */
+  public void writeArray(byte[] s) {
+  }
+  public void writeByte(byte b) {
+  }
+  public void writeString(String s) {
+  }
 }
