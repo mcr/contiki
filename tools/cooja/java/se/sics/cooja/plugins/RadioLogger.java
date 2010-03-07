@@ -421,8 +421,7 @@ public class RadioLogger extends VisPlugin {
           analyze = false;
           for (int i = 0; i < analyzers.size(); i++) {
               PacketAnalyzer analyzer = analyzers.get(i);
-              if (analyzer.matchPacket(packet)) {
-                  analyzer.analyzePacket(packet, brief, verbose);
+              if (analyzer.matchPacket(packet) && analyzer.analyzePacket(packet, brief, verbose)) {
                   /* continue another round if more bytes left */
                   analyze = packet.hasMoreData();
                   brief.append('|');
