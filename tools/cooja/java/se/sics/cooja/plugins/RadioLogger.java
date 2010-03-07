@@ -77,6 +77,7 @@ import se.sics.cooja.Simulation;
 import se.sics.cooja.VisPlugin;
 import se.sics.cooja.dialogs.TableColumnAdjuster;
 import se.sics.cooja.interfaces.Radio;
+import se.sics.cooja.plugins.analyzers.ICMPv6Analyzer;
 import se.sics.cooja.plugins.analyzers.IEEE802154Analyzer;
 import se.sics.cooja.plugins.analyzers.IPHCPacketAnalyzer;
 import se.sics.cooja.plugins.analyzers.PacketAnalyzer;
@@ -128,6 +129,7 @@ public class RadioLogger extends VisPlugin {
     ArrayList<PacketAnalyzer> lowpanAnalyzers = new ArrayList<PacketAnalyzer>();
     lowpanAnalyzers.add(new IEEE802154Analyzer());
     lowpanAnalyzers.add(new IPHCPacketAnalyzer());
+    lowpanAnalyzers.add(new ICMPv6Analyzer());
     model = new AbstractTableModel() {
 
       private static final long serialVersionUID = 1692207305977527004L;
@@ -421,11 +423,17 @@ public class RadioLogger extends VisPlugin {
           analyze = false;
           for (int i = 0; i < analyzers.size(); i++) {
               PacketAnalyzer analyzer = analyzers.get(i);
-              if (analyzer.matchPacket(packet) && analyzer.analyzePacket(packet, brief, verbose)) {
-                  /* continue another round if more bytes left */
-                  analyze = packet.hasMoreData();
-                  brief.append('|');
-                  verbose.append("<p>");
+              if (analyzer.matchPacket(packet)) {
+                  int res = analyzer.analyzePacket(packet, brief, verbose);
+                  if (res != analyzer.ANALYSIS_OK_FINAL) {
+                      /* continue another round if more bytes left */
+                      analyze = packet.hasMoreData();
+                      brief.append('|');
+                      verbose.append("<p>");
+                  } else {
+                      /* this was the final - no analyzable payload possible here... */
+                      return brief.length() > 0;
+                  }
                   break;
               }
           }
