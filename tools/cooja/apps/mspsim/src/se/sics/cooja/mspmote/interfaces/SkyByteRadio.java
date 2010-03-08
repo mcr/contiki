@@ -329,8 +329,13 @@ public class SkyByteRadio extends Radio implements CustomDataRadio {
     return cc2420.getRSSI();
   }
 
-  public void setCurrentSignalStrength(double signalStrength) {
-    cc2420.setRSSI((int) signalStrength);
+  public void setCurrentSignalStrength(final double signalStrength) {
+    getMote().getSimulation().scheduleEvent(new MspMoteTimeEvent(mote, 0) {
+      public void execute(long t) {
+        super.execute(t);
+        cc2420.setRSSI((int) signalStrength);
+      }        
+    }, mote.getSimulation().getSimulationTime());
   }
 
   public JPanel getInterfaceVisualizer() {
