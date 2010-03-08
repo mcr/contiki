@@ -198,16 +198,33 @@ public class MspMoteID extends MoteID {
       if (moteMem.variableExists("rseed")) {
         moteMem.setIntValueOf("rseed", (int) (mote.getSimulation().getRandomSeed() + newID));
       }
-      moteMem.setIntValueOf("TOS_NODE_ID", newID);
-      moteMem.setIntValueOf("ActiveMessageAddressC$addr", newID);
+
+      if (moteMem.variableExists("TOS_NODE_ID")) {
+        moteMem.setIntValueOf("TOS_NODE_ID", newID);
+      }
+      if (moteMem.variableExists("ActiveMessageAddressC__addr")) {
+        moteMem.setIntValueOf("ActiveMessageAddressC__addr", newID);
+      }
+      if (moteMem.variableExists("ActiveMessageAddressC$addr")) {
+        moteMem.setIntValueOf("ActiveMessageAddressC$addr", newID);
+      }
+      
       setChanged();
       notifyObservers();
       return;
     }
 
     if (location == ID_LOCATION.VARIABLE_TOS_NODE_ID) {
-      moteMem.setIntValueOf("TOS_NODE_ID", newID);
-      moteMem.setIntValueOf("ActiveMessageAddressC$addr", newID);
+      if (moteMem.variableExists("TOS_NODE_ID")) {
+        moteMem.setIntValueOf("TOS_NODE_ID", newID);
+      }
+      if (moteMem.variableExists("ActiveMessageAddressC__addr")) {
+        moteMem.setIntValueOf("ActiveMessageAddressC__addr", newID);
+      }
+      if (moteMem.variableExists("ActiveMessageAddressC$addr")) {
+        moteMem.setIntValueOf("ActiveMessageAddressC$addr", newID);
+      }
+      
       setChanged();
       notifyObservers();
       return;
