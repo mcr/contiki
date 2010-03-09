@@ -34,7 +34,7 @@
 
 #include "contiki.h"
 
-// Simulation interface structure
+/* Simulation interface structure */
 struct simInterface {
   void         (* doActionsBeforeTick) (void);
   void         (* doActionsAfterTick)  (void);
@@ -48,8 +48,6 @@ extern clock_time_t simCurrentTime;
 
 // Variable that when set to != 0, stops the mote from falling asleep next tick
 extern char simDontFallAsleep;
-extern char simNoYield;
-extern char simDoReceiverCallback;
 
 // Definition for registering an interface
 #define SIM_INTERFACE(name, doActionsBeforeTick, doActionsAfterTick) \
