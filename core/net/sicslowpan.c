@@ -46,6 +46,17 @@
  * \author Joakim Eriksson <joakime@sics.se>
  */
 
+/**
+ * FOR HC-06 COMPLIANCE TODO:
+ * -Add compression options to UDP, currently only supports
+ *  both ports compressed or both ports elided
+ *  
+ * -Fix traffic class/flow/ECN/DCSP processing, doesn't work
+ *  per hc-06
+ *  
+ * -Add stateless multicast option
+ */
+
 #include <string.h>
 
 #include "contiki.h"
@@ -882,9 +893,8 @@ uncompress_hdr_hc06(u16_t ip_len) {
 
   /* Next header processing - continued */
   if((RIME_IPHC_BUF[0] & SICSLOWPAN_IPHC_NH_C)) {
-    /* TODO: check if this is correct in hc-06 */
     /* The next header is compressed, NHC is following */
-    if((*hc06_ptr & 0xFC) == SICSLOWPAN_NHC_UDP_ID) {
+    if((*hc06_ptr & SICSLOWPAN_NDC_UDP_MASK) == SICSLOWPAN_NHC_UDP_ID) {
       SICSLOWPAN_IP_BUF->proto = UIP_PROTO_UDP;
       switch(*hc06_ptr) {
       case SICSLOWPAN_NHC_UDP_C:
