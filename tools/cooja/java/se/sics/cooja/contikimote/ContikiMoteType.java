@@ -141,15 +141,15 @@ public class ContikiMoteType implements MoteType {
     }
 
     public String getSourceFilenamesString() {
-      if (this == UIPV6) {
-        return " init-net-uipv6.c";
-      }
-      if (this == UIP) {
-        return " init-net-uip.c";
-      }
-      if (this == RIME) {
-        return " init-net-rime.c";
-      }
+//      if (this == UIPV6) {
+//        return " init-net-uipv6.c";
+//      }
+//      if (this == UIP) {
+//        return " init-net-uip.c";
+//      }
+//      if (this == RIME) {
+//        return " init-net-rime.c";
+//      }
       return " ";
     }
 
@@ -169,7 +169,7 @@ public class ContikiMoteType implements MoteType {
     }
   }
 
-  private final String[] sensors = { "button_sensor", "pir_sensor", "radio_sensor", "vib_sensor" };
+  private final String[] sensors = { "button_sensor", "pir_sensor", "vib_sensor" };
 
   private String identifier = null;
   private String description = null;

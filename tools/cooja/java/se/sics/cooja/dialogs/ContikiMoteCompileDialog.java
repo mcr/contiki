@@ -223,7 +223,7 @@ public class ContikiMoteCompileDialog extends AbstractCompileDialog {
     symbolsCheckBox.setToolTipText("Not implemented");*/
 
     /* Communication stack */
-    JLabel label = new JLabel("Communication stack");
+    /*JLabel label = new JLabel("Communication stack");
     label.setPreferredSize(LABEL_DIMENSION);
     commStackComboBox.setSelectedItem(((ContikiMoteType)moteType).getCommunicationStack());
     commStackComboBox.setEnabled(true);
@@ -240,12 +240,12 @@ public class ContikiMoteCompileDialog extends AbstractCompileDialog {
     commStackBox.setAlignmentX(Component.LEFT_ALIGNMENT);
     commStackBox.add(label);
     commStackBox.add(Box.createHorizontalGlue());
-    commStackBox.add(commStackComboBox);
+    commStackBox.add(commStackComboBox);*/
 
     /* Advanced tab */
     Box box = Box.createVerticalBox();
     /*box.add(symbolsCheckBox);*/
-    box.add(commStackBox);
+    /*box.add(commStackBox);*/
     box.add(Box.createVerticalGlue());
     parent.addTab("Advanced", null, new JScrollPane(box), "Advanced Contiki Mote Type settings");
   }
