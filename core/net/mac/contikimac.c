@@ -776,7 +776,9 @@ static void
 qsend_packet(mac_callback_t sent, void *ptr)
 {
   int ret = send_packet(sent, ptr);
-  mac_call_sent_callback(sent, ptr, ret, 1);
+  if(ret != MAC_TX_DEFERRED) {
+    mac_call_sent_callback(sent, ptr, ret, 1);
+  }
 }
 /*---------------------------------------------------------------------------*/
 static void
