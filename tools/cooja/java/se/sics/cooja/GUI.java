@@ -1874,8 +1874,11 @@ public class GUI extends Observable {
         logger.fatal("Could not find valid plugin type annotation in class " + newPluginClass);
         return false;
       }
+    } catch (NoClassDefFoundError e) {
+      logger.fatal("No plugin class: " + newPluginClass + ": " + e.getMessage());
+      return false;
     } catch (NoSuchMethodException e) {
-      logger.fatal("Could not find valid constructor in class " + newPluginClass + ": " + e);
+      logger.fatal("No plugin class constructor: " + newPluginClass + ": " + e.getMessage());
       return false;
     }
 
