@@ -54,7 +54,7 @@
 
 #include <string.h>
 
-#define DEBUG 1
+#define DEBUG 0
 #if DEBUG
 #include <stdio.h>
 #define PRINTF(...) printf(__VA_ARGS__)
@@ -111,7 +111,7 @@ packet_sent(void *ptr, int status, int num_transmissions)
 
   sent = q->sent;
   cptr = q->cptr;
-  num_tx = q->transmissions - q->collisions - q->deferrals;
+  num_tx = q->transmissions;
   
   if(status == MAC_TX_COLLISION ||
      status == MAC_TX_NOACK) {
