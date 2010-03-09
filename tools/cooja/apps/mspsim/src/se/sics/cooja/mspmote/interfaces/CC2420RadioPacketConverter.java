@@ -30,9 +30,6 @@
  */
 
 package se.sics.cooja.mspmote.interfaces;
-
-import org.apache.log4j.Logger;
-
 import se.sics.cooja.ConvertedRadioPacket;
 import se.sics.cooja.RadioPacket;
 import se.sics.mspsim.util.CCITT_CRC;
@@ -44,7 +41,6 @@ import se.sics.mspsim.util.CCITT_CRC;
  * @author Fredrik Osterlind
  */
 public class CC2420RadioPacketConverter {
-  private static Logger logger = Logger.getLogger(CC2420RadioPacketConverter.class);
 
   public static final boolean WITH_PREAMBLE = true;
   public static final boolean WITH_SYNCH = true;
@@ -90,7 +86,6 @@ public class CC2420RadioPacketConverter {
     }
     cc2420Data[pos++] = len;
     cc2420CRC.setCRC(0);
-    cc2420CRC.add(len); /* TODO Should length be included in CRC? */
 
     /* 4 byte X-MAC: not implemented */
     if (WITH_XMAC) {
