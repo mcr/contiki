@@ -3082,6 +3082,12 @@ public class GUI extends Observable {
     /* Look and Feel: Nimbus */
     setLookAndFeel();
 
+    /* Warn at no JAVA_HOME */
+    String javaHome = System.getenv().get("JAVA_HOME");
+    if (javaHome == null || javaHome.equals("")) {
+      logger.warn("JAVA_HOME environment variable not set, Contiki motes (OS-level) may not compile");
+    }
+
     // Parse general command arguments
     for (String element : args) {
       if (element.startsWith("-contiki=")) {
