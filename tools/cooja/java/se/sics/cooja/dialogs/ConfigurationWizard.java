@@ -69,7 +69,6 @@ import se.sics.cooja.GUI;
 import se.sics.cooja.SectionMoteMemory;
 import se.sics.cooja.MoteType.MoteTypeCreationException;
 import se.sics.cooja.contikimote.ContikiMoteType;
-import se.sics.cooja.contikimote.ContikiMoteType.CommunicationStack;
 
 /* TODO Test common section */
 
@@ -602,8 +601,7 @@ public class ConfigurationWizard extends JDialog {
           new File(cLibraryName + ".c"),
           new File(cLibraryName + ContikiMoteType.mapSuffix),
           new File(cLibraryName + ContikiMoteType.librarySuffix),
-          new File(cLibraryName + ContikiMoteType.dependSuffix),
-          CommunicationStack.RIME
+          new File(cLibraryName + ContikiMoteType.dependSuffix)
       );
     } catch (Exception e) {
       testOutput.addMessage("### Error: Compiler environment failed", MessageList.ERROR);
