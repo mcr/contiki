@@ -407,6 +407,17 @@ public class ExecuteJAR {
           "Error when writing external tools configuration: " + e2.getMessage()   
       ).initCause(e2);
     }
+    
+    /* Delete existing META-INF dir */
+    File metaInfDir = new File(workingDir, "META-INF");
+    if (metaInfDir.exists() && metaInfDir.isDirectory()) {
+      if (!deleteDirectory(metaInfDir)) {
+        if (!deleteDirectory(metaInfDir)) {
+          deleteDirectory(metaInfDir);
+        }
+      }
+
+    }
 
     /* Prepare JAR manifest */
     File manifestFile = new File(workingDir, "manifest.tmp");
