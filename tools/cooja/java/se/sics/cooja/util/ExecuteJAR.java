@@ -446,7 +446,7 @@ public class ExecuteJAR {
     MessageList errors = new MessageList();
     try {
       CompileContiki.compile(
-          "jar cfm " + outputFile.getAbsolutePath() + " manifest.tmp *",
+          "jar cfm " + outputFile.getAbsolutePath() + " manifest.tmp .",
           null,
           outputFile,
           workingDir,
