@@ -65,6 +65,7 @@
 #include "net/uip-netif.h"
 #include "net/rime.h"
 #include "net/sicslowpan.h"
+#include "net/neighbor-info.h"
 #include "net/netstack.h"
 
 #define DEBUG 0
