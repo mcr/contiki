@@ -289,6 +289,17 @@ addr_context_lookup_by_number(u8_t number) {
   return NULL;
 }
 /*--------------------------------------------------------------------*/
+ /**
++ * Callback function for the MAC packet sent callback
++ */
+static void
+packet_sent(void *ptr, int status, int transmissions)
+{
+#if SICSLOWPAN_CONF_NEIGHBOR_INFO
+  neighbor_info_packet_sent(status, transmissions);
+#endif /* SICSLOWPAN_CONF_NEIGHBOR_INFO */
+}
+/*--------------------------------------------------------------------*/
 /**
  * \brief Compress IP/UDP header
  *
@@ -1268,9 +1279,9 @@ send_packet(rimeaddr_t *dest)
    */
   packetbuf_set_addr(PACKETBUF_ADDR_RECEIVER, dest);
 
-  /* XXX we should provide a callback function that is called when the
-     packet is sent. For now, we just supply a NULL pointer. */
-  NETSTACK_MAC.send(NULL, NULL);
+  /* Provide a callback function to receive the result of
+     a packet transmission. */
+  NETSTACK_MAC.send(&packet_sent, NULL);
 
   /* If we are sending multiple packets in a row, we need to let the
      watchdog know that we are still alive. */
@@ -1636,6 +1647,10 @@ input(void)
       PRINTF("\n");
     }
 #endif
+
+#if SICSLOWPAN_CONF_NEIGHBOR_INFO
+    neighbor_info_packet_received();
+#endif /* SICSLOWPAN_CONF_NEIGHBOR_INFO */
 
     tcpip_input();
 #if SICSLOWPAN_CONF_FRAG
