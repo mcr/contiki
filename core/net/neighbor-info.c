@@ -37,8 +37,8 @@
  * \author Nicolas Tsiftes <nvt@sics.se>
  */
 
-#include "neighbor-info.h"
-#include "neighbor-attr.h"
+#include "net/neighbor-info.h"
+#include "net/neighbor-attr.h"
 
 #define DEBUG 0
 #if DEBUG
