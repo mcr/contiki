@@ -109,7 +109,12 @@ create(void)
      \todo For phase 1 the addresses are all long. We'll need a mechanism
      in the rime attributes to tell the mac to use long or short for phase 2.
   */
-  params.fcf.src_addr_mode = FRAME802154_LONGADDRMODE;
+  if(sizeof(rimeaddr_t) == 2) {
+    /* Use short address mode if rimeaddr size is short. */
+    params.fcf.src_addr_mode = FRAME802154_SHORTADDRMODE;
+  } else {
+    params.fcf.src_addr_mode = FRAME802154_LONGADDRMODE;
+  }
   params.dest_pid = mac_dst_pan_id;
 
   /*
@@ -125,7 +130,12 @@ create(void)
   } else {
     rimeaddr_copy((rimeaddr_t *)&params.dest_addr,
                   packetbuf_addr(PACKETBUF_ADDR_RECEIVER));
-    params.fcf.dest_addr_mode = FRAME802154_LONGADDRMODE;
+    /* Use short address mode if rimeaddr size is small */
+    if(sizeof(rimeaddr_t) == 2) {
+      params.fcf.dest_addr_mode = FRAME802154_SHORTADDRMODE;
+    } else {
+      params.fcf.dest_addr_mode = FRAME802154_LONGADDRMODE;
+    }
   }
 
   /* Set the source PAN ID to the global variable. */
