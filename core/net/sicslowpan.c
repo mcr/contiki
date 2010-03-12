@@ -289,9 +289,9 @@ addr_context_lookup_by_number(u8_t number) {
   return NULL;
 }
 /*--------------------------------------------------------------------*/
- /**
-+ * Callback function for the MAC packet sent callback
-+ */
+/**
+ * Callback function for the MAC packet sent callback
+ */
 static void
 packet_sent(void *ptr, int status, int transmissions)
 {
