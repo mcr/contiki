@@ -628,7 +628,7 @@ collect_open(struct collect_conn *tc, uint16_t channels,
   neighbor_discovery_open(&tc->neighbor_discovery_conn, channels,
 			  CLOCK_SECOND * 8,
 			  CLOCK_SECOND * 32,
-			  (unsigned)(CLOCK_SECOND * 600UL),
+			 (CLOCK_SECOND * 600UL),
 			  &neighbor_discovery_callbacks);
   neighbor_discovery_start(&tc->neighbor_discovery_conn, tc->rtmetric);
 #else /* !COLLECT_ANNOUNCEMENTS */
