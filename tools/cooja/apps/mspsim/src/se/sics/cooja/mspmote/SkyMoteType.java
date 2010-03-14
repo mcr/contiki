@@ -67,6 +67,7 @@ import se.sics.cooja.mspmote.interfaces.SkyCoffeeFilesystem;
 import se.sics.cooja.mspmote.interfaces.SkyFlash;
 import se.sics.cooja.mspmote.interfaces.SkyLED;
 import se.sics.cooja.mspmote.interfaces.MspSerial;
+import se.sics.cooja.mspmote.interfaces.SkyTemperature;
 
 @ClassDescription("Sky Mote Type")
 @AbstractionLevelDescription("Emulated level")
@@ -218,7 +219,8 @@ public class SkyMoteType extends MspMoteType {
         SkyByteRadio.class,
         MspSerial.class,
         SkyLED.class,
-        MspDebugOutput.class /* EXPERIMENTAL: Enable me for COOJA_DEBUG(..) */
+        MspDebugOutput.class, /* EXPERIMENTAL: Enable me for COOJA_DEBUG(..) */
+        SkyTemperature.class
     };
   }
 
