@@ -115,7 +115,7 @@ public class MoteInterfaceViewer extends VisPlugin implements HasQuickHelp, Mote
         interfacePanel.removeAll();
         String interfaceDescription = (String) selectInterfaceComboBox.getSelectedItem();
         selectedMoteInterface = null;
-        Vector<MoteInterface> intfs = mote.getInterfaces().getInterfaces();
+        Collection<MoteInterface> intfs = mote.getInterfaces().getInterfaces();
         for (MoteInterface intf : intfs) {
           if (GUI.getDescriptionOf(intf).equals(interfaceDescription)) {
             selectedMoteInterface = intf;
