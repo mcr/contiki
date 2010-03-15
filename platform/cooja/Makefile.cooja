@@ -73,7 +73,7 @@ CONTIKI_CPU=$(CONTIKI)/cpu/x86
 
 ### Compiler arguments
 CC = gcc
-CFLAGSNO = $(EXTRA_CC_ARGS) -Wall -g -I/usr/local/include
+CFLAGSNO = $(EXTRA_CC_ARGS) -Wall -g -I/usr/local/include -DCLASSNAME=$(CLASSNAME)
 CFLAGS   = $(CFLAGSNO)
 
 ifdef UIP_CONF_IPV6
@@ -111,6 +111,9 @@ endif ## REDEF_PRINTF
 $(CONTIKI_APP).cooja: $(JNILIB)
 	cp $(JNILIB) $@
 	rm $(CONTIKI_APP_OBJ)
+
+mtype%.o: contiki-cooja-main.o
+	mv contiki-cooja-main.o $@
 
 symbols.c:
 	# Create initial symbol files if not existing
