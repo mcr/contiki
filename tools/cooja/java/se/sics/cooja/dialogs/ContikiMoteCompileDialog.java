@@ -164,7 +164,8 @@ public class ContikiMoteCompileDialog extends AbstractCompileDialog {
           source,
           ((ContikiMoteType)moteType).mapFile,
           ((ContikiMoteType)moteType).libFile,
-          ((ContikiMoteType)moteType).archiveFile
+          ((ContikiMoteType)moteType).archiveFile,
+          ((ContikiMoteType)moteType).javaClassName
       );
       String[] envOneDimension = new String[env.length];
       for (int i=0; i < env.length; i++) {
@@ -361,7 +362,7 @@ public class ContikiMoteCompileDialog extends AbstractCompileDialog {
     ((ContikiMoteType)moteType).setCoreInterfaces(coreInterfaces);
 
     /* Generate Contiki main source */
-    try {
+    /*try {
       CompileContiki.generateSourceFile(
           ((ContikiMoteType)moteType).libSource,
           ((ContikiMoteType)moteType).javaClassName,
@@ -370,7 +371,7 @@ public class ContikiMoteCompileDialog extends AbstractCompileDialog {
       );
     } catch (Exception e) {
       throw (Exception) new Exception("Error when generating Contiki main source").initCause(e);
-    }
+    }*/
 
     /* Start compiling */
     super.compileContiki();

@@ -273,7 +273,7 @@ public class ContikiMoteType implements MoteType {
       mapFile.delete();
 
       /* Generate Contiki main source */
-      try {
+      /*try {
         CompileContiki.generateSourceFile(
             libSource,
             javaClassName,
@@ -283,7 +283,7 @@ public class ContikiMoteType implements MoteType {
       } catch (Exception e) {
         throw (MoteTypeCreationException) new MoteTypeCreationException(
         "Error when generating Contiki main source").initCause(e);
-      }
+      }*/
 
       /* Prepare compiler environment */
       String[][] env;
@@ -293,7 +293,8 @@ public class ContikiMoteType implements MoteType {
             contikiApp,
             mapFile,
             libFile,
-            archiveFile);
+            archiveFile,
+            javaClassName);
       } catch (Exception e) {
         throw (MoteTypeCreationException) new MoteTypeCreationException(
             "Error when creating environment: " + e.getMessage()).initCause(e);

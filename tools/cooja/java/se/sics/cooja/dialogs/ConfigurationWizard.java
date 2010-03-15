@@ -601,7 +601,8 @@ public class ConfigurationWizard extends JDialog {
           new File(cLibraryName + ".c"),
           new File(cLibraryName + ContikiMoteType.mapSuffix),
           new File(cLibraryName + ContikiMoteType.librarySuffix),
-          new File(cLibraryName + ContikiMoteType.dependSuffix)
+          new File(cLibraryName + ContikiMoteType.dependSuffix),
+          javaLibraryName
       );
     } catch (Exception e) {
       testOutput.addMessage("### Error: Compiler environment failed", MessageList.ERROR);
