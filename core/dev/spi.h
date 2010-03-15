@@ -230,11 +230,24 @@ void spi_init(void);
 		  SPI_DISABLE();\
 	 } while (0)
 
+#define FASTSPI_WRITE_RAM_BE(p,a,c,n)                              \
+  do {                                                             \
+    SPI_ENABLE();                                                  \
+    FASTSPI_TX(0x80 | (a & 0x7F));                                 \
+    FASTSPI_TX((a >> 1) & 0xC0);                                   \
+    for (n = (c); n > 0; n--) {                                    \
+      FASTSPI_TX(((uint8_t *)(p))[n - 1]);                         \
+    }                                                              \
+    SPI_WAITFORTx_ENDED();                                         \
+    SPI_DISABLE();                                                 \
+  } while (0)
+
 #define FASTSPI_READ_RAM_LE(p,a,c,n)\
 	 do {\
 		  SPI_ENABLE();\
 		  FASTSPI_TX(0x80 | (a & 0x7F));\
 		  FASTSPI_TX(((a >> 1) & 0xC0) | 0x20);\
+                  SPI_WAITFORTx_ENDED();\
 		  SPI_RXBUF;\
 		  for (n = 0; n < (c); n++) {\
 				FASTSPI_RX(((u8_t*)(p))[n]);\
