@@ -89,6 +89,7 @@ void stimer_reset(struct stimer *t);
 void stimer_restart(struct stimer *t);
 int stimer_expired(struct stimer *t);
 unsigned long stimer_remaining(struct stimer *t);
+unsigned long stimer_elapsed(struct stimer *t);
 
 
 #endif /* __STIMER_H__ */
