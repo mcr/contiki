@@ -33,7 +33,7 @@
 
 /**
  * \file
- *         AES encryption/decryption functions.
+ *         AES encryption functions.
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
@@ -56,16 +56,16 @@
 
 /*---------------------------------------------------------------------------*/
 void
-cc2420_aes_set_key(uint8_t *key, int index)
+cc2420_aes_set_key(const uint8_t *key, int index)
 {
   uint16_t f;
   
   switch(index) {
   case 0:
-    FASTSPI_WRITE_RAM_LE(key, CC2420RAM_KEY0, KEYLEN, f);
+    FASTSPI_WRITE_RAM_BE(key, CC2420RAM_KEY0, KEYLEN, f);
     break;
   case 1:
-    FASTSPI_WRITE_RAM_LE(key, CC2420RAM_KEY1, KEYLEN, f);
+    FASTSPI_WRITE_RAM_BE(key, CC2420RAM_KEY1, KEYLEN, f);
     break;
   }
 }
@@ -75,11 +75,16 @@ static void
 cipher16(uint8_t *data, int len)
 {
   uint16_t f;
+  uint8_t status;
 
   len = MIN(len, MAX_DATALEN);
   
   FASTSPI_WRITE_RAM_LE(data, CC2420RAM_SABUF, len, f);
   FASTSPI_STROBE(CC2420_SAES);
+  /* Wait for the encryption to finish */
+  do {
+    FASTSPI_UPD_STATUS(status);
+  } while(status & BV(CC2420_ENC_BUSY));
   FASTSPI_READ_RAM_LE(data, CC2420RAM_SABUF, len, f);
 }
 /*---------------------------------------------------------------------------*/
