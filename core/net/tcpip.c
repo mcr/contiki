@@ -73,6 +73,10 @@ void uip_log(char *msg);
 #define UIP_IP_BUF ((struct uip_ip_hdr *)&uip_buf[UIP_LLH_LEN])
 #define UIP_TCP_BUF ((struct uip_tcpip_hdr *)&uip_buf[UIP_LLH_LEN])
 
+#ifdef UIP_FALLBACK_INTERFACE
+external struct uip_fallback_interface UIP_FALLBACK_INTERFACE;
+#endif
+
 process_event_t tcpip_event;
 #if UIP_CONF_ICMP6
 process_event_t tcpip_icmp6_event;
@@ -568,7 +572,11 @@ tcpip_ipv6_output(void)
       locrt = uip_ds6_route_lookup(&UIP_IP_BUF->destipaddr);
       if(locrt == NULL) {
         if((nexthop = uip_ds6_defrt_choose()) == NULL) {
+#ifdef UIP_FALLBACK_INTERFACE
+	  UIP_FALLBACK_INTERFACE.output();
+#else
           PRINTF("tcpip_ipv6_output: Destination off-link but no route\n");
+#endif
           uip_len = 0;
           return;
         }
@@ -741,7 +749,9 @@ PROCESS_THREAD(tcpip_process, ev, data)
   etimer_set(&periodic, CLOCK_SECOND / 2);
 
   uip_init();
-  
+#ifdef UIP_FALLBACK_INTERFACE
+  UIP_FALLBACK_INTERFACE.init();
+#endif
   while(1) {
     PROCESS_YIELD();
     eventhandler(ev, data);
