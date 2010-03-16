@@ -74,7 +74,7 @@ void uip_log(char *msg);
 #define UIP_TCP_BUF ((struct uip_tcpip_hdr *)&uip_buf[UIP_LLH_LEN])
 
 #ifdef UIP_FALLBACK_INTERFACE
-external struct uip_fallback_interface UIP_FALLBACK_INTERFACE;
+extern struct uip_fallback_interface UIP_FALLBACK_INTERFACE;
 #endif
 
 process_event_t tcpip_event;
