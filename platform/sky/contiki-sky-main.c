@@ -331,10 +331,6 @@ main(int argc, char **argv)
   }
 
   
-#if UIP_CONF_ROUTER
-  //uip_router_register(&UIP_ROUTER_MODULE);
-  UIP_ROUTER_MODULE.activate();
-#endif /* UIP_CONF_ROUTER */
 #else /* WITH_UIP6 */
 
   NETSTACK_RDC.init();
