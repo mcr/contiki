@@ -48,8 +48,6 @@
 
 #include <stdint.h>
 
-#include "uart1.h"
-
 typedef int32_t s32_t;
 
 /*

@@ -50,14 +50,8 @@
 #include "net/rime/rimeaddr.h"
 #include "net/rime/ctimer.h"
 
-/* mc1322x */
-#include "isr.h"
-#include "gpio.h"
-#include "uart1.h"
-#include "maca.h"
-#include "nvm.h"
-#include "kbi.h"
-
+/* from libmc1322x */
+#include "mc1322x.h"
 
 #ifndef RIMEADDR_NVM
 #define RIMEADDR_NVM 0x1E000
@@ -78,12 +72,12 @@ void
 init_lowlevel(void)
 {
 	/* led direction init */
-	set_bit(reg32(GPIO_PAD_DIR0),8);
-	set_bit(reg32(GPIO_PAD_DIR0),9);
-	set_bit(reg32(GPIO_PAD_DIR0),10);
-	set_bit(reg32(GPIO_PAD_DIR0),23);
-	set_bit(reg32(GPIO_PAD_DIR0),24);
-	set_bit(reg32(GPIO_PAD_DIR0),25);
+	set_bit(*GPIO_PAD_DIR0,8);
+	set_bit(*GPIO_PAD_DIR0,9);
+	set_bit(*GPIO_PAD_DIR0,10);
+	set_bit(*GPIO_PAD_DIR0,23);
+	set_bit(*GPIO_PAD_DIR0,24);
+	set_bit(*GPIO_PAD_DIR0,25);
 
 	/* button init */
 	/* set up kbi */
@@ -120,9 +114,9 @@ init_lowlevel(void)
 #endif
 
 #if USE_32KHZ_XTAL
-	reg32(CRM_RTC_TIMEOUT) = 32768 * 10; 
+	*CRM_RTC_TIMEOUT = 32768 * 10; 
 #else 
-	reg32(CRM_RTC_TIMEOUT) = cal_rtc_secs * 10;
+	*CRM_RTC_TIMEOUT = cal_rtc_secs * 10;
 #endif
 
 	/* XXX debug */
@@ -135,14 +129,14 @@ init_lowlevel(void)
 void
 set_rimeaddr(rimeaddr_t *addr) 
 {
-	nvm_type_t type=0;
-	nvm_err_t err;	
+	nvmType_t type=0;
+	nvmErr_t err;	
 	volatile uint8_t buf[RIMEADDR_NBYTES];
 	int i;
 
-	err = nvm_detect(NVM_INTERFACE_INTERNAL, &type);
+	err = nvm_detect(gNvmInternalInterface_c, &type);
 
-	err = nvm_read(NVM_INTERFACE_INTERNAL, type, (uint8_t *)buf, RIMEADDR_NVM, RIMEADDR_NBYTES);
+	err = nvm_read(gNvmInternalInterface_c, type, (uint8_t *)buf, RIMEADDR_NVM, RIMEADDR_NBYTES);
 
 	rimeaddr_copy(addr,&rimeaddr_null);
 
@@ -161,7 +155,8 @@ set_rimeaddr(rimeaddr_t *addr)
 //PROCINIT(&etimer_process, &blink8_process,&blink9_process,&blink10_process);
 //PROCINIT(&etimer_process, &blink8_process, &blink9_process, &blink10_process);
 //PROCINIT(&etimer_process, &ctimer_process, &maca_process, &blink8_process,&blink9_process,&blink10_process);
-PROCINIT(&etimer_process, &ctimer_process, &maca_process);
+//PROCINIT(&etimer_process, &ctimer_process, &maca_process);
+PROCINIT(&etimer_process, &ctimer_process);
 //AUTOSTART_PROCESSES(&etimer_process, &blink8_process, &blink9_process, &blink10_process);
 //AUTOSTART_PROCESSES(&hello_world_process);
 
@@ -187,7 +182,7 @@ main(void)
 //	rime_init(nullmac_init(&maca_driver));
 //	rime_init(xmac_init(&maca_driver));
 //	rime_init(lpp_init(&maca_driver));
-	rime_init(sicslowmac_init(&maca_driver));
+//	rime_init(sicslowmac_init(&maca_driver));
 
 #if !(USE_32KHZ_XTAL)
 	PRINTF("setting xmac to use calibrated rtc value\n");
