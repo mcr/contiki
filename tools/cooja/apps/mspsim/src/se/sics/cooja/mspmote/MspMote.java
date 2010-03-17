@@ -258,6 +258,7 @@ public abstract class MspMote extends AbstractEmulatedMote implements Mote, Watc
 
     this.myCpu = node.getCPU();
     this.myCpu.setMonitorExec(true);
+    this.myCpu.setTrace(0); /* TODO Enable */
 
     int[] memory = myCpu.getMemory();
     logger.info("Loading ELF from: " + fileELF.getAbsolutePath());
@@ -307,13 +308,12 @@ public abstract class MspMote extends AbstractEmulatedMote implements Mote, Watc
    */
   protected abstract boolean initEmulator(File ELFFile);
 
-  public boolean tick(long simTime) {
-    throw new RuntimeException("Obsolete method");
-  }
-
   private long lastExecute = -1; /* Last time mote executed */
   private long nextExecute;
-  public void execute(long t) {
+  public void execute(long time) {
+    execute(time, EXECUTE_DURATION_US);
+  }
+  public void execute(long t, int duration) {
     /* Wait until mote boots */
     if (myMoteInterfaceHandler.getClock().getTime() < 0) {
       scheduleNextWakeup(t - myMoteInterfaceHandler.getClock().getTime());
@@ -322,7 +322,8 @@ public abstract class MspMote extends AbstractEmulatedMote implements Mote, Watc
 
     if (stopNextInstruction) {
       stopNextInstruction = false;
-      sendCLICommandAndPrint("trace 1000");
+      /*sendCLICommandAndPrint("trace 1000");*/ /* TODO Enable */
+      scheduleNextWakeup(t);
       throw new RuntimeException("MSPSim requested simulation stop");
     } 
 
@@ -334,29 +335,25 @@ public abstract class MspMote extends AbstractEmulatedMote implements Mote, Watc
       throw new RuntimeException("Bad event ordering: " + lastExecute + " < " + t);
     }
 
-    /* TODO Poll mote interfaces? */
-
     /* Execute MSPSim-based mote */
     /* TODO Try-catch overhead */
     try {
       nextExecute = 
-        t + EXECUTE_DURATION_US + 
-        myCpu.stepMicros(t - lastExecute, EXECUTE_DURATION_US);
+        t + duration + 
+        myCpu.stepMicros(t - lastExecute, duration);
       lastExecute = t;
     } catch (EmulationException e) {
       if (e.getMessage().startsWith("Bad operation")) {
         /* Experimental: print program counter history */
-        sendCLICommandAndPrint("trace 1000");
+        /*sendCLICommandAndPrint("trace 1000");*/ /* TODO Enable */
       }
 
       throw (RuntimeException)
       new RuntimeException("Emulated exception: " + e.getMessage()).initCause(e);
     }
 
-    /* TODO Poll mote interfaces? */
-
     /* Schedule wakeup */
-    if (nextExecute <= t) {
+    if (nextExecute < t) {
       throw new RuntimeException(t + ": MSPSim requested early wakeup: " + nextExecute);
     }
     /*logger.debug(t + ": Schedule next wakeup at " + nextExecute);*/
@@ -396,7 +393,6 @@ public abstract class MspMote extends AbstractEmulatedMote implements Mote, Watc
   
   public boolean setConfigXML(Simulation simulation, Collection<Element> configXML, boolean visAvailable) {
     setSimulation(simulation);
-    initEmulator(myMoteType.getContikiFirmwareFile());
     myMoteInterfaceHandler = createMoteInterfaceHandler();
 
     /* Create watchpoint container */

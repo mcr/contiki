@@ -45,10 +45,10 @@ PROCESS_THREAD(test_sensors_process, ev, data)
   PROCESS_BEGIN();
 
   printf("Starting sensors test process\n");
-  button_sensor.activate();
-  pir_sensor.activate();
-  vib_sensor.activate();
-  radio_sensor.activate();
+  button_sensor.configure(SENSORS_ACTIVE, 1);
+  pir_sensor.configure(SENSORS_ACTIVE, 1);
+  vib_sensor.configure(SENSORS_ACTIVE, 1);
+  radio_sensor.configure(SENSORS_ACTIVE, 1);
 
   while(1) {
     PROCESS_WAIT_EVENT();

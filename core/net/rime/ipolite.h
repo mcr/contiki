@@ -138,6 +138,8 @@ struct ipolite_conn {
   struct ctimer t;
   struct queuebuf *q;
   uint8_t hdrsize;
+  uint8_t maxdups;
+  uint8_t dups;
 };
 
 
@@ -145,6 +147,7 @@ struct ipolite_conn {
  * \brief      Open an ipolite connection
  * \param c    A pointer to a struct ipolite_conn.
  * \param channel The channel number to be used for this connection
+ * \param maxdups The number of duplicates that are allowed to be heard before suppressing
  * \param cb   A pointer to the callbacks used for this connection
  *
  *             This function opens an ipolite connection on the
@@ -152,7 +155,7 @@ struct ipolite_conn {
  *             packet is received, or when another event occurs on the
  *             connection (see \ref "struct ipolite_callbacks").
  */
-void ipolite_open(struct ipolite_conn *c, uint16_t channel,
+void ipolite_open(struct ipolite_conn *c, uint16_t channel, uint8_t maxdups,
 		  const struct ipolite_callbacks *cb);
 
 /**

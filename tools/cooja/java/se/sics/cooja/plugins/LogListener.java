@@ -96,10 +96,12 @@ public class LogListener extends VisPlugin {
   private final static int COLUMN_TIME = 0;
   private final static int COLUMN_FROM = 1;
   private final static int COLUMN_DATA = 2;
+  private final static int COLUMN_CONCAT = 3;
   private final static String[] COLUMN_NAMES = {
     "Time",
     "Mote",
-    "Message"
+    "Message",
+    "#"
   };
 
   private final JTable logTable;
@@ -108,7 +110,6 @@ public class LogListener extends VisPlugin {
 
   private Simulation simulation;
 
-  private String filterText = "";
   private JTextField filterTextField = null;
   private Color filterTextFieldBackground;
 
@@ -143,6 +144,8 @@ public class LogListener extends VisPlugin {
           return log.strID;
         } else if (col == COLUMN_DATA) {
           return log.ev.getMessage();
+        } else if (col == COLUMN_CONCAT) {
+          return log.strID + ' ' + log.ev.getMessage();
         }
         return null;
       }
@@ -174,6 +177,7 @@ public class LogListener extends VisPlugin {
         return super.getToolTipText(e);
       }
     };
+    logTable.getColumnModel().removeColumn(logTable.getColumnModel().getColumn(COLUMN_CONCAT));
     logTable.setFillsViewportHeight(true);
     logTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
     logTable.setFont(new Font("Monospaced", Font.PLAIN, 12));
@@ -275,8 +279,8 @@ public class LogListener extends VisPlugin {
     filterPanel.add(filterTextField);
     filterTextField.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        filterText = filterTextField.getText();
-        setFilter(filterText);
+        String str = filterTextField.getText();
+        setFilter(str);
         /* Autoscroll */
         logTable.scrollRectToVisible(new Rectangle(0, logTable.getHeight() - 2, 1, logTable.getHeight()));
       }
@@ -293,15 +297,8 @@ public class LogListener extends VisPlugin {
   }
 
   private void updateTitle() {
-    int observing = simulation.getEventCentral().getLogOutputObservationsCount();
-    int tot = simulation.getMotesCount();
-    if (observing == tot) {
-      setTitle("Log Listener (listening on all " + simulation.getMotesCount() + " motes)");
-    } else {
-      setTitle("Log Listener (listening on " 
-          + simulation.getEventCentral().getLogOutputObservationsCount() + "/"
-          + simulation.getMotesCount() + " motes)");
-    }
+    setTitle("Log Listener (listening on " 
+        + simulation.getEventCentral().getLogOutputObservationsCount() + " log interfaces)");
   }
 
   public void closePlugin() {
@@ -314,7 +311,7 @@ public class LogListener extends VisPlugin {
     Element element;
 
     element = new Element("filter");
-    element.setText(filterText);
+    element.setText(filterTextField.getText());
     config.add(element);
 
     return config;
@@ -324,11 +321,10 @@ public class LogListener extends VisPlugin {
     for (Element element : configXML) {
       String name = element.getName();
       if ("filter".equals(name)) {
-        filterText = element.getText();
+        final String str = element.getText();
         EventQueue.invokeLater(new Runnable() {
           public void run() {
-            filterTextField.setText(filterText);
-            setFilter(filterText);
+            setFilter(str);
           }
         });
       }
@@ -337,10 +333,16 @@ public class LogListener extends VisPlugin {
     return true;
   }
 
-  private void setFilter(String text) {
+  public String getFilter() {
+    return filterTextField.getText();
+  }
+
+  public void setFilter(String str) {
+    filterTextField.setText(str);
+
     try {
-      if (text != null && text.length() > 0) {
-        logFilter.setRowFilter(RowFilter.regexFilter(text, 1, 2));
+      if (str != null && str.length() > 0) {
+        logFilter.setRowFilter(RowFilter.regexFilter(str, COLUMN_FROM, COLUMN_DATA, COLUMN_CONCAT));
       } else {
         logFilter.setRowFilter(null);
       }
@@ -385,6 +387,8 @@ public class LogListener extends VisPlugin {
   }
 
   private Action saveAction = new AbstractAction("Save to file") {
+    private static final long serialVersionUID = -4140706275748686944L;
+
     public void actionPerformed(ActionEvent e) {
       JFileChooser fc = new JFileChooser();
       int returnVal = fc.showSaveDialog(GUI.getTopParentContainer());
@@ -429,6 +433,8 @@ public class LogListener extends VisPlugin {
   };
 
   private Action timeLineAction = new AbstractAction("to Timeline") {
+    private static final long serialVersionUID = -6358463434933029699L;
+
     public void actionPerformed(ActionEvent e) {
       TimeLine plugin = (TimeLine) simulation.getGUI().getStartedPlugin(TimeLine.class.getName());
       if (plugin == null) {
@@ -448,6 +454,8 @@ public class LogListener extends VisPlugin {
   };
 
   private Action radioLoggerAction = new AbstractAction("to Radio Logger") {
+    private static final long serialVersionUID = -3041714249257346688L;
+
     public void actionPerformed(ActionEvent e) {
       RadioLogger plugin = (RadioLogger) simulation.getGUI().getStartedPlugin(RadioLogger.class.getName());
       if (plugin == null) {
@@ -468,6 +476,8 @@ public class LogListener extends VisPlugin {
 
   
   private Action clearAction = new AbstractAction("Clear") {
+    private static final long serialVersionUID = -2115620313183440224L;
+
     public void actionPerformed(ActionEvent e) {
       int size = logs.size();
       if (size > 0) {
@@ -478,6 +488,8 @@ public class LogListener extends VisPlugin {
   };
 
   private Action copyAction = new AbstractAction("Copy selected") {
+    private static final long serialVersionUID = -8433490108577001803L;
+
     public void actionPerformed(ActionEvent e) {
       Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 
@@ -499,6 +511,8 @@ public class LogListener extends VisPlugin {
   };
 
   private Action copyAllAction = new AbstractAction("Copy all") {
+    private static final long serialVersionUID = -5038884975254178373L;
+
     public void actionPerformed(ActionEvent e) {
       Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 

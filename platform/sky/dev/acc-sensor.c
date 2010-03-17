@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006, Swedish Institute of Computer Science.
+ * Copyright (c) 2010, Swedish Institute of Computer Science.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,24 +38,10 @@
 
 #include "dev/acc-sensor.h"
 #include <io.h>
-#include "dev/irq.h"
-
-#include <stdio.h>
 
 const struct sensors_sensor acc_sensor;
+static uint8_t active;
 
-/*---------------------------------------------------------------------------*/
-static void
-init(void)
-{
-
-}
-/*---------------------------------------------------------------------------*/
-static int
-irq(void)
-{
-  return 0;
-}
 /*---------------------------------------------------------------------------*/
 static void
 activate(void)
@@ -87,6 +73,7 @@ activate(void)
   ADC12CTL0 |= ENC | ADC12SC;
 
   /*  Irq_adc12_activate(&acc_sensor, 6, (INCH_11 + SREF_1)); */
+  active = 1;
 }
 /*---------------------------------------------------------------------------*/
 static void
@@ -94,15 +81,10 @@ deactivate(void)
 {
   /*  irq_adc12_deactivate(&acc_sensor, 6);
       acc_value = 0;*/
+  active = 0;
 }
 /*---------------------------------------------------------------------------*/
 static int
-active(void)
-{
-  return 0; /* irq_adc12_active(6);*/
-}
-/*---------------------------------------------------------------------------*/
-static unsigned int
 value(int type)
 {
   switch(type) {
@@ -119,17 +101,29 @@ value(int type)
 }
 /*---------------------------------------------------------------------------*/
 static int
-configure(int type, void *c)
+configure(int type, int c)
 {
+  switch(type) {
+  case SENSORS_ACTIVE:
+    if (c) {
+      activate();
+    } else {
+      deactivate();
+    }
+  }
   return 0;
 }
 /*---------------------------------------------------------------------------*/
-static void *
+static int
 status(int type)
 {
-  return NULL;
+  switch (type) {
+  case SENSORS_ACTIVE:
+  case SENSORS_READY:
+    return active;
+  }
+  return 0;
 }
 /*---------------------------------------------------------------------------*/
 SENSORS_SENSOR(acc_sensor, ACC_SENSOR,
-	       init, irq, activate, deactivate, active,
 	       value, configure, status);

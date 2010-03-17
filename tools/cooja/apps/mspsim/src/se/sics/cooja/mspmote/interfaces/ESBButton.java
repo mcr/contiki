@@ -77,10 +77,6 @@ public class ESBButton extends Button {
     return false;
   }
 
-  public double energyConsumption() {
-    return 0;
-  }
-
   public JPanel getInterfaceVisualizer() {
     JPanel panel = new JPanel();
     final JButton clickButton = new JButton("Click button");

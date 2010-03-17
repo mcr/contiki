@@ -57,7 +57,8 @@ import se.sics.cooja.TimeEvent;
 import se.sics.cooja.interfaces.CustomDataRadio;
 import se.sics.cooja.interfaces.Position;
 import se.sics.cooja.interfaces.Radio;
-import se.sics.cooja.mspmote.ESBMote;
+import se.sics.cooja.mspmote.MspMote;
+import se.sics.cooja.mspmote.MspMoteTimeEvent;
 import se.sics.mspsim.core.IOUnit;
 import se.sics.mspsim.core.USART;
 import se.sics.mspsim.core.USARTListener;
@@ -79,7 +80,10 @@ public class TR1001Radio extends Radio implements USARTListener, CustomDataRadio
    */
   public static final long DELAY_BETWEEN_BYTES = 416;
 
-  private ESBMote mote;
+  /* The data used when transmission is interfered */
+  private static final Byte CORRUPTED_DATA = (byte) 0xff;
+
+  private MspMote mote;
 
   private boolean isTransmitting = false;
   private boolean isReceiving = false;
@@ -107,7 +111,7 @@ public class TR1001Radio extends Radio implements USARTListener, CustomDataRadio
    * @param mote Mote
    */
   public TR1001Radio(Mote mote) {
-    this.mote = (ESBMote) mote;
+    this.mote = (MspMote) mote;
 
     /* Start listening to CPU's USART */
     IOUnit usart = this.mote.getCPU().getIOUnit("USART 0");
@@ -139,8 +143,10 @@ public class TR1001Radio extends Radio implements USARTListener, CustomDataRadio
     }
 
     /* Feed incoming bytes to radio "slowly" via time events */
-    TimeEvent receiveCrosslevelDataEvent = new MoteTimeEvent(mote, 0) {
+    TimeEvent receiveCrosslevelDataEvent = new MspMoteTimeEvent(mote, 0) {
       public void execute(long t) {
+        super.execute(t);
+        
         /* Stop receiving data when buffer is empty */
         if (data.isEmpty()) {
           return;
@@ -174,19 +180,23 @@ public class TR1001Radio extends Radio implements USARTListener, CustomDataRadio
       logger.fatal("Received bad custom data: " + data);
       return;
     }
-    receivedByte = (Byte) data;
 
-    mote.requestImmediateWakeup();
-    if (radioUSART.isReceiveFlagCleared()) {
-      /*logger.info("----- TR1001 RECEIVED BYTE -----");*/
-      if (isInterfered) {
-        radioUSART.byteReceived(0xFF); /* Corrupted data */
-      } else {
-        radioUSART.byteReceived(receivedByte);
+    receivedByte = isInterfered ? CORRUPTED_DATA : (Byte) data;
+
+    final byte finalByte = receivedByte;
+    mote.getSimulation().scheduleEvent(new MspMoteTimeEvent(mote, 0) {
+      public void execute(long t) {
+        super.execute(t);
+
+        if (radioUSART.isReceiveFlagCleared()) {
+          /*logger.info("----- TR1001 RECEIVED BYTE -----");*/
+          radioUSART.byteReceived(finalByte);
+        } else {
+          logger.warn(mote.getSimulation().getSimulationTime() + ": ----- TR1001 RECEIVED BYTE DROPPED -----");
+        }
+        mote.requestImmediateWakeup();
       }
-    } else {
-      logger.warn(mote.getSimulation().getSimulationTime() + ": ----- TR1001 RECEIVED BYTE DROPPED -----");
-    }
+    }, mote.getSimulation().getSimulationTime());
   }
 
   /* USART listener support */
@@ -423,10 +433,6 @@ public class TR1001Radio extends Radio implements USARTListener, CustomDataRadio
     }
 
     this.deleteObserver(observer);
-  }
-
-  public double energyConsumption() {
-    return 0;
   }
 
   public Collection<Element> getConfigXML() {

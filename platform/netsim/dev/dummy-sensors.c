@@ -42,51 +42,23 @@
 #include "dev/temperature-sensor.h"
 
 /*---------------------------------------------------------------------------*/
-static void
-init(void)
-{
-}
-/*---------------------------------------------------------------------------*/
 static int
-irq(void)
-{
-  return 0;
-}
-/*---------------------------------------------------------------------------*/
-static void
-activate(void)
-{
-}
-/*---------------------------------------------------------------------------*/
-static void
-deactivate(void)
-{
-}
-/*---------------------------------------------------------------------------*/
-static int
-active(void)
-{
-  return 0;
-}
-/*---------------------------------------------------------------------------*/
-static unsigned int
 value(int type)
 {
   return 0;
 }
 /*---------------------------------------------------------------------------*/
 static int
-configure(int type, void *c)
+configure(int type, int c)
 {
   return 0;
 }
 /*---------------------------------------------------------------------------*/
-static void *
+static int
 status(int type)
 {
-  return NULL;
+  return 0;
 }
 /*---------------------------------------------------------------------------*/
 SENSORS_SENSOR(temperature_sensor, TEMPERATURE_SENSOR,
-	       init, irq, activate, deactivate, active,
 	       value, configure, status);

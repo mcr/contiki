@@ -153,10 +153,6 @@ public class ContikiClock extends Clock implements ContikiMoteInterface, PolledB
   public void releaseInterfaceVisualizer(JPanel panel) {
   }
 
-  public double energyConsumption() {
-    return 0.0;
-  }
-
   public Collection<Element> getConfigXML() {
     return null;
   }

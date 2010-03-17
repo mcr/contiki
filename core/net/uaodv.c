@@ -75,18 +75,8 @@ last_known_seqno(uip_ipaddr_t *host)
   return 0;
 }
 
-#ifndef NOINIT
-#ifdef __GNUC__
-#define NOINIT __attribute__((section(".noinit")))
-#else /* __GNUC__ */
-#define NOINIT
-#endif /* __GNUC__ */
-#endif
 
-/*
- * When possible, keep state across reboots.
- */
-NOINIT static u32_t rreq_id, my_hseqno;	/* In host byte order! */
+static u32_t rreq_id, my_hseqno;	/* In host byte order! */
 
 #define NFWCACHE 16
 

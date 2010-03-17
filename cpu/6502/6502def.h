@@ -66,10 +66,14 @@ typedef unsigned short uip_stats_t;
 #define UIP_ARCH_ADD32  1
 #define UIP_ARCH_CHKSUM 1
 
+#define LOADER_CONF_ARCH "lib/unload.h"
+
 #if WITH_LOGGING
 #define LOG_CONF_ENABLED 1
+#define UIP_CONF_LOGGING 1
 #else /* WITH_LOGGING */
 #define LOG_CONF_ENABLED 0
+#define UIP_CONF_LOGGING 0
 #endif /* WITH_LOGGING */
 
 #if MTU_SIZE
@@ -97,11 +101,9 @@ typedef unsigned short uip_stats_t;
 #endif /* WITH_CLIENT */
 
 #if WITH_DNS
-#define UIP_CONF_UDP           1
-#define UIP_CONF_UDP_CHECKSUMS 1
+#define UIP_CONF_UDP 1
 #else /* WITH_DNS */
-#define UIP_CONF_UDP           0
-#define UIP_CONF_UDP_CHECKSUMS 0
+#define UIP_CONF_UDP 0
 #endif /* WITH_DNS */
 
 #define CTK_CONF_WIDGET_FLAGS 0

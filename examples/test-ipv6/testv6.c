@@ -38,7 +38,7 @@ static const struct uip_eth_addr ethaddr = {{0x00,0x06,0x98,0x01,0x02,0x29}};
 
 /*---------------------------------------------------------------------------*/
 PROCESS(test_process, "Test");
-PROCESS(test_tcpip_process, "tcp/ip test");
+PROCESS(test_tcpip_process, "TCP/IP test");
 AUTOSTART_PROCESSES(&test_process, &test_tcpip_process, &webserver_nogui_process);
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(test_process, ev, data)

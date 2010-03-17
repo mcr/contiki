@@ -61,7 +61,7 @@ static char initialized;
 #endif
 
 /*---------------------------------------------------------------------------*/
-PROCESS(ctimer_process, "ctimer process");
+PROCESS(ctimer_process, "Ctimer process");
 PROCESS_THREAD(ctimer_process, ev, data)
 {
   struct ctimer *c;

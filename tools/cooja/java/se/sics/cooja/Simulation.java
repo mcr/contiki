@@ -282,6 +282,8 @@ public class Simulation extends Observable implements Runnable {
       if (!GUI.isVisualized()) {
 	/* Quit simulator if in test mode */
 	System.exit(1);
+      } else {
+        GUI.showErrorDialog(GUI.getTopParentContainer(), "Simulation error", e, false);
       }
     }
     isRunning = false;
@@ -313,7 +315,26 @@ public class Simulation extends Observable implements Runnable {
   }
 
   /**
+   * Stops simulation and conditionally blocks until stopped.
+   * 
+   * @param block Blocks if true
+   * 
+   * @see #stopSimulation()
+   */
+  public void stopSimulation(boolean block) {
+    if (!isRunning()) {
+      return;
+    }
+    if (block) {
+      stopSimulation();
+    } else {
+      stopSimulation = true;
+    }
+  }
+
+  /**
    * Stops this simulation (notifies observers).
+   * Method blocks until simulation has stopped.
    */
   public void stopSimulation() {
     if (isRunning()) {
@@ -482,7 +503,6 @@ public class Simulation extends Observable implements Runnable {
     // Motes
     for (Mote mote : motes) {
       element = new Element("mote");
-      element.setText(mote.getClass().getName());
 
       Collection<Element> moteConfig = mote.getConfigXML();
       if (moteConfig == null) {
@@ -528,14 +548,19 @@ public class Simulation extends Observable implements Runnable {
 
       // Random seed
       if (element.getName().equals("randomseed")) {
-        if (manualRandomSeed != null) {
-          setRandomSeed(manualRandomSeed);
-        } else if (element.getText().equals("generated")) {
+        long newSeed;
+        
+        if (element.getText().equals("generated")) {
           randomSeedGenerated = true;
-          setRandomSeed(new Random().nextLong());
+          newSeed = new Random().nextLong();
         } else {
-          setRandomSeed(Long.parseLong(element.getText()));
+          newSeed = Long.parseLong(element.getText());
         }
+        if (manualRandomSeed != null) {
+          newSeed = manualRandomSeed;
+        }
+
+        setRandomSeed(newSeed);
       }
 
       // Max mote startup delay
@@ -615,28 +640,24 @@ public class Simulation extends Observable implements Runnable {
 
       /* Mote */
       if (element.getName().equals("mote")) {
-        String moteClassName = element.getText().trim();
-        
+
         /* Read mote type identifier */
         MoteType moteType = null;
         for (Element subElement: (Collection<Element>) element.getChildren()) {
           if (subElement.getName().equals("motetype_identifier")) {
             moteType = getMoteType(subElement.getText());
+            if (moteType == null) {
+              throw new Exception("No mote type '" + subElement.getText() + "' for mote");
+            }
             break;
           }
         }
         if (moteType == null) {
-          throw new Exception("No mote type for mote: " + moteClassName);
+          throw new Exception("No mote type specified for mote");
         }
-        
-        /* Load mote class using mote type's class loader */
-        Class<? extends Mote> moteClass = myGUI.tryLoadClass(moteType, Mote.class, moteClassName);
-        if (moteClass == null) {
-          throw new Exception("Could not load mote class: " + element.getText().trim());
-        }
-
-        Mote mote = moteClass.getConstructor((Class[]) null).newInstance((Object[]) null);
-        mote.setType(moteType);
+    
+        /* Create mote using mote type */
+        Mote mote = moteType.generateMote(this);
         if (mote.setConfigXML(this, element.getChildren(), visAvailable)) {
           addMote(mote);
         } else {
@@ -928,7 +949,7 @@ public class Simulation extends Observable implements Runnable {
    * Returns current simulation time rounded to milliseconds.
    * 
    * @see #getSimulationTime()
-   * @return
+   * @return Time rounded to milliseconds
    */
   public long getSimulationTimeMillis() {
     return currentSimulationTime / MILLISECOND;

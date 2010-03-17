@@ -48,9 +48,9 @@
 #include "net/rime.h"
 #include "dev/cc2420.h"
 #include "dev/leds.h"
-#include "dev/light.h"
-#include "dev/sht11.h"
+#include "dev/light-sensor.h"
 #include "dev/battery-sensor.h"
+#include "dev/sht11-sensor.h"
 
 #include "lib/checkpoint.h"
 
@@ -172,16 +172,20 @@ PROCESS_THREAD(shell_sky_alldata_process, ev, data)
   struct neighbor *n;
   PROCESS_BEGIN();
 
+
+  SENSORS_ACTIVATE(light_sensor);
+  SENSORS_ACTIVATE(battery_sensor);
+  SENSORS_ACTIVATE(sht11_sensor);
   
   msg.len = sizeof(struct sky_alldata_msg) / sizeof(uint16_t);
   msg.clock = clock_time();
   msg.timesynch_time = timesynch_time();
-  msg.light1 = sensors_light1();
-  msg.light2 = sensors_light2();
-  msg.temp = sht11_temp();
-  msg.humidity = sht11_humidity();
+  msg.light1 = light_sensor.value(LIGHT_SENSOR_PHOTOSYNTHETIC);
+  msg.light2 = light_sensor.value(LIGHT_SENSOR_TOTAL_SOLAR);
+  msg.temp = sht11_sensor.value(SHT11_SENSOR_TEMP);
+  msg.humidity = sht11_sensor.value(SHT11_SENSOR_HUMIDITY);
   msg.rssi = do_rssi();
-
+  
   energest_flush();
   
   cpu = energest_type_time(ENERGEST_TYPE_CPU) - last_cpu;
@@ -218,8 +222,14 @@ PROCESS_THREAD(shell_sky_alldata_process, ev, data)
     msg.best_neighbor_rtmetric = n->rtmetric;
   }
   msg.battery_voltage = battery_sensor.value(0);
-  msg.battery_indicator = sht11_sreg() & 0x40? 1: 0;
+  msg.battery_indicator = sht11_sensor.value(SHT11_SENSOR_BATTERY_INDICATOR);
   shell_output(&sky_alldata_command, &msg, sizeof(msg), "", 0);
+
+
+  SENSORS_DEACTIVATE(light_sensor);
+  SENSORS_DEACTIVATE(battery_sensor);
+  SENSORS_DEACTIVATE(sht11_sensor);
+
   PROCESS_END();
 }
 /*---------------------------------------------------------------------------*/
@@ -229,18 +239,20 @@ PROCESS_THREAD(sky_shell_process, ev, data)
 
   serial_shell_init();
   shell_blink_init();
-  shell_file_init();
-  shell_coffee_init();
+  /*  shell_file_init();
+      shell_coffee_init();*/
   /*  shell_download_init();
       shell_rime_sendcmd_init();*/
   shell_ps_init();
   shell_reboot_init();
   shell_rime_init();
   shell_rime_netcmd_init();
-  /*  shell_rime_ping_init();*/
-/*  shell_rime_debug_init(); */
-/*  shell_rime_sniff_init();*/
+  shell_rime_ping_init();
+  shell_rime_debug_init();
+  shell_rime_sniff_init();
   shell_sky_init();
+  shell_power_init();
+  shell_base64_init();
   shell_text_init();
   shell_time_init();
   /*  shell_checkpoint_init();*/

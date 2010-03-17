@@ -45,29 +45,6 @@ init(void)
   radio_sensor_signal = 0;
 }
 /*---------------------------------------------------------------------------*/
-static int
-irq(void)
-{
-  return 0;
-}
-/*---------------------------------------------------------------------------*/
-static void
-activate(void)
-{
-}
-/*---------------------------------------------------------------------------*/
-static void
-deactivate(void)
-{
-  radio_sensor_signal = 0;
-}
-/*---------------------------------------------------------------------------*/
-static int
-active(void)
-{
-  return 1;
-}
-/*---------------------------------------------------------------------------*/
 static unsigned int
 value(int type)
 {
@@ -87,5 +64,4 @@ status(int type)
 }
 /*---------------------------------------------------------------------------*/
 SENSORS_SENSOR(radio_sensor, RADIO_SENSOR,
-	       init, irq, activate, deactivate, active,
 	       value, configure, status);

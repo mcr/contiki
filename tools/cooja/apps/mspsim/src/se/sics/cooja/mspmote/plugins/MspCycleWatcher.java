@@ -46,7 +46,7 @@ import se.sics.mspsim.core.MSP430;
 
 @ClassDescription("Msp Cycle Watcher")
 @PluginType(PluginType.MOTE_PLUGIN)
-public class MspCycleWatcher extends VisPlugin {
+public class MspCycleWatcher extends VisPlugin implements MotePlugin {
   private static Logger logger = Logger.getLogger(MspStackWatcher.class);
   private MspMote mspMote;
   private MSP430 cpu;
@@ -120,5 +120,8 @@ public class MspCycleWatcher extends VisPlugin {
     simulation.deleteObserver(simObserver);
   }
 
+  public Mote getMote() {
+    return mspMote;
+  }
 
 }

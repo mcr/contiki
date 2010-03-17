@@ -65,12 +65,10 @@ PROCESS_THREAD(fft_process, ev, data)
   PROCESS_BEGIN();
 
   etimer_set(&etimer, CLOCK_SECOND * 4);
-  button_sensor.activate();
+  button_sensor.configure(SENSORS_ACTIVE, 1);
   /* start and configure the sound sensor for sampling */
-  sound_sensor.activate();
-  sound_sensor.configure(SOUND_SET_BUFFER_PTR, fftBuf);
-  sound_sensor.configure(SOUND_SET_BUFFER_SIZE, (void *) FFT_TEST_SIZE);
-  sound_sensor.configure(SOUND_SET_DIV, (void *) 1);
+  sound_sensor.configure(SENSORS_ACTIVE, 1);
+  sound_sensor_set_buffer(fftBuf, FFT_TEST_SIZE, 1);
   while(1) {
 
     PROCESS_WAIT_EVENT();
@@ -124,7 +122,7 @@ PROCESS_THREAD(fft_process, ev, data)
     } else if(ev == PROCESS_EVENT_TIMER) {
       if(data == &etimer) {
 	if(on) {
-	  sound_sensor.configure(SOUND_START_SAMPLE, NULL);
+	  sound_sensor_start_sample();
 	  leds_off(LEDS_ALL);
 	}
 	etimer_set(&etimer, CLOCK_SECOND / 2);

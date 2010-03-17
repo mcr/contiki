@@ -33,16 +33,27 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
-import javax.swing.*;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
 import org.jdom.Element;
 
-import se.sics.cooja.*;
-import se.sics.cooja.MoteType.MoteTypeCreationException;
+import se.sics.cooja.ClassDescription;
+import se.sics.cooja.GUI;
+import se.sics.cooja.Mote;
+import se.sics.cooja.MoteInterface;
+import se.sics.cooja.MoteType;
+import se.sics.cooja.ProjectConfig;
+import se.sics.cooja.Simulation;
+import se.sics.cooja.interfaces.ApplicationLED;
 import se.sics.cooja.interfaces.ApplicationRadio;
+import se.sics.cooja.interfaces.ApplicationSerialPort;
 import se.sics.cooja.interfaces.MoteID;
 import se.sics.cooja.interfaces.Position;
 
@@ -55,8 +66,13 @@ public abstract class AbstractApplicationMoteType implements MoteType {
   private String identifier = null;
   private String description = null;
 
-  private final Class<? extends MoteInterface>[] moteInterfaceClasses =
-    new Class[] { SimpleMoteID.class, Position.class, ApplicationRadio.class };
+  private final Class<? extends MoteInterface>[] moteInterfaceClasses = new Class[] { 
+      SimpleMoteID.class,
+      Position.class,
+      ApplicationSerialPort.class,
+      ApplicationRadio.class,
+      ApplicationLED.class
+  };
 
   public AbstractApplicationMoteType() {
     super();
@@ -212,8 +228,6 @@ public abstract class AbstractApplicationMoteType implements MoteType {
         identifier = element.getText();
       } else if (name.equals("description")) {
         description = element.getText();
-      } else {
-        logger.fatal("Unrecognized entry: " + name);
       }
     }
 
@@ -230,9 +244,6 @@ public abstract class AbstractApplicationMoteType implements MoteType {
     }
     public void setMoteID(int newID) {
       this.id = newID;
-    }
-    public double energyConsumption() {
-      return 0;
     }
     public JPanel getInterfaceVisualizer() {
       return null;

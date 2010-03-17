@@ -42,7 +42,7 @@
 #ifndef __CTSRTS_SENSOR_H__
 #define __CTSRTS_SENSOR_H__
 
-#include "contiki-esb.h"
+#include "lib/sensors.h"
 
 extern const struct sensors_sensor ctsrts_sensor;
 

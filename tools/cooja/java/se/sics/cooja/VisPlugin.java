@@ -54,7 +54,6 @@ import se.sics.cooja.plugins.SimControl;
  * @author Fredrik Osterlind
  */
 public abstract class VisPlugin extends JInternalFrame implements Plugin {
-  private Object tag = null;
 
   public VisPlugin(String title, final GUI gui) {
     this(title, gui, true);
@@ -75,8 +74,9 @@ public abstract class VisPlugin extends JInternalFrame implements Plugin {
       }
       public void internalFrameActivated(InternalFrameEvent e) {
         /* Highlight mote in COOJA */
-        if (VisPlugin.this.tag != null && tag instanceof Mote) {
-          gui.signalMoteHighlight((Mote) tag);
+        Plugin p = VisPlugin.this;
+        if (p instanceof MotePlugin) {
+          gui.signalMoteHighlight(((MotePlugin)p).getMote());
         }
         gui.loadQuickHelp(VisPlugin.this);
       }
@@ -94,14 +94,6 @@ public abstract class VisPlugin extends JInternalFrame implements Plugin {
 
   public boolean setConfigXML(Collection<Element> configXML, boolean visAvailable) {
     return false;
-  }
-
-  public void tagWithObject(Object tag) {
-    this.tag = tag;
-  }
-
-  public Object getTag() {
-    return tag;
   }
 
   public void startPlugin() {

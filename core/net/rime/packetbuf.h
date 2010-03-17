@@ -86,6 +86,19 @@
 void packetbuf_clear(void);
 
 /**
+ * \brief      Clear and reset the header of the packetbuf
+ *
+ *             This function clears the header of the packetbuf and
+ *             resets all the internal state pointers pertaining to
+ *             the header (header size, header pointer, but not
+ *             external data pointer). It is used before after sending
+ *             a packet in the packetbuf, to be able to reuse the
+ *             packet buffer for a later retransmission.
+ *
+ */
+void packetbuf_clear_hdr(void);
+
+/**
  * \brief      Get a pointer to the data in the packetbuf
  * \return     Pointer to the packetbuf data
  *

@@ -188,7 +188,13 @@ rrep_packet_received(struct unicast_conn *uc, const rimeaddr_t *from)
     rrep_pending = 0;
     ctimer_stop(&c->t);
     if(c->cb->new_route) {
-      c->cb->new_route(c, &msg->originator);
+      rimeaddr_t originator;
+
+      /* If the callback modifies the packet, the originator address
+         will be lost. Therefore, we need to copy it into a local
+         variable before calling the callback. */
+      rimeaddr_copy(&originator, &msg->originator);
+      c->cb->new_route(c, &originator);
     }
 
   } else {

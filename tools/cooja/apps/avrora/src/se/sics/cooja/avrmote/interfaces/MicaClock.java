@@ -84,10 +84,6 @@ public class MicaClock extends Clock {
   public void releaseInterfaceVisualizer(JPanel panel) {
   }
 
-  public double energyConsumption() {
-    return 0;
-  }
-
   public Collection<Element> getConfigXML() {
     return null;
   }

@@ -200,10 +200,10 @@ struct uip_conn *uip_conn;
 static u8_t c;
 #endif
 
-#if UIP_ACTIVE_OPEN
+#if UIP_ACTIVE_OPEN || UIP_UDP
 /* Keeps track of the last port used for a new connection. */
 static u16_t lastport;
-#endif /* UIP_ACTIVE_OPEN */
+#endif /* UIP_ACTIVE_OPEN || UIP_UDP */
 /** @} */
 
 /*---------------------------------------------------------------------------*/
@@ -417,9 +417,9 @@ uip_init(void)
   }
 #endif /* UIP_TCP */
 
-#if UIP_ACTIVE_OPEN
+#if UIP_ACTIVE_OPEN || UIP_UDP
   lastport = 1024;
-#endif /* UIP_ACTIVE_OPEN */
+#endif /* UIP_ACTIVE_OPEN || UIP_UDP */
 
 #if UIP_UDP
   for(c = 0; c < UIP_UDP_CONNS; ++c) {
@@ -1358,6 +1358,12 @@ uip_process(u8_t flag)
   uip_len = uip_len - UIP_IPUDPH_LEN;
 #endif /* UIP_UDP_CHECKSUMS */
 
+  /* Make sure that the UDP destination port number is not zero. */
+  if(UIP_UDP_BUF->destport == 0) {
+    UIP_LOG("udp: zero port.");
+    goto drop;
+  }
+
   /* Demultiplex this UDP packet between the UDP "connections". */
   for(uip_udp_conn = &uip_udp_conns[0];
       uip_udp_conn < &uip_udp_conns[UIP_UDP_CONNS];
@@ -1443,7 +1449,13 @@ uip_process(u8_t flag)
     UIP_LOG("tcp: bad checksum.");
     goto drop;
   }
-  
+
+  /* Make sure that the TCP port number is not zero. */
+  if(UIP_TCP_BUF->destport == 0 || UIP_TCP_BUF->srcport == 0) {
+    UIP_LOG("tcp: zero port.");
+    goto drop;
+  }
+
   /* Demultiplex this segment. */
   /* First check any active connections. */
   for(uip_connr = &uip_conns[0]; uip_connr <= &uip_conns[UIP_CONNS - 1];
@@ -1666,14 +1678,22 @@ uip_process(u8_t flag)
 
   /* First, check if the sequence number of the incoming packet is
      what we're expecting next. If not, we send out an ACK with the
-     correct numbers in. */
-  if(!(((uip_connr->tcpstateflags & UIP_TS_MASK) == UIP_SYN_SENT) &&
-       ((UIP_TCP_BUF->flags & TCP_CTL) == (TCP_SYN | TCP_ACK)))) {
+     correct numbers in, unless we are in the SYN_RCVD state and
+     receive a SYN, in which case we should retransmit our SYNACK
+     (which is done futher down). */
+  if(!((((uip_connr->tcpstateflags & UIP_TS_MASK) == UIP_SYN_SENT) &&
+	((UIP_TCP_BUF->flags & TCP_CTL) == (TCP_SYN | TCP_ACK))) ||
+       (((uip_connr->tcpstateflags & UIP_TS_MASK) == UIP_SYN_RCVD) &&
+	((UIP_TCP_BUF->flags & TCP_CTL) == TCP_SYN)))) {
     if((uip_len > 0 || ((UIP_TCP_BUF->flags & (TCP_SYN | TCP_FIN)) != 0)) &&
        (UIP_TCP_BUF->seqno[0] != uip_connr->rcv_nxt[0] ||
         UIP_TCP_BUF->seqno[1] != uip_connr->rcv_nxt[1] ||
         UIP_TCP_BUF->seqno[2] != uip_connr->rcv_nxt[2] ||
         UIP_TCP_BUF->seqno[3] != uip_connr->rcv_nxt[3])) {
+
+      if(UIP_TCP_BUF->flags & TCP_SYN) {
+        goto tcp_send_synack;
+      }
       goto tcp_send_ack;
     }
   }
@@ -1743,6 +1763,10 @@ uip_process(u8_t flag)
         uip_slen = 0;
         UIP_APPCALL();
         goto appsend;
+      }
+      /* We need to retransmit the SYNACK */
+      if((UIP_TCP_BUF->flags & TCP_CTL) == TCP_SYN) {
+	goto tcp_send_synack;
       }
       goto drop;
 #if UIP_ACTIVE_OPEN

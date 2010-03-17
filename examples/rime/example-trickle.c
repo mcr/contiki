@@ -65,8 +65,8 @@ PROCESS_THREAD(example_trickle_process, ev, data)
   PROCESS_EXITHANDLER(trickle_close(&trickle);)
   PROCESS_BEGIN();
 
-  trickle_open(&trickle, CLOCK_SECOND, 128, &trickle_call);
-//  button_sensor.activate();
+  trickle_open(&trickle, CLOCK_SECOND, 145, &trickle_call);
+  SENSORS_ACTIVATE(button_sensor);
 
   while(1) {
     static struct etimer et;

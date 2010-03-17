@@ -23,7 +23,8 @@
       <identifier>esb1</identifier>
       <description>ESB Mote Type #esb1</description>
       <source>[CONTIKI_DIR]/examples/hello-world/hello-world.c</source>
-      <commands>make hello-world.esb TARGET=esb</commands>
+      <commands>make clean TARGET=esb
+make hello-world.esb TARGET=esb</commands>
       <firmware>[CONTIKI_DIR]/examples/hello-world/hello-world.esb</firmware>
       <moteinterface>se.sics.cooja.interfaces.Position</moteinterface>
       <moteinterface>se.sics.cooja.interfaces.RimeAddress</moteinterface>
@@ -107,7 +108,7 @@
   <plugin>
     se.sics.cooja.plugins.ScriptRunner
     <plugin_config>
-      <script>TIMEOUT(2000, log.log("last message: " + msg + "\n"));
+      <script>TIMEOUT(5000, log.log("last message: " + msg + "\n"));
 
 WAIT_UNTIL(msg.equals('Hello, world'));
 log.testOK();</script>

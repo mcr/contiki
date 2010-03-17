@@ -49,7 +49,6 @@ import se.sics.cooja.MoteInterface;
  * The current code does not monitor the energy consumption of simulated motes.
  * 
  * @see MoteInterface
- * @see MoteInterface#energyConsumption()
  *
  * @author Fredrik Osterlind
  */

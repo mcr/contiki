@@ -353,6 +353,7 @@ struct shell_input {
  * @}
  */
 
+#include "shell-base64.h"
 #include "shell-blink.h"
 #include "shell-checkpoint.h"
 #include "shell-coffee.h"
@@ -361,6 +362,7 @@ struct shell_input {
 #include "shell-file.h"
 #include "shell-httpd.h"
 #include "shell-irc.h"
+#include "shell-memdebug.h"
 #include "shell-netfile.h"
 #include "shell-netperf.h"
 #include "shell-netstat.h"
@@ -369,6 +371,7 @@ struct shell_input {
 #include "shell-ps.h"
 #include "shell-reboot.h"
 #include "shell-rime-debug.h"
+#include "shell-rime-debug-runicast.h"
 #include "shell-rime-neighbors.h"
 #include "shell-rime-netcmd.h"
 #include "shell-rime-ping.h"

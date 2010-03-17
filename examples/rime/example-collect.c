@@ -131,9 +131,36 @@ PROCESS_THREAD(example_collect_process, ev, data)
 {
   PROCESS_BEGIN();
 
-  ev_pressed = process_alloc_event();
+  SENSORS_ACTIVATE(button_sensor);
+  
+  collect_open(&tc, 130, &callbacks);
 
-  collect_open(&tc, 128, &callbacks);
+  while(1) {
+    static struct etimer et;
+
+    /* Send a packet every 16 seconds; first wait 8 seconds, than a
+       random time between 0 and 8 seconds. */
+
+    etimer_set(&et, CLOCK_SECOND * 16 + random_rand() % (CLOCK_SECOND * 16));
+    PROCESS_WAIT_EVENT();
+
+    if(etimer_expired(&et)) {
+      while(tc.forwarding) {
+	PROCESS_PAUSE();
+      }
+      printf("Sending\n");
+      packetbuf_clear();
+      packetbuf_set_datalen(sprintf(packetbuf_dataptr(),
+				  "%s", "Hello") + 1);
+      collect_send(&tc, 4);
+    }
+
+    if(ev == sensors_event) {
+      if(data == &button_sensor) {
+	printf("I am sink\n");
+	collect_set_sink(&tc, 1);
+      }
+    }
 
 #if ON_BATTERY
   enable_timer_wu();

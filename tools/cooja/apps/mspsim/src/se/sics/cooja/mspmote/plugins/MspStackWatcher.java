@@ -47,6 +47,7 @@ import org.apache.log4j.Logger;
 import se.sics.cooja.ClassDescription;
 import se.sics.cooja.GUI;
 import se.sics.cooja.Mote;
+import se.sics.cooja.MotePlugin;
 import se.sics.cooja.PluginType;
 import se.sics.cooja.Simulation;
 import se.sics.cooja.VisPlugin;
@@ -58,7 +59,7 @@ import se.sics.mspsim.util.Utils;
 
 @ClassDescription("Msp Stack Watcher")
 @PluginType(PluginType.MOTE_PLUGIN)
-public class MspStackWatcher extends VisPlugin {
+public class MspStackWatcher extends VisPlugin implements MotePlugin {
   private static Logger logger = Logger.getLogger(MspStackWatcher.class);
   
   private MspMote mspMote;
@@ -150,6 +151,10 @@ public class MspStackWatcher extends VisPlugin {
   public void closePlugin() {
     mspMote.getStackOverflowObservable().deleteObserver(stackObserver);
     stackUI.stop();
+  }
+
+  public Mote getMote() {
+    return mspMote;
   }
 
 }

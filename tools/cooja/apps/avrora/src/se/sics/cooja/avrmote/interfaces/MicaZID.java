@@ -152,10 +152,6 @@ public class MicaZID extends MoteID {
     public void releaseInterfaceVisualizer(JPanel panel) {
     }
 
-    public double energyConsumption() {
-        return 0;
-    }
-
     public Collection<Element> getConfigXML() {
         Vector<Element> config = new Vector<Element>();
         Element element;
