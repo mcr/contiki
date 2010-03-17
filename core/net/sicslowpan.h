@@ -102,8 +102,8 @@
  * Values of fields within the IPHC encoding first byte
  * (C stands for compressed and I for inline)
  */
-#define SICSLOWPAN_IPHC_TC_C                        0x10
-#define SICSLOWPAN_IPHC_FL_C                        0x08
+#define SICSLOWPAN_IPHC_FL_C                        0x10
+#define SICSLOWPAN_IPHC_TC_C                        0x08
 #define SICSLOWPAN_IPHC_NH_C                        0x04
 #define SICSLOWPAN_IPHC_TTL_1                       0x01
 #define SICSLOWPAN_IPHC_TTL_64                      0x02
