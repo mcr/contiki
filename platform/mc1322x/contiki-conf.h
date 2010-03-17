@@ -59,6 +59,16 @@ typedef int32_t s32_t;
 /* Clock ticks per second */
 #define CLOCK_CONF_SECOND 100
 
+/* Baud rate */
+#define MOD 9999
+/*  230400 bps, INC=767, MOD=9999, 24Mhz 16x samp */
+/*  115200 bps, INC=767, MOD=9999, 24Mhz 8x samp */
+#define INC 767  
+/*  921600 bps, MOD=9999, 24Mhz 16x samp */
+//#define INC 3071 
+#define SAMP UCON_SAMP_8X
+//#define SAMP UCON_SAMP_16X
+
 /* Pre-allocated memory for loadable modules heap space (in bytes)*/
 #define MMEM_CONF_SIZE 256
 

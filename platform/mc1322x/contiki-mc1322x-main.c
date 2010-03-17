@@ -90,22 +90,22 @@ init_lowlevel(void)
 	gpio_pu0_disable(29);
 	
 	/* uart init */
-	uart1_init();
+	uart1_init(INC, MOD, SAMP);
 	
 	enable_irq(CRM);
 
 	/* radio init */
-	reset_maca();
+//	reset_maca();
 	/* it looks like radio_init does something to */
 	/* that changes the ring_oscillator           */
-	radio_init();
-	vreg_init();
-	flyback_init();
-	init_phy();
+//	radio_init();
+//	vreg_init();
+//	flyback_init();
+//	init_phy();
 	
-	set_power(0x0f); /* 0dbm */
+//	set_power(0x0f); /* 0dbm */
 //	set_power(0x0); 
-	set_channel(0); /* channel 11 */
+//	set_channel(0); /* channel 11 */
 
 #if USE_32KHZ_XTAL
 	enable_32khz_xtal();
@@ -166,12 +166,12 @@ main(void)
 	volatile uint32_t i;
 	rimeaddr_t addr;
 
-	/* Clock */
-	clock_init();
-	
 	/* Initialize hardware and */
 	/* go into user mode */
 	init_lowlevel();
+
+	/* Clock */
+	clock_init();	
 
 	/* Process subsystem */
 	process_init();
@@ -185,7 +185,7 @@ main(void)
 //	rime_init(sicslowmac_init(&maca_driver));
 
 #if !(USE_32KHZ_XTAL)
-	PRINTF("setting xmac to use calibrated rtc value\n");
+	PRINTF("setting xmac to use calibrated rtc value\n\r");
 	xmac_config.on_time = cal_rtc_secs/200;
 	xmac_config.off_time = cal_rtc_secs/2 - xmac_config.on_time;
 	xmac_config.strobe_time = 20 * xmac_config.on_time + xmac_config.off_time;
@@ -197,13 +197,13 @@ main(void)
 #endif
 
 
-	set_rimeaddr(&addr);
+//	set_rimeaddr(&addr);
 
-	printf("Rime started with address ");
-	for(i = 0; i < sizeof(addr.u8) - 1; i++) {
-		printf("%d.", addr.u8[i]);
-	}
-	printf("%d\n", addr.u8[i]);
+//	printf("Rime started with address ");
+//	for(i = 0; i < sizeof(addr.u8) - 1; i++) {
+//		printf("%d.", addr.u8[i]);
+//	}
+//	printf("%d\n", addr.u8[i]);
 
 	/* Autostart processes */
 	autostart_start(autostart_processes);
