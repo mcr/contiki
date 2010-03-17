@@ -1,0 +1,14 @@
+From: 
+http://www.kernel.org/pub/software/scm/git/docs/howto/using-merge-subtree.html
+
+Moved mc1322x.lds to mc1322x.lds.contiki
+
+Setup with:
+
+git remote add -f libmc1322x git://git.devl.org/git/malvira/libmc1322x.git
+git read-tree --prefix=cpu/mc1322x -u libmc1322x/master
+git commit -m "Merge libmc1322x as a subdirectory"
+
+Do subsequent merges with:
+
+git pull -s subtree libmc1322x master
