@@ -456,8 +456,10 @@ public class RadioLogger extends VisPlugin {
                   }
                   /* continue another round if more bytes left */
                   analyze = packet.hasMoreData();
-                  brief.append('|');
-                  verbose.append("<p>");
+                  if (analyze) {
+                      brief.append('|');
+                      verbose.append("<p>");
+                  }
                   break;
               }
           }
