@@ -148,7 +148,7 @@ send_timer(void *ptr)
 
   c->current_interval = interval;
 
-  printf("current_interval %lu\n", (long unsigned int) interval);
+  PRINTF("current_interval %lu\n", (long unsigned int) interval);
   set_timers(c);
 }
 /*---------------------------------------------------------------------------*/
