@@ -13,7 +13,7 @@ CONTIKI_CPU_DIRS = . lib src board
 MC1322X = dbg-io.c rtimer-arch.c watchdog.c contiki-crm.c
 
 CPU_LIBS = $(notdir $(wildcard $(CONTIKI_CPU)/lib/*.c))
-CPU_SRCS = $(notdir $(wildcard $(CONTIKI_CPU)/src/*.c))
+CPU_SRCS = $(notdir $(wildcard $(CONTIKI_CPU)/src/*.c)) $(notdir $(wildcard $(CONTIKI_CPU)/src/*.S))
 
 CONTIKI_TARGET_SOURCEFILES += $(MC1322X) $(CPU_LIBS) $(CPU_SRCS) $(SYSAPPS) $(ELFLOADER) \
 			$(TARGETLIBS) $(UIPDRIVERS) $(USB)
@@ -39,7 +39,7 @@ TEXT_BASE = 0x00400000
 export TEXT_BASE
 LINKERSCRIPT = $(CONTIKI_CPU)/mc1322x.lds
 
-STARTUP=${addprefix $(OBJECTDIR)/,startup.o}
+STARTUP=$(OBJECTDIR)/start.o
 
 ARCH_FLAGS= -mcpu=arm7tdmi-s -mthumb-interwork -march=armv4t -mtune=arm7tdmi-s -DCONFIG_ARM -D__ARM__
 THUMB_FLAGS=-mthumb -mcallee-super-interworking
