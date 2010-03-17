@@ -51,7 +51,7 @@
 
 #define REF_OSC 24000000ULL          /* reference osc. frequency */
 #define NOMINAL_RING_OSC_SEC 2000 /* nominal ring osc. frequency */
-//extern uint32_t cal_rtc_secs;      /* calibrated 2khz rtc seconds */
+extern uint32_t cal_rtc_secs;      /* calibrated 2khz rtc seconds */
 
 /* XTAL32_CNTL bit locations */
 #define XTAL32_GAIN 4      /* 2 bits */
