@@ -120,9 +120,9 @@ _begin:
 	msr	CPSR_c, #(SYS_MODE | IRQ_DISABLE | FIQ_DISABLE)
 	ldr	sp, =__sys_stack_top__	/* set the SYS stack pointer */
 
-#ifdef USE_ROM_VARS	
+
 	bl _rom_data_init+.-base
-#endif	
+
 	msr	CPSR_c, #(SYS_MODE)
 
 	b main
