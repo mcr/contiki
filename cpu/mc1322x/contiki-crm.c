@@ -80,7 +80,7 @@ void cal_ring_osc(void)
 	PRINTF("cal_count: 0x%0x\n\r",*CRM_CAL_COUNT); 
 	cal_factor = (REF_OSC*1000) / *CRM_CAL_COUNT;
 	cal_rtc_secs = (NOMINAL_RING_OSC_SEC * cal_factor)/100;
-	PRINTF("cal factor: %d \n\nr", cal_factor);
-	PRINTF("hib_wake_secs: %d \n\nr", cal_rtc_secs);      
+	PRINTF("cal factor: %d\n\r", cal_factor);
+	PRINTF("hib_wake_secs: %d\n\r", cal_rtc_secs);      
 	set_bit(*CRM_STATUS,9);
 }
