@@ -450,15 +450,14 @@ public class RadioLogger extends VisPlugin {
               PacketAnalyzer analyzer = analyzers.get(i);
               if (analyzer.matchPacket(packet)) {
                   int res = analyzer.analyzePacket(packet, brief, verbose);
-                  if (res != analyzer.ANALYSIS_OK_FINAL) {
-                      /* continue another round if more bytes left */
-                      analyze = packet.hasMoreData();
-                      brief.append('|');
-                      verbose.append("<p>");
-                  } else {
-                      /* this was the final - no analyzable payload possible here... */
+                  if (res != PacketAnalyzer.ANALYSIS_OK_CONTINUE) {
+                      /* this was the final or the analysis failed - no analyzable payload possible here... */
                       return brief.length() > 0;
                   }
+                  /* continue another round if more bytes left */
+                  analyze = packet.hasMoreData();
+                  brief.append('|');
+                  verbose.append("<p>");
                   break;
               }
           }
