@@ -50,27 +50,7 @@ void tmr0_isr(void) {
 //		if(etimer_pending() && etimer_next_expiration_time() <= current_clock) {
 		if(etimer_pending()) {
 			etimer_request_poll();
-			/* dbg_printf("%d,%d\n", clock_time(),etimer_next_expiration_time  	()); */			
-
-			if(tmr_led == 0) {
-//				set_bit(reg32(GPIO_DATA0),10);
-				tmr_led = 1;
-			} else {
-//				clear_bit(reg32(GPIO_DATA0),10);
-				tmr_led = 0;
-			}
-
 		}
-
-/* 		if((current_clock % 32) == 0) { */
-/* 			if(tmr_led9 == 0) { */
-/* 				set_bit(reg32(GPIO_DATA0),9); */
-/* 				tmr_led9 = 1; */
-/* 			} else { */
-/* 				clear_bit(reg32(GPIO_DATA0),9); */
-/* 				tmr_led9 = 0; */
-/* 			} */
-/* 		} */
 
 		/* clear the compare flags */
 		clear_bit(*TMR(0,SCTRL),TCF);                
