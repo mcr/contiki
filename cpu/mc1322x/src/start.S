@@ -68,7 +68,6 @@ _start:	b       _begin
 	ldr	pc, _irq
 	ldr	pc, _fiq
 
-#ifdef USE_ROM_VARS	
 /* these vectors are used for rom patching */	
 .org 0x20
 .code 16
@@ -91,7 +90,6 @@ _RPTV_3_START:
 ROM_var_start: .word 0
 .org 0x7ff
 ROM_var_end:   .word 0
-#endif /*USE_ROM_VARS*/
 
 .code 32
 .align
