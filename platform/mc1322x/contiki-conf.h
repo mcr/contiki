@@ -69,6 +69,14 @@ typedef int32_t s32_t;
 #define SAMP UCON_SAMP_8X
 //#define SAMP UCON_SAMP_16X
 
+/* Econotag also needs an addtional 12pf on board */
+/* Coarse tune: add 4pf */
+#define CTUNE_4PF 1
+/* Coarse tune: add 0-15 pf (CTUNE is 4 bits) */
+#define CTUNE 11
+/* Fine tune: add FTUNE * 156fF (FTUNE is 5bits) */
+#define FTUNE 7
+
 /* Pre-allocated memory for loadable modules heap space (in bytes)*/
 #define MMEM_CONF_SIZE 256
 

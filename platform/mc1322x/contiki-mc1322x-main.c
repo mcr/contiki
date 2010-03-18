@@ -52,6 +52,9 @@
 
 /* from libmc1322x */
 #include "mc1322x.h"
+#include "default_lowlevel.h"
+
+#include "contiki-maca.h"
 
 #ifndef RIMEADDR_NVM
 #define RIMEADDR_NVM 0x1E000
@@ -88,24 +91,23 @@ init_lowlevel(void)
 //	kbi_pol_pos(7);
 //	gpio_sel0_pullup(29);
 	gpio_pu0_disable(29);
+
+//	trim_xtal();
 	
 	/* uart init */
 	uart1_init(INC, MOD, SAMP);
 	
-	enable_irq(CRM);
+	default_vreg_init();
 
-	/* radio init */
-//	reset_maca();
-	/* it looks like radio_init does something to */
-	/* that changes the ring_oscillator           */
-//	radio_init();
-//	vreg_init();
-//	flyback_init();
-//	init_phy();
-	
-//	set_power(0x0f); /* 0dbm */
-//	set_power(0x0); 
-//	set_channel(0); /* channel 11 */
+	maca_init();
+
+	set_channel(0); /* channel 11 */
+	set_power(0x12); /* 0x12 is the highest, not documented */
+
+        *GPIO_FUNC_SEL2 = (0x01 << ((44-16*2)*2));
+	gpio_pad_dir_set( 1ULL << 44 );
+
+	enable_irq(CRM);
 
 #if USE_32KHZ_XTAL
 	enable_32khz_xtal();
@@ -155,8 +157,8 @@ set_rimeaddr(rimeaddr_t *addr)
 //PROCINIT(&etimer_process, &blink8_process,&blink9_process,&blink10_process);
 //PROCINIT(&etimer_process, &blink8_process, &blink9_process, &blink10_process);
 //PROCINIT(&etimer_process, &ctimer_process, &maca_process, &blink8_process,&blink9_process,&blink10_process);
-//PROCINIT(&etimer_process, &ctimer_process, &maca_process);
-PROCINIT(&etimer_process, &ctimer_process);
+PROCINIT(&etimer_process, &ctimer_process, &maca_process);
+//PROCINIT(&etimer_process, &ctimer_process);
 //AUTOSTART_PROCESSES(&etimer_process, &blink8_process, &blink9_process, &blink10_process);
 //AUTOSTART_PROCESSES(&hello_world_process);
 
@@ -182,7 +184,7 @@ main(void)
 //	rime_init(nullmac_init(&maca_driver));
 //	rime_init(xmac_init(&maca_driver));
 //	rime_init(lpp_init(&maca_driver));
-//	rime_init(sicslowmac_init(&maca_driver));
+	rime_init(sicslowmac_init(&maca_driver));
 
 #if !(USE_32KHZ_XTAL)
 	PRINTF("setting xmac to use calibrated rtc value\n\r");
@@ -199,11 +201,11 @@ main(void)
 
 //	set_rimeaddr(&addr);
 
-//	printf("Rime started with address ");
-//	for(i = 0; i < sizeof(addr.u8) - 1; i++) {
-//		printf("%d.", addr.u8[i]);
-//	}
-//	printf("%d\n", addr.u8[i]);
+	printf("Rime started with address ");
+	for(i = 0; i < sizeof(addr.u8) - 1; i++) {
+		printf("%d.", addr.u8[i]);
+	}
+	printf("%d\n", addr.u8[i]);
 
 	/* Autostart processes */
 	autostart_start(autostart_processes);
