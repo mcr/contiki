@@ -92,17 +92,17 @@ int maca_send(const void *payload, unsigned short payload_len) {
 	volatile int i;
 	volatile packet_t *p;
 
-	if(payload_len > MAX_PACKET_SIZE)  return RADIO_TX_ERR;
-
 	if ((p = get_free_packet())) {
 		PRINTF("maca send");
 		maca_on();
-		p->length = payload_len;
 #if MACA_RAW_MODE
 		p->offset = 1;
+		p->length = payload_len + 1;
 #else 
 		p->offset = 0;
+		p->length = payload_len;
 #endif
+		if(payload_len > MAX_PACKET_SIZE)  return RADIO_TX_ERR;
 		memcpy((uint8_t *)(p->data + p->offset), payload, payload_len);
 #if MACA_RAW_MODE
 		p->offset = 0;
@@ -110,7 +110,7 @@ int maca_send(const void *payload, unsigned short payload_len) {
 		PRINTF(" raw mode");
 #endif
 #if CONTIKI_MACA_DEBUG
-		PRINTF(": sending %d bytes\n\r");
+		PRINTF(": sending %d bytes\n\r", payload_len);
 		for(i = p->offset ; i < p->length ; i++) {
 			PRINTF(" %02x",p->data[i]);
 		}
