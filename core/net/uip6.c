@@ -404,7 +404,7 @@ uip_udpchksum(void)
 void
 uip_init(void)
 {
-   
+  printf("uip_init\n");
   uip_netif_init();
   uip_nd6_init();
 
@@ -1375,6 +1375,15 @@ uip_process(u8_t flag)
        connection is bound to a remote port. Finally, if the
        connection is bound to a remote IP address, the source IP
        address of the packet is checked. */
+printf("uip_udp_conn %x uip_udp_conn->lport %x UIP_UDP_BUF->destport %x uip_udp_conn->rport %x UIP_UDP_BUF->srcport %x\n",
+uip_udp_conn, uip_udp_conn->lport, UIP_UDP_BUF->destport, uip_udp_conn->rport, UIP_UDP_BUF->srcport);
+printf("uip_udp_conn->ripaddr ");
+  PRINT6ADDR(&uip_udp_conn->ripaddr);
+  PRINTF("\n");
+printf("UIP_IP_BUF->srcipaddr ");
+  PRINT6ADDR(&UIP_IP_BUF->srcipaddr);
+  PRINTF("\n");
+
     if(uip_udp_conn->lport != 0 &&
        UIP_UDP_BUF->destport == uip_udp_conn->lport &&
        (uip_udp_conn->rport == 0 ||

@@ -85,11 +85,12 @@ PROCESS_THREAD(udp_process_receiver, ev, data)
       UDP_ADDR_A,UDP_ADDR_B,UDP_ADDR_C,UDP_ADDR_D,
       UDP_ADDR_E,UDP_ADDR_F,UDP_ADDR_G,UDP_ADDR_H);
 #else /* UDP_ADDR_A */
-  uip_ip6addr(&ipaddr,0xFE80,0,0,0,0x2022,0x2222,0x2222,0x2222);
+  uip_ip6addr(&ipaddr,0xFE80,0,0,0,0x2,0x01ff,0xfe01,0x0101);
 #endif /* UDP_ADDR_A */
 
   udpconn = udp_new(&ipaddr, HTONS(0xF0B0+1), NULL);
   udp_bind(udpconn, HTONS(0xF0B0));
+printf("updconn %x lport %x rport %x\n", udpconn, udpconn->lport, udpconn->rport);
 
   PRINTF("Created connection with remote peer ");
   PRINT6ADDR(&udpconn->ripaddr);

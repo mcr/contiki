@@ -64,7 +64,7 @@
 typedef union uip_ip6addr_t {
   u8_t  u8[16];			/* Initializer, must come first!!! */
   u16_t u16[8];
-} uip_ip6addr_t;
+} __attribute__ ((__packed__)) uip_ip6addr_t;
 
 typedef uip_ip6addr_t uip_ipaddr_t;
 #else /* UIP_CONF_IPV6 */
@@ -74,7 +74,7 @@ typedef union uip_ip4addr_t {
 #if 0
   u32_t u32;
 #endif
-} uip_ip4addr_t;
+}  __attribute__ ((__packed__)) uip_ip4addr_t;
 typedef uip_ip4addr_t uip_ipaddr_t;
 #endif /* UIP_CONF_IPV6 */
 
@@ -84,21 +84,21 @@ typedef uip_ip4addr_t uip_ipaddr_t;
 /** \brief 16 bit 802.15.4 address */
 struct uip_802154_shortaddr {
   u8_t addr[2];
-};
+}  __attribute__ ((__packed__));
 /** \brief 64 bit 802.15.4 address */
 struct uip_802154_longaddr {
   u8_t addr[8];
-};
+} __attribute__ ((__packed__));
 
 /** \brief 802.11 address */
 struct uip_80211_addr {
   u8_t addr[6];
-};
+} __attribute__ ((__packed__));
 
 /** \brief 802.3 address */
 struct uip_eth_addr {
   u8_t addr[6];
-};
+} __attribute__ ((__packed__));
 
 #if UIP_CONF_LL_802154
 /** \brief 802.15.4 address */
@@ -1566,6 +1566,8 @@ void uip_process(u8_t flag);
   
 #define UIP_STOPPED      16
 
+#define PACKED __attribute__ ((__packed__))
+
 /* The TCP and IP headers. */
 struct uip_tcpip_hdr {
 #if UIP_CONF_IPV6
@@ -1600,7 +1602,7 @@ struct uip_tcpip_hdr {
   u16_t tcpchksum;
   u8_t urgp[2];
   u8_t optdata[4];
-};
+} PACKED;
 
 /* The ICMP and IP headers. */
 struct uip_icmpip_hdr {
@@ -1632,7 +1634,7 @@ struct uip_icmpip_hdr {
   u16_t id, seqno;
   u8_t payload[1];
 #endif /* !UIP_CONF_IPV6 */
-};
+} PACKED;
 
 
 /* The UDP and IP headers. */
@@ -1663,7 +1665,7 @@ struct uip_udpip_hdr {
     destport;
   u16_t udplen;
   u16_t udpchksum;
-};
+} PACKED;
 
 /*
  * In IPv6 the length of the L3 headers before the transport header is
@@ -1692,7 +1694,7 @@ struct uip_ip_hdr {
   u16_t ipchksum;
   uip_ipaddr_t srcipaddr, destipaddr;
 #endif /* UIP_CONF_IPV6 */
-};
+} PACKED;
 
 
 /*
@@ -1719,19 +1721,19 @@ struct uip_ip_hdr {
 struct uip_ext_hdr {
   u8_t next;
   u8_t len;
-};
+} PACKED;
 
 /* Hop by Hop option header */
 struct uip_hbho_hdr {
   u8_t next;
   u8_t len;
-};
+} PACKED;
 
 /* destination option header */
 struct uip_desto_hdr {
   u8_t next;
   u8_t len;
-};
+} PACKED;
 
 /* We do not define structures for PAD1 and PADN options */
 
@@ -1748,7 +1750,7 @@ struct uip_routing_hdr {
   u8_t len;
   u8_t routing_type;
   u8_t seg_left;
-};
+} PACKED;
 
 /* fragmentation header */
 struct uip_frag_hdr {
@@ -1756,7 +1758,7 @@ struct uip_frag_hdr {
   u8_t res;
   u16_t offsetresmore;
   u32_t id;
-};
+} PACKED;
 
 /*
  * an option within the destination or hop by hop option headers
@@ -1765,13 +1767,13 @@ struct uip_frag_hdr {
 struct uip_ext_hdr_opt {
   u8_t type;
   u8_t len;
-};
+} PACKED;
 
 /* PADN option */
 struct uip_ext_hdr_opt_padn {
   u8_t opt_type;
   u8_t opt_len;
-};
+} PACKED;
 
 /* TCP header */
 struct uip_tcp_hdr {
@@ -1785,7 +1787,7 @@ struct uip_tcp_hdr {
   u16_t tcpchksum;
   u8_t urgp[2];
   u8_t optdata[4];
-};
+} PACKED;
 
 /* The ICMP headers. */
 struct uip_icmp_hdr {
@@ -1794,7 +1796,7 @@ struct uip_icmp_hdr {
 #if !UIP_CONF_IPV6
   u16_t id, seqno;
 #endif /* !UIP_CONF_IPV6 */
-};
+} PACKED;
 
 
 /* The UDP headers. */
@@ -1803,7 +1805,7 @@ struct uip_udp_hdr {
   u16_t destport;
   u16_t udplen;
   u16_t udpchksum;
-};
+} PACKED;
 
 
 /**

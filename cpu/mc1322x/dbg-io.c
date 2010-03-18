@@ -32,8 +32,3 @@ puts(const char *s)
 	return i;
 }
 
-int
-__sp(struct _reent *_ptr, int c, FILE *_p) {
-  dbg_putchar(c);
-  return c;
-}

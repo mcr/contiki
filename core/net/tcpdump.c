@@ -48,7 +48,7 @@
    u16_t ipchksum;
    u8_t srcipaddr[4],
      destipaddr[4];
- };
+ } __attribute__ ((__packed__));
 
 #define TCP_FIN 0x01
 #define TCP_SYN 0x02
@@ -81,7 +81,7 @@ struct tcpip_hdr {
   u16_t tcpchksum;
   u8_t urgp[2];
   u8_t optdata[4];
-};
+} __attribute__ ((__packed__));
 
 #define ICMP_ECHO_REPLY 0
 #define ICMP_ECHO       8
@@ -103,7 +103,7 @@ struct icmpip_hdr {
   u8_t type, icode;
   u16_t icmpchksum;
   u16_t id, seqno;
-};
+} __attribute__ ((__packed__));
 
 
 /* The UDP and IP headers. */
@@ -125,7 +125,7 @@ struct udpip_hdr {
     destport;
   u16_t udplen;
   u16_t udpchksum;
-};
+} __attribute__ ((__packed__));
 
 #define ETHBUF    ((struct eth_hdr *)&packet[0])
 #define IPBUF     ((struct ip_hdr *)&packet[0])

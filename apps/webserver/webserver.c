@@ -98,13 +98,14 @@ webserver_log_file(uip_ipaddr_t *requester, char *file)
   memcpy(log, &log[LOG_WIDTH], LOG_WIDTH * (LOG_HEIGHT - 1));
 
   /* Print out IP address of requesting host. */
+#if 0
   size = sprintf(&log[LOG_WIDTH * (LOG_HEIGHT - 1)],
 		 "%d.%d.%d.%d: ",
 		 requester->u8[0],
 		 requester->u8[1],
 		 requester->u8[2],
 		 requester->u8[3]);
-  
+#endif  
   /* Copy filename into last line. */		 
   strncpy(&log[LOG_WIDTH * (LOG_HEIGHT - 1) + size], file, LOG_WIDTH - size);
 	   

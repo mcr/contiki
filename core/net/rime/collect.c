@@ -231,7 +231,7 @@ node_packet_received(struct runicast_conn *c, const rimeaddr_t *from,
 		     uint8_t seqno)
 {
   struct collect_conn *tc = (struct collect_conn *)
-    ((char *)c - offsetof(struct collect_conn, runicast_conn));
+    ((long *)c - offsetof(struct collect_conn, runicast_conn)/sizeof(long));
   int i;
 
   /* To protect against forwarding duplicate packets, we keep a list
@@ -303,7 +303,7 @@ node_packet_sent(struct runicast_conn *c, const rimeaddr_t *to,
 		 uint8_t transmissions)
 {
   struct collect_conn *tc = (struct collect_conn *)
-    ((char *)c - offsetof(struct collect_conn, runicast_conn));
+    ((long *)c - offsetof(struct collect_conn, runicast_conn)/sizeof(long));
 
   PRINTF("%d.%d: sent to %d.%d after %d retransmissions\n",
 	 rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1],
@@ -327,7 +327,7 @@ node_packet_timedout(struct runicast_conn *c, const rimeaddr_t *to,
 		     uint8_t transmissions)
 {
   struct collect_conn *tc = (struct collect_conn *)
-    ((char *)c - offsetof(struct collect_conn, runicast_conn));
+    ((long *)c - offsetof(struct collect_conn, runicast_conn)/sizeof(long));
 
   PRINTF("%d.%d: timedout after %d retransmissions: packet dropped\n",
 	 rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1], transmissions);
@@ -349,7 +349,7 @@ adv_received(struct neighbor_discovery_conn *c, const rimeaddr_t *from,
 	     uint16_t rtmetric)
 {
   struct collect_conn *tc = (struct collect_conn *)
-    ((char *)c - offsetof(struct collect_conn, neighbor_discovery_conn));
+    ((long *)c - offsetof(struct collect_conn, neighbor_discovery_conn)/sizeof(long));
   struct neighbor *n;
   
   n = neighbor_find(from);
@@ -371,7 +371,7 @@ received_announcement(struct announcement *a, const rimeaddr_t *from,
 		      uint16_t id, uint16_t value)
 {
   struct collect_conn *tc = (struct collect_conn *)
-    ((char *)a - offsetof(struct collect_conn, announcement));
+    ((long *)a - offsetof(struct collect_conn, announcement)/sizeof(long));
   struct neighbor *n;
   
   n = neighbor_find(from);

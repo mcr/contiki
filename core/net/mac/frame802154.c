@@ -76,7 +76,7 @@ typedef struct {
   uint8_t src_pid_len;     /**<  Length (in bytes) of source PAN ID field */
   uint8_t src_addr_len;    /**<  Length (in bytes) of source address field */
   uint8_t aux_sec_len;     /**<  Length (in bytes) of aux security header field */
-} field_length_t;
+} __attribute__ ((__packed__))  field_length_t;
 
 /*----------------------------------------------------------------------------*/
 CC_INLINE static uint8_t

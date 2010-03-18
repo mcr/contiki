@@ -64,6 +64,7 @@ uip_ipaddr_t dest_addr;
 PROCESS(ping6_process, "PING6 process");
 AUTOSTART_PROCESSES(&ping6_process);
 
+#define scanf(a, b, ...) 0
 
 /*---------------------------------------------------------------------------*/
 static u8_t

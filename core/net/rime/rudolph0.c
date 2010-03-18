@@ -162,8 +162,8 @@ static void
 recv_nack(struct polite_conn *polite)
 {
   struct rudolph0_conn *c = (struct rudolph0_conn *)
-    ((char *)polite - offsetof(struct rudolph0_conn,
-			     nackc));
+    ((long *)polite - offsetof(struct rudolph0_conn,
+			     nackc)/sizeof(long));
   struct rudolph0_datapacket *p = packetbuf_dataptr();
 
   if(p->h.type == TYPE_NACK && c->state == STATE_SENDER) {

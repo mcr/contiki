@@ -65,7 +65,7 @@ tcpip_output(uip_lladdr_t *a)
     /*    printf("pppp o %u tx %u rx %u\n", UIP_IP_BUF->proto,
 	   packetbuf_attr(PACKETBUF_ATTR_TRANSMIT_TIME),
 	   packetbuf_attr(PACKETBUF_ATTR_LISTEN_TIME));*/
-    leds_invert(LEDS_GREEN);
+//    leds_invert(LEDS_GREEN);
   }
   return 0;
 }
@@ -95,7 +95,7 @@ tcpip_input(void)
 	     packetbuf_attr(PACKETBUF_ATTR_TRANSMIT_TIME),
 	     packetbuf_attr(PACKETBUF_ATTR_LISTEN_TIME));*/
       slip_write(uip_buf, uip_len);
-      leds_invert(LEDS_RED);
+//      leds_invert(LEDS_RED);
       uip_len = 0;
     }
   }
@@ -113,7 +113,7 @@ slip_tcpip_input(void)
 static void
 slip_activity(void)
 {
-  leds_invert(LEDS_BLUE);
+//  leds_invert(LEDS_BLUE);
 }
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(uip6_bridge, ev, data)
@@ -124,8 +124,8 @@ PROCESS_THREAD(uip6_bridge, ev, data)
 
   mac_ethernetSetup();
 
-  slip_arch_init(BAUD2UBR(115200));
-  slip_set_input_callback(slip_activity);
+//  slip_arch_init(BAUD2UBR(115200));
+//  slip_set_input_callback(slip_activity);
   slip_set_tcpip_input_callback(slip_tcpip_input);
   process_start(&slip_process, NULL);
 

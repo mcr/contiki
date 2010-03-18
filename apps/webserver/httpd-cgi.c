@@ -138,7 +138,8 @@ static unsigned short
 generate_file_stats(void *arg)
 {
   char *f = (char *)arg;
-  return snprintf((char *)uip_appdata, uip_mss(), "%5u", httpd_fs_count(f));
+  //return snprintf((char *)uip_appdata, uip_mss(), "%5u", httpd_fs_count(f));
+  return sprintf((char *)uip_appdata, "%5u", httpd_fs_count(f));
 }
 /*---------------------------------------------------------------------------*/
 static
@@ -161,7 +162,7 @@ make_tcp_stats(void *arg)
   #if UIP_CONF_IPV6
   char buf[48];
   httpd_sprint_ip6(conn->ripaddr, buf);
-  return snprintf((char *)uip_appdata, uip_mss(),
+  return sprintf((char *)uip_appdata, 
          "<tr align=\"center\"><td>%d</td><td>%s:%u</td><td>%s</td><td>%u</td><td>%u</td><td>%c %c</td></tr>\r\n",
          htons(conn->lport),
          buf,
@@ -172,7 +173,7 @@ make_tcp_stats(void *arg)
          (uip_outstanding(conn))? '*':' ',
          (uip_stopped(conn))? '!':' ');
 #else
-  return snprintf((char *)uip_appdata, uip_mss(),
+  return sprintf((char *)uip_appdata, 
          "<tr align=\"center\"><td>%d</td><td>%u.%u.%u.%u:%u</td><td>%s</td><td>%u</td><td>%u</td><td>%c %c</td></tr>\r\n",
          htons(conn->lport),
          conn->ripaddr.u8[0],
@@ -211,7 +212,7 @@ make_processes(void *p)
   strncpy(name, ((struct process *)p)->name, 40);
   petsciiconv_toascii(name, 40);
 
-  return snprintf((char *)uip_appdata, uip_mss(),
+  return sprintf((char *)uip_appdata, 
 		 "<tr align=\"center\"><td>%p</td><td>%s</td><td>%p</td><td>%s</td></tr>\r\n",
 		 p, name,
 		 *((char **)&(((struct process *)p)->thread)),

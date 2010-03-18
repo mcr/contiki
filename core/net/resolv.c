@@ -104,7 +104,7 @@ struct dns_answer {
   u16_t ttl[2];
   u16_t len;
   u16_t ipaddr[2];
-};
+} __attribute__ ((__packed__));
 
 struct namemap {
 #define STATE_UNUSED 0

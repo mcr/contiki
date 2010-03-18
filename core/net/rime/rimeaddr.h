@@ -65,7 +65,7 @@
 
 typedef union {
   unsigned char u8[RIMEADDR_SIZE];
-} rimeaddr_t;
+}  __attribute__ ((__packed__)) rimeaddr_t;
 
 
 /**
