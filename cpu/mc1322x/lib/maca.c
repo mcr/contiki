@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 #ifndef DEBUG_MACA 
-#define DEBUG_MACA 0
+#define DEBUG_MACA 1
 #endif
 #if (DEBUG_MACA == 0)
 #define PRINTF(...) 
@@ -24,12 +24,15 @@
 #define RECV_SOFTIMEOUT (32*128*CLK_PER_BYTE) 
 #endif
 
-#define MAX_PACKET_SIZE (MAX_PAYLOAD_SIZE + 2) /* packet includes 2 bytes of checksum */
-
 #define reg(x) (*(volatile uint32_t *)(x))
 
 static volatile packet_t packet_pool[NUM_PACKETS];
-static volatile packet_t *free_head, *rx_head, *rx_end, *tx_head, *tx_end, *dma_tx, *dma_rx = 0;
+static volatile packet_t *free_head, *rx_end, *tx_head, *tx_end, *dma_tx, *dma_rx = 0;
+
+/* rx_head is visible to the outside */
+/* so you can peek at it and see if there is data */
+/* waiting for you */
+volatile packet_t *rx_head;
 
 /* used for ack recpetion if the packet_pool goes empty */
 /* doesn't go back into the pool when freed */
@@ -550,18 +553,7 @@ const uint32_t addr_reg_rep[MAX_DATA] = { 0x80004118,0x80009204,0x80009208,0x800
 
 const uint32_t data_reg_rep[MAX_DATA] = { 0x00180012,0x00000605,0x00000504,0x00001111,0x0fc40000,0x20046000,0x4005580c,0x40075801,0x4005d801,0x5a45d800,0x4a45d800,0x40044000,0x00106000,0x00083806,0x00093807,0x0009b804,0x000db800,0x00093802,0x00000015,0x00000002,0x0000000f,0x0000aaa0,0x01002020,0x016800fe,0x8e578248,0x000000dd,0x00000946,0x0000035a,0x00100010,0x00000515,0x00397feb,0x00180358,0x00000455,0x00000001,0x00020003,0x00040014,0x00240034,0x00440144,0x02440344,0x04440544,0x0ee7fc00,0x00000082,0x0000002a };
 
-
-/* has been tested and it good */
-void vreg_init(void) {
-	volatile uint32_t i;
-	*(volatile uint32_t *)(0x80003000) = 0x00000018; /* set default state */
-	*(volatile uint32_t *)(0x80003048) = 0x00000f04; /* bypass the buck */
-	for(i=0; i<0x161a8; i++) { continue; } /* wait for the bypass to take */
-//	while((((*(volatile uint32_t *)(0x80003018))>>17) & 1) !=1) { continue; } /* wait for the bypass to take */
-	*(volatile uint32_t *)(0x80003048) = 0x00000ff8; /* start the regulators */
-}
-
-void radio_off(void) {
+void maca_off(void) {
 	disable_irq(MACA);
 	/* turn off the radio regulators */
 	reg(0x80003048) =  0x00000f00;
@@ -569,7 +561,7 @@ void radio_off(void) {
 	maca_reset = maca_reset_rst;  
 }
 
-void radio_on(void) {
+void maca_on(void) {
 	/* turn the radio regulators back on */
 	reg(0x80003048) =  0x00000f78; 
 	/* reinitialize the phy */

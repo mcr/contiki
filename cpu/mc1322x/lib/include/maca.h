@@ -5,6 +5,8 @@
 #include <types.h>
 #include <utils.h>
 
+#define MAX_PACKET_SIZE (MAX_PAYLOAD_SIZE + 2) /* packet includes 2 bytes of checksum */
+
 #define MACA_BASE       (0x80004000)
 #define MACA_RESET      ((volatile uint32_t *) (MACA_BASE+0x04))
 #define MACA_RANDOM     ((volatile uint32_t *) (MACA_BASE+0x08))
@@ -116,8 +118,8 @@ void init_phy(void);
 void flyback_init(void);
 void ResumeMACASync(void);
 void radio_init(void);
-void radio_off(void);
-void radio_on(void);
+void maca_off(void);
+void maca_on(void);
 uint32_t init_from_flash(uint32_t addr);
 void set_power(uint8_t power);
 void set_channel(uint8_t chan);
@@ -127,6 +129,8 @@ volatile packet_t* rx_packet(void);
 volatile packet_t* get_free_packet(void);
 void free_packet(volatile packet_t *p);
 void free_all_packets(void);
+
+extern volatile packet_t *rx_head;
 
 /* set_fcs_mode(NO_FCS) to disable checksum filtering */
 extern volatile uint8_t fcs_mode;
