@@ -76,7 +76,7 @@ int maca_read(void *buf, unsigned short bufsize) {
 		PRINTF(": bufsize 0x%0x \n\r",bufsize);
 		PRINTF("maca read:   \n\r");
 #if CONTIKI_MACA_DEBUG
-		for( i = p->offset ; i < bufsize ; i++) {
+		for( i = p->offset ; i < (bufsize + p->offset) ; i++) {
 			PRINTF(" %02x",p->data[i]);
 		}
 #endif 
@@ -111,7 +111,7 @@ int maca_send(const void *payload, unsigned short payload_len) {
 #endif
 #if CONTIKI_MACA_DEBUG
 		PRINTF(": sending %d bytes\n\r", payload_len);
-		for(i = p->offset ; i < p->length ; i++) {
+		for(i = p->offset ; i < (p->length + p->offset); i++) {
 			PRINTF(" %02x",p->data[i]);
 		}
 		PRINTF("\n\r");
