@@ -92,10 +92,10 @@ init_lowlevel(void)
 //	gpio_sel0_pullup(29);
 	gpio_pu0_disable(29);
 
-//	trim_xtal();
+	trim_xtal();
 	
 	/* uart init */
-	uart1_init(INC, MOD, SAMP);
+	uart_init(INC, MOD, SAMP);
 	
 	default_vreg_init();
 

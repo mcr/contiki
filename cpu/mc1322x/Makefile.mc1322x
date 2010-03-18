@@ -45,7 +45,6 @@ ARCH_FLAGS= -mcpu=arm7tdmi-s -mthumb-interwork -march=armv4t -mtune=arm7tdmi-s -
 THUMB_FLAGS=-mthumb -mcallee-super-interworking
 ARM_FLAGS=
 
-
 CFLAGSNO = -I. -I$(CONTIKI)/core -I$(CONTIKI_CPU) -I$(CONTIKI_CPU)/loader \
 	   -I$(CONTIKI_CPU)/dbg-io \
            -I$(CONTIKI)/platform/$(TARGET) \
@@ -92,7 +91,7 @@ CUSTOM_RULE_C_TO_CO=yes
 %.ihex: %.$(TARGET)
 	$(OBJCOPY) $^ -O ihex $@
 
-%.bin: %.$(TARGET)
+%_$(TARGET).bin: %.$(TARGET)
 	$(OBJCOPY) -O binary $< $@
 
 symbols.c:

@@ -33,21 +33,50 @@
 
 /**
  * \file
- *        Contiki kernel for MC1322x hobby board
+ *         Configuration for MC1322x hobby board based on 
+ *         Configuration for sample STK 501 Contiki kernel
  *
  * \author
+ *         Originial by:
  *         Simon Barner <barner@in.tum.de
+ *         This version by:
  *         Mariano Alvira <mar@devl.org>
  */
 
-#ifndef __CONTIKI_MC1322X_H__
-#define __CONTIKI_MC1322X_H__
+#ifndef __CONTIKI_CONF_H__
+#define __CONTIKI_CONF_H__
 
-#include "contiki.h"
-#include "contiki-net.h"
-#include "contiki-lib.h"
+#include <stdint.h>
 
-void init_lowlevel(void);
-void init_net(void);
+/* mc1322x files */
+#include "contiki-mc1322x-conf.h"
+/* this is from cpu/mc1322x/board */
+#include "redbee-dev.h"
 
-#endif /* #ifndef __CONTIKI_MC1322X_H__ */
+/* Clock ticks per second */
+#define CLOCK_CONF_SECOND 100
+
+/* Baud rate */
+#define MOD 9999
+/*  230400 bps, INC=767, MOD=9999, 24Mhz 16x samp */
+/*  115200 bps, INC=767, MOD=9999, 24Mhz 8x samp */
+#define INC 767  
+/*  921600 bps, MOD=9999, 24Mhz 16x samp */
+//#define INC 3071 
+#define SAMP UCON_SAMP_8X
+//#define SAMP UCON_SAMP_16X
+
+#define uart_init uart1_init
+#define dbg_putchar(x) uart1_putchar(x)
+
+#define USE_FORMATTED_STDIO 1
+#define MACA_DEBUG          0
+#define MACA_RAW_MODE       0
+#define USE_32KHZ_XTAL      0
+
+#define QUEUEBUF_CONF_NUM     8
+#define RIMEADDR_CONF_SIZE    8
+#define PACKETBUF_CONF_SIZE  96
+#define PACKETBUF_CONF_HDR_SIZE 64
+
+#endif /* __CONTIKI_CONF_H__ */

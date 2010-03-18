@@ -48,13 +48,10 @@
 
 #include <stdint.h>
 
-typedef int32_t s32_t;
-
-/*
- * MCU and clock rate
- */
-#define MCU_MHZ 24
-#define PLATFORM PLATFORM_MC1322X
+/* mc1322x files */
+#include "contiki-mc1322x-conf.h"
+/* this is from cpu/mc1322x/board */
+#include "redbee-econotag.h"
 
 /* Clock ticks per second */
 #define CLOCK_CONF_SECOND 100
@@ -69,26 +66,10 @@ typedef int32_t s32_t;
 #define SAMP UCON_SAMP_8X
 //#define SAMP UCON_SAMP_16X
 
-/* Econotag also needs an addtional 12pf on board */
-/* Coarse tune: add 4pf */
-#define CTUNE_4PF 1
-/* Coarse tune: add 0-15 pf (CTUNE is 4 bits) */
-#define CTUNE 11
-/* Fine tune: add FTUNE * 156fF (FTUNE is 5bits) */
-#define FTUNE 7
-
-/* Pre-allocated memory for loadable modules heap space (in bytes)*/
-#define MMEM_CONF_SIZE 256
-
-#define AUTOSTART_ENABLE 1
-
-#define CCIF
-#define CLIF
-
+#define uart_init uart1_init
 #define dbg_putchar(x) uart1_putchar(x)
 
 #define USE_FORMATTED_STDIO 1
-#undef DISABLE_RECEPTION
 #define MACA_DEBUG          0
 #define MACA_RAW_MODE       0
 #define USE_32KHZ_XTAL      0
@@ -97,16 +78,5 @@ typedef int32_t s32_t;
 #define RIMEADDR_CONF_SIZE    8
 #define PACKETBUF_CONF_SIZE  96
 #define PACKETBUF_CONF_HDR_SIZE 64
-
-typedef uint32_t clock_time_t;
-typedef unsigned char u8_t;
-typedef unsigned short u16_t;
-typedef unsigned long u32_t;
-typedef unsigned short uip_stats_t;
-
-void clock_delay(unsigned int us2);
-void clock_wait(int ms10);
-void clock_set_seconds(unsigned long s);
-unsigned long clock_seconds(void);
 
 #endif /* __CONTIKI_CONF_H__ */
