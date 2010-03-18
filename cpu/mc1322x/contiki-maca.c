@@ -158,3 +158,7 @@ PROCESS_THREAD(maca_process, ev, data)
 	
  	PROCESS_END();
 }
+
+void maca_rx_callback(volatile packet_t *p __attribute((unused))) {
+	process_post(&maca_process, event_data_ready, NULL);
+}
