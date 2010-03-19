@@ -3397,6 +3397,7 @@ public class GUI extends Observable {
     for (File project: currentProjectDirs) {
       Element projectElement = new Element("project");
       projectElement.addContent(createPortablePath(project).getPath().replaceAll("\\\\", "/"));
+      projectElement.setAttribute("EXPORT", "discard");
       root.addContent(projectElement);
     }
 
@@ -4114,10 +4115,13 @@ public class GUI extends Observable {
     }
   }
   private File restoreConfigRelativePath(File portable) {
-    if (currentConfigFile == null) {
+    return restoreConfigRelativePath(currentConfigFile, portable);
+  }
+  public static File restoreConfigRelativePath(File configFile, File portable) {
+    if (configFile == null) {
       return null;
     }
-    File configPath = currentConfigFile.getParentFile();
+    File configPath = configFile.getParentFile();
     if (configPath == null) {
         /* File is in current directory */
         configPath = new File("");
