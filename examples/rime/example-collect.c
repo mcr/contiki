@@ -42,7 +42,6 @@
 #include "lib/random.h"
 #include "net/rime.h"
 #include "net/rime/collect.h"
-#include "net/rime/neighbor.h"
 #include "dev/leds.h"
 #include "dev/button-sensor.h"
 
@@ -75,6 +74,13 @@ PROCESS_THREAD(example_collect_process, ev, data)
   
   collect_open(&tc, 130, &callbacks);
 
+  if(rimeaddr_node_addr.u8[0] == 1 &&
+     rimeaddr_node_addr.u8[1] == 1) {
+	printf("I am sink\n");
+	collect_set_sink(&tc, 1);
+
+  }
+  
   while(1) {
     static struct etimer et;
 
@@ -85,7 +91,7 @@ PROCESS_THREAD(example_collect_process, ev, data)
     PROCESS_WAIT_EVENT();
 
     if(etimer_expired(&et)) {
-      while(tc.forwarding) {
+      while(tc.sending) {
 	PROCESS_PAUSE();
       }
       printf("Sending\n");

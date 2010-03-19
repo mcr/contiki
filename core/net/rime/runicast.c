@@ -45,11 +45,9 @@
  */
 
 #include "net/rime/runicast.h"
-#include "net/rime/neighbor.h"
 #include "net/rime.h"
 #include <string.h>
 
-#define RUNICAST_PACKET_ID_BITS 2
 
 #ifdef RUNICAST_CONF_REXMIT_TIME
 #define REXMIT_TIME RUNICAST_CONF_REXMIT_TIME
@@ -83,13 +81,14 @@ sent_by_stunicast(struct stunicast_conn *stunicast, int status, int num_tx)
   /* Only process data packets, not ACKs. */
   if(packetbuf_attr(PACKETBUF_ATTR_PACKET_TYPE) == PACKETBUF_ATTR_PACKET_TYPE_DATA) {
     
-    c->rxmit += num_tx;
+    c->rxmit += 1;
     
     if(c->rxmit != 0) {
       RIMESTATS_ADD(rexmit);
-      PRINTF("%d.%d: runicast: packet %u resent %u\n",
+      PRINTF("%d.%d: runicast: sent_by_stunicast packet %u (%u) resent %u\n",
              rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1],
-             packetbuf_attr(PACKETBUF_ATTR_PACKET_ID), c->rxmit);
+             packetbuf_attr(PACKETBUF_ATTR_PACKET_ID),
+             c->sndnxt, c->rxmit);
     }
     if(c->rxmit >= c->max_rxmit) {
       RIMESTATS_ADD(timedout);
@@ -234,6 +233,7 @@ runicast_send(struct runicast_conn *c, const rimeaddr_t *receiver,
   packetbuf_set_attr(PACKETBUF_ATTR_RELIABLE, 1);
   packetbuf_set_attr(PACKETBUF_ATTR_PACKET_TYPE, PACKETBUF_ATTR_PACKET_TYPE_DATA);
   packetbuf_set_attr(PACKETBUF_ATTR_PACKET_ID, c->sndnxt);
+  packetbuf_set_attr(PACKETBUF_ATTR_MAX_MAC_REXMIT, 2);
   c->max_rxmit = max_retransmissions;
   c->rxmit = 0;
   c->is_tx = 1;

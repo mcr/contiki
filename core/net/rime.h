@@ -53,7 +53,6 @@
 #include "net/rime/mesh.h"
 #include "net/rime/multihop.h"
 #include "net/rime/neighbor-discovery.h"
-#include "net/rime/neighbor.h"
 #include "net/rime/netflood.h"
 #include "net/rime/polite-announcement.h"
 #include "net/rime/polite.h"

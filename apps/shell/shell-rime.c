@@ -48,7 +48,6 @@
 #include "lib/random.h"
 
 #include "net/rime.h"
-#include "net/rime/neighbor.h"
 #include "net/rime/route.h"
 
 #include "net/rime/timesynch.h"
@@ -64,7 +63,7 @@ int snprintf(char *str, size_t size, const char *format, ...);
 #include <string.h>
 
 
-#define COLLECT_REXMITS 8
+#define COLLECT_REXMITS 4
 
 #define COLLECT_MSG_HDRSIZE 4
 struct collect_msg {
