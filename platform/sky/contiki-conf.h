@@ -35,16 +35,19 @@
 
 #define CC2420_CONF_AUTOACK              1
 #define MAC_CONF_CHANNEL_CHECK_RATE      8
-#define COLLECT_CONF_ANNOUNCEMENTS       0
+
+#define COLLECT_CONF_ANNOUNCEMENTS       1
 #define RIME_CONF_NO_POLITE_ANNOUCEMENTS 1
+#define RIME_CONF_NO_BROADCAST_ANNOUCEMENTS 0
 #define CXMAC_CONF_ANNOUNCEMENTS         0
 #define XMAC_CONF_ANNOUNCEMENTS          0
+#define CONTIKIMAC_CONF_ANNOUNCEMENTS    0
 
 #define CONTIKIMAC_CONF_COMPOWER         1
 #define XMAC_CONF_COMPOWER               1
 #define CXMAC_CONF_COMPOWER              1
 
-
+#define COLLECT_NEIGHBOR_CONF_MAX_NEIGHBORS      32
 
 #endif /* WITH_UIP6 */
 
@@ -102,7 +105,7 @@
 #define F_CPU 3900000uL /*2457600uL*/
 
 /* Our clock resolution, this is the same as Unix HZ. */
-#define CLOCK_CONF_SECOND 128L
+#define CLOCK_CONF_SECOND 128UL
 
 #define BAUD2UBR(baud) ((F_CPU/baud))
 
