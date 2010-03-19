@@ -631,6 +631,10 @@ cc2420_read(void *buf, unsigned short bufsize)
   uint16_t checksum;
 #endif /* CC2420_CONF_CHECKSUM */
 
+  if(!pending) {
+    return 0;
+  }
+  
   pending = 0;
   
   GET_LOCK();
