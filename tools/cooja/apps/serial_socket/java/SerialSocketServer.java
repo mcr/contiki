@@ -150,7 +150,7 @@ public class SerialSocketServer extends VisPlugin implements MotePlugin {
       public void update(Observable obs, Object obj) {
         try {
           if (out == null) {
-            logger.debug("out is null");
+            /*logger.debug("out is null");*/
             return;
           }
           out.write(serialPort.getLastSerialData());
