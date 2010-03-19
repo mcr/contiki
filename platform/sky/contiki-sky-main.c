@@ -392,6 +392,8 @@ main(int argc, char **argv)
   energest_init();
   ENERGEST_ON(ENERGEST_TYPE_CPU);
 
+  watchdog_start();
+
   print_processes(autostart_processes);
   autostart_start(autostart_processes);
 
@@ -401,7 +403,7 @@ main(int argc, char **argv)
 #if DCOSYNCH_CONF_ENABLED
   timer_set(&mgt_timer, DCOSYNCH_PERIOD * CLOCK_SECOND);
 #endif
-  watchdog_start();
+
   /*  watchdog_stop();*/
   while(1) {
     int r;
