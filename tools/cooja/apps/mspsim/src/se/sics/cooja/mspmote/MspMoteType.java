@@ -221,9 +221,11 @@ public abstract class MspMoteType implements MoteType {
       element = new Element("source");
       File file = simulation.getGUI().createPortablePath(fileSource);
       element.setText(file.getPath().replaceAll("\\\\", "/"));
+      element.setAttribute("EXPORT", "discard");
       config.add(element);
       element = new Element("commands");
       element.setText(compileCommands);
+      element.setAttribute("EXPORT", "discard");
       config.add(element);
     }
 
@@ -231,6 +233,7 @@ public abstract class MspMoteType implements MoteType {
     element = new Element("firmware");
     File file = simulation.getGUI().createPortablePath(fileFirmware);
     element.setText(file.getPath().replaceAll("\\\\", "/"));
+    element.setAttribute("EXPORT", "copy");
     config.add(element);
 
     // Mote interfaces
