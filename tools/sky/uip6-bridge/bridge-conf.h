@@ -50,9 +50,6 @@
 #undef XMAC_CONF_ANNOUNCEMENTS
 #define XMAC_CONF_ANNOUNCEMENTS 0
 
-#undef RF_CHANNEL
-#define RF_CHANNEL              26
-
 #undef UIP_CONF_BUFFER_SIZE
 #define UIP_CONF_BUFFER_SIZE  256
 #endif /* __BRIDGE_CONF_H__ */
