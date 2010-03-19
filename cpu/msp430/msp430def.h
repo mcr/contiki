@@ -76,6 +76,9 @@ spl_t   splhigh_(void);
 #ifndef memcpy
 #include <string.h>
 
+/* void *w_memcpy(void *out, const void *in, size_t n); */
+
+/* #define memcpy(dest, src, count) w_memcpy(dest, src, count) */
 #define memcpy(dest, src, count) do {                    \
   if(count == 2) {                                       \
     *((uint8_t *)dest) = *((uint8_t *)src);              \
@@ -85,6 +88,9 @@ spl_t   splhigh_(void);
   }                                                      \
 } while(0)
 
+/* void *w_memset(void *out, int value, size_t n); */
+
+/* #define memset(dest, value, count) w_memset(dest, value, count) */
 #define memset(dest, value, count) do {                  \
   if(count == 2) {                                       \
     *((uint8_t *)dest) = (uint8_t)value;                 \
