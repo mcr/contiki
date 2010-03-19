@@ -140,8 +140,8 @@ clock_init(void)
   /* Select SMCLK (2.4576MHz), clear TAR */
   /* TACTL = TASSEL1 | TACLR | ID_3; */
   
-  /* Select ACLK 32768Hz clock, divide by 4 */
-  TACTL = TASSEL0 | TACLR | ID_2;
+  /* Select ACLK 32768Hz clock, divide by 2 */
+  TACTL = TASSEL0 | TACLR | ID_1;
 
   /* Initialize ccr1 to create the X ms interval. */
   /* CCR1 interrupt enabled, interrupt occurs when timer equals CCR1. */
