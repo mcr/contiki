@@ -97,6 +97,9 @@ public class ExecuteJAR {
 
     /* Load simulation */
     logger.info("Loading " + config);
+    GUI.externalToolsUserSettingsFile = new File(
+        System.getProperty("user.home"), 
+        GUI.EXTERNAL_TOOLS_USER_SETTINGS_FILENAME);
     Simulation s = GUI.quickStartSimulationConfig(config, false);
     if (s == null) {
       throw new RuntimeException(
@@ -108,6 +111,8 @@ public class ExecuteJAR {
     try {
       buildExecutableJAR(s.getGUI(), jar);
     } catch (RuntimeException e) {
+      logger.fatal(e.getMessage());
+      System.exit(1);
     }
     System.exit(0);
   }

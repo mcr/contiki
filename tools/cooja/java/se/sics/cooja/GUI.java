@@ -2734,8 +2734,6 @@ public class GUI extends Observable {
       filename = GUI.EXTERNAL_TOOLS_LINUX_SETTINGS_FILENAME;
     }
 
-    logger.info("Loading external tools user settings from: " + filename);
-
     try {
       InputStream in = GUI.class.getResourceAsStream(filename);
       if (in == null) {
@@ -2747,10 +2745,9 @@ public class GUI extends Observable {
 
       currentExternalToolsSettings = settings;
       defaultExternalToolsSettings = (Properties) currentExternalToolsSettings.clone();
+      logger.info("External tools default settings: " + filename);
     } catch (IOException e) {
-      // Error while importing default properties
-      logger.warn(
-          "Error when reading external tools settings from " + filename, e);
+      logger.warn("Error when reading external tools settings from " + filename, e);
     } finally {
       if (currentExternalToolsSettings == null) {
         defaultExternalToolsSettings = new Properties();
@@ -2773,17 +2770,16 @@ public class GUI extends Observable {
       settings.load(in);
       in.close();
 
-      Enumeration en = settings.keys();
+      Enumeration<Object> en = settings.keys();
       while (en.hasMoreElements()) {
         String key = (String) en.nextElement();
         setExternalToolsSetting(key, settings.getProperty(key));
       }
-
+      logger.info("External tools user settings: " + externalToolsUserSettingsFile);
     } catch (FileNotFoundException e) {
-      // No default configuration file found, using default
+      logger.warn("Error when reading user settings from: " + externalToolsUserSettingsFile);
     } catch (IOException e) {
-      // Error while importing saved properties, using default
-      logger.warn("Error when reading default settings from " + externalToolsUserSettingsFile);
+      logger.warn("Error when reading user settings from: " + externalToolsUserSettingsFile);
     }
   }
 
