@@ -30,6 +30,7 @@
 package se.sics.cooja.util;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -61,6 +62,7 @@ public class ExecuteJAR {
 
   public final static String SIMCONFIG_FILENAME = "simulation.csc";
   public final static String EXTERNALTOOLS_FILENAME = "exttools.config";
+  public final static String PROJECT_DEFAULT_CONFIG_FILENAME = "cooja_default.config";
   public final static String FIRMWARE_SUFFIX = ".sky";
 
   public static void main(String[] args) {
@@ -417,6 +419,26 @@ public class ExecuteJAR {
       throw (RuntimeException) new RuntimeException(
           "Error when writing external tools configuration: " + e2.getMessage()   
       ).initCause(e2);
+    }
+
+    /* Export current project configuration */
+    try {
+      ProjectConfig pConfig = gui.getProjectConfig().clone();
+      Enumeration<String> pValues = pConfig.getPropertyNames();
+      File newConfigFile = new File(workingDir, PROJECT_DEFAULT_CONFIG_FILENAME);
+      Properties newConfig = new Properties();
+      while (pValues.hasMoreElements()) {
+        String name = pValues.nextElement();
+        newConfig.setProperty(name, pConfig.getStringValue(name));
+      }
+      FileOutputStream out = new FileOutputStream(newConfigFile);
+      newConfig.store(out, "COOJA Project Config");
+      logger.info("Wrote project config: " + newConfigFile.getName());
+    } catch (Exception e1) {
+      e1.printStackTrace();
+      throw (RuntimeException) new RuntimeException(
+          "Error when writing project config: " + e1.getMessage()   
+      ).initCause(e1);
     }
     
     /* Delete existing META-INF dir */
