@@ -1651,13 +1651,13 @@ public class GUI extends Observable {
         GUI.showErrorDialog(GUI.getTopParentContainer(), "Error when starting plugin", ex, false);
       } else {
         /* If the plugin requires visualization, inform user */
-        Throwable cause = ex.getCause();
+        Throwable cause = ex;
         do {
           if (cause instanceof PluginRequiresVisualizationException) {
             logger.info("Visualized plugin was not started: " + pluginClass);
             return null;
           }
-        } while ((cause=cause.getCause()) != null);
+        } while (cause != null && (cause=cause.getCause()) != null);
         
         logger.fatal("Error when starting plugin", ex);
       }
