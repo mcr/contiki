@@ -109,7 +109,7 @@ public class ExecuteJAR {
       buildExecutableJAR(s.getGUI(), jar);
     } catch (RuntimeException e) {
     }
-    System.exit(1);
+    System.exit(0);
   }
 
   final static boolean OVERWRITE = false;
@@ -362,8 +362,8 @@ public class ExecuteJAR {
                       "Error when writing firmware file: " + firmwareFile
                   );
                 }
-                logger.info("Simconfig: Update firmware path reference: " + firmwareFile.getAbsolutePath() + " -> " + (executeDir + "/" + newName));
-                ((Element)pathElement).setText(executeDir + "/" + newName);
+                logger.info("Simconfig: Update firmware path reference: " + firmwareFile.getAbsolutePath() + " -> " + ("[CONFIG_DIR]/" + newName));
+                ((Element)pathElement).setText("[CONFIG_DIR]/" + newName);
               }
             }
           }
