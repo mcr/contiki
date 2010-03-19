@@ -44,6 +44,7 @@
 #include "sys/clock.h"
 
 void powertrace_start(clock_time_t perioc);
+void powertrace_stop(void);
 
 typedef enum {
   POWERTRACE_ON,
