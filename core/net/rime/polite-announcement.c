@@ -75,7 +75,7 @@ struct announcement_msg {
 };
 
 
-struct polite_announcement_state {
+static struct polite_announcement_state {
   struct ipolite_conn c;
   struct ctimer t;
   clock_time_t interval;

@@ -76,7 +76,7 @@ struct announcement_msg {
 };
 
 
-struct broadcast_announcement_state {
+static struct broadcast_announcement_state {
   struct broadcast_conn c;
   struct ctimer send_timer, interval_timer;
   clock_time_t initial_interval, min_interval, max_interval;
