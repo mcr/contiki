@@ -144,6 +144,9 @@ list_add(list_t list, void *item)
 {
   struct list *l;
 
+  /* Make sure not to add the same element twice */
+  list_remove(list, item);
+
   ((struct list *)item)->next = NULL;
   
   l = list_tail(list);
