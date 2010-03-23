@@ -223,6 +223,7 @@ start_process_run_loop(void *data)
 
     /* Initialize communication stack */
     netstack_init();
+    printf("MAC %s RDC %s\n", NETSTACK_MAC.name, NETSTACK_RDC.name);
 
     /* Start serial process */
     serial_line_init();
