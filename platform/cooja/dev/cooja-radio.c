@@ -210,12 +210,12 @@ pending_packet(void)
 }
 /*---------------------------------------------------------------------------*/
 static int
-cca(void)
+channel_clear(void)
 {
   if(simSignalStrength > CCA_SS_THRESHOLD) {
-    return 1;
+    return 0;
   }
-  return 0;
+  return 1;
 }
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(cooja_radio_process, ev, data)
@@ -252,7 +252,7 @@ const struct radio_driver cooja_radio_driver =
     transmit_packet,
     radio_send,
     radio_read,
-    cca,
+    channel_clear,
     receiving_packet,
     pending_packet,
     radio_on,
