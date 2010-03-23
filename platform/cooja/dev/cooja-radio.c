@@ -192,7 +192,6 @@ transmit_packet(unsigned short len)
   int ret = RADIO_TX_ERR;
   if(pending_data != NULL) {
     ret = radio_send(pending_data, len);
-    pending_data = NULL;
   }
   return ret;
 }
