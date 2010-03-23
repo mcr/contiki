@@ -110,8 +110,10 @@ typedef uint32_t u32_t;
 typedef int32_t s32_t;
 typedef unsigned short uip_stats_t;
 
-typedef unsigned long clock_time_t;
 #define CLOCK_CONF_SECOND 1000L
+typedef unsigned long clock_time_t;
+typedef unsigned long rtimer_clock_t;
+#define RTIMER_CLOCK_LT(a,b)     ((signed long)((a)-(b)) < 0)
 
 #define AODV_COMPLIANCE
 #define AODV_NUM_RT_ENTRIES 32
