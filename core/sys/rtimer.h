@@ -53,6 +53,8 @@
 #ifndef __RTIMER_H__
 #define __RTIMER_H__
 
+#include "rtimer-arch.h"
+
 #ifndef RTIMER_CLOCK_LT
 typedef unsigned short rtimer_clock_t;
 #define RTIMER_CLOCK_LT(a,b)     ((signed short)((a)-(b)) < 0)
@@ -146,8 +148,6 @@ void rtimer_arch_schedule(rtimer_clock_t t);
 /*rtimer_clock_t rtimer_arch_now(void);*/
 
 #define RTIMER_SECOND RTIMER_ARCH_SECOND
-
-#include "rtimer-arch.h"
 
 #endif /* __RTIMER_H__ */
 
