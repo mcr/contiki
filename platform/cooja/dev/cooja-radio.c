@@ -150,9 +150,11 @@ radio_read(void *buf, unsigned short bufsize)
 static int
 radio_send(const void *payload, unsigned short payload_len)
 {
+  int radiostate = simRadioHWOn;
+
   if(!simRadioHWOn) {
-    /* TODO Turn on radio temporarily during tx */
-    return RADIO_TX_ERR;
+    /* Turn on radio temporarily */
+    simRadioHWOn = 1;
   }
   if(payload_len > COOJA_RADIO_BUFSIZE) {
     return RADIO_TX_ERR;
@@ -173,6 +175,7 @@ radio_send(const void *payload, unsigned short payload_len)
     cooja_mt_yield();
   }
 
+  simRadioHWOn = radiostate;
   return RADIO_TX_OK;
 }
 /*---------------------------------------------------------------------------*/
