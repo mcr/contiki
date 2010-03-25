@@ -94,8 +94,9 @@ void
 shell_rime_neighbors_init(void)
 {
   announcement_register(&neighbor_announcement,
-			SHELL_RIME_ANNOUNCEMENT_IDENTIFIER_NEIGHBORS, 0,
+			SHELL_RIME_ANNOUNCEMENT_IDENTIFIER_NEIGHBORS,
 			received_announcement);
+  announcement_set_value(&neighbor_announcement, 0);
 
   shell_register_command(&neighbors_command);
 }
