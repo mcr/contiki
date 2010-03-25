@@ -353,6 +353,9 @@ Java_se_sics_cooja_corecomm_CLASSNAME_setMemory(JNIEnv *env, jobject obj, jint r
 JNIEXPORT void JNICALL
 Java_se_sics_cooja_corecomm_CLASSNAME_tick(JNIEnv *env, jobject obj)
 {
+  clock_time_t nextEtimer;
+  rtimer_clock_t nextRtimer;
+  
   simProcessRunValue = 0;
 
   /* Let all simulation interfaces act first */
@@ -382,9 +385,9 @@ Java_se_sics_cooja_corecomm_CLASSNAME_tick(JNIEnv *env, jobject obj)
     return;
   }
 
-  /* Save nearest event timer expiration time */
-  int nextEtimer = etimer_next_expiration_time() - simCurrentTime;
-  int nextRtimer = rtimer_arch_next() - simCurrentTime;
+  /* Save nearest expiration time */
+  nextEtimer = etimer_next_expiration_time() - (clock_time_t) simCurrentTime;
+  nextRtimer = rtimer_arch_next() - (rtimer_clock_t) simCurrentTime;
   if(etimer_pending() && rtimer_arch_pending()) {
     simNextExpirationTime = MIN(nextEtimer, nextRtimer);
   } else if (etimer_pending()) {
