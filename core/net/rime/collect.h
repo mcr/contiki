@@ -86,6 +86,7 @@ struct collect_conn {
   struct neighbor_discovery_conn neighbor_discovery_conn;
 #else /* ! COLLECT_CONF_ANNOUNCEMENTS */
   struct announcement announcement;
+  struct ctimer transmit_after_scan_timer;
 #endif /* COLLECT_CONF_ANNOUNCEMENTS */
   const struct collect_callbacks *cb;
   struct ctimer t;
@@ -96,9 +97,16 @@ struct collect_conn {
   uint8_t eseqno;
   struct ctimer retransmission_timer;
   rimeaddr_t current_receiver;
+  uint8_t is_router;
+};
+
+enum {
+  COLLECT_NO_ROUTER,
+  COLLECT_ROUTER,
 };
 
 void collect_open(struct collect_conn *c, uint16_t channels,
+                  uint8_t is_router,
                   const struct collect_callbacks *callbacks);
 void collect_close(struct collect_conn *c);
 
