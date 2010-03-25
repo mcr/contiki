@@ -85,7 +85,9 @@ update_etx(const rimeaddr_t *dest, int packet_etx)
 
   if(new_etx > ETX_LIMIT) {
     neighbor_attr_remove_neighbor(dest);
-    subscriber_callback(dest, 0, new_etx);
+    if(subscriber_callback != NULL) {
+      subscriber_callback(dest, 0, new_etx);
+    }
   } else if(neighbor_attr_has_neighbor(dest)) {
     neighbor_attr_set_data(&etx, dest, &new_etx);
     if(new_etx != recorded_etx && subscriber_callback != NULL) {
