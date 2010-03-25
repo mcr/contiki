@@ -343,7 +343,8 @@ send_collect(void *dummy)
 void
 shell_rime_init(void)
 {
-  collect_open(&collect, SHELL_RIME_CHANNEL_COLLECT, &collect_callbacks);
+  collect_open(&collect, SHELL_RIME_CHANNEL_COLLECT,
+               COLLECT_ROUTER, &collect_callbacks);
   
   shell_register_command(&collect_command);
   shell_register_command(&mac_command);
