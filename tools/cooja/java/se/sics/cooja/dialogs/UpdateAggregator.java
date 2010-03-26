@@ -121,7 +121,7 @@ public abstract class UpdateAggregator<A> {
       while (pending.size() > maxPending) {
         /* Delay producer thread; events are coming in too fast */
         EventQueue.invokeLater(consume); /* Request immediate consume */
-        wait();
+        wait(t.getDelay());
       }
     } catch (InterruptedException e) {
     }
