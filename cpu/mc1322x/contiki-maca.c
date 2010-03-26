@@ -19,6 +19,12 @@
 #define MACA_RAW_PREPEND 0xff
 #endif
 
+#ifndef BLOCKING_TX
+#define BLOCKING_TX 1
+#endif
+
+static volatile uint8_t tx_complete;
+
 /* contiki mac driver */
 
 static void (* receiver_callback)(const struct radio_driver *);
@@ -115,7 +121,16 @@ int maca_send(const void *payload, unsigned short payload_len) {
 		}
 		PRINTF("\n\r");
 #endif
+#if BLOCKING_TX		
+		tx_complete = 0;
+#endif
 		tx_packet(p);
+#if BLOCKING_TX
+		/* block until tx_complete, set by maca_tx_callback */
+		/* there are many places in contiki that rely on the */
+		/* transmit call to block */
+		while(!tx_complete); 
+#endif
 		return RADIO_TX_OK;
 	} else {
 		PRINTF("couldn't get free packet for maca_send\n\r");
@@ -161,3 +176,9 @@ PROCESS_THREAD(maca_process, ev, data)
 void maca_rx_callback(volatile packet_t *p __attribute((unused))) {
 	process_post(&maca_process, event_data_ready, NULL);
 }
+
+#if BLOCKING_TX
+void maca_tx_callback(volatile packet_t *p __attribute((unused))) {
+	tx_complete = 1;
+}
+#endif
