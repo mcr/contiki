@@ -8,7 +8,7 @@
 
 #include "mc1322x.h"
 
-#define CONTIKI_MACA_DEBUG 1
+#define CONTIKI_MACA_DEBUG 0
 #if CONTIKI_MACA_DEBUG
 #define PRINTF(...) printf(__VA_ARGS__)
 #else
