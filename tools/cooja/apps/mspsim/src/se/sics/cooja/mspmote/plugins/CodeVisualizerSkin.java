@@ -47,6 +47,7 @@ import se.sics.cooja.Mote;
 import se.sics.cooja.Simulation;
 import se.sics.cooja.interfaces.Position;
 import se.sics.cooja.mspmote.MspMote;
+import se.sics.cooja.mspmote.MspMoteType;
 import se.sics.cooja.plugins.Visualizer;
 import se.sics.cooja.plugins.VisualizerSkin;
 import se.sics.mspsim.core.MSP430;
@@ -103,7 +104,7 @@ public class CodeVisualizerSkin implements VisualizerSkin {
     }
     try {
       DebugInfo debugInfo = 
-        ((MspMote)mote).getELF().getDebugInfo(((MspMote)mote).getCPU().reg[MSP430.PC]);
+        ((MspMoteType)mote.getType()).getELF().getDebugInfo(((MspMote)mote).getCPU().reg[MSP430.PC]);
       if (debugInfo == null) {
         return null;
       }
