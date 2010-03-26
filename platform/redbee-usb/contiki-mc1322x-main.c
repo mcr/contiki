@@ -213,7 +213,7 @@ main(void)
 #endif
 
 
-//	set_rimeaddr(&addr);
+	set_rimeaddr(&addr);
 
 	printf("Rime started with address ");
 	for(i = 0; i < sizeof(addr.u8) - 1; i++) {

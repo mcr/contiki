@@ -48,10 +48,7 @@
 
 #include <stdio.h>
 
-#include "gpio.h"
-#include "utils.h"
-#include "crm.h"
-#include "isr.h"
+#include "mc1322x.h"
 
 #define TIC 4
 #define ON_BATTERY 0
@@ -67,26 +64,26 @@ PROCESS(example_collect_process, "Test collect process");
 AUTOSTART_PROCESSES(&example_collect_process);
 /*---------------------------------------------------------------------------*/
 
-#define led_blue_on() do { set_bit(reg32(GPIO_DATA0),10); set_bit(reg32(GPIO_DATA0),25); } while (0)
-#define led_blue_off() do { clear_bit(reg32(GPIO_DATA0),10); clear_bit(reg32(GPIO_DATA0),25); } while(0)
+#define led_blue_on() do { set_bit(*GPIO_DATA0,10); set_bit(*GPIO_DATA0,25); } while (0)
+#define led_blue_off() do { clear_bit(*GPIO_DATA0,10); clear_bit(*GPIO_DATA0,25); } while(0)
 
 void safe_sleep(void) {
 	/* set kbi wake up polarity to the opposite of the current reading */
-	if(bit_is_set(reg32(GPIO_DATA0),29)) {
+	if(bit_is_set(*GPIO_DATA0,29)) {
 		printf("pol neg\n\r");
 		kbi_pol_neg(7);
 	} else {
 		printf("pol pos\n\r");
 		kbi_pol_pos(7);
 	}
-	reg32(CRM_WU_TIMEOUT) = cal_rtc_secs * SLEEP_TIME;
+	*CRM_WU_TIMEOUT = cal_rtc_secs * SLEEP_TIME;
 	sleep((SLEEP_RETAIN_MCU|SLEEP_RAM_64K),SLEEP_MODE_HIBERNATE);
 	enable_irq(TMR);
 	enable_irq(CRM);
-	uart1_init();
+	uart_init(INC, MOD, SAMP);
 	maca_on();
 	printf("awake\n\r");
-	if(bit_is_set(reg32(CRM_STATUS),7)) {
+	if(bit_is_set(*CRM_STATUS,7)) {
 		printf("woke up from button\n\r");
 		process_post(&example_collect_process, ev_pressed, "GPIO29");
 	}
@@ -95,7 +92,7 @@ void safe_sleep(void) {
 
 void report_state(void) {
 	packetbuf_clear();
-	if(bit_is_set(reg32(GPIO_DATA0),29)) {
+	if(bit_is_set(*GPIO_DATA0,29)) {
 		packetbuf_copyfrom("GPIO29-1",9);
 	} else {
 		packetbuf_copyfrom("GPIO29-0",9);
@@ -131,46 +128,19 @@ PROCESS_THREAD(example_collect_process, ev, data)
 {
   PROCESS_BEGIN();
 
-  SENSORS_ACTIVATE(button_sensor);
+  ev_pressed = process_alloc_event();
   
   collect_open(&tc, 130, &callbacks);
-
-  while(1) {
-    static struct etimer et;
-
-    /* Send a packet every 16 seconds; first wait 8 seconds, than a
-       random time between 0 and 8 seconds. */
-
-    etimer_set(&et, CLOCK_SECOND * 16 + random_rand() % (CLOCK_SECOND * 16));
-    PROCESS_WAIT_EVENT();
-
-    if(etimer_expired(&et)) {
-      while(tc.forwarding) {
-	PROCESS_PAUSE();
-      }
-      printf("Sending\n");
-      packetbuf_clear();
-      packetbuf_set_datalen(sprintf(packetbuf_dataptr(),
-				  "%s", "Hello") + 1);
-      collect_send(&tc, 4);
-    }
-
-    if(ev == sensors_event) {
-      if(data == &button_sensor) {
-	printf("I am sink\n");
-	collect_set_sink(&tc, 1);
-      }
-    }
-
+  
 #if ON_BATTERY
   enable_timer_wu();
 #endif
-
+  
   if(rimeaddr_node_addr.u8[0] == 1) {
 	  printf("I am sink\n");
 	  collect_set_sink(&tc, 1);
   }
-
+  
   while(1) {
 	  static struct etimer et;
 	  static uint16_t chirps;
@@ -199,7 +169,7 @@ PROCESS_THREAD(example_collect_process, ev, data)
 	  
 	  printf("going to sleep\n");
 	  safe_sleep();
-	  
+  	  
 #else
 	  etimer_set(&et, CLOCK_SECOND * TIC + random_rand() % (CLOCK_SECOND * TIC));
 	  PROCESS_WAIT_EVENT();
@@ -222,5 +192,7 @@ PROCESS_THREAD(example_collect_process, ev, data)
   }
   
   PROCESS_END();
-}
+  
+  }
+
 /*---------------------------------------------------------------------------*/
