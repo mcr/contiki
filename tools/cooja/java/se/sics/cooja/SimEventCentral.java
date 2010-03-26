@@ -217,7 +217,10 @@ public class SimEventCentral {
 
       /* We may have to remove some events now */
       while (logOutputEvents.size() > logOutputBufferSize-1) {
-        LogOutputEvent removed = logOutputEvents.pollFirst();
+        LogOutputEvent removed;
+        synchronized (logOutputEvents) {
+          removed = logOutputEvents.pollFirst();
+        }
         if (removed == null) {
           break;
         }
@@ -225,11 +228,12 @@ public class SimEventCentral {
           l.removedLogOutput(removed);
         }
       }
-      
+
       /* Store log output, and notify listeners */
-      LogOutputEvent ev = 
-        new LogOutputEvent(mote, simulation.getSimulationTime(), msg);
-      logOutputEvents.add(ev);
+      LogOutputEvent ev = new LogOutputEvent(mote, simulation.getSimulationTime(), msg);
+      synchronized (logOutputEvents) {
+        logOutputEvents.add(ev);
+      }
       for (LogOutputListener l: logOutputListeners) {
         l.newLogOutput(ev);
       }
@@ -269,8 +273,11 @@ public class SimEventCentral {
       logOutputEvents.clear();
     }
   }
+
   public LogOutputEvent[] getLogOutputHistory() {
-    return logOutputEvents.toArray(new LogOutputEvent[0]);
+    synchronized (logOutputEvents) {
+      return logOutputEvents.toArray(new LogOutputEvent[0]);
+    }
   }
   public int getLogOutputBufferSize() {
     return logOutputBufferSize;
