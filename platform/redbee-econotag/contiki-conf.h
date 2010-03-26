@@ -80,6 +80,7 @@
 #define PACKETBUF_CONF_HDR_SIZE 64
 
 #define RF_CHANNEL 11
+#define BLOCKING_TX 1
 
 /* 0 for IPv6, or 1 for HC1, 2 for HC01 */
 #define SICSLOWPAN_CONF_COMPRESSION_IPV6 0 
