@@ -145,7 +145,7 @@ uip_nd6_init(void)
   uip_nd6_prefix_list[0].is_infinite = 1;
 
   /* we check the ND structures every 100ms */
-  etimer_set(&uip_nd6_timer_periodic, 0.1 * CLOCK_SECOND);
+  etimer_set(&uip_nd6_timer_periodic, 1 * CLOCK_SECOND);
 }
 
 struct uip_nd6_neighbor *
