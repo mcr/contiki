@@ -1342,7 +1342,7 @@ output(uip_lladdr_t *localdest)
   packetbuf_clear();
   rime_ptr = packetbuf_dataptr();
 
-  packetbuf_set_attr(PACKETBUF_ATTR_MAX_MAC_REXMIT, 2);
+  packetbuf_set_attr(PACKETBUF_ATTR_MAX_MAC_TRANSMISSIONS, 3);
   
   if(UIP_IP_BUF->proto == UIP_PROTO_TCP) {
     /*    packetbuf_set_attr(PACKETBUF_ATTR_PACKET_TYPE,
