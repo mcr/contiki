@@ -43,6 +43,8 @@
 #include <stdint.h>
 #include <unistd.h>
 
+#include "pfs.h"
+
 /* These names are deprecated, use C99 names. */
 typedef uint8_t   u8_t;
 typedef uint16_t u16_t;
