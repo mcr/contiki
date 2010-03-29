@@ -199,7 +199,7 @@ PROCESS_THREAD(test_collect_process, ev, data)
 
   SENSORS_ACTIVATE(button_sensor);
   
-  collect_open(&tc, 128, &callbacks);
+  collect_open(&tc, 128, COLLECT_ROUTER, &callbacks);
   
   while(1) {
     static struct etimer et;
