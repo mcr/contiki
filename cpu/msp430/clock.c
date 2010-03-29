@@ -53,6 +53,7 @@ static volatile clock_time_t count = 0;
 static unsigned short last_tar = 0;
 /*---------------------------------------------------------------------------*/
 interrupt(TIMERA1_VECTOR) timera1 (void) {
+  ENERGEST_OFF(ENERGEST_TYPE_LPM);
   ENERGEST_ON(ENERGEST_TYPE_IRQ);
 
   if(TAIV == 2) {
@@ -95,6 +96,7 @@ interrupt(TIMERA1_VECTOR) timera1 (void) {
     }*/
     
   ENERGEST_OFF(ENERGEST_TYPE_IRQ);
+  ENERGEST_ON(ENERGEST_TYPE_LPM);
 }
 /*---------------------------------------------------------------------------*/
 clock_time_t
