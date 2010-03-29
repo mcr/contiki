@@ -112,7 +112,7 @@ packetbuf_compact(void)
 	   packetbuf_datalen());
   } else if (bufptr > 0) {
     len = packetbuf_datalen() + PACKETBUF_HDR_SIZE;
-    for (i = PACKETBUF_HDR_SIZE; i < len; i++) {
+    for(i = PACKETBUF_HDR_SIZE; i < len; i++) {
       packetbuf[i] = packetbuf[bufptr + i];
     }
 
@@ -176,13 +176,19 @@ packetbuf_hdralloc(int size)
   return 0;
 }
 /*---------------------------------------------------------------------------*/
+void
+packetbuf_hdr_remove(int size)
+{
+  hdrptr += size;
+}
+/*---------------------------------------------------------------------------*/
 int
 packetbuf_hdrreduce(int size)
 {
   if(buflen < size) {
     return 0;
   }
-  
+
   bufptr += size;
   buflen -= size;
   return 1;
@@ -245,19 +251,14 @@ packetbuf_totlen(void)
   return packetbuf_hdrlen() + packetbuf_datalen();
 }
 /*---------------------------------------------------------------------------*/
-
-
-
 void
 packetbuf_attr_clear(void)
 {
   int i;
   for(i = 0; i < PACKETBUF_NUM_ATTRS; ++i) {
-/*     packetbuf_attrs[i].type = PACKETBUF_ATTR_NONE; */
     packetbuf_attrs[i].val = 0;
   }
   for(i = 0; i < PACKETBUF_NUM_ADDRS; ++i) {
-/*     packetbuf_addrs[i].type = PACKETBUF_ATTR_NONE; */
     rimeaddr_copy(&packetbuf_addrs[i].addr, &rimeaddr_null);
   }
 }

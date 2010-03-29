@@ -98,6 +98,8 @@ void packetbuf_clear(void);
  */
 void packetbuf_clear_hdr(void);
 
+void packetbuf_hdr_remove(int bytes);
+
 /**
  * \brief      Get a pointer to the data in the packetbuf
  * \return     Pointer to the packetbuf data
