@@ -53,4 +53,6 @@ typedef enum {
 
 void powertrace_sniff(powertrace_onoff_t onoff);
 
+void powertrace_print(char *str);
+
 #endif /* POWERTRACE_H */
