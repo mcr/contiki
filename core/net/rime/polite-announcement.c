@@ -158,7 +158,8 @@ send_timer(void *ptr)
 }
 /*---------------------------------------------------------------------------*/
 static void
-new_announcement(uint16_t id, uint16_t newval, uint16_t oldval, uint8_t bump)
+new_announcement(uint16_t id, uint8_t has_value, uint16_t newval,
+    uint16_t oldval, uint8_t bump)
 {
   if(newval != oldval) {
     c.interval = c.min_interval;
