@@ -327,7 +327,7 @@ psock_init(CC_REGISTER_ARG struct psock *psock,
 }
 /*---------------------------------------------------------------------------*/
 static char
-copy_to_buf(char **buffer, uint16_t *bufsize, const char **str)
+copy_to_buf(const uint8_t **buffer, uint16_t *bufsize, const char **str)
 {
   uint16_t len = strlen(*str);
   uint16_t copysize = len;
