@@ -303,18 +303,6 @@ addr_context_lookup_by_number(u8_t number) {
   return NULL;
 }
 /*--------------------------------------------------------------------*/
-/**
- * Callback function for the MAC packet sent callback
- */
-static void
-packet_sent(void *ptr, int status, int transmissions)
-{
-#if SICSLOWPAN_CONF_NEIGHBOR_INFO
-  neighbor_info_packet_sent(status, transmissions);
-#endif /* SICSLOWPAN_CONF_NEIGHBOR_INFO */
-}
-
-/*--------------------------------------------------------------------*/
 static void
 compress_addr_64(uint8_t bitpos, uip_ipaddr_t *ipaddr, uip_lladdr_t *lladdr) {
   if(uip_is_addr_mac_addr_based(ipaddr, lladdr)){
@@ -1293,6 +1281,17 @@ compress_hdr_ipv6(rimeaddr_t *rime_destaddr) {
 /*--------------------------------------------------------------------*/
 /** \name Input/output functions common to all compression schemes
  * @{                                                                 */
+/*--------------------------------------------------------------------*/
+/**
+ * Callback function for the MAC packet sent callback
+ */
+static void
+packet_sent(void *ptr, int status, int transmissions)
+{
+#if SICSLOWPAN_CONF_NEIGHBOR_INFO
+  neighbor_info_packet_sent(status, transmissions);
+#endif /* SICSLOWPAN_CONF_NEIGHBOR_INFO */
+}
 /*--------------------------------------------------------------------*/
 /**
  * \brief This function is called by the 6lowpan code to send out a
