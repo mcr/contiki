@@ -51,7 +51,7 @@
 #include "sys/pt.h"
 #include "sys/rtimer.h"
 
-#include "cooja-debug.h"
+/*#include "cooja-debug.h"*/
 #include "contiki-conf.h"
 
 #ifdef EXPERIMENT_SETUP
