@@ -95,6 +95,7 @@ struct radio_driver {
 enum {
   RADIO_TX_OK,
   RADIO_TX_ERR,
+  RADIO_TX_COLLISION,
 };
 
 #endif /* __RADIO_H__ */
