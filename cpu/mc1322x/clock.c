@@ -69,3 +69,20 @@ clock_time(void)
   return current_clock;
 }
 
+unsigned long
+clock_seconds(void)
+{
+	return seconds;
+}
+
+/* clock delay from cc2430 */
+/* I don't see any documentation about how this routine is suppose to behave */
+void
+clock_delay(unsigned int len)
+{
+  unsigned int i;
+  for(i = 0; i< len; i++) {
+	  asm("nop");
+  }
+}
+
