@@ -39,127 +39,89 @@
  */
 
 #include "contiki.h"
+#include "dev/leds.h"
 
-#include "utils.h"
-#include "gpio.h"
-#include "uart1.h"
+#define DEBUG 0
+#if DEBUG
+#include <stdio.h>
+#define PRINTF(...) printf(__VA_ARGS__)
+#else
+#define PRINTF(...)
+#endif
 
-#define DELAY8  100000
-#define DELAY9  200000
-#define DELAY10 400000
+static struct etimer red_timer, green_timer, blue_timer;
 
+PROCESS(red_process, "red process");
+PROCESS(green_process, "green process");
+PROCESS(blue_process, "blue process");
 
-#include <stdio.h> /* For printf() */
+PROCESS_NAME(red_process);
+PROCESS_NAME(green_process);
+PROCESS_NAME(blue_process);
 
+AUTOSTART_PROCESSES(&red_process, &green_process, &blue_process);
 
-static struct etimer blink8_timer, blink9_timer, blink10_timer;
-
-PROCESS(blink8_process, "blink8 process");
-PROCESS(blink9_process, "blink9 process");
-PROCESS(blink10_process, "blink10 process");
-
-PROCESS_NAME(blink8_process);
-PROCESS_NAME(blink9_process);
-PROCESS_NAME(blink10_process);
-
-AUTOSTART_PROCESSES(&blink8_process,&blink9_process,&blink10_process);
-
-PROCESS_THREAD(blink8_process, ev, data)
+PROCESS_THREAD(red_process, ev, data)
 {
 
-  PROCESS_BEGIN();
+	PROCESS_BEGIN();
 
-  etimer_set(&blink8_timer, CLOCK_SECOND);
+	leds_init();
+	etimer_set(&red_timer, CLOCK_SECOND);
 
-  set_bit(reg32(GPIO_PAD_DIR0),8);
-  
-  volatile uint32_t i;
+	while(1) {
+		PROCESS_WAIT_EVENT_UNTIL(ev == PROCESS_EVENT_TIMER);
 
-  static volatile uint8_t led8 = 0;
-  
-  while(1) {
-	  PROCESS_WAIT_EVENT_UNTIL(ev == PROCESS_EVENT_TIMER);
-	  
-	  if(data == &blink8_timer) {
-		  if(led8 == 0) {
-			  set_bit(reg32(GPIO_DATA0),8);
-			  led8 = 1;
-//			  printf("Red\n\r");
-		  } else {
-			  clear_bit(reg32(GPIO_DATA0),8);
-			  led8 = 0;
-		  }
-		  etimer_reset(&blink8_timer);
-	  }
-  };
-  
-  PROCESS_END();
+		if(data == &red_timer) {
+			leds_toggle(LEDS_RED);
+			PRINTF("Red\n\r");
+			etimer_reset(&red_timer);
+		}
+	}
+
+	PROCESS_END();
 }
 
 
-PROCESS_THREAD(blink9_process, ev, data)
+PROCESS_THREAD(green_process, ev, data)
 {
 
-  PROCESS_BEGIN();
+	PROCESS_BEGIN();
 
-  etimer_set(&blink9_timer, CLOCK_SECOND/2);
+	etimer_set(&green_timer, CLOCK_SECOND/2);
 
-  set_bit(reg32(GPIO_PAD_DIR0),9);
-  
-  volatile uint32_t i;
+	while(1) {
+		PROCESS_WAIT_EVENT_UNTIL(ev == PROCESS_EVENT_TIMER);
 
-  static volatile uint8_t led9 = 0;
-  
-  while(1) {
-	  PROCESS_WAIT_EVENT_UNTIL(ev == PROCESS_EVENT_TIMER);
-	  
-	  if(data == &blink9_timer) {
-		  if(led9 == 0) {
-			  set_bit(reg32(GPIO_DATA0),9);
-			  led9 = 1;
-//			  printf("Green\n\r");
-		  } else {
-			  clear_bit(reg32(GPIO_DATA0),9);
-			  led9 = 0;
-		  }
-		  etimer_reset(&blink9_timer);
-	  }
-  };
-  
-  PROCESS_END();
+		if(data == &green_timer) {
+			leds_toggle(LEDS_GREEN);
+			PRINTF("Green\n\r");
+			etimer_reset(&green_timer);
+		}
+	};
+
+	PROCESS_END();
 }
 
 
 
-PROCESS_THREAD(blink10_process, ev, data)
+PROCESS_THREAD(blue_process, ev, data)
 {
 
-  PROCESS_BEGIN();
+	PROCESS_BEGIN();
 
-  etimer_set(&blink10_timer, CLOCK_SECOND/4);
+	etimer_set(&blue_timer, CLOCK_SECOND/4);
 
-  set_bit(reg32(GPIO_PAD_DIR0),10);
-  
-  volatile uint32_t i;
+	while(1) {
+		PROCESS_WAIT_EVENT_UNTIL(ev == PROCESS_EVENT_TIMER);
 
-  static volatile uint8_t led10 = 0;
-  
-  while(1) {
-	  PROCESS_WAIT_EVENT_UNTIL(ev == PROCESS_EVENT_TIMER);
-	  
-	  if(data == &blink10_timer) {
-		  if(led10 == 0) {
-			  set_bit(reg32(GPIO_DATA0),10);
-			  led10 = 1;
-//			  printf("Blue\n\r");
-		  } else {
-			  clear_bit(reg32(GPIO_DATA0),10);
-			  led10 = 0;
-		  }
-		  etimer_reset(&blink10_timer);
-	  }
-  };
-  
-  PROCESS_END();
+		if(data == &blue_timer) {
+			leds_toggle(LEDS_BLUE);
+			PRINTF("Blue\n\r");
+			etimer_reset(&blue_timer);
+		}
+	};
+
+	PROCESS_END();
 }
 
