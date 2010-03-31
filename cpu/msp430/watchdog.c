@@ -39,11 +39,12 @@ static int stopped = 0;
 static void
 printchar(char c)
 {
+  /* Transmit the data. */
+  TXBUF1 = c;
+
   /* Loop until the transmission buffer is available. */
   while((IFG2 & UTXIFG1) == 0);
 
-  /* Transmit the data. */
-  TXBUF1 = c;
 }
 /*---------------------------------------------------------------------------*/
 static void
