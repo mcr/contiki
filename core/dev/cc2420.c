@@ -831,7 +831,7 @@ cc2420_receiving_packet(void)
 static int
 pending_packet(void)
 {
-  return pending;
+  return FIFOP_IS_1;
 }
 /*---------------------------------------------------------------------------*/
 void
