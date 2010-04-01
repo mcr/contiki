@@ -1344,6 +1344,7 @@ output(uip_lladdr_t *localdest)
 
   packetbuf_set_attr(PACKETBUF_ATTR_MAX_MAC_TRANSMISSIONS, 3);
 
+#define TCP_FIN 0x01
   /* Set stream mode for all TCP packets, except FIN packets. */
   if(UIP_IP_BUF->proto == UIP_PROTO_TCP &&
      (UIP_TCP_BUF->flags & TCP_FIN) == 0) {
