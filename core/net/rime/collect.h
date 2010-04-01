@@ -90,13 +90,13 @@ struct collect_conn {
 #endif /* COLLECT_CONF_ANNOUNCEMENTS */
   const struct collect_callbacks *cb;
   struct ctimer t;
+  struct ctimer retransmission_timer;
+  rimeaddr_t parent;
+  rimeaddr_t last_received_addr;
   uint16_t rtmetric;
   uint8_t sending, transmissions, max_rexmits;
   uint8_t seqno, last_received_seqno;
-  rimeaddr_t last_received_addr;
   uint8_t eseqno;
-  struct ctimer retransmission_timer;
-  rimeaddr_t current_receiver;
   uint8_t is_router;
 };
 
