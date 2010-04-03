@@ -352,6 +352,7 @@ enum {
   PACKETBUF_ATTR_REXMIT,
   PACKETBUF_ATTR_MAX_REXMIT,
   PACKETBUF_ATTR_NUM_REXMIT,
+  PACKETBUF_ATTR_PENDING,
   
   /* Scope 2 attributes: used between end-to-end nodes. */
   PACKETBUF_ATTR_HOPS,
