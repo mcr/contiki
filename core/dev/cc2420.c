@@ -189,7 +189,7 @@ on(void)
 
   ENABLE_FIFOP_INT();
   strobe(CC2420_SRXON);
-  flushrx();
+
 }
 static void
 off(void)
@@ -201,6 +201,7 @@ off(void)
   /* Wait for transmission to end before turning radio off. */
   while(status() & BV(CC2420_TX_ACTIVE));
 
+  flushrx();
   strobe(CC2420_SRFOFF);
   DISABLE_FIFOP_INT();
   ENERGEST_OFF(ENERGEST_TYPE_LISTEN);
@@ -215,6 +216,7 @@ static void RELEASE_LOCK(void) {
       lock_on = 0;
     }
     if(lock_off) {
+      leds_off(LEDS_BLUE);
       off();
       lock_off = 0;
     }
