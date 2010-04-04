@@ -76,8 +76,11 @@ watchdog_interrupt(void)
   /*  printstring("Watchdog reset at PC $");
   hexprint(ptr[3]);
   hexprint(ptr[2]);*/
-  printstring("\nStack:\n");
-
+  printstring("\nStack at $");
+  hexprint(((int)ptr) >> 8);
+  hexprint(((int)ptr) & 0xff);
+  printstring(":\n");
+  
   for(i = 0; i < 64; ++i) {
     hexprint(ptr[i]);
     printchar(' ');
