@@ -68,6 +68,8 @@ typedef unsigned short uip_stats_t;
 #define UIP_ARCH_ADD32  1
 #define UIP_ARCH_CHKSUM 1
 
+#define MAC_CONF_CHANNEL_CHECK_RATE CLOCK_CONF_SECOND
+
 #define LOADER_CONF_ARCH "lib/unload.h"
 
 #if WITH_LOGGING
