@@ -34,42 +34,20 @@
 #include <signal.h>
 #include <sys/unistd.h>
 #include "msp430.h"
-#include "msp430def.h"
 #include "dev/watchdog.h"
 #include "net/uip.h"
 
+
 /*---------------------------------------------------------------------------*/
-#if defined(__MSP430__) && defined(__GNUC__) && MSP430_MEMCPY_WORKAROUND
-void *
-w_memcpy(void *out, const void *in, size_t n)
-{
-  uint8_t *src, *dest;
-  src = (uint8_t *) in;
-  dest = (uint8_t *) out;
-  while(n-- > 0) {
-    *dest++ = *src++;
-  }
-  return out;
-}
-#endif /* __GNUC__ &&  __MSP430__ && MSP430_MEMCPY_WORKAROUND */
-/*---------------------------------------------------------------------------*/
-#if defined(__MSP430__) && defined(__GNUC__) && MSP430_MEMCPY_WORKAROUND
-void *
-w_memset(void *out, int value, size_t n)
-{
-  uint8_t *dest;
-  dest = (uint8_t *) out;
-  while(n-- > 0) {
-    *dest++ = value & 0xff;
-  }
-  return out;
-}
-#endif /* __GNUC__ &&  __MSP430__ && MSP430_MEMCPY_WORKAROUND */
-/*---------------------------------------------------------------------------*/
+#ifndef PLATFORM_DCO_INIT
 void
 msp430_init_dco(void)
 {
     /* This code taken from the FU Berlin sources and reformatted. */
+/* 
+ * Basic clock system used in some MSP430 families 
+ * including the sky/msb430 msp430f161x chips
+ * */
 #define DELTA    ((MSP430_CPU_SPEED) / (32768 / 8))
 
   unsigned int compare, oldcapture = 0;
@@ -120,6 +98,9 @@ msp430_init_dco(void)
 
   BCSCTL1 &= ~(DIVA1 + DIVA0);          /* remove /8 divisor from ACLK again */
 }
+#else
+void msp430_init_dco(void);
+#endif
 /*---------------------------------------------------------------------------*/
 
 static void
@@ -173,6 +154,31 @@ init_ports(void)
 #ifdef P6DIR
   P6DIR = 0;
   P6OUT = 0;
+#endif
+
+#ifdef P7DIR
+  P7DIR = 0;
+  P7OUT = 0;
+#endif
+
+#ifdef P8DIR
+  P8DIR = 0;
+  P8OUT = 0;
+#endif
+
+#ifdef P9DIR
+  P9DIR = 0;
+  P9OUT = 0;
+#endif
+
+#ifdef P10DIR
+  P10DIR = 0;
+  P10OUT = 0;
+#endif
+
+#ifdef P11DIR
+  P11DIR = 0;
+  P11OUT = 0;
 #endif
 
   P1IE = 0;
@@ -247,6 +253,7 @@ splx_(int sr)
   /* If GIE was set, restore it. */
   asmv("bis %0, r2" : : "r" (sr));
 }
+#if DCOSYNCH_CONF_ENABLED
 /*---------------------------------------------------------------------------*/
 /* this code will always start the TimerB if not already started */
 void
@@ -294,4 +301,5 @@ msp430_sync_dco(void) {
     }
   }
 }
+#endif
 /*---------------------------------------------------------------------------*/
