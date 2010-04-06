@@ -195,6 +195,11 @@ static volatile rtimer_clock_t stream_until;
 static int last_received_seqno;
 static rimeaddr_t last_received_sender;
 
+#if CONTIKIMAC_CONF_BROADCAST_RATE_LIMIT
+static struct timer broadcast_rate_timer;
+static int broadcast_rate_counter;
+#endif /* CONTIKIMAC_CONF_BROADCAST_RATE_LIMIT */
+
 /*---------------------------------------------------------------------------*/
 static void
 on(void)
@@ -492,6 +497,27 @@ format_announcement(char *hdr)
 #endif /* CONTIKIMAC_CONF_ANNOUNCEMENTS */
 /*---------------------------------------------------------------------------*/
 static int
+broadcast_rate_drop(void)
+{
+#if CONTIKIMAC_CONF_BROADCAST_RATE_LIMIT
+  if(!timer_expired(&broadcast_rate_timer)) {
+    broadcast_rate_counter++;
+    if(broadcast_rate_counter < CONTIKIMAC_CONF_BROADCAST_RATE_LIMIT) {
+      return 0;
+    } else {
+      return 1;
+    }
+  } else {
+    timer_set(&broadcast_rate_timer, CLOCK_SECOND);
+    broadcast_rate_counter = 0;
+    return 0;
+  }
+#else /* CONTIKIMAC_CONF_BROADCAST_RATE_LIMIT */
+  return 0;
+#endif /* CONTIKIMAC_CONF_BROADCAST_RATE_LIMIT */
+}
+/*---------------------------------------------------------------------------*/
+static int
 send_packet(mac_callback_t mac_callback, void *mac_callback_ptr)
 {
   rtimer_clock_t t0;
@@ -519,6 +545,10 @@ send_packet(mac_callback_t mac_callback, void *mac_callback_ptr)
   if(rimeaddr_cmp(packetbuf_addr(PACKETBUF_ADDR_RECEIVER), &rimeaddr_null)) {
     is_broadcast = 1;
     PRINTDEBUG("contikimac: send broadcast\n");
+
+    if(broadcast_rate_drop()) {
+      return MAC_TX_COLLISION;
+    }
   } else {
 #if UIP_CONF_IPV6
     PRINTDEBUG("contikimac: send unicast to %02x%02x:%02x%02x:%02x%02x:%02x%02x\n",
