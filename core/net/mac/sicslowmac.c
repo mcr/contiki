@@ -47,8 +47,7 @@
 #include <string.h>
 #include "net/mac/sicslowmac.h"
 #include "net/mac/frame802154.h"
-#include "net/packetbuf.h"
-#include "net/netstack.h"
+#include "net/rime/packetbuf.h"
 #include "lib/random.h"
 
 #define DEBUG 0
@@ -56,7 +55,7 @@
 #if DEBUG
 #include <stdio.h>
 #define PRINTF(...) printf(__VA_ARGS__)
-#define PRINTADDR(addr) PRINTF(" %02x%02x:%02x%02x:%02x%02x:%02x%02x ", ((uint8_t *)addr)[0], ((uint8_t *)addr)[1], ((uint8_t *)addr)[2], ((uint8_t *)addr)[3], ((uint8_t *)addr)[4], ((uint8_t *)addr)[5], ((uint8_t *)addr)[6], ((uint8_t *)addr)[7])
+#define PRINTADDR(addr) PRINTF(" %02x%02x:%02x%02x:", ((uint8_t *)addr)[0], ((uint8_t *)addr)[1], ((uint8_t *)addr)[2], ((uint8_t *)addr)[3]); PRINTF ("%02x%02x:%02x%02x ", ((uint8_t *)addr)[4], ((uint8_t *)addr)[5], ((uint8_t *)addr)[6], ((uint8_t *)addr)[7]) 
 #else
 #define PRINTF(...)
 #define PRINTADDR(addr)
@@ -80,6 +79,8 @@ static uint16_t mac_dst_pan_id = IEEE802154_PANID;
  */
 static uint16_t mac_src_pan_id = IEEE802154_PANID;
 
+static const struct radio_driver *radio;
+static void (* receiver_callback)(const struct mac_driver *);
 /*---------------------------------------------------------------------------*/
 static int
 is_broadcast_addr(uint8_t mode, uint8_t *addr)
@@ -93,11 +94,11 @@ is_broadcast_addr(uint8_t mode, uint8_t *addr)
   return 1;
 }
 /*---------------------------------------------------------------------------*/
-static void
-send_packet(mac_callback_t sent, void *ptr)
+static  frame802154_t params;
+static  uint8_t len;
+static int
+send_packet(void)
 {
-  frame802154_t params;
-  uint8_t len;
 
   /* init to zeros */
   memset(&params, 0, sizeof(params));
@@ -130,12 +131,11 @@ send_packet(mac_callback_t sent, void *ptr)
   if(rimeaddr_cmp(packetbuf_addr(PACKETBUF_ADDR_RECEIVER), &rimeaddr_null)) {
     /* Broadcast requires short address mode. */
     params.fcf.dest_addr_mode = FRAME802154_SHORTADDRMODE;
-    params.dest_addr[0] = 0xFF;
-    params.dest_addr[1] = 0xFF;
+    params.dest_addr.u8[0] = 0xFF;
+    params.dest_addr.u8[1] = 0xFF;
 
   } else {
-    rimeaddr_copy((rimeaddr_t *)&params.dest_addr,
-                  packetbuf_addr(PACKETBUF_ADDR_RECEIVER));
+    rimeaddr_copy(&params.dest_addr, packetbuf_addr(PACKETBUF_ADDR_RECEIVER));
     params.fcf.dest_addr_mode = FRAME802154_LONGADDRMODE;
   }
 
@@ -146,111 +146,114 @@ send_packet(mac_callback_t sent, void *ptr)
    * Set up the source address using only the long address mode for
    * phase 1.
    */
-  rimeaddr_copy((rimeaddr_t *)&params.src_addr, &rimeaddr_node_addr);
+  rimeaddr_copy(&params.src_addr, &rimeaddr_node_addr);
 
   params.payload = packetbuf_dataptr();
   params.payload_len = packetbuf_datalen();
   len = frame802154_hdrlen(&params);
   if(packetbuf_hdralloc(len)) {
-    int ret;
     frame802154_create(&params, packetbuf_hdrptr(), len);
 
     PRINTF("6MAC-UT: %2X", params.fcf.frame_type);
     PRINTADDR(params.dest_addr.u8);
     PRINTF("%u %u (%u)\n", len, packetbuf_datalen(), packetbuf_totlen());
 
-    ret = NETSTACK_RADIO.send(packetbuf_hdrptr(), packetbuf_totlen());
-    if(sent) {
-      switch(ret) {
-      case RADIO_TX_OK:
-        sent(ptr, MAC_TX_OK, 1);
-        break;
-      case RADIO_TX_ERR:
-        sent(ptr, MAC_TX_ERR, 1);
-        break;
-      }
-    }
+    return radio->send(packetbuf_hdrptr(), packetbuf_totlen());
   } else {
     PRINTF("6MAC-UT: too large header: %u\n", len);
   }
+  return 0;
 }
 /*---------------------------------------------------------------------------*/
 static void
-input_packet(void)
+input_packet(const struct radio_driver *d)
 {
-  frame802154_t frame;
+  if(receiver_callback) {
+    receiver_callback(&sicslowmac_driver);
+  }
+}
+/*---------------------------------------------------------------------------*/
+static int
+read_packet(void)
+{
   int len;
-
-  len = packetbuf_datalen();
-
-  if(frame802154_parse(packetbuf_dataptr(), len, &frame) &&
-     packetbuf_hdrreduce(len - frame.payload_len)) {
-    if(frame.fcf.dest_addr_mode) {
-      if(frame.dest_pid != mac_src_pan_id &&
-         frame.dest_pid != FRAME802154_BROADCASTPANDID) {
-        /* Not broadcast or for our PAN */
-        PRINTF("6MAC: for another pan %u\n", frame.dest_pid);
-        return;
-      }
-      if(!is_broadcast_addr(frame.fcf.dest_addr_mode, frame.dest_addr)) {
-        packetbuf_set_addr(PACKETBUF_ADDR_RECEIVER, (rimeaddr_t *)&frame.dest_addr);
-        if(!rimeaddr_cmp(packetbuf_addr(PACKETBUF_ADDR_RECEIVER),
-                         &rimeaddr_node_addr)) {
-          /* Not for this node */
-          PRINTF("6MAC: not for us\n");
-          return;
+  packetbuf_clear();
+  len = radio->read(packetbuf_dataptr(), PACKETBUF_SIZE);
+  if(len > 0) {
+    packetbuf_set_datalen(len);
+    if(frame802154_parse(packetbuf_dataptr(), len, &params) &&
+       packetbuf_hdrreduce(len - params.payload_len)) {
+      if(params.fcf.dest_addr_mode) {
+        if(params.dest_pid != mac_src_pan_id &&
+           params.dest_pid != FRAME802154_BROADCASTPANDID) {
+          /* Not broadcast or for our PAN */
+          PRINTF("6MAC: for another pan %u\n", params.dest_pid);
+          return 0;
+        }
+        if(!is_broadcast_addr(params.fcf.dest_addr_mode, params.dest_addr.u8)) {
+          packetbuf_set_addr(PACKETBUF_ADDR_RECEIVER, &params.dest_addr);
+          if(!rimeaddr_cmp(packetbuf_addr(PACKETBUF_ADDR_RECEIVER),
+                           &rimeaddr_node_addr)) {
+            /* Not for this node */
+            PRINTF("6MAC: not for us\n");
+            return 0;
+          }
         }
       }
-    }
-    packetbuf_set_addr(PACKETBUF_ADDR_SENDER, (rimeaddr_t *)&frame.src_addr);
+      packetbuf_set_addr(PACKETBUF_ADDR_SENDER, &params.src_addr);
 
-    PRINTF("6MAC-IN: %2X", frame.fcf.frame_type);
-    PRINTADDR(packetbuf_addr(PACKETBUF_ADDR_SENDER));
-    PRINTADDR(packetbuf_addr(PACKETBUF_ADDR_RECEIVER));
-    PRINTF("%u\n", packetbuf_datalen());
-    NETSTACK_MAC.input();
-  } else {
-    PRINTF("6MAC: failed to parse hdr\n");
+      PRINTF("6MAC-IN: %2X", params.fcf.frame_type);
+      PRINTADDR(packetbuf_addr(PACKETBUF_ADDR_SENDER));
+      PRINTADDR(packetbuf_addr(PACKETBUF_ADDR_RECEIVER));
+      PRINTF("%u\n", packetbuf_datalen());
+      return packetbuf_datalen();
+    } else {
+      PRINTF("6MAC: failed to parse hdr\n");
+    }
   }
+  return 0;
+}
+/*---------------------------------------------------------------------------*/
+static void
+set_receive_function(void (* recv)(const struct mac_driver *))
+{
+  receiver_callback = recv;
 }
 /*---------------------------------------------------------------------------*/
 static int
 on(void)
 {
-  return NETSTACK_RADIO.on();
+  return radio->on();
 }
 /*---------------------------------------------------------------------------*/
 static int
 off(int keep_radio_on)
 {
   if(keep_radio_on) {
-    return NETSTACK_RADIO.on();
+    return radio->on();
   } else {
-    return NETSTACK_RADIO.off();
+    return radio->off();
   }
 }
 /*---------------------------------------------------------------------------*/
-static void
-init(void)
+const struct mac_driver sicslowmac_driver = {
+  "sicslowmac",
+  sicslowmac_init,
+  send_packet,
+  read_packet,
+  set_receive_function,
+  on,
+  off,
+};
+/*---------------------------------------------------------------------------*/
+const struct mac_driver *
+sicslowmac_init(const struct radio_driver *d)
 {
   mac_dsn = random_rand() % 256;
 
-  NETSTACK_RADIO.on();
+  radio = d;
+  radio->set_receive_function(input_packet);
+  radio->on();
+  return &sicslowmac_driver;
 }
-/*---------------------------------------------------------------------------*/
-static unsigned short
-channel_check_interval(void)
-{
-  return 0;
-}
-/*---------------------------------------------------------------------------*/
-const struct rdc_driver sicslowmac_driver = {
-  "sicslowmac",
-  init,
-  send_packet,
-  input_packet,
-  on,
-  off,
-  channel_check_interval
-};
 /*---------------------------------------------------------------------------*/
