@@ -114,6 +114,8 @@ PT_THREAD(send_headers(struct httpd_state *s, const char *statushdr))
     ptr = http_content_type_css;
   } else if(strcmp(http_png, ptr) == 0) {
     ptr = http_content_type_png;
+  } else if(strcmp(http_gif, ptr) == 0) {
+    ptr = http_content_type_gif;
   } else if(strcmp(http_jpg, ptr) == 0) {
     ptr = http_content_type_jpg;
   } else {
