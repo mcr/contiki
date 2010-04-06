@@ -52,7 +52,9 @@ spi_init(void)
 
   if (spi_inited)
     return;
+#ifdef __msp430_headers_usart_h
 
+  /* MSP430x161x have USART */
   /* Initalize ports for communication with SPI units. */
 
   U0CTL  = CHAR + SYNC + MM + SWRST; /* SW  reset,8-bit transfer, SPI master */
@@ -67,4 +69,28 @@ spi_init(void)
 
   ME1   |= USPIE0;	   /* Module enable ME1 --> U0ME? xxx/bg */
   U0CTL &= ~SWRST;		/* Remove RESET */
+
+#elif defined(__MSP430_HEADERS_USCI_H__)
+#ifdef UCB1_SPI_MASTER
+  /* MSP430x54xx have USCI */
+
+  UCB1CTL1 |= UCSWRST;                      /* **Put state machine in reset** */
+  UCB1CTL0 = UCMST+UCSYNC+UCCKPL+UCMSB;    /*  3-pin, 8-bit SPI master */
+                                            /*  Clock polarity high, MSB */
+  UCB1CTL1 = (UCB1CTL1&0x3f) | UCSSEL_SMCLK;                     /*  SMCLK */
+  UCB1BR0 = 0x02;                           /* /2 */
+  UCB1BR1 = 0;                              /*  */
+  UCB1MCTL = 1;                             /*  No modulation */
+
+  /* Configure as outputs */
+  P3REN &= 0x7f;
+  P5REN &= ~(0x20);  /* SPI CLK P5.5 */
+
+  /* Select Peripheral functionality */
+  P3SEL |= 0x80;  /* SPI MOSI P3.7 */
+  P5SEL |= 0x10;  /* SPI MISO P5.4 */
+  P5SEL |= 0x20;  /* SPI CLK P5.5 */
+  UCB1CTL1 &= ~UCSWRST;                     // **Initialize USCI state machine**
+#endif 
+#endif 
 }
