@@ -264,7 +264,7 @@ PT_THREAD(handle_input(struct httpd_state *s))
     strncpy(s->filename, http_index_html, sizeof(s->filename));
   } else {
     s->inputbuf[PSOCK_DATALEN(&s->sin) - 1] = 0;
-    strncpy(s->filename, &s->inputbuf[0], sizeof(s->filename));
+    strncpy(s->filename, s->inputbuf, sizeof(s->filename));
   }
 
   petsciiconv_topetscii(s->filename, sizeof(s->filename));
