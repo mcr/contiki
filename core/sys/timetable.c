@@ -73,6 +73,7 @@ timetable_timediff(struct timetable *t,
 {
 #ifdef SDCC_mcs51
   char i; /* SDCC tracker 2982753 */
+	  /* does not affect all versions of SDCC */
 #else
   int i;
 #endif
