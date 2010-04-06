@@ -71,7 +71,11 @@ rtimer_clock_t
 timetable_timediff(struct timetable *t,
 		   const char *id1, const char *id2)
 {
+#ifdef SDCC_mcs51
+  char i; /* SDCC tracker 2982753 */
+#else
   int i;
+#endif
   int t1, t2;
   
   t1 = t2 = t->size;
