@@ -218,7 +218,7 @@ process_init(void)
 static void
 do_poll(void)
 {
-  struct process *p;
+  static struct process *p;
 
   poll_requested = 0;
   /* Call the processes that needs to be polled. */
