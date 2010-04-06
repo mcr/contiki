@@ -292,6 +292,7 @@ main(void)
 	
 	/* Main scheduler loop */
 	while(1) {
+		check_maca();
 		process_run();
 	}
 	
