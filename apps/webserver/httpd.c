@@ -220,7 +220,8 @@ PT_THREAD(handle_output(struct httpd_state *s))
   PT_BEGIN(&s->outputpt);
  
   if(!httpd_fs_open(s->filename, &s->file)) {
-    httpd_fs_open(http_404_html, &s->file);
+    strcpy(s->filename, http_404_html);
+    httpd_fs_open(s->filename, &s->file);
     PT_WAIT_THREAD(&s->outputpt,
 		   send_headers(s,
 		   http_header_404));
