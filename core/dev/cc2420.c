@@ -188,6 +188,7 @@ on(void)
 
   ENABLE_FIFOP_INT();
   strobe(CC2420_SRXON);
+  while(!(status() & (BV(CC2420_XOSC16M_STABLE))));
   ENERGEST_ON(ENERGEST_TYPE_LISTEN);
   leds_on(LEDS_GREEN);
 }
@@ -200,8 +201,8 @@ off(void)
   /* Wait for transmission to end before turning radio off. */
   while(status() & BV(CC2420_TX_ACTIVE));
 
-  strobe(CC2420_SRFOFF);
   ENERGEST_OFF(ENERGEST_TYPE_LISTEN);
+  strobe(CC2420_SRFOFF);
   DISABLE_FIFOP_INT();
   leds_off(LEDS_GREEN);
 

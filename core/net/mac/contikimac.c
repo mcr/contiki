@@ -335,7 +335,7 @@ powercycle(struct rtimer *t, void *ptr)
           }
           powercycle_turn_radio_off();
         }
-        schedule_powercycle(t, CCA_SLEEP_TIME);
+        schedule_powercycle_fixed(t, RTIMER_NOW() + CCA_SLEEP_TIME);
         /*        COOJA_DEBUG_STR("yield\n");*/
         PT_YIELD(&pt);
       }
