@@ -164,7 +164,7 @@ packet_sent(void *ptr, int status, int num_transmissions)
     /* The retransmission time uses a linear backoff so that the
        interval between the transmissions increase with each
        retransmit. */
-    time = time + (random_rand() % ((q->collisions + q->transmissions) * 3 * time));
+    time = time + (random_rand() % ((q->transmissions + 1) * 3 * time));
     
     if(q->transmissions < q->max_transmissions) {
       PRINTF("csma: retransmitting with time %lu\n", time);
@@ -186,7 +186,10 @@ static void
 send_packet(mac_callback_t sent, void *ptr)
 {
   struct queued_packet *q;
-
+  static uint16_t seqno;
+  
+  packetbuf_set_attr(PACKETBUF_ATTR_MAC_SEQNO, seqno++);
+  
   /* Remember packet for later. */
   q = memb_alloc(&packet_memb);
   if(q != NULL) {

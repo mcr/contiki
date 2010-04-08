@@ -101,7 +101,12 @@ create(void)
   params.fcf.frame_version = FRAME802154_IEEE802154_2003;
 
   /* Increment and set the data sequence number. */
-  params.seq = mac_dsn++;
+  if(packetbuf_attr(PACKETBUF_ATTR_MAC_SEQNO)) {
+    params.seq = packetbuf_attr(PACKETBUF_ATTR_MAC_SEQNO);
+  } else {
+    params.seq = mac_dsn++;
+    packetbuf_set_attr(PACKETBUF_ATTR_MAC_SEQNO, params.seq);
+  }
 /*   params.seq = packetbuf_attr(PACKETBUF_ATTR_PACKET_ID); */
 
   /* Complete the addressing fields. */
