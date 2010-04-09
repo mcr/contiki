@@ -46,6 +46,7 @@
 #include <string.h>
 
 #include "contiki-net.h"
+#include "net/rime/collect-neighbor.h"
 #include "httpd.h"
 #include "httpd-cgi.h"
 #include "httpd-fs.h"
@@ -167,7 +168,7 @@ static unsigned short
 make_neighbor(void *arg)
 {
   struct httpd_state *s = (struct httpd_state *)arg;
-  struct collet_neighbor *n = collet_neighbor_get(s->u.count);
+  struct collect_neighbor *n = collect_neighbor_get(s->u.count);
 
   if(n == NULL) {
     return 0;
@@ -238,7 +239,7 @@ httpd_cgi_init(void)
   httpd_cgi_add(&nodeid);
   httpd_cgi_add(&neighbors);
 
-  announcement_register(&announcement, 31, 0,
+  announcement_register(&announcement, 31,
 			received_announcement);
   announcement_listen(2);
 
