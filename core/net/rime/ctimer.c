@@ -101,7 +101,7 @@ void
 ctimer_set(struct ctimer *c, clock_time_t t,
 	   void (*f)(void *), void *ptr)
 {
-  PRINTF("ctimer_set %p %d\n", c, t);
+  PRINTF("ctimer_set %p %u\n", c, (unsigned)t);
   c->p = PROCESS_CURRENT();
   c->f = f;
   c->ptr = ptr;
