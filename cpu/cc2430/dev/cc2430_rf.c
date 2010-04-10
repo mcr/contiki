@@ -158,20 +158,19 @@ cc2430_rf_send_b(void *payload, unsigned short payload_len) __banked
   /*printf("packetbuf_attr: txpower = %d\n", packetbuf_attr(PACKETBUF_ATTR_RADIO_TXPOWER));*/
   /* Should set TX power according to this if > 0 */
 
-  PRINTF("cc2430_rf: sending %ud byte payload\n", payload_len);
-
+  //PRINTF("cc2430_rf: sending %ud byte payload\n", payload_len);
   RIMESTATS_ADD(lltx);
 
   cc2430_rf_command(ISFLUSHTX);
-  PRINTF("cc2430_rf: sent = ");
+  //PRINTF("cc2430_rf: sent = ");
   /* Send the phy length byte first */
   RFD = payload_len+CHECKSUM_LEN; 	/* Payload plus FCS */
-  PRINTF("(%d)", payload_len+CHECKSUM_LEN);
+  //PRINTF("(%d)", payload_len+CHECKSUM_LEN);
   for(i = 0 ; i < payload_len; i++) {
     RFD = ((unsigned char*)(payload))[i];
-    PRINTF("%02X", ((unsigned char*)(payload))[i]);
+    //PRINTF("%02X", ((unsigned char*)(payload))[i]);
   }
-  PRINTF("\n");
+  //PRINTF("\n");
 
   /* Leave space for the FCS */
   RFD = 0;
@@ -265,42 +264,6 @@ cc2430_rf_read_banked(void *buf, unsigned short bufsize) __banked
 
   return (len - CHECKSUM_LEN);
 }
-/**
- * Execute a single CSP command.
- *
- * \param command command to execute
- *
- */
-void cc2430_rf_command(uint8_t command) __banked
-{
-  if(command >= 0xE0) {	/*immediate strobe*/
-    uint8_t fifo_count;
-    switch(command) {	/*hardware bug workaround*/
-    case ISRFOFF:
-    case ISRXON:
-    case ISTXON:
-      fifo_count = RXFIFOCNT;
-      RFST = command;
-      clock_delay(2);
-      if(fifo_count != RXFIFOCNT) {
-	RFST = ISFLUSHRX;
-	RFST = ISFLUSHRX;
-      }
-      break;
-
-    default:
-      RFST = command;
-    }
-  } else if(command == SSTART) {
-    RFIF &= ~IRQ_CSP_STOP;	/*clear IRQ flag*/
-    RFST = SSTOP;	/*make sure there is a stop in the end*/
-    RFST = ISSTART;	/*start execution*/
-    while((RFIF & IRQ_CSP_STOP) == 0);
-  } else {
-    RFST = command;	/*write command*/
-  }
-}
-/*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
 
 /**
@@ -448,7 +411,7 @@ cc2430_rf_tx_enable(void)
 	*	\param ieee_addr The 64-bit IEEE address to set
 	*/
 void
-cc2430_rf_set_addr(unsigned pan, unsigned addr, const uint8_t *ieee_addr)
+cc2430_rf_set_addr(unsigned pan, unsigned addr, const uint8_t *ieee_addr) __banked
 {
 	uint8_t f;
 	__xdata unsigned char *ptr;

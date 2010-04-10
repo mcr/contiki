@@ -153,3 +153,39 @@ PROCESS_THREAD(cc2430_rf_process, ev, data)
 
   PROCESS_END();
 }
+/**
+ * Execute a single CSP command.
+ *
+ * \param command command to execute
+ *
+ */
+void cc2430_rf_command(uint8_t command)
+{
+  if(command >= 0xE0) {	/*immediate strobe*/
+    uint8_t fifo_count;
+    switch(command) {	/*hardware bug workaround*/
+    case ISRFOFF:
+    case ISRXON:
+    case ISTXON:
+      fifo_count = RXFIFOCNT;
+      RFST = command;
+      clock_delay(2);
+      if(fifo_count != RXFIFOCNT) {
+	RFST = ISFLUSHRX;
+	RFST = ISFLUSHRX;
+      }
+      break;
+
+    default:
+      RFST = command;
+    }
+  } else if(command == SSTART) {
+    RFIF &= ~IRQ_CSP_STOP;	/*clear IRQ flag*/
+    RFST = SSTOP;	/*make sure there is a stop in the end*/
+    RFST = ISSTART;	/*start execution*/
+    while((RFIF & IRQ_CSP_STOP) == 0);
+  } else {
+    RFST = command;	/*write command*/
+  }
+}
+/*---------------------------------------------------------------------------*/
