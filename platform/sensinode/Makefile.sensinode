@@ -9,6 +9,8 @@
 
 # make sensinode.upload - Will use nano_programmer to upload file using D2xx Devboard
 # make sensinode.serialdump - Will use the Contiki serialdump tool on the default UART
+PATH:=${CONTIKI}/platform/${TARGET}/tools/bin:${PATH}
+export PATH 
 
 ifndef CONTIKI
   $(error CONTIKI not defined! You must specify where CONTIKI resides!)
@@ -22,7 +24,7 @@ PROG = $(CONTIKI)/tools/sensinode/nano_programmer/nano_programmer -d $(DEFUART)
 SERIALDUMP = $(CONTIKI)/tools/sky/serialdump-linux -b115200 $(DEFUART)
 
 CONTIKI_TARGET_DIRS = . dev
-CONTIKI_TARGET_MAIN = ${addprefix $(OBJECTDIR)/,contiki-sensinode-main.o}
+CONTIKI_TARGET_MAIN = ${addprefix $(OBJECTDIR)/,contiki-sensinode-main.rel}
 
 CONTIKI_TARGET_SOURCEFILES = contiki-sensinode-main.c \
                              leds.c leds-arch.c serial-line.c
@@ -41,4 +43,4 @@ sensinode.serialdump:
 CONTIKI_CPU=$(CONTIKI)/cpu/cc2430
 include $(CONTIKI)/cpu/cc2430/Makefile.cc2430
 
-contiki-$(TARGET).a:# ${addprefix $(OBJECTDIR)/,symbols.o}
+contiki-$(TARGET).a:# ${addprefix $(OBJECTDIR)/,symbols.rel}
