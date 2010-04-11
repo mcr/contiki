@@ -29,7 +29,6 @@
  * This file is part of the Contiki operating system.
  *
  * $Id$
- *
  */
 
 #ifndef __URLCONV_H__
