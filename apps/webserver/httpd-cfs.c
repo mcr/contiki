@@ -50,7 +50,7 @@ int snprintf(char *str, size_t size, const char *format, ...);
 #include "httpd-cfs.h"
 
 #ifndef WEBSERVER_CONF_CFS_CONNS
-#define CONNS 4
+#define CONNS UIP_CONNS
 #else /* WEBSERVER_CONF_CFS_CONNS */
 #define CONNS WEBSERVER_CONF_CFS_CONNS
 #endif /* WEBSERVER_CONF_CFS_CONNS */

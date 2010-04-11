@@ -47,7 +47,7 @@
 #include "httpd.h"
 
 #ifndef WEBSERVER_CONF_CGI_CONNS
-#define CONNS 4
+#define CONNS UIP_CONNS
 #else /* WEBSERVER_CONF_CGI_CONNS */
 #define CONNS WEBSERVER_CONF_CGI_CONNS
 #endif /* WEBSERVER_CONF_CGI_CONNS */
