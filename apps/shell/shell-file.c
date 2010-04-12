@@ -139,6 +139,7 @@ PROCESS_THREAD(shell_append_process, ev, data)
 PROCESS_THREAD(shell_write_process, ev, data)
 {
   static int fd = 0;
+  int r;
 
   PROCESS_EXITHANDLER(cfs_close(fd));
   
@@ -159,18 +160,24 @@ PROCESS_THREAD(shell_write_process, ev, data)
 	cfs_close(fd);
 	PROCESS_EXIT();
       }
-      
+
+      r = 0;      
       if(input->len1 > 0) {
-	cfs_write(fd, input->data1, input->len1);
+	r = cfs_write(fd, input->data1, input->len1);
       }
 
-      if(input->len2 > 0) {
-	cfs_write(fd, input->data2, input->len2);
+      if(r >= 0 && input->len2 > 0) {
+	r = cfs_write(fd, input->data2, input->len2);
       }
- 
-      shell_output(&write_command,
-		   input->data1, input->len1,
-		   input->data2, input->len2);
+
+      if(r < 0) {
+	shell_output_str(&write_command, "write: could not write to the file",
+			 NULL);
+      } else {
+	shell_output(&write_command,
+		     input->data1, input->len1,
+		     input->data2, input->len2);
+      }
     }
   }
   
