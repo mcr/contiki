@@ -6,6 +6,8 @@
 #include "tmr.h"
 #include "isr.h"
 
+#include "contiki-conf.h"
+
 static volatile clock_time_t current_clock = 0;
 
 volatile unsigned long seconds = 0;
@@ -45,7 +47,7 @@ static volatile uint8_t tmr_led,tmr_led9=0;
 void tmr0_isr(void) {
 	if(bit_is_set(*TMR(0,CSCTRL),TCF1)) {
 		current_clock++;
-		if(current_clock % CLOCK_CONF_SECONDS) { seconds++; }
+		if(current_clock % CLOCK_CONF_SECOND) { seconds++; }
 		/* maybe blink out current clock somehow for debug?*/
 		/* maybe check if a bit is set in current_clock? */
 		/* that should give me a divided blink */
