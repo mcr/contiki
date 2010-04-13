@@ -123,6 +123,4 @@
 
 #define UIP_CONF_LOGGING         1
 
-#define WITH_UIP6                1
-
 #endif /* __CONTIKI_CONF_H__ */

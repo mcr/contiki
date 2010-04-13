@@ -281,9 +281,11 @@ main(void)
 //  }
 #endif /* WITH_UIP */
 
+#if WITH_UIP6
   PRINTF("Local IPv6 address: ");
   PRINT6ADDR(&uip_netif_physical_if.addresses[0].ipaddr);
   PRINTF("\n");
+#endif
 
 	printf("System online.\n\r");
 	
