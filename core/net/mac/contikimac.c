@@ -155,6 +155,17 @@ static volatile unsigned char radio_is_on = 0;
 #define PRINTDEBUG(...)
 #endif
 
+#define DEBUG_LEDS DEBUG
+#undef LEDS_ON
+#undef LEDS_OFF
+#if DEBUG_LEDS
+#define LEDS_ON(x) leds_on(x)
+#define LEDS_OFF(x) leds_off(x)
+#else
+#define LEDS_ON(x)
+#define LEDS_OFF(x)
+#endif
+
 #if CONTIKIMAC_CONF_ANNOUNCEMENTS
 /* Timers for keeping track of when to send announcements. */
 static struct ctimer announcement_cycle_ctimer, announcement_ctimer;
@@ -367,24 +378,24 @@ powercycle(struct rtimer *t, void *ptr)
             silence_periods = 0;
           }
           if(silence_periods > MAX_SILENCE_PERIODS) {
-            leds_on(LEDS_RED);
+            LEDS_ON(LEDS_RED);
             powercycle_turn_radio_off();
 #if CONTIKIMAC_CONF_COMPOWER
             compower_accumulate(&compower_idle_activity);
 #endif /* CONTIKIMAC_CONF_COMPOWER */
-            leds_off(LEDS_RED);
+            LEDS_OFF(LEDS_RED);
             break;
           }
 #if 1
           if(periods > MAX_NONACTIVITY_PERIODIC && !(NETSTACK_RADIO.receiving_packet() ||
                                                      NETSTACK_RADIO.pending_packet())) {
-            leds_on(LEDS_GREEN);
+            LEDS_ON(LEDS_GREEN);
             powercycle_turn_radio_off();
 #if CONTIKIMAC_CONF_COMPOWER
             compower_accumulate(&compower_idle_activity);
 #endif /* CONTIKIMAC_CONF_COMPOWER */
             
-            leds_off(LEDS_GREEN);
+            LEDS_OFF(LEDS_GREEN);
             break;
           }
 #endif /* 0 */
@@ -393,18 +404,18 @@ powercycle(struct rtimer *t, void *ptr)
           }
           
           schedule_powercycle(t, CCA_CHECK_TIME + CCA_SLEEP_TIME);
-          leds_on(LEDS_BLUE);
+          LEDS_ON(LEDS_BLUE);
           PT_YIELD(&pt);
-          leds_off(LEDS_BLUE);
+          LEDS_OFF(LEDS_BLUE);
         }
         if(radio_is_on && !(NETSTACK_RADIO.receiving_packet() ||
                             NETSTACK_RADIO.pending_packet())) {
-          leds_on(LEDS_RED + LEDS_GREEN);
+          LEDS_ON(LEDS_RED + LEDS_GREEN);
           powercycle_turn_radio_off();
 #if CONTIKIMAC_CONF_COMPOWER
           compower_accumulate(&compower_idle_activity);
 #endif /* CONTIKIMAC_CONF_COMPOWER */
-          leds_off(LEDS_RED + LEDS_GREEN);
+          LEDS_OFF(LEDS_RED + LEDS_GREEN);
         }
       } else {
 #if CONTIKIMAC_CONF_COMPOWER
@@ -415,7 +426,7 @@ powercycle(struct rtimer *t, void *ptr)
             RTIMER_CLOCK_LT(RTIMER_NOW() - cycle_start, CYCLE_TIME - CHECK_TIME));
 
     if(is_snooping) {
-      leds_on(LEDS_RED);
+      LEDS_ON(LEDS_RED);
     }
     if(RTIMER_CLOCK_LT(RTIMER_NOW() - cycle_start, CYCLE_TIME)) {
       /*      schedule_powercycle(t, CYCLE_TIME - (RTIMER_NOW() - cycle_start));*/
@@ -424,7 +435,7 @@ powercycle(struct rtimer *t, void *ptr)
               cycle_start, RTIMER_NOW(), CYCLE_TIME - (RTIMER_NOW() - cycle_start));*/
       PT_YIELD(&pt);
     }
-    leds_off(LEDS_RED);
+    LEDS_OFF(LEDS_RED);
   }
 
   PT_END(&pt);
