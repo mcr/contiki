@@ -68,6 +68,9 @@ PROJECT_OBJECTFILES += ${addprefix $(OBJECTDIR)/,$(CONTIKI_TARGET_MAIN:.c=.o)}
 %.mspsim:	%.${TARGET}
 	java -jar ${CONTIKI}/tools/mspsim/mspsim.jar -platform=${TARGET} $<
 
+mspsim-maptable:	contiki-${TARGET}.map
+	java -classpath ${CONTIKI}/tools/mspsim/mspsim.jar se.sics.mspsim.util.MapTable $<
+
 core-labels.o: core.${TARGET}
 	${CONTIKI}/tools/msp430-make-labels core.${TARGET} > core-labels.S
 	$(AS) -o $@ core-labels.S
