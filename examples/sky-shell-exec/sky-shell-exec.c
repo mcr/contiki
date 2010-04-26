@@ -35,7 +35,6 @@
 #include "shell.h"
 #include "serial-shell.h"
 
-#include "net/rime/neighbor.h"
 #include "dev/watchdog.h"
 
 #include "net/rime.h"

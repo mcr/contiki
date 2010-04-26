@@ -47,6 +47,7 @@ import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Properties;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ButtonGroup;
@@ -77,9 +78,11 @@ import se.sics.cooja.Simulation;
 import se.sics.cooja.VisPlugin;
 import se.sics.cooja.dialogs.TableColumnAdjuster;
 import se.sics.cooja.interfaces.Radio;
+import se.sics.cooja.plugins.analyzers.ICMPv6Analyzer;
 import se.sics.cooja.plugins.analyzers.IEEE802154Analyzer;
 import se.sics.cooja.plugins.analyzers.IPHCPacketAnalyzer;
 import se.sics.cooja.plugins.analyzers.PacketAnalyzer;
+import se.sics.cooja.plugins.analyzers.RadioLoggerAnalyzerSuite;
 import se.sics.cooja.util.StringUtils;
 
 /**
@@ -128,6 +131,7 @@ public class RadioLogger extends VisPlugin {
     ArrayList<PacketAnalyzer> lowpanAnalyzers = new ArrayList<PacketAnalyzer>();
     lowpanAnalyzers.add(new IEEE802154Analyzer());
     lowpanAnalyzers.add(new IPHCPacketAnalyzer());
+    lowpanAnalyzers.add(new ICMPv6Analyzer());
     model = new AbstractTableModel() {
 
       private static final long serialVersionUID = 1692207305977527004L;
@@ -262,6 +266,7 @@ public class RadioLogger extends VisPlugin {
                     prepareTooltipString(conn);
                 }
                 verboseBox.setText(conn.tooltip);
+                verboseBox.setCaretPosition(0);
             }
         }
     });
@@ -295,6 +300,29 @@ public class RadioLogger extends VisPlugin {
     group.add(rbMenuItem);
     popupMenu.add(rbMenuItem);
 
+    /* Load additional analyzers specified by projects (cooja.config) */
+    String[] projectAnalyzerSuites =
+      gui.getProjectConfig().getStringArrayValue(RadioLogger.class, "ANALYZERS");
+    if (projectAnalyzerSuites != null) {
+      for (String suiteName: projectAnalyzerSuites) {
+        Class<? extends RadioLoggerAnalyzerSuite> suiteClass =
+          gui.tryLoadClass(RadioLogger.this, RadioLoggerAnalyzerSuite.class, suiteName);
+        try {
+          RadioLoggerAnalyzerSuite suite = suiteClass.newInstance();
+          ArrayList<PacketAnalyzer> suiteAnalyzers = suite.getAnalyzers();
+          rbMenuItem = new JRadioButtonMenuItem(createAnalyzerAction(
+              suite.getDescription(), suiteName, suiteAnalyzers, false));
+          group.add(rbMenuItem);
+          popupMenu.add(rbMenuItem);
+          logger.debug("Loaded radio logger analyzers: " + suite.getDescription());
+        } catch (InstantiationException e1) {
+          logger.warn("Failed to load analyzer suite '" + suiteName + "': " + e1.getMessage());
+        } catch (IllegalAccessException e1) {
+          logger.warn("Failed to load analyzer suite '" + suiteName + "': " + e1.getMessage());
+        }
+      }
+    }
+    
     dataTable.setComponentPopupMenu(popupMenu);
     dataTable.setFillsViewportHeight(true);
 
@@ -397,10 +425,19 @@ public class RadioLogger extends VisPlugin {
     PacketAnalyzer.Packet packet = new PacketAnalyzer.Packet(data, PacketAnalyzer.MAC_LEVEL);
 
     if (analyzePacket(packet, brief, verbose)) {
-        conn.data = (data.length < 10 ? " " : "") + data.length + ": " + brief;
         if (packet.hasMoreData()) {
-            conn.data += ": " + StringUtils.toHex(packet.getPayload(), 4);
+            byte[] payload = packet.getPayload();
+            brief.append(StringUtils.toHex(payload, 4));
+            if (verbose.length() > 0) {
+                verbose.append("<p>");
+            }
+            verbose.append("<b>Payload (")
+            .append(payload.length).append(" bytes)</b><br><pre>")
+            .append(StringUtils.hexDump(payload))
+            .append("</pre>");
         }
+        conn.data = (data.length < 100 ? (data.length < 10 ? "  " : " ") : "")
+        + data.length + ": " + brief;
         if (verbose.length() > 0) {
             conn.tooltip = verbose.toString();
         }
@@ -417,10 +454,17 @@ public class RadioLogger extends VisPlugin {
           for (int i = 0; i < analyzers.size(); i++) {
               PacketAnalyzer analyzer = analyzers.get(i);
               if (analyzer.matchPacket(packet)) {
-                  analyzer.analyzePacket(packet, brief, verbose);
+                  int res = analyzer.analyzePacket(packet, brief, verbose);
+                  if (packet.hasMoreData() && brief.length() > 0) {
+                      brief.append('|');
+                      verbose.append("<br>");
+                  }
+                  if (res != PacketAnalyzer.ANALYSIS_OK_CONTINUE) {
+                      /* this was the final or the analysis failed - no analyzable payload possible here... */
+                      return brief.length() > 0;
+                  }
                   /* continue another round if more bytes left */
                   analyze = packet.hasMoreData();
-                  brief.append("|");
                   break;
               }
           }

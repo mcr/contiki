@@ -61,16 +61,16 @@ PROCESS_NAME(deluge_process);
 /* All pages up to, and including, this page are complete. */
 #define PAGE_AVAILABLE	1
 
-#define S_PKT		32		/* Deluge packet size. */
+#define S_PKT		64		/* Deluge packet size. */
 #define N_PKT		4		/* Packets per page. */
 #define S_PAGE		(S_PKT * N_PKT)	/* Fixed page size. */
 
 /* Bounds for the round time in seconds. */
 #define T_LOW		2
-#define T_HIGH		32
+#define T_HIGH		64
 
 /* Random interval for request transmissions in jiffies. */
-#define T_R		(CLOCK_SECOND / 2)
+#define T_R		(CLOCK_SECOND * 2)
 
 /* Bound for the number of advertisements. */
 #define CONST_K		1
@@ -93,7 +93,7 @@ PROCESS_NAME(deluge_process);
 #define CONST_ALPHA		0.5
 
 #define CONST_OMEGA		8
-#define ESTIMATED_TX_TIME	(CLOCK_SECOND / 8)
+#define ESTIMATED_TX_TIME	(CLOCK_SECOND)
 
 struct deluge_msg_summary {
   uint16_t object_id;

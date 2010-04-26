@@ -60,9 +60,6 @@
 #ifndef __POLITE_ANNOUNCEMENT_H__
 #define __POLITE_ANNOUNCEMENT_H__
 
-#include "net/rime/announcement.h"
-#include "net/rime/ipolite.h"
-
 void polite_announcement_init(uint16_t channel,
 			      clock_time_t min,
 			      clock_time_t max);

@@ -42,7 +42,6 @@
 #include "lib/random.h"
 #include "net/rime.h"
 #include "net/rime/collect.h"
-#include "net/rime/neighbor.h"
 #include "dev/leds.h"
 #include "dev/button-sensor.h"
 

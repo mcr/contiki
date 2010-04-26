@@ -33,10 +33,11 @@
 
 /**
  * \file
- *         Sample Contiki kernel for STK 501 development board
+ *         Contiki 2.4 kernel for Jackdaw USB stick
  *
  * \author
- *         Simon Barner <barner@in.tum.de
+ *         Simon Barner <barner@in.tum.de>
+ *         David Kopf <dak664@embarqmail.com>
  */
 
 #include <avr/pgmspace.h>
@@ -46,35 +47,9 @@
 #include <stdio.h>
 #include <string.h>
 
-/* Set ANNOUNCE to send boot messages to USB serial port */
-#define ANNOUNCE 1
-
-#if RF230BB        //radio driver using contiki core mac
+#if RF230BB           //radio driver using contiki core mac
 #include "radio/rf230bb/rf230bb.h"
 #include "net/mac/frame802154.h"
-#include "net/mac/framer-802154.h"
-//#include "net/mac/framer-nullmac.h"
-//#include "net/mac/framer.h"
-#include "net/sicslowpan.h"
-#include "net/uip-netif.h"
-#include "net/mac/lpp.h"
-//#include "dev/xmem.h"
-
-#if WITH_NULLMAC
-#define MAC_DRIVER nullmac_driver
-#endif /* WITH_NULLMAC */
-
-#ifndef MAC_DRIVER
-#ifdef MAC_CONF_DRIVER
-#define MAC_DRIVER MAC_CONF_DRIVER
-#else
-#define MAC_DRIVER sicslowmac_driver
-//#define MAC_DRIVER cxmac_driver
-#endif /* MAC_CONF_DRIVER */
-#endif /* MAC_DRIVER */
-
-#include "net/mac/sicslowmac.h"
-#include "net/mac/cxmac.h"
 #else                 //radio driver using Atmel/Cisco 802.15.4'ish MAC
 #include <stdbool.h>
 #include "mac.h"
@@ -92,33 +67,44 @@
 #include "contiki-lib.h"
 #include "contiki-raven.h"
 
+/* Set ANNOUNCE to send boot messages to USB or serial port */
+#define ANNOUNCE 1
+#ifndef USB_CONF_CDC
+#define USB_CONF_RS232 1
+#endif
+
+#if USB_CONF_RS232
+#include "dev/rs232.h"
+#endif
+
 #include "usb_task.h"
+#if USB_CONF_CDC
 #include "serial/cdc_task.h"
+#endif
 #include "rndis/rndis_task.h"
+#if USB_CONF_STORAGE
 #include "storage/storage_task.h"
+#endif
 
 #if RF230BB
-//#warning Experimental RF230BB radio selected
 #define UIP_IP_BUF ((struct uip_ip_hdr *)&uip_buf[UIP_LLH_LEN])
 extern int rf230_interrupt_flag;
 extern uint8_t rf230processflag;
+rimeaddr_t addr,macLongAddr;
 #endif /* RF230BB */
 
-#if 1  //dummy tcpip process not needed?
-PROCESS(tcpip_process, "tcpip dummy");
-PROCESS_THREAD(tcpip_process, ev, data)
-{
-  PROCESS_BEGIN();
-  PROCESS_END();
-}
-void
-tcpip_ipv6_output(void)
-{
-  printf("tcpipipv6output");
-}
-#endif
+/* Test rtimers, also useful for pings and time stamps in simulator */
+#define TESTRTIMER 0
+#if TESTRTIMER
+#define PINGS 0
+#define STAMPS 30
+uint8_t rtimerflag=1;
+uint16_t rtime;
+struct rtimer rt;
+void rtimercycle(void) {rtimerflag=1;}
+#endif /* TESTRTIMER */
 
-
+/*-------------------------------------------------------------------------*/
 /*----------------------Configuration of the .elf file---------------------*/
 typedef struct {unsigned char B2;unsigned char B1;unsigned char B0;} __signature_t;
 #define SIGNATURE __signature_t __signature __attribute__((section (".signature")))
@@ -136,32 +122,30 @@ uint8_t mac_address[8] EEMEM = {0x02, 0x12, 0x13, 0xff, 0xfe, 0x14, 0x15, 0x16};
 //uint8_t EEMEM server_name[16];
 //uint8_t EEMEM domain_name[30];
 
-#if RF230BB
-rimeaddr_t macLongAddr;
-#endif
-
-//uint8_t rtimerworks;
-int
-main(void)
-{
-#if ANNOUNCE
-  uint32_t firsttime=0;
-#endif
-#if RF230BB
-    rimeaddr_t addr;
-#endif
-  /*
-   * GCC depends on register r1 set to 0.
-   */
-  asm volatile ("clr r1");
+/*-------------------------------------------------------------------------*/
+/*-----------------------------Low level initialization--------------------*/
+static void initialize(void) {
 
   /* Initialize hardware */
+// Currently only used for finger detection for mass storage mode
+#if USB_CONF_STORAGE
   init_lowlevel();
+#endif
   
   /* Clock */
   clock_init();
 
-/* rtimer init needed for low power protocols */
+  #if USB_CONF_RS232
+  /* Use rs232 port for serial out (tx, rx, gnd are the three pads behind jackdaw leds */
+  rs232_init(RS232_PORT_0, USART_BAUD_57600,USART_PARITY_NONE | USART_STOP_BITS_1 | USART_DATA_BITS_8);
+  /* Redirect stdout to second port */
+  rs232_redirect_stdout(RS232_PORT_0);
+#if ANNOUNCE
+  printf_P(PSTR("\n\n\n********BOOTING CONTIKI*********\n"));
+#endif
+#endif
+
+  /* rtimer init needed for low power protocols */
   rtimer_init();
 
   /* Process subsystem. */
@@ -171,11 +155,10 @@ main(void)
   process_start(&etimer_process, NULL);
   
 #if RF230BB
-{
   ctimer_init();
   /* Start radio and radio receive process */
   /* Note this starts RF230 process, so must be done after process_init */
-  rf230_init();
+  NETSTACK_RADIO.init();
 
   /* Set addresses BEFORE starting tcpip process */
 
@@ -193,88 +176,137 @@ main(void)
   macLongAddr.u8[6]=addr.u8[1];
   macLongAddr.u8[7]=addr.u8[0];
  
-  memcpy(&uip_lladdr.addr, &addr.u8, 8);	
+  memcpy(&uip_lladdr.addr, &addr.u8, 8);
   rf230_set_pan_addr(IEEE802154_PANID, 0, (uint8_t *)&addr.u8);
-
   rf230_set_channel(24);
 
   rimeaddr_set_node_addr(&addr); 
 //  set_rime_addr();
-//  PRINTF("MAC address %x:%x:%x:%x:%x:%x:%x:%x\n",addr.u8[0],addr.u8[1],addr.u8[2],addr.u8[3],addr.u8[4],addr.u8[5],addr.u8[6],addr.u8[7]);
 
-  framer_set(&framer_802154);
-
-  /* Setup X-MAC for 802.15.4 */
+  /* Initialize stack protocols */
   queuebuf_init();
   NETSTACK_RDC.init();
   NETSTACK_MAC.init();
   NETSTACK_NETWORK.init();
- // PRINTF("Driver: %s, Channel: %u\n", sicslowpan_mac->name, rf230_get_channel()); 
 
 #if UIP_CONF_ROUTER
   rime_init(rime_udp_init(NULL));
   uip_router_register(&rimeroute);
 #endif
-}
-#endif /*RF230BB*/
 
+#if ANNOUNCE && USB_CONF_RS232
+  printf_P(PSTR("MAC address %x:%x:%x:%x:%x:%x:%x:%x\n"),addr.u8[0],addr.u8[1],addr.u8[2],addr.u8[3],addr.u8[4],addr.u8[5],addr.u8[6],addr.u8[7]);
+  printf_P(PSTR("%s %s, channel %u"),NETSTACK_MAC.name, NETSTACK_RDC.name,rf230_get_channel());
+  if (NETSTACK_RDC.channel_check_interval) {
+    unsigned short tmp;
+    tmp=CLOCK_SECOND / (NETSTACK_RDC.channel_check_interval == 0 ? 1:\
+                        NETSTACK_RDC.channel_check_interval());
+    if (tmp<65535) printf_P(PSTR(", check rate %u Hz"),tmp);
+  }
+  printf_P(PSTR("\n"));
+#endif
 
-#if RF230BB
-  process_start(&tcpip_process, NULL);
-#else
+#else  /* RF230BB */
 /* The order of starting these is important! */
   process_start(&mac_process, NULL);
   process_start(&tcpip_process, NULL);
-
-#endif
+#endif /* RF230BB */
 
   /* Setup USB */
   process_start(&usb_process, NULL);
+#if USB_CONF_CDC
   process_start(&cdc_process, NULL);
+#endif
   process_start(&rndis_process, NULL);
+#if USB_CONF_STORAGE
   process_start(&storage_process, NULL);
+#endif
 
   //Fix MAC address
   init_net();
   
-   /* Main scheduler loop */
+#if ANNOUNCE
+#if USB_CONF_CDC
+{unsigned short i;
+   printf_P(PSTR("\n\n\n********BOOTING CONTIKI*********\n\r"));
+  /* Allow USB CDC to keep up with printfs */
+  for (i=0;i<8000;i++) process_run();
+#if RF230BB
+  printf_P(PSTR("MAC address %x:%x:%x:%x:%x:%x:%x:%x\n\r"),addr.u8[0],addr.u8[1],addr.u8[2],addr.u8[3],addr.u8[4],addr.u8[5],addr.u8[6],addr.u8[7]);
+  for (i=0;i<8000;i++) process_run();
+  printf_P(PSTR("%s %s, channel %u"),NETSTACK_MAC.name, NETSTACK_RDC.name,rf230_get_channel());
+  if (NETSTACK_RDC.channel_check_interval) {
+    i=CLOCK_SECOND / (NETSTACK_RDC.channel_check_interval == 0 ? 1:\
+                      NETSTACK_RDC.channel_check_interval());
+    if (i<65535) printf_P(PSTR(", check rate %u Hz"),i);
+   }
+   printf_P(PSTR("\n\r"));
+   for (i=0;i<8000;i++) process_run();
+#endif /* RF230BB */
+  printf_P(PSTR("System online.\n\r"));
+}
+#elif USB_CONF_RS232
+  printf_P(PSTR("System online.\n"));
+#endif /* USB_CONF_CDC */
+#endif /* ANNOUNCE */
+}
+
+/*-------------------------------------------------------------------------*/
+/*---------------------------------Main Routine----------------------------*/
+int
+main(void)
+{
+  /* GCC depends on register r1 set to 0 (?) */
+  asm volatile ("clr r1");
+  
+  /* Initialize in a subroutine to maximize stack space */
+  initialize();
+
   while(1) {
     process_run();
-#if 0
- if (rtimerworks) {
-  printf("i");
-  rtimerworks=0;
-}
+
+#if TESTRTIMER
+    if (rtimerflag) {  //8 seconds is maximum interval, my jackdaw 4% slow
+      rtimer_set(&rt, RTIMER_NOW()+ RTIMER_ARCH_SECOND*1UL, 1,(void *) rtimercycle, NULL);
+      rtimerflag=0;
+#if STAMPS
+      if ((rtime%STAMPS)==0) {
+        printf("%us ",rtime);
+      }
+#endif
+      rtime+=1;
+#if PINGS
+      if ((rtime%PINGS)==0) {
+        PRINTF("**Ping\n");
+        pingsomebody();
+      }
+#endif
+    }
+#endif /* TESTRTIMER */
+
+//Use with RF230BB DEBUGFLOW to show path through driver
+//Warning, Jackdaw doesn't handle simultaneous radio and USB interrupts very well.
+#if RF230BB&&0
+extern uint8_t debugflowsize,debugflow[];
+  if (debugflowsize) {
+    debugflow[debugflowsize]=0;
+    printf("%s",debugflow);
+    debugflowsize=0;
+   }
 #endif
 
-  /* Allow USB CDC to keep up with printfs */
-#if ANNOUNCE
-    if (firsttime++==36000){
-       printf_P(PSTR("\n\n\n********BOOTING CONTIKI*********\n\r"));
-#if RF230BB
-    } else if (firsttime==44000) {
-       printf("MAC address %x:%x:%x:%x:%x:%x:%x:%x\n\r",addr.u8[0],addr.u8[1],addr.u8[2],addr.u8[3],addr.u8[4],addr.u8[5],addr.u8[6],addr.u8[7]);
-
-    } else if (firsttime==52000) {
-       printf("Driver: %s, Channel: %u\n\r", sicslowpan_mac->name, rf230_get_channel()); 
+#if RF230BB&&0
+  if (rf230processflag) {
+    printf("**RF230 process flag %u\n\r",rf230processflag);
+    rf230processflag=0;
+  }
+  if (rf230_interrupt_flag) {
+//  if (rf230_interrupt_flag!=11) {
+      printf("**RF230 Interrupt %u\n\r",rf230_interrupt_flag);
+ // }
+    rf230_interrupt_flag=0;
+  }
 #endif
-    } else if (firsttime==60000) {
-      printf_P(PSTR("System online.\n\r"));
-    }
-    
-#if DEBUG && 0
-    if (rf230processflag) {
-       printf("**RF230 process flag %u\n\r",rf230processflag);
-       rf230processflag=0;
-    }
-    if (rf230_interrupt_flag) {
- //     if (rf230_interrupt_flag!=11) {
-        printf("**RF230 Interrupt %u\n\r",rf230_interrupt_flag);
- //     }
-      rf230_interrupt_flag=0;
-    }
-#endif /* DEBUG */
-#endif /* ANNOUNCE */
   }
 
   return 0;

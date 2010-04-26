@@ -46,8 +46,6 @@
 
 #include "dev/serial-line.h"
 #include "dev/slip.h"
-#include "dev/tr1001.h"
-#include "net/tr1001-uip.h"
 
 #include "node-id.h"
 
@@ -71,7 +69,5 @@
 void msp430_cpu_init(void);
 void init_lowlevel(void);
 void init_apps(void);
-void init_net(void);
-
 
 #endif /* __CONTIKI_ESB_H__ */

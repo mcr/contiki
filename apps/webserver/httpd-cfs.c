@@ -45,14 +45,21 @@ int snprintf(char *str, size_t size, const char *format, ...);
 #include "cfs/cfs.h"
 #include "lib/petsciiconv.h"
 #include "http-strings.h"
+#include "urlconv.h"
 
 #include "httpd-cfs.h"
 
 #ifndef WEBSERVER_CONF_CFS_CONNS
-#define CONNS 4
+#define CONNS UIP_CONNS
 #else /* WEBSERVER_CONF_CFS_CONNS */
 #define CONNS WEBSERVER_CONF_CFS_CONNS
 #endif /* WEBSERVER_CONF_CFS_CONNS */
+
+#ifndef WEBSERVER_CONF_CFS_URLCONV
+#define URLCONV 1
+#else /* WEBSERVER_CONF_CFS_URLCONV */
+#define URLCONV WEBSERVER_CONF_CFS_URLCONV
+#endif /* WEBSERVER_CONF_CFS_URLCONV */
 
 #define STATE_WAITING 0
 #define STATE_OUTPUT  1
@@ -99,7 +106,7 @@ PT_THREAD(send_string(struct httpd_state *s, const char *str))
 static
 PT_THREAD(send_headers(struct httpd_state *s, const char *statushdr))
 {
-  char *ptr;
+  const char *ptr;
 
   PSOCK_BEGIN(&s->sout);
 
@@ -107,18 +114,21 @@ PT_THREAD(send_headers(struct httpd_state *s, const char *statushdr))
 
   ptr = strrchr(s->filename, ISO_period);
   if(ptr == NULL) {
-    SEND_STRING(&s->sout, http_content_type_plain);
-  } else if(strncmp(http_html, ptr, 5) == 0) {
-    SEND_STRING(&s->sout, http_content_type_html);
-  } else if(strncmp(http_css, ptr, 4) == 0) {
-    SEND_STRING(&s->sout, http_content_type_css);
-  } else if(strncmp(http_png, ptr, 4) == 0) {
-    SEND_STRING(&s->sout, http_content_type_png);
-  } else if(strncmp(http_jpg, ptr, 4) == 0) {
-    SEND_STRING(&s->sout, http_content_type_jpg);
+    ptr = http_content_type_plain;
+  } else if(strcmp(http_html, ptr) == 0) {
+    ptr = http_content_type_html;
+  } else if(strcmp(http_css, ptr) == 0) {
+    ptr = http_content_type_css;
+  } else if(strcmp(http_png, ptr) == 0) {
+    ptr = http_content_type_png;
+  } else if(strcmp(http_gif, ptr) == 0) {
+    ptr = http_content_type_gif;
+  } else if(strcmp(http_jpg, ptr) == 0) {
+    ptr = http_content_type_jpg;
   } else {
-    SEND_STRING(&s->sout, http_content_type_binary);
+    ptr = http_content_type_binary;
   }
+  SEND_STRING(&s->sout, ptr);
   PSOCK_END(&s->sout);
 }
 /*---------------------------------------------------------------------------*/
@@ -128,23 +138,21 @@ PT_THREAD(handle_output(struct httpd_state *s))
   PT_BEGIN(&s->outputpt);
 
   petsciiconv_topetscii(s->filename, sizeof(s->filename));
-  s->fd = cfs_open(s->filename, CFS_READ);
+  s->fd = cfs_open(&s->filename[1], CFS_READ);
   petsciiconv_toascii(s->filename, sizeof(s->filename));
   if(s->fd < 0) {
-    strcpy(s->filename, "notfound.html");
-    s->fd = cfs_open(s->filename, CFS_READ);
+    strcpy(s->filename, "/notfound.html");
+    s->fd = cfs_open(&s->filename[1], CFS_READ);
     petsciiconv_toascii(s->filename, sizeof(s->filename));
+    PT_WAIT_THREAD(&s->outputpt,
+                   send_headers(s, http_header_404));
     if(s->fd < 0) {
-      PT_WAIT_THREAD(&s->outputpt,
-                     send_headers(s, http_header_404));
       PT_WAIT_THREAD(&s->outputpt,
                      send_string(s, "not found"));
       uip_close();
       webserver_log_file(&uip_conn->ripaddr, "404 (no notfound.html)");
       PT_EXIT(&s->outputpt);
     }
-    PT_WAIT_THREAD(&s->outputpt,
-		   send_headers(s, http_header_404));
     webserver_log_file(&uip_conn->ripaddr, "404 - notfound.html");
   } else {
     PT_WAIT_THREAD(&s->outputpt,
@@ -173,12 +181,17 @@ PT_THREAD(handle_input(struct httpd_state *s))
     PSOCK_CLOSE_EXIT(&s->sin);
   }
 
+#if URLCONV
+  s->inputbuf[PSOCK_DATALEN(&s->sin) - 1] = 0;
+  urlconv_tofilename(s->filename, s->inputbuf, sizeof(s->filename));
+#else /* URLCONV */
   if(s->inputbuf[1] == ISO_space) {
-    strncpy(s->filename, &http_index_html[1], sizeof(s->filename));
+    strncpy(s->filename, http_index_html, sizeof(s->filename));
   } else {
     s->inputbuf[PSOCK_DATALEN(&s->sin) - 1] = 0;
-    strncpy(s->filename, &s->inputbuf[1], sizeof(s->filename));
+    strncpy(s->filename, s->inputbuf, sizeof(s->filename));
   }
+#endif /* URLCONV */
 
   petsciiconv_topetscii(s->filename, sizeof(s->filename));
   webserver_log_file(&uip_conn->ripaddr, s->filename);

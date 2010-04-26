@@ -47,7 +47,6 @@
 #include "lib/random.h"
 
 #include "net/rime.h"
-#include "net/rime/neighbor.h"
 #include "net/rime/route.h"
 #include "net/rime/trickle.h"
 

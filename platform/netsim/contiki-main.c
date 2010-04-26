@@ -71,12 +71,6 @@ int snprintf(char *str, size_t size, const char *format, ...);
 #include "dev/leds.h"
 
 #ifdef __CYGWIN__
-__attribute__((dllimport)) extern int __argc;
-__attribute__((dllimport)) extern char **__argv[];
-#endif /* __CYGWIN__ */
-
-
-#ifdef __CYGWIN__
 static struct uip_fw_netif extif =
   {UIP_FW_NETIF(0,0,0,0, 0,0,0,0, wpcap_output)};
 #else /* __CYGWIN__ */
@@ -135,23 +129,21 @@ contiki_main(int flag)
       
   if(flag == 1) {
 #ifdef __CYGWIN__
-    if(__argc > 2 && (*__argv)[1][0] != '-') {
-      process_start(&wpcap_process, NULL);
-      {
-	char buf[1024];
-	uip_ipaddr_t ifaddr;
-	extern uip_ipaddr_t winifaddr;
-	
-	uip_ipaddr_copy(&ifaddr, &winifaddr);
-	
-	snprintf(buf, sizeof(buf), "route add %d.%d.%d.%d mask %d.%d.%d.%d %d.%d.%d.%d",
-		 uip_ipaddr_to_quad(&meshif.ipaddr),
-		 uip_ipaddr_to_quad(&meshif.netmask),
-		 uip_ipaddr_to_quad(&ifaddr));
-	printf("%s\n", buf);
-	system(buf);
-	signal(SIGTERM, remove_route);
-      }
+    process_start(&wpcap_process, NULL);
+    {
+      char buf[1024];
+      uip_ipaddr_t ifaddr;
+      extern uip_ipaddr_t winifaddr;
+      
+      uip_ipaddr_copy(&ifaddr, &winifaddr);
+      
+      snprintf(buf, sizeof(buf), "route add %d.%d.%d.%d mask %d.%d.%d.%d %d.%d.%d.%d",
+               uip_ipaddr_to_quad(&meshif.ipaddr),
+               uip_ipaddr_to_quad(&meshif.netmask),
+               uip_ipaddr_to_quad(&ifaddr));
+      printf("%s\n", buf);
+      system(buf);
+      signal(SIGTERM, remove_route);
     }
 #else /* __CYGWIN__ */
     process_start(&tapdev_process, NULL);

@@ -34,10 +34,37 @@
 #include <signal.h>
 #include <sys/unistd.h>
 #include "msp430.h"
+#include "msp430def.h"
 #include "dev/watchdog.h"
 #include "net/uip.h"
 
-
+/*---------------------------------------------------------------------------*/
+#if defined(__MSP430__) && defined(__GNUC__) && MSP430_MEMCPY_WORKAROUND
+void *
+w_memcpy(void *out, const void *in, size_t n)
+{
+  uint8_t *src, *dest;
+  src = (uint8_t *) in;
+  dest = (uint8_t *) out;
+  while(n-- > 0) {
+    *dest++ = *src++;
+  }
+  return out;
+}
+#endif /* __GNUC__ &&  __MSP430__ && MSP430_MEMCPY_WORKAROUND */
+/*---------------------------------------------------------------------------*/
+#if defined(__MSP430__) && defined(__GNUC__) && MSP430_MEMCPY_WORKAROUND
+void *
+w_memset(void *out, int value, size_t n)
+{
+  uint8_t *dest;
+  dest = (uint8_t *) out;
+  while(n-- > 0) {
+    *dest++ = value & 0xff;
+  }
+  return out;
+}
+#endif /* __GNUC__ &&  __MSP430__ && MSP430_MEMCPY_WORKAROUND */
 /*---------------------------------------------------------------------------*/
 void
 msp430_init_dco(void)

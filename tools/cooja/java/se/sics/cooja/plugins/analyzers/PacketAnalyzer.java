@@ -2,6 +2,10 @@ package se.sics.cooja.plugins.analyzers;
 
 public abstract class PacketAnalyzer {
 
+    public static final int ANALYSIS_FAILED = -1;
+    public static final int ANALYSIS_OK_CONTINUE = 1;
+    public static final int ANALYSIS_OK_FINAL = 2;
+    
     public static final int RADIO_LEVEL = 0;
     public static final int MAC_LEVEL = 1;
     public static final int NETWORK_LEVEL = 2;
@@ -10,21 +14,41 @@ public abstract class PacketAnalyzer {
         byte[] data;
         int pos;
         int level;
-
+        /* size = length - consumed bytes at tail */
+        int size;
+        
         /* L2 addresseses */
         byte[] llsender;
         byte[] llreceiver;
 
+        byte lastDispatch = 0;
+        
         public Packet(byte[] data, int level) {
             this.level = level;
             this.data = data;
+            this.size = data.length;
         }
 
+
+        public void consumeBytesStart(int bytes) {
+            pos += bytes;
+        }
+
+        public void consumeBytesEnd(int bytes) {
+            size -= bytes;
+        }
+        
+        
         public boolean hasMoreData() {
-            return data.length > pos;
+            return size > pos;
+        }
+        
+        public int size() {
+            return size - pos;
         }
         
         public byte get(int index) {
+            if (index >= size) return 0;
             return data[pos + index];
         }
 
@@ -38,7 +62,7 @@ public abstract class PacketAnalyzer {
 
         
         public byte[] getPayload() {
-            byte[] pload = new byte[data.length - pos];
+            byte[] pload = new byte[size - pos];
             System.arraycopy(data, pos, pload, 0, pload.length);
             return pload;
         }
@@ -60,5 +84,5 @@ public abstract class PacketAnalyzer {
     
     public abstract boolean matchPacket(Packet packet);
     
-    public abstract void analyzePacket(Packet packet, StringBuffer brief, StringBuffer verbose);
+    public abstract int analyzePacket(Packet packet, StringBuffer brief, StringBuffer verbose);
 }

@@ -36,39 +36,96 @@
 
 #define PROFILE_CONF_ON 0
 #define ENERGEST_CONF_ON 0
+#define LOG_CONF_ENABLED 1
 
 #define COOJA 1
 
-#define QUEUEBUF_CONF_NUM 10
+#if WITH_UIP
+#if WITH_UIP6
+#error WITH_UIP && WITH_IP6: Bad configuration
+#endif /* WITH_UIP6 */
+#endif /* WITH_UIP */
+
+#ifdef NETSTACK_CONF_H
+
+/* These header overrides the below default configuration */
+#define NETSTACK__QUOTEME(s) NETSTACK_QUOTEME(s)
+#define NETSTACK_QUOTEME(s) #s
+#include NETSTACK__QUOTEME(NETSTACK_CONF_H)
+
+#else /* NETSTACK_CONF_H */
+
+/* Default network config */
+#if WITH_UIP6
+
+/* Network setup for IPv6 */
+#define NETSTACK_CONF_NETWORK uip_driver
+#define NETSTACK_CONF_MAC nullmac_driver
+#define NETSTACK_CONF_RDC nullrdc_driver
+#define NETSTACK_CONF_RADIO cooja_radio_driver
+#define UIP_CONF_IPV6 1
+#define UIP_CONF_IP_FORWARD           0
+
+#else /* WITH_UIP6 */
+
+#if WITH_UIP
+
+/* Network setup for IPv4 */
+#define NETSTACK_CONF_NETWORK rime_driver /* NOTE: uip_over_mesh. else: uip_driver */
+#define NETSTACK_CONF_MAC nullmac_driver
+#define NETSTACK_CONF_RDC nullrdc_driver
+#define NETSTACK_CONF_RADIO cooja_radio_driver
+#define UIP_CONF_IP_FORWARD           1
+
+#else /* WITH_UIP */
+
+/* Network setup for Rime */
+#define NETSTACK_CONF_NETWORK rime_driver
+#define NETSTACK_CONF_MAC nullmac_driver
+#define NETSTACK_CONF_RDC nullrdc_driver
+#define NETSTACK_CONF_RADIO cooja_radio_driver
+/*#define NETSTACK_CONF_FRAMER framer_nullmac*/
+
+#endif /* WITH_UIP */
+#endif /* WITH_UIP6 */
+
+#endif /* NETSTACK_CONF_H */
+
+
+#define PACKETBUF_CONF_ATTRS_INLINE 1
+
+#define QUEUEBUF_CONF_NUM 16
 
 #define CC_CONF_REGISTER_ARGS          1
 #define CC_CONF_FUNCTION_POINTER_ARGS  1
 #define CC_CONF_FASTCALL
 #define CC_CONF_VA_ARGS                1
+#define CC_CONF_INLINE inline
 
 #define CCIF
 #define CLIF
 
 #include <inttypes.h>
-
 typedef uint8_t u8_t;
 typedef uint16_t u16_t;
 typedef uint32_t u32_t;
 typedef int32_t s32_t;
 typedef unsigned short uip_stats_t;
 
+#define CLOCK_CONF_SECOND 1000L
 typedef unsigned long clock_time_t;
-#define CLOCK_CONF_SECOND 1000
-
-#define LOG_CONF_ENABLED 1
+typedef unsigned long rtimer_clock_t;
+#define RTIMER_CLOCK_LT(a,b)     ((signed long)((a)-(b)) < 0)
 
 #define AODV_COMPLIANCE
+#define AODV_NUM_RT_ENTRIES 32
+
+#define WITH_ASCII 1
 
 #define UIP_CONF_MAX_LISTENPORTS      40
 #define UIP_CONF_MAX_CONNECTIONS      40
 #define UIP_CONF_BYTE_ORDER           UIP_LITTLE_ENDIAN
 #define UIP_CONF_TCP_SPLIT            0
-#define UIP_CONF_IP_FORWARD           0
 #define UIP_CONF_LOGGING              0
 #define UIP_CONF_UDP_CHECKSUMS        0
 #define UIP_CONF_BROADCAST            1
@@ -77,6 +134,7 @@ typedef unsigned long clock_time_t;
 #define UIP_CONF_TCP                  1
 
 #if UIP_CONF_IPV6
+#define RIMEADDR_CONF_SIZE            8
 #define UIP_CONF_IPV6_QUEUE_PKT       1
 #define UIP_CONF_IPV6_CHECKS          1
 #define UIP_CONF_IPV6_REASSEMBLY      1

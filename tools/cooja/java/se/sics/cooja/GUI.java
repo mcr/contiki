@@ -248,7 +248,6 @@ public class GUI extends Observable {
     "PATH_JAVAC",
 
     "CONTIKI_STANDARD_PROCESSES",
-    "CONTIKI_MAIN_TEMPLATE_FILENAME",
 
     "CMD_GREP_PROCESSES", "REGEXP_PARSE_PROCESSES",
     "CMD_GREP_INTERFACES", "REGEXP_PARSE_INTERFACES",
@@ -1652,13 +1651,13 @@ public class GUI extends Observable {
         GUI.showErrorDialog(GUI.getTopParentContainer(), "Error when starting plugin", ex, false);
       } else {
         /* If the plugin requires visualization, inform user */
-        Throwable cause = ex.getCause();
+        Throwable cause = ex;
         do {
           if (cause instanceof PluginRequiresVisualizationException) {
             logger.info("Visualized plugin was not started: " + pluginClass);
             return null;
           }
-        } while ((cause=cause.getCause()) != null);
+        } while (cause != null && (cause=cause.getCause()) != null);
         
         logger.fatal("Error when starting plugin", ex);
       }
@@ -1874,8 +1873,11 @@ public class GUI extends Observable {
         logger.fatal("Could not find valid plugin type annotation in class " + newPluginClass);
         return false;
       }
+    } catch (NoClassDefFoundError e) {
+      logger.fatal("No plugin class: " + newPluginClass + ": " + e.getMessage());
+      return false;
     } catch (NoSuchMethodException e) {
-      logger.fatal("Could not find valid constructor in class " + newPluginClass + ": " + e);
+      logger.fatal("No plugin class constructor: " + newPluginClass + ": " + e.getMessage());
       return false;
     }
 
@@ -2732,8 +2734,6 @@ public class GUI extends Observable {
       filename = GUI.EXTERNAL_TOOLS_LINUX_SETTINGS_FILENAME;
     }
 
-    logger.info("Loading external tools user settings from: " + filename);
-
     try {
       InputStream in = GUI.class.getResourceAsStream(filename);
       if (in == null) {
@@ -2745,10 +2745,9 @@ public class GUI extends Observable {
 
       currentExternalToolsSettings = settings;
       defaultExternalToolsSettings = (Properties) currentExternalToolsSettings.clone();
+      logger.info("External tools default settings: " + filename);
     } catch (IOException e) {
-      // Error while importing default properties
-      logger.warn(
-          "Error when reading external tools settings from " + filename, e);
+      logger.warn("Error when reading external tools settings from " + filename, e);
     } finally {
       if (currentExternalToolsSettings == null) {
         defaultExternalToolsSettings = new Properties();
@@ -2771,17 +2770,16 @@ public class GUI extends Observable {
       settings.load(in);
       in.close();
 
-      Enumeration en = settings.keys();
+      Enumeration<Object> en = settings.keys();
       while (en.hasMoreElements()) {
         String key = (String) en.nextElement();
         setExternalToolsSetting(key, settings.getProperty(key));
       }
-
+      logger.info("External tools user settings: " + externalToolsUserSettingsFile);
     } catch (FileNotFoundException e) {
-      // No default configuration file found, using default
+      logger.warn("Error when reading user settings from: " + externalToolsUserSettingsFile);
     } catch (IOException e) {
-      // Error while importing saved properties, using default
-      logger.warn("Error when reading default settings from " + externalToolsUserSettingsFile);
+      logger.warn("Error when reading user settings from: " + externalToolsUserSettingsFile);
     }
   }
 
@@ -3078,6 +3076,12 @@ public class GUI extends Observable {
 
     /* Look and Feel: Nimbus */
     setLookAndFeel();
+
+    /* Warn at no JAVA_HOME */
+    String javaHome = System.getenv().get("JAVA_HOME");
+    if (javaHome == null || javaHome.equals("")) {
+      logger.warn("JAVA_HOME environment variable not set, Contiki motes (OS-level) may not compile");
+    }
 
     // Parse general command arguments
     for (String element : args) {
@@ -3393,6 +3397,7 @@ public class GUI extends Observable {
     for (File project: currentProjectDirs) {
       Element projectElement = new Element("project");
       projectElement.addContent(createPortablePath(project).getPath().replaceAll("\\\\", "/"));
+      projectElement.setAttribute("EXPORT", "discard");
       root.addContent(projectElement);
     }
 
@@ -3476,9 +3481,11 @@ public class GUI extends Observable {
         pluginSubElement.setText("" + pluginFrame.getLocation().y);
         pluginElement.addContent(pluginSubElement);
 
-        pluginSubElement = new Element("minimized");
-        pluginSubElement.setText(new Boolean(pluginFrame.isIcon()).toString());
-        pluginElement.addContent(pluginSubElement);
+        if (pluginFrame.isIcon()) {
+          pluginSubElement = new Element("minimized");
+          pluginSubElement.setText("" + true);
+          pluginElement.addContent(pluginSubElement);
+        }
       }
 
       config.add(pluginElement);
@@ -3610,9 +3617,18 @@ public class GUI extends Observable {
                 location.y = Integer.parseInt(pluginSubElement.getText());
                 startedPlugin.getGUI().setLocation(location);
               } else if (pluginSubElement.getName().equals("minimized")) {
-                try {
-                  startedPlugin.getGUI().setIcon(Boolean.parseBoolean(pluginSubElement.getText()));
-                } catch (PropertyVetoException e) { }
+                boolean minimized = Boolean.parseBoolean(pluginSubElement.getText());
+                final JInternalFrame pluginGUI = startedPlugin.getGUI();
+                if (minimized && pluginGUI != null) {
+                  SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                      try {
+                        pluginGUI.setIcon(true);
+                      } catch (PropertyVetoException e) {
+                      }
+                    };                    
+                  });
+                }
               }
             }
 
@@ -4110,10 +4126,13 @@ public class GUI extends Observable {
     }
   }
   private File restoreConfigRelativePath(File portable) {
-    if (currentConfigFile == null) {
+    return restoreConfigRelativePath(currentConfigFile, portable);
+  }
+  public static File restoreConfigRelativePath(File configFile, File portable) {
+    if (configFile == null) {
       return null;
     }
-    File configPath = currentConfigFile.getParentFile();
+    File configPath = configFile.getParentFile();
     if (configPath == null) {
         /* File is in current directory */
         configPath = new File("");

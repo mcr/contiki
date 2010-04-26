@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005, Swedish Institute of Computer Science
+ * Copyright (c) 2010, Swedish Institute of Computer Science.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,43 +26,61 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * This file is part of the Contiki operating system.
- *
- * @(#)$Id$
+ * $Id$
  */
 
-#include "lib/sensors.h"
-#include "dev/radio-sensor.h"
-#include "dev/cooja-radio.h"
-#include "lib/simEnvChange.h"
+/**
+ * \file
+ *         A brief description of what this file is
+ * \author
+ *         Niclas Finne <nfi@sics.se>
+ *         Joakim Eriksson <joakime@sics.se>
+ */
 
-const struct sensors_sensor radio_sensor;
+#include "net/netstack.h"
+#include "net/uip.h"
+#include "net/tcpip.h"
+#include "net/hc.h"
+#include "net/rime/packetbuf.h"
+#include "net/uip-driver.h"
+#include <string.h>
 
-extern int simSignalStrength;
-
-/*---------------------------------------------------------------------------*/
-static int
-value(int type)
+/*--------------------------------------------------------------------*/
+uint8_t
+uip_driver_send(void)
 {
-  return simSignalStrength;
+  packetbuf_copyfrom(&uip_buf[UIP_LLH_LEN], uip_len);
+
+  /* XXX we should provide a callback function that is called when the
+     packet is sent. For now, we just supply a NULL pointer. */
+  NETSTACK_MAC.send(NULL, NULL);
+  return 1;
 }
-/*---------------------------------------------------------------------------*/
-static int
-configure(int type, int c)
+/*--------------------------------------------------------------------*/
+static void
+init(void)
 {
-  return 0;
+  /*
+   * Set out output function as the function to be called from uIP to
+   * send a packet.
+   */
+  tcpip_set_outputfunc(uip_driver_send);
 }
-/*---------------------------------------------------------------------------*/
-static int
-status(int type)
+/*--------------------------------------------------------------------*/
+static void
+input(void)
 {
-  switch(type) {
-  case SENSORS_ACTIVE:
-  case SENSORS_READY:
-    return 1;
+  if(packetbuf_datalen() > 0 &&
+     packetbuf_datalen() <= UIP_BUFSIZE - UIP_LLH_LEN) {
+    memcpy(&uip_buf[UIP_LLH_LEN], packetbuf_dataptr(), packetbuf_datalen());
+    uip_len = packetbuf_datalen();
+    tcpip_input();
   }
-  return 0;
 }
-/*---------------------------------------------------------------------------*/
-SENSORS_SENSOR(radio_sensor, RADIO_SENSOR,
-               value, configure, status);
+/*--------------------------------------------------------------------*/
+const struct network_driver uip_driver = {
+  "uip",
+  init,
+  input
+};
+/*--------------------------------------------------------------------*/

@@ -30,14 +30,13 @@
  *
  * @(#)$$
  */
-#define DEBUG 1
+#define ANNOUNCE_BOOT 1    //adds about 600 bytes to program size
+
+#define DEBUG 0
 #if DEBUG
 #define PRINTF(FORMAT,args...) printf_P(PSTR(FORMAT),##args)
 #define PRINTSHORT(FORMAT,args...) printf_P(PSTR(FORMAT),##args)
-int pingtimer1=0,pingtimer2=0;
-#if RF230BB
-extern int rf230_interrupt_flag;
-#endif
+
 #else
 #define PRINTF(...)
 #define PRINTSHORT(...)
@@ -49,7 +48,6 @@ extern int rf230_interrupt_flag;
 #include <stdio.h>
 #include <string.h>
 
-//#include "lib/mmem.h"
 #include "loader/symbols-def.h"
 #include "loader/symtab.h"
 
@@ -57,30 +55,7 @@ extern int rf230_interrupt_flag;
 #include "radio/rf230bb/rf230bb.h"
 #include "net/mac/frame802154.h"
 #include "net/mac/framer-802154.h"
-//#include "net/mac/framer-nullmac.h"
-//#include "net/mac/framer.h"
 #include "net/sicslowpan.h"
-//#include "net/uip-netif.h"
-//#include "net/mac/lpp.h"
-//#include "net/mac/cxmac.h"
-//#include "net/mac/sicslowmac.h"
-//#include "dev/xmem.h"
-//#include "net/rime.h"
-
-#if 0
-#if WITH_NULLMAC
-#define MAC_DRIVER nullmac_driver
-#endif /* WITH_NULLMAC */
-
-#ifndef MAC_DRIVER
-#ifdef MAC_CONF_DRIVER
-#define MAC_DRIVER MAC_CONF_DRIVER
-#else
-#define MAC_DRIVER sicslowmac1_driver
-//#define MAC_DRIVER cxmac_driver
-#endif /* MAC_CONF_DRIVER */
-#endif /* MAC_DRIVER */
-#endif
 
 #else                 //radio driver using Atmel/Cisco 802.15.4'ish MAC
 #include <stdbool.h>
@@ -118,7 +93,6 @@ extern int rf230_interrupt_flag;
 #endif
 
 #include "net/rime.h"
-//#include "node-id.h"
 
 /*-------------------------------------------------------------------------*/
 /*----------------------Configuration of the .elf file---------------------*/
@@ -159,10 +133,12 @@ void initialize(void)
   /* Redirect stdout to second port */
   rs232_redirect_stdout(RS232_PORT_1);
   clock_init();
+#if ANNOUNCE_BOOT
   printf_P(PSTR("\n*******Booting %s*******\n"),CONTIKI_VERSION_STRING);
+#endif
 
-/* rtimers not used yet */
-//  rtimer_init();
+/* rtimers needed for radio cycling */
+  rtimer_init();
 
  /* Initialize process subsystem */
   process_init();
@@ -170,10 +146,10 @@ void initialize(void)
   process_start(&etimer_process, NULL);
 
 #if RF230BB
-{
+
   ctimer_init();
   /* Start radio and radio receive process */
-  rf230_init();
+  NETSTACK_RADIO.init();
 
   /* Set addresses BEFORE starting tcpip process */
 
@@ -185,54 +161,45 @@ void initialize(void)
  
   memcpy(&uip_lladdr.addr, &addr.u8, 8);	
   rf230_set_pan_addr(IEEE802154_PANID, 0, (uint8_t *)&addr.u8);
-
   rf230_set_channel(24);
 
   rimeaddr_set_node_addr(&addr); 
-//  set_rime_addr();
+
   PRINTF("MAC address %x:%x:%x:%x:%x:%x:%x:%x\n",addr.u8[0],addr.u8[1],addr.u8[2],addr.u8[3],addr.u8[4],addr.u8[5],addr.u8[6],addr.u8[7]);
 
-  framer_set(&framer_802154);
-
-  /* Setup X-MAC for 802.15.4 */
+  /* Initialize stack protocols */
   queuebuf_init();
-  NETSTACK_RDC.init();  //prints rs2048
+  NETSTACK_RDC.init();
   NETSTACK_MAC.init();
   NETSTACK_NETWORK.init();
-//todo: makes raven reboot
-//  printf(" %s, channel check rate %d Hz, radio channel %u\n",
- //        sicslowpan_mac->name,
- //        CLOCK_SECOND / (sicslowpan_mac->channel_check_interval() == 0? 1:
- //                        sicslowpan_mac->channel_check_interval()),
- //        RF_CHANNEL); 
 
- // uip_ip6addr(&ipprefix, 0xaaaa, 0, 0, 0, 0, 0, 0, 0);
- // uip_netif_addr_add(&ipprefix, UIP_DEFAULT_PREFIX_LEN, 0, AUTOCONF);
- // uip_nd6_prefix_add(&ipprefix, UIP_DEFAULT_PREFIX_LEN, 0);
- // PRINTF("Prefix %x::/%u\n",ipprefix.u16[0],UIP_DEFAULT_PREFIX_LEN);
+#if ANNOUNCE_BOOT
+  printf_P(PSTR("%s %s, channel %u"),NETSTACK_MAC.name, NETSTACK_RDC.name,rf230_get_channel());
+  if (NETSTACK_RDC.channel_check_interval) {//function pointer is zero for sicslowmac
+    unsigned short tmp;
+    tmp=CLOCK_SECOND / (NETSTACK_RDC.channel_check_interval == 0 ? 1:\
+                                   NETSTACK_RDC.channel_check_interval());
+    if (tmp<65535) printf_P(PSTR(", check rate %u Hz"),tmp);
+  }
+  printf_P(PSTR("\n"));
+#endif
 
 #if UIP_CONF_ROUTER
-#warning Routing enabled
-  PRINTF("Routing Enabled\n")
+#if ANNOUNCE_BOOT
+  printf_P(PSTR("Routing Enabled\n"));
+#endif
   rime_init(rime_udp_init(NULL));
   uip_router_register(&rimeroute);
 #endif
 
-//  sicslowpan_init(MAC_DRIVER.init(&rf230_driver));
-  
-//  PRINTF("Driver: %s, Channel: %u\n\r", MAC_DRIVER.name, rf230_get_channel()); 
- PRINTF("Driver: %s, Channel: %u\n", sicslowpan_mac->name, rf230_get_channel()); 
-}
-#endif /*RF230BB*/
-
-#if RF230BB
   process_start(&tcpip_process, NULL);
-#else
+
+  #else
 /* mac process must be started before tcpip process! */
   process_start(&mac_process, NULL);
   process_start(&tcpip_process, NULL);
+#endif /*RF230BB*/
 
-#endif
 #ifdef RAVEN_LCD_INTERFACE
   process_start(&raven_lcd_process, NULL);
 #endif
@@ -258,18 +225,32 @@ void initialize(void)
 //  fa = cfs_open("upload.html"), CFW_WRITE);
 // <html><body><form action="upload.html" enctype="multipart/form-data" method="post"><input name="userfile" type="file" size="50" /><input value="Upload" type="submit" /></form></body></html>
   }
+#endif /* COFFEE_FILES */
+
+/* Add addresses for testing */
+#if 0
+{  
+  uip_ip6addr_t ipaddr;
+  uip_ip6addr(&ipaddr, 0xaaaa, 0, 0, 0, 0, 0, 0, 0);
+  uip_ds6_addr_add(&ipaddr, 0, ADDR_AUTOCONF);
+//  uip_ds6_prefix_add(&ipaddr,64,0);
+}
 #endif
 
 /*--------------------------Announce the configuration---------------------*/
-#define ANNOUNCE_BOOT 1    //adds about 400 bytes to program size
-
 #if ANNOUNCE_BOOT
 
 #if WEBSERVER
-
   uint8_t i;
   char buf[80];
   unsigned int size;
+
+  for (i=0;i<UIP_DS6_ADDR_NB;i++) {
+	if (uip_ds6_if.addr_list[i].isused) {	  
+	   httpd_cgi_sprint_ip6(uip_ds6_if.addr_list[i].ipaddr,buf);
+       printf_P(PSTR("IPv6 Address: %s\n"),buf);
+	}
+  }
    eeprom_read_block (buf,server_name, sizeof(server_name));
    buf[sizeof(server_name)]=0;
    printf_P(PSTR("%s"),buf);
@@ -286,48 +267,34 @@ void initialize(void)
    printf_P(PSTR(".%s online with static %u byte program memory file system\n"),buf,size);
 #elif COFFEE_FILES==4
    printf_P(PSTR(".%s online with dynamic %u KB program memory file system\n"),buf,size>>10);
-#endif
+#endif /* COFFEE_FILES */
 
-/* Add prefixes for testing */
-#if 0
-{  
-  uip_ip6addr_t ipaddr;
-  uip_ip6addr(&ipaddr, 0xaaaa, 0, 0, 0, 0, 0, 0, 0);
-  uip_netif_addr_autoconf_set(&ipaddr, &uip_lladdr);
-  uip_netif_addr_add(&ipaddr, 16, 0, TENTATIVE);
-}
-#endif
-#if 0
-{
-  uip_ip6addr_t ipaddr;
-  uip_ip6addr(&ipaddr, 0xaaaa, 0, 0, 0, 0, 0, 0, 0);
-  uip_netif_addr_add(&ipaddr, UIP_DEFAULT_PREFIX_LEN, 0, AUTOCONF);
-  uip_nd6_prefix_add(&ipaddr, UIP_DEFAULT_PREFIX_LEN, 0);
-}
-#endif
-
-  for(i = 0; i < UIP_CONF_NETIF_MAX_ADDRESSES; i ++) {
-   if(uip_netif_physical_if.addresses[i].state != NOT_USED) {
-      httpd_cgi_sprint_ip6(*(uip_ipaddr_t*)&uip_netif_physical_if.addresses[i],buf);
-      printf_P(PSTR("IPv6 Address: %s\n"),buf);
-   }
-  }
 #else
    printf_P(PSTR("Online\n"));
 #endif /* WEBSERVER */
 
 #endif /* ANNOUNCE_BOOT */
-
 }
-#if RF230BB
-extern uint8_t rf230processflag;      //for debugging process call problems
-#endif
+
 /*---------------------------------------------------------------------------*/
 void log_message(char *m1, char *m2)
 {
   printf_P(PSTR("%s%s\n"), m1, m2);
 }
-extern uint8_t rtimerworks;
+/* Test rtimers, also useful for pings and time stamps in simulator */
+#define TESTRTIMER 0
+#if TESTRTIMER
+#define PINGS 60
+#define STAMPS 30
+uint8_t rtimerflag=1;
+uint16_t rtime;
+struct rtimer rt;
+void rtimercycle(void) {rtimerflag=1;}
+#endif /* TESTRTIMER */
+
+#if RF230BB
+extern char rf230_interrupt_flag, rf230processflag;
+#endif
 /*-------------------------------------------------------------------------*/
 /*------------------------- Main Scheduler loop----------------------------*/
 /*-------------------------------------------------------------------------*/
@@ -335,41 +302,61 @@ int
 main(void)
 {
   initialize();
+
   while(1) {
     process_run();
-#if 0
-    if (rtimerworks>200) {
-      printf("%d",rtimerworks);
-      rtimerworks=0;
+//Various entry points for debugging in AVR simulator
+//    NETSTACK_RADIO.send(packetbuf_hdrptr(), 42);
+//    process_poll(&rf230_process);
+//    packetbuf_clear();
+//    len = rf230_read(packetbuf_dataptr(), PACKETBUF_SIZE);
+//    packetbuf_set_datalen(42);
+//    NETSTACK_RDC.input();
+
+#if TESTRTIMER
+    if (rtimerflag) {  //8 seconds is maximum interval, my raven 6% slow
+      rtimer_set(&rt, RTIMER_NOW()+ RTIMER_ARCH_SECOND*1UL, 1,(void *) rtimercycle, NULL);
+      rtimerflag=0;
+#if STAMPS
+      if ((rtime%STAMPS)==0) {
+        printf("%us ",rtime);
+      }
+#endif
+      rtime+=1;
+#if PINGS
+      if ((rtime%PINGS)==0) {
+        PRINTF("**Ping\n");
+        raven_ping6();
+      }
+#endif
     }
 #endif
-#if RF230BB && 0
+
+//Use with RF230BB DEBUGFLOW to show path through driver
+#if RF230BB&&1
+extern uint8_t debugflowsize,debugflow[];
+  if (debugflowsize) {
+    debugflow[debugflowsize]=0;
+    printf("%s",debugflow);
+    debugflowsize=0;
+   }
+#endif
+
+#if RF230BB&&0
     if (rf230processflag) {
       printf("rf230p%d",rf230processflag);
       rf230processflag=0;
-  }
+    }
 #endif
 
-#if 0
+#if RF230BB&&0
     if (rf230_interrupt_flag) {
- //     if (rf230_interrupt_flag!=11) {
- //       PRINTF("*****Radio interrupt %u\n",rf230_interrupt_flag);
+ //   if (rf230_interrupt_flag!=11) {
         PRINTSHORT("**RI%u",rf230_interrupt_flag);
-       rf230_interrupt_flag=0;
- //     }
+ //   }
+      rf230_interrupt_flag=0;
     }
 #endif
-#if PINGS
-    if (pingtimer1++==10000) {
-      pingtimer1=0;
-      if (pingtimer2++==1000) { 
-        PRINTF("-------Ping\n");
-        pingtimer2=0;
-        raven_ping6();
-      }
-    }
-#endif
-
   }
   return 0;
 }

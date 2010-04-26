@@ -89,6 +89,9 @@ uart1_writeb(unsigned char c)
      the first byte into the UART. */
   if(transmitting == 0) {
     transmitting = 1;
+
+    /* Loop until the transmission buffer is available. */
+    /*while((IFG2 & UTXIFG1) == 0);*/
     TXBUF1 = ringbuf_get(&txbuf);
   }
 
@@ -182,7 +185,7 @@ uart1_init(unsigned long ubr)
   rx_in_progress = 0;
 
   transmitting = 0;
-  
+
   IE2 |= URXIE1;                        /* Enable USART1 RX interrupt  */
 #if TX_WITH_INTERRUPT
   ringbuf_init(&txbuf, txbuf_data, sizeof(txbuf_data));
@@ -230,7 +233,7 @@ uart1_tx_interrupt(void)
   } else {
     TXBUF1 = ringbuf_get(&txbuf);
   }
-  
+
   ENERGEST_OFF(ENERGEST_TYPE_IRQ);
 }
 #endif /* TX_WITH_INTERRUPT */

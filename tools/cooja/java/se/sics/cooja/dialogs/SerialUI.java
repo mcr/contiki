@@ -62,6 +62,8 @@ import se.sics.cooja.plugins.SLIP;
 public abstract class SerialUI extends Log implements SerialPort {
   private static Logger logger = Logger.getLogger(SerialUI.class);
 
+  private final static int MAX_LENGTH = 1024;
+
   private String lastLogMessage = "";
   private StringBuilder newMessage = new StringBuilder();
 
@@ -324,6 +326,10 @@ public abstract class SerialUI extends Log implements SerialPort {
         this.notifyObservers(getMote());
       } else {
         newMessage.append((char) data);
+        if (newMessage.length() > MAX_LENGTH) {
+          logger.warn("Dropping too large log message (>" + MAX_LENGTH + " bytes).");
+          newMessage.setLength(0);
+        }
       }
       lastSerialData = (byte) data;
       serialDataObservable.notifyNewData();

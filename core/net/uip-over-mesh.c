@@ -90,11 +90,20 @@ recv_data(struct unicast_conn *c, const rimeaddr_t *from)
   source.u8[0] = BUF->srcipaddr.u8[2];
   source.u8[1] = BUF->srcipaddr.u8[3];
 
-  e = route_lookup(from);
+  e = route_lookup(&source);
   if(e == NULL) {
     route_add(&source, from, 10, 0);
   } else {
     route_refresh(e);
+  }
+
+  /* If we received data via a gateway, we refresh the gateway route.
+   * Note: we refresh OUR gateway route, although we are not sure it forwarded the data. */
+  if(!uip_ipaddr_maskcmp(&BUF->srcipaddr, &netaddr, &netmask)) {
+    e = route_lookup(&gateway);
+    if(e != NULL) {
+      route_refresh(e);
+    }
   }
 
   /*  uip_len = hc_inflate(&uip_buf[UIP_LLH_LEN], uip_len);*/

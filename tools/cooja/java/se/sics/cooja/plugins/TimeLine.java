@@ -35,6 +35,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -102,7 +103,7 @@ import se.sics.cooja.interfaces.Radio.RadioEvent;
 @ClassDescription("Timeline")
 @PluginType(PluginType.SIM_STANDARD_PLUGIN)
 public class TimeLine extends VisPlugin {
-
+  private static final long serialVersionUID = -883154261246961973L;
   public static final int LED_PIXEL_HEIGHT = 2;
   public static final int EVENT_PIXEL_HEIGHT = 4;
   public static final int TIME_MARKER_PIXEL_HEIGHT = 6;
@@ -112,12 +113,12 @@ public class TimeLine extends VisPlugin {
   private static final boolean PAINT_ZERO_WIDTH_EVENTS = true;
   private static final int TIMELINE_UPDATE_INTERVAL = 100;
 
-  private static long currentPixelDivisor = 200;
+  private double currentPixelDivisor = 200;
 
-  private static final long[] ZOOM_LEVELS = { 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000 }; 
+  private static final long[] ZOOM_LEVELS = { 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000 }; 
 
-  private int zoomLevel = 9;
-
+  private boolean needZoomOut = false;
+  
   private static Logger logger = Logger.getLogger(TimeLine.class);
 
   private int paintedMoteHeight = EVENT_PIXEL_HEIGHT;
@@ -152,7 +153,7 @@ public class TimeLine extends VisPlugin {
     super("Timeline (Add motes to observe by clicking +)", gui);
     this.simulation = simulation;
     
-    currentPixelDivisor = ZOOM_LEVELS[zoomLevel];
+    currentPixelDivisor = ZOOM_LEVELS[ZOOM_LEVELS.length/2];
     
     /* Box: events to observe */
     eventCheckboxes = Box.createVerticalBox();
@@ -283,6 +284,7 @@ public class TimeLine extends VisPlugin {
   }
 
   private Action removeMoteAction = new AbstractAction() {
+    private static final long serialVersionUID = 2924285037480429045L;
     public void actionPerformed(ActionEvent e) {
       JComponent b = (JComponent) e.getSource();
       Mote m = (Mote) b.getClientProperty("mote");
@@ -290,6 +292,7 @@ public class TimeLine extends VisPlugin {
     }
   };
   private Action addMoteAction = new AbstractAction("Add motes to timeline") {
+    private static final long serialVersionUID = 7546685285707302865L;
     public void actionPerformed(ActionEvent e) {
 
       JComboBox source = new JComboBox();
@@ -323,7 +326,40 @@ public class TimeLine extends VisPlugin {
     }
   };
 
-  private Action zoomInAction = new AbstractAction("Zoom in") {
+  private void forceRepaintAndFocus(final long focusTime, final double focusCenter) {
+    forceRepaintAndFocus(focusTime, focusCenter, true);
+  }
+
+  private void forceRepaintAndFocus(final long focusTime, final double focusCenter, final boolean mark) {
+    lastRepaintSimulationTime = -1; /* Force repaint */
+    repaintTimelineTimer.getActionListeners()[0].actionPerformed(null); /* Force size update*/
+    SwingUtilities.invokeLater(new Runnable() {
+      public void run() {
+        int w = timeline.getVisibleRect().width;
+
+        /* centerPixel-leftPixel <=> focusCenter*w; */
+        int centerPixel = (int) (focusTime/currentPixelDivisor);
+        int leftPixel = (int) (focusTime/currentPixelDivisor - focusCenter*w);
+
+        Rectangle r = new Rectangle(
+            leftPixel, 0, 
+            w, 1
+        );
+
+        timeline.scrollRectToVisible(r);
+
+        /* Time ruler */
+        if (mark) {
+          mousePixelPositionX = centerPixel;
+          mouseDownPixelPositionX = centerPixel;
+          mousePixelPositionY = timeline.getHeight();
+        }
+      }
+    });
+  }
+  
+  private Action zoomInAction = new AbstractAction("Zoom in (Ctrl+)") {
+    private static final long serialVersionUID = -2592452356547803615L;
     public void actionPerformed(ActionEvent e) {
       Rectangle r = timeline.getVisibleRect();
       int pixelX = r.x + r.width/2;
@@ -334,37 +370,26 @@ public class TimeLine extends VisPlugin {
       if (mousePixelPositionX > 0) {
         pixelX = mousePixelPositionX;
       }
-      final long centerTime = pixelX*currentPixelDivisor;
+      final long centerTime = (long) (pixelX*currentPixelDivisor);
 
+      int zoomLevel = 0;
+      while (zoomLevel < ZOOM_LEVELS.length) {
+        if (currentPixelDivisor <= ZOOM_LEVELS[zoomLevel]) break;
+        zoomLevel++;
+      }
+      
       if (zoomLevel > 0) {
-        zoomLevel--;
+        zoomLevel--; /* zoom in */
       }
       currentPixelDivisor = ZOOM_LEVELS[zoomLevel];
       logger.info("Zoom level: " + currentPixelDivisor + " microseconds/pixel " + ((zoomLevel==0)?"(MIN)":""));
       
-      lastRepaintSimulationTime = -1; /* Force repaint */
-      repaintTimelineTimer.getActionListeners()[0].actionPerformed(null); /* Force size update*/
-      SwingUtilities.invokeLater(new Runnable() {
-        public void run() {
-          int w = timeline.getVisibleRect().width;
-          
-          int centerPixel = (int)(centerTime/currentPixelDivisor);
-          Rectangle r = new Rectangle(
-              centerPixel - w/2, 0, 
-              w, 1
-          );
-          timeline.scrollRectToVisible(r);
-          
-          /* Time ruler */
-          mousePixelPositionX = centerPixel;
-          mouseDownPixelPositionX = centerPixel;
-          mousePixelPositionY = timeline.getHeight();
-        }
-      });
+      forceRepaintAndFocus(centerTime, 0.5);
     }
   };
 
-  private Action zoomOutAction = new AbstractAction("Zoom out") {
+  private Action zoomOutAction = new AbstractAction("Zoom out (Ctrl-)") {
+    private static final long serialVersionUID = 6837091379835151725L;
     public void actionPerformed(ActionEvent e) {
       Rectangle r = timeline.getVisibleRect();
       int pixelX = r.x + r.width/2;
@@ -372,74 +397,51 @@ public class TimeLine extends VisPlugin {
         pixelX = popupLocation.x;
         popupLocation = null;
       }
-      final long centerTime = pixelX*currentPixelDivisor;
+      final long centerTime = (long) (pixelX*currentPixelDivisor);
       if (mousePixelPositionX > 0) {
         pixelX = mousePixelPositionX;
       }
 
-      if (zoomLevel < ZOOM_LEVELS.length-1) {
+      int zoomLevel = 0;
+      while (zoomLevel < ZOOM_LEVELS.length) {
+        if (currentPixelDivisor <= ZOOM_LEVELS[zoomLevel]) break;
         zoomLevel++;
+      }
+
+      if (zoomLevel < ZOOM_LEVELS.length-1) {
+        zoomLevel++; /* zoom out */
       }
       currentPixelDivisor = ZOOM_LEVELS[zoomLevel];
       logger.info("Zoom level: " + currentPixelDivisor + " microseconds/pixel " + ((zoomLevel==ZOOM_LEVELS.length-1)?"(MAX)":""));
 
-      lastRepaintSimulationTime = -1; /* Force repaint */
-      repaintTimelineTimer.getActionListeners()[0].actionPerformed(null); /* Force size update */
-      SwingUtilities.invokeLater(new Runnable() {
-        public void run() {
-          int w = timeline.getVisibleRect().width;
-          int centerPixel = (int)(centerTime/currentPixelDivisor);
-          Rectangle r = new Rectangle(
-              centerPixel - w/2, 0, 
-              w, 1
-          );
-
-          /* Time ruler */
-          mousePixelPositionX = centerPixel;
-          mouseDownPixelPositionX = centerPixel;
-          mousePixelPositionY = timeline.getHeight();
-          
-          timeline.scrollRectToVisible(r);
-        }
-      });
+      forceRepaintAndFocus(centerTime, 0.5);
     }
   };
   
-  private Action zoomSliderAction = new AbstractAction("Zoom slider") {
+  private Action zoomSliderAction = new AbstractAction("Zoom slider (Ctrl+Mouse)") {
+    private static final long serialVersionUID = -4288046377707363837L;
     public void actionPerformed(ActionEvent e) {
+      int zoomLevel = 0;
+      while (zoomLevel < ZOOM_LEVELS.length) {
+        if (currentPixelDivisor <= ZOOM_LEVELS[zoomLevel]) break;
+        zoomLevel++;
+      }
+
       final JSlider zoomSlider = new JSlider(JSlider.VERTICAL, 0, ZOOM_LEVELS.length-1, zoomLevel);
       zoomSlider.setInverted(true);
       zoomSlider.setPaintTicks(true);
       zoomSlider.setPaintLabels(false);
 
-      final long centerTime = popupLocation.x*currentPixelDivisor;
+      final long centerTime = (long) (popupLocation.x*currentPixelDivisor);
       
       zoomSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
-          zoomLevel = zoomSlider.getValue();
+          int zoomLevel = zoomSlider.getValue();
           
           currentPixelDivisor = ZOOM_LEVELS[zoomLevel];
           logger.info("Zoom level: " + currentPixelDivisor + " microseconds/pixel " + ((zoomLevel==ZOOM_LEVELS.length-1)?"(MAX)":""));
 
-          lastRepaintSimulationTime = -1; /* Force repaint */
-          repaintTimelineTimer.getActionListeners()[0].actionPerformed(null); /* Force size update */
-          SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-              int w = timeline.getVisibleRect().width;
-              int centerPixel = (int)(centerTime/currentPixelDivisor);
-              Rectangle r = new Rectangle(
-                  centerPixel - w/2, 0, 
-                  w, 1
-              );
-
-              /* Time ruler */
-              mousePixelPositionX = centerPixel;
-              mouseDownPixelPositionX = centerPixel;
-              mousePixelPositionY = timeline.getHeight();
-              
-              timeline.scrollRectToVisible(r);
-            }
-          });
+          forceRepaintAndFocus(centerTime, 0.5);
         }
       });
       
@@ -454,6 +456,7 @@ public class TimeLine extends VisPlugin {
    * Save logged raw data to file for post-processing. 
    */
   private Action saveDataAction = new AbstractAction("Save raw data to file") {
+    private static final long serialVersionUID = 975176793514425718L;
     public void actionPerformed(ActionEvent e) {
       JFileChooser fc = new JFileChooser();
       int returnVal = fc.showSaveDialog(GUI.getTopParentContainer());
@@ -526,19 +529,33 @@ public class TimeLine extends VisPlugin {
     long onTimeRX = 0, onTimeTX = 0, onTimeInterfered = 0;
     
     public String toString() {
-      return
-      "Mote: " + (mote!=null?mote:"ALL") + "\n" +
-      "LED red ontime:\t" + onTimeRedLED + "us = " + 100.0*((double)onTimeRedLED/simulation.getSimulationTime()) + "%\n" +
-      "LED green ontime:\t" + onTimeGreenLED + "us = " + 100.0*((double)onTimeGreenLED/simulation.getSimulationTime()) + "%\n" +
-      "LED blue ontime:\t" + onTimeBlueLED + "us = " + 100.0*((double)onTimeBlueLED/simulation.getSimulationTime()) + "%\n" +
-      "Log messages: " + nrLogs + "\n" +
-      "Radio ontime:\t" + radioOn + "us = " + 100.0*((double)radioOn/simulation.getSimulationTime()) + "%\n" +
-      "Radio RX time:\t" + onTimeRX + "us = " + 100.0*((double)onTimeRX/simulation.getSimulationTime()) + "%\n" +
-      "Radio TX time:\t" + onTimeTX + "us = " + 100.0*((double)onTimeTX/simulation.getSimulationTime()) + "%\n" +
-      "Radio interfered time:\t" + onTimeInterfered + "us = " + 100.0*((double)onTimeInterfered/simulation.getSimulationTime()) + "%\n";
+      return toString(true, true, true, true);
+    }
+    public String toString(boolean logs, boolean leds, boolean radioHW, boolean radioRXTX) {
+      long duration = simulation.getSimulationTime(); /* XXX */
+      StringBuilder sb = new StringBuilder();
+      String moteDesc = (mote!=null?"" + mote.getID():"AVERAGE") + " ";
+      if (logs) {
+        sb.append(moteDesc + "nr_logs " + nrLogs + "\n");
+      }
+      if (leds) {
+        sb.append(moteDesc + "led_red " + onTimeRedLED + " us " + 100.0*((double)onTimeRedLED/duration) + " %\n");
+        sb.append(moteDesc + "led_green " + onTimeGreenLED + " us " + 100.0*((double)onTimeGreenLED/duration) + " %\n");
+        sb.append(moteDesc + "led_blue " + onTimeBlueLED + " us " + 100.0*((double)onTimeBlueLED/duration) + " %\n");
+      }
+      if (radioHW) {
+        sb.append(moteDesc + "radio_on " + radioOn + " us " + 100.0*((double)radioOn/duration) + " %\n");
+      }
+      if (radioRXTX) {
+        sb.append(moteDesc + "radio_tx " + onTimeTX + " us " + 100.0*((double)onTimeTX/duration) + " %\n");
+        sb.append(moteDesc + "radio_rx " + onTimeRX + " us " + 100.0*((double)onTimeRX/duration) + " %\n");
+        sb.append(moteDesc + "radio_int " + onTimeInterfered + " us " + 100.0*((double)onTimeInterfered/duration) + " %\n");
+      }
+      return sb.toString();
     }
   }
   private Action statisticsAction = new AbstractAction("Print statistics to console") {
+    private static final long serialVersionUID = 8671605486913497397L;
     public void actionPerformed(ActionEvent e) {
       if (simulation.isRunning()) {
         simulation.stopSimulation();
@@ -546,151 +563,167 @@ public class TimeLine extends VisPlugin {
       logger.info(extractStatistics());
     }
   };
-  
-  public synchronized String extractStatistics() {
+
+  public String extractStatistics() {
+    return extractStatistics(true, true, true, true);
+  }
+  public synchronized String extractStatistics(
+      boolean logs, boolean leds, boolean radioHW, boolean radioRXTX) {
     StringBuilder output = new StringBuilder();
-    
+
     /* Process all events (per mote basis) */
     ArrayList<MoteStatistics> allStats = new ArrayList<MoteStatistics>();
     for (MoteEvents moteEvents: allMoteEvents) {
       MoteStatistics stats = new MoteStatistics();
       allStats.add(stats);
       stats.mote = moteEvents.mote;
-      
-      for (MoteEvent ev: moteEvents.ledEvents) {
-        if (!(ev instanceof LEDEvent)) continue;
-        LEDEvent ledEvent = (LEDEvent) ev;
 
-        /* Red */
-        if (ledEvent.red) {
-          /* LED is on, add time interval */
-          if (ledEvent.next == null) {
-            stats.onTimeRedLED += (simulation.getSimulationTime() - ledEvent.time);
-          } else {
-            stats.onTimeRedLED += (ledEvent.next.time - ledEvent.time);
-          }
-        }
+      if (leds) {
+        for (MoteEvent ev: moteEvents.ledEvents) {
+          if (!(ev instanceof LEDEvent)) continue;
+          LEDEvent ledEvent = (LEDEvent) ev;
 
-        /* Green */
-        if (ledEvent.green) {
-          /* LED is on, add time interval */
-          if (ledEvent.next == null) {
-            stats.onTimeGreenLED += (simulation.getSimulationTime() - ledEvent.time);
-          } else {
-            stats.onTimeGreenLED += (ledEvent.next.time - ledEvent.time);
+          /* Red */
+          if (ledEvent.red) {
+            /* LED is on, add time interval */
+            if (ledEvent.next == null) {
+              stats.onTimeRedLED += (simulation.getSimulationTime() - ledEvent.time);
+            } else {
+              stats.onTimeRedLED += (ledEvent.next.time - ledEvent.time);
+            }
           }
-        }
-        
-        /* Blue */
-        if (ledEvent.blue) {
-          /* LED is on, add time interval */
-          if (ledEvent.next == null) {
-            stats.onTimeBlueLED += (simulation.getSimulationTime() - ledEvent.time);
-          } else {
-            stats.onTimeBlueLED += (ledEvent.next.time - ledEvent.time);
+
+          /* Green */
+          if (ledEvent.green) {
+            /* LED is on, add time interval */
+            if (ledEvent.next == null) {
+              stats.onTimeGreenLED += (simulation.getSimulationTime() - ledEvent.time);
+            } else {
+              stats.onTimeGreenLED += (ledEvent.next.time - ledEvent.time);
+            }
+          }
+
+          /* Blue */
+          if (ledEvent.blue) {
+            /* LED is on, add time interval */
+            if (ledEvent.next == null) {
+              stats.onTimeBlueLED += (simulation.getSimulationTime() - ledEvent.time);
+            } else {
+              stats.onTimeBlueLED += (ledEvent.next.time - ledEvent.time);
+            }
           }
         }
       }
 
-      for (MoteEvent ev: moteEvents.logEvents) {
-        if (!(ev instanceof LogEvent)) continue;
-        stats.nrLogs++;
+      if (logs) {
+        for (MoteEvent ev: moteEvents.logEvents) {
+          if (!(ev instanceof LogEvent)) continue;
+          stats.nrLogs++;
+        }
       }
       
       /* TODO Radio channels */
 
-      for (MoteEvent ev: moteEvents.radioHWEvents) {
-        if (!(ev instanceof RadioHWEvent)) continue;
-        RadioHWEvent hwEvent = (RadioHWEvent) ev;
-        if (hwEvent.on) {
-          /* HW is on */
-          if (hwEvent.next == null) {
-            stats.radioOn += (simulation.getSimulationTime() - hwEvent.time);
-          } else {
-            stats.radioOn += (hwEvent.next.time - hwEvent.time);
+      if (radioHW) {
+        for (MoteEvent ev: moteEvents.radioHWEvents) {
+          if (!(ev instanceof RadioHWEvent)) continue;
+          RadioHWEvent hwEvent = (RadioHWEvent) ev;
+          if (hwEvent.on) {
+            /* HW is on */
+            if (hwEvent.next == null) {
+              stats.radioOn += (simulation.getSimulationTime() - hwEvent.time);
+            } else {
+              stats.radioOn += (hwEvent.next.time - hwEvent.time);
+            }
           }
         }
       }
       
-      for (MoteEvent ev: moteEvents.radioRXTXEvents) {
-        if (!(ev instanceof RadioRXTXEvent)) continue;
-        RadioRXTXEvent rxtxEvent = (RadioRXTXEvent) ev;
-        if (rxtxEvent.state == RXTXRadioEvent.IDLE) {
-          continue;
-        }
+      if (radioRXTX) {
+        for (MoteEvent ev: moteEvents.radioRXTXEvents) {
+          if (!(ev instanceof RadioRXTXEvent)) continue;
+          RadioRXTXEvent rxtxEvent = (RadioRXTXEvent) ev;
+          if (rxtxEvent.state == RXTXRadioEvent.IDLE) {
+            continue;
+          }
 
-        long diff;
-        if (rxtxEvent.next == null) {
-          diff = (simulation.getSimulationTime() - rxtxEvent.time);
-        } else {
-          diff = (rxtxEvent.next.time - rxtxEvent.time);
-        }
+          long diff;
+          if (rxtxEvent.next == null) {
+            diff = (simulation.getSimulationTime() - rxtxEvent.time);
+          } else {
+            diff = (rxtxEvent.next.time - rxtxEvent.time);
+          }
 
-        if (rxtxEvent.state == RXTXRadioEvent.TRANSMITTING) {
-          stats.onTimeTX += diff;
-          continue;
-        }
-        if (rxtxEvent.state == RXTXRadioEvent.INTERFERED) {
-          stats.onTimeInterfered += diff;
-          continue;
-        }
-        if (rxtxEvent.state == RXTXRadioEvent.RECEIVING) {
-          stats.onTimeRX += diff;
-          continue;
+          if (rxtxEvent.state == RXTXRadioEvent.TRANSMITTING) {
+            stats.onTimeTX += diff;
+            continue;
+          }
+          if (rxtxEvent.state == RXTXRadioEvent.INTERFERED) {
+            stats.onTimeInterfered += diff;
+            continue;
+          }
+          if (rxtxEvent.state == RXTXRadioEvent.RECEIVING) {
+            stats.onTimeRX += diff;
+            continue;
+          }
         }
       }
       
       /* TODO Watchpoints */
 
-      output.append(stats.toString());
+      output.append(stats.toString(logs, leds, radioHW, radioRXTX));
     }
 
-    /* Summary */
-    MoteStatistics all = new MoteStatistics();
+    if (allStats.size() == 0) {
+      return output.toString();
+    }
+    
+    /* Average */
+    MoteStatistics average = new MoteStatistics();
     for (MoteStatistics stats: allStats) {
-      all.onTimeRedLED += stats.onTimeRedLED;
-      all.onTimeGreenLED += stats.onTimeGreenLED;
-      all.onTimeBlueLED += stats.onTimeBlueLED;
-      all.radioOn += stats.radioOn;
-      all.onTimeRX += stats.onTimeRX;
-      all.onTimeTX += stats.onTimeTX;
-      all.onTimeInterfered += stats.onTimeInterfered;
+      average.onTimeRedLED += stats.onTimeRedLED;
+      average.onTimeGreenLED += stats.onTimeGreenLED;
+      average.onTimeBlueLED += stats.onTimeBlueLED;
+      average.radioOn += stats.radioOn;
+      average.onTimeRX += stats.onTimeRX;
+      average.onTimeTX += stats.onTimeTX;
+      average.onTimeInterfered += stats.onTimeInterfered;
     }
-    all.onTimeBlueLED /= allStats.size();
-    all.onTimeGreenLED /= allStats.size();
-    all.onTimeBlueLED /= allStats.size();
-    all.radioOn /= allStats.size();
-    all.onTimeRX /= allStats.size();
-    all.onTimeTX /= allStats.size();
-    all.onTimeInterfered /= allStats.size();
+    average.onTimeBlueLED /= allStats.size();
+    average.onTimeGreenLED /= allStats.size();
+    average.onTimeBlueLED /= allStats.size();
+    average.radioOn /= allStats.size();
+    average.onTimeRX /= allStats.size();
+    average.onTimeTX /= allStats.size();
+    average.onTimeInterfered /= allStats.size();
 
-    output.append("SIMULATION AVERAGE:");
-    output.append(all.toString());
+    output.append(average.toString(logs, leds, radioHW, radioRXTX));
     return output.toString();
   }
   
-  public void trySelectTime(final long time) {
+  public void trySelectTime(final long toTime) {
     java.awt.EventQueue.invokeLater(new Runnable() {
       public void run() {
-        /* Visible rectangle */
-        int newX = (int) (time / currentPixelDivisor);
-        int w = timeline.getVisibleRect().width;
-        Rectangle r = new Rectangle(
-            newX - w/2, 0, 
-            w, 1
-        );
-        timeline.scrollRectToVisible(r);
-
-        /* Time ruler */
-        mousePixelPositionX = newX;
-        mouseDownPixelPositionX = newX;
+        /* Mark selected time in time ruler */
+        final int toPixel = (int) (toTime / currentPixelDivisor);
+        mousePixelPositionX = toPixel;
+        mouseDownPixelPositionX = toPixel;
         mousePixelPositionY = timeline.getHeight();
-        repaint();
+
+        /* Check if time is already visible */
+        Rectangle vis = timeline.getVisibleRect();
+        if (toPixel >= vis.x && toPixel < vis.x + vis.width) {
+          repaint();
+          return;
+        }
+
+        forceRepaintAndFocus(toTime, 0.5, false);
       }
     });  
   }
   
   private Action radioLoggerAction = new AbstractAction("to Radio Logger") {
+    private static final long serialVersionUID = 7690116136861949864L;
     public void actionPerformed(ActionEvent e) {
       RadioLogger plugin = (RadioLogger) simulation.getGUI().getStartedPlugin(RadioLogger.class.getName());
       if (plugin == null) {
@@ -702,10 +735,11 @@ public class TimeLine extends VisPlugin {
       }
 
       /* Select simulation time */
-      plugin.trySelectTime(popupLocation.x*currentPixelDivisor);
+      plugin.trySelectTime((long) (popupLocation.x*currentPixelDivisor));
     }
   };
   private Action logListenerAction = new AbstractAction("to Log Listener") {
+    private static final long serialVersionUID = -8626118368774023257L;
     public void actionPerformed(ActionEvent e) {
       LogListener plugin = (LogListener) simulation.getGUI().getStartedPlugin(LogListener.class.getName());
       if (plugin == null) {
@@ -717,7 +751,7 @@ public class TimeLine extends VisPlugin {
       }
 
       /* Select simulation time */
-      plugin.trySelectTime(popupLocation.x*currentPixelDivisor);
+      plugin.trySelectTime((long) (popupLocation.x*currentPixelDivisor));
     }
   };
   
@@ -1020,8 +1054,8 @@ public class TimeLine extends VisPlugin {
     element.addContent("" + splitPane.getDividerLocation());
     config.add(element);
 
-    element = new Element("zoom");
-    element.addContent("" + zoomLevel);
+    element = new Element("zoomfactor");
+    element.addContent("" + currentPixelDivisor);
     config.add(element);
 
     return config;
@@ -1061,8 +1095,11 @@ public class TimeLine extends VisPlugin {
       } else if ("split".equals(name)) {
         splitPane.setDividerLocation(Integer.parseInt(element.getText()));
       } else if ("zoom".equals(name)) {
-        zoomLevel = Integer.parseInt(element.getText())-1;
-        zoomOutAction.actionPerformed(null);
+        currentPixelDivisor = ZOOM_LEVELS[Integer.parseInt(element.getText())-1];
+        forceRepaintAndFocus(0, 0);
+      } else if ("zoomfactor".equals(name)) {
+        currentPixelDivisor = Double.parseDouble(element.getText());
+        forceRepaintAndFocus(0, 0);
       }
     }
 
@@ -1091,7 +1128,7 @@ public class TimeLine extends VisPlugin {
   private int mousePixelPositionY = -1;
   private int mouseDownPixelPositionX = -1; 
   class Timeline extends JComponent {
-
+    private static final long serialVersionUID = 2206491823778169359L;
     public Timeline() {
       setLayout(null);
       setToolTipText(null);
@@ -1145,8 +1182,32 @@ public class TimeLine extends VisPlugin {
 
     private MouseAdapter mouseAdapter = new MouseAdapter() {
       private Popup popUpToolTip = null;
+      private double zoomInitialPixelDivisor;
+      private int zoomInitialMouseY;
+      private long zoomCenterTime = -1;
+      private double zoomCenter = -1;
       public void mouseDragged(MouseEvent e) {
         super.mouseDragged(e);
+        if (e.isControlDown()) {
+          /* Zoom with mouse */
+          if (zoomCenterTime < 0) {
+            return;
+          }
+
+          double factor = 0.01*(e.getY() - zoomInitialMouseY);
+          factor = Math.exp(factor);
+
+          currentPixelDivisor = zoomInitialPixelDivisor * factor;
+          if (currentPixelDivisor < ZOOM_LEVELS[0]) {
+            currentPixelDivisor = ZOOM_LEVELS[0];
+          }
+          if (currentPixelDivisor > ZOOM_LEVELS[ZOOM_LEVELS.length-1]) {
+            currentPixelDivisor = ZOOM_LEVELS[ZOOM_LEVELS.length-1];
+          }
+          forceRepaintAndFocus(zoomCenterTime, zoomCenter);
+          return;
+        }
+
         if (mousePixelPositionX >= 0) {
           mousePixelPositionX = e.getX();
           mousePixelPositionY = e.getY();
@@ -1154,6 +1215,15 @@ public class TimeLine extends VisPlugin {
         }
       }
       public void mousePressed(MouseEvent e) {
+        if (e.isControlDown()) {
+          /* Zoom with mouse */
+          zoomInitialMouseY = e.getY();
+          zoomInitialPixelDivisor = currentPixelDivisor;
+          zoomCenterTime = (long) (e.getX()*currentPixelDivisor);
+          zoomCenter = (double) (e.getX() - timeline.getVisibleRect().x) / timeline.getVisibleRect().width;
+          return;
+        }
+        
         if (popUpToolTip != null) {
           popUpToolTip.hide();
           popUpToolTip = null;
@@ -1175,6 +1245,7 @@ public class TimeLine extends VisPlugin {
         }
       }
       public void mouseReleased(MouseEvent e) {
+        zoomCenterTime = -1;
         if (popUpToolTip != null) {
           popUpToolTip.hide();
           popUpToolTip = null;
@@ -1189,8 +1260,26 @@ public class TimeLine extends VisPlugin {
     public void paintComponent(Graphics g) {
       Rectangle bounds = g.getClipBounds();
       /*logger.info("Clip bounds: " + bounds);*/
-      long intervalStart = (long)bounds.x*(long)currentPixelDivisor;
-      long intervalEnd = intervalStart + bounds.width*currentPixelDivisor;
+      
+      if (needZoomOut) {
+        /* Need zoom out */
+        g.setColor(Color.RED);
+        g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+
+        Rectangle vis = timeline.getVisibleRect();
+        g.setColor(Color.WHITE);
+        String msg = "Zoom out";
+        FontMetrics fm = g.getFontMetrics();
+        int msgWidth = fm.stringWidth(msg);
+        int msgHeight = fm.getHeight();
+        g.drawString(msg, 
+            vis.x + vis.width/2 - msgWidth/2,
+            vis.y + vis.height/2 + msgHeight/2);
+        return;
+      }
+      
+      long intervalStart = (long)(bounds.x*currentPixelDivisor);
+      long intervalEnd = (long) (intervalStart + bounds.width*currentPixelDivisor);
 
       if (intervalEnd > simulation.getSimulationTime()) {
         intervalEnd = simulation.getSimulationTime();
@@ -1424,6 +1513,8 @@ public class TimeLine extends VisPlugin {
   }
 
   class MoteRuler extends JPanel {
+    private static final long serialVersionUID = -5555627354526272220L;
+
     public MoteRuler() {
       setPreferredSize(new Dimension(35, 1));
       setToolTipText(null);
@@ -1854,17 +1945,27 @@ public class TimeLine extends VisPlugin {
   private long lastRepaintSimulationTime = -1;
   private Timer repaintTimelineTimer = new Timer(TIMELINE_UPDATE_INTERVAL, new ActionListener() {
     public void actionPerformed(ActionEvent e) {
+      /* Only set new size if simulation time has changed */
+      long now = simulation.getSimulationTime();
+      if (now == lastRepaintSimulationTime) {
+        return;
+      }
+      lastRepaintSimulationTime = now; 
+
+      /* Update timeline size */
+      int newWidth;
+      if (now/currentPixelDivisor > Integer.MAX_VALUE) {
+        /* Need zoom out */
+        newWidth = 1;
+        needZoomOut = true;
+      } else {
+        newWidth = (int) (now/currentPixelDivisor);
+        needZoomOut = false;
+      }
+
       Rectangle visibleRectangle = timeline.getVisibleRect(); 
       boolean isTracking = visibleRectangle.x + visibleRectangle.width >= timeline.getWidth();
 
-      /* Only set new size if simulation time has changed */
-      if (simulation.getSimulationTime() == lastRepaintSimulationTime) {
-        return;
-      }
-      lastRepaintSimulationTime = simulation.getSimulationTime(); 
-
-      /* Update timeline size */
-      int newWidth = (int) (simulation.getSimulationTime()/currentPixelDivisor);
       int newHeight = (int) (FIRST_MOTE_PIXEL_OFFSET + paintedMoteHeight * allMoteEvents.size()); 
       timeline.setPreferredSize(new Dimension(
           newWidth,
@@ -1880,7 +1981,7 @@ public class TimeLine extends VisPlugin {
       /* Update visible rectangle */
       if (isTracking) {
         Rectangle r = new Rectangle(
-            newWidth-1, 0, 
+            newWidth-1, visibleRectangle.y, 
             1, 1);
         timeline.scrollRectToVisible(r);
       }

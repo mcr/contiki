@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009, Swedish Institute of Computer Science
+ * Copyright (c) 2010, Swedish Institute of Computer Science.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,39 +26,48 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * This file is part of the Contiki operating system.
- *
- * @(#)$Id$
+ * $Id$
  */
 
-#include "contiki.h"
-#include <stdio.h>
-#include <string.h>
+package se.sics.cooja.mspmote.interfaces;
 
-#include "net/rime.h"
-#include "net/mac/nullmac.h"
+import java.util.Collection;
 
-#include "node-id.h"
-#include "dev/cooja-radio.h"
+import javax.swing.JPanel;
 
-void
-init_net(void)
-{
-  int i;
-  rimeaddr_t rimeaddr;
+import org.jdom.Element;
 
-  /* Init Rime */
-  ctimer_init();
-  rimeaddr.u8[0] = node_id & 0xff;
-  rimeaddr.u8[1] = node_id >> 8;
-  rimeaddr_set_node_addr(&rimeaddr);
-  printf("Rime started with address: ");
-  for(i = 0; i < sizeof(rimeaddr_node_addr.u8) - 1; i++) {
-    printf("%d.", rimeaddr_node_addr.u8[i]);
+import se.sics.cooja.ClassDescription;
+import se.sics.cooja.Mote;
+import se.sics.cooja.MoteInterface;
+import se.sics.cooja.mspmote.SkyMote;
+
+@ClassDescription("Temperature")
+public class SkyTemperature extends MoteInterface {
+
+  private SkyMote skyMote;
+
+  public SkyTemperature(Mote mote) {
+    skyMote = (SkyMote) mote;
   }
-  printf("%d\n", rimeaddr_node_addr.u8[i]);
 
-  /* Rime <-> nullMAC <-> COOJA's packet radio */
-  nullmac_init(&cooja_radio);
-  rime_init(&nullmac_driver);
+  /**
+   * @param temp Temperature in Celsius
+   */
+  public void setTemperature(double temp) {
+    skyMote.skyNode.sht11.setTemperature((int) ((temp+39.6)*100));
+  }
+
+  public JPanel getInterfaceVisualizer() {
+    return null;
+  }
+  public void releaseInterfaceVisualizer(JPanel panel) {
+  }
+
+  public Collection<Element> getConfigXML() {
+    return null;
+  }
+  public void setConfigXML(Collection<Element> configXML, boolean visAvailable) {
+  }
+
 }

@@ -118,7 +118,9 @@ public class SerialSocketServer extends VisPlugin implements MotePlugin {
 
     try {
       logger.info("Listening on port: " + LISTEN_PORT);
-      statusLabel.setText("Listening on port: " + LISTEN_PORT);
+      if (GUI.isVisualized()) {
+        statusLabel.setText("Listening on port: " + LISTEN_PORT);
+      }
       server = new ServerSocket(LISTEN_PORT);
       new Thread() {
         public void run() {
@@ -130,7 +132,9 @@ public class SerialSocketServer extends VisPlugin implements MotePlugin {
               out.flush();
 
               startSocketReadThread(in);
-              statusLabel.setText("Client connected: " + client.getInetAddress());
+              if (GUI.isVisualized()) {
+                statusLabel.setText("Client connected: " + client.getInetAddress());
+              }
             } catch (IOException e) {
               logger.fatal("Listening thread shut down: " + e.getMessage());
               server = null;
@@ -150,7 +154,7 @@ public class SerialSocketServer extends VisPlugin implements MotePlugin {
       public void update(Observable obs, Object obj) {
         try {
           if (out == null) {
-            logger.debug("out is null");
+            /*logger.debug("out is null");*/
             return;
           }
           out.write(serialPort.getLastSerialData());
@@ -242,11 +246,13 @@ public class SerialSocketServer extends VisPlugin implements MotePlugin {
     } catch (IOException e) {
     }
 
-    SwingUtilities.invokeLater(new Runnable() {
-      public void run() {
-        statusLabel.setText("Listening on port: " + LISTEN_PORT);
-      }
-    });
+    if (GUI.isVisualized()) {
+      SwingUtilities.invokeLater(new Runnable() {
+        public void run() {
+          statusLabel.setText("Listening on port: " + LISTEN_PORT);
+        }
+      });
+    }
   }
 
   public void closePlugin() {

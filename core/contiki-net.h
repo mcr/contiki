@@ -47,7 +47,7 @@
 
 #if UIP_CONF_IPV6
 #include "net/uip-icmp6.h"
-#include "net/uip-netif.h"
+#include "net/uip-ds6.h"
 #endif /* UIP_CONF_IPV6 */
 
 #include "net/resolv.h"

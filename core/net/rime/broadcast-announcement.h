@@ -1,5 +1,24 @@
+/**
+ * \addtogroup rime
+ * @{
+ */
+
+/**
+ * \defgroup rimebroadcastannouncement
+ * @{
+ *
+ * The broadcast announcement module implements a periodic explicit
+ * announcement. THe module announces the announcements that have been
+ * registered with the \ref rimeannouncement "announcement module".
+ *
+ * \section channels Channels
+ *
+ * The broadcast announcement module uses 1 channel.
+ *
+ */
+
 /*
- * Copyright (c) 2005, Swedish Institute of Computer Science
+ * Copyright (c) 2006, Swedish Institute of Computer Science.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,18 +47,24 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id$
+ * $Id$
  */
-#ifndef __RADIO_SENSOR_H__
-#define __RADIO_SENSOR_H__
 
-#include "lib/sensors.h"
-extern const struct sensors_sensor radio_sensor;
+/**
+ * \file
+ *         Neighbor discovery header file
+ * \author
+ *         Adam Dunkels <adam@sics.se>
+ */
 
-#define RADIO_SENSOR "Radio"
+#ifndef __BROADCAST_ANNOUNCEMENT_H__
+#define __BROADCAST_ANNOUNCEMENT_H__
 
-#ifndef radio_sensor_signal
-#define radio_sensor_signal simSignalStrength
-#endif
+void broadcast_announcement_init(uint16_t channel,
+                                 clock_time_t bump_time,
+                                 clock_time_t min_time,
+                                 clock_time_t max_time);
 
-#endif /* __RADIO_SENSOR_H__ */
+#endif /* __BROADCAST_ANNOUNCEMENT_H__ */
+/** @} */
+/** @} */

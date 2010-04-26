@@ -56,7 +56,7 @@
 
 #include "sys/timetable.h"
 
-#define WITH_SEND_CCA 0
+#define WITH_SEND_CCA 1
 
 #define FOOTER_LEN 2
 
@@ -86,6 +86,17 @@
 #define PRINTF(...) printf(__VA_ARGS__)
 #else
 #define PRINTF(...) do {} while (0)
+#endif
+
+#define DEBUG_LEDS DEBUG
+#undef LEDS_ON
+#undef LEDS_OFF
+#if DEBUG_LEDS
+#define LEDS_ON(x) leds_on(x)
+#define LEDS_OFF(x) leds_off(x)
+#else
+#define LEDS_ON(x)
+#define LEDS_OFF(x)
 #endif
 
 void cc2420_arch_init(void);
@@ -135,8 +146,6 @@ const struct radio_driver cc2420_driver =
   };
 
 static uint8_t receive_on;
-/* Radio stuff in network byte order. */
-static uint16_t pan_id;
 
 static int channel;
 
@@ -185,41 +194,48 @@ static uint8_t locked, lock_on, lock_off;
 static void
 on(void)
 {
-  ENERGEST_ON(ENERGEST_TYPE_LISTEN);
-  PRINTF("on\n");
+  /*  PRINTF("on\n");*/
   receive_on = 1;
 
   ENABLE_FIFOP_INT();
   strobe(CC2420_SRXON);
-  flushrx();
+  while(!(status() & (BV(CC2420_XOSC16M_STABLE))));
+  ENERGEST_ON(ENERGEST_TYPE_LISTEN);
+  LEDS_ON(LEDS_GREEN);
 }
 static void
 off(void)
 {
-  leds_on(LEDS_GREEN);
-  PRINTF("off\n");
+  /*  PRINTF("off\n");*/
   receive_on = 0;
 
   /* Wait for transmission to end before turning radio off. */
-  // while(status() & BV(CC2420_TX_ACTIVE));
+  while(status() & BV(CC2420_TX_ACTIVE));
 
+  ENERGEST_OFF(ENERGEST_TYPE_LISTEN);
   strobe(CC2420_SRFOFF);
   DISABLE_FIFOP_INT();
-  ENERGEST_OFF(ENERGEST_TYPE_LISTEN);
-  leds_off(LEDS_GREEN);
+  LEDS_OFF(LEDS_GREEN);
+
+  if(!FIFOP_IS_1) {
+    flushrx();
+  }
 }
 /*---------------------------------------------------------------------------*/
-#define GET_LOCK() locked = 1
+#define GET_LOCK() locked++
 static void RELEASE_LOCK(void) {
-  if(lock_on) {
-    on();
-    lock_on = 0;
+  if(locked == 1) {
+    if(lock_on) {
+      on();
+      lock_on = 0;
+    }
+    if(lock_off) {
+      LEDS_OFF(LEDS_BLUE);
+      off();
+      lock_off = 0;
+    }
   }
-  if(lock_off) {
-    off();
-    lock_off = 0;
-  }
-  locked = 0;
+  locked--;
 }
 /*---------------------------------------------------------------------------*/
 static unsigned
@@ -280,8 +296,6 @@ cc2420_init(void)
   /* Turn on/off automatic packet acknowledgment and address decoding. */
   reg = getreg(CC2420_MDMCTRL0);
 
-  reg |= 0x40; /* XXX CCA mode 1 */
-  
 #if CC2420_CONF_AUTOACK
   reg |= AUTOACK | ADR_DECODE;
 #else
@@ -289,6 +303,13 @@ cc2420_init(void)
 #endif /* CC2420_CONF_AUTOACK */
   setreg(CC2420_MDMCTRL0, reg);
 
+  /* Set transmission turnaround time to the lower setting (8 symbols
+     = 0.128 ms) instead of the default (12 symbols = 0.192 ms). */
+  /*  reg = getreg(CC2420_TXCTRL);
+  reg &= ~(1 << 13);
+  setreg(CC2420_TXCTRL, reg);*/
+
+  
   /* Change default values as recomended in the data sheet, */
   /* correlation threshold = 20, RX bandpass filter = 1.3uA. */
   setreg(CC2420_MDMCTRL1, CORR_THR(20));
@@ -307,6 +328,8 @@ cc2420_init(void)
   cc2420_set_pan_addr(0xffff, 0x0000, NULL);
   cc2420_set_channel(26);
 
+  flushrx();
+  
   process_start(&cc2420_process, NULL);
   return 1;
 }
@@ -340,7 +363,7 @@ cc2420_transmit(unsigned short payload_len)
    * transmission starts.
    */
 #ifdef TMOTE_SKY
-#define LOOP_20_SYMBOLS 400	/* 326us (msp430 @ 2.4576MHz) */
+#define LOOP_20_SYMBOLS 800	/* 326us (msp430 @ 2.4576MHz) */
 #elif __AVR__
 #define LOOP_20_SYMBOLS 500	/* XXX */
 #endif
@@ -359,7 +382,8 @@ cc2420_transmit(unsigned short payload_len)
         /* SFD went high but we are not transmitting. This means that
            we just started receiving a packet, so we drop the
            transmission. */
-        return RADIO_TX_ERR;
+        RELEASE_LOCK();
+        return RADIO_TX_COLLISION;
       }
       if(receive_on) {
 	ENERGEST_OFF(ENERGEST_TYPE_LISTEN);
@@ -369,7 +393,6 @@ cc2420_transmit(unsigned short payload_len)
       /* We wait until transmission has ended so that we get an
 	 accurate measurement of the transmission time.*/
       while(status() & BV(CC2420_TX_ACTIVE));
-
 
 #ifdef ENERGEST_CONF_LEVELDEVICE_LEVELS
       ENERGEST_OFF_LEVEL(ENERGEST_TYPE_TRANSMIT,cc2420_get_txpower());
@@ -404,7 +427,7 @@ cc2420_transmit(unsigned short payload_len)
   }
 
   RELEASE_LOCK();
-  return RADIO_TX_ERR;			/* Transmission never started! */
+  return RADIO_TX_COLLISION;
 }
 /*---------------------------------------------------------------------------*/
 static int
@@ -458,20 +481,23 @@ cc2420_off(void)
   /* If we are called when the driver is locked, we indicate that the
      radio should be turned off when the lock is unlocked. */
   if(locked) {
+    /*    printf("Off when locked (%d)\n", locked);*/
+    LEDS_ON(LEDS_GREEN + LEDS_BLUE);
     lock_off = 1;
     return 1;
   }
 
+  GET_LOCK();
   /* If we are currently receiving a packet (indicated by SFD == 1),
      we don't actually switch the radio off now, but signal that the
      driver should switch off the radio once the packet has been
      received and processed, by setting the 'lock_off' variable. */
   if(status() & BV(CC2420_TX_ACTIVE)) {
     lock_off = 1;
-    return 1;
+  } else {
+    off();
   }
-
-  off();
+  RELEASE_LOCK();
   return 1;
 }
 /*---------------------------------------------------------------------------*/
@@ -482,11 +508,14 @@ cc2420_on(void)
     return 1;
   }
   if(locked) {
+    LEDS_ON(LEDS_GREEN + LEDS_RED);
     lock_on = 1;
     return 1;
   }
 
+  GET_LOCK();
   on();
+  RELEASE_LOCK();
   return 1;
 }
 /*---------------------------------------------------------------------------*/
@@ -500,11 +529,12 @@ void
 cc2420_set_channel(int c)
 {
   uint16_t f;
+
+  GET_LOCK();
   /*
    * Subtract the base channel (11), multiply by 5, which is the
    * channel spacing. 357 is 2405-2048 and 0x4000 is LOCK_THR = 1.
    */
-
   channel = c;
 
   f = 5 * (c - 11) + 357 + 0x4000;
@@ -524,6 +554,7 @@ cc2420_set_channel(int c)
     strobe(CC2420_SRXON);
   }
 
+  RELEASE_LOCK();
 }
 /*---------------------------------------------------------------------------*/
 void
@@ -532,22 +563,31 @@ cc2420_set_pan_addr(unsigned pan,
                     const uint8_t *ieee_addr)
 {
   uint16_t f = 0;
+  uint8_t tmp[2];
+
+  GET_LOCK();
+  
   /*
    * Writing RAM requires crystal oscillator to be stable.
    */
   while(!(status() & (BV(CC2420_XOSC16M_STABLE))));
 
-  pan_id = pan;
-  FASTSPI_WRITE_RAM_LE(&pan, CC2420RAM_PANID, 2, f);
-  FASTSPI_WRITE_RAM_LE(&addr, CC2420RAM_SHORTADDR, 2, f);
+  tmp[0] = pan & 0xff;
+  tmp[1] = pan >> 8;
+  FASTSPI_WRITE_RAM_LE(&tmp, CC2420RAM_PANID, 2, f);
+
+  tmp[0] = addr & 0xff;
+  tmp[1] = addr >> 8;
+  FASTSPI_WRITE_RAM_LE(&tmp, CC2420RAM_SHORTADDR, 2, f);
   if(ieee_addr != NULL) {
-    uint8_t addr[8];
+    uint8_t tmp_addr[8];
     /* LSB first, MSB last for 802.15.4 addresses in CC2420 */
     for (f = 0; f < 8; f++) {
-      addr[7 - f] = ieee_addr[f];
+      tmp_addr[7 - f] = ieee_addr[f];
     }
-    FASTSPI_WRITE_RAM_LE(addr, CC2420RAM_IEEEADDR, 8, f);
+    FASTSPI_WRITE_RAM_LE(tmp_addr, CC2420RAM_IEEEADDR, 8, f);
   }
+  RELEASE_LOCK();
 }
 /*---------------------------------------------------------------------------*/
 /*
@@ -568,7 +608,7 @@ cc2420_interrupt(void)
   TIMETABLE_TIMESTAMP(cc2420_timetable, "interrupt");
 #endif /* CC2420_TIMETABLE_PROFILING */
 
-  pending = 1;
+  pending++;
   
   cc2420_packets_seen++;
   return 1;
@@ -593,6 +633,7 @@ PROCESS_THREAD(cc2420_process, ev, data)
     len = cc2420_read(packetbuf_dataptr(), PACKETBUF_SIZE);
     if(len > 0) {
       packetbuf_set_datalen(len);
+
       NETSTACK_RDC.input();
 #if CC2420_TIMETABLE_PROFILING
       TIMETABLE_TIMESTAMP(cc2420_timetable, "end");
@@ -615,17 +656,19 @@ cc2420_read(void *buf, unsigned short bufsize)
   uint16_t checksum;
 #endif /* CC2420_CONF_CHECKSUM */
 
-  pending = 0;
-  
   if(!FIFOP_IS_1) {
-    /* If FIFOP is 0, there is no packet in the RXFIFO. */
     return 0;
   }
-
+  /*  if(!pending) {
+    return 0;
+    }*/
+  
+  pending = 0;
+  
   GET_LOCK();
-  
+
   cc2420_packets_read++;
-  
+
   getrxbyte(&len);
 
   if(len > CC2420_MAX_PACKET_LEN) {
@@ -681,16 +724,16 @@ cc2420_read(void *buf, unsigned short bufsize)
     len = AUX_LEN;
   }
 
-  /* Clean up in case of FIFO overflow!  This happens for every full
-   * length frame and is signaled by FIFOP = 1 and FIFO = 0.
-   */
-  if(FIFOP_IS_1 && !FIFO_IS_1) {
-    /*    printf("cc2420_read: FIFOP_IS_1 1\n");*/
-    flushrx();
-  } else if(FIFOP_IS_1) {
-    /* Another packet has been received and needs attention. */
-    /*    printf("attention\n");*/
-    process_poll(&cc2420_process);
+  if(FIFOP_IS_1) {
+    if(!FIFO_IS_1) {
+      /* Clean up in case of FIFO overflow!  This happens for every
+       * full length frame and is signaled by FIFOP = 1 and FIFO =
+       * 0. */
+      flushrx();
+    } else {
+      /* Another packet has been received and needs attention. */
+      process_poll(&cc2420_process);
+    }
   }
 
   RELEASE_LOCK();
@@ -713,7 +756,11 @@ cc2420_set_txpower(uint8_t power)
 int
 cc2420_get_txpower(void)
 {
-  return (int)(getreg(CC2420_TXCTRL) & 0x001f);
+  int power;
+  GET_LOCK();
+  power = (int)(getreg(CC2420_TXCTRL) & 0x001f);
+  RELEASE_LOCK();
+  return power;
 }
 /*---------------------------------------------------------------------------*/
 int
@@ -721,6 +768,8 @@ cc2420_rssi(void)
 {
   int rssi;
   int radio_was_off = 0;
+
+  GET_LOCK();
 
   if(!receive_on) {
     radio_was_off = 1;
@@ -735,13 +784,21 @@ cc2420_rssi(void)
   if(radio_was_off) {
     cc2420_off();
   }
+  RELEASE_LOCK();
   return rssi;
 }
 /*---------------------------------------------------------------------------*/
 int
 cc2420_cca_valid(void)
 {
-  return !!(status() & BV(CC2420_RSSI_VALID));
+  int valid;
+  if(locked) {
+    return 1;
+  }
+  GET_LOCK();
+  valid = !!(status() & BV(CC2420_RSSI_VALID));
+  RELEASE_LOCK();
+  return valid;
 }
 /*---------------------------------------------------------------------------*/
 static int
@@ -757,13 +814,18 @@ cc2420_cca(void)
   if(locked) {
     return 1;
   }
-  
+
+  GET_LOCK();
   if(!receive_on) {
     radio_was_off = 1;
     cc2420_on();
-
   }
 
+  /* Make sure that the radio really got turned on. */
+  if(!receive_on) {
+    RELEASE_LOCK();
+    return 1;
+  }
 
   while(!(status() & BV(CC2420_RSSI_VALID))) {
     /*    printf("cc2420_rssi: RSSI not valid.\n"); */
@@ -774,6 +836,7 @@ cc2420_cca(void)
   if(radio_was_off) {
     cc2420_off();
   }
+  RELEASE_LOCK();
   return cca;
 }
 /*---------------------------------------------------------------------------*/
@@ -786,35 +849,15 @@ cc2420_receiving_packet(void)
 static int
 pending_packet(void)
 {
-  return pending;
-}
-/*---------------------------------------------------------------------------*/
-void
-cc2420_ugly_hack_send_only_one_symbol(void)
-{
-  uint8_t len;
-  GET_LOCK();
-
-  /* Write packet to TX FIFO. */
-  strobe(CC2420_SFLUSHTX);
-
-  len = 1;
-  FASTSPI_WRITE_FIFO(&len, 1);
-  FASTSPI_WRITE_FIFO(&len, 1);
-
-  strobe(CC2420_STXON);
-  while(!SFD_IS_1);
-
-  /* Turn radio off immediately after sending the first symbol. */
-  strobe(CC2420_SRFOFF);
-  RELEASE_LOCK();
-  return;
+  return FIFOP_IS_1;
 }
 /*---------------------------------------------------------------------------*/
 void
 cc2420_set_cca_threshold(int value)
 {
   uint16_t shifted = value << 8;
+  GET_LOCK();
   setreg(CC2420_RSSI, shifted);
+  RELEASE_LOCK();
 }
 /*---------------------------------------------------------------------------*/

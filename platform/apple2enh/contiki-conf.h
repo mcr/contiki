@@ -38,8 +38,6 @@
 
 #include "6502def.h"
 
-#include "pfs.h"
-
 #define CTK_CONF_MENU_KEY         CH_ESC
 #define CTK_CONF_WINDOWSWITCH_KEY 0x17	/* Ctrl-W */
 #define CTK_CONF_WIDGETUP_KEY     0x01	/* Ctrl-A */
@@ -54,9 +52,6 @@
 
 #define IRC_CONF_WIDTH  80
 #define IRC_CONF_HEIGHT 23
-
-#define WEBSERVER_CONF_CGI_CONNS UIP_CONNS
-#define WEBSERVER_CONF_CFS_CONNS 8 - 3
 
 #define WWW_CONF_WEBPAGE_WIDTH      80
 #define WWW_CONF_WEBPAGE_HEIGHT     19

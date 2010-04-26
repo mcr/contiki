@@ -76,23 +76,29 @@ spl_t   splhigh_(void);
 #ifndef memcpy
 #include <string.h>
 
-#define memcpy(dest, src, count) do {                    \
-  if(count == 2) {                                       \
-    *((uint8_t *)dest) = *((uint8_t *)src);              \
-    *((uint8_t *)dest + 1) = *((uint8_t *)src + 1);      \
-  } else {                                               \
-    memcpy(dest, src, count);                            \
-  }                                                      \
-} while(0)
+void *w_memcpy(void *out, const void *in, size_t n);
+#define memcpy(dest, src, count) w_memcpy(dest, src, count)
 
-#define memset(dest, value, count) do {                  \
-  if(count == 2) {                                       \
-    *((uint8_t *)dest) = (uint8_t)value;                 \
-    *((uint8_t *)dest + 1) = (uint8_t)value;             \
-  } else {                                               \
-    memset(dest, value, count);                          \
-  }                                                      \
-} while(0)
+/* #define memcpy(dest, src, count) do {                    \ */
+/*   if(count == 2) {                                       \ */
+/*     *((uint8_t *)dest) = *((uint8_t *)src);              \ */
+/*     *((uint8_t *)dest + 1) = *((uint8_t *)src + 1);      \ */
+/*   } else {                                               \ */
+/*     memcpy(dest, src, count);                            \ */
+/*   }                                                      \ */
+/* } while(0) */
+
+void *w_memset(void *out, int value, size_t n);
+#define memset(dest, value, count) w_memset(dest, value, count)
+
+/* #define memset(dest, value, count) do {                  \ */
+/*   if(count == 2) {                                       \ */
+/*     *((uint8_t *)dest) = (uint8_t)value;                 \ */
+/*     *((uint8_t *)dest + 1) = (uint8_t)value;             \ */
+/*   } else {                                               \ */
+/*     memset(dest, value, count);                          \ */
+/*   }                                                      \ */
+/* } while(0) */
 #endif /* memcpy */
 #endif /* __GNUC__ &&  __MSP430__ && MSP430_MEMCPY_WORKAROUND */
 

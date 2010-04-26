@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007, Swedish Institute of Computer Science.
+ * Copyright (c) 2010, Swedish Institute of Computer Science.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,30 +31,19 @@
  * $Id$
  */
 
-#include "contiki-esb.h"
+/**
+ * \file
+ *         A null RDC implementation that uses framer for headers.
+ * \author
+ *         Adam Dunkels <adam@sics.se>
+ *         Niclas Finne <nfi@sics.se>
+ */
 
-static struct uip_fw_netif tr1001if =
-  {UIP_FW_NETIF(0,0,0,0, 0,0,0,0, tr1001_uip_send)};
+#ifndef __NULLRDC_FRAMER_H__
+#define __NULLRDC_FRAMER_H__
 
-#define NODE_ID (node_id & 0xFF)
+#include "net/mac/rdc.h"
 
-void
-init_net(void)
-{
-  uip_ipaddr_t hostaddr;
+extern const struct rdc_driver nullrdc_framer_driver;
 
-  uip_init();
-  uip_fw_init();
-
-  process_start(&tcpip_process, NULL);
-  process_start(&uip_fw_process, NULL);
-
-  tr1001_uip_init();
-
-  if (NODE_ID > 0) {
-    /* node id is set, construct an ip address based on the node id */
-    uip_ipaddr(&hostaddr, 172, 16, 1, NODE_ID);
-    uip_sethostaddr(&hostaddr);
-  }
-  uip_fw_default(&tr1001if);
-}
+#endif /* __NULLRDC_FRAMER_H__ */

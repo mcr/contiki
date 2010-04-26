@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009, Swedish Institute of Computer Science.
+ * Copyright (c) 2010, Swedish Institute of Computer Science.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,30 +31,57 @@
 
 /**
  * \file
- *         A MAC framer is responsible for constructing and parsing
- *         the header in MAC frames. At least the sender and receiver
- *         are required to be encoded in the MAC frame headers.
+ *         A brief description of what this file is
  * \author
  *         Niclas Finne <nfi@sics.se>
  *         Joakim Eriksson <joakime@sics.se>
  */
 
-#include "contiki.h"
-#include "net/mac/framer.h"
-#include "net/mac/framer-nullmac.h"
+#include "net/netstack.h"
+#include "net/uip.h"
+#include "net/tcpip.h"
+#include "net/hc.h"
+#include "net/rime/packetbuf.h"
+#include "net/uip-driver.h"
+#include <string.h>
 
-const struct framer *framer_current;
+/*--------------------------------------------------------------------*/
+static void
+init(void)
+{
+  /*
+   * Set out output function as the function to be called from uIP to
+   * send a packet.
+   */
+  tcpip_set_outputfunc(uip_driver_send);
+}
+/*--------------------------------------------------------------------*/
+static void
+input(void)
+{
+  if(packetbuf_datalen() > 0 &&
+     packetbuf_datalen() <= UIP_BUFSIZE - UIP_LLH_LEN) {
+    memcpy(&uip_buf[UIP_LLH_LEN], packetbuf_dataptr(), packetbuf_datalen());
+    uip_len = hc_inflate(&uip_buf[UIP_LLH_LEN], packetbuf_datalen());
+    tcpip_input();
+  }
+}
+/*--------------------------------------------------------------------*/
+uint8_t
+uip_driver_send(void)
+{
+  uip_len = hc_compress(&uip_buf[UIP_LLH_LEN], uip_len);
+  packetbuf_copyfrom(&uip_buf[UIP_LLH_LEN], uip_len);
 
-/*---------------------------------------------------------------------------*/
-const struct framer *
-framer_get(void)
-{
-  return framer_current != NULL ? framer_current : &framer_nullmac;
+  /* XXX we should provide a callback function that is called when the
+     packet is sent. For now, we just supply a NULL pointer. */
+  NETSTACK_MAC.send(NULL, NULL);
+  return 1;
 }
-/*---------------------------------------------------------------------------*/
-void
-framer_set(const struct framer *f)
-{
-  framer_current = f;
-}
-/*---------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------*/
+const struct network_driver uip_driver = {
+  "uip",
+  init,
+  input
+};
+/*--------------------------------------------------------------------*/

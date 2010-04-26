@@ -30,9 +30,6 @@
  */
 
 package se.sics.cooja.mspmote.interfaces;
-
-import org.apache.log4j.Logger;
-
 import se.sics.cooja.ConvertedRadioPacket;
 import se.sics.cooja.RadioPacket;
 import se.sics.mspsim.util.CCITT_CRC;
@@ -44,7 +41,6 @@ import se.sics.mspsim.util.CCITT_CRC;
  * @author Fredrik Osterlind
  */
 public class CC2420RadioPacketConverter {
-  private static Logger logger = Logger.getLogger(CC2420RadioPacketConverter.class);
 
   public static final boolean WITH_PREAMBLE = true;
   public static final boolean WITH_SYNCH = true;
@@ -58,7 +54,7 @@ public class CC2420RadioPacketConverter {
     int pos = 0;
     byte packetData[] = packet.getPacketData();
     byte len; /* total packet minus preamble(4), synch(1) and length(1) */
-    WrapperCC2420CRC cc2420CRC = new WrapperCC2420CRC();
+    CCITT_CRC cc2420CRC = new CCITT_CRC();
     short contikiCRC = 0;
 
     /* 4 bytes preamble */
@@ -90,34 +86,33 @@ public class CC2420RadioPacketConverter {
     }
     cc2420Data[pos++] = len;
     cc2420CRC.setCRC(0);
-    cc2420CRC.add(len); /* TODO Should length be included in CRC? */
 
     /* 4 byte X-MAC: not implemented */
     if (WITH_XMAC) {
       cc2420Data[pos++] = 1; /* TYPE_DATA */
-      cc2420CRC.add(1);
+      cc2420CRC.addBitrev(1);
       contikiCRC = CRCCoder.crc16Add((byte)0, contikiCRC);
       cc2420Data[pos++] = 0;
-      cc2420CRC.add(0);
+      cc2420CRC.addBitrev(0);
       contikiCRC = CRCCoder.crc16Add((byte)0, contikiCRC);
       cc2420Data[pos++] = 0; /* XXX sender: 0.0 */
-      cc2420CRC.add(0);
+      cc2420CRC.addBitrev(0);
       contikiCRC = CRCCoder.crc16Add((byte)0, contikiCRC);
       cc2420Data[pos++] = 0;
-      cc2420CRC.add(0);
+      cc2420CRC.addBitrev(0);
       contikiCRC = CRCCoder.crc16Add((byte)0, contikiCRC);
       cc2420Data[pos++] = 0; /* XXX receiver: 0.0 */
-      cc2420CRC.add(0);
+      cc2420CRC.addBitrev(0);
       contikiCRC = CRCCoder.crc16Add((byte)0, contikiCRC);
       cc2420Data[pos++] = 0;
-      cc2420CRC.add(0);
+      cc2420CRC.addBitrev(0);
       contikiCRC = CRCCoder.crc16Add((byte)0, contikiCRC);
     }
 
     /* Payload */
     for (byte b : packetData) {
       contikiCRC = CRCCoder.crc16Add(b, contikiCRC);
-      cc2420CRC.add(b & 0xFF);
+      cc2420CRC.addBitrev(b & 0xFF);
     }
     System.arraycopy(packetData, 0, cc2420Data, pos, packetData.length);
     pos += packetData.length;
@@ -125,28 +120,25 @@ public class CC2420RadioPacketConverter {
     /* 2 bytes checksum */
     if (WITH_CHECKSUM) {
       cc2420Data[pos++] = (byte) (contikiCRC & 0xff);
-      cc2420CRC.add(contikiCRC & 0xFF);
+      cc2420CRC.addBitrev(contikiCRC & 0xFF);
       cc2420Data[pos++] = (byte) ((contikiCRC >> 8) & 0xff);
-      cc2420CRC.add((contikiCRC >> 8) & 0xFF);
+      cc2420CRC.addBitrev((contikiCRC >> 8) & 0xFF);
     }
 
     /* (TODO) 3 bytes timestamp */
     if (WITH_TIMESTAMP) {
       cc2420Data[pos++] = 0;
-      cc2420CRC.add(0);
+      cc2420CRC.addBitrev(0);
       cc2420Data[pos++] = 0;
-      cc2420CRC.add(0);
+      cc2420CRC.addBitrev(0);
       cc2420Data[pos++] = 0;
-      cc2420CRC.add(0);
+      cc2420CRC.addBitrev(0);
     }
 
     /* 2 bytes footer: CC2420's CRC */
     if (WITH_FOOTER) {
-      /* TODO XXX Workaround for (potential) CC2420 bug:
-       * it excludes the last byte in the CRC */
-      int crc = cc2420CRC.getPreviousCRC();
-      cc2420Data[pos++] = (byte) ((crc >> 8) & 0xff);
-      cc2420Data[pos++] = (byte) (crc & 0xff);
+      cc2420Data[pos++] = (byte) cc2420CRC.getCRCHi();
+      cc2420Data[pos++] = (byte) cc2420CRC.getCRCLow();
     }
 
     byte cc2420DataStripped[] = new byte[pos];
@@ -212,20 +204,6 @@ public class CC2420RadioPacketConverter {
     byte convertedData[] = new byte[len];
     System.arraycopy(data, pos, convertedData, 0, len);
     return new ConvertedRadioPacket(convertedData, originalData);
-  }
-
-  private static class WrapperCC2420CRC extends CCITT_CRC {
-    int previous = 0;
-    public WrapperCC2420CRC() {
-      super();
-    }
-    public int add(int data) {
-      previous = getCRC();
-      return super.add(data);
-    }
-    public int getPreviousCRC() {
-      return previous;
-    }
   }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007, Swedish Institute of Computer Science
+ * Copyright (c) 2010, Swedish Institute of Computer Science.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,31 +28,46 @@
  *
  * This file is part of the Contiki operating system.
  *
+ * $Id$
  */
-
 /**
  * \file
- *	Rime initialization for the MSB-430 port.
- * \author
- * 	Nicolas Tsiftes <nvt@sics.se>
+ *         Declarations for the neighbor information module.
+ *
+ * \author Nicolas Tsiftes <nvt@sics.se>
  */
 
-#include "contiki.h"
-#include "node-id.h"
-#include "dev/cc1020.h"
-#include "net/mac/nullmac.h"
-#include "net/mac/lpp.h"
-#include "net/rime.h"
-#include "contiki-msb430.h"
+#ifndef NEIGHBOR_INFO_H
+#define NEIGHBOR_INFO_H
 
-void
-init_net(void)
-{
-  rimeaddr_t rimeaddr;
-  
-  cc1020_init(cc1020_config_19200);
-  rime_init(lpp_init(&cc1020_driver));
-  rimeaddr.u8[0] = node_id & 0xff;
-  rimeaddr.u8[1] = node_id >> 8;
-  rimeaddr_set_node_addr(&rimeaddr);
-}
+#include "net/rime.h"
+
+typedef void (*neighbor_info_subscriber_t)(const rimeaddr_t *, int known, int etx);
+
+/**
+ * Notify the neighbor information module about the status of
+ * a packet transmission.
+ *
+ * \param status The MAC status code for this packet.
+ *
+ * \param numtx The amount of transmissions made for this packet.
+ */
+void neighbor_info_packet_sent(int status, int numtx);
+
+/**
+ * Notify the neighbor information module that a packet was received.
+ *
+ * \param status The MAC status code for this packet.
+ *
+ * \param numtx The amount of transmissions made for this packet.
+ */
+void neighbor_info_packet_received(void);
+
+/**
+ * Subscribe to notifications of changed neighbor information.
+ *
+ * \return Returns 1 if the subscription was successful, and 0 if not.
+ */
+int neighbor_info_subscribe(neighbor_info_subscriber_t);
+
+#endif /* NEIGHBOR_INFO_H */

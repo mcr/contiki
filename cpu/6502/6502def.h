@@ -43,6 +43,8 @@
 #include <stdint.h>
 #include <unistd.h>
 
+#include "pfs.h"
+
 /* These names are deprecated, use C99 names. */
 typedef uint8_t   u8_t;
 typedef uint16_t u16_t;
@@ -66,7 +68,21 @@ typedef unsigned short uip_stats_t;
 #define UIP_ARCH_ADD32  1
 #define UIP_ARCH_CHKSUM 1
 
+#define MAC_CONF_CHANNEL_CHECK_RATE CLOCK_CONF_SECOND
+
 #define LOADER_CONF_ARCH "lib/unload.h"
+
+#if MTU_SIZE
+#define UIP_CONF_BUFFER_SIZE (UIP_LLH_LEN + MTU_SIZE)
+#else /* MTU_SIZE */
+#define UIP_CONF_BUFFER_SIZE (UIP_LLH_LEN + 1500)
+#endif /* MTU_SIZE */
+
+#if CONNECTIONS
+#define UIP_CONF_MAX_CONNECTIONS CONNECTIONS
+#else /* CONNECTIONS */
+#define UIP_CONF_MAX_CONNECTIONS 10
+#endif /* CONNECTIONS */
 
 #if WITH_LOGGING
 #define LOG_CONF_ENABLED 1
@@ -75,12 +91,6 @@ typedef unsigned short uip_stats_t;
 #define LOG_CONF_ENABLED 0
 #define UIP_CONF_LOGGING 0
 #endif /* WITH_LOGGING */
-
-#if MTU_SIZE
-#define UIP_CONF_BUFFER_SIZE (UIP_LLH_LEN + MTU_SIZE)
-#else /* MTU_SIZE */
-#define UIP_CONF_BUFFER_SIZE (UIP_LLH_LEN + 1500)
-#endif /* MTU_SIZE */
 
 #if WITH_BOOST
 #define UIP_CONF_TCP_SPLIT 1

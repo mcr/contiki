@@ -46,6 +46,7 @@
 #include <string.h>
 
 #include "contiki-net.h"
+#include "net/rime/collect-neighbor.h"
 #include "httpd.h"
 #include "httpd-cgi.h"
 #include "httpd-fs.h"
@@ -167,7 +168,7 @@ static unsigned short
 make_neighbor(void *arg)
 {
   struct httpd_state *s = (struct httpd_state *)arg;
-  struct neighbor *n = neighbor_get(s->u.count);
+  struct collect_neighbor *n = collect_neighbor_get(s->u.count);
 
   if(n == NULL) {
     return 0;
@@ -189,9 +190,9 @@ PT_THREAD(neighborscall(struct httpd_state *s, char *ptr))
   
   /*  printf("neighbor_num %d\n", neighbor_num());*/
   
-  for(s->u.count = 0; s->u.count < neighbor_num(); s->u.count++) {
+  for(s->u.count = 0; s->u.count < collect_neighbor_num(); s->u.count++) {
     /*    printf("count %d\n", s->u.count);*/
-    if(neighbor_get(s->u.count) != NULL) {
+    if(collect_neighbor_get(s->u.count) != NULL) {
       /*      printf("!= NULL\n");*/
       PSOCK_GENERATOR_SEND(&s->sout, make_neighbor, s);
     }
@@ -205,16 +206,16 @@ static void
 received_announcement(struct announcement *a, const rimeaddr_t *from,
 	     uint16_t id, uint16_t value)
 {
-  struct neighbor *n;
+  struct collect_neighbor *n;
 
   /*  printf("adv_received %d.%d\n", from->u8[0], from->u8[1]);*/
   
-  n = neighbor_find(from);
+  n = collect_neighbor_find(from);
   
   if(n == NULL) {
-    neighbor_add(from, value, 1);
+    collect_neighbor_add(from, value, 1);
   } else {
-    neighbor_update(n, value);
+    collect_neighbor_update(n, value);
   }
 }
 
@@ -238,7 +239,7 @@ httpd_cgi_init(void)
   httpd_cgi_add(&nodeid);
   httpd_cgi_add(&neighbors);
 
-  announcement_register(&announcement, 31, 0,
+  announcement_register(&announcement, 31,
 			received_announcement);
   announcement_listen(2);
 

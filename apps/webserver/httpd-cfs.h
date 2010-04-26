@@ -37,13 +37,19 @@
 
 #include "contiki-net.h"
 
+#ifndef WEBSERVER_CONF_CFS_PATHLEN
+#define HTTPD_PATHLEN 80
+#else /* WEBSERVER_CONF_CFS_CONNS */
+#define HTTPD_PATHLEN WEBSERVER_CONF_CFS_PATHLEN
+#endif /* WEBSERVER_CONF_CFS_CONNS */
+
 struct httpd_state {
   struct timer timer;
   struct psock sin, sout;
   struct pt outputpt;
-  char inputbuf[50];
+  char inputbuf[HTTPD_PATHLEN + 30];
   char outputbuf[UIP_TCP_MSS];
-  char filename[20];
+  char filename[HTTPD_PATHLEN];
   char state;
   int fd;
   int len;

@@ -39,7 +39,9 @@
 
 #define RTIMER_ARCH_SECOND CLOCK_CONF_SECOND
 
-#define rtimer_arch_now() -1
-
+rtimer_clock_t rtimer_arch_now(void);
+int rtimer_arch_check(void);
+int rtimer_arch_pending(void);
+rtimer_clock_t rtimer_arch_next(void);
 
 #endif /* __RTIMER_ARCH_H__ */

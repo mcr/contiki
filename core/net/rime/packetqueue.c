@@ -123,6 +123,12 @@ packetqueue_dequeue(struct packetqueue *q)
   }
 }
 /*---------------------------------------------------------------------------*/
+int
+packetqueue_len(struct packetqueue *q)
+{
+  return list_length(*q->list);
+}
+/*---------------------------------------------------------------------------*/
 struct queuebuf *
 packetqueue_queuebuf(struct packetqueue_item *i)
 {

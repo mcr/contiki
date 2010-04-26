@@ -75,7 +75,7 @@ struct announcement_msg {
 };
 
 
-struct polite_announcement_state {
+static struct polite_announcement_state {
   struct ipolite_conn c;
   struct ctimer t;
   clock_time_t interval;
@@ -158,7 +158,8 @@ send_timer(void *ptr)
 }
 /*---------------------------------------------------------------------------*/
 static void
-new_announcement(uint16_t id, uint16_t newval, uint16_t oldval)
+new_announcement(uint16_t id, uint8_t has_value, uint16_t newval,
+    uint16_t oldval, uint8_t bump)
 {
   if(newval != oldval) {
     c.interval = c.min_interval;

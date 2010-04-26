@@ -56,7 +56,7 @@
  *             index is given by the 'index' parameter.
  *
  */
-void cc2420_aes_set_key(uint8_t *key, int index);
+void cc2420_aes_set_key(const uint8_t *key, int index);
 
 
 /**

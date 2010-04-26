@@ -33,7 +33,7 @@
 
 /**
  * \file
- *         Tmote Sky-specific Contiki shell
+ *         Jcreate-specific Contiki shell
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
@@ -42,18 +42,8 @@
 #include "shell.h"
 #include "serial-shell.h"
 
-#include "net/rime/neighbor.h"
-#include "dev/watchdog.h"
-
-#include "net/rime.h"
-#include "dev/cc2420.h"
 #include "dev/leds.h"
-#include "dev/light.h"
-#include "dev/sht11.h"
 #include "dev/acc-sensor.h"
-#include "dev/battery-sensor.h"
-
-#include "net/rime/timesynch.h"
 
 #include <stdio.h>
 #include <string.h>

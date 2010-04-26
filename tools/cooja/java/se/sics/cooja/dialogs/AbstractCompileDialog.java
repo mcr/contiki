@@ -205,7 +205,7 @@ public abstract class AbstractCompileDialog extends JDialog {
           }
 
           public String getDescription() {
-            return "Contiki process source or Contiki firmware";
+            return "Contiki process source or Precompiled firmware";
           }
         });
         fc.setDialogTitle("Select Contiki process source");

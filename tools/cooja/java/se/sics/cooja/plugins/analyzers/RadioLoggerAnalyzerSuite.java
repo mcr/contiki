@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007, Swedish Institute of Computer Science.
+ * Copyright (c) 2010, Swedish Institute of Computer Science.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,46 +27,13 @@
  * SUCH DAMAGE.
  *
  * $Id$
- *
- * -----------------------------------------------------------------
- *
- * Author  : Adam Dunkels, Joakim Eriksson, Niclas Finne
- * Created : 2007-04-03
- * Updated : $Date$
- *           $Revision$
  */
 
-#include "contiki-esb.h"
+package se.sics.cooja.plugins.analyzers;
 
-static struct uip_fw_netif tr1001if =
-  {UIP_FW_NETIF(0,0,0,0, 0,0,0,0, tr1001_uip_send)};
+import java.util.ArrayList;
 
-static struct uip_fw_netif slipif =
-  {UIP_FW_NETIF(172,16,0,0, 255,255,255,0, slip_send)};
-
-#define NODE_ID (node_id & 0xFF)
-
-void
-init_net(void)
-{
-  uip_ipaddr_t hostaddr;
-
-  uip_init();
-  uip_fw_init();
-
-  rs232_set_input(slip_input_byte);
-
-  process_start(&tcpip_process, NULL);
-  process_start(&slip_process, NULL);
-  process_start(&uip_fw_process, NULL);
-
-  tr1001_uip_init();
-
-  if (NODE_ID > 0) {
-    /* node id is set, construct an ip address based on the node id */
-    uip_ipaddr(&hostaddr, 172, 16, 1, NODE_ID);
-    uip_sethostaddr(&hostaddr);
-  }
-  uip_fw_register(&slipif);
-  uip_fw_default(&tr1001if);
+public interface RadioLoggerAnalyzerSuite {
+  public String getDescription();
+  public ArrayList<PacketAnalyzer> getAnalyzers();
 }

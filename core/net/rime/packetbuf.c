@@ -52,42 +52,6 @@
 struct packetbuf_attr packetbuf_attrs[PACKETBUF_NUM_ATTRS];
 struct packetbuf_addr packetbuf_addrs[PACKETBUF_NUM_ADDRS];
 
-#define DEBUG_STRINGS 0
-#if DEBUG_STRINGS
-const char *packetbuf_attr_strings[] =
-  {
-    "PACKETBUF_ATTR_NONE",
-    "PACKETBUF_ATTR_CHANNEL",
-    "PACKETBUF_ATTR_PACKET_ID",
-    "PACKETBUF_ATTR_PACKET_TYPE",
-    "PACKETBUF_ATTR_EPACKET_ID",
-    "PACKETBUF_ATTR_EPACKET_TYPE",
-    "PACKETBUF_ATTR_HOPS",
-    "PACKETBUF_ATTR_TTL",
-    "PACKETBUF_ATTR_REXMIT",
-    "PACKETBUF_ATTR_MAX_REXMIT",
-    "PACKETBUF_ATTR_NUM_REXMIT",
-    "PACKETBUF_ATTR_LINK_QUALITY",
-    "PACKETBUF_ATTR_RSSI",
-    "PACKETBUF_ATTR_TIMESTAMP",
-    "PACKETBUF_ATTR_RADIO_TXPOWER",
-
-    "PACKETBUF_ATTR_LISTEN_ENERGY",
-    "PACKETBUF_ATTR_TRANSMIT_ENERGY",
-    
-    "PACKETBUF_ATTR_NETWORK_ID",
-
-    "PACKETBUF_ATTR_RELIABLE",
-    "PACKETBUF_ATTR_ERELIABLE",
-
-    "PACKETBUF_ADDR_SENDER",
-    "PACKETBUF_ADDR_RECEIVER",
-    "PACKETBUF_ADDR_ESENDER",
-    "PACKETBUF_ADDR_ERECEIVER",
-
-    "PACKETBUF_ATTR_MAX",
-  };
-#endif /* DEBUG_STRINGS */
 
 static uint16_t buflen, bufptr;
 static uint8_t hdrptr;
@@ -148,7 +112,7 @@ packetbuf_compact(void)
 	   packetbuf_datalen());
   } else if (bufptr > 0) {
     len = packetbuf_datalen() + PACKETBUF_HDR_SIZE;
-    for (i = PACKETBUF_HDR_SIZE; i < len; i++) {
+    for(i = PACKETBUF_HDR_SIZE; i < len; i++) {
       packetbuf[i] = packetbuf[bufptr + i];
     }
 
@@ -212,13 +176,19 @@ packetbuf_hdralloc(int size)
   return 0;
 }
 /*---------------------------------------------------------------------------*/
+void
+packetbuf_hdr_remove(int size)
+{
+  hdrptr += size;
+}
+/*---------------------------------------------------------------------------*/
 int
 packetbuf_hdrreduce(int size)
 {
   if(buflen < size) {
     return 0;
   }
-  
+
   bufptr += size;
   buflen -= size;
   return 1;
@@ -281,19 +251,14 @@ packetbuf_totlen(void)
   return packetbuf_hdrlen() + packetbuf_datalen();
 }
 /*---------------------------------------------------------------------------*/
-
-
-
 void
 packetbuf_attr_clear(void)
 {
   int i;
   for(i = 0; i < PACKETBUF_NUM_ATTRS; ++i) {
-/*     packetbuf_attrs[i].type = PACKETBUF_ATTR_NONE; */
     packetbuf_attrs[i].val = 0;
   }
   for(i = 0; i < PACKETBUF_NUM_ADDRS; ++i) {
-/*     packetbuf_addrs[i].type = PACKETBUF_ATTR_NONE; */
     rimeaddr_copy(&packetbuf_addrs[i].addr, &rimeaddr_null);
   }
 }

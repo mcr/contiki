@@ -48,8 +48,8 @@
 
 PROCESS(powertrace_process, "Periodic power output");
 /*---------------------------------------------------------------------------*/
-static void
-print_power(void)
+void
+powertrace_print(char *str)
 {
   static uint32_t last_cpu, last_lpm, last_transmit, last_listen;
   static uint32_t last_idle_transmit, last_idle_listen;
@@ -79,8 +79,9 @@ print_power(void)
 
   time = cpu + lpm;
   
-  printf("P %d %lu %lu %lu %lu %lu %lu %lu (radio %d.%02d%% tx %d.%02d%% listen %d.%02d%%)\n",
-         node_id, seqno++,
+  printf("%s %lu P %d %lu %lu %lu %lu %lu %lu %lu (radio %d.%02d%% tx %d.%02d%% listen %d.%02d%%)\n",
+         str,
+         clock_time(), node_id, seqno++,
          cpu, lpm, transmit, listen, idle_transmit, idle_listen,
          (int)((100L * (transmit + listen)) / time),
          (int)((10000L * (transmit + listen) / time) - (100L * (transmit + listen) / time) * 100),
@@ -106,7 +107,7 @@ PROCESS_THREAD(powertrace_process, ev, data)
   while(1) {
     PROCESS_WAIT_UNTIL(etimer_expired(&periodic));
     etimer_reset(&periodic);
-    print_power();
+    powertrace_print("");
   }
 
   PROCESS_END();
@@ -116,6 +117,12 @@ void
 powertrace_start(clock_time_t period)
 {
   process_start(&powertrace_process, (void *)&period);
+}
+/*---------------------------------------------------------------------------*/
+void
+powertrace_stop(void)
+{
+  process_exit(&powertrace_process);
 }
 /*---------------------------------------------------------------------------*/
 static void
@@ -129,9 +136,10 @@ sniffprint(char *prefix, int seqno)
   ereceiver = packetbuf_addr(PACKETBUF_ADDR_ERECEIVER);
 
 
-  printf("%s %d %u %d %d %d.%d %u %u\n",
+  printf("%lu %s %d %u %d %d %d.%d %u %u\n",
+         clock_time(),
          prefix,
-         node_id, seqno,
+         rimeaddr_node_addr.u8[0], seqno,
          packetbuf_attr(PACKETBUF_ATTR_CHANNEL),
          packetbuf_attr(PACKETBUF_ATTR_PACKET_TYPE),
          esender->u8[0], esender->u8[1],

@@ -264,6 +264,13 @@ PROCESS_THREAD(slip_process, ev, data)
       uip_len = 0;
       SLIP_STATISTICS(slip_ip_drop++);
     }
+#else /* UIP_CONF_IPV6 */
+    if(uip_len > 0) {
+      if(input_callback) {
+        input_callback();
+      }
+      tcpip_input();
+    }
 #endif /* UIP_CONF_IPV6 */
   }
 

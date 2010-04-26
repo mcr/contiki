@@ -325,12 +325,51 @@ public class SkyByteRadio extends Radio implements CustomDataRadio {
     return 31;
   }
 
+  /**
+   * Current received signal strength.
+   * May differ from CC2420's internal value which is an average of the last 8 symbols.
+   */
+  double currentSignalStrength = 0;
+
+  /**
+   * Last 8 received signal strengths
+   */
+  private double[] rssiLast = new double[8];
+  private int rssiLastCounter = 0;
+
   public double getCurrentSignalStrength() {
-    return cc2420.getRSSI();
+    return currentSignalStrength;
   }
 
-  public void setCurrentSignalStrength(double signalStrength) {
-    cc2420.setRSSI((int) signalStrength);
+  public void setCurrentSignalStrength(final double signalStrength) {
+    if (signalStrength == currentSignalStrength) {
+      return; /* ignored */
+    }
+    currentSignalStrength = signalStrength;
+    if (rssiLastCounter == 0) {
+      getMote().getSimulation().scheduleEvent(new MspMoteTimeEvent(mote, 0) {
+        public void execute(long t) {
+          super.execute(t);
+
+          /* Update average */
+          System.arraycopy(rssiLast, 1, rssiLast, 0, 7);
+          rssiLast[7] = currentSignalStrength;
+          double avg = 0;
+          for (double v: rssiLast) {
+            avg += v;
+          }
+          avg /= rssiLast.length;
+
+          cc2420.setRSSI((int) avg);
+          
+          rssiLastCounter--;
+          if (rssiLastCounter > 0) {
+            mote.getSimulation().scheduleEvent(this, t+DELAY_BETWEEN_BYTES/2);
+          }
+        }        
+      }, mote.getSimulation().getSimulationTime());
+    }
+    rssiLastCounter = 8;
   }
 
   public JPanel getInterfaceVisualizer() {

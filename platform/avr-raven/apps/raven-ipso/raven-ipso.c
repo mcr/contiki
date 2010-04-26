@@ -59,7 +59,6 @@
 #include "contiki-lib.h"
 #include "contiki-net.h"
 
-#include "frame.h"
 #include "mac.h"
 
 #include "raven-lcd.h"
@@ -97,7 +96,7 @@ void rs232_send(uint8_t port, unsigned char c);
 
 /*------------------------------------------------------------------*/
 /* Sends a ping packet out the radio */
-static void
+void
 raven_ping6(void)
 {
    
@@ -110,10 +109,11 @@ raven_ping6(void)
   UIP_IP_BUF->tcflow = 1;
   UIP_IP_BUF->flow = 0;
   UIP_IP_BUF->proto = UIP_PROTO_ICMP6;
-  UIP_IP_BUF->ttl = uip_netif_physical_if.cur_hop_limit;
+//UIP_IP_BUF->ttl = uip_netif_physical_if.cur_hop_limit;
+  UIP_IP_BUF->ttl = uip_ds6_if.cur_hop_limit;
   uip_ipaddr_copy(&UIP_IP_BUF->destipaddr, &ping_addr);
-  uip_netif_select_src(&UIP_IP_BUF->srcipaddr, &UIP_IP_BUF->destipaddr);
- 
+//uip_netif_select_src(&UIP_IP_BUF->srcipaddr, &UIP_IP_BUF->destipaddr);
+  uip_ds6_select_src(&UIP_IP_BUF->srcipaddr, &UIP_IP_BUF->destipaddr); 
   UIP_ICMP_BUF->type = ICMP6_ECHO_REQUEST;
   UIP_ICMP_BUF->icode = 0;
   /* set identifier and sequence number to 0 */
@@ -183,7 +183,7 @@ raven_gui_loop(process_event_t ev, process_data_t data)
             break;
         }
         /* Reset command done flag. */
-        cmd.done = false;
+        cmd.done = 0;
       }
       break;
     default:
@@ -203,7 +203,7 @@ int raven_lcd_serial_input(unsigned char ch)
   switch (cmd.ndx){
     case 0:
       /* first byte, must be 0x01 */
-      cmd.done = false;
+      cmd.done = 0;
       if (ch != 0x01){
         return 0;
       }
@@ -221,7 +221,7 @@ int raven_lcd_serial_input(unsigned char ch)
       if (cmd.ndx >= cmd.len+3){
         /* all done, check ETX */
         if (ch == 0x04){
-          cmd.done = true;
+          cmd.done = 1;
           process_post(&raven_lcd_process, SERIAL_CMD, 0);
         } else {
           /* Failed ETX */

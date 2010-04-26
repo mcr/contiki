@@ -40,6 +40,7 @@
 #include "net/mac/framer-802154.h"
 #include "net/mac/frame802154.h"
 #include "net/rime/packetbuf.h"
+#include "lib/random.h"
 #include <string.h>
 
 #define DEBUG 0
@@ -54,6 +55,7 @@
 #endif
 
 static uint8_t mac_dsn;
+static uint8_t initialized = 0;
 const static uint16_t mac_dst_pan_id = IEEE802154_PANID;
 const static uint16_t mac_src_pan_id = IEEE802154_PANID;
 
@@ -79,18 +81,32 @@ create(void)
   /* init to zeros */
   memset(&params, 0, sizeof(params));
 
+  if(!initialized) {
+    initialized = 1;
+    mac_dsn = random_rand() & 0xff;
+  }
+
   /* Build the FCF. */
   params.fcf.frame_type = FRAME802154_DATAFRAME;
   params.fcf.security_enabled = 0;
-  params.fcf.frame_pending = 0;
-  params.fcf.ack_required = 1; //packetbuf_attr(PACKETBUF_ATTR_RELIABLE);
+  params.fcf.frame_pending = packetbuf_attr(PACKETBUF_ATTR_PENDING);
+  if(rimeaddr_cmp(packetbuf_addr(PACKETBUF_ADDR_RECEIVER), &rimeaddr_null)) {
+    params.fcf.ack_required = 0;
+  } else {
+    params.fcf.ack_required = 1; //packetbuf_attr(PACKETBUF_ATTR_RELIABLE);
+  }
   params.fcf.panid_compression = 0;
 
   /* Insert IEEE 802.15.4 (2003) version bit. */
   params.fcf.frame_version = FRAME802154_IEEE802154_2003;
 
   /* Increment and set the data sequence number. */
-  params.seq = mac_dsn++;
+  if(packetbuf_attr(PACKETBUF_ATTR_MAC_SEQNO)) {
+    params.seq = packetbuf_attr(PACKETBUF_ATTR_MAC_SEQNO);
+  } else {
+    params.seq = mac_dsn++;
+    packetbuf_set_attr(PACKETBUF_ATTR_MAC_SEQNO, params.seq);
+  }
 /*   params.seq = packetbuf_attr(PACKETBUF_ATTR_PACKET_ID); */
 
   /* Complete the addressing fields. */
@@ -98,7 +114,12 @@ create(void)
      \todo For phase 1 the addresses are all long. We'll need a mechanism
      in the rime attributes to tell the mac to use long or short for phase 2.
   */
-  params.fcf.src_addr_mode = FRAME802154_LONGADDRMODE;
+  if(sizeof(rimeaddr_t) == 2) {
+    /* Use short address mode if rimeaddr size is short. */
+    params.fcf.src_addr_mode = FRAME802154_SHORTADDRMODE;
+  } else {
+    params.fcf.src_addr_mode = FRAME802154_LONGADDRMODE;
+  }
   params.dest_pid = mac_dst_pan_id;
 
   /*
@@ -114,7 +135,12 @@ create(void)
   } else {
     rimeaddr_copy((rimeaddr_t *)&params.dest_addr,
                   packetbuf_addr(PACKETBUF_ADDR_RECEIVER));
-    params.fcf.dest_addr_mode = FRAME802154_LONGADDRMODE;
+    /* Use short address mode if rimeaddr size is small */
+    if(sizeof(rimeaddr_t) == 2) {
+      params.fcf.dest_addr_mode = FRAME802154_SHORTADDRMODE;
+    } else {
+      params.fcf.dest_addr_mode = FRAME802154_LONGADDRMODE;
+    }
   }
 
   /* Set the source PAN ID to the global variable. */
@@ -132,13 +158,13 @@ create(void)
   if(packetbuf_hdralloc(len)) {
     frame802154_create(&params, packetbuf_hdrptr(), len);
 
-    PRINTF("P6MAC-UT: %2X", params.fcf.frame_type);
+    PRINTF("15.4-OUT: %2X", params.fcf.frame_type);
     PRINTADDR(params.dest_addr.u8);
     PRINTF("%u %u (%u)\n", len, packetbuf_datalen(), packetbuf_totlen());
 
     return len;
   } else {
-    PRINTF("P6MAC-UT: too large header: %u\n", len);
+    PRINTF("15.4-OUT: too large header: %u\n", len);
     return 0;
   }
 }
@@ -155,7 +181,7 @@ parse(void)
       if(frame.dest_pid != mac_src_pan_id &&
          frame.dest_pid != FRAME802154_BROADCASTPANDID) {
         /* Packet to another PAN */
-        PRINTF("P6MAC: for another pan %u\n", frame.dest_pid);
+        PRINTF("15.4: for another pan %u\n", frame.dest_pid);
         return 0;
       }
       if(!is_broadcast_addr(frame.fcf.dest_addr_mode, frame.dest_addr)) {
@@ -163,10 +189,11 @@ parse(void)
       }
     }
     packetbuf_set_addr(PACKETBUF_ADDR_SENDER, (rimeaddr_t *)&frame.src_addr);
-    packetbuf_set_attr(PACKETBUF_ATTR_RELIABLE, frame.fcf.ack_required);
+    packetbuf_set_attr(PACKETBUF_ATTR_PENDING, frame.fcf.frame_pending);
+    /*    packetbuf_set_attr(PACKETBUF_ATTR_RELIABLE, frame.fcf.ack_required);*/
     packetbuf_set_attr(PACKETBUF_ATTR_PACKET_ID, frame.seq);
 
-    PRINTF("P6MAC-IN: %2X", frame.fcf.frame_type);
+    PRINTF("15.4-IN: %2X", frame.fcf.frame_type);
     PRINTADDR(packetbuf_addr(PACKETBUF_ADDR_SENDER));
     PRINTADDR(packetbuf_addr(PACKETBUF_ADDR_RECEIVER));
     PRINTF("%u (%u)\n", packetbuf_datalen(), len);

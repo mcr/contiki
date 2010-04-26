@@ -50,7 +50,7 @@
 LIST(announcements);
 
 static void (* listen_callback)(int time);
-static void (* observer_callback)(uint16_t id, uint16_t newval, uint16_t oldval);
+static announcement_observer observer_callback;
 
 /*---------------------------------------------------------------------------*/
 void
@@ -60,15 +60,16 @@ announcement_init(void)
 }
 /*---------------------------------------------------------------------------*/
 void
-announcement_register(struct announcement *a, uint16_t id, uint16_t value,
+announcement_register(struct announcement *a, uint16_t id,
 		      announcement_callback_t callback)
 {
   a->id = id;
-  a->value = value;
+  a->has_value = 0;
   a->callback = callback;
   list_add(announcements, a);
   if(observer_callback) {
-    observer_callback(a->id, a->value, 0);
+    observer_callback(a->id, a->has_value,
+                      a->value, 0, ANNOUNCEMENT_BUMP);
   }
 }
 /*---------------------------------------------------------------------------*/
@@ -79,21 +80,33 @@ announcement_remove(struct announcement *a)
 }
 /*---------------------------------------------------------------------------*/
 void
+announcement_remove_value(struct announcement *a)
+{
+  a->has_value = 0;
+  if(observer_callback) {
+    observer_callback(a->id, 0, 0, 0, ANNOUNCEMENT_NOBUMP);
+  }
+
+}
+/*---------------------------------------------------------------------------*/
+void
 announcement_set_value(struct announcement *a, uint16_t value)
 {
   uint16_t oldvalue = a->value;
+  a->has_value = 1;
   a->value = value;
   if(observer_callback) {
-    observer_callback(a->id, value, oldvalue);
+    observer_callback(a->id, a->has_value,
+                      value, oldvalue, ANNOUNCEMENT_NOBUMP);
   }
 }
 /*---------------------------------------------------------------------------*/
 void
-announcement_set_id(struct announcement *a, uint16_t id)
+announcement_bump(struct announcement *a)
 {
-  a->id = id;
   if(observer_callback) {
-    observer_callback(a->id, a->value, a->value);
+    observer_callback(a->id, a->has_value,
+                      a->value, a->value, ANNOUNCEMENT_BUMP);
   }
 }
 /*---------------------------------------------------------------------------*/
@@ -112,7 +125,7 @@ announcement_register_listen_callback(void (*callback)(int time))
 }
 /*---------------------------------------------------------------------------*/
 void
-announcement_register_observer_callback(void (*callback)(uint16_t, uint16_t, uint16_t))
+announcement_register_observer_callback(announcement_observer callback)
 {
   observer_callback = callback;
 }

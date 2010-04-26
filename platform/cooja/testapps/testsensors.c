@@ -33,7 +33,6 @@
 #include "dev/button-sensor.h"
 #include "dev/pir-sensor.h"
 #include "dev/vib-sensor.h"
-#include "dev/radio-sensor.h"
 
 #include <stdio.h>
 
@@ -48,7 +47,6 @@ PROCESS_THREAD(test_sensors_process, ev, data)
   button_sensor.configure(SENSORS_ACTIVE, 1);
   pir_sensor.configure(SENSORS_ACTIVE, 1);
   vib_sensor.configure(SENSORS_ACTIVE, 1);
-  radio_sensor.configure(SENSORS_ACTIVE, 1);
 
   while(1) {
     PROCESS_WAIT_EVENT();

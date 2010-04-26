@@ -178,6 +178,17 @@ struct packetqueue_item *packetqueue_first(struct packetqueue *q);
 void packetqueue_dequeue(struct packetqueue *q);
 
 /**
+ * \brief      Get the length of the packet queue
+ * \param q    A pointer to a struct packetqueue.
+ * \return     The number of packets queued on the packet queue
+ *
+ *             This function returns the number of packets that are
+ *             queued on the packet queue.
+ *
+ */
+int packetqueue_len(struct packetqueue *q);
+
+/**
  * @}
  */
 
