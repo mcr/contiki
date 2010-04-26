@@ -58,8 +58,9 @@ void leds_blink(void);
 #define LEDS_GREEN  1
 #define LEDS_YELLOW 2
 #define LEDS_RED    4
-#define LEDS_BLUE   LEDS_YELLOW	/* Tmote Sky is colorblind? */
-#define leds_blue   leds_yellow
+//#define LEDS_BLUE   LEDS_YELLOW	/* Tmote Sky is colorblind? */
+#define LEDS_BLUE   8	/* Tmote Sky is colorblind? */
+//#define leds_blue   leds_yellow
 
 #define LEDS_ALL    7
 

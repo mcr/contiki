@@ -1,0 +1,82 @@
+/*
+ * Copyright (c) 2006, Technical University of Munich
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the Institute nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE INSTITUTE AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE INSTITUTE OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ *
+ * This file is part of the Contiki operating system.
+ *
+ * @(#)$$
+ */
+
+/**
+ * \file
+ *         Configuration for MC1322x hobby board based on 
+ *         Configuration for sample STK 501 Contiki kernel
+ *
+ * \author
+ *         Originial by:
+ *         Simon Barner <barner@in.tum.de
+ *         This version by:
+ *         Mariano Alvira <mar@devl.org>
+ */
+
+#ifndef __CONTIKI_CONF_H__
+#define __CONTIKI_CONF_H__
+
+#include <stdint.h>
+
+/* mc1322x files */
+#include "contiki-mc1322x-conf.h"
+/* this is from cpu/mc1322x/board */
+#include "redbee-econotag.h"
+
+/* Clock ticks per second */
+#define CLOCK_CONF_SECOND 100
+
+/* Baud rate */
+#define MOD 9999
+/*  230400 bps, INC=767, MOD=9999, 24Mhz 16x samp */
+/*  115200 bps, INC=767, MOD=9999, 24Mhz 8x samp */
+#define INC 767  
+/*  921600 bps, MOD=9999, 24Mhz 16x samp */
+//#define INC 3071 
+#define SAMP UCON_SAMP_8X
+//#define SAMP UCON_SAMP_16X
+
+#define uart_init uart1_init
+#define dbg_putchar(x) uart1_putchar(x)
+
+#define USE_FORMATTED_STDIO 1
+#define MACA_DEBUG          0
+#define MACA_RAW_MODE       0
+#define USE_32KHZ_XTAL      0
+
+#define QUEUEBUF_CONF_NUM     8
+#define RIMEADDR_CONF_SIZE    8
+#define PACKETBUF_CONF_SIZE  96
+#define PACKETBUF_CONF_HDR_SIZE 64
+
+#endif /* __CONTIKI_CONF_H__ */

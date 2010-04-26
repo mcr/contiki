@@ -1,3 +1,5 @@
+# -*- makefile -*-
+
 # Adapted from Makefile.msp430
 # Adapted from Makefile.at91sam7
 
@@ -6,12 +8,14 @@ CONTIKI_CPU=$(CONTIKI)/cpu/mc1322x
 
 ### Define the source files we have in the AT91SAM7S port
 
-CONTIKI_CPU_DIRS = . 
+CONTIKI_CPU_DIRS = . lib src board
 
-MC1322X = uart1.c dbg-io.c printf-arch.c maca.c nvm.c crm.c \
-rtimer-arch.c watchdog.c
+MC1322X = dbg-io.c rtimer-arch.c watchdog.c contiki-crm.c contiki-maca.c leds-arch.c leds.c
 
-CONTIKI_TARGET_SOURCEFILES += $(MC1322X) $(SYSAPPS) $(ELFLOADER) \
+CPU_LIBS = $(notdir $(wildcard $(CONTIKI_CPU)/lib/*.c))
+CPU_SRCS = $(notdir $(wildcard $(CONTIKI_CPU)/src/*.c)) $(notdir $(wildcard $(CONTIKI_CPU)/src/*.S))
+
+CONTIKI_TARGET_SOURCEFILES += $(MC1322X) $(CPU_LIBS) $(CPU_SRCS) $(SYSAPPS) $(ELFLOADER) \
 			$(TARGETLIBS) $(UIPDRIVERS) $(USB)
 
 CONTIKI_SOURCEFILES        += $(CONTIKI_TARGET_SOURCEFILES)
@@ -35,16 +39,18 @@ TEXT_BASE = 0x00400000
 export TEXT_BASE
 LINKERSCRIPT = $(CONTIKI_CPU)/mc1322x.lds
 
-STARTUP=${addprefix $(OBJECTDIR)/,startup.o}
+STARTUP=$(OBJECTDIR)/start.o
 
 ARCH_FLAGS= -mcpu=arm7tdmi-s -mthumb-interwork -march=armv4t -mtune=arm7tdmi-s -DCONFIG_ARM -D__ARM__
 THUMB_FLAGS=-mthumb -mcallee-super-interworking
 ARM_FLAGS=
 
-
 CFLAGSNO = -I. -I$(CONTIKI)/core -I$(CONTIKI_CPU) -I$(CONTIKI_CPU)/loader \
 	   -I$(CONTIKI_CPU)/dbg-io \
            -I$(CONTIKI)/platform/$(TARGET) \
+	   -I$(CONTIKI_CPU)/lib/include \
+	   -I$(CONTIKI_CPU)/src \
+	   -I$(CONTIKI_CPU)/board \
            ${addprefix -I,$(APPDIRS)} \
            -DWITH_UIP -DWITH_ASCII -DMCK=$(MCK) \
            -Werror $(ARCH_FLAGS) -g 
@@ -60,7 +66,13 @@ CDEPFLAGS = $(CFLAGS) -D __MAKING_DEPS__
 CUSTOM_RULE_C_TO_OBJECTDIR_O=yes
 CUSTOM_RULE_C_TO_O=yes
 
-$(OBJECTDIR)/isr.o: isr.c
+CFLAGS += -I$(OBJECTDIR) -I$(CONTIKI_CPU)/board -DBOARD=$(TARGET)
+
+$(OBJECTDIR)/board.h: $(OBJECTDIR) 
+	ln -sf ../$(CONTIKI_CPU)/board/$(TARGET).h $(OBJECTDIR)/board.h
+
+
+$(OBJECTDIR)/isr.o: $(CONTIKI_CPU)/src/isr.c
 	$(CC) $(CFLAGS) $(ARM_FLAGS) $< -c -o $@
 
 %.o: %.c
@@ -85,13 +97,13 @@ CUSTOM_RULE_C_TO_CO=yes
 %.ihex: %.$(TARGET)
 	$(OBJCOPY) $^ -O ihex $@
 
-%.bin: %.$(TARGET)
+%_$(TARGET).bin: %.$(TARGET)
 	$(OBJCOPY) -O binary $< $@
 
 symbols.c:
 	@${CONTIKI}/tools/make-empty-symbols
  
-%.$(TARGET): %.co $(PROJECT_OBJECTFILES) contiki-$(TARGET).a $(STARTUP) $(OBJECTDIR)/symbols.o
+%.$(TARGET): $(OBJECTDIR)/board.h  %.co $(PROJECT_OBJECTFILES) contiki-$(TARGET).a $(STARTUP) $(OBJECTDIR)/symbols.o
 	$(CC) $(LDFLAGS) $(CFLAGS) -nostartfiles -o $@ $(filter-out %.a,$^) $(filter %.a,$^) $(filter %.a,$^)
 
 

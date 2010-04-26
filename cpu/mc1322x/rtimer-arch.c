@@ -76,13 +76,13 @@ rtimer_arch_schedule(rtimer_clock_t t)
 	now = rtimer_arch_now();
 	PRINTF("rtimer_arch_schedule time %u; now is %u\n", t,now);
 	if(now>t) {
-		reg32(CRM_RTC_TIMEOUT) = 1;
+		*CRM_RTC_TIMEOUT = 1;
 	} else {
-		reg32(CRM_RTC_TIMEOUT) = t - now;
+		*CRM_RTC_TIMEOUT = t - now;
 	}
 
 	clear_rtc_wu_evt();
 	enable_rtc_wu();
 	enable_rtc_wu_irq();
-	PRINTF("rtimer_arch_schedule CRM_RTC_TIMEOUT is %u\n", reg32(CRM_RTC_TIMEOUT));
+	PRINTF("rtimer_arch_schedule CRM_RTC_TIMEOUT is %u\n", *CRM_RTC_TIMEOUT);
 }

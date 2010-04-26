@@ -54,6 +54,6 @@
 #define RTIMER_ARCH_SECOND 2000 /* bogus value --- you should set xmac_config after calibration */
 #endif
 
-#define rtimer_arch_now() (reg32(CRM_RTC_COUNT))
+#define rtimer_arch_now() (*CRM_RTC_COUNT)
 
 #endif /* __RTIMER_ARCH_H__ */
