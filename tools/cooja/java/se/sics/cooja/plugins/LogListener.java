@@ -254,8 +254,10 @@ public class LogListener extends VisPlugin {
     popupMenu.addSeparator();
     popupMenu.add(new JMenuItem(saveAction));
     popupMenu.addSeparator();
-    popupMenu.add(new JMenuItem(radioLoggerAction));
-    popupMenu.add(new JMenuItem(timeLineAction));
+    JMenu focusMenu = new JMenu("Focus (Space)");
+    focusMenu.add(new JMenuItem(timeLineAction));
+    focusMenu.add(new JMenuItem(radioLoggerAction));
+    popupMenu.add(focusMenu);
     
     logTable.setComponentPopupMenu(popupMenu);
 
@@ -466,13 +468,13 @@ public class LogListener extends VisPlugin {
     }
   };
 
-  private Action timeLineAction = new AbstractAction("to Timeline") {
+  private Action timeLineAction = new AbstractAction("in Timeline ") {
     private static final long serialVersionUID = -6358463434933029699L;
 
     public void actionPerformed(ActionEvent e) {
       TimeLine plugin = (TimeLine) simulation.getGUI().getStartedPlugin(TimeLine.class.getName());
       if (plugin == null) {
-        logger.fatal("No Timeline plugin");
+        /*logger.fatal("No Timeline plugin");*/
         return;
       }
 
@@ -487,13 +489,13 @@ public class LogListener extends VisPlugin {
     }
   };
 
-  private Action radioLoggerAction = new AbstractAction("to Radio Logger") {
+  private Action radioLoggerAction = new AbstractAction("in Radio Logger") {
     private static final long serialVersionUID = -3041714249257346688L;
 
     public void actionPerformed(ActionEvent e) {
       RadioLogger plugin = (RadioLogger) simulation.getGUI().getStartedPlugin(RadioLogger.class.getName());
       if (plugin == null) {
-        logger.fatal("No Radio Logger plugin");
+        /*logger.fatal("No Radio Logger plugin");*/
         return;
       }
 
