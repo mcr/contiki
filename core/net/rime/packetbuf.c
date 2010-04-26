@@ -168,11 +168,10 @@ packetbuf_copyto(void *to)
 int
 packetbuf_hdralloc(int size)
 {
-  if(hdrptr > size) {
+  if(hdrptr >= size) {
     hdrptr -= size;
     return 1;
   }
-  hdrptr = 0;
   return 0;
 }
 /*---------------------------------------------------------------------------*/
