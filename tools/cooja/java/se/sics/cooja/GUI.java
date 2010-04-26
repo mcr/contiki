@@ -3481,9 +3481,11 @@ public class GUI extends Observable {
         pluginSubElement.setText("" + pluginFrame.getLocation().y);
         pluginElement.addContent(pluginSubElement);
 
-        pluginSubElement = new Element("minimized");
-        pluginSubElement.setText(new Boolean(pluginFrame.isIcon()).toString());
-        pluginElement.addContent(pluginSubElement);
+        if (pluginFrame.isIcon()) {
+          pluginSubElement = new Element("minimized");
+          pluginSubElement.setText("" + true);
+          pluginElement.addContent(pluginSubElement);
+        }
       }
 
       config.add(pluginElement);
@@ -3615,9 +3617,18 @@ public class GUI extends Observable {
                 location.y = Integer.parseInt(pluginSubElement.getText());
                 startedPlugin.getGUI().setLocation(location);
               } else if (pluginSubElement.getName().equals("minimized")) {
-                try {
-                  startedPlugin.getGUI().setIcon(Boolean.parseBoolean(pluginSubElement.getText()));
-                } catch (PropertyVetoException e) { }
+                boolean minimized = Boolean.parseBoolean(pluginSubElement.getText());
+                final JInternalFrame pluginGUI = startedPlugin.getGUI();
+                if (minimized && pluginGUI != null) {
+                  SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                      try {
+                        pluginGUI.setIcon(true);
+                      } catch (PropertyVetoException e) {
+                      }
+                    };                    
+                  });
+                }
               }
             }
 
