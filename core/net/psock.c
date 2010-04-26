@@ -167,7 +167,7 @@ data_is_sent_and_acked(CC_REGISTER_ARG struct psock *s)
   return 0;
 }
 /*---------------------------------------------------------------------------*/
-PT_THREAD(psock_send(CC_REGISTER_ARG struct psock *s, const uint8_t *buf,
+PT_THREAD(psock_send(CC_REGISTER_ARG struct psock *s, uint8_t *buf,
 		     unsigned int len))
 {
   PT_BEGIN(&s->psockpt);
@@ -327,7 +327,7 @@ psock_init(CC_REGISTER_ARG struct psock *psock,
 }
 /*---------------------------------------------------------------------------*/
 static char
-copy_to_buf(const uint8_t **buffer, uint16_t *bufsize, const char **str)
+copy_to_buf(uint8_t **buffer, uint16_t *bufsize, const char **str)
 {
   uint16_t len = strlen(*str);
   uint16_t copysize = len;

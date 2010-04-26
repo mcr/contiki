@@ -31,11 +31,10 @@ void maca_set_receiver(void (* recv)(const struct radio_driver *d));
 
 const struct radio_driver maca_driver =
 {
-	maca_send,
-	maca_read,
-	maca_set_receiver,
-	maca_on_request,
-	maca_off_request,
+	.send = maca_send,
+	.read = maca_read,
+	.on = maca_on_request,
+	.off = maca_off_request,
 };
 
 static volatile uint8_t maca_request_on = 0;
