@@ -928,7 +928,6 @@ input_packet(void)
 
 #if WITH_CONTIKIMAC_HEADER
     struct hdr *chdr;
-    int len;
     chdr = packetbuf_dataptr();
     if(chdr->id != CONTIKIMAC_ID) {
       PRINTF("contikimac: failed to parse hdr (%u)\n", packetbuf_totlen());
