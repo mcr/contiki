@@ -95,10 +95,7 @@ void
 stunicast_close(struct stunicast_conn *c)
 {
   unicast_close(&c->c);
-  ctimer_stop(&c->t);
-  if(c->buf != NULL) {
-    queuebuf_free(c->buf);
-  }
+  stunicast_cancel(c);
 }
 /*---------------------------------------------------------------------------*/
 rimeaddr_t *
@@ -168,6 +165,10 @@ void
 stunicast_cancel(struct stunicast_conn *c)
 {
   ctimer_stop(&c->t);
+  if(c->buf != NULL) {
+    queuebuf_free(c->buf);
+    c->buf = NULL;
+  }
 }
 /*---------------------------------------------------------------------------*/
 /** @} */
