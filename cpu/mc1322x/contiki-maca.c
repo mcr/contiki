@@ -29,16 +29,27 @@ static volatile uint8_t tx_complete;
 
 static void (* receiver_callback)(const struct radio_driver *);
 
+int maca_init(void);
 int maca_on_request(void);
 int maca_off_request(void);
 int maca_read(void *buf, unsigned short bufsize);
+int maca_prepare(const void *payload, unsigned short payload_len);
+int maca_transmit(unsigned short transmit_len);
 int maca_send(const void *data, unsigned short len);
-void maca_set_receiver(void (* recv)(const struct radio_driver *d));
+int maca_channel_clear(void);
+int maca_receiving_packet(void);
+int maca_pending_packet(void);
 
 const struct radio_driver maca_driver =
 {
+	.init = maca_init,
+	.prepare = maca_prepare,
+	.transmit = maca_transmit,
 	.send = maca_send,
 	.read = maca_read,
+	.receiving_packet = maca_recieving_packet,
+	.pending_packet = maca_pending_packet,
+	.channel_clear = maca_channel_clear,
 	.on = maca_on_request,
 	.off = maca_off_request,
 };
@@ -47,6 +58,36 @@ static volatile uint8_t maca_request_on = 0;
 static volatile uint8_t maca_request_off = 0;
 
 static process_event_t event_data_ready;
+
+volatile packet_t *prepped_p;
+
+int maca_init(void) {
+	prepped_p = 0;
+	trim_xtal();
+	vreg_init();
+	maca_init();
+	set_channel(0); /* channel 11 */
+	set_power(0x12); /* 0x12 is the highest, not documented */
+	return 1;
+}
+
+/* CCA not implemented */
+int maca_channel_clear(void) {
+	return 1;
+}
+
+/* not sure how to check if a reception is in progress */
+int maca_receiving_packet(void) {
+	return 0;
+}
+
+int maca_pending_packet(void) {
+	if (rx_head != NULL) {
+		return 1;
+	} else {
+		return 0;
+	}
+}
 
 int maca_on_request(void) {
 	maca_request_on = 1;
@@ -66,7 +107,7 @@ int maca_off_request(void) {
 int maca_read(void *buf, unsigned short bufsize) {
 	volatile uint32_t i;
 	volatile packet_t *p;
-
+	
 	if((p = rx_packet())) {
 		PRINTF("maca read");
 #if MACA_RAW_MODE
@@ -92,7 +133,7 @@ int maca_read(void *buf, unsigned short bufsize) {
 	}
 }
 
-int maca_send(const void *payload, unsigned short payload_len) {
+int maca_prepare(const void *payload, unsigned short payload_len) {
 	volatile int i;
 	volatile packet_t *p;
 
@@ -120,16 +161,9 @@ int maca_send(const void *payload, unsigned short payload_len) {
 		}
 		PRINTF("\n\r");
 #endif
-#if BLOCKING_TX		
-		tx_complete = 0;
-#endif
-		tx_packet(p);
-#if BLOCKING_TX
-		/* block until tx_complete, set by maca_tx_callback */
-		/* there are many places in contiki that rely on the */
-		/* transmit call to block */
-		while(!tx_complete); 
-#endif
+
+		prepped_p = p;
+
 		return RADIO_TX_OK;
 	} else {
 		PRINTF("couldn't get free packet for maca_send\n\r");
@@ -137,9 +171,19 @@ int maca_send(const void *payload, unsigned short payload_len) {
 	}
 }
 
-void maca_set_receiver(void (* recv)(const struct radio_driver *))
-{
-  receiver_callback = recv;
+int maca_transmit(unsigned short transmit_len) {
+#if BLOCKING_TX
+	tx_complete = 0;
+#endif
+	tx_packet(prepped_p);
+	prepped_p = 0;
+#if BLOCKING_TX
+	/* block until tx_complete, set by maca_tx_callback */
+	/* there are many places in contiki that rely on the */
+	/* transmit call to block */
+	/* TODO: make sure that check_maca is getting called while waiting for this */
+	while(!tx_complete);
+#endif	
 }
 
 PROCESS(maca_process, "maca process");
@@ -162,11 +206,7 @@ PROCESS_THREAD(maca_process, ev, data)
 			maca_request_off = 0;
 			maca_off();
  		}
-		
-		if (rx_head != NULL) {
-			receiver_callback(&maca_driver);
-		}
-		
+				
  	};
 	
  	PROCESS_END();
