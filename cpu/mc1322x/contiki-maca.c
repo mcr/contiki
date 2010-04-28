@@ -27,61 +27,59 @@ static volatile uint8_t tx_complete;
 
 /* contiki mac driver */
 
-static void (* receiver_callback)(const struct radio_driver *);
+int contiki_maca_init(void);
+int contiki_maca_on_request(void);
+int contiki_maca_off_request(void);
+int contiki_maca_read(void *buf, unsigned short bufsize);
+int contiki_maca_prepare(const void *payload, unsigned short payload_len);
+int contiki_maca_transmit(unsigned short transmit_len);
+int contiki_maca_send(const void *payload, unsigned short payload_len);
+int contiki_maca_channel_clear(void);
+int contiki_maca_receiving_packet(void);
+int contiki_maca_pending_packet(void);
 
-int maca_init(void);
-int maca_on_request(void);
-int maca_off_request(void);
-int maca_read(void *buf, unsigned short bufsize);
-int maca_prepare(const void *payload, unsigned short payload_len);
-int maca_transmit(unsigned short transmit_len);
-int maca_send(const void *data, unsigned short len);
-int maca_channel_clear(void);
-int maca_receiving_packet(void);
-int maca_pending_packet(void);
-
-const struct radio_driver maca_driver =
+const struct radio_driver contiki_maca_driver =
 {
-	.init = maca_init,
-	.prepare = maca_prepare,
-	.transmit = maca_transmit,
-	.send = maca_send,
-	.read = maca_read,
-	.receiving_packet = maca_recieving_packet,
-	.pending_packet = maca_pending_packet,
-	.channel_clear = maca_channel_clear,
-	.on = maca_on_request,
-	.off = maca_off_request,
+	.init = contiki_maca_init,
+	.prepare = contiki_maca_prepare,
+	.transmit = contiki_maca_transmit,
+	.send = contiki_maca_send,
+	.read = contiki_maca_read,
+	.receiving_packet = contiki_maca_receiving_packet,
+	.pending_packet = contiki_maca_pending_packet,
+	.channel_clear = contiki_maca_channel_clear,
+	.on = contiki_maca_on_request,
+	.off = contiki_maca_off_request,
 };
 
-static volatile uint8_t maca_request_on = 0;
-static volatile uint8_t maca_request_off = 0;
+static volatile uint8_t contiki_maca_request_on = 0;
+static volatile uint8_t contiki_maca_request_off = 0;
 
 static process_event_t event_data_ready;
 
 volatile packet_t *prepped_p;
 
-int maca_init(void) {
+int contiki_maca_init(void) {
 	prepped_p = 0;
 	trim_xtal();
 	vreg_init();
-	maca_init();
+	contiki_maca_init();
 	set_channel(0); /* channel 11 */
 	set_power(0x12); /* 0x12 is the highest, not documented */
 	return 1;
 }
 
 /* CCA not implemented */
-int maca_channel_clear(void) {
+int contiki_maca_channel_clear(void) {
 	return 1;
 }
 
 /* not sure how to check if a reception is in progress */
-int maca_receiving_packet(void) {
+int contiki_maca_receiving_packet(void) {
 	return 0;
 }
 
-int maca_pending_packet(void) {
+int contiki_maca_pending_packet(void) {
 	if (rx_head != NULL) {
 		return 1;
 	} else {
@@ -89,28 +87,28 @@ int maca_pending_packet(void) {
 	}
 }
 
-int maca_on_request(void) {
-	maca_request_on = 1;
-	maca_request_off = 0;
+int contiki_maca_on_request(void) {
+	contiki_maca_request_on = 1;
+	contiki_maca_request_off = 0;
 	return 1;
 }
 
-int maca_off_request(void) {
-	maca_request_on = 0;
-	maca_request_off = 1;
+int contiki_maca_off_request(void) {
+	contiki_maca_request_on = 0;
+	contiki_maca_request_off = 1;
 	return 1;
 }
 
 /* it appears that the mc1332x radio cannot */
 /* receive packets where the last three bits of the first byte */
 /* is equal to 2 --- even in promiscuous mode */
-int maca_read(void *buf, unsigned short bufsize) {
+int contiki_maca_read(void *buf, unsigned short bufsize) {
 	volatile uint32_t i;
 	volatile packet_t *p;
 	
 	if((p = rx_packet())) {
 		PRINTF("maca read");
-#if MACA_RAW_MODE
+#if CONTIKI_MACA_RAW_MODE
 		/* offset + 1 and size - 1 to strip the raw mode prepended byte */
 		/* work around since maca can't receive acks bigger than five bytes */
 		PRINTF(" raw mode");
@@ -120,7 +118,7 @@ int maca_read(void *buf, unsigned short bufsize) {
 		PRINTF(": p->length 0x%0x bufsize 0x%0x \n\r", p->length, bufsize);
 		if((p->length) < bufsize) bufsize = (p->length);
 		memcpy(buf, (uint8_t *)(p->data + p->offset), bufsize);
-#if CONTIKI_MACA_DEBUG
+#if CONTIKI_CONTIKI_MACA_DEBUG
 		for( i = p->offset ; i < (bufsize + p->offset) ; i++) {
 			PRINTF(" %02x",p->data[i]);
 		}
@@ -133,14 +131,14 @@ int maca_read(void *buf, unsigned short bufsize) {
 	}
 }
 
-int maca_prepare(const void *payload, unsigned short payload_len) {
+int contiki_maca_prepare(const void *payload, unsigned short payload_len) {
 	volatile int i;
 	volatile packet_t *p;
 
 	if ((p = get_free_packet())) {
 		PRINTF("maca send");
 		maca_on();
-#if MACA_RAW_MODE
+#if CONTIKI_MACA_RAW_MODE
 		p->offset = 1;
 		p->length = payload_len + 1;
 #else 
@@ -149,12 +147,12 @@ int maca_prepare(const void *payload, unsigned short payload_len) {
 #endif
 		if(payload_len > MAX_PACKET_SIZE)  return RADIO_TX_ERR;
 		memcpy((uint8_t *)(p->data + p->offset), payload, payload_len);
-#if MACA_RAW_MODE
+#if CONTIKI_MACA_RAW_MODE
 		p->offset = 0;
-		p->data[0] = MACA_PREPEND_BYTE;
+		p->data[0] = CONTIKI_MACA_PREPEND_BYTE;
 		PRINTF(" raw mode");
 #endif
-#if CONTIKI_MACA_DEBUG
+#if CONTIKI_CONTIKI_MACA_DEBUG
 		PRINTF(": sending %d bytes\n\r", payload_len);
 		for(i = p->offset ; i < (p->length + p->offset); i++) {
 			PRINTF(" %02x",p->data[i]);
@@ -166,19 +164,19 @@ int maca_prepare(const void *payload, unsigned short payload_len) {
 
 		return RADIO_TX_OK;
 	} else {
-		PRINTF("couldn't get free packet for maca_send\n\r");
+		PRINTF("couldn't get free packet for contiki_maca_send\n\r");
 		return RADIO_TX_ERR;
 	}
 }
 
-int maca_transmit(unsigned short transmit_len) {
+int contiki_maca_transmit(unsigned short transmit_len) {
 #if BLOCKING_TX
 	tx_complete = 0;
 #endif
 	tx_packet(prepped_p);
 	prepped_p = 0;
 #if BLOCKING_TX
-	/* block until tx_complete, set by maca_tx_callback */
+	/* block until tx_complete, set by contiki_maca_tx_callback */
 	/* there are many places in contiki that rely on the */
 	/* transmit call to block */
 	/* TODO: make sure that check_maca is getting called while waiting for this */
@@ -186,8 +184,14 @@ int maca_transmit(unsigned short transmit_len) {
 #endif	
 }
 
-PROCESS(maca_process, "maca process");
-PROCESS_THREAD(maca_process, ev, data)
+int contiki_maca_send(const void *payload, unsigned short payload_len) {
+	contiki_maca_prepare(payload, payload_len);
+	contiki_maca_transmit(payload_len);
+	return RADIO_TX_OK;
+}
+
+PROCESS(contiki_maca_process, "maca process");
+PROCESS_THREAD(contiki_maca_process, ev, data)
 {
  	volatile uint32_t i;
 	
@@ -197,13 +201,13 @@ PROCESS_THREAD(maca_process, ev, data)
 		PROCESS_WAIT_EVENT_UNTIL(ev == event_data_ready);
 
 		/* check if there is a request to turn the radio on or off */
-		if(maca_request_on == 1) {
-			maca_request_on = 0;
+		if(contiki_maca_request_on == 1) {
+			contiki_maca_request_on = 0;
 			maca_on();
  		}
 
-		if(maca_request_off == 1) {
-			maca_request_off = 0;
+		if(contiki_maca_request_off == 1) {
+			contiki_maca_request_off = 0;
 			maca_off();
  		}
 				
@@ -212,12 +216,12 @@ PROCESS_THREAD(maca_process, ev, data)
  	PROCESS_END();
 }
 
-void maca_rx_callback(volatile packet_t *p __attribute((unused))) {
-	process_post(&maca_process, event_data_ready, NULL);
+void contiki_maca_rx_callback(volatile packet_t *p __attribute((unused))) {
+	process_post(&contiki_maca_process, event_data_ready, NULL);
 }
 
 #if BLOCKING_TX
-void maca_tx_callback(volatile packet_t *p __attribute((unused))) {
+void contiki_maca_tx_callback(volatile packet_t *p __attribute((unused))) {
 	tx_complete = 1;
 }
 #endif
