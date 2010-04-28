@@ -5,8 +5,11 @@
 /* contiki */
 #include "radio.h"
 #include "sys/process.h"
+#include "net/rime/packetbuf.h"
+#include "net/netstack.h"
 
 #include "mc1322x.h"
+#include "contiki-conf.h"
 
 #define CONTIKI_MACA_DEBUG 0
 #if CONTIKI_MACA_DEBUG
@@ -179,8 +182,7 @@ int contiki_maca_transmit(unsigned short transmit_len) {
 	/* block until tx_complete, set by contiki_maca_tx_callback */
 	/* there are many places in contiki that rely on the */
 	/* transmit call to block */
-	/* TODO: make sure that check_maca is getting called while waiting for this */
-	while(!tx_complete);
+ 	while(!tx_complete && (tx_head != 0));
 #endif	
 }
 
@@ -194,11 +196,13 @@ PROCESS(contiki_maca_process, "maca process");
 PROCESS_THREAD(contiki_maca_process, ev, data)
 {
  	volatile uint32_t i;
+	int len;
 	
  	PROCESS_BEGIN();
 
 	while (1) {
 		PROCESS_WAIT_EVENT_UNTIL(ev == event_data_ready);
+//		PROCESS_YIELD_UNTIL(ev == PROCESS_EVENT_POLL);
 
 		/* check if there is a request to turn the radio on or off */
 		if(contiki_maca_request_on == 1) {
@@ -210,18 +214,27 @@ PROCESS_THREAD(contiki_maca_process, ev, data)
 			contiki_maca_request_off = 0;
 			maca_off();
  		}
-				
+
+		if (rx_head != NULL) {
+			packetbuf_clear();
+			len = contiki_maca_read(packetbuf_dataptr(), PACKETBUF_SIZE);
+			if(len > 0) {
+				packetbuf_set_datalen(len);				
+				NETSTACK_RDC.input();
+			}
+		}
+		
  	};
 	
  	PROCESS_END();
 }
 
-void contiki_maca_rx_callback(volatile packet_t *p __attribute((unused))) {
+void maca_rx_callback(volatile packet_t *p __attribute((unused))) {
 	process_post(&contiki_maca_process, event_data_ready, NULL);
 }
 
 #if BLOCKING_TX
-void contiki_maca_tx_callback(volatile packet_t *p __attribute((unused))) {
+void maca_tx_callback(volatile packet_t *p __attribute((unused))) {
 	tx_complete = 1;
 }
 #endif

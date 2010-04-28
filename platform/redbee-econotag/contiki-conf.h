@@ -115,9 +115,9 @@
 #define XMAC_CONF_ANNOUNCEMENTS          0
 #define CONTIKIMAC_CONF_ANNOUNCEMENTS    0
 
-#define CONTIKIMAC_CONF_COMPOWER         1
-#define XMAC_CONF_COMPOWER               1
-#define CXMAC_CONF_COMPOWER              1
+#define CONTIKIMAC_CONF_COMPOWER         0
+#define XMAC_CONF_COMPOWER               0
+#define CXMAC_CONF_COMPOWER              0
 
 #define COLLECT_NEIGHBOR_CONF_MAX_NEIGHBORS      32
 

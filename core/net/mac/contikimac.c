@@ -718,10 +718,10 @@ send_packet(mac_callback_t mac_callback, void *mac_callback_ptr)
      packet will be retransmitted later by the MAC protocol
      instread. */
   if(NETSTACK_RADIO.receiving_packet() || NETSTACK_RADIO.pending_packet()) {
-    we_are_sending = 0;
-    PRINTF("contikimac: collision receiving %d, pending %d\n",
-           NETSTACK_RADIO.receiving_packet(), NETSTACK_RADIO.pending_packet());
-    return MAC_TX_COLLISION;
+	  we_are_sending = 0;
+	  PRINTF("contikimac: collision receiving %d, pending %d\n",
+		 NETSTACK_RADIO.receiving_packet(), NETSTACK_RADIO.pending_packet());
+	  return MAC_TX_COLLISION;
   }
   
   /* Switch off the radio to ensure that we didn't start sending while
