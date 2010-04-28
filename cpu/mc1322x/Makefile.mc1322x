@@ -10,7 +10,7 @@ CONTIKI_CPU=$(CONTIKI)/cpu/mc1322x
 
 CONTIKI_CPU_DIRS = . lib src board
 
-MC1322X = dbg-io.c rtimer-arch.c watchdog.c contiki-crm.c contiki-maca.c leds-arch.c leds.c
+MC1322X = dbg-io.c rtimer-arch.c watchdog.c contiki-crm.c contiki-maca.c contiki-misc.c leds-arch.c leds.c
 
 CPU_LIBS = $(notdir $(wildcard $(CONTIKI_CPU)/lib/*.c))
 CPU_SRCS = $(notdir $(wildcard $(CONTIKI_CPU)/src/*.c)) $(notdir $(wildcard $(CONTIKI_CPU)/src/*.S))
@@ -41,7 +41,7 @@ LINKERSCRIPT = $(CONTIKI_CPU)/mc1322x.lds
 
 STARTUP=$(OBJECTDIR)/start.o
 
-ARCH_FLAGS= -mcpu=arm7tdmi-s -mthumb-interwork -march=armv4t -mtune=arm7tdmi-s -DCONFIG_ARM -D__ARM__
+ARCH_FLAGS= -mcpu=arm7tdmi-s -mthumb-interwork -march=armv4t -mtune=arm7tdmi-s -DCONFIG_ARM -D__ARM__ #-Wcast-align
 THUMB_FLAGS=-mthumb -mcallee-super-interworking
 ARM_FLAGS=
 
@@ -52,11 +52,11 @@ CFLAGSNO = -I. -I$(CONTIKI)/core -I$(CONTIKI_CPU) -I$(CONTIKI_CPU)/loader \
 	   -I$(CONTIKI_CPU)/src \
 	   -I$(CONTIKI_CPU)/board \
            ${addprefix -I,$(APPDIRS)} \
-           -DWITH_UIP -DWITH_ASCII -DMCK=$(MCK) \
+           -DWITH_ASCII -DMCK=$(MCK) \
            -Werror $(ARCH_FLAGS) -g 
 
 CFLAGS  += $(CFLAGSNO) -Os -DRUN_AS_SYSTEM -DROM_RUN -fno-strict-aliasing  -fno-common -ffixed-r8 -msoft-float -DTEXT_BASE=$(TEXT_BASE) -fno-builtin-printf -fno-builtin-sprintf
-LDFLAGS += -T $(LINKERSCRIPT) -nostartfiles -static
+LDFLAGS += -T $(LINKERSCRIPT) -nostartfiles -static -Wl,-Map=contiki-$(TARGET).map,-export-dynamic
 AFLAGS := $(AFLAGS_DEBUG) -D__ASSEMBLY__ $(CPPFLAGS) -gstabs
 
 CDEPFLAGS = $(CFLAGS) -D __MAKING_DEPS__
@@ -93,6 +93,7 @@ CUSTOM_RULE_C_TO_CO=yes
 %.co: %.c
 	$(CC) $(CFLAGS) $(THUMB_FLAGS) $< -c -o $@
 
+.PRECIOUS: %.bin
 
 %.ihex: %.$(TARGET)
 	$(OBJCOPY) $^ -O ihex $@

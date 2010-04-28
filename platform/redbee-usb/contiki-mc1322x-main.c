@@ -32,6 +32,7 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 
 #include <stdbool.h>
 
@@ -56,6 +57,18 @@
 
 #include "contiki-maca.h"
 
+#define DEBUG 1
+#if DEBUG
+#include <stdio.h>
+#define PRINTF(...) printf(__VA_ARGS__)
+#define PRINT6ADDR(addr) PRINTF(" %02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x ", ((u8_t *)addr)[0], ((u8_t *)addr)[1], ((u8_t *)addr)[2], ((u8_t *)addr)[3], ((u8_t *)addr)[4], ((u8_t *)addr)[5], ((u8_t *)addr)[6], ((u8_t *)addr)[7], ((u8_t *)addr)[8], ((u8_t *)addr)[9], ((u8_t *)addr)[10], ((u8_t *)addr)[11], ((u8_t *)addr)[12], ((u8_t *)addr)[13], ((u8_t *)addr)[14], ((u8_t *)addr)[15])
+#define PRINTLLADDR(lladdr) PRINTF(" %02x:%02x:%02x:%02x:%02x:%02x ",(lladdr)->addr[0], (lladdr)->addr[1], (lladdr)->addr[2], (lladdr)->addr[3],(lladdr)->addr[4], (lladdr)->addr[5])
+#else
+#define PRINTF(...)
+#define PRINT6ADDR(addr)
+#define PRINTLLADDR(addr)
+#endif
+
 #ifndef RIMEADDR_NVM
 #define RIMEADDR_NVM 0x1E000
 #endif
@@ -70,6 +83,7 @@
 #else
 #define PRINTF(...)
 #endif
+
 
 void
 init_lowlevel(void)
@@ -184,7 +198,7 @@ main(void)
 //	rime_init(nullmac_init(&maca_driver));
 //	rime_init(xmac_init(&maca_driver));
 //	rime_init(lpp_init(&maca_driver));
-	rime_init(sicslowmac_init(&maca_driver));
+//	rime_init(sicslowmac_init(&maca_driver));
 
 #if !(USE_32KHZ_XTAL)
 	PRINTF("setting xmac to use calibrated rtc value\n\r");
@@ -207,15 +221,75 @@ main(void)
 	}
 	printf("%d\n", addr.u8[i]);
 
-	/* Autostart processes */
-	autostart_start(autostart_processes);
-	
 	//Give ourselves a prefix
 	//init_net();
 	
 	printf("\n\r********BOOTING CONTIKI*********\n\r");
 	
+#if WITH_UIP6
+  memcpy(&uip_lladdr.addr, &addr.u8, 8);	
+  sicslowpan_init(sicslowmac_init(&maca_driver));
+  process_start(&tcpip_process, NULL);
+  printf(" %s channel %u\n", sicslowmac_driver.name, RF_CHANNEL);
+#if UIP_CONF_ROUTER
+  rime_init(rime_udp_init(NULL));
+  uip_router_register(&rimeroute);
+#endif /* UIP_CONF_ROUTER */
+#else /* WITH_UIP6 */
+#if WITH_NULLMAC
+  rime_init(nullmac_init(&maca_driver));
+#else /* WITH_NULLMAC */
+  rime_init(xmac_init(&maca_driver));
+#endif /* WITH_NULLMAC */
+  printf(" %s channel %u\n", rime_mac->name, RF_CHANNEL);
+#endif /* WITH_UIP6 */
+
+#if PROFILE_CONF_ON
+  profile_init();
+#endif /* PROFILE_CONF_ON */
+
+#if TIMESYNCH_CONF_ENABLED
+  timesynch_init();
+  timesynch_set_authority_level(rimeaddr_node_addr.u8[0]);
+#endif /* TIMESYNCH_CONF_ENABLED */
+
+#if WITH_UIP
+  process_start(&tcpip_process, NULL);
+  //process_start(&uip_fw_process, NULL);	/* Start IP output */
+  //process_start(&slip_process, NULL);
+
+  //slip_set_input_callback(set_gateway);
+
+//  {
+//    uip_ipaddr_t hostaddr, netmask;
+
+//    uip_init();
+
+//    uip_ipaddr(&hostaddr, 172,16,
+//	       rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1]);
+//    uip_ipaddr(&netmask, 255,255,0,0);
+    //uip_ipaddr_copy(&meshif.ipaddr, &hostaddr);
+
+    //uip_sethostaddr(&hostaddr);
+    //uip_setnetmask(&netmask);
+    //uip_over_mesh_set_net(&hostaddr, &netmask);
+    /*    uip_fw_register(&slipif);*/
+    //uip_over_mesh_set_gateway_netif(&slipif);
+    //uip_fw_default(&meshif);
+    //uip_over_mesh_init(UIP_OVER_MESH_CHANNEL);
+//    printf("uIP started with IP address %d.%d.%d.%d\n",
+//	   uip_ipaddr_to_quad(&hostaddr));
+//  }
+#endif /* WITH_UIP */
+
+  PRINTF("Local IPv6 address: ");
+  PRINT6ADDR(&uip_netif_physical_if.addresses[0].ipaddr);
+  PRINTF("\n");
+
 	printf("System online.\n\r");
+	
+	/* Autostart processes */
+	autostart_start(autostart_processes);
 	
 	/* Main scheduler loop */
 	while(1) {

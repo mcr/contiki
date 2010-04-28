@@ -2,9 +2,8 @@
 #include <sys/cc.h>
 #include <sys/etimer.h>
 
-#include "utils.h"
-#include "tmr.h"
-#include "isr.h"
+#include "contiki-conf.h"
+#include "mc1322x.h"
 
 #include "contiki-conf.h"
 
@@ -39,10 +38,6 @@ clock_init()
 	enable_irq(TMR);
 
 }
-
-#define GPIO_DATA0      0x80000008
-
-static volatile uint8_t tmr_led,tmr_led9=0;
 
 void tmr0_isr(void) {
 	if(bit_is_set(*TMR(0,CSCTRL),TCF1)) {
