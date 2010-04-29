@@ -1,0 +1,126 @@
+/*
+ * Copyright (c) 2006, Technical University of Munich
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the Institute nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE INSTITUTE AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE INSTITUTE OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ *
+ * This file is part of the Contiki operating system.
+ *
+ * @(#)$$
+ */
+
+/**
+ * \file
+ *         Configuration for MC1322x hobby board based on 
+ *         Configuration for sample STK 501 Contiki kernel
+ *
+ * \author
+ *         Originial by:
+ *         Simon Barner <barner@in.tum.de
+ *         This version by:
+ *         Mariano Alvira <mar@devl.org>
+ */
+
+#ifndef __CONTIKI_CONF_H__
+#define __CONTIKI_CONF_H__
+
+#include <stdint.h>
+
+/* mc1322x files */
+#include "contiki-mc1322x-conf.h"
+/* this is from cpu/mc1322x/board */
+#include "freescale-ncb.h"
+
+/* Clock ticks per second */
+#define CLOCK_CONF_SECOND 100
+
+/* Baud rate */
+#define MOD 9999
+/*  230400 bps, INC=767, MOD=9999, 24Mhz 16x samp */
+/*  115200 bps, INC=767, MOD=9999, 24Mhz 8x samp */
+#define INC 767  
+/*  921600 bps, MOD=9999, 24Mhz 16x samp */
+//#define INC 3071 
+#define SAMP UCON_SAMP_8X
+//#define SAMP UCON_SAMP_16X
+
+#define uart_init uart1_init
+#define dbg_putchar(x) uart1_putchar(x)
+
+#define USE_FORMATTED_STDIO 1
+#define MACA_DEBUG          0
+#define MACA_RAW_MODE       0
+#define USE_32KHZ_XTAL      0
+
+#define QUEUEBUF_CONF_NUM     8
+#define RIMEADDR_CONF_SIZE    8
+#define PACKETBUF_CONF_SIZE  127
+#define PACKETBUF_CONF_HDR_SIZE 64
+
+#define RF_CHANNEL 11
+#define BLOCKING_TX 1
+
+/* 0 for IPv6, or 1 for HC1, 2 for HC01 */
+#define SICSLOWPAN_CONF_COMPRESSION_IPV6 0 
+#define SICSLOWPAN_CONF_COMPRESSION_HC1  1 
+#define SICSLOWPAN_CONF_COMPRESSION_HC01 2
+
+#define SICSLOWPAN_CONF_COMPRESSION       SICSLOWPAN_CONF_COMPRESSION_HC01 
+#define SICSLOWPAN_CONF_MAX_ADDR_CONTEXTS 2
+#define SICSLOWPAN_CONF_FRAG              1 
+
+#define SICSLOWPAN_CONF_CONVENTIONAL_MAC	1
+
+#define SICSLOWPAN_CONF_MAXAGE 5
+
+#define UIP_CONF_LL_802154       1
+#define UIP_CONF_LLH_LEN         0
+
+#define UIP_CONF_MAX_CONNECTIONS 2
+#define UIP_CONF_MAX_LISTENPORTS 2
+#define UIP_CONF_UDP_CONNS       2
+
+#define UIP_CONF_IP_FORWARD      0
+#define UIP_CONF_FWCACHE_SIZE    0
+
+#define UIP_CONF_IPV6            1
+#define UIP_CONF_IPV6_CHECKS     1
+#define UIP_CONF_IPV6_QUEUE_PKT  1
+#define UIP_CONF_IPV6_REASSEMBLY 0
+#define UIP_CONF_NETIF_MAX_ADDRESSES  3
+#define UIP_CONF_ND6_MAX_PREFIXES     3
+#define UIP_CONF_ND6_MAX_NEIGHBORS    4  
+#define UIP_CONF_ND6_MAX_DEFROUTERS   2
+#define UIP_CONF_ICMP6           1
+
+#define UIP_CONF_UDP             1
+#define UIP_CONF_UDP_CHECKSUMS   1
+
+#define UIP_CONF_TCP             1
+#define UIP_CONF_TCP_SPLIT       1
+
+#define UIP_CONF_LOGGING         1
+
+#endif /* __CONTIKI_CONF_H__ */
