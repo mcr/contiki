@@ -92,7 +92,7 @@
 #define DEFAULT_MIN_HOPRANKINC          4
 
 /* Represents 2^n ms. */
-#define DEFAULT_DIO_INTERVAL_MIN        10
+#define DEFAULT_DIO_INTERVAL_MIN        12
 
 /* Maximum amount of timer doublings. */
 #define DEFAULT_DIO_INTERVAL_DOUBLINGS  8
