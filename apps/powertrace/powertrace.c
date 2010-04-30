@@ -43,6 +43,7 @@
 #include "node-id.h"
 #include "powertrace.h"
 #include "net/rime.h"
+#include "node-id.h"
 
 #include <stdio.h>
 
@@ -125,6 +126,7 @@ powertrace_stop(void)
   process_exit(&powertrace_process);
 }
 /*---------------------------------------------------------------------------*/
+#if ! UIP_CONF_IPV6
 static void
 sniffprint(char *prefix, int seqno)
 {
@@ -189,3 +191,9 @@ powertrace_sniff(powertrace_onoff_t onoff)
   }
 }
 /*---------------------------------------------------------------------------*/
+#else /* ! UIP_CONF_IPV6 */
+void
+powertrace_sniff(powertrace_onoff_t onoff)
+{
+}
+#endif /* ! UIP_CONF_IPV6 */
