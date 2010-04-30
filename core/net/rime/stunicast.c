@@ -74,7 +74,8 @@ sent_by_uc(struct unicast_conn *uc, int status, int num_tx)
   register struct stunicast_conn *c = (struct stunicast_conn *)uc;
   PRINTF("%d.%d: stunicast: recv_from_uc from %d.%d\n",
 	 rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1],
-	from->u8[0], from->u8[1]);
+         packetbuf_addr(PACKETBUF_ADDR_SENDER)->u8[0],
+         packetbuf_addr(PACKETBUF_ADDR_SENDER)->u8[1]);
   if(c->u->sent != NULL) {
     c->u->sent(c, status, num_tx);
   }
