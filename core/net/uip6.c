@@ -94,6 +94,10 @@
 #define PRINT6ADDR(addr)
 #endif
 
+#if UIP_CONF_IPV6_RPL
+void uip_rpl_input(void);
+#endif /* UIP_CONF_IPV6_RPL */
+
 #if UIP_LOGGING == 1
 #include <stdio.h>
 void uip_log(char *msg);
@@ -1404,8 +1408,15 @@ uip_process(u8_t flag)
     }
   }
   PRINTF("udp: no matching connection found\n");
+
+#if UIP_UDP_SEND_UNREACH_NOPORT
+  uip_icmp6_error_output(ICMP6_DST_UNREACH, ICMP6_DST_UNREACH_NOPORT, 0);
+  UIP_STAT(++uip_stat.ip.drop);
+  goto send;
+#else
   goto drop;
-  
+#endif
+
  udp_found:
   PRINTF("In udp_found\n");
  
