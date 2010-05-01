@@ -126,17 +126,6 @@
 /* Handle 10 routes    */
 #define UIP_CONF_DS6_ROUTE_NBU   10
 
-#define UIP_DS6_ROUTE_STATE_TYPE rpl_route_entry_t
-/* Needed for the extended route entry state */
-typedef struct rpl_route_entry {
-  uint32_t lifetime;
-  uint32_t saved_lifetime;
-  void *dag;
-  uint8_t learned_from;
-} rpl_route_entry_t;
-
-#define UIP_CONF_DS6_NEIGHBOR_STATE_CHANGED rpl_ds6_neighbor_callback
-
 #define UIP_CONF_ND6_SEND_RA		0
 #define UIP_CONF_ND6_REACHABLE_TIME     600000
 #define UIP_CONF_ND6_RETRANS_TIMER      10000
