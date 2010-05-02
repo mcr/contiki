@@ -219,7 +219,7 @@ queuebuf_datalen(struct queuebuf *b)
 const rimeaddr_t *
 queuebuf_addr(struct queuebuf *b, uint8_t type)
 {
-  return &b->addrs[type];
+  return &b->addrs[type - PACKETBUF_ADDR_FIRST].addr;
 }
 /*---------------------------------------------------------------------------*/
 /** @} */
