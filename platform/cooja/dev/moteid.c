@@ -38,6 +38,7 @@ const struct simInterface moteid_interface;
 // COOJA variables
 int simMoteID;
 char simMoteIDChanged;
+int simRandomSeed;
 
 /*-----------------------------------------------------------------------------------*/
 static void
@@ -45,7 +46,7 @@ doInterfaceActionsBeforeTick(void)
 {
   if (simMoteIDChanged) {
     simMoteIDChanged = 0;
-	random_init((simMoteID+1));
+	random_init(simRandomSeed);
   }
 }
 /*-----------------------------------------------------------------------------------*/
