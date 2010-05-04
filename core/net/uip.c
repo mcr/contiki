@@ -127,7 +127,8 @@ struct uip_eth_addr uip_ethaddr = {{0,0,0,0,0,0}};
 #endif
 
 #ifndef UIP_CONF_EXTERNAL_BUFFER
-u8_t uip_buf[UIP_BUFSIZE + 2];   /* The packet buffer that contains
+static uint32_t uip_buf32[(UIP_BUFSIZE + 3) / 4];
+uint8_t *uip_buf = (uint8_t *)uip_buf32;  /* The packet buffer that contains
 				    incoming packets. */
 #endif /* UIP_CONF_EXTERNAL_BUFFER */
 

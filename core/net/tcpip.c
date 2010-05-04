@@ -76,7 +76,9 @@ void uip_log(char *msg);
 #ifdef UIP_FALLBACK_INTERFACE
 extern struct uip_fallback_interface UIP_FALLBACK_INTERFACE;
 #endif
-
+#if UIP_CONF_IPV6_RPL
+void rpl_init(void);
+#endif
 process_event_t tcpip_event;
 #if UIP_CONF_ICMP6
 process_event_t tcpip_icmp6_event;
@@ -752,6 +754,11 @@ PROCESS_THREAD(tcpip_process, ev, data)
 #ifdef UIP_FALLBACK_INTERFACE
   UIP_FALLBACK_INTERFACE.init();
 #endif
+/* initialize RPL if configured for using RPL */
+#if UIP_CONF_IPV6_RPL
+  rpl_init();
+#endif /* UIP_CONF_IPV6_RPL */
+
   while(1) {
     PROCESS_YIELD();
     eventhandler(ev, data);

@@ -113,9 +113,9 @@ struct announcement_msg {
 
 #define MAX_PHASE_STROBE_TIME              RTIMER_ARCH_SECOND / 20
 
-#define CCA_COUNT_MAX 2
-#define CCA_CHECK_TIME                     RTIMER_ARCH_SECOND / 8192 //- RTIMER_ARCH_SECOND / 5000
-#define CCA_SLEEP_TIME                     RTIMER_ARCH_SECOND / 2000 //- RTIMER_ARCH_SECOND / 5000 //+ CCA_CHECK_TIME
+#define CCA_COUNT_MAX                      2
+#define CCA_CHECK_TIME                     RTIMER_ARCH_SECOND / 8192
+#define CCA_SLEEP_TIME                     RTIMER_ARCH_SECOND / 2000
 #define CHECK_TIME                         (CCA_COUNT_MAX * (CCA_CHECK_TIME + CCA_SLEEP_TIME))
 
 #define STROBE_TIME                        (CYCLE_TIME + 2 * CHECK_TIME)
@@ -621,6 +621,7 @@ send_packet(mac_callback_t mac_callback, void *mac_callback_ptr)
   if(is_streaming) {
     packetbuf_set_attr(PACKETBUF_ATTR_PENDING, 1);
   }
+  packetbuf_set_attr(PACKETBUF_ATTR_MAC_ACK, 1);
 
 #if WITH_CONTIKIMAC_HEADER
   hdrlen = packetbuf_totlen();
@@ -928,7 +929,6 @@ input_packet(void)
 
 #if WITH_CONTIKIMAC_HEADER
     struct hdr *chdr;
-    int len;
     chdr = packetbuf_dataptr();
     if(chdr->id != CONTIKIMAC_ID) {
       PRINTF("contikimac: failed to parse hdr (%u)\n", packetbuf_totlen());

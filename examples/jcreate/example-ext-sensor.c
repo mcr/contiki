@@ -57,10 +57,6 @@ PROCESS_THREAD(ext_sensor_process, ev, data)
   static int time;
   PROCESS_BEGIN();
 
-  /* The Sentilla JCreate has 8 LEDs, and we need to set the ports
-     correctly. */
-  LEDS_PxDIR = 0xff;
-  LEDS_PxOUT = 0xff;
   SENSORS_ACTIVATE(ext_sensor);
 
   leds_invert(LEDS_ALL);

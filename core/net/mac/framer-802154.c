@@ -93,7 +93,7 @@ create(void)
   if(rimeaddr_cmp(packetbuf_addr(PACKETBUF_ADDR_RECEIVER), &rimeaddr_null)) {
     params.fcf.ack_required = 0;
   } else {
-    params.fcf.ack_required = 1; //packetbuf_attr(PACKETBUF_ATTR_RELIABLE);
+    params.fcf.ack_required = packetbuf_attr(PACKETBUF_ATTR_MAC_ACK);
   }
   params.fcf.panid_compression = 0;
 

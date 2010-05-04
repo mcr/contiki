@@ -94,6 +94,10 @@
 #define PRINT6ADDR(addr)
 #endif
 
+#if UIP_CONF_IPV6_RPL
+void uip_rpl_input(void);
+#endif /* UIP_CONF_IPV6_RPL */
+
 #if UIP_LOGGING == 1
 #include <stdio.h>
 void uip_log(char *msg);
@@ -166,7 +170,8 @@ u8_t uip_ext_opt_offset = 0;
  */
 /** Packet buffer for incoming and outgoing packets */
 #ifndef UIP_CONF_EXTERNAL_BUFFER
-u8_t uip_buf[UIP_BUFSIZE + 2];
+static uint32_t uip_buf32[(UIP_BUFSIZE + 3) / 4];
+uint8_t *uip_buf = (uint8_t *) uip_buf32;
 #endif /* UIP_CONF_EXTERNAL_BUFFER */
 
 /* The uip_appdata pointer points to application data. */
@@ -1015,7 +1020,8 @@ uip_process(u8_t flag)
     }
   }
 #endif /* UIP_UDP */
-   
+
+  
   /* This is where the input processing starts. */
   UIP_STAT(++uip_stat.ip.recv);
    
@@ -1028,7 +1034,6 @@ uip_process(u8_t flag)
     UIP_LOG("ipv6: invalid version.");
     goto drop;
   }
-   
   /*
    * Check the size of the packet. If the size reported to us in
    * uip_len is smaller the size reported in the IP header, we assume
@@ -1116,7 +1121,8 @@ uip_process(u8_t flag)
   }
 #else /* UIP_CONF_ROUTER */
   if(!uip_ds6_is_my_addr(&UIP_IP_BUF->destipaddr) &&
-     !uip_ds6_is_my_maddr(&UIP_IP_BUF->destipaddr)) {
+     !uip_ds6_is_my_maddr(&UIP_IP_BUF->destipaddr) &&
+     !uip_is_addr_mcast(&UIP_IP_BUF->destipaddr)) {
     PRINTF("Dropping packet, not for me\n");
     UIP_STAT(++uip_stat.ip.drop);
     goto drop;
@@ -1368,7 +1374,8 @@ uip_process(u8_t flag)
   if(UIP_UDP_BUF->udpchksum != 0 && uip_udpchksum() != 0xffff) {
     UIP_STAT(++uip_stat.udp.drop);
     UIP_STAT(++uip_stat.udp.chkerr);
-    UIP_LOG("udp: bad checksum.");
+    PRINTF("udp: bad checksum 0x%04x 0x%04x\n", UIP_UDP_BUF->udpchksum,
+           uip_udpchksum());
     goto drop;
   }
 #else /* UIP_UDP_CHECKSUMS */
@@ -1377,7 +1384,7 @@ uip_process(u8_t flag)
 
   /* Make sure that the UDP destination port number is not zero. */
   if(UIP_UDP_BUF->destport == 0) {
-    UIP_LOG("udp: zero port.");
+    PRINTF("udp: zero port.\n");
     goto drop;
   }
 
@@ -1402,8 +1409,15 @@ uip_process(u8_t flag)
     }
   }
   PRINTF("udp: no matching connection found\n");
+
+#if UIP_UDP_SEND_UNREACH_NOPORT
+  uip_icmp6_error_output(ICMP6_DST_UNREACH, ICMP6_DST_UNREACH_NOPORT, 0);
+  UIP_STAT(++uip_stat.ip.drop);
+  goto send;
+#else
   goto drop;
-  
+#endif
+
  udp_found:
   PRINTF("In udp_found\n");
  
@@ -1432,8 +1446,8 @@ uip_process(u8_t flag)
   UIP_UDP_BUF->udplen = HTONS(uip_slen + UIP_UDPH_LEN);
   UIP_UDP_BUF->udpchksum = 0;
 
-  UIP_TCP_BUF->srcport  = uip_udp_conn->lport;
-  UIP_TCP_BUF->destport = uip_udp_conn->rport;
+  UIP_UDP_BUF->srcport  = uip_udp_conn->lport;
+  UIP_UDP_BUF->destport = uip_udp_conn->rport;
 
   uip_ipaddr_copy(&UIP_IP_BUF->destipaddr, &uip_udp_conn->ripaddr);
   uip_ds6_select_src(&UIP_IP_BUF->srcipaddr, &UIP_IP_BUF->destipaddr);

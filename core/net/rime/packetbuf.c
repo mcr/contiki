@@ -159,6 +159,10 @@ packetbuf_copyto(void *to)
     PRINTF("packetbuf_write: data: %s\n", buffer);
   }
 #endif /* DEBUG_LEVEL */
+  if(PACKETBUF_HDR_SIZE - hdrptr + buflen > PACKETBUF_SIZE) {
+    /* Too large packet */
+    return 0;
+  }
   memcpy(to, packetbuf + hdrptr, PACKETBUF_HDR_SIZE - hdrptr);
   memcpy((uint8_t *)to + PACKETBUF_HDR_SIZE - hdrptr, packetbufptr + bufptr,
 	 buflen);
@@ -168,11 +172,10 @@ packetbuf_copyto(void *to)
 int
 packetbuf_hdralloc(int size)
 {
-  if(hdrptr > size) {
+  if(hdrptr >= size && packetbuf_totlen() + size <= PACKETBUF_SIZE) {
     hdrptr -= size;
     return 1;
   }
-  hdrptr = 0;
   return 0;
 }
 /*---------------------------------------------------------------------------*/

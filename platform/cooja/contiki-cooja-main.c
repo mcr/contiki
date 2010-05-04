@@ -184,8 +184,7 @@ process_run_thread_loop(void *data)
     simProcessRunValue = 1;
     cooja_mt_yield();
 
-    /* Initialize random generator */
-    random_init(0);
+    /* Initialize random generator (moved to moteid.c) */
 
     /* Start process handler */
     process_init();

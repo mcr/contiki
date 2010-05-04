@@ -41,7 +41,6 @@
 #include "dev/ds2411.h"
 #include "dev/leds.h"
 #include "dev/serial-line.h"
-#include "dev/sht11.h"
 #include "dev/slip.h"
 #include "dev/uart1.h"
 #include "dev/watchdog.h"
@@ -51,9 +50,7 @@
 #include "net/mac/frame802154.h"
 
 #if WITH_UIP6
-#include "net/sicslowpan.h"
 #include "net/uip-ds6.h"
-#include "net/mac/sicslowmac.h"
 #endif /* WITH_UIP6 */
 
 #include "net/rime.h"
@@ -63,14 +60,6 @@
 #include "cfs/cfs-coffee.h"
 #include "sys/autostart.h"
 #include "sys/profile.h"
-
-
-#include "dev/battery-sensor.h"
-#include "dev/button-sensor.h"
-#include "dev/light-sensor.h"
-#include "dev/sht11-sensor.h"
-
-SENSORS(&button_sensor);
 
 #if UIP_CONF_ROUTER
 
@@ -114,6 +103,8 @@ static uint8_t is_gateway;
 #ifdef EXPERIMENT_SETUP
 #include "experiment-setup.h"
 #endif
+
+void init_platform(void);
 
 /*---------------------------------------------------------------------------*/
 #if 0
@@ -253,9 +244,10 @@ main(int argc, char **argv)
    */
   process_init();
   process_start(&etimer_process, NULL);
-  process_start(&sensors_process, NULL);
 
   ctimer_init();
+
+  init_platform();
 
   set_rime_addr();
   
@@ -311,7 +303,7 @@ main(int argc, char **argv)
   {
     int i, a;
     for(a = 0; a < UIP_DS6_ADDR_NB; a++) {
-      if (uip_ds6_if.addr_list[a].isused) {
+      if(uip_ds6_if.addr_list[a].isused) {
 	for(i = 0; i < 7; ++i) {
 	  printf("%02x%02x:",
 		 uip_ds6_if.addr_list[a].ipaddr.u8[i * 2],
@@ -339,7 +331,6 @@ main(int argc, char **argv)
            ipaddr.u8[7 * 2], ipaddr.u8[7 * 2 + 1]);
   }
 
-  
 #else /* WITH_UIP6 */
 
   NETSTACK_RDC.init();

@@ -61,7 +61,7 @@
 #include <string.h>
 
 #ifndef WITH_ACK_OPTIMIZATION
-#define WITH_ACK_OPTIMIZATION        1
+#define WITH_ACK_OPTIMIZATION        0
 #endif
 #ifndef WITH_ENCOUNTER_OPTIMIZATION
 #define WITH_ENCOUNTER_OPTIMIZATION  1
@@ -303,7 +303,7 @@ powercycle(struct rtimer *t, void *ptr)
     schedule_powercycle(t, xmac_config.on_time);
     PT_YIELD(&pt);
 
-    if(xmac_config.off_time > 0) {
+    if(xmac_config.off_time > 0 && !NETSTACK_RADIO.receiving_packet()) {
       powercycle_turn_radio_off();
       if(waiting_for_packet != 0) {
 	waiting_for_packet++;
