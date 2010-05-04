@@ -41,6 +41,7 @@
 #include "dev/serial-line.h"
 #include "dev/slip.h"
 #include "dev/xmem.h"
+#include "dev/button-sensor.h"
 #include "lib/random.h"
 #include "net/netstack.h"
 #include "net/mac/frame802154.h"
@@ -166,6 +167,8 @@ print_processes(struct process * const processes[])
 }
 /*--------------------------------------------------------------------------*/
 
+SENSORS(&button_sensor);
+
 void
 init_lowlevel(void)
 {
@@ -179,13 +182,13 @@ init_lowlevel(void)
 
 	/* button init */
 	/* set up kbi */
-//	enable_irq_kbi(7);
-	kbi_edge(7);
-	enable_ext_wu(7);
-	kbi_pol_neg(7);
+	enable_irq_kbi(4);
+	kbi_edge(4);
+	enable_ext_wu(4);
+//	kbi_pol_neg(7);
 //	kbi_pol_pos(7);
 //	gpio_sel0_pullup(29);
-	gpio_pu0_disable(29);
+//	gpio_pu0_disable(29);
 
 	trim_xtal();
 	
@@ -199,6 +202,7 @@ init_lowlevel(void)
 	set_channel(RF_CHANNEL - 11); /* channel 11 */
 	set_power(0x12); /* 0x12 is the highest, not documented */
 
+	/* control TX_ON with the radio */
         *GPIO_FUNC_SEL2 = (0x01 << ((44-16*2)*2));
 	gpio_pad_dir_set( 1ULL << 44 );
 
@@ -377,6 +381,8 @@ main(void)
 	   uip_ipaddr_to_quad(&hostaddr));
   }
 #endif /* WITH_UIP */
+
+  process_start(&sensors_process, NULL);
   
   print_processes(autostart_processes);
   autostart_start(autostart_processes);
