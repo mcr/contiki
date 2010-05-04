@@ -151,9 +151,17 @@
 #define UIP_CONF_LL_802154              1
 #define UIP_CONF_LLH_LEN                0
 
-#ifndef UIP_CONF_ROUTER
-#define UIP_CONF_ROUTER			0
-#endif
+#define UIP_CONF_ROUTER                 1  
+#define UIP_CONF_IPV6_RPL               1
+
+/* Handle 10 neighbors */
+#define UIP_CONF_DS6_NBR_NBU     10
+/* Handle 10 routes    */
+#define UIP_CONF_DS6_ROUTE_NBU   10
+
+#define UIP_CONF_ND6_SEND_RA		0
+#define UIP_CONF_ND6_REACHABLE_TIME     600000
+#define UIP_CONF_ND6_RETRANS_TIMER      10000
 
 #define UIP_CONF_IPV6                   1
 #define UIP_CONF_IPV6_QUEUE_PKT         1
