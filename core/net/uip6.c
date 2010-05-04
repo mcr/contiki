@@ -170,7 +170,8 @@ u8_t uip_ext_opt_offset = 0;
  */
 /** Packet buffer for incoming and outgoing packets */
 #ifndef UIP_CONF_EXTERNAL_BUFFER
-u8_t uip_buf[UIP_BUFSIZE + 2];
+static uint32_t uip_buf32[(UIP_BUFSIZE + 3) / 4];
+uint8_t *uip_buf = (uint8_t *) uip_buf32;
 #endif /* UIP_CONF_EXTERNAL_BUFFER */
 
 /* The uip_appdata pointer points to application data. */
