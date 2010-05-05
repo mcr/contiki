@@ -476,8 +476,7 @@ void uip_reass_over(void);
  }
  \endcode
 */
-CCIF extern uint8_t *uip_buf;
-
+CCIF extern uint8_t * const uip_buf;
 
 
 /** @} */
