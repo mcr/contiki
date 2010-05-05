@@ -121,7 +121,7 @@ int contiki_maca_read(void *buf, unsigned short bufsize) {
 		PRINTF(": p->length 0x%0x bufsize 0x%0x \n\r", p->length, bufsize);
 		if((p->length) < bufsize) bufsize = (p->length);
 		memcpy(buf, (uint8_t *)(p->data + p->offset), bufsize);
-#if CONTIKI_CONTIKI_MACA_DEBUG
+#if CONTIKI_MACA_DEBUG
 		for( i = p->offset ; i < (bufsize + p->offset) ; i++) {
 			PRINTF(" %02x",p->data[i]);
 		}
@@ -155,7 +155,7 @@ int contiki_maca_prepare(const void *payload, unsigned short payload_len) {
 		p->data[0] = CONTIKI_MACA_PREPEND_BYTE;
 		PRINTF(" raw mode");
 #endif
-#if CONTIKI_CONTIKI_MACA_DEBUG
+#if CONTIKI_MACA_DEBUG
 		PRINTF(": sending %d bytes\n\r", payload_len);
 		for(i = p->offset ; i < (p->length + p->offset); i++) {
 			PRINTF(" %02x",p->data[i]);
