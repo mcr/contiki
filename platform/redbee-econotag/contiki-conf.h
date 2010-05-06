@@ -82,6 +82,16 @@
 #define RF_CHANNEL 11
 #define RIMEADDR_CONF_SIZE              8
 
+/* EUI64 generation */
+/* Organizationally Unique Identifier */
+#define OUI 0xacde48     /* if IAB is defined then OUI = 0x0050C2 */
+#define IAB 0xA8C        /* IAB 0xA8C for use on Redwire products only */
+//#undef IAB               /* do not define an IAB if you are using a full OUI */
+//#define EXT_ID 0xdef123  /* lower 12-bits used if IAB is defined */ 
+#undef  EXT_ID           /* if an extention id is not defined then one will be generated randomly */
+
+#define FLASH_BLANK_ADDR /* if defined then the generated rime address will flashed */
+
 #if WITH_UIP6
 /* Network setup for IPv6 */
 #define NETSTACK_CONF_NETWORK sicslowpan_driver

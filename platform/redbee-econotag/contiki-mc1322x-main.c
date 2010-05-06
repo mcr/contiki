@@ -227,14 +227,62 @@ init_lowlevel(void)
 //	enable_rtc_wu_irq();
 }
 
+#if RIMEADDR_SIZE == 1
+const rimeaddr_t addr_ff = { { 0xff } };
+#else /*RIMEADDR_SIZE == 2*/
+#if RIMEADDR_SIZE == 2
+const rimeaddr_t addr_ff = { { 0xff, 0xff } };
+#else /*RIMEADDR_SIZE == 2*/
+#if RIMEADDR_SIZE == 8
+const rimeaddr_t addr_ff = { { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff } };
+#endif /*RIMEADDR_SIZE == 8*/
+#endif /*RIMEADDR_SIZE == 2*/
+#endif /*RIMEADDR_SIZE == 1*/
+
+void iab_to_eui64(rimeaddr_t *eui64, uint32_t oui, uint16_t iab, uint32_t ext) {
+	/* OUI for IABs */
+	eui64->u8[0] =  0x00;
+	eui64->u8[1] =  0x50;
+	eui64->u8[2] =  0xc2;
+
+	/* EUI64 field */
+	eui64->u8[3] = 0xff;
+	eui64->u8[4] = 0xfe;
+
+	/* IAB */
+	eui64->u8[5] = (iab >> 4)  & 0xff;	
+	eui64->u8[6] = (iab & 0xf) << 4;
+
+	/* EXT */
+	eui64->u8[6] |= ((ext >> 8) &  0xf);	
+	eui64->u8[7] =    ext       & 0xff;
+}
+
+void oui_to_eui64(rimeaddr_t *eui64, uint32_t oui, uint32_t ext) {
+	/* OUI */
+	eui64->u8[0] = (oui >> 16) & 0xff;
+	eui64->u8[1] = (oui >> 8)  & 0xff;
+	eui64->u8[2] =  oui        & 0xff;
+
+	/* EUI64 field */
+	eui64->u8[3] = 0xff;
+	eui64->u8[4] = 0xfe;
+
+	/* EXT */
+	eui64->u8[5] = (ext >> 16) & 0xff;
+	eui64->u8[6] = (ext >> 8)  & 0xff;
+	eui64->u8[7] =  ext        & 0xff;
+}
+
 void
 set_rimeaddr(rimeaddr_t *addr) 
 {
 	nvmType_t type=0;
 	nvmErr_t err;	
 	volatile uint8_t buf[RIMEADDR_NBYTES];
+	rimeaddr_t eui64;
 	int i;
-
+		
 	err = nvm_detect(gNvmInternalInterface_c, &type);
 
 	err = nvm_read(gNvmInternalInterface_c, type, (uint8_t *)buf, RIMEADDR_NVM, RIMEADDR_NBYTES);
@@ -243,6 +291,39 @@ set_rimeaddr(rimeaddr_t *addr)
 
 	for(i=0; i<RIMEADDR_CONF_SIZE; i++) {		
 		addr->u8[i] = buf[i];
+	}
+
+	if (memcmp(addr, &addr_ff, RIMEADDR_CONF_SIZE)==0) {
+
+		//set addr to EUI64
+#ifdef IAB		
+   #ifdef EXT_ID
+		PRINTF("address in flash blank, setting to defined IAB and extention.\n\r");
+	  	iab_to_eui64(&eui64, OUI, IAB, EXT_ID);
+   #else  /* ifdef EXT_ID */
+		PRINTF("address in flash blank, setting to defined IAB with a random extention.\n\r");
+		iab_to_eui64(&eui64, OUI, IAB, *MACA_RANDOM & 0xfff);
+   #endif /* ifdef EXT_ID */
+
+#else  /* ifdef IAB */
+
+   #ifdef EXT_ID
+		PRINTF("address in flash blank, setting to defined OUI and extention.\n\r");
+		oui_to_eui64(&eui64, OUI, EXT_ID);
+   #else  /*ifdef EXT_ID */
+		PRINTF("address in flash blank, setting to defined OUI with a random extention.\n\r");
+		oui_to_eui64(&eui64, OUI, *MACA_RANDOM & 0xffffff);
+   #endif /*endif EXTID */
+
+#endif /* ifdef IAB */
+
+		rimeaddr_copy(addr, &eui64);		
+#ifdef FLASH_BLANK_ADDR
+		PRINTF("flashing blank address\n\r");
+		err = nvm_write(gNvmInternalInterface_c, type, &(eui64.u8), RIMEADDR_NVM, RIMEADDR_NBYTES);		
+#endif /* ifdef FLASH_BLANK_ADDR */
+	} else {
+		PRINTF("loading rime address from flash.\n\r");
 	}
 
 	rimeaddr_set_node_addr(addr);
@@ -273,9 +354,9 @@ main(void)
 
 	printf("Rime started with address ");
 	for(i = 0; i < sizeof(addr.u8) - 1; i++) {
-		printf("%d.", addr.u8[i]);
+		printf("%02X:", addr.u8[i]);
 	}
-	printf("%d\n", addr.u8[i]);
+	printf("%02X\n", addr.u8[i]);
 
 
 #if WITH_UIP6
