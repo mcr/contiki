@@ -27,96 +27,90 @@
  * SUCH DAMAGE.
  *
  * $Id$
- *
- * -----------------------------------------------------------------
- *
- * Author  : Adam Dunkels, Joakim Eriksson, Niclas Finne
- * Created : 2005-11-01
- * Updated : $Date$
- *           $Revision$
  */
 
-#include "dev/acc-sensor.h"
-#include "dev/sky-sensors.h"
-#include <io.h>
+/**
+ * \file
+ *         Slip fallback interface
+ * \author
+ *         Niclas Finne <nfi@sics.se>
+ *         Joakim Eriksson <joakime@sics.se>
+ *         Joel Hoglund <joel@sics.se>
+ *         Nicolas Tsiftes <nvt@sics.se>
+ */
 
-const struct sensors_sensor acc_sensor;
-static uint8_t active;
+#include "net/uip.h"
+#include "net/uip-ds6.h"
+#include "rpl.h"
+#include "dev/slip.h"
+#include "dev/uart1.h"
 
+#define UIP_IP_BUF        ((struct uip_ip_hdr *)&uip_buf[UIP_LLH_LEN])
+
+#define DEBUG DEBUG_PRINT
+#include "net/uip-debug.h"
+
+static uip_ipaddr_t last_sender;
 /*---------------------------------------------------------------------------*/
 static void
-activate(void)
+slip_input_callback(void)
 {
-  P2DIR |= 0x48;
-  P2OUT |= 0x48;
+  PRINTF("SIN: %u\n", uip_len);
 
-  /* stop converting immediately */
-  ADC12CTL0 &= ~ENC;
-  ADC12CTL1 &= ~CONSEQ_3;
-
-  while(ADC12CTL1 & ADC12BUSY);
-
-  /* Configure ADC12_2 to sample channel 4, 5, 6 and use */
-  /* the Vref+ as reference (SREF_1) since it is a stable reference */
-  ADC12MCTL2 = (INCH_4 + SREF_1);
-  ADC12MCTL3 = (INCH_5 + SREF_1);
-  ADC12MCTL4 = (INCH_6 + SREF_1);
-  /* internal temperature can be read as value(3) */
-  ADC12MCTL5 = (INCH_10 + SREF_1);
-
-  active = 1;
-  sky_sensors_activate(0x70);
+  /* Save the last sender received over SLIP to avoid bouncing the
+     packet back if no route is found */
+  uip_ipaddr_copy(&last_sender, &UIP_IP_BUF->srcipaddr);
 }
 /*---------------------------------------------------------------------------*/
 static void
-deactivate(void)
+init(void)
 {
-  sky_sensors_deactivate(0x70);
-  active = 0;
+  slip_arch_init(BAUD2UBR(115200));
+  process_start(&slip_process, NULL);
+  slip_set_input_callback(slip_input_callback);
 }
 /*---------------------------------------------------------------------------*/
-static int
-value(int type)
+static void
+output(void)
 {
-  switch(type) {
-  case 0:
-    return ADC12MEM2;
-  case 1:
-    return ADC12MEM3;
-  case 2:
-    return ADC12MEM4;
-  case 3:
-    return ADC12MEM5;
+  if(uip_ipaddr_cmp(&last_sender, &UIP_IP_BUF->srcipaddr)) {
+    /* Do not bounce packets back over SLIP if the packet was received
+       over SLIP */
+    PRINTF("slip-bridge: Destination off-link but no route\n");
+  } else {
+    PRINTF("SUT: %u\n", uip_len);
+    slip_send();
   }
-  return 0;
 }
 /*---------------------------------------------------------------------------*/
-static int
-configure(int type, int c)
+int
+putchar(int c)
 {
-  switch(type) {
-  case SENSORS_ACTIVE:
-    if (c) {
-      if(!active) {
-        activate();
-      }
-    } else if(active) {
-      deactivate();
-    }
+#define SLIP_END     0300
+  static char debug_frame = 0;
+
+  if(!debug_frame) {            /* Start of debug output */
+    slip_arch_writeb(SLIP_END);
+    slip_arch_writeb('\r');     /* Type debug line == '\r' */
+    debug_frame = 1;
   }
-  return 0;
+
+  /* Need to also print '\n' because for example COOJA will not show
+     any output before line end */
+  slip_arch_writeb((char)c);
+
+  /*
+   * Line buffered output, a newline marks the end of debug output and
+   * implicitly flushes debug output.
+   */
+  if(c == '\n') {
+    slip_arch_writeb(SLIP_END);
+    debug_frame = 0;
+  }
+  return c;
 }
 /*---------------------------------------------------------------------------*/
-static int
-status(int type)
-{
-  switch (type) {
-  case SENSORS_ACTIVE:
-  case SENSORS_READY:
-    return active;
-  }
-  return 0;
-}
+const struct uip_fallback_interface rpl_interface = {
+  init, output
+};
 /*---------------------------------------------------------------------------*/
-SENSORS_SENSOR(acc_sensor, ACC_SENSOR,
-	       value, configure, status);

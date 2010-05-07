@@ -618,7 +618,7 @@ rpl_ds6_neighbor_callback(uip_ds6_nbr_t *nbr)
         rpl_remove_neighbor(dag, n);
       }
     }
-    if(dag->def_route != NULL &&
+    if(dag != NULL && dag->def_route != NULL &&
        uip_ipaddr_cmp(&dag->def_route->ipaddr, &n->addr)) {
       n = rpl_find_best_parent(dag);
       if(n != NULL && dag->of->increment_rank(n->rank, n) <= dag->min_rank + dag->max_rankinc) {

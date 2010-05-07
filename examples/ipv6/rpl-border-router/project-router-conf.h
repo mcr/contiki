@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006, Swedish Institute of Computer Science.
+ * Copyright (c) 2010, Swedish Institute of Computer Science.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,27 +27,23 @@
  * SUCH DAMAGE.
  *
  * $Id$
- *
- * -----------------------------------------------------------------
- *
- * Author  : Marcus Lundén
- * Created : 2005-11-01
- * Updated : $Date$
- *           $Revision$
  */
 
-#ifndef __EXT_SENSOR_H__
-#define __EXT_SENSOR_H__
+#ifndef __PROJECT_ROUTER_CONF_H__
+#define __PROJECT_ROUTER_CONF_H__
 
-#include "lib/sensors.h"
+#undef UIP_FALLBACK_INTERFACE
+#define UIP_FALLBACK_INTERFACE rpl_interface
 
-#define ADC0 0
-#define ADC1 1
-#define ADC2 2
-#define ADC3 3
+/* The number of supported neighbors */
+#undef UIP_CONF_DS6_NBR_NBU
+#define UIP_CONF_DS6_NBR_NBU     10
 
-extern const struct sensors_sensor ext_sensor;
+/* The number of supported routes */
+#undef UIP_CONF_DS6_ROUTE_NBU
+#define UIP_CONF_DS6_ROUTE_NBU   10
 
-#define EXT_SENSOR "Ext"
+#undef QUEUEBUF_CONF_NUM
+#define QUEUEBUF_CONF_NUM          6
 
-#endif /* __EXT_SENSOR_H__ */
+#endif /* __PROJECT_ROUTER_CONF_H__ */
