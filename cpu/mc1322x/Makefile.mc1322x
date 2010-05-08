@@ -10,7 +10,7 @@ CONTIKI_CPU=$(CONTIKI)/cpu/mc1322x
 
 CONTIKI_CPU_DIRS = . lib src board
 
-MC1322X = rtimer-arch.c watchdog.c contiki-crm.c contiki-maca.c contiki-misc.c leds-arch.c leds.c
+MC1322X = dbg-io.c rtimer-arch.c watchdog.c contiki-crm.c contiki-maca.c contiki-misc.c leds-arch.c leds.c
 
 CPU_LIBS = $(notdir $(wildcard $(CONTIKI_CPU)/lib/*.c))
 CPU_SRCS = $(notdir $(wildcard $(CONTIKI_CPU)/src/*.c)) $(notdir $(wildcard $(CONTIKI_CPU)/src/*.S))

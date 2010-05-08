@@ -44,8 +44,6 @@ typedef int32_t s32_t;
 #define MCU_MHZ 24
 #define PLATFORM PLATFORM_MC1322X
 
-#define BAUD2UBR(baud)                  (baud)
-
 /* Pre-allocated memory for loadable modules heap space (in bytes)*/
 #define MMEM_CONF_SIZE 256
 
