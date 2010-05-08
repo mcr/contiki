@@ -1,5 +1,7 @@
 /*
- * Copyright (c) 2005, Swedish Institute of Computer Science
+ * Copyright (c) 2010, Mariano Alvira <mar@devl.org> and other contributors
+ * to the MC1322x project (http://mc1322x.devl.org) and Contiki.
+ *
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,9 +28,9 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * This file is part of the Contiki operating system.
+ * This file is part of the Contiki OS.
  *
- * @(#)$Id$
+ * $Id$
  */
 
 #include "dev/watchdog.h"
