@@ -130,9 +130,6 @@ static struct uip_fw_netif meshif =
 static uint8_t is_gateway;
 #endif /* WITH_UIP */
 
-/*---------------------------------------------------------------------------*/
-void uip_log(char *msg) { puts(msg); }
-/*---------------------------------------------------------------------------*/
 #ifndef RF_CHANNEL
 #define RF_CHANNEL              26
 #endif
