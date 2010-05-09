@@ -72,6 +72,8 @@ typedef unsigned short uip_stats_t;
 
 #define LOADER_CONF_ARCH "lib/unload.h"
 
+#define UIP_CONF_PLAIN_BUFFER 1
+
 #if MTU_SIZE
 #define UIP_CONF_BUFFER_SIZE (UIP_LLH_LEN + MTU_SIZE)
 #else /* MTU_SIZE */

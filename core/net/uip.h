@@ -476,7 +476,11 @@ void uip_reass_over(void);
  }
  \endcode
 */
+#ifdef UIP_CONF_PLAIN_BUFFER
+CCIF extern uint8_t uip_buf[UIP_BUFSIZE+2];
+#else /* UIP_CONF_PLAIN_BUFFER */
 CCIF extern uint8_t * const uip_buf;
+#endif /* UIP_CONF_PLAIN_BUFFER */
 
 
 /** @} */
