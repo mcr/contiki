@@ -29,19 +29,8 @@
  * $Id$
  */
 
-#ifndef __PROJECT_ROUTER_CONF_H__
-#define __PROJECT_ROUTER_CONF_H__
-
-#undef UIP_FALLBACK_INTERFACE
-#define UIP_FALLBACK_INTERFACE rpl_interface
-
-/* The number of supported neighbors */
-#undef UIP_CONF_DS6_NBR_NBU
-#define UIP_CONF_DS6_NBR_NBU     10
-
-/* The number of supported routes */
-#undef UIP_CONF_DS6_ROUTE_NBU
-#define UIP_CONF_DS6_ROUTE_NBU   10
+#ifndef __PROJECT_RPL_WEB_CONF_H__
+#define __PROJECT_RPL_WEB_CONF_H__
 
 #undef QUEUEBUF_CONF_NUM
 #define QUEUEBUF_CONF_NUM          6
@@ -55,4 +44,4 @@
 #undef WEBSERVER_CONF_CFS_CONNS
 #define WEBSERVER_CONF_CFS_CONNS 2
 
-#endif /* __PROJECT_ROUTER_CONF_H__ */
+#endif /* __PROJECT_RPL_WEB_CONF_H__ */
