@@ -31,7 +31,7 @@
 
 /**
  * \file
- *         A demo web server publishing sensor data
+ *         A simple web server forwarding page generation to a protothread
  * \author
  *         Adam Dunkels <adam@sics.se>
  *         Niclas Finne <nfi@sics.se>
