@@ -57,6 +57,10 @@ static void new_dio_interval(rpl_dag_t *dag);
 static void handle_dio_timer(void *ptr);
 
 static uint16_t next_dis;
+
+/* dio_send_ok is true if the node is ready to send DIOs */
+static uint8_t dio_send_ok;
+
 /************************************************************************/
 static void
 handle_periodic_timer(void *ptr)
@@ -118,6 +122,15 @@ handle_dio_timer(void *ptr)
   dag = (rpl_dag_t *)ptr;
 
   PRINTF("RPL: DIO Timer triggered\n");
+  if(!dio_send_ok) {
+    if(uip_ds6_get_link_local(ADDR_PREFERRED) != NULL) {
+      dio_send_ok = 1;
+    } else {
+      PRINTF("RPL: Postponing DIO transmission since link local addres is not ok\n");
+      ctimer_set(&dag->dio_timer, CLOCK_SECOND, &handle_dio_timer, dag);
+      return;
+    }
+  }
 
   if(dag->dio_send) {
     /* send DIO if counter is less than desired redundancy */
@@ -169,12 +182,21 @@ handle_dao_timer(void *ptr)
   rpl_dag_t *dag;
   rpl_neighbor_t *n;
   dag = (rpl_dag_t *)ptr;
+
+  if (!dio_send_ok && uip_ds6_get_link_local(ADDR_PREFERRED) == NULL) {
+    PRINTF("RPL: postpone DAO transmission... \n");
+    ctimer_set(&dag->dao_timer, CLOCK_SECOND, handle_dao_timer, dag);
+    return;
+  }
+
   /* Send the DAO to the best parent. rpl-07 section C.2 lists the
      fan-out as being under investigation. */
   n = rpl_find_best_parent(dag);
   if(n != NULL) {
     PRINTF("RPL: handle_dao_timer - sending DAO\n");
     dao_output(n, DEFAULT_ROUTE_LIFETIME);
+  } else {
+    PRINTF("RPL: could not find any best parent.. \n");
   }
   ctimer_stop(&dag->dao_timer);
 }

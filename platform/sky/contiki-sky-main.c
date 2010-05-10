@@ -301,19 +301,14 @@ main(int argc, char **argv)
 
   printf("Tentative link-local IPv6 address ");
   {
-    int i, a;
-    for(a = 0; a < UIP_DS6_ADDR_NB; a++) {
-      if(uip_ds6_if.addr_list[a].isused) {
-	for(i = 0; i < 7; ++i) {
-	  printf("%02x%02x:",
-		 uip_ds6_if.addr_list[a].ipaddr.u8[i * 2],
-		 uip_ds6_if.addr_list[a].ipaddr.u8[i * 2 + 1]);
-	}
-	printf("%02x%02x\n",
-	       uip_ds6_if.addr_list[a].ipaddr.u8[14],
-	       uip_ds6_if.addr_list[a].ipaddr.u8[15]);
-      }
+    uip_ds6_addr_t *lladdr;
+    int i;
+    lladdr = uip_ds6_get_link_local(-1);
+    for(i = 0; i < 7; ++i) {
+      printf("%02x%02x:", lladdr->ipaddr.u8[i * 2],
+             lladdr->ipaddr.u8[i * 2 + 1]);
     }
+    printf("%02x%02x\n", lladdr->ipaddr.u8[14], lladdr->ipaddr.u8[15]);
   }
   
   if(1) {
