@@ -38,7 +38,9 @@
 #include "dev/spi.h"
 #include "dev/cc2420.h"
 
+#ifndef CONF_SFD_TIMESTAMPS
 #define CONF_SFD_TIMESTAMPS 0
+#endif /* CONF_SFD_TIMESTAMPS */
 
 #ifdef CONF_SFD_TIMESTAMPS
 #include "cc2420-arch-sfd.h"
