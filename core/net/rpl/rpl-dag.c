@@ -175,7 +175,11 @@ rpl_set_default_route(rpl_dag_t *dag, uip_ipaddr_t *from)
     PRINTF("RPL: Adding default route through ");
     PRINT6ADDR(from);
     PRINTF("\n");
-    dag->def_route = uip_ds6_defrt_add(from, DEFAULT_ROUTE_LIFETIME);
+    if(DEFAULT_ROUTE_LIFETIME == INFINITE_LIFETIME) {
+      dag->def_route = uip_ds6_defrt_add(from, 0);
+    } else {
+      dag->def_route = uip_ds6_defrt_add(from, DEFAULT_ROUTE_LIFETIME);
+    }
     if(dag->def_route == NULL) {
       return 0;
     }
