@@ -173,8 +173,9 @@ int contiki_maca_prepare(const void *payload, unsigned short payload_len) {
 	volatile int i;
 	volatile packet_t *p;
 
-	if ((p = get_free_packet())) {
-		PRINTF("maca send");
+	if ((prepped_p == 0) 
+	    && (p = get_free_packet())) {
+		PRINTF("contiki maca prepare");
 		maca_on();
 #if CONTIKI_MACA_RAW_MODE
 		p->offset = 1;
@@ -208,6 +209,7 @@ int contiki_maca_prepare(const void *payload, unsigned short payload_len) {
 }
 
 int contiki_maca_transmit(unsigned short transmit_len) {
+	PRINTF("contiki maca transmit\n\r");
 #if BLOCKING_TX
 	tx_complete = 0;
 #endif
