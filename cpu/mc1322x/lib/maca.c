@@ -98,9 +98,6 @@ enum posts {
 };
 static volatile uint8_t last_post = NO_POST;
 
-#define safe_irq_disable(x)  volatile uint32_t saved_irq; saved_irq = *INTENABLE; disable_irq(x)
-#define irq_restore() *INTENABLE = saved_irq
-
 volatile uint8_t fcs_mode = USE_FCS; 
 
 /* call periodically to */
@@ -122,13 +119,7 @@ void check_maca(void) {
 
 	if(*MACA_CLK == last_time) {
 		/* clock isn't running */
-		/* reinit maca */
-		reset_maca();
-		radio_init();
-		flyback_init();
-		init_phy();
-		*MACA_CONTROL = (1 << PRM) | (NO_CCA << MODE); 		
-		enable_irq(MACA);
+		ResumeMACASync();
 		maca_isr(); 
 	} else {
 		if((last_time > (*MACA_SFTCLK + RECV_SOFTIMEOUT)) &&
