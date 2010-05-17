@@ -77,7 +77,9 @@ clock_init()
 void tmr0_isr(void) {
 	if(bit_is_set(*TMR(0,CSCTRL),TCF1)) {
 		current_clock++;
-		if(current_clock % CLOCK_CONF_SECOND) { seconds++; }
+		if((current_clock % CLOCK_CONF_SECOND) == 0) {
+			seconds++;
+		}
 		/* maybe blink out current clock somehow for debug?*/
 		/* maybe check if a bit is set in current_clock? */
 		/* that should give me a divided blink */
