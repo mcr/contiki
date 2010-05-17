@@ -42,6 +42,8 @@
 
 #include "contiki-conf.h"
 
+#define MAX_TICKS (~((clock_time_t)0) / 2)
+
 static volatile clock_time_t current_clock = 0;
 
 volatile unsigned long seconds = 0;
@@ -84,10 +86,11 @@ void tmr0_isr(void) {
 		/* maybe check if a bit is set in current_clock? */
 		/* that should give me a divided blink */
 		
-//		if(etimer_pending() && etimer_next_expiration_time() <= current_clock) {
-		if(etimer_pending()) {
-			etimer_request_poll();
-		}
+		if(etimer_pending() &&
+		   (etimer_next_expiration_time() - current_clock - 1) > MAX_TICKS) {
+ 			etimer_request_poll();
+ 		}
+
 
 		/* clear the compare flags */
 		clear_bit(*TMR(0,SCTRL),TCF);                
