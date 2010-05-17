@@ -383,6 +383,10 @@ public abstract class MspMote extends AbstractEmulatedMote implements Mote, Watc
     return sb.toString();
   }
   
+  public int getCPUFrequency() {
+    return myCpu.getDCOFrequency();
+  }
+
   public int getID() {
     return getInterfaces().getMoteID().getMoteID();
   }
