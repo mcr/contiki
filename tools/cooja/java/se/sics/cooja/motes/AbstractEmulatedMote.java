@@ -32,4 +32,11 @@ package se.sics.cooja.motes;
 import se.sics.cooja.Mote;
 
 public abstract class AbstractEmulatedMote extends AbstractWakeupMote implements Mote {
+
+  /**
+   * @return CPU frequency (Hz)
+   */
+  public int getCPUFrequency() {
+    return -1;
+  }
 }
