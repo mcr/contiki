@@ -47,6 +47,7 @@
 #define LED_ARCH_CYAN   (           LED_ARCH_GREEN | LED_ARCH_BLUE)
 #define LED_ARCH_WHITE  (LED_ARCH_RED  | LED_ARCH_GREEN | LED_ARCH_BLUE)
 
+/*FIXME: this is broken --- don't set all of the GPIO direction */
 void leds_arch_init(void)
 {
 	gpio_pad_dir(LED_ARCH_WHITE);
@@ -63,6 +64,7 @@ unsigned char leds_arch_get(void)
 
 }
 
+/*FIXME: this is broken --- it hits the entire GPIO data register and breaks the button sensor */
 void leds_arch_set(unsigned char leds)
 {
 	uint64_t led;
