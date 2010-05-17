@@ -36,6 +36,7 @@
 #include <sys/clock.h>
 #include <sys/cc.h>
 #include <sys/etimer.h>
+#include "dev/leds.h"
 
 #include "contiki-conf.h"
 #include "mc1322x.h"
@@ -81,10 +82,10 @@ void tmr0_isr(void) {
 		current_clock++;
 		if((current_clock % CLOCK_CONF_SECOND) == 0) {
 			seconds++;
+#if BLINK_SECONDS
+			leds_toggle(LEDS_GREEN);
+#endif
 		}
-		/* maybe blink out current clock somehow for debug?*/
-		/* maybe check if a bit is set in current_clock? */
-		/* that should give me a divided blink */
 		
 		if(etimer_pending() &&
 		   (etimer_next_expiration_time() - current_clock - 1) > MAX_TICKS) {

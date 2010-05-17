@@ -55,6 +55,8 @@
 
 /* Clock ticks per second */
 #define CLOCK_CONF_SECOND 100
+/* set to 1 to toggle the green led ever second */
+#define BLINK_SECONDS 1
 
 /* Baud rate */
 #define MOD 9999
