@@ -75,7 +75,7 @@ extern void *cc2430_rf_payload;
 
 /* RF driver functions */
 void cc2430_rf_init(void) __banked;
-void cc2430_rf_command(uint8_t command) __banked;
+void cc2430_rf_command(uint8_t command);
 int8_t cc2430_rf_channel_set(uint8_t channel);
 int8_t cc2430_rf_power_set(uint8_t new_power);
 int8_t cc2430_rf_rx_enable(void) __banked;
@@ -85,7 +85,7 @@ int8_t cc2430_rf_address_decoder_mode(rf_address_mode_t mode);
 int8_t cc2430_rf_analyze_rssi(void);
 int8_t cc2430_rf_cca_check(uint8_t backoff_count, uint8_t slotted);
 void cc2430_rf_send_ack(uint8_t pending);
-void cc2430_rf_set_addr(unsigned pan, unsigned addr, const uint8_t *ieee_addr);
+void cc2430_rf_set_addr(unsigned pan, unsigned addr, const uint8_t *ieee_addr) __banked;
 
 extern void cc2430_rf_ISR( void ) __interrupt (RF_VECTOR);
 extern void cc2430_rf_error_ISR( void ) __interrupt (RFERR_VECTOR);
