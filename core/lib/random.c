@@ -38,13 +38,13 @@
 
 /*---------------------------------------------------------------------------*/
 void
-random_init(unsigned short seed)
+random_init(unsigned short seed) __banked
 {
   srand(seed);
 }
 /*---------------------------------------------------------------------------*/
 unsigned short
-random_rand(void)
+random_rand(void) __banked
 {
   return (unsigned short)rand();
 }

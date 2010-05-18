@@ -63,6 +63,7 @@
 #define FRAME_802154_H
 
 #include "contiki-conf.h"
+#include "dev/banked.h"
 #include "net/rime/rimeaddr.h"
 
 #ifdef IEEE802154_CONF_PANID
@@ -151,9 +152,9 @@ typedef struct {
   frame802154_fcf_t fcf;            /**< Frame control field  */
   uint8_t seq;          /**< Sequence number */
   uint16_t dest_pid;    /**< Destination PAN ID */
-  uint8_t dest_addr[8];     /**< Destination address */
+  rimeaddr_t dest_addr;     /**< Destination address */
   uint16_t src_pid;     /**< Source PAN ID */
-  uint8_t src_addr[8];      /**< Source address */
+  rimeaddr_t src_addr;      /**< Source address */
   frame802154_aux_hdr_t aux_hdr;    /**< Aux security header */
   uint8_t *payload;     /**< Pointer to 802.15.4 frame payload */
   uint8_t payload_len;  /**< Length of payload field */
@@ -161,9 +162,9 @@ typedef struct {
 
 /* Prototypes */
 
-uint8_t frame802154_hdrlen(frame802154_t *p);
-uint8_t frame802154_create(frame802154_t *p, uint8_t *buf, uint8_t buf_len);
-uint8_t frame802154_parse(uint8_t *data, uint8_t length, frame802154_t *pf);
+uint8_t frame802154_hdrlen(frame802154_t *p) __banked;
+uint8_t frame802154_create(frame802154_t *p, uint8_t *buf, uint8_t buf_len) __banked;
+uint8_t frame802154_parse(uint8_t *data, uint8_t length, frame802154_t *pf) __banked;
 
 /** @} */
 #endif /* FRAME_802154_H */

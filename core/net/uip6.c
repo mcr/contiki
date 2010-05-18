@@ -75,10 +75,14 @@
 #include "net/uipopt.h"
 #include "net/uip-icmp6.h"
 #include "net/uip-nd6.h"
-#include "net/uip-ds6.h"
-
+#include "net/uip-netif.h"
+#include "banked.h"
 #include <string.h>
-
+#ifdef BANKED_FNS_ONLY
+#else
+#ifdef SDCC
+#define SKIP_BANKED_FNS
+#endif
 /*---------------------------------------------------------------------------*/
 /* For Debug, logging, statistics                                            */
 /*---------------------------------------------------------------------------*/
@@ -93,10 +97,6 @@
 #define PRINTF(...)
 #define PRINT6ADDR(addr)
 #endif
-
-#if UIP_CONF_IPV6_RPL
-void uip_rpl_input(void);
-#endif /* UIP_CONF_IPV6_RPL */
 
 #if UIP_LOGGING == 1
 #include <stdio.h>
@@ -170,7 +170,7 @@ u8_t uip_ext_opt_offset = 0;
  */
 /** Packet buffer for incoming and outgoing packets */
 #ifndef UIP_CONF_EXTERNAL_BUFFER
-uip_buf_t uip_aligned_buf;
+u8_t uip_buf[UIP_BUFSIZE + 2];
 #endif /* UIP_CONF_EXTERNAL_BUFFER */
 
 /* The uip_appdata pointer points to application data. */
@@ -258,6 +258,14 @@ static u16_t tmp16;
 struct uip_udp_conn *uip_udp_conn;
 struct uip_udp_conn uip_udp_conns[UIP_UDP_CONNS];
 #endif /* UIP_UDP */
+/** @} */
+
+/*---------------------------------------------------------------------------*/
+/** @{ \name Routing module                                                  */
+/*---------------------------------------------------------------------------*/
+#if UIP_CONF_ROUTER
+const struct uip_router *uip_router;
+#endif /* UIP_CONF_ROUTER */
 /** @} */
 
 /*---------------------------------------------------------------------------*/
@@ -401,7 +409,8 @@ void
 uip_init(void)
 {
    
-  uip_ds6_init();
+  uip_netif_init();
+  uip_nd6_init();
 
 #if UIP_TCP
   for(c = 0; c < UIP_LISTENPORTS; ++c) {
@@ -423,6 +432,19 @@ uip_init(void)
 #endif /* UIP_UDP */
 }
 
+/*---------------------------------------------------------------------------*/
+#if UIP_CONF_ROUTER
+void
+uip_router_register(const struct uip_router *router) {
+  if(uip_router != NULL) {
+    uip_router->deactivate();
+  }
+  uip_router = router;
+  if(uip_router != NULL) {
+    router->activate();
+  }
+}
+#endif /*UIP_CONF_ROUTER*/
 /*---------------------------------------------------------------------------*/
 #if UIP_TCP && UIP_ACTIVE_OPEN
 struct uip_conn *
@@ -532,7 +554,7 @@ uip_udp_new(const uip_ipaddr_t *ripaddr, u16_t rport)
   } else {
     uip_ipaddr_copy(&conn->ripaddr, ripaddr);
   }
-  conn->ttl = uip_ds6_if.cur_hop_limit;
+  conn->ttl = uip_netif_physical_if.cur_hop_limit;
   
   return conn;
 }
@@ -795,12 +817,18 @@ uip_add_rcv_nxt(u16_t n)
 }
 #endif
 /*---------------------------------------------------------------------------*/
-
+#endif
+#ifdef SKIP_BANKED_FNS
+u8_t ext_hdr_options_process() __banked;
+#else
 /**
  * \brief Process the options in Destination and Hop By Hop extension headers
  */
-static u8_t
-ext_hdr_options_process() {
+#ifndef BANKED_FNS_ONLY
+static 
+#endif
+u8_t
+ext_hdr_options_process() __banked {
  /*
   * Length field in the extension header: length of th eheader in units of
   * 8 bytes, excluding the first 8 bytes
@@ -858,6 +886,8 @@ ext_hdr_options_process() {
   }
   return 0;
 }
+#endif
+#ifndef BANKED_FNS_ONLY
 
 
 /*---------------------------------------------------------------------------*/
@@ -1019,8 +1049,7 @@ uip_process(u8_t flag)
     }
   }
 #endif /* UIP_UDP */
-
-  
+   
   /* This is where the input processing starts. */
   UIP_STAT(++uip_stat.ip.recv);
    
@@ -1033,6 +1062,7 @@ uip_process(u8_t flag)
     UIP_LOG("ipv6: invalid version.");
     goto drop;
   }
+   
   /*
    * Check the size of the packet. If the size reported to us in
    * uip_len is smaller the size reported in the IP header, we assume
@@ -1073,55 +1103,29 @@ uip_process(u8_t flag)
   }
 
 #if UIP_CONF_ROUTER
-  /* TBD Some Parameter problem messages */
-  if(!uip_ds6_is_my_addr(&UIP_IP_BUF->destipaddr) &&
-     !uip_ds6_is_my_maddr(&UIP_IP_BUF->destipaddr)) {
+  if(!uip_netif_is_addr_my_unicast(&UIP_IP_BUF->destipaddr) &&
+     !uip_netif_is_addr_my_solicited(&UIP_IP_BUF->destipaddr)) {
     if(!uip_is_addr_mcast(&UIP_IP_BUF->destipaddr) &&
-       !uip_is_addr_link_local(&UIP_IP_BUF->destipaddr) &&
-       !uip_is_addr_link_local(&UIP_IP_BUF->srcipaddr) &&
-       !uip_is_addr_unspecified(&UIP_IP_BUF->srcipaddr) &&
-       !uip_is_addr_loopback(&UIP_IP_BUF->destipaddr)) {
-
-
-      /* Check MTU */
-      if(uip_len > UIP_LINK_MTU) {
-        uip_icmp6_error_output(ICMP6_PACKET_TOO_BIG, 0, UIP_LINK_MTU);
-        UIP_STAT(++uip_stat.ip.drop);
-        goto send;
-      }
-      /* Check Hop Limit */
-      if(UIP_IP_BUF->ttl <= 1) {
-        uip_icmp6_error_output(ICMP6_TIME_EXCEEDED,
-                               ICMP6_TIME_EXCEED_TRANSIT, 0);
-        UIP_STAT(++uip_stat.ip.drop);
-        goto send;
-      }
-      UIP_IP_BUF->ttl = UIP_IP_BUF->ttl - 1;
+       !uip_is_addr_link_local(&UIP_IP_BUF->destipaddr)) {
       PRINTF("Forwarding packet to ");
       PRINT6ADDR(&UIP_IP_BUF->destipaddr);
       PRINTF("\n");
+
+      /* Decrement the TTL (time-to-live) value in the IP header */
+      UIP_IP_BUF->ttl = UIP_IP_BUF->ttl - 1;
       UIP_STAT(++uip_stat.ip.forwarded);
       goto send;
-    } else {
-      if((uip_is_addr_link_local(&UIP_IP_BUF->srcipaddr)) &&
-         (!uip_is_addr_unspecified(&UIP_IP_BUF->srcipaddr)) &&
-         (!uip_is_addr_loopback(&UIP_IP_BUF->destipaddr)) &&
-         (!uip_is_addr_mcast(&UIP_IP_BUF->destipaddr)) &&
-         (!uip_ds6_is_addr_onlink((&UIP_IP_BUF->destipaddr)))) {
-        PRINTF("LL source address with off link destination, dropping\n");
-        uip_icmp6_error_output(ICMP6_DST_UNREACH,
-                               ICMP6_DST_UNREACH_NOTNEIGHBOR, 0);
-        goto send;
-      }
-      PRINTF("Dropping packet, not for me and link local or multicast\n");
+    } else if(!uip_is_addr_linklocal_allnodes_mcast(&UIP_IP_BUF->destipaddr) &&
+	      !uip_is_addr_linklocal_allrouters_mcast(&UIP_IP_BUF->destipaddr)) {
+      PRINTF("Dropping packet, not for me\n");
       UIP_STAT(++uip_stat.ip.drop);
       goto drop;
     }
   }
-#else /* UIP_CONF_ROUTER */
-  if(!uip_ds6_is_my_addr(&UIP_IP_BUF->destipaddr) &&
-     !uip_ds6_is_my_maddr(&UIP_IP_BUF->destipaddr) &&
-     !uip_is_addr_mcast(&UIP_IP_BUF->destipaddr)) {
+#else
+  if(!uip_netif_is_addr_my_unicast(&UIP_IP_BUF->destipaddr) &&
+     !uip_netif_is_addr_my_solicited(&UIP_IP_BUF->destipaddr) &&
+     !uip_is_addr_linklocal_allnodes_mcast(&UIP_IP_BUF->destipaddr)){
     PRINTF("Dropping packet, not for me\n");
     UIP_STAT(++uip_stat.ip.drop);
     goto drop;
@@ -1293,7 +1297,7 @@ uip_process(u8_t flag)
   /*
    * Here we process incoming ICMPv6 packets
    * For echo request, we send echo reply
-   * For ND pkts, we call the appropriate function in uip-nd6.c
+   * For ND pkts, we call the appropriate function in uip-nd6-io.c
    * We do not treat Error messages for now
    * If no pkt is to be sent as an answer to the incoming one, we
    * "goto drop". Else we just break; then at the after the "switch"
@@ -1305,32 +1309,18 @@ uip_process(u8_t flag)
 
   switch(UIP_ICMP_BUF->type) {
     case ICMP6_NS:
-      uip_nd6_ns_input();
+      uip_nd6_io_ns_input();
       break;
     case ICMP6_NA:
-      uip_nd6_na_input();
+      uip_nd6_io_na_input();
       break;
     case ICMP6_RS:
-#if UIP_CONF_ROUTER && UIP_ND6_SEND_RA
-    uip_nd6_rs_input();
-#else /* UIP_CONF_ROUTER && UIP_ND6_SEND_RA */
-    UIP_STAT(++uip_stat.icmp.drop);
-    uip_len = 0;
-#endif /* UIP_CONF_ROUTER && UIP_ND6_SEND_RA */
-    break;
-  case ICMP6_RA:
-#if UIP_CONF_ROUTER
-    UIP_STAT(++uip_stat.icmp.drop);
-    uip_len = 0;
-#else /* UIP_CONF_ROUTER */
-    uip_nd6_ra_input();
-#endif /* UIP_CONF_ROUTER */
-    break;
-#if UIP_CONF_IPV6_RPL
-  case ICMP6_RPL:
-    uip_rpl_input();
-    break;
-#endif /* UIP_CONF_IPV6_RPL */
+      UIP_STAT(++uip_stat.icmp.drop);
+      uip_len = 0;
+      break;
+    case ICMP6_RA:
+      uip_nd6_io_ra_input();
+      break;
     case ICMP6_ECHO_REQUEST:
       uip_icmp6_echo_request_input();
       break;
@@ -1373,8 +1363,7 @@ uip_process(u8_t flag)
   if(UIP_UDP_BUF->udpchksum != 0 && uip_udpchksum() != 0xffff) {
     UIP_STAT(++uip_stat.udp.drop);
     UIP_STAT(++uip_stat.udp.chkerr);
-    PRINTF("udp: bad checksum 0x%04x 0x%04x\n", UIP_UDP_BUF->udpchksum,
-           uip_udpchksum());
+    UIP_LOG("udp: bad checksum.");
     goto drop;
   }
 #else /* UIP_UDP_CHECKSUMS */
@@ -1383,7 +1372,7 @@ uip_process(u8_t flag)
 
   /* Make sure that the UDP destination port number is not zero. */
   if(UIP_UDP_BUF->destport == 0) {
-    PRINTF("udp: zero port.\n");
+    UIP_LOG("udp: zero port.");
     goto drop;
   }
 
@@ -1408,15 +1397,8 @@ uip_process(u8_t flag)
     }
   }
   PRINTF("udp: no matching connection found\n");
-
-#if UIP_UDP_SEND_UNREACH_NOPORT
-  uip_icmp6_error_output(ICMP6_DST_UNREACH, ICMP6_DST_UNREACH_NOPORT, 0);
-  UIP_STAT(++uip_stat.ip.drop);
-  goto send;
-#else
   goto drop;
-#endif
-
+  
  udp_found:
   PRINTF("In udp_found\n");
  
@@ -1445,11 +1427,11 @@ uip_process(u8_t flag)
   UIP_UDP_BUF->udplen = HTONS(uip_slen + UIP_UDPH_LEN);
   UIP_UDP_BUF->udpchksum = 0;
 
-  UIP_UDP_BUF->srcport  = uip_udp_conn->lport;
-  UIP_UDP_BUF->destport = uip_udp_conn->rport;
+  UIP_TCP_BUF->srcport  = uip_udp_conn->lport;
+  UIP_TCP_BUF->destport = uip_udp_conn->rport;
 
   uip_ipaddr_copy(&UIP_IP_BUF->destipaddr, &uip_udp_conn->ripaddr);
-  uip_ds6_select_src(&UIP_IP_BUF->srcipaddr, &UIP_IP_BUF->destipaddr);
+  uip_netif_select_src(&UIP_IP_BUF->srcipaddr, &UIP_IP_BUF->destipaddr);
 
   uip_appdata = &uip_buf[UIP_LLH_LEN + UIP_IPTCPH_LEN];
 
@@ -1565,7 +1547,7 @@ uip_process(u8_t flag)
   
   /* Swap IP addresses. */
   uip_ipaddr_copy(&UIP_IP_BUF->destipaddr, &UIP_IP_BUF->srcipaddr);
-  uip_ds6_select_src(&UIP_IP_BUF->srcipaddr, &UIP_IP_BUF->destipaddr);
+  uip_netif_select_src(&UIP_IP_BUF->srcipaddr, &UIP_IP_BUF->destipaddr);
   /* And send out the RST packet! */
   goto tcp_send_noconn;
 
@@ -2136,7 +2118,7 @@ uip_process(u8_t flag)
 
 
   uip_ipaddr_copy(&UIP_IP_BUF->destipaddr, &uip_connr->ripaddr);
-  uip_ds6_select_src(&UIP_IP_BUF->srcipaddr,&UIP_IP_BUF->destipaddr);
+  uip_netif_select_src(&UIP_IP_BUF->srcipaddr,&UIP_IP_BUF->destipaddr);
   PRINTF("Sending TCP packet to");
   PRINT6ADDR(&UIP_IP_BUF->destipaddr);
   PRINTF("from");
@@ -2153,7 +2135,7 @@ uip_process(u8_t flag)
   }
 
  tcp_send_noconn:
-  UIP_IP_BUF->ttl = uip_ds6_if.cur_hop_limit;
+  UIP_IP_BUF->ttl = uip_netif_physical_if.cur_hop_limit;
   UIP_IP_BUF->len[0] = ((uip_len - UIP_IPH_LEN) >> 8);
   UIP_IP_BUF->len[1] = ((uip_len - UIP_IPH_LEN) & 0xff);
 
@@ -2187,6 +2169,8 @@ uip_process(u8_t flag)
   uip_flags = 0;
   return;
 }
+#endif
+#ifndef SKIP_BANKED_FNS
 /*---------------------------------------------------------------------------*/
 u16_t
 htons(u16_t val)
@@ -2201,7 +2185,7 @@ htonl(u32_t val)
 }
 /*---------------------------------------------------------------------------*/
 void
-uip_send(const void *data, int len)
+uip_send(const void *data, int len) __banked
 {
   int copylen;
 #define MIN(a,b) ((a) < (b)? (a): (b))
@@ -2215,4 +2199,5 @@ uip_send(const void *data, int len)
   }
 }
 /*---------------------------------------------------------------------------*/
+#endif
 /** @} */

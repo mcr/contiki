@@ -1212,7 +1212,7 @@ output(uip_lladdr_t *localdest)
     rime_payload_len = (MAC_MAX_PAYLOAD - rime_hdr_len) & 0xf8;
     PRINTFO("(len %d, tag %d)\n", rime_payload_len, my_tag);
     memcpy(rime_ptr + rime_hdr_len,
-           (void *)UIP_IP_BUF + uncomp_hdr_len, rime_payload_len);
+           (uint8_t *)UIP_IP_BUF + uncomp_hdr_len, rime_payload_len);
     packetbuf_set_datalen(rime_payload_len + rime_hdr_len);
     q = queuebuf_new_from_packetbuf();
     if(q == NULL) {
@@ -1251,7 +1251,7 @@ output(uip_lladdr_t *localdest)
       PRINTFO("(offset %d, len %d, tag %d)\n",
              processed_ip_len >> 3, rime_payload_len, my_tag);
       memcpy(rime_ptr + rime_hdr_len,
-             (void *)UIP_IP_BUF + processed_ip_len, rime_payload_len);
+             (uint8_t *)UIP_IP_BUF + processed_ip_len, rime_payload_len);
       packetbuf_set_datalen(rime_payload_len + rime_hdr_len);
       q = queuebuf_new_from_packetbuf();
       if(q == NULL) {

@@ -32,19 +32,19 @@
  */
 #ifndef __RANDOM_H__
 #define __RANDOM_H__
-
+#include "dev/banked.h"
 /*
  * Initialize the pseudo-random generator.
  *
  */
-void random_init(unsigned short seed);
+void random_init(unsigned short seed) __banked;
 
 /*
  * Calculate a pseudo random number between 0 and 65535.
  *
  * \return A pseudo-random number between 0 and 65535.
  */
-unsigned short random_rand(void);
+unsigned short random_rand(void) __banked;
 
 #define RANDOM_MAX 65535U
 

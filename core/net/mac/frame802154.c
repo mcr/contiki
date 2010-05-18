@@ -155,7 +155,7 @@ field_len(frame802154_t *p, field_length_t *flen)
  *   \return The length of the frame header.
 */
 uint8_t
-frame802154_hdrlen(frame802154_t *p)
+frame802154_hdrlen(frame802154_t *p) __banked
 {
   field_length_t flen;
   field_len(p, &flen);
@@ -178,7 +178,7 @@ frame802154_hdrlen(frame802154_t *p)
  *   insufficient space in the buffer for the frame headers.
 */
 uint8_t
-frame802154_create(frame802154_t *p, uint8_t *buf, uint8_t buf_len)
+frame802154_create(frame802154_t *p, uint8_t *buf, uint8_t buf_len) __banked
 {
   int c;
   field_length_t flen;
@@ -217,7 +217,7 @@ frame802154_create(frame802154_t *p, uint8_t *buf, uint8_t buf_len)
 
   /* Destination address */
   for(c = flen.dest_addr_len; c > 0; c--) {
-    tx_frame_buffer[pos++] = p->dest_addr[c - 1];
+    tx_frame_buffer[pos++] = p->dest_addr.u8[c - 1];
   }
 
   /* Source PAN ID */
@@ -228,7 +228,7 @@ frame802154_create(frame802154_t *p, uint8_t *buf, uint8_t buf_len)
 
   /* Source address */
   for(c = flen.src_addr_len; c > 0; c--) {
-    tx_frame_buffer[pos++] = p->src_addr[c - 1];
+    tx_frame_buffer[pos++] = p->src_addr.u8[c - 1];
   }
 
   /* Aux header */
@@ -250,7 +250,7 @@ frame802154_create(frame802154_t *p, uint8_t *buf, uint8_t buf_len)
  *   \param pf The frame802154_t struct to store the parsed frame information.
  */
 uint8_t
-frame802154_parse(uint8_t *data, uint8_t len, frame802154_t *pf)
+frame802154_parse(uint8_t *data, uint8_t len, frame802154_t *pf) __banked
 {
   uint8_t *p;
   frame802154_fcf_t fcf;
@@ -291,18 +291,18 @@ frame802154_parse(uint8_t *data, uint8_t len, frame802154_t *pf)
 /*     } */
 /*     p += l; */
     if(fcf.dest_addr_mode == FRAME802154_SHORTADDRMODE) {
-      rimeaddr_copy((rimeaddr_t *)&(pf->dest_addr), &rimeaddr_null);
-      pf->dest_addr[0] = p[1];
-      pf->dest_addr[1] = p[0];
+      rimeaddr_copy(&(pf->dest_addr), &rimeaddr_null);
+      pf->dest_addr.u8[0] = p[1];
+      pf->dest_addr.u8[1] = p[0];
       p += 2;
     } else if(fcf.dest_addr_mode == FRAME802154_LONGADDRMODE) {
       for(c = 0; c < 8; c++) {
-        pf->dest_addr[c] = p[7 - c];
+        pf->dest_addr.u8[c] = p[7 - c];
       }
       p += 8;
     }
   } else {
-    rimeaddr_copy((rimeaddr_t *)&(pf->dest_addr), &rimeaddr_null);
+    rimeaddr_copy(&(pf->dest_addr), &rimeaddr_null);
     pf->dest_pid = 0;
   }
 
@@ -323,18 +323,18 @@ frame802154_parse(uint8_t *data, uint8_t len, frame802154_t *pf)
 /*     } */
 /*     p += l; */
     if(fcf.src_addr_mode == FRAME802154_SHORTADDRMODE) {
-      rimeaddr_copy((rimeaddr_t *)&(pf->src_addr), &rimeaddr_null);
-      pf->src_addr[0] = p[1];
-      pf->src_addr[1] = p[0];
+      rimeaddr_copy(&(pf->src_addr), &rimeaddr_null);
+      pf->src_addr.u8[0] = p[1];
+      pf->src_addr.u8[1] = p[0];
       p += 2;
     } else if(fcf.src_addr_mode == FRAME802154_LONGADDRMODE) {
       for(c = 0; c < 8; c++) {
-        pf->src_addr[c] = p[7 - c];
+        pf->src_addr.u8[c] = p[7 - c];
       }
       p += 8;
     }
   } else {
-    rimeaddr_copy((rimeaddr_t *)&(pf->src_addr), &rimeaddr_null);
+    rimeaddr_copy(&(pf->src_addr), &rimeaddr_null);
     pf->src_pid = 0;
   }
 

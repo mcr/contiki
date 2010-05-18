@@ -53,7 +53,7 @@
 
 #ifndef __UIP_H__
 #define __UIP_H__
-
+#include "dev/banked.h"
 #include "net/uipopt.h"
 
 /**
@@ -82,39 +82,38 @@ typedef uip_ip4addr_t uip_ipaddr_t;
 /*---------------------------------------------------------------------------*/
 
 /** \brief 16 bit 802.15.4 address */
-typedef struct uip_802154_shortaddr {
+struct uip_802154_shortaddr {
   u8_t addr[2];
-} uip_802154_shortaddr;
+};
 /** \brief 64 bit 802.15.4 address */
-typedef struct uip_802154_longaddr {
+struct uip_802154_longaddr {
   u8_t addr[8];
-} uip_802154_longaddr;
+};
 
 /** \brief 802.11 address */
-typedef struct uip_80211_addr {
+struct uip_80211_addr {
   u8_t addr[6];
-} uip_80211_addr;
+};
 
 /** \brief 802.3 address */
-typedef struct uip_eth_addr {
+struct uip_eth_addr {
   u8_t addr[6];
-} uip_eth_addr;
-
+};
 
 #if UIP_CONF_LL_802154
 /** \brief 802.15.4 address */
-typedef uip_802154_longaddr uip_lladdr_t;
+typedef struct uip_802154_longaddr uip_lladdr_t;
 #define UIP_802154_SHORTADDR_LEN 2
 #define UIP_802154_LONGADDR_LEN  8
 #define UIP_LLADDR_LEN UIP_802154_LONGADDR_LEN
 #else /*UIP_CONF_LL_802154*/
 #if UIP_CONF_LL_80211
 /** \brief 802.11 address */
-typedef uip_80211_addr uip_lladdr_t;
+typedef struct uip_80211_addr uip_lladdr_t;
 #define UIP_LLADDR_LEN 6
 #else /*UIP_CONF_LL_80211*/
 /** \brief Ethernet address */
-typedef uip_eth_addr uip_lladdr_t;
+typedef struct uip_eth_addr uip_lladdr_t;
 #define UIP_LLADDR_LEN 6
 #endif /*UIP_CONF_LL_80211*/
 #endif /*UIP_CONF_LL_802154*/
@@ -476,14 +475,8 @@ void uip_reass_over(void);
  }
  \endcode
 */
+CCIF extern u8_t uip_buf[UIP_BUFSIZE+2];
 
-typedef union {
-  uint32_t u32[(UIP_BUFSIZE + 3) / 4];
-  uint8_t u8[UIP_BUFSIZE];
-} uip_buf_t;
-
-CCIF extern uip_buf_t uip_aligned_buf;
-#define uip_buf (uip_aligned_buf.u8)
 
 
 /** @} */
@@ -600,7 +593,7 @@ struct uip_conn *uip_connect(uip_ipaddr_t *ripaddr, u16_t port);
  *
  * \hideinitializer
  */
-CCIF void uip_send(const void *data, int len);
+CCIF void uip_send(const void *data, int len) __banked;
 
 /**
  * The length of any incoming data that is currently available (if available)
@@ -1208,14 +1201,14 @@ struct uip_udp_conn *uip_udp_new(const uip_ipaddr_t *ripaddr, u16_t rport);
  * network byte order, use the HTONS() macro instead.
  */
 #ifndef htons
-CCIF u16_t htons(u16_t val);
+CCIF u16_t htons(u16_t val) __banked;
 #endif /* htons */
 #ifndef ntohs
 #define ntohs htons
 #endif
 
 #ifndef htonl
-CCIF u32_t htonl(u32_t val);
+CCIF u32_t htonl(u32_t val) __banked;
 #endif /* htonl */
 #ifndef ntohl
 #define ntohl htonl
@@ -1362,10 +1355,20 @@ struct uip_udp_conn {
 extern struct uip_udp_conn *uip_udp_conn;
 extern struct uip_udp_conn uip_udp_conns[UIP_UDP_CONNS];
 
-struct uip_fallback_interface {
-  void (*init)(void);
-  void (*output)(void);
+struct uip_router {
+  int (*activate)(void);
+  int (*deactivate)(void);
+  uip_ipaddr_t *(*lookup)(uip_ipaddr_t *destipaddr, uip_ipaddr_t *nexthop);
 };
+
+#if UIP_CONF_ROUTER
+extern const struct uip_router *uip_router;
+
+/**
+ * uIP routing driver registration function.
+ */
+void uip_router_register(const struct uip_router *router);
+#endif /*UIP_CONF_ROUTER*/
 
 #if UIP_CONF_ICMP6
 struct uip_icmp6_conn {
@@ -1713,22 +1716,22 @@ struct uip_ip_hdr {
  * used in IPSec and defined in RFC4302,4303,4305,4385
  */
 /* common header part */
-typedef struct uip_ext_hdr {
+struct uip_ext_hdr {
   u8_t next;
   u8_t len;
-} uip_ext_hdr;
+};
 
 /* Hop by Hop option header */
-typedef struct uip_hbho_hdr {
+struct uip_hbho_hdr {
   u8_t next;
   u8_t len;
-} uip_hbho_hdr;
+};
 
 /* destination option header */
-typedef struct uip_desto_hdr {
+struct uip_desto_hdr {
   u8_t next;
   u8_t len;
-} uip_desto_hdr;
+};
 
 /* We do not define structures for PAD1 and PADN options */
 
@@ -1740,35 +1743,35 @@ typedef struct uip_desto_hdr {
  * RFC3775 (MIPv6) here we do not implement MIPv6, so we just need to
  * parse the 4 first bytes
  */
-typedef struct uip_routing_hdr {
+struct uip_routing_hdr {
   u8_t next;
   u8_t len;
   u8_t routing_type;
   u8_t seg_left;
-} uip_routing_hdr;
+};
 
 /* fragmentation header */
-typedef struct uip_frag_hdr {
+struct uip_frag_hdr {
   u8_t next;
   u8_t res;
   u16_t offsetresmore;
   u32_t id;
-} uip_frag_hdr;
+};
 
 /*
  * an option within the destination or hop by hop option headers
  * it contains type an length, which is true for all options but PAD1
  */
-typedef struct uip_ext_hdr_opt {
+struct uip_ext_hdr_opt {
   u8_t type;
   u8_t len;
-} uip_ext_hdr_opt;
+};
 
 /* PADN option */
-typedef struct uip_ext_hdr_opt_padn {
+struct uip_ext_hdr_opt_padn {
   u8_t opt_type;
   u8_t opt_len;
-} uip_ext_hdr_opt_padn;
+};
 
 /* TCP header */
 struct uip_tcp_hdr {
@@ -1920,22 +1923,6 @@ CCIF extern uip_lladdr_t uip_lladdr;
 
 
 #ifdef UIP_CONF_IPV6
-/** Length of the link local prefix */
-#define UIP_LLPREF_LEN     10
-
-/**
- * \brief Is IPv6 address a the unspecified address
- * a is of type uip_ipaddr_t
- */
-#define uip_is_addr_loopback(a)                  \
-  ((((a)->u16[0]) == 0) &&                       \
-   (((a)->u16[1]) == 0) &&                       \
-   (((a)->u16[2]) == 0) &&                       \
-   (((a)->u16[3]) == 0) &&                       \
-   (((a)->u16[4]) == 0) &&                       \
-   (((a)->u16[5]) == 0) &&                       \
-   (((a)->u16[6]) == 0) &&                       \
-   (((a)->u16[7]) == 1))
 /**
  * \brief Is IPv6 address a the unspecified address
  * a is of type uip_ipaddr_t
@@ -1976,14 +1963,6 @@ CCIF extern uip_lladdr_t uip_lladdr;
    (((a)->u8[14]) == 0) &&                          \
    (((a)->u8[15]) == 0x02))
 
-/**
- * \brief Checks whether the address a is link local.
- * a is of type uip_ipaddr_t
- */
-#define uip_is_addr_linklocal(a)                 \
-  ((a)->u8[0] == 0xfe &&                         \
-   (a)->u8[1] == 0x80)
-
 /** \brief set IP address a to unspecified */
 #define uip_create_unspecified(a) uip_ip6addr(a, 0, 0, 0, 0, 0, 0, 0, 0)
 
@@ -1992,27 +1971,20 @@ CCIF extern uip_lladdr_t uip_lladdr;
 
 /** \brief set IP address a to the link local all-routers multicast address */
 #define uip_create_linklocal_allrouters_mcast(a) uip_ip6addr(a, 0xff02, 0, 0, 0, 0, 0, 0, 0x0002)
-#define uip_create_linklocal_prefix(addr) do { \
-    (addr)->u16[0] = HTONS(0xfe80);            \
-    (addr)->u16[1] = 0;                        \
-    (addr)->u16[2] = 0;                        \
-    (addr)->u16[3] = 0;                        \
-  } while(0)
 
 /**
  * \brief  is addr (a) a solicited node multicast address, see RFC3513
  *  a is of type uip_ipaddr_t*
  */
-#define uip_is_addr_solicited_node(a)          \
-  ((((a)->u8[0])  == 0xFF) &&                  \
-   (((a)->u8[1])  == 0x02) &&                  \
-   (((a)->u16[1]) == 0x00) &&                  \
-   (((a)->u16[2]) == 0x00) &&                  \
-   (((a)->u16[3]) == 0x00) &&                  \
-   (((a)->u16[4]) == 0x00) &&                  \
-   (((a)->u8[10]) == 0x00) &&                  \
-   (((a)->u8[11]) == 0x01) &&                  \
-   (((a)->u8[12]) == 0xFF))
+#define uip_is_addr_solicited_node(a)           \
+  ((((a)->u8[0]) == 0xFF) &&                     \
+  (((a)->u8[1]) == 0x02) &&                     \
+  (((a)->u16[1]) == 0) &&                       \
+  (((a)->u16[2]) == 0) &&                       \
+  (((a)->u16[3]) == 0) &&                       \
+  (((a)->u16[4]) == 0) &&                       \
+  (((a)->u16[5]) == 1) &&                       \
+  (((a)->u8[12]) == 0xFF))
 
 /**
  * \briefput in b the solicited node address corresponding to address a
@@ -2104,15 +2076,6 @@ CCIF extern uip_lladdr_t uip_lladdr;
    (((a)->u8[14])  == 0) &&                 \
    (((a)->u8[15])  == 2))
 
-
-/**
- * \brief are last three bytes of both addresses equal?
- * This is used to compare solicited node multicast addresses
- */
-#define uip_are_solicited_bytes_equal(a, b)             \
-  ((((a)->u8[13])  == ((b)->u8[13])) &&                 \
-   (((a)->u8[14])  == ((b)->u8[14])) &&                 \
-   (((a)->u8[15])  == ((b)->u8[15])))
 
 #endif /*UIP_CONF_IPV6*/
 
