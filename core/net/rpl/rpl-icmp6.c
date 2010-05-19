@@ -53,6 +53,7 @@
 #include "net/rime/packetbuf.h"
 
 #include <limits.h>
+#include <string.h>
 
 #define DEBUG DEBUG_ANNOTATE
 
