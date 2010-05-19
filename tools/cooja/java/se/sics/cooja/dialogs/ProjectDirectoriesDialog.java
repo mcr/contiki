@@ -465,12 +465,17 @@ class DirectoryTreePanel extends JPanel {
         }
         public void paintIcon(Component c, Graphics g, int x, int y) {
           if (icon != null) {
-            icon.paintIcon(c, g, x, y);
-          } else {
+            try {
+              icon.paintIcon(c, g, x, y);
+            } catch (Exception e) {
+              icon = null;
+            }
+          }
+          if (icon == null) {
             g.setColor(Color.WHITE);
-            g.fillRect(x, y, 18, 18);
+            g.fillRect(x+1, y+1, 16, 16);
             g.setColor(Color.BLACK);
-            g.drawRect(x, y, 18, 18);
+            g.drawRect(x+1, y+1, 16, 16);
           }
           if (color != null) {
             g.setColor(color);
