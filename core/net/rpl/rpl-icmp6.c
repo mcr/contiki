@@ -374,17 +374,18 @@ dao_input(void)
     return;
   }
 
-  PRINTF("RPL: Incoming DAO rank is %u, my rank is %u\n",
-	 (unsigned)rank, (unsigned)dag->rank);
   if(rank < dag->rank) {
+    PRINTF("RPL: Incoming DAO rank is %u, my rank is %u\n",
+	   (unsigned)rank, (unsigned)dag->rank);
     return;
   }
 
-  PRINTF("RPL: DAO rank: %u, lifetime: %lu, prefix length: %u\n",
-	(unsigned)rank, (unsigned long)lifetime, (unsigned)prefixlen);
-
   memset(&prefix, 0, sizeof(prefix));
   memcpy(&prefix, buffer + pos, prefixlen / CHAR_BIT);
+
+  PRINTF("RPL: DAO rank: %u, lifetime: %lu, prefix length: %u",
+	(unsigned)rank, (unsigned long)lifetime, (unsigned)prefixlen);
+  PRINTF("\n");
 
   if(lifetime == ZERO_LIFETIME) {
     /* No-DAO received; invoke the route purging routine. */

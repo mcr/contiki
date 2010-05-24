@@ -523,6 +523,11 @@ rpl_process_dio(uip_ipaddr_t *from, rpl_dio_t *dio)
       if(RPL_PARENT_COUNT(dag) > 1) {
         /* Since we have alternative parents, we can simply drop this one. */
         rpl_remove_neighbor(dag, n);
+	n = rpl_find_best_parent(dag);
+	if(n != NULL) {
+          rpl_set_default_route(dag, &n->addr);
+	}
+	return;
       } else if(dag->of->increment_rank(dio->dag_rank, n) <= dag->min_rank + dag->max_rankinc) {
         dag->rank = dag->of->increment_rank(dio->dag_rank, n);
         PRINTF("RPL: New rank is %hu, max is %hu\n",
