@@ -74,6 +74,9 @@
 
 #define reg(x) (*(volatile uint32_t *)(x))
 
+int count_packets(void);
+void Print_Packets(char *s);
+
 static volatile packet_t packet_pool[NUM_PACKETS];
 static volatile packet_t *free_head, *rx_end, *tx_end, *dma_tx, *dma_rx;
 
@@ -108,9 +111,14 @@ volatile uint8_t fcs_mode = USE_FCS;
 /* it calls redoes the maca intialization but _DOES NOT_ free all packets */ 
 
 void check_maca(void) {
+	safe_irq_disable(MACA);
 	static volatile uint32_t last_time;
 	static volatile uint32_t last_entry;
 	volatile uint32_t i;
+#if DEBUG_MACA
+	volatile uint32_t count;
+#endif 
+	
 
 	/* if *MACA_CLK == last_time */
 	/* try waiting for one clock period */
@@ -118,23 +126,44 @@ void check_maca(void) {
 	for(i=0; (i < 1024) && (*MACA_CLK == last_time); i++) { continue; }
 
 	if(*MACA_CLK == last_time) {
+		PRINTF("check maca: maca_clk stopped, restarting\n");
 		/* clock isn't running */
 		ResumeMACASync();
-		maca_isr(); 
+		*INTFRC = (1<<INT_NUM_MACA);
 	} else {
 		if((last_time > (*MACA_SFTCLK + RECV_SOFTIMEOUT)) &&
 		   (last_time > (*MACA_CPLCLK + CPL_TIMEOUT))) {
+			PRINTF("check maca: complete clocks expired --- forcing isr\n");
 			/* all complete clocks have expired */
 			/* check that maca entry is changing */
 			/* if not, do call the isr to restart the cycle */
 			if(last_entry == maca_entry) {
-				maca_isr();
+				*INTFRC = (1<<INT_NUM_MACA);
 			}
 		}
 	}
 		
 	last_entry = maca_entry;
 	last_time = *MACA_CLK;
+
+#if DEBUG_MACA
+	if((count = count_packets()) != NUM_PACKETS) {
+		PRINTF("check maca: count_packets %d\n", count);
+		Print_Packets("check_maca");
+#if PACKET_STATS
+		for(i=0; i<NUM_PACKETS; i++) {
+			printf("packet 0x%lx seen %d post_tx %d get_free %d rxd %d\n", 
+			       (uint32_t) &packet_pool[i], 
+			       packet_pool[i].seen, 
+			       packet_pool[i].post_tx, 
+			       packet_pool[i].get_free, 
+			       packet_pool[i].rxd);
+		}
+#endif
+		if(bit_is_set(*NIPEND, INT_NUM_MACA)) { *INTFRC = (1 << INT_NUM_MACA); }
+	}
+#endif /* DEBUG_MACA */
+	irq_restore();
 }
 
 void maca_init(void) {
@@ -144,25 +173,27 @@ void maca_init(void) {
 	init_phy();
 	free_head = 0; tx_head = 0; rx_head = 0; rx_end = 0; tx_end = 0; dma_tx = 0; dma_rx = 0;
 	free_all_packets();
+
+	#if DEBUG_MACA
+	Print_Packets("maca_init");
+	#endif
 	
 	/* initial radio command */
         /* nop, promiscuous, no cca */
 	*MACA_CONTROL = (1 << PRM) | (NO_CCA << MODE); 
 	
 	enable_irq(MACA);
-	maca_isr(); 
-	
+	*INTFRC = (1 << INT_NUM_MACA);
 }
 
 #define print_packets(x) Print_Packets(x)
 void Print_Packets(char *s) {
 	volatile packet_t *p;
-	int i = 0;
+
 	printf("packet pool after %s:\n\r",s);
 	p = free_head;	
 	printf("free_head: 0x%lx ", (uint32_t) free_head);
 	while(p != 0) {
-		i++;
 		p = p->left;
 		printf("->0x%lx", (uint32_t) p);
 	}
@@ -171,7 +202,6 @@ void Print_Packets(char *s) {
 	p = tx_head;
 	printf("tx_head: 0x%lx ", (uint32_t) tx_head);
 	while(p != 0) {
-		i++;
 		p = p->left;
 		printf("->0x%lx", (uint32_t) p);
 	}
@@ -180,41 +210,56 @@ void Print_Packets(char *s) {
 	p = rx_head;
 	printf("rx_head: 0x%lx ", (uint32_t) rx_head);
 	while(p != 0) {
-		i++;
 		p = p->left;
 		printf("->0x%lx", (uint32_t) p);
 	}
 	printf("\n\r");
-	printf("found %d packets\n\r",i);
+
+	printf("dma_rx: 0x%lx\n", (uint32_t) dma_rx);
+	printf("dma_tx: 0x%lx\n", (uint32_t) dma_tx);
+
 }
 
 inline void bad_packet_bounds(void) {
+	PRINTF("bad packet bounds! Halting.\n");
 	while(1) { continue; }
 }
 
 int count_packets(void) {
+	volatile int8_t total = -1;
+
+#if PACKET_STATS
 	volatile packet_t *pk;
-	volatile uint8_t tx, rx, free, total;
+	volatile uint8_t tx, rx, free;
+	volatile int i;
+
+	for(i = 0; i < NUM_PACKETS; i++) {
+		packet_pool[i].seen = 0;
+	}
 
 	pk = tx_head; tx = 0;
 	while( pk != 0 ) {
-		tx++;
+		if(pk->seen == 0) { tx++; }
+		pk->seen++;
 		pk = pk->left;
 	}
 	pk = rx_head; rx = 0;
 	while( pk != 0 ) {
-		rx++;
+		if(pk->seen == 0) { rx++; }
+		pk->seen++;
 		pk = pk->left;
 	}
 	pk = free_head; free = 0;
 	while( pk != 0 ) {
-		free++;
+		if(pk->seen == 0) { free++; }
+		pk->seen++;
 		pk = pk->left;
 	}
 
 	total = free + rx + tx;
-	if(dma_rx) { total++; }
-	if(dma_tx) { total++; }
+	if(dma_rx && (dma_rx->seen == 0)) { dma_rx->seen++; total++; }
+	if(dma_tx && (dma_tx->seen == 0)) { dma_tx->seen++; total++; }
+#endif /* PACKET_STATS */
 
 	return total;
 }	
@@ -247,11 +292,20 @@ void free_packet(volatile packet_t *p) {
 
 	p->length = 0; p->offset = 0;
 	p->left = free_head; p->right = 0;
+#if PACKET_STATS
+	p->seen = 0; 
+	p->post_tx = 0;
+	p->get_free = 0;
+	p->rxd = 0;
+#endif
+
 	free_head = p;
 
 	BOUND_CHECK(free_head);
 
 	irq_restore();
+	if(bit_is_set(*NIPEND, INT_NUM_MACA)) { *INTFRC = (1 << INT_NUM_MACA); }
+
 	return;
 }
 
@@ -259,7 +313,7 @@ volatile packet_t* get_free_packet(void) {
 	volatile packet_t *p;
 
 	safe_irq_disable(MACA);
-
+	
 	BOUND_CHECK(free_head);
 
 	p = free_head;
@@ -270,8 +324,14 @@ volatile packet_t* get_free_packet(void) {
 
 	BOUND_CHECK(free_head);
 
+#if PACKET_STATS
+	p->get_free++;
+#endif
+
 //	print_packets("get_free_packet");
 	irq_restore();
+	if(bit_is_set(*NIPEND, INT_NUM_MACA)) { *INTFRC = (1 << INT_NUM_MACA); }
+
 	return p;
 }
 
@@ -324,8 +384,14 @@ volatile packet_t* rx_packet(void) {
 		rx_head->right = 0;
 	}
 
+#if PACKET_STATS
+	p->rxd++;
+#endif
+
 //	print_packets("rx_packet");
 	irq_restore();
+	if(bit_is_set(*NIPEND, INT_NUM_MACA)) { *INTFRC = (1 << INT_NUM_MACA); }
+
 	return p;
 }
 
@@ -335,6 +401,9 @@ void post_tx(void) {
 	disable_irq(MACA);
 	last_post = TX_POST;
 	dma_tx = tx_head; 
+#if PACKET_STATS
+	dma_tx->post_tx++;
+#endif
 	*MACA_TXLEN = (uint32_t)((dma_tx->length) + 2);
 	*MACA_DMATX = (uint32_t)&(dma_tx->data[ 0 + dma_tx->offset]);
 	if(dma_rx == 0) {
@@ -388,6 +457,8 @@ void tx_packet(volatile packet_t *p) {
 	}
 //	print_packets("tx packet");
 	irq_restore();
+	if(bit_is_set(*NIPEND, INT_NUM_MACA)) { *INTFRC = (1 << INT_NUM_MACA); } 
+
 	return;
 }
 
@@ -403,6 +474,8 @@ void free_all_packets(void) {
 	tx_head = 0; tx_end = 0;
 
 	irq_restore();
+	if(bit_is_set(*NIPEND, INT_NUM_MACA)) { *INTFRC = (1 << INT_NUM_MACA); }
+
 	return;
 }
 
@@ -421,6 +494,8 @@ void free_tx_head(void) {
 	
 //	print_packets("free tx head");
 	irq_restore();
+	if(bit_is_set(*NIPEND, INT_NUM_MACA)) { *INTFRC = (1 << INT_NUM_MACA); }
+
 	return;
 }
 
@@ -444,6 +519,8 @@ void add_to_rx(volatile packet_t *p) {
 	
 //	print_packets("add to rx");
 	irq_restore();
+	if(bit_is_set(*NIPEND, INT_NUM_MACA)) { *INTFRC = (1 << INT_NUM_MACA); }
+
 	return;
 }
 
@@ -723,7 +800,7 @@ void maca_on(void) {
 	init_phy();
 	
 	enable_irq(MACA);
-	maca_isr(); 
+	*INTFRC = (1 << INT_NUM_MACA);
 }
 
 /* initialized with 0x4c */
@@ -924,6 +1001,8 @@ void set_power(uint8_t power) {
 	reg(ADDR_POW3) = AIMVAL[power];
 	
 	irq_restore();
+	if(bit_is_set(*NIPEND, INT_NUM_MACA)) { *INTFRC = (1 << INT_NUM_MACA); }
+
 }
 
 const uint8_t VCODivI[16] = {
@@ -993,6 +1072,7 @@ void set_channel(uint8_t chan) {
 	reg(ADDR_CHAN4) = tmp;
 	/* duh! */
 	irq_restore();
+	if(bit_is_set(*NIPEND, INT_NUM_MACA)) { *INTFRC = (1 << INT_NUM_MACA); }
 }
 
 #define ROM_END 0x0013ffff
