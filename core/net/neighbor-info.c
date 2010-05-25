@@ -127,6 +127,7 @@ neighbor_info_packet_sent(int status, int numtx)
     packet_etx = numtx;
     add_neighbor(dest);
     break;
+  case MAC_TX_ERR:
   case MAC_TX_NOACK:
     if(neighbor_attr_has_neighbor(dest)) {
       neighbor_attr_remove_neighbor(dest);
@@ -134,7 +135,6 @@ neighbor_info_packet_sent(int status, int numtx)
         subscriber_callback(dest, 0, 0);
       }
     }
-  case MAC_TX_COLLISION:
   default:
     return;
   }
