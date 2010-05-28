@@ -152,7 +152,7 @@ init(void)
   announcement_init();
 
   rime_mac = &NETSTACK_MAC;
-  chameleon_init(&chameleon_bitopt);
+  chameleon_init();
 #if ! RIME_CONF_NO_POLITE_ANNOUCEMENTS
   /* XXX This is initializes the transmission of announcements but it
    * is not currently certain where this initialization is supposed to

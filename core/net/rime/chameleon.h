@@ -41,19 +41,15 @@
 #ifndef __CHAMELEON_H__
 #define __CHAMELEON_H__
 
-
 #include "net/rime/channel.h"
-#include "net/rime/chameleon-bitopt.h"
-#include "net/rime/chameleon-raw.h"
 
 struct chameleon_module {
   struct channel *(* input)(void);
   int (* output)(struct channel *);
   int (* hdrsize)(const struct packetbuf_attrlist *);
-  void (* init)(void);
 };
 
-void chameleon_init(const struct chameleon_module *header_processing_module);
+void chameleon_init(void);
 
 int chameleon_hdrsize(const struct packetbuf_attrlist attrlist[]);
 struct channel *chameleon_parse(void);
