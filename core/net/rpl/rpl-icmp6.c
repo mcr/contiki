@@ -323,8 +323,8 @@ dio_output(rpl_dag_t *dag, uip_ipaddr_t *uc_addr)
   buffer[pos++] = RPL_DIO_SUBOPT_OCP;
   buffer[pos++] = 0;
   buffer[pos++] = 2;
-  buffer[pos++] = 0;
-  buffer[pos++] = 0;
+  buffer[pos++] = dag->of->ocp >> 8;
+  buffer[pos++] = dag->of->ocp & 0xff;
 
   /* alignment here ??? */
 
