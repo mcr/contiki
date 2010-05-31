@@ -67,7 +67,7 @@ open_url(char *url)
   static char host[32];
   char *file;
   register char *urlptr;
-  static u16_t addr[2];
+  static uip_ipaddr_t addr;
 
   /* Trim off any spaces in the end of the url. */
   urlptr = url + strlen(url) - 1;
@@ -120,7 +120,7 @@ open_url(char *url)
   
   /* Try to lookup the hostname. If it fails, we initiate a hostname
      lookup and print out an informative message on the statusbar. */
-  if(uiplib_ipaddrconv(host, (unsigned char *)addr) == 0) {
+  if(uiplib_ipaddrconv(host, &addr) == 0) {
     shell_output_str(&wget_command, "Not an IP address", "");
     if(resolv_lookup(host) == NULL) {
       shell_output_str(&wget_command, "Not resolved", "");

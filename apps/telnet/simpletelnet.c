@@ -151,7 +151,7 @@ show(char *text)
 static void
 connect(void)
 {
-  u16_t addr[2], *addrptr;
+  uip_ipaddr_t addr, *addrptr;
   u16_t port;
   char *cptr;
   struct uip_conn *conn;
@@ -161,9 +161,9 @@ connect(void)
   for(cptr = telnethost; *cptr != ' ' && *cptr != 0; ++cptr);
   *cptr = 0;
 
-  addrptr = &addr[0];  
+  addrptr = &addr;
 #if UIP_UDP
-  if(uiplib_ipaddrconv(telnethost, (unsigned char *)addr) == 0) {
+  if(uiplib_ipaddrconv(telnethost, &addr) == 0) {
     addrptr = resolv_lookup(telnethost);
     if(addrptr == NULL) {
       resolv_query(telnethost);
@@ -172,7 +172,7 @@ connect(void)
     }
   }
 #else /* UIP_UDP */
-  uiplib_ipaddrconv(telnethost, (unsigned char *)addr);
+  uiplib_ipaddrconv(telnethost, &addr);
 #endif /* UIP_UDP */
 
   port = 0;
@@ -185,7 +185,7 @@ connect(void)
   }
 
 
-  conn = tcp_connect((uip_ipaddr_t *)addrptr, htons(port), &ts_appstate);
+  conn = tcp_connect(addrptr, htons(port), &ts_appstate);
   if(conn == NULL) {
     show("Out of memory error");
     return;

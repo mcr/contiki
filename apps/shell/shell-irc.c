@@ -142,7 +142,7 @@ PROCESS_THREAD(shell_irc_process, ev, data)
   
   running = 1;
 
-  uiplib_ipaddrconv(server, (u8_t *)&serveraddr);
+  uiplib_ipaddrconv(server, &serveraddr);
   ircc_connect(&s, server, &serveraddr, nick);
   while(running) {
     PROCESS_WAIT_EVENT();

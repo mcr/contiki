@@ -39,7 +39,7 @@
 
 void ftpc_init(void);
 
-void *ftpc_connect(u16_t *ipaddr, u16_t port);
+void *ftpc_connect(uip_ipaddr_t *ipaddr, u16_t port);
 char ftpc_list(void *connection);
 void ftpc_cwd(void *connection, char *dir);
 void ftpc_cdup(void *connection);

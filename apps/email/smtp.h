@@ -41,7 +41,7 @@
 void smtp_done(unsigned char error);
 
 /* Functions. */
-void smtp_configure(char *localhostname, u16_t *smtpserver);
+void smtp_configure(char *localhostname, uip_ipaddr_t *smtpserver);
 
 unsigned char smtp_send(char *to, char *cc, char *from,
 			char *subject, char *msg,

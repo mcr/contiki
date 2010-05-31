@@ -56,7 +56,7 @@ static char url[128];
 static void
 start_get(void)
 {
-  u16_t addr[2];
+  uip_ipaddr_t addr;
   unsigned char i;
   static char host[32];
   char *file;
@@ -113,7 +113,7 @@ start_get(void)
 
 #if UIP_UDP
   /* First check if the host is an IP address. */
-  if(uiplib_ipaddrconv(host, (unsigned char *)addr) == 0) {    
+  if(uiplib_ipaddrconv(host, &addr) == 0) {    
     
     /* Try to lookup the hostname. If it fails, we initiate a hostname
        lookup and print out an informative message on the
@@ -125,7 +125,7 @@ start_get(void)
     }
   }
 #else /* UIP_UDP */
-  uiplib_ipaddrconv(host, (unsigned char *)addr);
+  uiplib_ipaddrconv(host, &addr);
 #endif /* UIP_UDP */
 
   /* The hostname we present in the hostname table, so we send out the

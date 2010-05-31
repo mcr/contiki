@@ -127,7 +127,7 @@ ftpc_init(void)
 }
 /*---------------------------------------------------------------------------*/
 void *
-ftpc_connect(u16_t *ipaddr, u16_t port)
+ftpc_connect(uip_ipaddr_t *ipaddr, u16_t port)
 {
   struct ftp_connection *c;
 
@@ -143,7 +143,7 @@ ftpc_connect(u16_t *ipaddr, u16_t port)
   c->dataconn.port = DATAPORT;
   tcp_listen(HTONS(DATAPORT));
 
-  if(tcp_connect((uip_ipaddr_t *)ipaddr, port, c) == NULL) {
+  if(tcp_connect(ipaddr, port, c) == NULL) {
     memb_free(&connections, c);
     return NULL;
   }
