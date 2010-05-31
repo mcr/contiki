@@ -91,7 +91,7 @@ $(OBJECTDIR)/%.o: %.S
 CUSTOM_RULE_C_TO_CO=yes
 
 %.co: %.c
-	$(CC) $(CFLAGS) $(THUMB_FLAGS) $< -c -o $@
+	$(CC) $(CFLAGS) -DAUTOSTART_ENABLE $(THUMB_FLAGS) $< -c -o $@
 
 .PRECIOUS: %.bin
 

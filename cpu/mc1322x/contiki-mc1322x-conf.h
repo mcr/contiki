@@ -47,11 +47,6 @@ typedef int32_t s32_t;
 /* Pre-allocated memory for loadable modules heap space (in bytes)*/
 #define MMEM_CONF_SIZE 256
 
-#define AUTOSTART_ENABLE 1
-
-#define CCIF
-#define CLIF
-
 typedef uint32_t clock_time_t;
 typedef unsigned char u8_t;
 typedef unsigned short u16_t;

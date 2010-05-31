@@ -60,6 +60,9 @@
 /* since leds_arch hits the entire gpio_data */
 #define BLINK_SECONDS 0
 
+#define CCIF
+#define CLIF
+
 /* Baud rate */
 #define MOD 9999
 /*  230400 bps, INC=767, MOD=9999, 24Mhz 16x samp */
