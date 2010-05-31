@@ -138,6 +138,7 @@ struct rpl_parent {
 typedef struct rpl_parent rpl_parent_t;
 
 struct rpl_of {
+  void (*reset)(void *);
   void (*parent_state_callback)(rpl_parent_t *, int, int);
   rpl_parent_t *(*best_parent)(rpl_parent_t *, rpl_parent_t *);
   rpl_rank_t (*increment_rank)(rpl_rank_t, rpl_parent_t *);
