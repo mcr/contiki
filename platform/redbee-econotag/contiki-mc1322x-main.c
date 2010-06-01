@@ -131,7 +131,7 @@ static uint8_t is_gateway;
 #endif /* WITH_UIP */
 
 /*---------------------------------------------------------------------------*/
-void uip_log(char *msg) { puts(msg); }
+void uip_log(char *msg) { printf("%c",msg); }
 /*---------------------------------------------------------------------------*/
 #ifndef RF_CHANNEL
 #define RF_CHANNEL              26
@@ -163,7 +163,7 @@ print_processes(struct process * const processes[])
     printf(" '%s'", (*processes)->name);
     processes++;
   }
-  putchar('\n');
+  printf("\n");
 }
 /*--------------------------------------------------------------------------*/
 
