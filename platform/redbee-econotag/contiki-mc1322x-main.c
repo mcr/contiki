@@ -61,7 +61,7 @@
 #include "mc1322x.h"
 #include "default_lowlevel.h"
 #include "contiki-maca.h"
-
+#include "contiki-uart.h"
 
 #define DEBUG 1
 #if DEBUG
@@ -471,6 +471,14 @@ main(void)
   /* Main scheduler loop */
   while(1) {
 	  check_maca();
+
+	  /* TODO: replace this with a uart rx interrupt */
+	  if(uart1_input_handler != NULL) {
+		  if(uart1_can_get()) {
+			  uart1_input_handler(uart1_getc());
+		  }
+	  }
+	         
 	  process_run();
   }
   
