@@ -273,7 +273,7 @@ const uint8_t unc_mxconf[] = {0x0f, 0x25, 0x23, 0x21};
 const uint8_t llprefix[] = {0xfe, 0x80};
 
 /* TTL uncompression values */
-static const uint8_t ttl_values[] = {1, 64, 255};
+static const uint8_t ttl_values[] = {0, 1, 64, 255};
 
 /*--------------------------------------------------------------------*/
 /** \name HC06 related functions
