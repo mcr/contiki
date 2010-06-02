@@ -568,8 +568,8 @@ rpl_process_dio(uip_ipaddr_t *from, rpl_dio_t *dio)
 
   if(dio->dag_rank < dag->rank) {
     /* Message from a node closer to the root, but we might still be out of allowed rank-range */
-    if(dag->max_rankinc > 0 &&
-       dag->min_rank + dag->max_rankinc < dag->of->increment_rank(dio->dag_rank, p)) {
+    if(dag->max_rankinc > 0 && dag->min_rank + dag->max_rankinc <
+       dag->of->increment_rank(dio->dag_rank, NULL)) {
         PRINTF("RPL: Could not add parent, resulting rank too high\n");
         return;
     }
