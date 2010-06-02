@@ -36,7 +36,7 @@
 #include <mc1322x.h>
 #include <types.h>
 
-volatile char u1_tx_buf[64];
+volatile char u1_tx_buf[1024];
 volatile uint32_t u1_head, u1_tail;
 
 void uart1_isr(void) {
