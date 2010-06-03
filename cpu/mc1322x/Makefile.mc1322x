@@ -8,7 +8,7 @@ CONTIKI_CPU=$(CONTIKI)/cpu/mc1322x
 
 ### Define the source files we have in the AT91SAM7S port
 
-CONTIKI_CPU_DIRS = . lib src board ../arm/common/dbg-io
+CONTIKI_CPU_DIRS = . lib src board dev ../arm/common/dbg-io
 
 MC1322X = debug-uart.c rtimer-arch.c watchdog.c contiki-crm.c contiki-maca.c contiki-misc.c leds-arch.c leds.c contiki-uart.c slip-uart1.c
 
