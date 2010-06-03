@@ -43,6 +43,7 @@
 #include "net/uip-ds6.h"
 #include "rpl.h"
 #include "dev/slip.h"
+#include "dev/uart1.h"
 
 #define UIP_IP_BUF        ((struct uip_ip_hdr *)&uip_buf[UIP_LLH_LEN])
 
