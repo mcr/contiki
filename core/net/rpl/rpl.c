@@ -77,6 +77,18 @@ rpl_purge_routes(void)
   }
 }
 /************************************************************************/
+void
+rpl_remove_routes(rpl_dag_t *dag)
+{
+  int i;
+
+  for(i = 0; i < UIP_DS6_ROUTE_NB; i++) {
+    if(uip_ds6_routing_table[i].state.dag == dag) {
+      uip_ds6_route_rm(&uip_ds6_routing_table[i]);
+    }
+  }
+}
+/************************************************************************/
 uip_ds6_route_t *
 rpl_add_route(rpl_dag_t *dag, uip_ipaddr_t *prefix, int prefix_len,
               uip_ipaddr_t *next_hop)

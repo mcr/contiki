@@ -289,6 +289,7 @@ rpl_dag_t *rpl_get_dag(int instance_id);
 rpl_dag_t *rpl_find_dag(unsigned char aucIndex);
 
 /* RPL routing table functions. */
+void rpl_remove_routes(rpl_dag_t *dag);
 uip_ds6_route_t *rpl_add_route(rpl_dag_t *dag, uip_ipaddr_t *prefix,
                                int prefix_len, uip_ipaddr_t *next_hop);
 void rpl_purge_routes(void);
