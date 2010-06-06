@@ -90,7 +90,7 @@
 /*---------------------------------------------------------------------------*/
 /* Default values for RPL constants and variables. */
 
-#define DEFAULT_DAO_LATENCY             (CLOCK_SECOND * (1 + (random_rand() + 0xf)))
+#define DEFAULT_DAO_LATENCY             (CLOCK_SECOND * (1 + (random_rand() & 0xf)))
 
 /* Special value indicating immediate removal. */
 #define ZERO_LIFETIME                   0
