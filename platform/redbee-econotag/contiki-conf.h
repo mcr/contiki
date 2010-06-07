@@ -86,7 +86,6 @@
 /* end of mc1322x specific config. */
 
 /* start of conitki config. */
-#define RF_CHANNEL 11
 #define RIMEADDR_CONF_SIZE              8
 
 /* EUI64 generation */
