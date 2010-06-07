@@ -429,6 +429,7 @@ join_dag(uip_ipaddr_t *from, rpl_dio_t *dio)
   dag->min_rank = dag->rank; /* So far this is the lowest rank we know */
   dag->version = dio->version;
   dag->best_parent = p;
+  dag->dtsn = dio->dtsn;
 
   dag->dio_intdoubl = dio->dag_intdoubl;
   dag->dio_intmin = dio->dag_intmin;
