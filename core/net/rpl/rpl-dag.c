@@ -545,7 +545,9 @@ rpl_process_dio(uip_ipaddr_t *from, rpl_dio_t *dio)
     return;
   }
 
-  dag->dtsn = dio->dtsn;
+  if(dag->rank != ROOT_RANK && dag->dtsn < dio->dtsn || dag->dtsn == ~0) {
+    dag->dtsn = dio->dtsn;
+  }
 
   /* This DIO pertains to a DAG that we are already part of. */
   p = rpl_find_parent(dag, from);
