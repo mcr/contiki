@@ -1,8 +1,17 @@
-Things to do:
+- Change Makefile so:
 
-- Use the ROM data for radio init instead of hardcoding it
+  make TARGET=redbee-econotag 
 
-- multihop mesh test?
+  creates foo.redbee-econotag and foo_redbee-econotag.bin
+  automatically.
 
-- Set address from NVM. This will enable easier testing of mesh and
-  stuff.
+- Use channel 24 by default
+
+- update start.S
+
+- test with 'none' toolchain
+
+- update redbee-dev
+
+
+
