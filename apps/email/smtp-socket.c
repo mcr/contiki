@@ -60,7 +60,7 @@ struct smtp_state {
 static struct smtp_state s;
 
 static char *localhostname;
-static u16_t smtpserver[2];
+static uip_ipaddr_t smtpserver;
 
 #define ISO_nl 0x0a
 #define ISO_cr 0x0d
@@ -201,11 +201,10 @@ smtp_appcall(void *state)
 }
 /*---------------------------------------------------------------------------*/
 void
-smtp_configure(char *lhostname, u16_t *server)
+smtp_configure(char *lhostname, uip_ipaddr_t *server)
 {
   localhostname = lhostname;
-  smtpserver[0] = server[0];
-  smtpserver[1] = server[1];
+  uip_ipaddr_copy(&smtpserver, server);
 }
 /*---------------------------------------------------------------------------*/
 unsigned char
@@ -214,7 +213,7 @@ smtp_send(char *to, char *cc, char *from, char *subject,
 {
   struct uip_conn *conn;
 
-  conn = tcp_connect((uip_ipaddr_t *)smtpserver, HTONS(25), NULL);
+  conn = tcp_connect(&smtpserver, HTONS(25), NULL);
   if(conn == NULL) {
     return 0;
   }

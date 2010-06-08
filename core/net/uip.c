@@ -126,14 +126,8 @@ const struct uip_eth_addr uip_ethaddr = {{UIP_ETHADDR0,
 struct uip_eth_addr uip_ethaddr = {{0,0,0,0,0,0}};
 #endif
 
-#ifdef UIP_CONF_PLAIN_BUFFER
-uint8_t uip_buf[UIP_BUFSIZE + 2];
-#else /* UIP_CONF_PLAIN_BUFFER */
-static uint32_t uip_buf32[(UIP_BUFSIZE + 3) / 4];
-uint8_t * const uip_buf = (uint8_t * const)uip_buf32; 
-                                 /* The packet buffer that contains
-				    incoming packets. */
-#endif /* UIP_CONF_PLAIN_BUFFER */
+/* The packet buffer that contains incoming packets. */
+uip_buf_t uip_aligned_buf;
 
 void *uip_appdata;               /* The uip_appdata pointer points to
 				    application data. */

@@ -476,11 +476,14 @@ void uip_reass_over(void);
  }
  \endcode
 */
-#ifdef UIP_CONF_PLAIN_BUFFER
-CCIF extern uint8_t uip_buf[UIP_BUFSIZE+2];
-#else /* UIP_CONF_PLAIN_BUFFER */
-CCIF extern uint8_t * const uip_buf;
-#endif /* UIP_CONF_PLAIN_BUFFER */
+
+typedef union {
+  uint32_t u32[(UIP_BUFSIZE + 3) / 4];
+  uint8_t u8[UIP_BUFSIZE];
+} uip_buf_t;
+
+CCIF extern uip_buf_t uip_aligned_buf;
+#define uip_buf (uip_aligned_buf.u8)
 
 
 /** @} */

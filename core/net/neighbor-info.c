@@ -55,10 +55,8 @@
 #endif /* !ETX_CONF_LIMIT */
 
 #define ETX_SCALE		100
-#define ETX_ALPHA		60
+#define ETX_ALPHA		80
 #define ETX_FIRST_GUESS		(ETX_LIMIT - 1)
-#define ETX_COLLISION_PENALTY	5
-#define ETX_NO_ACK_PENALTY	(ETX_LIMIT + 1)
 /*---------------------------------------------------------------------------*/
 NEIGHBOR_ATTRIBUTE(uint8_t, etx, NULL);
 
@@ -83,12 +81,7 @@ update_etx(const rimeaddr_t *dest, int packet_etx)
   PRINTF("neighbor-info: ETX changed from %d to %d (packet ETX = %d)\n", 
 	recorded_etx, new_etx, packet_etx);
 
-  if(new_etx > ETX_LIMIT) {
-    neighbor_attr_remove_neighbor(dest);
-    if(subscriber_callback != NULL) {
-      subscriber_callback(dest, 0, new_etx);
-    }
-  } else if(neighbor_attr_has_neighbor(dest)) {
+  if(neighbor_attr_has_neighbor(dest)) {
     neighbor_attr_set_data(&etx, dest, &new_etx);
     if(new_etx != recorded_etx && subscriber_callback != NULL) {
       subscriber_callback(dest, 1, new_etx);
@@ -129,19 +122,21 @@ neighbor_info_packet_sent(int status, int numtx)
 	dest->u8[sizeof(*dest) - 2], dest->u8[sizeof(*dest) - 1],
 	status, numtx);
 
-  packet_etx = numtx;
   switch(status) {
   case MAC_TX_OK:
+    packet_etx = numtx;
     add_neighbor(dest);
     break;
-  case MAC_TX_COLLISION:
-    packet_etx += ETX_COLLISION_PENALTY; 
-    break;
+  case MAC_TX_ERR:
   case MAC_TX_NOACK:
-    packet_etx += ETX_NO_ACK_PENALTY;
-    break;
+    if(neighbor_attr_has_neighbor(dest)) {
+      neighbor_attr_remove_neighbor(dest);
+      if(subscriber_callback != NULL) {
+        subscriber_callback(dest, 0, 0);
+      }
+    }
   default:
-    break;
+    return;
   }
 
   update_etx(dest, packet_etx);
@@ -167,6 +162,7 @@ int
 neighbor_info_subscribe(neighbor_info_subscriber_t s)
 {
   if(subscriber_callback == NULL) {
+    neighbor_attr_register(&etx);
     subscriber_callback = s;
     return 1;
   }

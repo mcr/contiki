@@ -94,7 +94,7 @@ PROCESS_THREAD(shell_udpsend_process, ev, data)
   ++next;
   port = shell_strtolong(next, &nextptr);
 
-  uiplib_ipaddrconv(server, (uint8_t *)&serveraddr);
+  uiplib_ipaddrconv(server, &serveraddr);
   udpconn = udp_new(&serveraddr, htons(port), NULL);
   
   if(next != nextptr) {

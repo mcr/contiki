@@ -511,27 +511,27 @@
   <plugin>
     se.sics.cooja.plugins.Visualizer
     <plugin_config>
-      <skin>se.sics.cooja.plugins.skins.MoteTypeVisualizerSkin</skin>
       <skin>se.sics.cooja.plugins.skins.IDVisualizerSkin</skin>
       <skin>se.sics.cooja.plugins.skins.UDGMVisualizerSkin</skin>
-      <viewport>1.327212496907238 0.0 0.0 1.327212496907238 84.15798010356802 95.26961226192635</viewport>
+      <skin>se.sics.cooja.plugins.skins.AttributeVisualizerSkin</skin>
+      <viewport>2.349818846983307 0.0 0.0 2.349818846983307 150.19773526533348 176.95275613586946</viewport>
     </plugin_config>
-    <width>300</width>
+    <width>520</width>
     <z>3</z>
-    <height>300</height>
-    <location_x>320</location_x>
-    <location_y>30</location_y>
+    <height>523</height>
+    <location_x>269</location_x>
+    <location_y>14</location_y>
   </plugin>
   <plugin>
     se.sics.cooja.plugins.LogListener
     <plugin_config>
       <filter />
     </plugin_config>
-    <width>1280</width>
+    <width>937</width>
     <z>0</z>
-    <height>268</height>
-    <location_x>0</location_x>
-    <location_y>533</location_y>
+    <height>213</height>
+    <location_x>21</location_x>
+    <location_y>464</location_y>
   </plugin>
   <plugin>
     se.sics.cooja.plugins.ScriptRunner

@@ -154,7 +154,7 @@ PROCESS_THREAD(shell_tcpsend_process, ev, data)
   
   running = 1;
 
-  uiplib_ipaddrconv(server, (u8_t *)&serveraddr);
+  uiplib_ipaddrconv(server, &serveraddr);
   telnet_connect(&s, &serveraddr, port);
   while(running) {
     PROCESS_WAIT_EVENT();

@@ -258,7 +258,7 @@ open_url(void)
   static char host[32];
   char *file;
   register char *urlptr;
-  static u16_t addr[2];
+  static uip_ipaddr_t addr;
 
   /* Trim off any spaces in the end of the url. */
   urlptr = url + strlen(url) - 1;
@@ -312,7 +312,7 @@ open_url(void)
 #if UIP_UDP
   /* Try to lookup the hostname. If it fails, we initiate a hostname
      lookup and print out an informative message on the statusbar. */
-  if(uiplib_ipaddrconv(host, (unsigned char *)addr) == 0) {
+  if(uiplib_ipaddrconv(host, &addr) == 0) {
     if(resolv_lookup(host) == NULL) {
       resolv_query(host);
       show_statustext("Resolving host...");
@@ -320,7 +320,7 @@ open_url(void)
     }
   }
 #else /* UIP_UDP */
-  uiplib_ipaddrconv(host, (unsigned char *)addr);
+  uiplib_ipaddrconv(host, &addr);
 #endif /* UIP_UDP */
 
   /* The hostname we present in the hostname table, so we send out the

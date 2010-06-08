@@ -133,25 +133,25 @@ webclient_close(void)
 unsigned char
 webclient_get(char *host, u16_t port, char *file)
 {
+  uip_ipaddr_t addr;
   struct uip_conn *conn;
-  u16_t *ipaddr;
-  static u16_t addr[2];
+  uip_ipaddr_t *ipaddr;
   
   /* First check if the host is an IP address. */
-  ipaddr = &addr[0];
+  ipaddr = &addr;
+  if(uiplib_ipaddrconv(host, &addr) == 0) {
 #if UIP_UDP
-  if(uiplib_ipaddrconv(host, (unsigned char *)addr) == 0) {
     ipaddr = resolv_lookup(host);
     
     if(ipaddr == NULL) {
       return 0;
     }
-  }
 #else /* UIP_UDP */
-  uiplib_ipaddrconv(host, (unsigned char *)addr);
+    return 0;
 #endif /* UIP_UDP */
+  }
   
-  conn = tcp_connect((uip_ipaddr_t *)ipaddr, htons(port), NULL);
+  conn = tcp_connect(ipaddr, htons(port), NULL);
   
   if(conn == NULL) {
     return 0;

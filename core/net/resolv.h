@@ -47,15 +47,11 @@
  */
 CCIF extern process_event_t resolv_event_found;
 
-/* Callbacks. */
-void resolv_found(char *name, u16_t *ipaddr);
-
 /* Functions. */
 CCIF void resolv_conf(const uip_ipaddr_t *dnsserver);
 CCIF uip_ipaddr_t *resolv_getserver(void);
-void resolv_init(char *arg);
-CCIF u16_t *resolv_lookup(char *name);
-CCIF void resolv_query(char *name);
+CCIF uip_ipaddr_t *resolv_lookup(const char *name);
+CCIF void resolv_query(const char *name);
 
 PROCESS_NAME(resolv_process);
 

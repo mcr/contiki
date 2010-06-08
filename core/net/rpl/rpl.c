@@ -59,9 +59,8 @@
 #define RPL_MAX_ROUTE_ENTRIES   RPL_CONF_MAX_ROUTE_ENTRIES
 #endif /* !RPL_CONF_MAX_ROUTE_ENTRIES */
 
-/************************************************************************/
 extern uip_ds6_route_t uip_ds6_routing_table[UIP_DS6_ROUTE_NB];
-
+/************************************************************************/
 void
 rpl_purge_routes(void)
 {
@@ -78,29 +77,48 @@ rpl_purge_routes(void)
   }
 }
 /************************************************************************/
+void
+rpl_remove_routes(rpl_dag_t *dag)
+{
+  int i;
+
+  for(i = 0; i < UIP_DS6_ROUTE_NB; i++) {
+    if(uip_ds6_routing_table[i].state.dag == dag) {
+      uip_ds6_route_rm(&uip_ds6_routing_table[i]);
+    }
+  }
+}
+/************************************************************************/
 uip_ds6_route_t *
 rpl_add_route(rpl_dag_t *dag, uip_ipaddr_t *prefix, int prefix_len,
               uip_ipaddr_t *next_hop)
 {
   uip_ds6_route_t *rep;
 
-  if((rep = uip_ds6_route_lookup(prefix)) == NULL) {
-
+  rep = uip_ds6_route_lookup(prefix);
+  if(rep == NULL) {
     if((rep = uip_ds6_route_add(prefix, prefix_len, next_hop, 0)) == NULL) {
       PRINTF("RPL: No space for more route entries\n");
       return NULL;
     }
-
-    rep->state.dag = dag;
-    rep->state.lifetime = DEFAULT_ROUTE_LIFETIME;
-    rep->state.learned_from = RPL_ROUTE_FROM_INTERNAL;
-
-    PRINTF("RPL: Added a route to ");
+  } else {
+    PRINTF("RPL: Updated the next hop for prefix ");
     PRINT6ADDR(prefix);
-    PRINTF("/%d via ", prefix_len);
+    PRINTF(" to ");
     PRINT6ADDR(next_hop);
     PRINTF("\n");
+    uip_ipaddr_copy(&rep->nexthop, next_hop);
   }
+  rep->state.dag = dag;
+  rep->state.lifetime = DEFAULT_ROUTE_LIFETIME;
+  rep->state.learned_from = RPL_ROUTE_FROM_INTERNAL;
+
+  PRINTF("RPL: Added a route to ");
+  PRINT6ADDR(prefix);
+  PRINTF("/%d via ", prefix_len);
+  PRINT6ADDR(next_hop);
+  PRINTF("\n");
+
   return rep;
 }
 /************************************************************************/
@@ -109,8 +127,7 @@ neighbor_callback(const rimeaddr_t *addr, int known, int etx)
 {
   uip_ipaddr_t ipaddr;
   rpl_dag_t *dag;
-  rpl_neighbor_t *parent;
-  uip_ds6_route_t *rep;
+  rpl_parent_t *parent;
 
   uip_ip6addr(&ipaddr, 0xfe80, 0, 0, 0, 0, 0, 0, 0);
   uip_ds6_set_addr_iid(&ipaddr, (uip_lladdr_t *)addr);
@@ -123,34 +140,41 @@ neighbor_callback(const rimeaddr_t *addr, int known, int etx)
     return;
   }
 
-  parent = rpl_find_neighbor(dag, &ipaddr);
+  parent = rpl_find_parent(dag, &ipaddr);
   if(parent == NULL) {
-    rep = uip_ds6_route_lookup(&ipaddr);
-    if(rep != NULL) {
-      if(!known) {
-        rep->state.lifetime = DAO_EXPIRATION_TIMEOUT;
-        rep->state.saved_lifetime = rep->state.lifetime;
-      } else {
-        rep->state.lifetime = rep->state.saved_lifetime;
-      }
+    if(!known) {
+      PRINTF("RPL: Deleting routes installed by DAOs received from ");
+      PRINT6ADDR(&ipaddr);
+      PRINTF("\n");
+      uip_ds6_route_rm_by_nexthop(&ipaddr);
     }
-  } else if(!known) {
+    return;
+  }
+
+  if(dag->of->parent_state_callback != NULL) {
+    dag->of->parent_state_callback(parent, known, etx);
+  }
+
+  if(!known) {
     PRINTF("RPL: Removing parent ");
     PRINT6ADDR(&parent->addr);
     PRINTF(" because of bad connectivity (ETX %d)\n", etx);
-    rpl_remove_neighbor(dag, parent);
+    rpl_remove_parent(dag, parent);
     if(RPL_PARENT_COUNT(dag) == 0) {
       rpl_free_dag(dag);
     } else {
       /* Select a new default route. */
-      parent = rpl_find_best_parent(dag);
+      parent = rpl_preferred_parent(dag);
       if(parent != NULL) {
+	PRINTF("RPL: Switching preferred parent to ");
+        PRINT6ADDR(&parent->addr);
+        PRINTF("\n");
         rpl_set_default_route(dag, &parent->addr);
       }
     }
   } else {
     parent->local_confidence = ~0 - etx;
-    PRINTF("RPL: Updating the local confidence value for this neighbor to %d\n",
+    PRINTF("RPL: Updating the local confidence value for this parent to %d\n",
            parent->local_confidence);
     if(parent != dag->best_parent &&
        dag->of->best_parent(parent, dag->best_parent) == parent) {

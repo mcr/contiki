@@ -312,7 +312,8 @@ make_connectionwindow(void)
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(ftp_process, ev, data)
 {
-  u16_t ipaddr[2], *ipaddrptr;
+  uip_ipaddr_t ipaddr;
+  uip_ipaddr_t *ipaddrptr;
   
   PROCESS_BEGIN();
     
@@ -425,7 +426,7 @@ PROCESS_THREAD(ftp_process, ev, data)
       } else if((struct ctk_button *)data == &connectbutton) {
 	ctk_dialog_close();
 #if UIP_UDP
-	if(uiplib_ipaddrconv(hostname, (unsigned char *)ipaddr) == 0) {
+	if(uiplib_ipaddrconv(hostname, &ipaddr) == 0) {
 	  ipaddrptr = resolv_lookup(hostname);
 	  if(ipaddrptr == NULL) {
 	    resolv_query(hostname);
@@ -435,12 +436,12 @@ PROCESS_THREAD(ftp_process, ev, data)
 	  connection = ftpc_connect(ipaddrptr, HTONS(21));
 	  show_statustext("Connecting to ", hostname);
 	} else {
-	  connection = ftpc_connect(ipaddr, HTONS(21));
+	  connection = ftpc_connect(&ipaddr, HTONS(21));
 	  show_statustext("Connecting to ", hostname);
 	}
 #else /* UIP_UDP */
-	uiplib_ipaddrconv(hostname, (unsigned char *)ipaddr);
-	connection = ftpc_connect(ipaddr, HTONS(21));
+	uiplib_ipaddrconv(hostname, &ipaddr);
+	connection = ftpc_connect(&ipaddr, HTONS(21));
 	show_statustext("Connecting to ", hostname);
 #endif /* UIP_UDP */
       } 

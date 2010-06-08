@@ -142,7 +142,7 @@ PROCESS_THREAD(shell_ping_process, ev, data)
 		     "ping <server>: server as address", "");
     PROCESS_EXIT();
   }
-  uiplib_ipaddrconv(data, (u8_t *)&remoteaddr);
+  uiplib_ipaddrconv(data, &remoteaddr);
 
   send_ping(&remoteaddr);
   

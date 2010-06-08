@@ -101,9 +101,11 @@ new_dio_interval(rpl_dag_t *dag)
   /* keep some stats */
   dag->dio_totint++;
   dag->dio_totrecv += dag->dio_counter;
-  ANNOTATE("#A rank=%d,ints=%d,snd=%d,rcv=%d,cint=%d\n", dag->rank,
+  ANNOTATE("#A rank=%d(%d),stats=%d %d %d %d,color=%s\n", dag->rank,
+           dag->version,
            dag->dio_totint, dag->dio_totsend,
-           dag->dio_totrecv,dag->dio_intcurrent);
+           dag->dio_totrecv,dag->dio_intcurrent,
+	   dag->rank == ROOT_RANK ? "BLUE" : "ORANGE");
 #endif /* RPL_CONF_STATS */
 
   /* reset the redundancy counter */
@@ -180,23 +182,24 @@ static void
 handle_dao_timer(void *ptr)
 {
   rpl_dag_t *dag;
-  rpl_neighbor_t *n;
+  rpl_parent_t *n;
+
   dag = (rpl_dag_t *)ptr;
 
   if (!dio_send_ok && uip_ds6_get_link_local(ADDR_PREFERRED) == NULL) {
-    PRINTF("RPL: postpone DAO transmission... \n");
+    PRINTF("RPL: Postpone DAO transmission... \n");
     ctimer_set(&dag->dao_timer, CLOCK_SECOND, handle_dao_timer, dag);
     return;
   }
 
   /* Send the DAO to the best parent. rpl-07 section C.2 lists the
      fan-out as being under investigation. */
-  n = rpl_find_best_parent(dag);
+  n = rpl_preferred_parent(dag);
   if(n != NULL) {
     PRINTF("RPL: handle_dao_timer - sending DAO\n");
     dao_output(n, DEFAULT_ROUTE_LIFETIME);
   } else {
-    PRINTF("RPL: could not find any best parent.. \n");
+    PRINTF("RPL: Could not find a parent to send a DAO to \n");
   }
   ctimer_stop(&dag->dao_timer);
 }
@@ -205,16 +208,16 @@ void
 rpl_schedule_dao(rpl_dag_t *dag)
 {
   clock_time_t expiration_time;
+
   expiration_time = etimer_expiration_time(&dag->dao_timer.etimer);
 
-  if(!etimer_expired(&dag->dao_timer.etimer) &&
-     (expiration_time - clock_time()) < (DEFAULT_DAO_LATENCY / dag->rank)) {
+  if(!etimer_expired(&dag->dao_timer.etimer)) {
     PRINTF("RPL: DAO timer already scheduled\n");
   } else {
     PRINTF("RPL: Scheduling DAO timer %u ticks in the future (%u %u)\n",
            (unsigned)DEFAULT_DAO_LATENCY / dag->rank,
            (unsigned)DEFAULT_DAO_LATENCY, (unsigned)dag->rank);
-    ctimer_set(&dag->dao_timer, DEFAULT_DAO_LATENCY / dag->rank,
+    ctimer_set(&dag->dao_timer, DEFAULT_DAO_LATENCY,
                handle_dao_timer, dag);
   }
 }
