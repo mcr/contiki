@@ -39,8 +39,6 @@
  *         Nicolas Tsiftes <nvt@sics.se>
  */
 
-#include <string.h>
-
 #include "net/uip.h"
 #include "net/uip-ds6.h"
 #include "net/rpl/rpl.h"
