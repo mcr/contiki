@@ -323,7 +323,8 @@ dio_output(rpl_dag_t *dag, uip_ipaddr_t *uc_addr)
   /* Set dst_adv_trigger and dst_adv_supported. */
   buffer[pos] |= RPL_DIO_DEST_ADV_SUPPORTED | RPL_DIO_DEST_ADV_TRIGGER;
   pos++;
-  buffer[pos++] = dag->dtsn;
+
+  buffer[pos++] = ++dag->dtsn_out;
   /* reserved 2 bytes */
   pos += 2;
 
