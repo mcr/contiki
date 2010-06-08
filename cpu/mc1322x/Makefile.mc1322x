@@ -95,18 +95,21 @@ CUSTOM_RULE_C_TO_CO=yes
 %.co: %.c
 	$(CC) $(CFLAGS) -DAUTOSTART_ENABLE $(THUMB_FLAGS) $< -c -o $@
 
-.PRECIOUS: %.bin
+.PRECIOUS: %.bin %_$(TARGET).bin
 
 %.ihex: %.$(TARGET)
 	$(OBJCOPY) $^ -O ihex $@
 
-%_$(TARGET).bin: %.$(TARGET)
+%_$(TARGET).bin: %.elf
 	$(OBJCOPY) -O binary $< $@
 
 symbols.c:
 	@${CONTIKI}/tools/make-empty-symbols
  
-%.$(TARGET): $(OBJECTDIR)/board.h  %.co $(PROJECT_OBJECTFILES) contiki-$(TARGET).a $(STARTUP) $(OBJECTDIR)/symbols.o
+%.$(TARGET): %_$(TARGET).bin
+	@
+
+%.elf: $(OBJECTDIR)/board.h  %.co $(PROJECT_OBJECTFILES) contiki-$(TARGET).a $(STARTUP) $(OBJECTDIR)/symbols.o
 	$(CC) $(LDFLAGS) $(CFLAGS) -nostartfiles -o $@ $(filter-out %.a,$^) $(filter %.a,$^) $(filter %.a,$^)
 
 
