@@ -1,14 +1,3 @@
-- Change Makefile so:
-
-  make TARGET=redbee-econotag 
-
-  creates foo.redbee-econotag and foo_redbee-econotag.bin
-  automatically.
-
-- Use channel 24 by default
-
-- update start.S
-
 - test with 'none' toolchain
 
 - update redbee-dev
