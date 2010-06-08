@@ -225,7 +225,7 @@ struct rpl_dag {
   uip_ds6_defrt_t *def_route;
   rpl_rank_t rank;
   rpl_rank_t min_rank; /* should be reset per DODAG iteration! */
-  uint8_t dtsn;
+  uint8_t dtsn_out;
   uint8_t instance_id;
   uint8_t version;
   uint8_t preference;
