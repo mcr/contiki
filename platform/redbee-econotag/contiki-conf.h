@@ -1,4 +1,7 @@
 /*
+ * Copyright (c) 2010, Mariano Alvira <mar@devl.org> and other contributors
+ * to the MC1322x project (http://mc1322x.devl.org) and Contiki.
+ *
  * Copyright (c) 2006, Technical University of Munich
  * All rights reserved.
  *
