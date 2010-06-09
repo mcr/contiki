@@ -144,7 +144,6 @@ int ctimer_expired(struct ctimer *c);
  */
 void ctimer_init(void);
 
-PROCESS_NAME(ctimer_process);
 #endif /* __CTIMER_H__ */
 /** @} */
 /** @} */
