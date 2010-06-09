@@ -1,7 +1,3 @@
-- fix license for printf.c (take from newlib instead of glibc)
-
-- fix license for start.S (find a BSD version)
-
 - openocd flashing
   use run_algorithm to hook ROM NVM functions
   see flash/stm32x.c
