@@ -167,7 +167,7 @@ data_is_sent_and_acked(CC_REGISTER_ARG struct psock *s)
   return 0;
 }
 /*---------------------------------------------------------------------------*/
-PT_THREAD(psock_send(CC_REGISTER_ARG struct psock *s, uint8_t *buf,
+PT_THREAD(psock_send(CC_REGISTER_ARG struct psock *s, const uint8_t *buf,
 		     unsigned int len))
 {
   PT_BEGIN(&s->psockpt);
@@ -179,7 +179,7 @@ PT_THREAD(psock_send(CC_REGISTER_ARG struct psock *s, uint8_t *buf,
 
   /* Save the length of and a pointer to the data that is to be
      sent. */
-  s->sendptr = buf;
+  s->sendptr = (uint8_t *) buf;
   s->sendlen = len;
 
   s->state = STATE_NONE;

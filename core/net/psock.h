@@ -114,7 +114,7 @@ struct psock {
   struct pt pt, psockpt; /* Protothreads - one that's using the psock
 			    functions, and one that runs inside the
 			    psock functions. */
-  u8_t *sendptr;   /* Pointer to the next data to be sent. */
+  u8_t *sendptr;         /* Pointer to the next data to be sent. */
   u8_t *readptr;         /* Pointer to the next data to be read. */
   
   uint8_t *bufptr;          /* Pointer to the buffer used for buffering
@@ -164,7 +164,7 @@ void psock_init(struct psock *psock, uint8_t *buffer, unsigned int buffersize);
  */
 #define PSOCK_BEGIN(psock) PT_BEGIN(&((psock)->pt))
 
-PT_THREAD(psock_send(struct psock *psock, uint8_t *buf, unsigned int len));
+PT_THREAD(psock_send(struct psock *psock, const uint8_t *buf, unsigned int len));
 /**
  * Send data.
  *
