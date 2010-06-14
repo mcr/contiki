@@ -45,7 +45,7 @@
  */
 
 #include "net/rime/timesynch.h"
-#include "net/rime/packetbuf.h"
+#include "net/packetbuf.h"
 #include "net/rime.h"
 #include "dev/cc2420.h"
 

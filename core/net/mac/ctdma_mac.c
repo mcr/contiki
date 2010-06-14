@@ -33,7 +33,7 @@
 
 #include "contiki.h"
 #include "net/mac/ctdma_mac.h"
-#include "net/rime/packetbuf.h"
+#include "net/packetbuf.h"
 #include "net/uip-fw.h"
 #include "sys/ctimer.h"
 #include "net/rime.h"

@@ -47,7 +47,7 @@
 #include <string.h>
 #include "net/mac/sicslowmac.h"
 #include "net/mac/frame802154.h"
-#include "net/rime/packetbuf.h"
+#include "net/packetbuf.h"
 #include "net/netstack.h"
 #include "lib/random.h"
 

@@ -54,7 +54,7 @@
 #ifndef __QUEUEBUF_H__
 #define __QUEUEBUF_H__
 
-#include "net/rime/packetbuf.h"
+#include "net/packetbuf.h"
 
 struct queuebuf;
 

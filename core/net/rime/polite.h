@@ -95,7 +95,7 @@
 #define __POLITE_H__
 
 #include "net/rime/abc.h"
-#include "net/rime/queuebuf.h"
+#include "net/queuebuf.h"
 
 struct polite_conn;
 

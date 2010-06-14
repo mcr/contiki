@@ -61,7 +61,7 @@
 #include "sys/ctimer.h"
 
 #include "net/rime/broadcast.h"
-#include "net/rime/queuebuf.h"
+#include "net/queuebuf.h"
 
 #define TRICKLE_ATTRIBUTES  { PACKETBUF_ATTR_EPACKET_ID, PACKETBUF_ATTR_BIT * 8 },\
                             BROADCAST_ATTRIBUTES

@@ -39,11 +39,11 @@
  */
 
 #include "net/mac/phase.h"
-#include "net/rime/packetbuf.h"
+#include "net/packetbuf.h"
 #include "sys/clock.h"
 #include "lib/memb.h"
 #include "sys/ctimer.h"
-#include "net/rime/queuebuf.h"
+#include "net/queuebuf.h"
 #include "dev/watchdog.h"
 #include "dev/leds.h"
 

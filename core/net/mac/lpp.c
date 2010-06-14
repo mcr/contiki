@@ -58,7 +58,7 @@
 #include "net/netstack.h"
 #include "net/mac/mac.h"
 #include "net/mac/lpp.h"
-#include "net/rime/packetbuf.h"
+#include "net/packetbuf.h"
 #include "net/rime/announcement.h"
 #include "sys/compower.h"
 

@@ -46,7 +46,7 @@
 
 #include "dev/radio.h"
 #include "net/netstack.h"
-#include "net/rime/packetbuf.h"
+#include "net/packetbuf.h"
 
 #include "node.h"
 

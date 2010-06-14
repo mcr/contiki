@@ -39,8 +39,8 @@
  */
 
 #include "net/mac/csma.h"
-#include "net/rime/packetbuf.h"
-#include "net/rime/queuebuf.h"
+#include "net/packetbuf.h"
+#include "net/queuebuf.h"
 
 #include "sys/ctimer.h"
 

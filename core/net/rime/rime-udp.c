@@ -44,7 +44,7 @@
 #include "net/uip-udp-packet.h"
 #include "net/uip-netif.h"
 #include "net/rime/rime-udp.h"
-#include "net/rime/packetbuf.h"
+#include "net/packetbuf.h"
 
 #define DEBUG 0
 #if DEBUG

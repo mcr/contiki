@@ -50,7 +50,7 @@
 #include "dev/cc2420.h"
 #include "dev/cc2420_const.h"
 
-#include "net/rime/packetbuf.h"
+#include "net/packetbuf.h"
 #include "net/rime/rimestats.h"
 #include "net/netstack.h"
 

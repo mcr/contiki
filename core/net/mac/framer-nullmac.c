@@ -38,7 +38,7 @@
  */
 
 #include "net/mac/framer-nullmac.h"
-#include "net/rime/packetbuf.h"
+#include "net/packetbuf.h"
 
 #define DEBUG 0
 

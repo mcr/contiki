@@ -37,7 +37,7 @@
 #include "sys/cooja_mt.h"
 #include "lib/simEnvChange.h"
 
-#include "net/rime/packetbuf.h"
+#include "net/packetbuf.h"
 #include "net/rime/rimestats.h"
 #include "net/netstack.h"
 

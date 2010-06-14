@@ -44,7 +44,7 @@
 struct channel;
 
 #include "contiki-conf.h"
-#include "net/rime/packetbuf.h"
+#include "net/packetbuf.h"
 #include "net/rime/chameleon.h"
 
 struct channel {

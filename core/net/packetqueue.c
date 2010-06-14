@@ -43,7 +43,7 @@
  */
 
 #include "sys/ctimer.h"
-#include "net/rime/packetqueue.h"
+#include "net/packetqueue.h"
 
 /*---------------------------------------------------------------------------*/
 void

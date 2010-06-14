@@ -52,7 +52,7 @@
 #include "dev/spi.h"
 #include "rf230bb.h"
 
-#include "net/rime/packetbuf.h"
+#include "net/packetbuf.h"
 #include "net/rime/rimestats.h"
 #include "net/netstack.h"
 
