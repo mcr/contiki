@@ -48,7 +48,8 @@ struct wget_callbacks {
 };
 
 void wget_init(void);
-int wget(const char *server, const char *file, const struct wget_callbacks *c);
+int wget_get(const char *server, uint16_t port, const char *file,
+             const struct wget_callbacks *c);
 
 enum {
   WGET_OK,
