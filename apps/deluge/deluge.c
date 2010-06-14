@@ -43,7 +43,6 @@
 
 #include "contiki.h"
 #include "net/rime.h"
-#include "net/rime/ctimer.h"
 #include "cfs/cfs.h"
 #include "loader/elfloader.h"
 #include "lib/crc16.h"

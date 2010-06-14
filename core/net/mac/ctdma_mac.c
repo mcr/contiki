@@ -35,7 +35,7 @@
 #include "net/mac/ctdma_mac.h"
 #include "net/rime/packetbuf.h"
 #include "net/uip-fw.h"
-#include "net/rime/ctimer.h"
+#include "sys/ctimer.h"
 #include "net/rime.h"
 #include "lib/memb.h"
 #include "lib/list.h"

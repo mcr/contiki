@@ -30,7 +30,7 @@
  */
 
 #include "contiki.h"
-#include "net/rime/ctimer.h"
+#include "sys/ctimer.h"
 
 #include <stdio.h>
 
