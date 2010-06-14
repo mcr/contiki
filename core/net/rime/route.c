@@ -47,7 +47,7 @@
 
 #include "lib/list.h"
 #include "lib/memb.h"
-#include "net/rime/ctimer.h"
+#include "sys/ctimer.h"
 #include "net/rime/route.h"
 #include "contiki-conf.h"
 

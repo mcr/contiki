@@ -73,8 +73,8 @@
 #ifndef __STUNICAST_H__
 #define __STUNICAST_H__
 
+#include "sys/ctimer.h"
 #include "net/rime/unicast.h"
-#include "net/rime/ctimer.h"
 #include "net/rime/queuebuf.h"
 
 struct stunicast_conn;

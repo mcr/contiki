@@ -42,7 +42,7 @@
  *         Adam Dunkels <adam@sics.se>
  */
 
-#include "net/rime/ctimer.h"
+#include "sys/ctimer.h"
 #include "net/rime/packetqueue.h"
 
 /*---------------------------------------------------------------------------*/

@@ -42,6 +42,7 @@
 #include "sys/autostart.h"
 
 #include "sys/timer.h"
+#include "sys/ctimer.h"
 #include "sys/etimer.h"
 #include "sys/rtimer.h"
 
