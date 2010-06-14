@@ -49,7 +49,7 @@
 #include "lib/list.h"
 #include "net/uip.h"
 #include "sys/clock.h"
-#include "net/rime/ctimer.h"
+#include "sys/ctimer.h"
 #include "net/uip-ds6.h"
 
 /* set to 1 for some statistics on trickle / DIO */

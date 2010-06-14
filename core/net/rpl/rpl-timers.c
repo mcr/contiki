@@ -42,7 +42,7 @@
  */
 
 #include "contiki-conf.h"
-#include "net/rime/ctimer.h"
+#include "sys/ctimer.h"
 #include "net/rpl/rpl.h"
 #include "lib/random.h"
 
