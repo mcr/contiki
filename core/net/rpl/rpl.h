@@ -38,11 +38,8 @@
 
 /*
  * ContikiRPL - an implementation of the routing protocol for low power and
- * lossy networks. See: draft-ietf-roll-rpl-08.
+ * lossy networks. See: draft-ietf-roll-rpl-09.
  *
- * Note: This version of ContikiRPL is currently moving on to RPL-08, but
- * since the type of the OCP option for DIOs is unclear we assume that it
- * will be of type 9.
  * --
  * The DIOs handle prefix information option for setting global IP addresses
  * on the nodes, but the current handling is not awaiting the join of the DAG
@@ -52,7 +49,7 @@
 #include "lib/list.h"
 #include "net/uip.h"
 #include "sys/clock.h"
-#include "net/rime/ctimer.h"
+#include "sys/ctimer.h"
 #include "net/uip-ds6.h"
 
 /* set to 1 for some statistics on trickle / DIO */
@@ -81,8 +78,6 @@
 #define RPL_DIO_SUBOPT_TRANSIT           6   /* Transit information */
 #define RPL_DIO_SUBOPT_SOLICITED_INFO    7   /* Solicited information */
 #define RPL_DIO_SUBOPT_PREFIX_INFO       8   /* Prefix information option */
-
-#define RPL_DIO_SUBOPT_OCP               9   /* 5 in the MC document... */
 
 #define RPL_DAO_K_FLAG                   0x80 /* DAO ACK requested */
 #define RPL_DAO_D_FLAG                   0x40 /* DODAG ID Present */
@@ -115,7 +110,7 @@
 #define RPL_DEFAULT_OCP                 1
 
 /* TODO: pick these from OCP later? */
-#define DEFAULT_MAX_RANKINC             16
+#define DEFAULT_MAX_RANKINC             10
 #define DEFAULT_MIN_HOPRANKINC          4
 
 /* Represents 2^n ms. */
@@ -125,7 +120,7 @@
 #define DEFAULT_DIO_INTERVAL_DOUBLINGS  8
 
 /* Desired DIO redundancy. */
-#define DEFAULT_DIO_REDUNDANCY          1
+#define DEFAULT_DIO_REDUNDANCY          5
 
 /* Expire DAOs from neighbors that do not respond in this time. (seconds) */
 #define DAO_EXPIRATION_TIMEOUT          60
@@ -163,25 +158,47 @@ struct rpl_parent {
   rpl_rank_t rank;
   uint8_t local_confidence;
   uint8_t dtsn;
+  uint8_t updated;
 };
 
 typedef struct rpl_parent rpl_parent_t;
 
+/*---------------------------------------------------------------------------*/
+/*
+ * API for RPL objective functions (OF)
+ *
+ * reset(dag)
+ *
+ *  Resets the objective function state for a specific DAG. This function is
+ *  called when doing a global repair on the DAG.
+ *
+ * parent_state_callback(parent, known, etx)
+ *
+ *  Receives link-layer neighbor information. The parameter "known" is set
+ *  either to 0 or 1. The "etx" parameter specifies the current
+ *  ETX(estimated transmissions) for the neighbor.
+ *
+ * best_parent(parent1, parent2)
+ *
+ *  Compares two parents and returns the best one, according to the OF.
+ *
+ * calculate_rank(parent, base_rank)
+ *
+ *  Calculates a rank value using the parent rank and a base rank.
+ *  If "parent" is NULL, the objective function selects a default increment
+ *  that is adds to the "base_rank". Otherwise, the OF uses information known
+ *  about "parent" to select an increment to the "base_rank".
+ */
 struct rpl_of {
   void (*reset)(void *);
   void (*parent_state_callback)(rpl_parent_t *, int, int);
   rpl_parent_t *(*best_parent)(rpl_parent_t *, rpl_parent_t *);
-
-  /* Increment the rank - the rank that just have been received in a DIO
-     (or if picked from a parent) is the first argument. This is considered
-     the valid rank to calculate based on. The second argument is the parent
-     that is related to this calculation - if any (can be NULL) */
-  rpl_rank_t (*increment_rank)(rpl_rank_t rank, rpl_parent_t *parent);
+  rpl_rank_t (*calculate_rank)(rpl_parent_t *, rpl_rank_t);
   rpl_ocp_t ocp;
 };
 
-
 typedef struct rpl_of rpl_of_t;
+/*---------------------------------------------------------------------------*/
 
 /* RPL DIO prefix suboption */
 struct rpl_prefix {
@@ -197,7 +214,7 @@ typedef struct rpl_prefix rpl_prefix_t;
 struct rpl_dio {
   uip_ipaddr_t dag_id;
   rpl_ocp_t ocp;
-  rpl_rank_t dag_rank;
+  rpl_rank_t rank;
   uint8_t grounded;
   uint8_t dst_adv_trigger;
   uint8_t dst_adv_supported;
@@ -221,7 +238,7 @@ struct rpl_dag {
   /* DAG configuration */
   rpl_of_t *of;
   uip_ipaddr_t dag_id;
-  /* this is  the current def-router that is set - used for routing "upwards" */
+  /* The current default router - used for routing "upwards" */
   uip_ds6_defrt_t *def_route;
   rpl_rank_t rank;
   rpl_rank_t min_rank; /* should be reset per DODAG iteration! */
@@ -250,7 +267,7 @@ struct rpl_dag {
   uint16_t dio_next_delay; /* delay for completion of dio interval */
   struct ctimer dio_timer;
   struct ctimer dao_timer;
-  rpl_parent_t *best_parent;
+  rpl_parent_t *preferred_parent;
   void *parent_list;
   list_t parents;
   rpl_prefix_t prefix_info;
@@ -259,7 +276,7 @@ struct rpl_dag {
 typedef struct rpl_dag rpl_dag_t;
 
 /*---------------------------------------------------------------------------*/
-/* RPL macro functions. */
+/* RPL macros. */
 #define RPL_PARENT_COUNT(dag)	list_length((dag)->parents)
 /*---------------------------------------------------------------------------*/
 /* ICMPv6 functions for RPL. */
@@ -275,6 +292,7 @@ int rpl_set_prefix(rpl_dag_t *dag, uip_ipaddr_t *prefix, int len);
 int rpl_repair_dag(rpl_dag_t *dag);
 int rpl_set_default_route(rpl_dag_t *dag, uip_ipaddr_t *from);
 void rpl_process_dio(uip_ipaddr_t *, rpl_dio_t *);
+int rpl_process_parent_event(rpl_dag_t *, rpl_parent_t *);
 
 /* DAG allocation and deallocation. */
 rpl_dag_t *rpl_alloc_dag(uint8_t);
@@ -284,7 +302,8 @@ void rpl_free_dag(rpl_dag_t *);
 rpl_parent_t *rpl_add_parent(rpl_dag_t *, rpl_dio_t *dio, uip_ipaddr_t *);
 rpl_parent_t *rpl_find_parent(rpl_dag_t *, uip_ipaddr_t *);
 int rpl_remove_parent(rpl_dag_t *, rpl_parent_t *);
-rpl_parent_t *rpl_preferred_parent(rpl_dag_t *dag);
+rpl_parent_t *rpl_select_parent(rpl_dag_t *dag);
+void rpl_recalculate_ranks(void);
 
 void rpl_join_dag(rpl_dag_t *);
 rpl_dag_t *rpl_get_dag(int instance_id);

@@ -138,8 +138,6 @@ update_rtmetric(struct collect_conn *tc)
     /* Pick the neighbor to use as a parent. We normally use
        the parent in the n->parent. */
     n = collect_neighbor_find(&tc->parent);
-    /* Find the neighbor with the lowest rtmetric. */
-    best = collect_neighbor_best();
 
     /* If we do not have a parent in n->parent, we use the best
        neighbor that we have as a new parent. Also, if the best
@@ -157,6 +155,8 @@ update_rtmetric(struct collect_conn *tc)
       PRINTF("#L %d 0\n", tc->parent.u8[0]);
       PRINTF("#L %d 1\n", best->addr.u8[0]);
       rimeaddr_copy(&tc->parent, &best->addr);
+
+      n = best;
     }
 
     /* If n is NULL, we have no best neighbor. */
@@ -613,6 +613,7 @@ node_packet_sent(struct unicast_conn *c, int status, int transmissions)
     //    PRINTF("Updating ETX with %d transmissions (punished %d)\n", tc->transmissions,
     //           tx);
     collect_neighbor_update_etx(collect_neighbor_find(&tc->parent), tx);
+
     update_rtmetric(tc);
   }
 }

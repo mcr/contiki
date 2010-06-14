@@ -48,7 +48,6 @@
 
 #include "net/rime/announcement.h"
 #include "net/rime/collect.h"
-#include "net/rime/ctimer.h"
 #include "net/rime/ipolite.h"
 #include "net/rime/mesh.h"
 #include "net/rime/multihop.h"

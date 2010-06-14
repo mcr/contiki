@@ -348,9 +348,9 @@ public abstract class SerialUI extends Log implements SerialPort {
           newMessage.setLength(0);
         }
       }
-      lastSerialData = (byte) data;
-      serialDataObservable.notifyNewData();
     }
+    lastSerialData = (byte) data;
+    serialDataObservable.notifyNewData();
   }
 
   public void close() {

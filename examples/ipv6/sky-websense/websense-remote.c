@@ -122,7 +122,7 @@ send_command(const char *server, const char *command)
 {
   int ret;
   printf("Sending to [%s]: %s\n", server, command);
-  ret = wget(server, command, &callbacks);
+  ret = wget_get(server, 80, command, &callbacks);
   if(ret != WGET_OK) {
     if(ret == WGET_ALREADY_RUNNING) {
       printf("Waiting for previous command to finish.\n");

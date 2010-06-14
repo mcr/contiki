@@ -57,6 +57,8 @@
 #include "lib/list.h"
 #include "lib/memb.h"
 
+#include "sys/ctimer.h"
+
 #include "net/rime/packetbuf.h"
 #include "net/rime/queuebuf.h"
 

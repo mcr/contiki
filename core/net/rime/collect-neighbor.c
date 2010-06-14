@@ -49,8 +49,8 @@
 #include "contiki.h"
 #include "lib/memb.h"
 #include "lib/list.h"
+
 #include "net/rime/collect-neighbor.h"
-#include "net/rime/ctimer.h"
 #include "net/rime/collect.h"
 
 #ifdef COLLECT_NEIGHBOR_CONF_MAX_COLLECT_NEIGHBORS

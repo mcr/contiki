@@ -3978,6 +3978,10 @@ public class GUI extends Observable {
    * @return Portable file, or original file is conversion failed
    */
   public File createPortablePath(File file) {
+    return createPortablePath(file, true);
+  }
+
+  public File createPortablePath(File file, boolean allowConfigRelativePaths) {
     File portable = null;
     
     portable = createContikiRelativePath(file);
@@ -3986,10 +3990,12 @@ public class GUI extends Observable {
       return portable;
     }
 
-    portable = createConfigRelativePath(file);
-    if (portable != null) {
-      /*logger.info("Generated config relative path '" + file.getPath() + "' to '" + portable.getPath() + "'");*/
-      return portable;
+    if (allowConfigRelativePaths) {
+      portable = createConfigRelativePath(file);
+      if (portable != null) {
+        /*logger.info("Generated config relative path '" + file.getPath() + "' to '" + portable.getPath() + "'");*/
+        return portable;
+      }
     }
     
     logger.warn("Path is not portable: '" + file.getPath());

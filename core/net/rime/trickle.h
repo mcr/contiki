@@ -58,8 +58,9 @@
 #ifndef __TRICKLE_H__
 #define __TRICKLE_H__
 
+#include "sys/ctimer.h"
+
 #include "net/rime/broadcast.h"
-#include "net/rime/ctimer.h"
 #include "net/rime/queuebuf.h"
 
 #define TRICKLE_ATTRIBUTES  { PACKETBUF_ATTR_EPACKET_ID, PACKETBUF_ATTR_BIT * 8 },\

@@ -61,8 +61,9 @@
 #ifndef __STBROADCAST_H__
 #define __STBROADCAST_H__
 
+#include "sys/ctimer.h"
+
 #include "net/rime/broadcast.h"
-#include "net/rime/ctimer.h"
 #include "net/rime/queuebuf.h"
 
 struct stbroadcast_conn;

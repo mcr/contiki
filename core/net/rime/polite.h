@@ -96,7 +96,6 @@
 
 #include "net/rime/abc.h"
 #include "net/rime/queuebuf.h"
-#include "net/rime/ctimer.h"
 
 struct polite_conn;
 

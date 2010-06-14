@@ -41,7 +41,8 @@
 #include "net/mac/csma.h"
 #include "net/rime/packetbuf.h"
 #include "net/rime/queuebuf.h"
-#include "net/rime/ctimer.h"
+
+#include "sys/ctimer.h"
 
 #include "lib/random.h"
 

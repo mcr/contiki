@@ -67,7 +67,7 @@ void queuebuf_to_packetbuf(struct queuebuf *b);
 void *queuebuf_dataptr(struct queuebuf *b);
 int queuebuf_datalen(struct queuebuf *b);
 
-const rimeaddr_t *queuebuf_addr(struct queuebuf *b, uint8_t type);
+rimeaddr_t *queuebuf_addr(struct queuebuf *b, uint8_t type);
 
 #endif /* __QUEUEBUF_H__ */
 
