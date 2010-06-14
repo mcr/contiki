@@ -131,7 +131,7 @@ webclient_close(void)
 }
 /*-----------------------------------------------------------------------------------*/
 unsigned char
-webclient_get(char *host, u16_t port, char *file)
+webclient_get(const char *host, u16_t port, const char *file)
 {
   uip_ipaddr_t addr;
   struct uip_conn *conn;
