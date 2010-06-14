@@ -84,6 +84,8 @@ MEMB(refbufmem, struct queuebuf_ref, QUEUEBUF_REF_NUM);
 #define PRINTF(...)
 #endif
 
+#define QUEUEBUF_CONF_STATS 0
+
 #ifdef QUEUEBUF_CONF_STATS
 #define QUEUEBUF_STATS QUEUEBUF_CONF_STATS
 #endif /* QUEUEBUF_CONF_STATS */
@@ -216,7 +218,7 @@ queuebuf_datalen(struct queuebuf *b)
   return b->len;
 }
 /*---------------------------------------------------------------------------*/
-const rimeaddr_t *
+rimeaddr_t *
 queuebuf_addr(struct queuebuf *b, uint8_t type)
 {
   return &b->addrs[type - PACKETBUF_ADDR_FIRST].addr;
