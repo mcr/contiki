@@ -113,6 +113,8 @@ void   list_copy(list_t dest, list_t src);
 
 void   list_insert(list_t list, void *previtem, void *newitem);
 
+void * list_item_next(void *item);
+
 #endif /* __LIST_H__ */
 
 /** @} */
