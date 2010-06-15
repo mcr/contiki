@@ -75,7 +75,7 @@ struct phase *
 find_neighbor(const struct phase_list *list, const rimeaddr_t *addr)
 {
   struct phase *e;
-  for(e = list_head(*list->list); e != NULL; e = e->next) {
+  for(e = list_head(*list->list); e != NULL; e = list_item_next(e)) {
     if(rimeaddr_cmp(addr, &e->neighbor)) {
       return e;
     }
