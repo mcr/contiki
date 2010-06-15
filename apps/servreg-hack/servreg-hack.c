@@ -93,6 +93,16 @@ static void
 purge_registrations(void)
 {
   struct servreg_hack_registration *t;
+
+  for(t = list_head(own_services);
+      t != NULL;
+      t = list_item_next(t)) {
+    if(timer_expired(&t->timer)) {
+      t->seqno++;
+      timer_set(&t->timer, LIFETIME / 2);
+    }
+  }
+
   for(t = list_head(others_services);
       t != NULL;
       t = list_item_next(t)) {
@@ -139,6 +149,7 @@ servreg_hack_register(servreg_hack_id_t id)
   }
   r->id = id;
   r->seqno = 1;
+  timer_set(&r->timer, LIFETIME / 2);
   list_push(own_services, r);
 
 
