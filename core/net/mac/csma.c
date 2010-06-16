@@ -157,9 +157,9 @@ packet_sent(void *ptr, int status, int num_transmissions)
 
     /* If the radio duty cycle has no channel check interval (i.e., it
        does not turn the radio off), we make the retransmission time
-       proportional to one second. */
+       proportional to the configured MAC channel check rate. */
     if(time == 0) {
-      time = CLOCK_SECOND;
+      time = CLOCK_SECOND / MAC_CHANNEL_CHECK_RATE;
     }
 
     /* The retransmission time uses a linear backoff so that the
