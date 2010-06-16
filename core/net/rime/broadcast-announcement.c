@@ -49,6 +49,7 @@
 #include "net/rime/announcement.h"
 #include "net/rime/broadcast.h"
 #include "lib/random.h"
+#include "lib/list.h"
 
 #if NETSIM
 #include "ether.h"
