@@ -63,6 +63,7 @@
 #include "net/rime/announcement.h"
 #include "net/rime/runicast.h"
 #include "net/rime/neighbor-discovery.h"
+#include "sys/ctimer.h"
 
 #define COLLECT_PACKET_ID_BITS 4
 
