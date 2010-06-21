@@ -362,12 +362,10 @@ cc2420_transmit(unsigned short payload_len)
    * Note that we may have to wait up to 320 us (20 symbols) before
    * transmission starts.
    */
-#ifdef TMOTE_SKY
-#define LOOP_20_SYMBOLS 800	/* 326us (msp430 @ 2.4576MHz) */
-#elif __AVR__
-#define LOOP_20_SYMBOLS 500	/* XXX */
-#elif ZOLERTIA_Z1
-#define LOOP_20_SYMBOLS 1302	/* 326us msp430X @ 8MHz */
+#ifndef CC2420_CONF_SYMBOL_LOOP_COUNT
+#error CC2420_CONF_SYMBOL_LOOP_COUNT needs to be set!!!
+#else
+#define LOOP_20_SYMBOLS CC2420_CONF_SYMBOL_LOOP_COUNT
 #endif
 
 #if WITH_SEND_CCA
