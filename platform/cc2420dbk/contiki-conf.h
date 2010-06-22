@@ -87,6 +87,8 @@ typedef u32_t off_t;
 #define EEPROMFS_ADDR_CODEPROP  (128 * XMEM_ERASE_UNIT_SIZE)
 
 #define CC2420_RADIO
+/* LOOP count for waiting 20 symbols in the CC2420 code */
+#define CC2420_CONF_SYMBOL_LOOP_COUNT 500
 /*
  * SPI bus configuration for the CC2420DBK.
  */
