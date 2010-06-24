@@ -84,10 +84,10 @@ MEMB(refbufmem, struct queuebuf_ref, QUEUEBUF_REF_NUM);
 #define PRINTF(...)
 #endif
 
-#define QUEUEBUF_CONF_STATS 0
-
 #ifdef QUEUEBUF_CONF_STATS
 #define QUEUEBUF_STATS QUEUEBUF_CONF_STATS
+#else
+#define QUEUEBUF_STATS 0
 #endif /* QUEUEBUF_CONF_STATS */
 
 #if QUEUEBUF_STATS
