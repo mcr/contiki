@@ -643,7 +643,7 @@ rpl_process_dio(uip_ipaddr_t *from, rpl_dio_t *dio)
 
   p = rpl_find_parent(dag, from);
   if(p == NULL) {
-    if(RPL_PARENT_COUNT(dag) == RPL_MAX_PARENTS && dio->rank >= dag->rank) {
+    if(RPL_PARENT_COUNT(dag) == RPL_MAX_PARENTS) {
       /* Try to make room for a new parent. */
       remove_parents(dag, dio->rank);
     }
