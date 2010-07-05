@@ -86,6 +86,7 @@ public abstract class AbstractApplicationMote extends AbstractWakeupMote impleme
   public abstract void sentPacket(RadioPacket p);
   
   public AbstractApplicationMote() {
+    moteInterfaces = new MoteInterfaceHandler(this, moteType.getMoteInterfaceClasses());
   }
 
   public AbstractApplicationMote(MoteType moteType, Simulation sim) {
@@ -155,7 +156,6 @@ public abstract class AbstractApplicationMote extends AbstractWakeupMote impleme
       Collection<Element> configXML, boolean visAvailable) {
     this.simulation = simulation;
     this.memory = new SectionMoteMemory(new Properties());
-    moteInterfaces = new MoteInterfaceHandler(this, moteType.getMoteInterfaceClasses());
     moteInterfaces.getRadio().addObserver(radioDataObserver);
 
     for (Element element : configXML) {
