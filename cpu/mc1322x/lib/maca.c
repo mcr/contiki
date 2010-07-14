@@ -55,7 +55,7 @@
 #endif
 
 #ifndef NUM_PACKETS
-#define NUM_PACKETS 8
+#define NUM_PACKETS 32
 #endif
 
 /* for 250kHz clock */
@@ -133,11 +133,12 @@ void check_maca(void) {
 	} else {
 		if((last_time > (*MACA_SFTCLK + RECV_SOFTIMEOUT)) &&
 		   (last_time > (*MACA_CPLCLK + CPL_TIMEOUT))) {
-			PRINTF("check maca: complete clocks expired --- forcing isr\n");
+			PRINTF("check maca: complete clocks expired\n");
 			/* all complete clocks have expired */
 			/* check that maca entry is changing */
 			/* if not, do call the isr to restart the cycle */
 			if(last_entry == maca_entry) {
+				PRINTF("check maca: forcing isr\n");
 				*INTFRC = (1<<INT_NUM_MACA);
 			}
 		}
@@ -458,7 +459,9 @@ void tx_packet(volatile packet_t *p) {
 //	print_packets("tx packet");
 	irq_restore();
 	if(bit_is_set(*NIPEND, INT_NUM_MACA)) { *INTFRC = (1 << INT_NUM_MACA); } 
-
+	if(last_post == NO_POST) { *INTFRC = (1<<INT_NUM_MACA); }
+	/* if we are in a reception cycle, advance the softclock timeout to now */
+	if(last_post == RX_POST) { *MACA_SFTCLK = *MACA_CLK; }
 	return;
 }
 
