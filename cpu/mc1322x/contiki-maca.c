@@ -176,7 +176,6 @@ int contiki_maca_prepare(const void *payload, unsigned short payload_len) {
 	if ((prepped_p == 0) 
 	    && (p = get_free_packet())) {
 		PRINTF("contiki maca prepare");
-		maca_on();
 #if CONTIKI_MACA_RAW_MODE
 		p->offset = 1;
 		p->length = payload_len + 1;
