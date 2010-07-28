@@ -38,7 +38,7 @@
  *         Adam Dunkels <adam@sics.se>
  */
 
-#include "ringbuf.h"
+#include "lib/ringbuf.h"
 /*---------------------------------------------------------------------------*/
 void
 ringbuf_init(struct ringbuf *r, uint8_t *dataptr, uint8_t size)

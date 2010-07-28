@@ -50,7 +50,7 @@
 #include "net/uip-nd6.h"
 #include "net/uip-icmp6.h"
 #include "net/rpl/rpl.h"
-#include "net/rime/packetbuf.h"
+#include "net/packetbuf.h"
 
 #include <limits.h>
 #include <string.h>

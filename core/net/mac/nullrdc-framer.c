@@ -40,7 +40,7 @@
  */
 
 #include "net/mac/nullrdc-framer.h"
-#include "net/rime/packetbuf.h"
+#include "net/packetbuf.h"
 #include "net/netstack.h"
 #include "sys/rtimer.h"
 #include "dev/watchdog.h"

@@ -375,7 +375,7 @@ format_announcement(char *hdr)
   adata.num = 0;
   for(a = announcement_list();
       a != NULL && adata.num < ANNOUNCEMENT_MAX;
-      a = a->next) {
+      a = list_item_next(a)) {
     adata.data[adata.num].id = a->id;
     adata.data[adata.num].value = a->value;
     adata.num++;
@@ -399,7 +399,7 @@ register_encounter(const rimeaddr_t *neighbor, rtimer_clock_t time)
   struct encounter *e;
 
   /* If we have an entry for this neighbor already, we renew it. */
-  for(e = list_head(encounter_list); e != NULL; e = e->next) {
+  for(e = list_head(encounter_list); e != NULL; e = list_item_next(e)) {
     if(rimeaddr_cmp(neighbor, &e->neighbor)) {
       e->time = time;
       break;
@@ -508,7 +508,7 @@ send_packet(void)
      an encounter with this particular neighbor. If so, we can compute
      the time for the next expected encounter and setup a ctimer to
      switch on the radio just before the encounter. */
-  for(e = list_head(encounter_list); e != NULL; e = e->next) {
+  for(e = list_head(encounter_list); e != NULL; e = list_item_next(e)) {
     const rimeaddr_t *neighbor = packetbuf_addr(PACKETBUF_ADDR_RECEIVER);
 
     if(rimeaddr_cmp(neighbor, &e->neighbor)) {

@@ -235,7 +235,7 @@ typedef struct rpl_route_entry {
 } rpl_route_entry_t;
 #endif /* UIP_DS6_ROUTE_STATE_TYPE */
 #ifndef UIP_CONF_DS6_NEIGHBOR_STATE_CHANGED
-#define UIP_CONF_DS6_NEIGHBOR_STATE_CHANGED rpl_ds6_neighbor_callback
+#define UIP_CONF_DS6_NEIGHBOR_STATE_CHANGED rpl_ipv6_neighbor_callback
 #endif /* UIP_CONF_DS6_NEIGHBOR_STATE_CHANGED */
 /* #endif /\* UIP_CONF_IPV6_RPL *\/ */
 
@@ -342,6 +342,7 @@ uip_ds6_addr_t *uip_ds6_addr_add(uip_ipaddr_t *ipaddr,
 void uip_ds6_addr_rm(uip_ds6_addr_t *addr);
 uip_ds6_addr_t *uip_ds6_addr_lookup(uip_ipaddr_t *ipaddr);
 uip_ds6_addr_t *uip_ds6_get_link_local(int8_t state);
+uip_ds6_addr_t *uip_ds6_get_global(int8_t state);
 
 /** @} */
 

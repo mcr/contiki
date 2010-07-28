@@ -1,5 +1,18 @@
+/**
+ * \addtogroup rime
+ * @{
+ */
+
+/**
+ * \defgroup rimequeuebuf Rime queue buffer management
+ * @{
+ *
+ * The queuebuf module handles buffers that are queued.
+ *
+ */
+
 /*
- * Copyright (c) 2006, Swedish Institute of Computer Science
+ * Copyright (c) 2006, Swedish Institute of Computer Science.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,66 +39,37 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * @(#)$Id$
+ * This file is part of the Contiki operating system.
+ *
+ * $Id$
  */
 
-#ifndef CC2420_MISC_H
-#define CC2420_MISC_H
-
-/*
- * Miscellaneous routines that illustrates how some of the CC2420
- * registers may be accessed.
+/**
+ * \file
+ *         Header file for the Rime queue buffer management
+ * \author
+ *         Adam Dunkels <adam@sics.se>
  */
 
-unsigned cc2420_pa_level(u16_t);
-unsigned cc2420_get_pa_level(void);
-int cc2420_get_current_rssi(void);
+#ifndef __QUEUEBUF_H__
+#define __QUEUEBUF_H__
 
-#define PA_LEVEL 0x1F
+#include "net/packetbuf.h"
 
-inline
-unsigned
-cc2420_pa_level(u16_t p)
-{
-  u16_t reg;
+struct queuebuf;
 
-  /* 
-   * All PA settings can be used, the ones given in the datasheet
-   * correspond to 0, -1, -3, -5, -7, -10, -15, -25 dBm in the
-   * reference design.
-   */
-  if (p > PA_LEVEL)
-    p = PA_LEVEL;
+void queuebuf_init(void);
 
-  reg = cc2420_getreg(CC2420_TXCTRL);
+struct queuebuf *queuebuf_new_from_packetbuf(void);
+void queuebuf_free(struct queuebuf *b);
+void queuebuf_to_packetbuf(struct queuebuf *b);
 
-  p |= reg & ~PA_LEVEL;
+void *queuebuf_dataptr(struct queuebuf *b);
+int queuebuf_datalen(struct queuebuf *b);
 
-  cc2420_setreg(CC2420_TXCTRL, p);
+rimeaddr_t *queuebuf_addr(struct queuebuf *b, uint8_t type);
 
-  return reg & PA_LEVEL;
-}
+#endif /* __QUEUEBUF_H__ */
 
-inline
-unsigned
-cc2420_get_pa_level(void)
-{
-  u16_t reg;
-
-  reg = cc2420_getreg(CC2420_TXCTRL);
-
-  return reg & PA_LEVEL;
-}
-
-inline
-int
-cc2420_get_current_rssi(void)
-{
-  u16_t reg;
-
-  reg = cc2420_getreg(CC2420_RSSI);
-
-  return (signed char) (reg & 0xff);
-}
-
-#endif /* CC2420_MISC_H */
+/** @} */
+/** @} */

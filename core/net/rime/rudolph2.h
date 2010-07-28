@@ -61,6 +61,7 @@
 #define __RUDOLPH2_H__
 
 #include "net/rime/polite.h"
+#include "sys/ctimer.h"
 
 struct rudolph2_conn;
 

@@ -58,7 +58,7 @@
 #ifndef __ABC_H__
 #define __ABC_H__
 
-#include "net/rime/packetbuf.h"
+#include "net/packetbuf.h"
 #include "net/rime/channel.h"
 
 struct abc_conn;

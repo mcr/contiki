@@ -49,7 +49,7 @@
 #include "net/rime/collect-neighbor.h"
 #include "net/rime/collect.h"
 
-#include "net/rime/packetqueue.h"
+#include "net/packetqueue.h"
 
 #include "dev/radio-sensor.h"
 

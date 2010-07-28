@@ -51,7 +51,7 @@
 #include <stdio.h>
 #include <avr/eeprom.h>
 #include <util/delay.h>
-#include "net/rime/packetbuf.h"
+#include "net/packetbuf.h"
 #include "zmac.h"
 #include "mac.h"
 #include "frame.h"

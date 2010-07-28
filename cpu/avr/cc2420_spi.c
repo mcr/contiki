@@ -44,8 +44,8 @@ __cc2420_arch_init(void)
 
   spi_init();
 
-  DDRB  |= BV(RESET_N) | BV(VREG_EN) | BV(CSN);
-  PORTB |= BV(RESET_N) | BV(CSN);
+  DDRB  |= BV(CC2420_RESET_PIN) | BV(CC2420_VREG_PIN) | BV(CC2420_CSN_PIN);
+  PORTB |= BV(CC2420_RESET_PIN) | BV(CC2420_CSN_PIN);
 
   SPI_DISABLE();                /* Unselect radio. */
 }

@@ -46,7 +46,7 @@
 #include "contiki-conf.h"
 #include "sys/energest.h"
 #include "sys/compower.h"
-#include "net/rime/packetbuf.h"
+#include "net/packetbuf.h"
 
 struct compower_activity compower_idle_activity;
 

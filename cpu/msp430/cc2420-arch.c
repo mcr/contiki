@@ -47,7 +47,7 @@
 #endif
 
 /*---------------------------------------------------------------------------*/
-interrupt(PORT1_VECTOR)
+interrupt(CC2420_IRQ_VECTOR)
 cc24240_port1_interrupt(void)
 {
   ENERGEST_ON(ENERGEST_TYPE_IRQ);
@@ -64,12 +64,14 @@ cc2420_arch_init(void)
   spi_init();
 
   /* all input by default, set these as output */
-  P4DIR |= BV(CSN) | BV(VREG_EN) | BV(RESET_N);
+  CC2420_CSN_PORT(DIR) |= BV(CC2420_CSN_PIN);
+  CC2420_VREG_PORT(DIR) |= BV(CC2420_VREG_PIN);
+  CC2420_RESET_PORT(DIR) |= BV(CC2420_RESET_PIN);
 
 #if CONF_SFD_TIMESTAMPS
   cc2420_arch_sfd_init();
 #endif
 
-  SPI_DISABLE();                /* Unselect radio. */
+  CC2420_SPI_DISABLE();                /* Unselect radio. */
 }
 /*---------------------------------------------------------------------------*/

@@ -60,6 +60,7 @@
 
 #include "net/rime/unicast.h"
 #include "net/rime/netflood.h"
+#include "sys/ctimer.h"
 
 struct route_discovery_conn;
 

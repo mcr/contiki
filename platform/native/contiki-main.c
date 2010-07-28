@@ -39,7 +39,6 @@
 
 #include "contiki.h"
 #include "net/netstack.h"
-#include "net/rime/ctimer.h"
 
 #include "dev/serial-line.h"
 

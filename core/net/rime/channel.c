@@ -80,7 +80,7 @@ struct channel *
 channel_lookup(uint16_t channelno)
 {
   struct channel *c;
-  for(c = list_head(channel_list); c != NULL; c = c->next) {
+  for(c = list_head(channel_list); c != NULL; c = list_item_next(c)) {
     if(c->channelno == channelno) {
       return c;
     }

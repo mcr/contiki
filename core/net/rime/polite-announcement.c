@@ -45,6 +45,7 @@
 
 #include "contiki.h"
 
+#include "lib/list.h"
 #include "net/rime.h"
 #include "net/rime/announcement.h"
 #include "net/rime/ipolite.h"
@@ -102,7 +103,7 @@ send_adv(clock_time_t interval)
   packetbuf_clear();
   adata = packetbuf_dataptr();
   adata->num = 0;
-  for(a = announcement_list(); a != NULL; a = a->next) {
+  for(a = announcement_list(); a != NULL; a = list_item_next(a)) {
     adata->data[adata->num].id = a->id;
     adata->data[adata->num].value = a->value;
     adata->num++;

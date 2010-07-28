@@ -207,7 +207,7 @@ main(void)
 
   netstack_init();
 
-  printf("%s %s, channel check rate %u Hz\n",
+  printf("%s %s, channel check rate %lu Hz\n",
          NETSTACK_MAC.name, NETSTACK_RDC.name,
          CLOCK_SECOND / (NETSTACK_RDC.channel_check_interval() == 0 ? 1:
                          NETSTACK_RDC.channel_check_interval()));

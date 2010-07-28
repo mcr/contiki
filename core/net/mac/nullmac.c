@@ -39,7 +39,7 @@
  */
 
 #include "net/mac/nullmac.h"
-#include "net/rime/packetbuf.h"
+#include "net/packetbuf.h"
 #include "net/netstack.h"
 
 /*---------------------------------------------------------------------------*/

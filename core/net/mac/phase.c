@@ -39,11 +39,11 @@
  */
 
 #include "net/mac/phase.h"
-#include "net/rime/packetbuf.h"
+#include "net/packetbuf.h"
 #include "sys/clock.h"
 #include "lib/memb.h"
 #include "sys/ctimer.h"
-#include "net/rime/queuebuf.h"
+#include "net/queuebuf.h"
 #include "dev/watchdog.h"
 #include "dev/leds.h"
 
@@ -75,7 +75,7 @@ struct phase *
 find_neighbor(const struct phase_list *list, const rimeaddr_t *addr)
 {
   struct phase *e;
-  for(e = list_head(*list->list); e != NULL; e = e->next) {
+  for(e = list_head(*list->list); e != NULL; e = list_item_next(e)) {
     if(rimeaddr_cmp(addr, &e->neighbor)) {
       return e;
     }

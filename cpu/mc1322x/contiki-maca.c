@@ -40,7 +40,7 @@
 /* contiki */
 #include "radio.h"
 #include "sys/process.h"
-#include "net/rime/packetbuf.h"
+#include "net/packetbuf.h"
 #include "net/netstack.h"
 
 #include "mc1322x.h"

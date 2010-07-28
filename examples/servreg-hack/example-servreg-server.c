@@ -1,16 +1,3 @@
-/**
- * \addtogroup rime
- * @{
- */
-
-/**
- * \defgroup rimequeuebuf Rime queue buffer management
- * @{
- *
- * The queuebuf module handles buffers that are queued.
- *
- */
-
 /*
  * Copyright (c) 2006, Swedish Institute of Computer Science.
  * All rights reserved.
@@ -46,30 +33,41 @@
 
 /**
  * \file
- *         Header file for the Rime queue buffer management
+ *         A very simple Contiki application showing how Contiki programs look
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
 
-#ifndef __QUEUEBUF_H__
-#define __QUEUEBUF_H__
+#include "contiki.h"
+#include "contiki-lib.h"
+#include "net/uip-ds6.h"
+#include "servreg-hack.h"
 
-#include "net/rime/packetbuf.h"
+#include <stdio.h> /* For printf() */
+/*---------------------------------------------------------------------------*/
+PROCESS(example_servreg_server_process, "Example servreg server");
+AUTOSTART_PROCESSES(&example_servreg_server_process);
+/*---------------------------------------------------------------------------*/
+static void
+set_global_address(void)
+{
+  uip_ipaddr_t ipaddr;
 
-struct queuebuf;
+  uip_ip6addr(&ipaddr, 0xaaaa, 0, 0, 0, 0, 0, 0, 0);
+  uip_ds6_set_addr_iid(&ipaddr, &uip_lladdr);
+  uip_ds6_addr_add(&ipaddr, 0, ADDR_AUTOCONF);
+}
+/*---------------------------------------------------------------------------*/
+PROCESS_THREAD(example_servreg_server_process, ev, data)
+{
+  PROCESS_BEGIN();
 
-void queuebuf_init(void);
+  set_global_address();
 
-struct queuebuf *queuebuf_new_from_packetbuf(void);
-void queuebuf_free(struct queuebuf *b);
-void queuebuf_to_packetbuf(struct queuebuf *b);
+  servreg_hack_init();
 
-void *queuebuf_dataptr(struct queuebuf *b);
-int queuebuf_datalen(struct queuebuf *b);
+  servreg_hack_register(188);
 
-rimeaddr_t *queuebuf_addr(struct queuebuf *b, uint8_t type);
-
-#endif /* __QUEUEBUF_H__ */
-
-/** @} */
-/** @} */
+  PROCESS_END();
+}
+/*---------------------------------------------------------------------------*/

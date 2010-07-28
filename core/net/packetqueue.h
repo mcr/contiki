@@ -59,8 +59,8 @@
 
 #include "sys/ctimer.h"
 
-#include "net/rime/packetbuf.h"
-#include "net/rime/queuebuf.h"
+#include "net/packetbuf.h"
+#include "net/queuebuf.h"
 
 /**
  * \brief      Representation of a packet queue.

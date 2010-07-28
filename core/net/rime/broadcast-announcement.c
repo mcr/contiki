@@ -49,6 +49,7 @@
 #include "net/rime/announcement.h"
 #include "net/rime/broadcast.h"
 #include "lib/random.h"
+#include "lib/list.h"
 
 #if NETSIM
 #include "ether.h"
@@ -104,7 +105,7 @@ send_adv(void *ptr)
   packetbuf_clear();
   adata = packetbuf_dataptr();
   adata->num = 0;
-  for(a = announcement_list(); a != NULL && a->has_value; a = a->next) {
+  for(a = announcement_list(); a != NULL && a->has_value; a = list_item_next(a)) {
     adata->data[adata->num].id = a->id;
     adata->data[adata->num].value = a->value;
     adata->num++;
@@ -169,9 +170,8 @@ static void
 set_timers(void)
 {
   ctimer_set(&c.interval_timer, c.current_interval, send_timer, NULL);
-  ctimer_set(&c.send_timer, c.current_interval / 2 + random_rand() %
-             (c.current_interval / 2),
-	     send_adv, NULL);
+  ctimer_set(&c.send_timer, random_rand() % c.current_interval,
+             send_adv, NULL);
 }
 /*---------------------------------------------------------------------------*/
 static void

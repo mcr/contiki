@@ -34,7 +34,6 @@
  * This code is almost device independent and should be easy to port.
  */
 
-#include <stdio.h>
 #include <string.h>
 
 #include "contiki.h"
@@ -50,7 +49,7 @@
 #include "dev/cc2420.h"
 #include "dev/cc2420_const.h"
 
-#include "net/rime/packetbuf.h"
+#include "net/packetbuf.h"
 #include "net/rime/rimestats.h"
 #include "net/netstack.h"
 
@@ -83,6 +82,7 @@
 
 #define DEBUG 0
 #if DEBUG
+#include <stdio.h>
 #define PRINTF(...) printf(__VA_ARGS__)
 #else
 #define PRINTF(...) do {} while (0)
@@ -150,42 +150,38 @@ static uint8_t receive_on;
 static int channel;
 
 /*---------------------------------------------------------------------------*/
-static uint8_t rxptr; /* Pointer to the next byte in the rxfifo. */
 
 static void
 getrxdata(void *buf, int len)
 {
-  FASTSPI_READ_FIFO_NO_WAIT(buf, len);
-  rxptr = (rxptr + len) & 0x7f;
+  CC2420_READ_FIFO_BUF(buf, len);
 }
 static void
 getrxbyte(uint8_t *byte)
 {
-  FASTSPI_READ_FIFO_BYTE(*byte);
-  rxptr = (rxptr + 1) & 0x7f;
+  CC2420_READ_FIFO_BYTE(*byte);
 }
 static void
 flushrx(void)
 {
   uint8_t dummy;
 
-  FASTSPI_READ_FIFO_BYTE(dummy);
-  FASTSPI_STROBE(CC2420_SFLUSHRX);
-  FASTSPI_STROBE(CC2420_SFLUSHRX);
-  rxptr = 0;
+  CC2420_READ_FIFO_BYTE(dummy);
+  CC2420_STROBE(CC2420_SFLUSHRX);
+  CC2420_STROBE(CC2420_SFLUSHRX);
 }
 /*---------------------------------------------------------------------------*/
 static void
 strobe(enum cc2420_register regname)
 {
-  FASTSPI_STROBE(regname);
+  CC2420_STROBE(regname);
 }
 /*---------------------------------------------------------------------------*/
 static unsigned int
 status(void)
 {
   uint8_t status;
-  FASTSPI_UPD_STATUS(status);
+  CC2420_GET_STATUS(status);
   return status;
 }
 /*---------------------------------------------------------------------------*/
@@ -197,7 +193,7 @@ on(void)
   /*  PRINTF("on\n");*/
   receive_on = 1;
 
-  ENABLE_FIFOP_INT();
+  CC2420_ENABLE_FIFOP_INT();
   strobe(CC2420_SRXON);
   while(!(status() & (BV(CC2420_XOSC16M_STABLE))));
   ENERGEST_ON(ENERGEST_TYPE_LISTEN);
@@ -214,10 +210,10 @@ off(void)
 
   ENERGEST_OFF(ENERGEST_TYPE_LISTEN);
   strobe(CC2420_SRFOFF);
-  DISABLE_FIFOP_INT();
+  CC2420_DISABLE_FIFOP_INT();
   LEDS_OFF(LEDS_GREEN);
 
-  if(!FIFOP_IS_1) {
+  if(!CC2420_FIFOP_IS_1) {
     flushrx();
   }
 }
@@ -242,14 +238,14 @@ static unsigned
 getreg(enum cc2420_register regname)
 {
   unsigned reg;
-  FASTSPI_GETREG(regname, reg);
+  CC2420_READ_REG(regname, reg);
   return reg;
 }
 /*---------------------------------------------------------------------------*/
 static void
 setreg(enum cc2420_register regname, unsigned value)
 {
-  FASTSPI_SETREG(regname, value);
+  CC2420_WRITE_REG(regname, value);
 }
 /*---------------------------------------------------------------------------*/
 static void
@@ -276,8 +272,8 @@ cc2420_init(void)
   {
     int s = splhigh();
     cc2420_arch_init();		/* Initalize ports and SPI. */
-    DISABLE_FIFOP_INT();
-    FIFOP_INT_INIT();
+    CC2420_DISABLE_FIFOP_INT();
+    CC2420_FIFOP_INT_INIT();
     splx(s);
   }
 
@@ -329,7 +325,7 @@ cc2420_init(void)
   cc2420_set_channel(26);
 
   flushrx();
-  
+
   process_start(&cc2420_process, NULL);
   return 1;
 }
@@ -362,10 +358,10 @@ cc2420_transmit(unsigned short payload_len)
    * Note that we may have to wait up to 320 us (20 symbols) before
    * transmission starts.
    */
-#ifdef TMOTE_SKY
-#define LOOP_20_SYMBOLS 800	/* 326us (msp430 @ 2.4576MHz) */
-#elif __AVR__
-#define LOOP_20_SYMBOLS 500	/* XXX */
+#ifndef CC2420_CONF_SYMBOL_LOOP_COUNT
+#error CC2420_CONF_SYMBOL_LOOP_COUNT needs to be set!!!
+#else
+#define LOOP_20_SYMBOLS CC2420_CONF_SYMBOL_LOOP_COUNT
 #endif
 
 #if WITH_SEND_CCA
@@ -377,7 +373,7 @@ cc2420_transmit(unsigned short payload_len)
 #endif /* WITH_SEND_CCA */
 
   for(i = LOOP_20_SYMBOLS; i > 0; i--) {
-    if(SFD_IS_1) {
+    if(CC2420_SFD_IS_1) {
       if(!(status() & BV(CC2420_TX_ACTIVE))) {
         /* SFD went high but we are not transmitting. This means that
            we just started receiving a packet, so we drop the
@@ -453,10 +449,10 @@ cc2420_prepare(const void *payload, unsigned short payload_len)
   checksum = crc16_data(payload, payload_len, 0);
 #endif /* CC2420_CONF_CHECKSUM */
   total_len = payload_len + AUX_LEN;
-  FASTSPI_WRITE_FIFO(&total_len, 1);
-  FASTSPI_WRITE_FIFO(payload, payload_len);
+  CC2420_WRITE_FIFO_BUF(&total_len, 1);
+  CC2420_WRITE_FIFO_BUF(payload, payload_len);
 #if CC2420_CONF_CHECKSUM
-  FASTSPI_WRITE_FIFO(&checksum, CHECKSUM_LEN);
+  CC2420_WRITE_FIFO_BUF(&checksum, CHECKSUM_LEN);
 #endif /* CC2420_CONF_CHECKSUM */
 
   RELEASE_LOCK();
@@ -574,18 +570,18 @@ cc2420_set_pan_addr(unsigned pan,
 
   tmp[0] = pan & 0xff;
   tmp[1] = pan >> 8;
-  FASTSPI_WRITE_RAM_LE(&tmp, CC2420RAM_PANID, 2, f);
+  CC2420_WRITE_RAM(&tmp, CC2420RAM_PANID, 2);
 
   tmp[0] = addr & 0xff;
   tmp[1] = addr >> 8;
-  FASTSPI_WRITE_RAM_LE(&tmp, CC2420RAM_SHORTADDR, 2, f);
+  CC2420_WRITE_RAM(&tmp, CC2420RAM_SHORTADDR, 2);
   if(ieee_addr != NULL) {
     uint8_t tmp_addr[8];
     /* LSB first, MSB last for 802.15.4 addresses in CC2420 */
     for (f = 0; f < 8; f++) {
       tmp_addr[7 - f] = ieee_addr[f];
     }
-    FASTSPI_WRITE_RAM_LE(tmp_addr, CC2420RAM_IEEEADDR, 8, f);
+    CC2420_WRITE_RAM(tmp_addr, CC2420RAM_IEEEADDR, 8);
   }
   RELEASE_LOCK();
 }
@@ -601,7 +597,7 @@ TIMETABLE_AGGREGATE(aggregate_time, 10);
 int
 cc2420_interrupt(void)
 {
-  CLEAR_FIFOP_INT();
+  CC2420_CLEAR_FIFOP_INT();
   process_poll(&cc2420_process);
 #if CC2420_TIMETABLE_PROFILING
   timetable_clear(&cc2420_timetable);
@@ -609,7 +605,6 @@ cc2420_interrupt(void)
 #endif /* CC2420_TIMETABLE_PROFILING */
 
   pending++;
-  
   cc2420_packets_seen++;
   return 1;
 }
@@ -656,7 +651,7 @@ cc2420_read(void *buf, unsigned short bufsize)
   uint16_t checksum;
 #endif /* CC2420_CONF_CHECKSUM */
 
-  if(!FIFOP_IS_1) {
+  if(!CC2420_FIFOP_IS_1) {
     return 0;
   }
   /*  if(!pending) {
@@ -724,8 +719,8 @@ cc2420_read(void *buf, unsigned short bufsize)
     len = AUX_LEN;
   }
 
-  if(FIFOP_IS_1) {
-    if(!FIFO_IS_1) {
+  if(CC2420_FIFOP_IS_1) {
+    if(!CC2420_FIFO_IS_1) {
       /* Clean up in case of FIFO overflow!  This happens for every
        * full length frame and is signaled by FIFOP = 1 and FIFO =
        * 0. */
@@ -831,7 +826,7 @@ cc2420_cca(void)
     /*    printf("cc2420_rssi: RSSI not valid.\n"); */
   }
 
-  cca = CCA_IS_1;
+  cca = CC2420_CCA_IS_1;
 
   if(radio_was_off) {
     cc2420_off();
@@ -843,13 +838,13 @@ cc2420_cca(void)
 int
 cc2420_receiving_packet(void)
 {
-  return SFD_IS_1;
+  return CC2420_SFD_IS_1;
 }
 /*---------------------------------------------------------------------------*/
 static int
 pending_packet(void)
 {
-  return FIFOP_IS_1;
+  return CC2420_FIFOP_IS_1;
 }
 /*---------------------------------------------------------------------------*/
 void

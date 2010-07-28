@@ -44,7 +44,7 @@
 #include "dev/leds.h"
 #include "sicslow_ethernet.h"
 
-#include "net/rime/packetbuf.h"
+#include "net/packetbuf.h"
 
 #include <stdio.h>
 #include <string.h>

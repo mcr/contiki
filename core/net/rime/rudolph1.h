@@ -62,6 +62,7 @@
 
 #include "net/rime/trickle.h"
 #include "net/rime/ipolite.h"
+#include "sys/ctimer.h"
 
 struct rudolph1_conn;
 
