@@ -369,10 +369,15 @@ public abstract class MspMote extends AbstractEmulatedMote implements Mote, Watc
   }
   
   public String sendCLICommandAndPrint(String cmd) {
+  	String response = executeCLICommand(cmd); 
+  	logger.fatal(response);
+    return response;
+  }
+  
+  public String executeCLICommand(String cmd) {
     final StringBuilder sb = new StringBuilder();
     LineListener tmp = new LineListener() {
       public void lineRead(String line) {
-        logger.fatal(line);
         sb.append(line + "\n");
       }
     };
@@ -486,6 +491,10 @@ public abstract class MspMote extends AbstractEmulatedMote implements Mote, Watc
 
   public MspBreakpointContainer getBreakpointsContainer() {
     return breakpointsContainer;
+  }
+
+  public String getExecutionDetails() {
+  	return executeCLICommand("stacktrace");
   }
 
 }
