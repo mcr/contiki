@@ -277,14 +277,19 @@ public class Simulation extends Observable implements Runnable {
         }
       }
     } catch (RuntimeException e) {
-      logger.fatal("Simulation stopped due to error: " + e.getMessage(), e);
+    	if ("MSPSim requested simulation stop".equals(e.getMessage())) {
+    		/* XXX Should be*/
+    		logger.info("Simulation stopped due to MSPSim breakpoint");
+    	} else {
 
-      if (!GUI.isVisualized()) {
-	/* Quit simulator if in test mode */
-	System.exit(1);
-      } else {
-        GUI.showErrorDialog(GUI.getTopParentContainer(), "Simulation error", e, false);
-      }
+    		logger.fatal("Simulation stopped due to error: " + e.getMessage(), e);
+    		if (!GUI.isVisualized()) {
+    			/* Quit simulator if in test mode */
+    			System.exit(1);
+    		} else {
+    			GUI.showErrorDialog(GUI.getTopParentContainer(), "Simulation error", e, false);
+    		}
+    	}
     }
     isRunning = false;
     simulationThread = null;
