@@ -177,6 +177,16 @@ public class SkyByteRadio extends Radio implements CustomDataRadio {
         notifyObservers();
       }
     });
+
+    cc2420.setChannelListener(new CC2420.ChannelListener() {
+			public void changedChannel(int channel) {
+				/* XXX Currently assumes zero channel switch time */
+        lastEvent = RadioEvent.UNKNOWN;
+				lastEventTime = SkyByteRadio.this.mote.getSimulation().getSimulationTime();
+        setChanged();
+        notifyObservers();
+			}
+		});
   }
 
   /* Packet radio support */
