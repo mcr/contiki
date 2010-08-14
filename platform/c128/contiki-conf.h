@@ -66,7 +66,7 @@
 #define WWW_CONF_WEBPAGE_WIDTH      80
 #define WWW_CONF_WEBPAGE_HEIGHT     20
 #define WWW_CONF_HISTORY_SIZE        0
-#define WWW_CONF_MAX_URLLEN         40
+#define WWW_CONF_MAX_URLLEN         78
 #define WWW_CONF_MAX_NUMPAGEWIDGETS 20
 #define WWW_CONF_RENDERSTATE         0
 #define WWW_CONF_FORMS               0
