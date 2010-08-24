@@ -36,6 +36,7 @@
 
 static int stopped = 0;
 /*---------------------------------------------------------------------------*/
+#ifdef CONTIKI_TARGET_SKY
 static void
 printchar(char c)
 {
@@ -62,16 +63,17 @@ printstring(char *s)
     printchar(*s++);
   }
 }
+#endif
 /*---------------------------------------------------------------------------*/
 interrupt(WDT_VECTOR)
 watchdog_interrupt(void)
 {
+#ifdef CONTIKI_TARGET_SKY
   uint8_t dummy;
   static uint8_t *ptr;
   static int i;
 
   ptr = &dummy;
-
   printstring("Watchdog reset");
   /*  printstring("Watchdog reset at PC $");
   hexprint(ptr[3]);
@@ -89,6 +91,8 @@ watchdog_interrupt(void)
     }
   }
   printchar('\n');
+#endif
+
   watchdog_reboot();
 }
 /*---------------------------------------------------------------------------*/
