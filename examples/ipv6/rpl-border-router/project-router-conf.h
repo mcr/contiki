@@ -35,14 +35,6 @@
 #undef UIP_FALLBACK_INTERFACE
 #define UIP_FALLBACK_INTERFACE rpl_interface
 
-/* The number of supported neighbors */
-#undef UIP_CONF_DS6_NBR_NBU
-#define UIP_CONF_DS6_NBR_NBU     30
-
-/* The number of supported routes */
-#undef UIP_CONF_DS6_ROUTE_NBU
-#define UIP_CONF_DS6_ROUTE_NBU   30
-
 #undef QUEUEBUF_CONF_NUM
 #define QUEUEBUF_CONF_NUM          6
 
