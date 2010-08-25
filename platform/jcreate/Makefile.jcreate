@@ -5,7 +5,7 @@ CFLAGS += -DCONTIKI_TARGET_SKY
 
 CONTIKI_TARGET_SOURCEFILES += contiki-jcreate-platform.c \
 	battery-sensor.c radio-sensor.c \
-	acc-sensor.c ext-sensor.c
+	temperature-sensor.c acc-sensor.c ext-sensor.c
 
 include $(CONTIKI)/platform/sky/Makefile.common
 

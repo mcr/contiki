@@ -45,4 +45,18 @@ extern const struct sensors_sensor acc_sensor;
 
 #define ACC_SENSOR "Acc"
 
+#define ACC_SENSOR_X 0
+#define ACC_SENSOR_Y 1
+#define ACC_SENSOR_Z 2
+
+/*
+  Sensitivity configuration (g-Select1 and g-Select2)
+  Value  g-Range  Sensitivity
+  0      1.5g     800mV/g
+  1      2g       600mV/g
+  2      4g       300mV/g
+  3      6g       200mV/g
+*/
+#define ACC_SENSOR_SENSITIVITY 10
+
 #endif /* __ACC_SENSOR_H__ */
