@@ -2,7 +2,7 @@
 
 CFLAGS+=-Os -g
 
-ARCH=msp430.c leds.c watchdog.c \
+ARCH=msp430.c leds.c watchdog.c xmem.c \
      spix.c cc2420.c cc2420-aes.c cc2420-arch.c cc2420-arch-sfd.c\
      node-id.c sensors.c button-sensor.c cfs-coffee.c \
      radio-sensor.c uart0x.c uart0-putchar.c uip-ipchksum.c \
