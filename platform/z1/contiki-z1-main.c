@@ -231,7 +231,7 @@ main(int argc, char **argv)
 
   
   /* Restore node id if such has been stored in external mem */
-  //Enric node_id_restore();
+  node_id_restore();
 
 
   /* for setting "hardcoded" IEEE 802.15.4 MAC addresses */
