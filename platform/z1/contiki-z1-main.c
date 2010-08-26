@@ -48,6 +48,7 @@
 #include "lib/random.h"
 #include "net/netstack.h"
 #include "net/mac/frame802154.h"
+#include "dev/button-sensor.h"
 
 #if WITH_UIP6
 #include "net/uip-ds6.h"
@@ -250,8 +251,7 @@ main(int argc, char **argv)
   process_init();
   process_start(&etimer_process, NULL);
 
-  //process_start(&sensors_process, NULL);
-  PRINTF("process_sensors() skipped \n");
+  process_start(&sensors_process, NULL);
 
   ctimer_init();
 

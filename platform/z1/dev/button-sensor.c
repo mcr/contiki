@@ -40,8 +40,8 @@ const struct sensors_sensor button_sensor;
 static struct timer debouncetimer;
 static int status(int type);
 
-HWCONF_PIN(BUTTON, 2, 7);
-HWCONF_IRQ(BUTTON, 2, 7);
+HWCONF_PIN(BUTTON, 2, 5);
+HWCONF_IRQ(BUTTON, 2, 5);
 
 /*---------------------------------------------------------------------------*/
 interrupt(PORT2_VECTOR)
