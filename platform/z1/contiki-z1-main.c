@@ -44,10 +44,7 @@
 #include "dev/slip.h"
 #include "dev/uart0.h"
 #include "dev/watchdog.h"
-#if 0
-//todo
-	#include "dev/xmem.h"
-#endif
+#include "dev/xmem.h"
 #include "lib/random.h"
 #include "net/netstack.h"
 #include "net/mac/frame802154.h"
@@ -224,7 +221,7 @@ main(int argc, char **argv)
   node_mac[7] = 0x05;
 
   
-  //xmem_init(); TODO
+  xmem_init();
 
   rtimer_init();
   /*
