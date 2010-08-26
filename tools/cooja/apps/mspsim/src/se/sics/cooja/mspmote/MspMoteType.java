@@ -390,11 +390,16 @@ public abstract class MspMoteType implements MoteType {
   }
 
   public static Hashtable<File, Hashtable<Integer, Integer>> getFirmwareDebugInfo(ELF elf) {
-    /* Fetch all executable addresses */
-    ArrayList<Integer> addresses = elf.getDebug().getExecutableAddresses();
-
     Hashtable<File, Hashtable<Integer, Integer>> fileToLineHash =
       new Hashtable<File, Hashtable<Integer, Integer>>();
+
+    if (elf.getDebug() == null) {
+      // No debug information is available
+      return fileToLineHash;
+    }
+
+    /* Fetch all executable addresses */
+    ArrayList<Integer> addresses = elf.getDebug().getExecutableAddresses();
 
     for (int address: addresses) {
       DebugInfo info = elf.getDebugInfo(address);
