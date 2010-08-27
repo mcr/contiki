@@ -37,7 +37,8 @@
  * Updated : $Date$
  *           $Revision$
  */
-
+#ifndef __Z1_PHIDGETS_H__
+#define __Z1_PHIDGETS_H__
 
 #define PHIDGET5V_1 0
 #define PHIDGET5V_2 1
@@ -45,3 +46,5 @@
 #define PHIDGET3V_2 3
 
 extern const struct sensors_sensor phidgets;
+
+#endif /* __Z1_PHIDGETS_H__ */

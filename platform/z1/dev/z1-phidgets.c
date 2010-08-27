@@ -37,14 +37,13 @@
  * Updated : $Date$
  *           $Revision$
  */
-#include <stdlib.h>
-
 #include <io.h>
-#include "lib/sensors.h"
 #include "contiki.h"
+#include "lib/sensors.h"
 #include "dev/z1-phidgets.h"
 
 static uint8_t adc_on;
+static uint8_t active;
 /*---------------------------------------------------------------------------*/
 static void
 sensors_activate(uint8_t type)
@@ -94,10 +93,6 @@ sensors_deactivate(uint8_t type)
     P6SEL = 0x00;
   }
 }
-/*---------------------------------------------------------------------------*/
-
-const struct sensors_sensor ext_sensor;
-static uint8_t active;
 /*---------------------------------------------------------------------------*/
 static int
 value(int type)
