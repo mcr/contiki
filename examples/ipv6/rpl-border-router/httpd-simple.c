@@ -251,5 +251,8 @@ httpd_init(void)
 {
   tcp_listen(HTONS(80));
   memb_init(&conns);
+#if URLCONV
+  urlconv_init();
+#else /* URLCONV */
 }
 /*---------------------------------------------------------------------------*/
