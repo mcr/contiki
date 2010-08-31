@@ -65,10 +65,10 @@
 #include "net/rime/neighbor-discovery.h"
 #include "sys/ctimer.h"
 
-#define COLLECT_PACKET_ID_BITS 4
+#define COLLECT_PACKET_ID_BITS 8
 
 #define COLLECT_ATTRIBUTES  { PACKETBUF_ADDR_ESENDER,     PACKETBUF_ADDRSIZE }, \
-                            { PACKETBUF_ATTR_EPACKET_ID,  PACKETBUF_ATTR_BIT * 4 }, \
+                            { PACKETBUF_ATTR_EPACKET_ID,  PACKETBUF_ATTR_BIT * COLLECT_PACKET_ID_BITS }, \
                             { PACKETBUF_ATTR_PACKET_ID,   PACKETBUF_ATTR_BIT * COLLECT_PACKET_ID_BITS }, \
                             { PACKETBUF_ATTR_TTL,         PACKETBUF_ATTR_BIT * 4 }, \
                             { PACKETBUF_ATTR_HOPS,        PACKETBUF_ATTR_BIT * 4 }, \
