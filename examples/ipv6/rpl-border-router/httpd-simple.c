@@ -253,6 +253,6 @@ httpd_init(void)
   memb_init(&conns);
 #if URLCONV
   urlconv_init();
-#else /* URLCONV */
+#endif /* URLCONV */
 }
 /*---------------------------------------------------------------------------*/
