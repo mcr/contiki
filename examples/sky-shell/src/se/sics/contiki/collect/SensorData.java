@@ -51,6 +51,7 @@ public class SensorData implements SensorInfo {
   private final long nodeTime;
   private final long systemTime;
   private int seqno;
+  private boolean isDuplicate;
 
   public SensorData(Node node, int[] values, long systemTime) {
     this.node = node;
@@ -66,6 +67,14 @@ public class SensorData implements SensorInfo {
 
   public String getNodeID() {
     return node.getID();
+  }
+
+  public boolean isDuplicate() {
+    return isDuplicate;
+  }
+
+  public void setDuplicate(boolean isDuplicate) {
+    this.isDuplicate = isDuplicate;
   }
 
   public int getSeqno() {
