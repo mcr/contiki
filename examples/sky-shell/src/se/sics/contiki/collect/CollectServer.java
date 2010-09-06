@@ -80,9 +80,10 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
 import se.sics.contiki.collect.gui.BarChartPanel;
 import se.sics.contiki.collect.gui.MapPanel;
+import se.sics.contiki.collect.gui.NodeInfoPanel;
+import se.sics.contiki.collect.gui.PacketChartPanel;
 import se.sics.contiki.collect.gui.SerialConsole;
 import se.sics.contiki.collect.gui.TimeChartPanel;
-import se.sics.contiki.collect.gui.SeqnoChartPanel;
 
 /**
  *
@@ -351,7 +352,9 @@ public class CollectServer {
             return data.getLatency();
           }
         },
-        new SeqnoChartPanel(this, "Received Packets", "Received Packets", "Seqno", "Received Packets"),
+        new PacketChartPanel(this, "Received Packets", "Time", "Received Packets"),
+//        new SeqnoChartPanel(this, "Received Packets", "Received Packets", "Seqno", "Received Packets"),
+        new NodeInfoPanel(),
         serialConsole
     };
     for (int i = 0, n = visualizers.length; i < n; i++) {
