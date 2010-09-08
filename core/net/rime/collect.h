@@ -93,10 +93,10 @@ struct collect_conn {
   struct ctimer t;
   struct ctimer retransmission_timer;
   rimeaddr_t parent;
-  rimeaddr_t last_received_addr;
+  /*  rimeaddr_t last_received_addr;*/
   uint16_t rtmetric;
+  uint8_t seqno; /*, last_received_seqno;*/
   uint8_t sending, transmissions, max_rexmits;
-  uint8_t seqno, last_received_seqno;
   uint8_t eseqno;
   uint8_t is_router;
 };
