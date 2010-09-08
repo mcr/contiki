@@ -101,16 +101,40 @@ public class NodeInfoPanel extends JPanel implements Visualizer {
     }
   }
 
+  private StringBuilder addTime(StringBuilder sb, long time) {
+    time /= 1000;
+    if (time > 24 * 60 * 60) {
+      long days = time / (24 * 60 * 60);
+      sb.append(days).append(" days, ");
+      time -= days * 24 * 60 * 60;
+    }
+    if (time > 60 * 60) {
+      long hours = time / (60 * 60);
+      sb.append(hours).append(" hours, ");
+      time -= hours * 60 * 60;
+    }
+    sb.append(time / 60).append(" min, ").append(time % 60).append(" sec");
+    return sb;
+  }
+
   private void updateInfoArea() {
     StringBuilder sb = new StringBuilder();
     if (selectedNodes != null) {
       for(Node node : selectedNodes) {
         SensorDataAggregator sda = node.getSensorDataAggregator();
-        sb.append(node.getName()).append('\n');
-        sb.append("  Packets Received: \t" + sda.getPacketCount() + '\n'
-                + "  Duplicates:       \t" + sda.getDuplicateCount() + '\n'
-                + "  Unique Sensor Values:\t" + sda.getDataCount()
-            + "\n--------------------------------------------------------\n");
+        long longest = sda.getLongestPeriod();
+        sb.append(node.getName() + '\n'
+            + "  Packets Received: \t" + sda.getPacketCount() + '\n'
+            + "  Duplicates:       \t" + sda.getDuplicateCount() + '\n');
+        if (longest > 0) {
+          sb.append("  Average period:\t");
+          addTime(sb, sda.getAveragePeriod()).append('\n');
+          sb.append("  Shortest period:\t");
+          addTime(sb, sda.getShortestPeriod()).append('\n');
+          sb.append("  Longest period:\t");
+          addTime(sb, longest).append('\n');
+        }
+        sb.append("--------------------------------------------------------\n");
       }
     }
     infoArea.setText(sb.toString());

@@ -155,8 +155,11 @@ public class PacketChartPanel extends JPanel implements Visualizer {
           } else {
             long min = sd.getSystemTime() / 60000;
             if (min != minute) {
-              for(; lastMinute < minute - 1; lastMinute++) {
+              if (lastMinute < minute) {
                 series.add(new Minute(new Date(lastMinute * 60000L)), 0);
+                if (lastMinute < minute - 1) {
+                  series.add(new Minute(new Date((minute - 1) * 60000L)), 0);
+                }
               }
               series.add(new Minute(new Date(minute * 60000L)), count);
               count = 0;
