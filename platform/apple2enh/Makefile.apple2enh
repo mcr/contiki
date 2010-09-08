@@ -34,15 +34,20 @@
 #
 
 CONTIKI_SOURCEFILES += pfs.S
-HIGHCODE_SOURCEFILES = process.c etimer.c uip_arp.c
 
 CONTIKI_CPU = $(CONTIKI)/cpu/6502
 include $(CONTIKI_CPU)/Makefile.6502
 
+ifeq ($(findstring WITH_REBOOT,$(DEFINES)),WITH_REBOOT)
+  HIGHCODE_SOURCEFILES = process.c etimer.c uip_arp.c
+  LDFLAGS += -C apple2enh-reboot.cfg
+else
+  HIGHCODE_SOURCEFILES = process.c etimer.c ethernet.c
+  LDFLAGS += -C apple2enh-loader.cfg
+endif
+
 # Set a target-specific variable value
 ${addprefix $(OBJECTDIR)/,${call oname, $(HIGHCODE_SOURCEFILES)}}: CFLAGS += --code-name HIGHCODE
-
-LDFLAGS += -C apple2enh-reboot.cfg
 
 ifeq ($(MAKECMDGOALS),disk)
   ifndef AC
