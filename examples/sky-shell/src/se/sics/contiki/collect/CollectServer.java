@@ -731,11 +731,18 @@ public class CollectServer {
         final Node newNode = node;
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-              // Insert the node sorted by name
-              String nodeName = newNode.getName();
+              // Insert the node sorted by id
+              String nodeID = newNode.getID();
               boolean added = false;
               for (int i = 0, n = nodeModel.size(); i < n; i++) {
-                int cmp = nodeName.compareTo(((Node) nodeModel.get(i)).getName());
+                String id = ((Node) nodeModel.get(i)).getID();
+                int cmp;
+                // Shorter id first (4.0 before 10.0)
+                if (nodeID.length() == id.length()) {
+                  cmp = nodeID.compareTo(id);
+                } else {
+                  cmp = nodeID.length() - id.length();
+                }
                 if (cmp < 0) {
                   nodeModel.insertElementAt(newNode, i);
                   added = true;
