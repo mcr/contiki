@@ -50,7 +50,6 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.PatternSyntaxException;
 
@@ -90,6 +89,7 @@ import se.sics.cooja.SimEventCentral.LogOutputEvent;
 import se.sics.cooja.SimEventCentral.LogOutputListener;
 import se.sics.cooja.dialogs.TableColumnAdjuster;
 import se.sics.cooja.dialogs.UpdateAggregator;
+import se.sics.cooja.util.ArrayQueue;
 
 /**
  * A simple mote log listener.
@@ -116,7 +116,7 @@ public class LogListener extends VisPlugin {
 
   private final JTable logTable;
   private TableRowSorter<TableModel> logFilter;
-  private LinkedList<LogData> logs = new LinkedList<LogData>();
+  private ArrayQueue<LogData> logs = new ArrayQueue<LogData>();
 
   private Simulation simulation;
 
@@ -155,7 +155,7 @@ public class LogListener extends VisPlugin {
       /* Remove old */
       int removed = 0;
       while (logs.size() > simulation.getEventCentral().getLogOutputBufferSize()) {
-        logs.removeFirst();
+        logs.remove(0);
         removed++;
       }
       if (removed > 0) {
