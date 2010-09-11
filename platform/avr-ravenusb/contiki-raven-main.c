@@ -104,6 +104,58 @@ struct rtimer rt;
 void rtimercycle(void) {rtimerflag=1;}
 #endif /* TESTRTIMER */
 
+/*---------------------------------------------------------------------------*/
+/*---------------------------------  RPL   ----------------------------------*/
+/*---------------------------------------------------------------------------*/
+#if UIP_CONF_IPV6_RPL
+
+#define RPL_BORDER_ROUTER 1     //Set to 1 for border router
+
+#define PRINTF(FORMAT,args...) printf_P(PSTR(FORMAT),##args)
+//#define PRINTF(...)
+#include "net/rpl/rpl.h"
+
+#if RPL_BORDER_ROUTER
+
+uint16_t dag_id[] = {0x1111, 0x1100, 0, 0, 0, 0, 0, 0x0011};
+
+PROCESS(border_router_process, "Border router process");
+PROCESS_THREAD(border_router_process, ev, data)
+{
+  rpl_dag_t *dag;
+
+  PROCESS_BEGIN();
+
+  PROCESS_PAUSE();
+
+  PRINTF("RPL-Border router started\n");
+
+  dag = rpl_set_root((uip_ip6addr_t *)dag_id);
+  if(dag != NULL) {
+    uip_ip6addr_t ipaddr;
+    uip_ip6addr(&ipaddr, 0xaaaa, 0, 0, 0, 0, 0, 0, 0);
+    uip_ds6_addr_add(&ipaddr, 0, ADDR_AUTOCONF);
+    rpl_set_prefix(dag, &ipaddr, 64);
+    PRINTF("created a new RPL dag\n");
+  }
+
+  /* The border router runs with a 100% duty cycle in order to ensure high
+     packet reception rates. */
+ // NETSTACK_MAC.off(1);
+
+  while(1) {
+    PROCESS_YIELD();
+ //   if (ev == sensors_event && data == &button_sensor) {
+ //     PRINTF("Initiating global repair\n");
+ //     rpl_repair_dag(rpl_get_dag(RPL_ANY_INSTANCE));
+//    }
+  }
+
+  PROCESS_END();
+}
+#endif /* RPL_BORDER_ROUTER */
+#endif /* UIP_CONF_IPV6_RPL */
+
 /*-------------------------------------------------------------------------*/
 /*----------------------Configuration of the .elf file---------------------*/
 typedef struct {unsigned char B2;unsigned char B1;unsigned char B0;} __signature_t;
@@ -178,7 +230,7 @@ static void initialize(void) {
  
   memcpy(&uip_lladdr.addr, &addr.u8, 8);
   rf230_set_pan_addr(IEEE802154_PANID, 0, (uint8_t *)&addr.u8);
-  rf230_set_channel(24);
+  rf230_set_channel(26);
 
   rimeaddr_set_node_addr(&addr); 
 //  set_rime_addr();
@@ -188,11 +240,6 @@ static void initialize(void) {
   NETSTACK_RDC.init();
   NETSTACK_MAC.init();
   NETSTACK_NETWORK.init();
-
-#if UIP_CONF_ROUTER
-  rime_init(rime_udp_init(NULL));
-  uip_router_register(&rimeroute);
-#endif
 
 #if ANNOUNCE && USB_CONF_RS232
   printf_P(PSTR("MAC address %x:%x:%x:%x:%x:%x:%x:%x\n"),addr.u8[0],addr.u8[1],addr.u8[2],addr.u8[3],addr.u8[4],addr.u8[5],addr.u8[6],addr.u8[7]);
@@ -205,6 +252,21 @@ static void initialize(void) {
   }
   printf_P(PSTR("\n"));
 #endif
+
+#if UIP_CONF_IPV6_RPL
+/* Normally tcpip process does this, but we don't have one.
+ * A Compiler warning will occur since no rpl.h header include
+ * Still experimental, pings work to link local address only
+ */
+//  rpl_init();
+#if RPL_BORDER_ROUTER
+  process_start(&tcpip_process, NULL);
+  process_start(&border_router_process, NULL);
+#else
+  PRINTF ("RPL Started\n");
+  process_start(&tcpip_process, NULL);
+#endif
+#endif /* UIP_CONF_IPV6_RPL */
 
 #else  /* RF230BB */
 /* The order of starting these is important! */

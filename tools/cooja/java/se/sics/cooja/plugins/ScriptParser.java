@@ -223,6 +223,7 @@ public class ScriptParser {
     
   public static String getJSCode(String code, String timeoutCode) {
     return
+    "timeout_function = null; " +
     "function run() { " +
     "SEMAPHORE_SIM.acquire(); " +
     "SEMAPHORE_SCRIPT.acquire(); " + /* STARTUP BLOCKS HERE! */
@@ -247,6 +248,7 @@ public class ScriptParser {
     "\n" +
     "function SCRIPT_TIMEOUT() { " +
     timeoutCode + "; " +
+    " if (timeout_function != null) { timeout_function(); } " +
     " log.log('TEST TIMEOUT\\n'); " +
     " log.testFailed(); " +
     " while (!SHUTDOWN) { " +

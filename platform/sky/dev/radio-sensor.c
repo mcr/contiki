@@ -36,6 +36,7 @@
 #include "dev/radio-sensor.h"
 
 const struct sensors_sensor radio_sensor;
+static int active;
 
 /*---------------------------------------------------------------------------*/
 static int
@@ -53,12 +54,21 @@ value(int type)
 static int
 configure(int type, int c)
 {
+  if(type == SENSORS_ACTIVE) {
+    active = c;
+    return 1;
+  }
   return 0;
 }
 /*---------------------------------------------------------------------------*/
 static int
 status(int type)
 {
+  switch(type) {
+  case SENSORS_ACTIVE:
+  case SENSORS_READY:
+    return active;
+  }
   return 0;
 }
 /*---------------------------------------------------------------------------*/

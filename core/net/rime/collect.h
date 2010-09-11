@@ -65,10 +65,10 @@
 #include "net/rime/neighbor-discovery.h"
 #include "sys/ctimer.h"
 
-#define COLLECT_PACKET_ID_BITS 4
+#define COLLECT_PACKET_ID_BITS 8
 
 #define COLLECT_ATTRIBUTES  { PACKETBUF_ADDR_ESENDER,     PACKETBUF_ADDRSIZE }, \
-                            { PACKETBUF_ATTR_EPACKET_ID,  PACKETBUF_ATTR_BIT * 4 }, \
+                            { PACKETBUF_ATTR_EPACKET_ID,  PACKETBUF_ATTR_BIT * COLLECT_PACKET_ID_BITS }, \
                             { PACKETBUF_ATTR_PACKET_ID,   PACKETBUF_ATTR_BIT * COLLECT_PACKET_ID_BITS }, \
                             { PACKETBUF_ATTR_TTL,         PACKETBUF_ATTR_BIT * 4 }, \
                             { PACKETBUF_ATTR_HOPS,        PACKETBUF_ATTR_BIT * 4 }, \
@@ -93,10 +93,10 @@ struct collect_conn {
   struct ctimer t;
   struct ctimer retransmission_timer;
   rimeaddr_t parent;
-  rimeaddr_t last_received_addr;
+  /*  rimeaddr_t last_received_addr;*/
   uint16_t rtmetric;
+  uint8_t seqno; /*, last_received_seqno;*/
   uint8_t sending, transmissions, max_rexmits;
-  uint8_t seqno, last_received_seqno;
   uint8_t eseqno;
   uint8_t is_router;
 };

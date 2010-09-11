@@ -50,12 +50,15 @@ public class SensorData implements SensorInfo {
   private final int[] values;
   private final long nodeTime;
   private final long systemTime;
+  private int seqno;
+  private boolean isDuplicate;
 
   public SensorData(Node node, int[] values, long systemTime) {
     this.node = node;
     this.values = values;
     this.nodeTime = ((values[TIMESTAMP1] << 16) + values[TIMESTAMP2]) * 1000L;
     this.systemTime = systemTime;
+    this.seqno = values[SEQNO];
   }
 
   public Node getNode() {
@@ -64,6 +67,22 @@ public class SensorData implements SensorInfo {
 
   public String getNodeID() {
     return node.getID();
+  }
+
+  public boolean isDuplicate() {
+    return isDuplicate;
+  }
+
+  public void setDuplicate(boolean isDuplicate) {
+    this.isDuplicate = isDuplicate;
+  }
+
+  public int getSeqno() {
+    return seqno;
+  }
+
+  public void setSeqno(int seqno) {
+    this.seqno = seqno;
   }
 
   public int getValue(int index) {
@@ -189,9 +208,8 @@ public class SensorData implements SensorInfo {
     double v = -4.0 + 405.0 * values[HUMIDITY] / 10000.0;
     if(v > 100) {
       return 100;
-    } else {
-      return v;
     }
+    return v;
   }
 
   public double getLight1() {

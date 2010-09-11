@@ -40,7 +40,8 @@
 #ifndef __SKY_SENSORS_H__
 #define __SKY_SENSORS_H__
 
-void sky_sensors_activate(uint8_t);
-void sky_sensors_deactivate(uint8_t);
+int  sky_sensors_status(uint16_t input, int type);
+int  sky_sensors_configure(uint16_t input, uint8_t reference,
+                           int type, int value);
 
 #endif /* __SKY_SENSORS_H__ */

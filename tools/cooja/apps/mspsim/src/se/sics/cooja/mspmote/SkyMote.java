@@ -36,6 +36,7 @@ import java.io.File;
 import org.apache.log4j.Logger;
 
 import se.sics.cooja.Simulation;
+import se.sics.cooja.mspmote.interfaces.CoojaM25P80;
 import se.sics.cooja.mspmote.interfaces.SkyCoffeeFilesystem;
 import se.sics.mspsim.platform.sky.SkyNode;
 
@@ -59,6 +60,7 @@ public class SkyMote extends MspMote {
     try {
       skyNode = new SkyNode();
       registry = skyNode.getRegistry();
+      skyNode.setFlash(new CoojaM25P80(skyNode.getCPU()));
       prepareMote(fileELF, skyNode);
     } catch (Exception e) {
       logger.fatal("Error when creating Sky mote: ", e);

@@ -34,6 +34,7 @@
 #ifndef __URLCONV_H__
 #define __URLCONV_H__
 
+void urlconv_init(void);
 void urlconv_tofilename(char *dest, char *source, unsigned char maxlen);
 
 #endif /* __URLCONV_H__ */

@@ -39,4 +39,11 @@ public abstract class AbstractEmulatedMote extends AbstractWakeupMote implements
   public int getCPUFrequency() {
     return -1;
   }
+  
+  /**
+   * @return Execution details, for instance a stack trace
+   */
+  public String getExecutionDetails() {
+  	return null;
+  }
 }

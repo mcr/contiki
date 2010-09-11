@@ -50,7 +50,6 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.PatternSyntaxException;
 
@@ -82,6 +81,7 @@ import org.jdom.Element;
 import se.sics.cooja.ClassDescription;
 import se.sics.cooja.GUI;
 import se.sics.cooja.Mote;
+import se.sics.cooja.Plugin;
 import se.sics.cooja.PluginType;
 import se.sics.cooja.Simulation;
 import se.sics.cooja.VisPlugin;
@@ -89,6 +89,7 @@ import se.sics.cooja.SimEventCentral.LogOutputEvent;
 import se.sics.cooja.SimEventCentral.LogOutputListener;
 import se.sics.cooja.dialogs.TableColumnAdjuster;
 import se.sics.cooja.dialogs.UpdateAggregator;
+import se.sics.cooja.util.ArrayQueue;
 
 /**
  * A simple mote log listener.
@@ -115,7 +116,7 @@ public class LogListener extends VisPlugin {
 
   private final JTable logTable;
   private TableRowSorter<TableModel> logFilter;
-  private LinkedList<LogData> logs = new LinkedList<LogData>();
+  private ArrayQueue<LogData> logs = new ArrayQueue<LogData>();
 
   private Simulation simulation;
 
@@ -154,7 +155,7 @@ public class LogListener extends VisPlugin {
       /* Remove old */
       int removed = 0;
       while (logs.size() > simulation.getEventCentral().getLogOutputBufferSize()) {
-        logs.removeFirst();
+        logs.remove(0);
         removed++;
       }
       if (removed > 0) {
@@ -244,7 +245,12 @@ public class LogListener extends VisPlugin {
       public Component getTableCellRendererComponent(JTable table,
           Object value, boolean isSelected, boolean hasFocus, int row,
           int column) {
-        if (backgroundColors) {
+      	if (row >= logTable.getRowCount()) {
+          return super.getTableCellRendererComponent(
+              table, value, isSelected, hasFocus, row, column);
+      	}
+
+      	if (backgroundColors) {
           LogData d = logs.get(logTable.getRowSorter().convertRowIndexToModel(row));
           char last = d.strID.charAt(d.strID.length()-1);
           if (last >= '0' && last <= '9') {
@@ -545,43 +551,47 @@ public class LogListener extends VisPlugin {
 
   private Action timeLineAction = new AbstractAction("in Timeline ") {
     private static final long serialVersionUID = -6358463434933029699L;
-
     public void actionPerformed(ActionEvent e) {
-      TimeLine plugin = (TimeLine) simulation.getGUI().getStartedPlugin(TimeLine.class.getName());
-      if (plugin == null) {
-        /*logger.fatal("No Timeline plugin");*/
-        return;
-      }
-
       int view = logTable.getSelectedRow();
       if (view < 0) {
         return;
       }
       int model = logTable.convertRowIndexToModel(view);
-      
-      /* Select simulation time */
-      plugin.trySelectTime(logs.get(model).ev.getTime());
+      long time = logs.get(model).ev.getTime();
+
+      Plugin[] plugins = simulation.getGUI().getStartedPlugins();
+      for (Plugin p: plugins) {
+      	if (!(p instanceof TimeLine)) {
+      		continue;
+      	}
+      	
+        /* Select simulation time */
+      	TimeLine plugin = (TimeLine) p;
+        plugin.trySelectTime(time);
+      }
     }
   };
 
   private Action radioLoggerAction = new AbstractAction("in Radio Logger") {
     private static final long serialVersionUID = -3041714249257346688L;
-
     public void actionPerformed(ActionEvent e) {
-      RadioLogger plugin = (RadioLogger) simulation.getGUI().getStartedPlugin(RadioLogger.class.getName());
-      if (plugin == null) {
-        /*logger.fatal("No Radio Logger plugin");*/
-        return;
-      }
-
       int view = logTable.getSelectedRow();
       if (view < 0) {
         return;
       }
       int model = logTable.convertRowIndexToModel(view);
-      
-      /* Select simulation time */
-      plugin.trySelectTime(logs.get(model).ev.getTime());
+      long time = logs.get(model).ev.getTime();
+
+      Plugin[] plugins = simulation.getGUI().getStartedPlugins();
+      for (Plugin p: plugins) {
+      	if (!(p instanceof RadioLogger)) {
+      		continue;
+      	}
+      	
+        /* Select simulation time */
+      	RadioLogger plugin = (RadioLogger) p;
+        plugin.trySelectTime(time);
+      }
     }
   };
 

@@ -55,7 +55,7 @@
 
 #include "contiki.h"
 
-#include "ds2411.h"
+#include "dev/ds2411.h"
 
 unsigned char ds2411_id[8];
 

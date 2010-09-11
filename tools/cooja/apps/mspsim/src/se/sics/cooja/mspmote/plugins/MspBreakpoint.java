@@ -238,7 +238,7 @@ public class MspBreakpoint implements Watchpoint {
     String desc = "";
     if (codeFile != null) {
       desc += codeFile.getPath() + ":" + lineNr + " (0x" + Integer.toHexString(address.intValue()) + ")";
-    } else {
+    } else if (address != null) {
       desc += "0x" + Integer.toHexString(address.intValue());
     }
     if (msg != null) {

@@ -80,6 +80,8 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
 import se.sics.contiki.collect.gui.BarChartPanel;
 import se.sics.contiki.collect.gui.MapPanel;
+import se.sics.contiki.collect.gui.NodeInfoPanel;
+import se.sics.contiki.collect.gui.PacketChartPanel;
 import se.sics.contiki.collect.gui.SerialConsole;
 import se.sics.contiki.collect.gui.TimeChartPanel;
 
@@ -350,6 +352,9 @@ public class CollectServer {
             return data.getLatency();
           }
         },
+        new PacketChartPanel(this, "Received Packets", "Time", "Received Packets"),
+//        new SeqnoChartPanel(this, "Received Packets", "Received Packets", "Seqno", "Received Packets"),
+        new NodeInfoPanel(),
         serialConsole
     };
     for (int i = 0, n = visualizers.length; i < n; i++) {
@@ -457,6 +462,24 @@ public class CollectServer {
     runInitScriptItem.setEnabled(false);
     toolsMenu.add(runInitScriptItem);
     toolsMenu.addSeparator();
+
+    final JCheckBoxMenuItem baseShapeItem = new JCheckBoxMenuItem("Base Shape Visible");
+    baseShapeItem.setSelected(true);
+    baseShapeItem.addActionListener(new ActionListener() {
+
+      public void actionPerformed(ActionEvent e) {
+        boolean visible = baseShapeItem.getState();
+        if (visualizers != null) {
+          for(Visualizer v : visualizers) {
+            if (v instanceof TimeChartPanel) {
+              ((TimeChartPanel)v).setBaseShapeVisible(visible);
+            }
+          }
+        }
+      }
+
+    });
+    toolsMenu.add(baseShapeItem);
 
     final JCheckBoxMenuItem scrollItem = new JCheckBoxMenuItem("Scroll Layout");
     scrollItem.addActionListener(new ActionListener() {
@@ -708,11 +731,18 @@ public class CollectServer {
         final Node newNode = node;
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-              // Insert the node sorted by name
-              String nodeName = newNode.getName();
+              // Insert the node sorted by id
+              String nodeID = newNode.getID();
               boolean added = false;
               for (int i = 0, n = nodeModel.size(); i < n; i++) {
-                int cmp = nodeName.compareTo(((Node) nodeModel.get(i)).getName());
+                String id = ((Node) nodeModel.get(i)).getID();
+                int cmp;
+                // Shorter id first (4.0 before 10.0)
+                if (nodeID.length() == id.length()) {
+                  cmp = nodeID.compareTo(id);
+                } else {
+                  cmp = nodeID.length() - id.length();
+                }
                 if (cmp < 0) {
                   nodeModel.insertElementAt(newNode, i);
                   added = true;

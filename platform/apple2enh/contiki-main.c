@@ -70,7 +70,10 @@ main(void)
 {
   struct ethernet_config *ethernet_config;
 
+#if WITH_REBOOT
   rebootafterexit();
+#endif /* WITH_REBOOT */
+
   videomode(VIDEOMODE_80COL);
 
   process_init();
