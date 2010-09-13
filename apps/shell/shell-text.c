@@ -145,7 +145,9 @@ PROCESS_THREAD(shell_binprint_process, ev, data)
     bufptr = buf;
     ptr = (uint16_t *)input->data1;
     for(i = 0; i < input->len1 && i < input->len1 - 1; i += 2) {
-      bufptr += sprintf(bufptr, "%u ", *ptr);
+      uint16_t data;
+      memcpy(&data, ptr, sizeof(data));
+      bufptr += sprintf(bufptr, "%u ", data);
       if(bufptr - buf >= sizeof(buf) - 6) {
 	shell_output_str(&binprint_command, buf, "");
 	bufptr = buf;
@@ -158,7 +160,9 @@ PROCESS_THREAD(shell_binprint_process, ev, data)
     
     ptr = (uint16_t *)input->data2;
     for(i = 0; i < input->len2 && i < input->len2 - 1; i += 2) {
-      bufptr += sprintf(bufptr, "%u ", *ptr);
+      uint16_t data;
+      memcpy(&data, ptr, sizeof(data));
+      bufptr += sprintf(bufptr, "%u ", data);
       if(bufptr - buf >= sizeof(buf) - 6) {
 	shell_output_str(&binprint_command, buf, "");
 	bufptr = buf;
