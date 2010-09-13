@@ -77,6 +77,17 @@ rtimer_arch_init(void)
   eint();
 }
 /*---------------------------------------------------------------------------*/
+rtimer_clock_t
+rtimer_arch_now(void)
+{
+  rtimer_clock_t t1, t2;
+  do {
+    t1 = TAR;
+    t2 = TAR;
+  } while(t1 != t2);
+  return t1;
+}
+/*---------------------------------------------------------------------------*/
 void
 rtimer_arch_schedule(rtimer_clock_t t)
 {
