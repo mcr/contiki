@@ -50,6 +50,7 @@ import javax.swing.JPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.time.Minute;
 import org.jfree.data.time.TimeSeries;
@@ -88,6 +89,7 @@ public class PacketChartPanel extends JPanel implements Visualizer {
         "Received Packets", timeAxisLabel, valueAxisLabel, timeSeries,
         false, true, false
     );
+    ((NumberAxis)chart.getXYPlot().getRangeAxis()).setAutoRangeIncludesZero(true);
     this.chartPanel = new ChartPanel(chart);
     this.chartPanel.setPreferredSize(new Dimension(500, 270));
     setBaseShapeVisible(false);
