@@ -64,6 +64,8 @@ int snprintf(char *str, size_t size, const char *format, ...);
 #include <string.h>
 
 
+#define DEFAULT_COLLECT_REXMITS 4
+
 
 #define COLLECT_MSG_HDRSIZE 4
 struct collect_msg {
@@ -250,11 +252,18 @@ PROCESS_THREAD(shell_send_process, ev, data)
   int len;
   struct collect_msg *msg;
   static int num_rexmits;
+  char *next;
   
   PROCESS_BEGIN();
 
-  num_rexmits = shell_strtolong((char *)data, NULL);
-  
+  num_rexmits = shell_strtolong((char *)data, &next);
+
+  if(next == data) {
+    /* If no argument was given, we send packets with a default number
+       of retransmissions. */
+    num_rexmits = DEFAULT_COLLECT_REXMITS;
+  }
+
   while(1) {
     PROCESS_WAIT_EVENT_UNTIL(ev == shell_event_input);
     input = data;
