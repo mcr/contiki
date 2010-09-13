@@ -221,7 +221,7 @@ PROCESS_THREAD(shell_sky_alldata_process, ev, data)
   rimeaddr_copy(&msg.best_neighbor, &rimeaddr_null);
   msg.best_neighbor_etx =
     msg.best_neighbor_rtmetric = 0;
-  n = collect_neighbor_list_best(shell_collect_conn.neighbor_list);
+  n = collect_neighbor_list_best(&shell_collect_conn.neighbor_list);
   if(n != NULL) {
     rimeaddr_copy(&msg.best_neighbor, &n->addr);
     msg.best_neighbor_etx = collect_neighbor_rtmetric(n) - n->rtmetric;
