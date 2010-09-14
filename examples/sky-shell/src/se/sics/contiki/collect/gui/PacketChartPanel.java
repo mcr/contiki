@@ -90,6 +90,7 @@ public class PacketChartPanel extends JPanel implements Visualizer {
         false, true, false
     );
     ((NumberAxis)chart.getXYPlot().getRangeAxis()).setAutoRangeIncludesZero(true);
+    ((NumberAxis)chart.getXYPlot().getRangeAxis()).setStandardTickUnits(NumberAxis.createIntegerTickUnits());
     this.chartPanel = new ChartPanel(chart);
     this.chartPanel.setPreferredSize(new Dimension(500, 270));
     setBaseShapeVisible(false);

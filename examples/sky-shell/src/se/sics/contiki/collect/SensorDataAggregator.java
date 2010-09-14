@@ -72,8 +72,8 @@ public class SensorDataAggregator implements SensorInfo {
     return values[index];
   }
 
-  public long getAverageValue(int index) {
-    return dataCount > 0 ? values[index] / dataCount : 0;
+  public double getAverageValue(int index) {
+      return dataCount > 0 ? (double)values[index] / (double)dataCount : 0;
   }
 
   public int getValueCount() {
@@ -195,6 +195,10 @@ public class SensorDataAggregator implements SensorInfo {
     return (values[TIME_CPU] * POWER_CPU + values[TIME_LPM] * POWER_LPM
     + values[TIME_LISTEN] * POWER_LISTEN + values[TIME_TRANSMIT] * POWER_TRANSMIT)
     / (values[TIME_CPU] + values[TIME_LPM]);
+  }
+
+  public double getAverageDutyCycle(int index) {
+      return (double)(values[index]) / (double)(values[TIME_CPU] + values[TIME_LPM]);
   }
 
   public long getPowerMeasureTime() {
