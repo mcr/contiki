@@ -419,7 +419,7 @@ public class CollectServer {
           }
         },
 //        new SeqnoChartPanel(this, "Received Packets", "Received Packets", "Seqno", "Received Packets"),
-        new NodeInfoPanel(),
+        new NodeInfoPanel(this),
         serialConsole
     };
     for (int i = 0, n = visualizers.length; i < n; i++) {
