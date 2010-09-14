@@ -155,15 +155,15 @@ public class PacketChartPanel extends JPanel implements Visualizer {
           if (sd.isDuplicate()) {
             duplicates++;
           } else {
-            long min = sd.getSystemTime() / 60000;
+            long min = sd.getNodeTime() / 60000;
             if (min != minute) {
               if (lastMinute < minute) {
-                series.add(new Minute(new Date(lastMinute * 60000L)), 0);
+                series.addOrUpdate(new Minute(new Date(lastMinute * 60000L)), 0);
                 if (lastMinute < minute - 1) {
-                  series.add(new Minute(new Date((minute - 1) * 60000L)), 0);
+                  series.addOrUpdate(new Minute(new Date((minute - 1) * 60000L)), 0);
                 }
               }
-              series.add(new Minute(new Date(minute * 60000L)), count);
+              series.addOrUpdate(new Minute(new Date(minute * 60000L)), count);
               count = 0;
               lastMinute = minute + 1;
               minute = min;
