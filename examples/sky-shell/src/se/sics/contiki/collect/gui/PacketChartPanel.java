@@ -146,7 +146,7 @@ public class PacketChartPanel extends JPanel implements Visualizer {
     int total = 0;
     series.clear();
     if (this.selectedNodes != null && server.getSensorDataCount() > 0) {
-      long minute = server.getSensorData(0).getSystemTime() / 60000;
+      long minute = server.getSensorData(0).getNodeTime() / 60000;
       long lastMinute = minute;
       int count = 0;
       for(int i = 0; i < server.getSensorDataCount(); i++) {
@@ -158,12 +158,12 @@ public class PacketChartPanel extends JPanel implements Visualizer {
             long min = sd.getNodeTime() / 60000;
             if (min != minute) {
               if (lastMinute < minute) {
-                series.addOrUpdate(new Minute(new Date(lastMinute * 60000L)), 0);
+                series.add(new Minute(new Date(lastMinute * 60000L)), 0);
                 if (lastMinute < minute - 1) {
-                  series.addOrUpdate(new Minute(new Date((minute - 1) * 60000L)), 0);
+                  series.add(new Minute(new Date((minute - 1) * 60000L)), 0);
                 }
               }
-              series.addOrUpdate(new Minute(new Date(minute * 60000L)), count);
+              series.add(new Minute(new Date(minute * 60000L)), count);
               count = 0;
               lastMinute = minute + 1;
               minute = min;
@@ -174,7 +174,7 @@ public class PacketChartPanel extends JPanel implements Visualizer {
         }
       }
       if (count > 0) {
-        series.addOrUpdate(new Minute(new Date(minute * 60000L)), count);
+        series.add(new Minute(new Date(minute * 60000L)), count);
       }
     }
     int nodes = selectedMap.size();
