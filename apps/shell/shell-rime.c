@@ -256,7 +256,7 @@ PROCESS_THREAD(shell_send_process, ev, data)
   
   PROCESS_BEGIN();
 
-  num_rexmits = shell_strtolong((char *)data, &next);
+  num_rexmits = (int)shell_strtolong((char *)data, &next);
 
   if(next == data) {
     /* If no argument was given, we send packets with a default number
