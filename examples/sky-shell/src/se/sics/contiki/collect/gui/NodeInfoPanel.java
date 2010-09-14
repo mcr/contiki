@@ -123,7 +123,7 @@ public class NodeInfoPanel extends JPanel implements Visualizer {
       for(Node node : selectedNodes) {
         SensorDataAggregator sda = node.getSensorDataAggregator();
         long longest = sda.getLongestPeriod();
-        sb.append(node.getName() + '\n'
+        sb.append("Node " + node.getName() + '\n'
             + "  Packets Received: \t" + sda.getPacketCount() + '\n'
             + "  Duplicates:       \t" + sda.getDuplicateCount() + '\n');
         if (longest > 0) {

@@ -169,7 +169,7 @@ public abstract class TimeChartPanel extends JPanel implements Visualizer {
     timeSeries.removeAllSeries();
     if (this.selectedNodes != null) {
       for(Node node: this.selectedNodes) {
-        TimeSeries series = new TimeSeries(node.getName(), Second.class);
+        TimeSeries series = new TimeSeries("Node " + node.getName(), Second.class);
         // Reduce the number of items by grouping them and use the average for each group
         int groupSize = getGroupSize(node);
         if (groupSize > 1) {

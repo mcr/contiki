@@ -62,7 +62,7 @@ public class Node implements Comparable<Node> {
 
   public Node(String nodeID) {
     this.id = nodeID;
-    this.name = "Node " + nodeID;
+    this.name = nodeID;
     sensorDataAggregator = new SensorDataAggregator(this);
   }
 
