@@ -124,13 +124,14 @@ public class MapPanel extends JPanel implements Visualizer, ActionListener, Mous
   private String mapName;
 
   private final CollectServer server;
+  private final String category;
 
   private boolean hideNetwork = false;
 
-
-  public MapPanel(CollectServer server) {
+  public MapPanel(CollectServer server, String category) {
     super(new BorderLayout());
     this.server = server;
+    this.category = category;
     setPreferredSize(new Dimension(300, 200));
 
     popupMenu = new JPopupMenu(getTitle());
@@ -220,6 +221,11 @@ public class MapPanel extends JPanel implements Visualizer, ActionListener, Mous
   // -------------------------------------------------------------------
   // Visualizer
   // -------------------------------------------------------------------
+
+  @Override
+  public String getCategory() {
+    return category;
+  }
 
   @Override
   public String getTitle() {

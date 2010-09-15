@@ -67,6 +67,7 @@ public abstract class BarChartPanel extends JPanel implements Visualizer {
   private static final long serialVersionUID = 7664283678708048061L;
 
   protected final CollectServer server;
+  protected final String category;
   protected final String title;
   protected final String[] categories;
   protected final JFreeChart chart;
@@ -76,17 +77,18 @@ public abstract class BarChartPanel extends JPanel implements Visualizer {
   private boolean isShowingAllNodes = false;
   private int categoryOrder = 0;
 
-  protected BarChartPanel(CollectServer server, String title,
+  protected BarChartPanel(CollectServer server, String category, String title,
       String chartTitle, String domainAxisLabel, String valueAxisLabel,
       String[] categories) {
-    this(server, title, chartTitle, domainAxisLabel, valueAxisLabel, categories, true);
+    this(server, category, title, chartTitle, domainAxisLabel, valueAxisLabel, categories, true);
   }
 
-  protected BarChartPanel(CollectServer server, String title,
+  protected BarChartPanel(CollectServer server, String category, String title,
       String chartTitle, String domainAxisLabel, String valueAxisLabel,
       String[] categories, boolean stackedChart) {
     super(new BorderLayout());
     this.server = server;
+    this.category = category;
     this.title = title;
     this.categories = categories;
 
@@ -137,6 +139,11 @@ public abstract class BarChartPanel extends JPanel implements Visualizer {
     add(chartPanel, BorderLayout.CENTER);
   }
 
+  @Override
+  public String getCategory() {
+    return category;
+  }
+  
   @Override
   public String getTitle() {
     return title;
