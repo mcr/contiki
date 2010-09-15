@@ -49,7 +49,7 @@
 #endif /* DEBUG */
 
 #ifndef ETX_CONF_LIMIT
-#define ETX_LIMIT		10
+#define ETX_LIMIT		31
 #else
 #define ETX_LIMIT		ETX_CONF_LIMIT
 #endif /* !ETX_CONF_LIMIT */
@@ -57,7 +57,7 @@
 #define ETX_SCALE		100
 #define ETX_ALPHA		80
 #define ETX_FIRST_GUESS		3
-#define ETX_LOSS_PENALTY        1
+#define ETX_LOSS_PENALTY        ETX_LIMIT
 
 #define ETX2FIX(etx)    ((etx) << 4)
 #define FIX2ETX(fix)    ((fix) >> 4)
