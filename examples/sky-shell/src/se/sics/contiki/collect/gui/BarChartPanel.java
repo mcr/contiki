@@ -40,8 +40,10 @@
 
 package se.sics.contiki.collect.gui;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.GradientPaint;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JPanel;
@@ -113,6 +115,23 @@ public abstract class BarChartPanel extends JPanel implements Visualizer {
           updateCharts();
         }
       });
+    }
+
+    CategoryPlot plot = (CategoryPlot) chart.getPlot();
+    BarRenderer renderer = (BarRenderer) plot.getRenderer();
+    if (categories.length < 3) {
+      renderer.setDrawBarOutline(false);
+
+      GradientPaint gp = new GradientPaint(0.0f, 0.0f, Color.RED,
+          0.0f, 0.0f, new Color(128, 0, 0));
+      renderer.setSeriesPaint(0, gp);
+      if (categories.length > 1) {
+        gp = new GradientPaint(0.0f, 0.0f, Color.BLUE,
+            0.0f, 0.0f, new Color(0, 0, 128));
+        renderer.setSeriesPaint(1, gp);
+      }
+    } else {
+      renderer.setDrawBarOutline(true);
     }
 
     add(chartPanel, BorderLayout.CENTER);
