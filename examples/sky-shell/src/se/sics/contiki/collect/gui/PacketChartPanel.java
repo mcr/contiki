@@ -174,9 +174,6 @@ public class PacketChartPanel extends JPanel implements Visualizer {
           total++;
         }
       }
-      if (count > 0) {
-        series.add(new Minute(new Date(minute * 60000L)), count);
-      }
     }
     int nodes = selectedMap.size();
     if (nodes > 0) {
