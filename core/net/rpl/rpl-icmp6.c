@@ -211,7 +211,7 @@ dio_input(void)
 
   dio.instance_id = buffer[i++];
   dio.version = buffer[i++];
-  dio.rank = (buffer[i] << 8) + buffer[i + 1];
+  dio.rank = (buffer[i] << 8) | buffer[i + 1];
   i += 2;
 
   PRINTF("RPL: Incoming DIO rank %u\n", (unsigned)dio.rank);
