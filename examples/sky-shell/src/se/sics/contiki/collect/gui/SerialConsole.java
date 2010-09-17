@@ -64,6 +64,7 @@ import se.sics.contiki.collect.Visualizer;
 public class SerialConsole implements Visualizer {
 
   private final CollectServer server;
+  private final String category;
   private JPanel panel;
   private JTextArea logArea;
   private JTextField commandField;
@@ -71,8 +72,9 @@ public class SerialConsole implements Visualizer {
   private int historyPos = 0;
   private int historyCount = 0;
 
-  public SerialConsole(CollectServer server) {
+  public SerialConsole(CollectServer server, String category) {
     this.server = server;
+    this.category = category;
     panel = new JPanel(new BorderLayout());
     logArea = new JTextArea(4, 30);
     logArea.setEditable(false);
@@ -166,6 +168,11 @@ public class SerialConsole implements Visualizer {
   @Override
   public Component getPanel() {
     return panel;
+  }
+
+  @Override
+  public String getCategory() {
+    return category;
   }
 
   @Override

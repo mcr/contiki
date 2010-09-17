@@ -40,15 +40,19 @@
 
 package se.sics.contiki.collect.gui;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.GradientPaint;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 import se.sics.contiki.collect.CollectServer;
 import se.sics.contiki.collect.Node;
@@ -63,6 +67,7 @@ public abstract class BarChartPanel extends JPanel implements Visualizer {
   private static final long serialVersionUID = 7664283678708048061L;
 
   protected final CollectServer server;
+  protected final String category;
   protected final String title;
   protected final String[] categories;
   protected final JFreeChart chart;
@@ -72,17 +77,38 @@ public abstract class BarChartPanel extends JPanel implements Visualizer {
   private boolean isShowingAllNodes = false;
   private int categoryOrder = 0;
 
-  protected BarChartPanel(CollectServer server, String title, String chartTitle, String domainAxisLabel, String valueAxisLabel,
+  protected BarChartPanel(CollectServer server, String category, String title,
+      String chartTitle, String domainAxisLabel, String valueAxisLabel,
       String[] categories) {
+    this(server, category, title, chartTitle, domainAxisLabel, valueAxisLabel, categories, true);
+  }
+
+  protected BarChartPanel(CollectServer server, String category, String title,
+      String chartTitle, String domainAxisLabel, String valueAxisLabel,
+      String[] categories, boolean stackedChart) {
     super(new BorderLayout());
     this.server = server;
+    this.category = category;
     this.title = title;
     this.categories = categories;
 
     /* Create chart with power of all nodes */
     dataset = new DefaultCategoryDataset();
-    this.chart = ChartFactory.createStackedBarChart(chartTitle, domainAxisLabel, valueAxisLabel, dataset, PlotOrientation.VERTICAL, true, true, false);
-    this.chartPanel = new ChartPanel(chart);
+    if (stackedChart) {
+      this.chart = ChartFactory.createStackedBarChart(chartTitle,
+          domainAxisLabel, valueAxisLabel, dataset, PlotOrientation.VERTICAL,
+          categories.length > 1, true, false);
+    } else {
+      this.chart = ChartFactory.createBarChart(chartTitle,
+          domainAxisLabel, valueAxisLabel, dataset, PlotOrientation.VERTICAL,
+          categories.length > 1, true, false);
+      if (categories.length > 1) {
+        CategoryPlot plot = chart.getCategoryPlot();
+        BarRenderer renderer = (BarRenderer) plot.getRenderer();
+        renderer.setItemMargin(0);
+      }
+    }
+    this.chartPanel = new ChartPanel(chart, false);
     this.chartPanel.setPreferredSize(new Dimension(500, 270));
     if (categories.length > 1) {
       this.chartPanel.addMouseListener(new MouseAdapter() {
@@ -92,9 +118,32 @@ public abstract class BarChartPanel extends JPanel implements Visualizer {
         }
       });
     }
+
+    CategoryPlot plot = (CategoryPlot) chart.getPlot();
+    BarRenderer renderer = (BarRenderer) plot.getRenderer();
+    if (categories.length < 3) {
+      renderer.setDrawBarOutline(false);
+
+      GradientPaint gp = new GradientPaint(0.0f, 0.0f, Color.RED,
+          0.0f, 0.0f, new Color(128, 0, 0));
+      renderer.setSeriesPaint(0, gp);
+      if (categories.length > 1) {
+        gp = new GradientPaint(0.0f, 0.0f, Color.BLUE,
+            0.0f, 0.0f, new Color(0, 0, 128));
+        renderer.setSeriesPaint(1, gp);
+      }
+    } else {
+      renderer.setDrawBarOutline(true);
+    }
+
     add(chartPanel, BorderLayout.CENTER);
   }
 
+  @Override
+  public String getCategory() {
+    return category;
+  }
+  
   @Override
   public String getTitle() {
     return title;

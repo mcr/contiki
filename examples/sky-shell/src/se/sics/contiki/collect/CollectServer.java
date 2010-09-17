@@ -59,6 +59,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Properties;
 import javax.swing.BorderFactory;
@@ -66,6 +67,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -73,6 +75,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.ListCellRenderer;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -98,6 +101,12 @@ public class CollectServer {
   public static final String INIT_SCRIPT = "collect-init.script";
   public static final String FIRMWARE_FILE = "sky-shell.ihex";
 
+  /* Categories for the tab pane */
+  private static final String MAIN = "main";
+  private static final String NETWORK = "Network";
+  private static final String SENSORS = "Sensors";
+  private static final String POWER = "Power";
+
   private Properties config = new Properties();
 
   private String configFile;
@@ -111,6 +120,7 @@ public class CollectServer {
 
   private JFrame window;
   private JTabbedPane mainPanel;
+  private HashMap<String,JTabbedPane> categoryTable = new HashMap<String,JTabbedPane>();
   private JMenuItem serialItem;
   private JMenuItem runInitScriptItem;
 
@@ -125,6 +135,8 @@ public class CollectServer {
 
   private SerialConnection serialConnection;
   private String initScript;
+
+  private long nodeTimeDelta;
 
   @SuppressWarnings("serial")
   public CollectServer(String comPort) {
@@ -161,8 +173,9 @@ public class CollectServer {
     });
 
     nodeModel = new DefaultListModel();
+    nodeModel.addElement("<All>");
     nodeList = new JList(nodeModel);
-    nodeList.setPrototypeCellValue("Node 88888");
+    nodeList.setPrototypeCellValue("888.888");
     nodeList.addListSelectionListener(new ListSelectionListener() {
 
       @Override
@@ -173,9 +186,17 @@ public class CollectServer {
           int iMax = nodeList.getMaxSelectionIndex();
           if ((iMin < 0) || (iMax < 0)) {
             selected = null;
+          } else if (nodeList.getSelectedIndex() == 0) {
+            selected = getNodes();
+            if (nodeModel.size() > 1) {
+              nodeList.setSelectionInterval(1, nodeModel.size() - 1);
+            }
           } else {
             Node[] tmp = new Node[1 + (iMax - iMin)];
             int n = 0;
+            if (iMin < 1) {
+              iMin = 1;
+            }
             for(int i = iMin; i <= iMax; i++) {
               if (nodeList.isSelectedIndex(i)) {
                 tmp[n++] = (Node) nodeModel.getElementAt(i);
@@ -193,14 +214,19 @@ public class CollectServer {
 
       }});
     nodeList.setBorder(BorderFactory.createTitledBorder("Nodes"));
+    ListCellRenderer renderer = nodeList.getCellRenderer();
+    if (renderer instanceof JLabel) {
+      ((JLabel)renderer).setHorizontalAlignment(JLabel.CENTER);
+    }
     window.getContentPane().add(new JScrollPane(nodeList), BorderLayout.WEST);
 
     mainPanel = new JTabbedPane();
     mainPanel.setBackground(nodeList.getBackground());
     mainPanel.setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
+    categoryTable.put(MAIN, mainPanel);
 
-    serialConsole = new SerialConsole(this);
-    mapPanel = new MapPanel(this);
+    serialConsole = new SerialConsole(this, MAIN);
+    mapPanel = new MapPanel(this, MAIN);
     String image = getConfig("collect.mapimage");
     if (image != null) {
       mapPanel.setMapBackground(image);
@@ -208,48 +234,7 @@ public class CollectServer {
     final int defaultMaxItemCount = 250;
     visualizers = new Visualizer[] {
         mapPanel,
-        new BarChartPanel(this, "Average Power", "Average Power Consumption", null, "Power (mW)",
-            new String[] { "LPM", "CPU", "Radio listen", "Radio transmit" }) {
-          {
-            ValueAxis axis = chart.getCategoryPlot().getRangeAxis();
-            axis.setLowerBound(0.0);
-            axis.setUpperBound(75.0);
-          }
-          protected void addSensorData(SensorData data) {
-            Node node = data.getNode();
-            String nodeName = node.getName();
-            SensorDataAggregator aggregator = node.getSensorDataAggregator();
-            dataset.addValue(aggregator.getLPMPower(), categories[0], nodeName);
-            dataset.addValue(aggregator.getCPUPower(), categories[1], nodeName);
-            dataset.addValue(aggregator.getListenPower(), categories[2], nodeName);
-            dataset.addValue(aggregator.getTransmitPower(), categories[3], nodeName);
-          }
-        },
-        new BarChartPanel(this, "Instantaneous Power", "Instantaneous Power Consumption", null, "Power (mW)",
-            new String[] { "LPM", "CPU", "Radio listen", "Radio transmit" }) {
-          {
-            ValueAxis axis = chart.getCategoryPlot().getRangeAxis();
-            axis.setLowerBound(0.0);
-            axis.setUpperBound(75.0);
-          }
-          protected void addSensorData(SensorData data) {
-            Node node = data.getNode();
-            String nodeName = node.getName();
-            dataset.addValue(data.getLPMPower(), categories[0], nodeName);
-            dataset.addValue(data.getCPUPower(), categories[1], nodeName);
-            dataset.addValue(data.getListenPower(), categories[2], nodeName);
-            dataset.addValue(data.getTransmitPower(), categories[3], nodeName);
-          }
-        },
-        new TimeChartPanel(this, "Power History", "Historical Power Consumption", "Time", "mW") {
-          {
-            setMaxItemCount(defaultMaxItemCount);
-          }
-          protected double getSensorDataValue(SensorData data) {
-            return data.getAveragePower();
-          }
-        },
-        new BarChartPanel(this, "Average Temperature", "Temperature", null, "Celsius",
+        new BarChartPanel(this, SENSORS, "Average Temperature", "Temperature", "Nodes", "Celsius",
             new String[] { "Celsius" }) {
           {
             chart.getCategoryPlot().getRangeAxis().setStandardTickUnits(NumberAxis.createIntegerTickUnits());
@@ -261,7 +246,7 @@ public class CollectServer {
             dataset.addValue(aggregator.getAverageTemperature(), categories[0], nodeName);
           }
         },
-        new TimeChartPanel(this, "Temperature", "Temperature", "Time", "Celsius") {
+        new TimeChartPanel(this, SENSORS, "Temperature", "Temperature", "Time", "Celsius") {
           {
             chart.getXYPlot().getRangeAxis().setStandardTickUnits(NumberAxis.createIntegerTickUnits());
             setRangeTick(5);
@@ -273,7 +258,7 @@ public class CollectServer {
             return data.getTemperature();
           }
         },
-        new TimeChartPanel(this, "Battery Voltage", "Battery Voltage",
+        new TimeChartPanel(this, SENSORS, "Battery Voltage", "Battery Voltage",
 			   "Time", "Volt") {
           {
             setRangeTick(1);
@@ -285,7 +270,7 @@ public class CollectServer {
             return data.getBatteryVoltage();
           }
         },
-        new TimeChartPanel(this, "Battery Indicator", "Battery Indicator",
+        new TimeChartPanel(this, SENSORS, "Battery Indicator", "Battery Indicator",
 			   "Time", "Indicator") {
           {
             chart.getXYPlot().getRangeAxis().setStandardTickUnits(NumberAxis.createIntegerTickUnits());
@@ -298,7 +283,7 @@ public class CollectServer {
             return data.getBatteryIndicator();
           }
         },
-        new TimeChartPanel(this, "Relative Humidity", "Humidity", "Time", "%") {
+        new TimeChartPanel(this, SENSORS, "Relative Humidity", "Humidity", "Time", "%") {
           {
             setMaxItemCount(defaultMaxItemCount);
             chart.getXYPlot().getRangeAxis().setRange(0.0, 100.0);
@@ -307,7 +292,7 @@ public class CollectServer {
             return data.getHumidity();
           }
         },
-        new TimeChartPanel(this, "Light 1", "Light 1", "Time", "-") {
+        new TimeChartPanel(this, SENSORS, "Light 1", "Light 1", "Time", "-") {
           {
             setMaxItemCount(defaultMaxItemCount);
           }
@@ -315,7 +300,7 @@ public class CollectServer {
             return data.getLight1();
           }
         },
-        new TimeChartPanel(this, "Light 2", "Light 2", "Time", "-") {
+        new TimeChartPanel(this, SENSORS, "Light 2", "Light 2", "Time", "-") {
           {
             setMaxItemCount(defaultMaxItemCount);
           }
@@ -323,11 +308,10 @@ public class CollectServer {
             return data.getLight2();
           }
         },
-        new TimeChartPanel(this, "Network Hops", "Network Hops", "Time", "Hops") {
+        new TimeChartPanel(this, NETWORK, "Network Hops (Over Time)", "Network Hops", "Time", "Hops") {
           {
             ValueAxis axis = chart.getXYPlot().getRangeAxis();
-            axis.setLowerBound(0.0);
-	    axis.setUpperBound(4.0);
+            ((NumberAxis)axis).setAutoRangeIncludesZero(true);
             axis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
             setMaxItemCount(defaultMaxItemCount);
           }
@@ -335,16 +319,17 @@ public class CollectServer {
             return data.getValue(SensorData.HOPS);
           }
         },
-        new BarChartPanel(this, "Network Hops", "Network Hops", null, "Hops",
-            new String[] { "Hops" }) {
+        new BarChartPanel(this, NETWORK, "Network Hops (Per Node)", "Network Hops", "Nodes", "Hops",
+            new String[] { "Last Hop", "Average Hops" }, false) {
           {
             chart.getCategoryPlot().getRangeAxis().setStandardTickUnits(NumberAxis.createIntegerTickUnits());
           }
           protected void addSensorData(SensorData data) {
             dataset.addValue(data.getValue(SensorData.HOPS), categories[0], data.getNode().getName());
+            dataset.addValue(data.getNode().getSensorDataAggregator().getAverageValue(SensorData.HOPS), categories[1], data.getNode().getName());
           }
         },
-        new TimeChartPanel(this, "Latency", "Latency", "Time", "Seconds") {
+        new TimeChartPanel(this, NETWORK, "Latency", "Latency", "Time", "Seconds") {
           {
             setMaxItemCount(defaultMaxItemCount);
           }
@@ -352,13 +337,118 @@ public class CollectServer {
             return data.getLatency();
           }
         },
-        new PacketChartPanel(this, "Received Packets", "Time", "Received Packets"),
-//        new SeqnoChartPanel(this, "Received Packets", "Received Packets", "Seqno", "Received Packets"),
-        new NodeInfoPanel(),
+        new PacketChartPanel(this, NETWORK, "Received (Over Time)", "Time", "Received Packets"),
+        new BarChartPanel(this, NETWORK, "Received (Per Node)", "Received Packets Per Node", "Nodes", "Packets",
+            new String[] { "Packets", "Duplicates" }) {
+          {
+            chart.getCategoryPlot().getRangeAxis().setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+          }
+          protected void addSensorData(SensorData data) {
+            Node node = data.getNode();
+            SensorDataAggregator sda = node.getSensorDataAggregator();
+            dataset.addValue(sda.getDataCount(), categories[0], node.getName());
+            dataset.addValue(sda.getDuplicateCount(), categories[1], node.getName());
+          }
+        },
+        new BarChartPanel(this, NETWORK, "Received (5 min)", "Received Packets (last 5 min)", "Nodes", "Packets",
+            new String[] { "Packets", "Duplicates" }) {
+          {
+            chart.getCategoryPlot().getRangeAxis().setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+          }
+          protected void addSensorData(SensorData data) {
+            Node node = data.getNode();
+            int packetCount = 0;
+            int duplicateCount = 0;
+            long earliestData = System.currentTimeMillis() - (5 * 60 * 1000);
+            for(int index = node.getSensorDataCount() - 1; index >= 0; index--) {
+              SensorData sd = node.getSensorData(index);
+              if (sd.getNodeTime() < earliestData) {
+                break;
+              }
+              if (sd.isDuplicate()) {
+                duplicateCount++;
+              } else {
+                packetCount++;
+              }
+            }
+            dataset.addValue(packetCount, categories[0], node.getName());
+            dataset.addValue(duplicateCount, categories[1], node.getName());
+          }
+        },
+        new BarChartPanel(this, POWER, "Average Power", "Average Power Consumption",
+            "Nodes", "Power (mW)",
+            new String[] { "LPM", "CPU", "Radio listen", "Radio transmit" }) {
+          {
+            ValueAxis axis = chart.getCategoryPlot().getRangeAxis();
+            ((NumberAxis)axis).setAutoRangeIncludesZero(true);
+          }
+          protected void addSensorData(SensorData data) {
+            Node node = data.getNode();
+            String nodeName = node.getName();
+            SensorDataAggregator aggregator = node.getSensorDataAggregator();
+            dataset.addValue(aggregator.getLPMPower(), categories[0], nodeName);
+            dataset.addValue(aggregator.getCPUPower(), categories[1], nodeName);
+            dataset.addValue(aggregator.getListenPower(), categories[2], nodeName);
+            dataset.addValue(aggregator.getTransmitPower(), categories[3], nodeName);
+          }
+        },
+        new BarChartPanel(this, POWER, "Radio Duty Cycle", "Average Radio Duty Cycle",
+            "Nodes", "Duty Cycle (%)",
+            new String[] { "Radio listen", "Radio transmit" }) {
+          {
+            ValueAxis axis = chart.getCategoryPlot().getRangeAxis();
+            ((NumberAxis)axis).setAutoRangeIncludesZero(true);
+          }
+          protected void addSensorData(SensorData data) {
+            Node node = data.getNode();
+            String nodeName = node.getName();
+            SensorDataAggregator aggregator = node.getSensorDataAggregator();
+            dataset.addValue(100 * aggregator.getAverageDutyCycle(SensorInfo.TIME_LISTEN),
+                             categories[0], nodeName);
+            dataset.addValue(100 * aggregator.getAverageDutyCycle(SensorInfo.TIME_TRANSMIT),
+                             categories[1], nodeName);
+          }
+        },
+        new BarChartPanel(this, POWER, "Instantaneous Power",
+            "Instantaneous Power Consumption", "Nodes", "Power (mW)",
+            new String[] { "LPM", "CPU", "Radio listen", "Radio transmit" }) {
+          {
+            ValueAxis axis = chart.getCategoryPlot().getRangeAxis();
+            ((NumberAxis)axis).setAutoRangeIncludesZero(true);
+          }
+          protected void addSensorData(SensorData data) {
+            Node node = data.getNode();
+            String nodeName = node.getName();
+            dataset.addValue(data.getLPMPower(), categories[0], nodeName);
+            dataset.addValue(data.getCPUPower(), categories[1], nodeName);
+            dataset.addValue(data.getListenPower(), categories[2], nodeName);
+            dataset.addValue(data.getTransmitPower(), categories[3], nodeName);
+          }
+        },
+        new TimeChartPanel(this, POWER, "Power History", "Historical Power Consumption", "Time", "mW") {
+          {
+//            ValueAxis axis = chart.getCategoryPlot().getRangeAxis();
+//            ((NumberAxis)axis).setAutoRangeIncludesZero(true);
+            setMaxItemCount(defaultMaxItemCount);
+          }
+          protected double getSensorDataValue(SensorData data) {
+            return data.getAveragePower();
+          }
+        },
+        new NodeInfoPanel(this, MAIN),
         serialConsole
     };
     for (int i = 0, n = visualizers.length; i < n; i++) {
-      mainPanel.add(visualizers[i].getTitle(), visualizers[i].getPanel());
+      String category = visualizers[i].getCategory();
+      JTabbedPane pane = categoryTable.get(category);
+      if (pane == null) {
+        pane = new JTabbedPane();
+        pane.setBackground(nodeList.getBackground());
+        pane.setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
+        categoryTable.put(category, pane);
+        mainPanel.add(category, pane);
+      }
+      pane.add(visualizers[i].getTitle(), visualizers[i].getPanel());
     }
     window.getContentPane().add(mainPanel, BorderLayout.CENTER);
 
@@ -480,20 +570,6 @@ public class CollectServer {
 
     });
     toolsMenu.add(baseShapeItem);
-
-    final JCheckBoxMenuItem scrollItem = new JCheckBoxMenuItem("Scroll Layout");
-    scrollItem.addActionListener(new ActionListener() {
-
-      public void actionPerformed(ActionEvent e) {
-        if (scrollItem.getState()) {
-          mainPanel.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-        } else {
-          mainPanel.setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
-        }
-      }
-
-    });
-    toolsMenu.add(scrollItem);
 
     window.setJMenuBar(menuBar);
     window.pack();
@@ -731,18 +807,9 @@ public class CollectServer {
         final Node newNode = node;
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-              // Insert the node sorted by id
-              String nodeID = newNode.getID();
               boolean added = false;
-              for (int i = 0, n = nodeModel.size(); i < n; i++) {
-                String id = ((Node) nodeModel.get(i)).getID();
-                int cmp;
-                // Shorter id first (4.0 before 10.0)
-                if (nodeID.length() == id.length()) {
-                  cmp = nodeID.compareTo(id);
-                } else {
-                  cmp = nodeID.length() - id.length();
-                }
+              for (int i = 1, n = nodeModel.size(); i < n; i++) {
+                int cmp = newNode.compareTo((Node) nodeModel.get(i));
                 if (cmp < 0) {
                   nodeModel.insertElementAt(newNode, i);
                   added = true;
@@ -890,6 +957,18 @@ public class CollectServer {
     serialConsole.addSerialData(line);
   }
 
+  // -------------------------------------------------------------------
+  // Node time estimation
+  // -------------------------------------------------------------------
+
+  public long getNodeTime() {
+    return System.currentTimeMillis() + nodeTimeDelta;
+  }
+
+  private void updateNodeTime(SensorData sensorData) {
+    this.nodeTimeDelta = sensorData.getNodeTime() - System.currentTimeMillis();
+  }
+
 
   // -------------------------------------------------------------------
   // SensorData handling
@@ -905,9 +984,10 @@ public class CollectServer {
 
   private void handleSensorData(final SensorData sensorData) {
     System.out.println("SENSOR DATA: " + sensorData);
+    saveSensorData(sensorData);
     if (sensorData.getNode().addSensorData(sensorData)) {
+      updateNodeTime(sensorData);
       sensorDataList.add(sensorData);
-      saveSensorData(sensorData);
       handleLinks(sensorData);
       if (visualizers != null) {
         SwingUtilities.invokeLater(new Runnable() {
@@ -952,6 +1032,7 @@ public class CollectServer {
             SensorData data = SensorData.parseSensorData(this, line);
             if (data != null) {
               if (data.getNode().addSensorData(data)) {
+                updateNodeTime(data);
                 sensorDataList.add(data);
                 handleLinks(data);
               }
@@ -990,6 +1071,15 @@ public class CollectServer {
   private void clearSensorData() {
     sensorDataList.clear();
     Node[] nodes = getNodes();
+    this.selectedNodes = null;
+    nodeList.clearSelection();
+    if (nodeModel.size() > 1) {
+      nodeModel.removeRange(1, nodeModel.size() - 1);
+    }
+    this.nodeTable.clear();
+    synchronized (this) {
+      this.nodeCache = null;
+    }
     if (nodes != null) {
       for(Node node : nodes) {
         node.removeAllSensorData();
@@ -997,6 +1087,7 @@ public class CollectServer {
     }
     if (visualizers != null) {
       for(Visualizer v : visualizers) {
+        v.nodesSelected(null);
         v.clearNodeData();
       }
     }

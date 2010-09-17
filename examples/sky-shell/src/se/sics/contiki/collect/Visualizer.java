@@ -47,6 +47,7 @@ import java.awt.Component;
  */
 public interface Visualizer {
 
+  public String getCategory();
   public String getTitle();
   public Component getPanel();
   public void nodesSelected(Node[] node);

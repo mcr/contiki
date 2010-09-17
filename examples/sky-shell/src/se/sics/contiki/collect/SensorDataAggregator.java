@@ -52,6 +52,9 @@ public class SensorDataAggregator implements SensorInfo {
   private int seqnoDelta = 0;
   private int dataCount;
   private int duplicates = 0;
+  private int lost = 0;
+  private int nextHopChangeCount = 0;
+  private String lastNextHop = null;
   private long shortestPeriod = Long.MAX_VALUE;
   private long longestPeriod = 0;
 
@@ -72,8 +75,8 @@ public class SensorDataAggregator implements SensorInfo {
     return values[index];
   }
 
-  public long getAverageValue(int index) {
-    return dataCount > 0 ? values[index] / dataCount : 0;
+  public double getAverageValue(int index) {
+      return dataCount > 0 ? (double)values[index] / (double)dataCount : 0;
   }
 
   public int getValueCount() {
@@ -87,6 +90,12 @@ public class SensorDataAggregator implements SensorInfo {
   public void addSensorData(SensorData data) {
     int seqn = data.getValue(SEQNO);
     int s = seqn + seqnoDelta;
+
+    String bestNeighbor = data.getBestNeighborID();
+    if (lastNextHop != null && !lastNextHop.equals(bestNeighbor)) {
+      nextHopChangeCount++;
+    }
+    lastNextHop = bestNeighbor;
 
     if (s <= maxSeqno) {
       // Check for duplicates among the last 5 packets
@@ -142,9 +151,16 @@ public class SensorDataAggregator implements SensorInfo {
         }
       }
       // Handle wrapping sequence numbers
-      if (dataCount > 0 && maxSeqno - s > 2) {
+      if (dataCount == 0) {
+        // First packet from node.
+      } else if (maxSeqno - s > 2) {
         s += maxSeqno - seqnoDelta;
         seqnoDelta = maxSeqno;
+        if (seqn > 0) {
+          lost += seqn - 1;
+        }
+      } else if (s > maxSeqno + 1){
+        lost += s - (maxSeqno + 1);
       }
       if (s < minSeqno) minSeqno = s;
       if (s > maxSeqno) maxSeqno = s;
@@ -159,6 +175,9 @@ public class SensorDataAggregator implements SensorInfo {
     }
     dataCount = 0;
     duplicates = 0;
+    lost = 0;
+    nextHopChangeCount = 0;
+    lastNextHop = null;
     minSeqno = Integer.MAX_VALUE;
     maxSeqno = Integer.MIN_VALUE;
     seqnoDelta = 0;
@@ -195,6 +214,10 @@ public class SensorDataAggregator implements SensorInfo {
     return (values[TIME_CPU] * POWER_CPU + values[TIME_LPM] * POWER_LPM
     + values[TIME_LISTEN] * POWER_LISTEN + values[TIME_TRANSMIT] * POWER_TRANSMIT)
     / (values[TIME_CPU] + values[TIME_LPM]);
+  }
+
+  public double getAverageDutyCycle(int index) {
+      return (double)(values[index]) / (double)(values[TIME_CPU] + values[TIME_LPM]);
   }
 
   public long getPowerMeasureTime() {
@@ -235,6 +258,14 @@ public class SensorDataAggregator implements SensorInfo {
 
   public int getPacketCount() {
     return node.getSensorDataCount();
+  }
+
+  public int getNextHopChangeCount() {
+    return nextHopChangeCount;
+  }
+
+  public int getEstimatedLostCount() {
+    return lost;
   }
 
   public int getDuplicateCount() {

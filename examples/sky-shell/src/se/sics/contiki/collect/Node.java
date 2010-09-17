@@ -47,6 +47,8 @@ import java.util.Hashtable;
  */
 public class Node implements Comparable<Node> {
 
+  private static final boolean SINGLE_LINK = true;
+
   private SensorDataAggregator sensorDataAggregator;
   private ArrayList<SensorData> sensorDataList = new ArrayList<SensorData>();
   private ArrayList<Link> links = new ArrayList<Link>();
@@ -62,7 +64,7 @@ public class Node implements Comparable<Node> {
 
   public Node(String nodeID) {
     this.id = nodeID;
-    this.name = "Node " + nodeID;
+    this.name = nodeID;
     sensorDataAggregator = new SensorDataAggregator(this);
   }
 
@@ -101,7 +103,13 @@ public class Node implements Comparable<Node> {
 
   @Override
   public int compareTo(Node o) {
-    return name.compareTo(o.name);
+    String i1 = id;
+    String i2 = o.getID();
+    // Shorter id first (4.0 before 10.0)
+    if (i1.length() == i2.length()) {
+      return i1.compareTo(i2);
+    }
+    return i1.length() - i2.length();
   }
 
   public String toString() {
@@ -194,6 +202,9 @@ public class Node implements Comparable<Node> {
 
     // Add new link
     Link l = new Link(node);
+    if (SINGLE_LINK) {
+      links.clear();
+    }
     links.add(l);
     return l;
   }

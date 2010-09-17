@@ -85,5 +85,6 @@ void shell_rime_init(void);
 /* Announcement idenfied used by the 'neighbors' command, uses one idenfier */
 #define SHELL_RIME_ANNOUNCEMENT_IDENTIFIER_NEIGHBORS SHELL_RIME_CHANNEL_DOWNLOAD + 2
 
+extern struct collect_conn shell_collect_conn;
 
 #endif /* __SHELL_RIME_H__ */

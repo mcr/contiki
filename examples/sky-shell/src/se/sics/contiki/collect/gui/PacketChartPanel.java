@@ -50,6 +50,7 @@ import javax.swing.JPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.time.Minute;
 import org.jfree.data.time.TimeSeries;
@@ -68,6 +69,7 @@ public class PacketChartPanel extends JPanel implements Visualizer {
   private static final long serialVersionUID = -607864439709540641L;
 
   protected final CollectServer server;
+  protected final String category;
   protected final String title;
   protected final TimeSeries series;
 
@@ -77,10 +79,11 @@ public class PacketChartPanel extends JPanel implements Visualizer {
   private Node[] selectedNodes;
   private HashMap<Node,Node> selectedMap = new HashMap<Node,Node>();
 
-  public PacketChartPanel(CollectServer server, String title,
+  public PacketChartPanel(CollectServer server, String category, String title,
       String timeAxisLabel, String valueAxisLabel) {
     super(new BorderLayout());
     this.server = server;
+    this.category = category;
     this.title = title;
     this.series = new TimeSeries("Received Packets", Minute.class);
     TimeSeriesCollection timeSeries = new TimeSeriesCollection(series);
@@ -88,10 +91,17 @@ public class PacketChartPanel extends JPanel implements Visualizer {
         "Received Packets", timeAxisLabel, valueAxisLabel, timeSeries,
         false, true, false
     );
+    ((NumberAxis)chart.getXYPlot().getRangeAxis()).setAutoRangeIncludesZero(true);
+    ((NumberAxis)chart.getXYPlot().getRangeAxis()).setStandardTickUnits(NumberAxis.createIntegerTickUnits());
     this.chartPanel = new ChartPanel(chart);
     this.chartPanel.setPreferredSize(new Dimension(500, 270));
     setBaseShapeVisible(false);
     add(chartPanel, BorderLayout.CENTER);
+  }
+
+  @Override
+  public String getCategory() {
+    return category;
   }
 
   @Override
@@ -144,7 +154,7 @@ public class PacketChartPanel extends JPanel implements Visualizer {
     int total = 0;
     series.clear();
     if (this.selectedNodes != null && server.getSensorDataCount() > 0) {
-      long minute = server.getSensorData(0).getSystemTime() / 60000;
+      long minute = server.getSensorData(0).getNodeTime() / 60000;
       long lastMinute = minute;
       int count = 0;
       for(int i = 0; i < server.getSensorDataCount(); i++) {
@@ -153,7 +163,7 @@ public class PacketChartPanel extends JPanel implements Visualizer {
           if (sd.isDuplicate()) {
             duplicates++;
           } else {
-            long min = sd.getSystemTime() / 60000;
+            long min = sd.getNodeTime() / 60000;
             if (min != minute) {
               if (lastMinute < minute) {
                 series.add(new Minute(new Date(lastMinute * 60000L)), 0);
@@ -170,9 +180,6 @@ public class PacketChartPanel extends JPanel implements Visualizer {
           }
           total++;
         }
-      }
-      if (count > 0) {
-        series.addOrUpdate(new Minute(new Date(minute * 60000L)), count);
       }
     }
     int nodes = selectedMap.size();

@@ -42,6 +42,7 @@
 #define PHASE_H
 
 #include "net/rime/rimeaddr.h"
+#include "sys/timer.h"
 #include "sys/rtimer.h"
 #include "lib/list.h"
 #include "lib/memb.h"
@@ -52,6 +53,7 @@ struct phase {
   rimeaddr_t neighbor;
   rtimer_clock_t time;
   uint8_t noacks;
+  struct timer noacks_timer;
 };
 
 struct phase_list {

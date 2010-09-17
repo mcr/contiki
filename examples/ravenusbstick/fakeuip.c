@@ -1,13 +1,13 @@
 
 /* Various stub functions and uIP variables other code might need to
  * compile. Allows you to save needing to compile all of uIP in just
- * to get a few things */
+ * to get a few things.  This file is included in the build by the contiki
+ * Makefile.include only when CONTIKI_NO_NET is defined */
 
+//#if CONTIKI_NO_NET
  
 #include "uip.h"
 #include <string.h>
-
-#if CONTIKI_NO_NET
 
 #define UIP_IP_BUF   ((struct uip_ip_hdr *)&uip_buf[UIP_LLH_LEN])
 
@@ -20,6 +20,12 @@ struct uip_stats uip_stat;
 uip_lladdr_t uip_lladdr;
 
 static u8_t (* output)(uip_lladdr_t *);
+extern void mac_LowpanToEthernet(void);
+void tcpip_input( void )
+{
+//  printf("tcpip_input");
+  mac_LowpanToEthernet();
+}
 
 u8_t tcpip_output(uip_lladdr_t * lladdr){
   if(output != NULL) {
@@ -126,4 +132,4 @@ uip_icmp6chksum(void)
 {
   return upper_layer_chksum(UIP_PROTO_ICMP6); 
 }
-#endif /* CONTIKI_NO_NET */
+//#endif /* CONTIKI_NO_NET */

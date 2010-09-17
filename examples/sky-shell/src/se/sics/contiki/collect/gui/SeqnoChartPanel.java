@@ -66,6 +66,7 @@ public class SeqnoChartPanel extends JPanel implements Visualizer {
   private static final long serialVersionUID = 4302047079820959307L;
 
   protected final CollectServer server;
+  protected final String category;
   protected final String title;
   protected final XYSeriesCollection dataSet;
   protected final XYSeries series;
@@ -74,10 +75,11 @@ public class SeqnoChartPanel extends JPanel implements Visualizer {
 
   private Node[] selectedNodes;
 
-  public SeqnoChartPanel(CollectServer server, String title,
+  public SeqnoChartPanel(CollectServer server, String category, String title,
       String chartTitle, String timeAxisLabel, String valueAxisLabel) {
     super(new BorderLayout());
     this.server = server;
+    this.category = category;
     this.title = title;
     this.series = new XYSeries(chartTitle);
     this.dataSet = new XYSeriesCollection(this.series);
@@ -88,6 +90,11 @@ public class SeqnoChartPanel extends JPanel implements Visualizer {
     this.chartPanel = new ChartPanel(chart);
     this.chartPanel.setPreferredSize(new Dimension(500, 270));
     add(chartPanel, BorderLayout.CENTER);
+  }
+
+  @Override
+  public String getCategory() {
+    return category;
   }
 
   @Override
