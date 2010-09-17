@@ -95,7 +95,7 @@ CUSTOM_RULE_C_TO_CO=yes
 %.co: %.c
 	$(CC) $(CFLAGS) -DAUTOSTART_ENABLE $(THUMB_FLAGS) $< -c -o $@
 
-.PRECIOUS: %.bin %_$(TARGET).bin
+.PRECIOUS: %.bin %_$(TARGET).bin %.elf %.$(TARGET)
 
 %.ihex: %.$(TARGET)
 	$(OBJCOPY) $^ -O ihex $@
