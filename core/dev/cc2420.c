@@ -146,8 +146,8 @@ const struct radio_driver cc2420_driver =
     cc2420_transmit,
     cc2420_send,
     cc2420_read,
-    cc2420_set_channel,
-    detected_energy,
+    /* cc2420_set_channel, */
+    /* detected_energy, */
     cc2420_cca,
     cc2420_receiving_packet,
     pending_packet,
@@ -796,11 +796,13 @@ cc2420_rssi(void)
   return rssi;
 }
 /*---------------------------------------------------------------------------*/
+/*
 static int
 detected_energy(void)
 {
   return cc2420_rssi();
 }
+*/
 /*---------------------------------------------------------------------------*/
 int
 cc2420_cca_valid(void)
