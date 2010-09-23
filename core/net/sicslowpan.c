@@ -777,19 +777,17 @@ uncompress_hdr_hc06(u16_t ip_len) {
     uint8_t sci = (iphc1 & SICSLOWPAN_IPHC_CID) ?
       RIME_IPHC_BUF[2] >> 4 : 0;
 
-    /* Source address */
-    if((iphc1 & SICSLOWPAN_IPHC_SAM_11) != SICSLOWPAN_IPHC_SAM_00) {
-      context =
-	addr_context_lookup_by_number(sci);
+    /* Source address - check context != NULL only if SAM bits are != 0*/
+    if (tmp != 0) {
+      context = addr_context_lookup_by_number(sci);
       if(context == NULL) {
         PRINTF("sicslowpan uncompress_hdr: error context not found\n");
         return;
-      } else {
-        PRINTF("IPHC: found compressed source context for sci = %d\n", sci);
       }
     }
-    uncompress_addr(&SICSLOWPAN_IP_BUF->srcipaddr, context->prefix,
-                    unc_ctxconf[tmp],
+    /* if tmp == 0 we do not have a context and therefore no prefix */
+    uncompress_addr(&SICSLOWPAN_IP_BUF->srcipaddr,
+                    tmp != 0 ? context->prefix : NULL, unc_ctxconf[tmp],
                     (uip_lladdr_t *)packetbuf_addr(PACKETBUF_ADDR_SENDER));
   } else {
     /* no compression and link local */
