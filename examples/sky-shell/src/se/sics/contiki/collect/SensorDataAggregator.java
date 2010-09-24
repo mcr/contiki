@@ -307,7 +307,7 @@ public class SensorDataAggregator implements SensorInfo {
   }
 
   public long getShortestPeriod() {
-    return shortestPeriod;
+    return shortestPeriod < Long.MAX_VALUE ? shortestPeriod : 0;
   }
 
   public long getLongestPeriod() {
