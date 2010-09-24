@@ -47,6 +47,8 @@ import se.sics.cooja.RadioConnection;
 import se.sics.cooja.Simulation;
 import se.sics.cooja.interfaces.Radio;
 import se.sics.cooja.plugins.DGRMConfigurator;
+import se.sics.cooja.plugins.Visualizer;
+import se.sics.cooja.plugins.skins.DGRMVisualizerSkin;
 
 /**
  * Directed Graph Radio Medium.
@@ -76,6 +78,7 @@ public class DirectedGraphMedium extends AbstractRadioMedium {
   public DirectedGraphMedium() {
     /* Do not initialize radio medium: use only for hash table */
     super(null);
+    Visualizer.registerVisualizerSkin(DGRMVisualizerSkin.class);
   }
 
   public DirectedGraphMedium(Simulation simulation) {
@@ -88,7 +91,8 @@ public class DirectedGraphMedium extends AbstractRadioMedium {
     /* Register plugin.
      * TODO Should be unregistered when radio medium is removed */
     simulation.getGUI().registerTemporaryPlugin(DGRMConfigurator.class);
-  }
+    Visualizer.registerVisualizerSkin(DGRMVisualizerSkin.class);
+}
 
   public void addEdge(Edge e) {
     edges.add(e);
@@ -137,7 +141,7 @@ public class DirectedGraphMedium extends AbstractRadioMedium {
   public void registerRadioInterface(Radio radio, Simulation sim) {
     super.registerRadioInterface(radio, sim);
 
-    for (Edge edge: edges) {
+    for (Edge edge: getEdges()) {
       if (edge.delayedLoadConfig == null) {
         continue;
       }
@@ -207,7 +211,7 @@ public class DirectedGraphMedium extends AbstractRadioMedium {
       new Hashtable<Radio,ArrayList<DestinationRadio>>();
 
     /* Fill edge hash table with all edges */
-    for (Edge edge: edges) {
+    for (Edge edge: getEdges()) {
       if (edge.source == null) {
         /* XXX Wait until edge configuration has been loaded */
         logger.warn("DGRM edges not loaded");
@@ -342,7 +346,7 @@ public class DirectedGraphMedium extends AbstractRadioMedium {
     ArrayList<Element> config = new ArrayList<Element>();
     Element element;
 
-    for (Edge edge: edges) {
+    for (Edge edge: getEdges()) {
       element = new Element("edge");
       element.addContent(edge.getConfigXML());
       config.add(element);
