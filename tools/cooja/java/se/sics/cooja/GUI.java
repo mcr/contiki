@@ -3608,7 +3608,6 @@ public class GUI extends Observable {
                 startedPlugin.getGUI().setSize(size);
               } else if (pluginSubElement.getName().equals("z")) {
                 int zOrder = Integer.parseInt(pluginSubElement.getText());
-                // Save z order as temporary client property
                 startedPlugin.getGUI().putClientProperty("zorder", zOrder);
               } else if (pluginSubElement.getName().equals("location_x")) {
                 location.x = Integer.parseInt(pluginSubElement.getText());
@@ -3632,17 +3631,6 @@ public class GUI extends Observable {
               }
             }
 
-            // For all visualized plugins, check if they have a zorder property
-            try {
-              for (JInternalFrame plugin : getDesktopPane().getAllFrames()) {
-                if (plugin.getClientProperty("zorder") != null) {
-                  getDesktopPane().setComponentZOrder(plugin,
-                      ((Integer) plugin.getClientProperty("zorder")).intValue());
-                  plugin.putClientProperty("zorder", null);
-                }
-              }
-            } catch (Exception e) { }
-
             showPlugin(startedPlugin);
             return true;
           }
@@ -3650,6 +3638,28 @@ public class GUI extends Observable {
 
       }
     }
+
+    /* Z order visualized plugins */
+    try {
+    	for (int z=0; z < getDesktopPane().getAllFrames().length; z++) {
+        for (JInternalFrame plugin : getDesktopPane().getAllFrames()) {
+          if (plugin.getClientProperty("zorder") == null) {
+          	continue;
+          }
+          int zOrder = ((Integer) plugin.getClientProperty("zorder")).intValue();
+          if (zOrder != z) {
+          	continue;
+          }
+          getDesktopPane().setComponentZOrder(plugin, zOrder);
+          if (z == 0) {
+            plugin.setSelected(true);
+          }
+          plugin.putClientProperty("zorder", null);
+          break;
+        }
+        getDesktopPane().repaint();
+    	}
+    } catch (Exception e) { }
 
     return true;
   }
