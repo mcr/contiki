@@ -777,6 +777,13 @@ public class CollectServer {
     /* TODO Clean up resources */
     if (configFile != null) {
       configTable.setProperty("collect.bounds", "" + window.getX() + ',' + window.getY() + ',' + window.getWidth() + ',' + window.getHeight());
+      if (visualizers != null) {
+        for(Visualizer v : visualizers) {
+          if (v instanceof Configurable) {
+            ((Configurable)v).updateConfig(configTable);
+          }
+        }
+      }
       saveConfig(configTable, configFile);
     }
     if (serialConnection != null) {
