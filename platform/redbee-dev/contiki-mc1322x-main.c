@@ -1,4 +1,7 @@
 /*
+ * Copyright (c) 2010, Mariano Alvira <mar@devl.org> and other contributors
+ * to the MC1322x project (http://mc1322x.devl.org) and Contiki.
+ *
  * Copyright (c) 2006, Technical University of Munich
  * All rights reserved.
  *
@@ -31,31 +34,37 @@
  * @(#)$$
  */
 
+#include <signal.h>
 #include <stdio.h>
 #include <string.h>
 
-#include <stdbool.h>
-
-/* contiki */
 #include "contiki.h"
-#include "contiki-net.h"
-#include "contiki-lib.h"
 
+#include "dev/leds.h"
+#include "dev/serial-line.h"
+#include "dev/slip.h"
+#include "dev/xmem.h"
+#include "dev/button-sensor.h"
+#include "lib/random.h"
+#include "net/netstack.h"
 #include "net/mac/frame802154.h"
-#include "net/mac/nullmac.h"
-#include "net/mac/xmac.h"
-#include "net/mac/lpp.h"
+
+#if WITH_UIP6
+#include "net/sicslowpan.h"
+#include "net/uip-ds6.h"
 #include "net/mac/sicslowmac.h"
+#endif /* WITH_UIP6 */
 
 #include "net/rime.h"
-#include "net/rime/rimeaddr.h"
-#include "net/rime/ctimer.h"
+
+#include "sys/autostart.h"
+#include "sys/profile.h"
 
 /* from libmc1322x */
 #include "mc1322x.h"
 #include "default_lowlevel.h"
-
 #include "contiki-maca.h"
+#include "contiki-uart.h"
 
 #define DEBUG 1
 #if DEBUG
@@ -85,6 +94,84 @@
 #endif
 
 
+#if UIP_CONF_ROUTER
+
+#ifndef UIP_ROUTER_MODULE
+#ifdef UIP_CONF_ROUTER_MODULE
+#define UIP_ROUTER_MODULE UIP_CONF_ROUTER_MODULE
+#else /* UIP_CONF_ROUTER_MODULE */
+#define UIP_ROUTER_MODULE rimeroute
+#endif /* UIP_CONF_ROUTER_MODULE */
+#endif /* UIP_ROUTER_MODULE */
+
+extern const struct uip_router UIP_ROUTER_MODULE;
+
+#endif /* UIP_CONF_ROUTER */
+
+#if DCOSYNCH_CONF_ENABLED
+static struct timer mgt_timer;
+#endif
+
+#ifndef WITH_UIP
+#define WITH_UIP 0
+#endif
+
+#if WITH_UIP
+#include "net/uip.h"
+#include "net/uip-fw.h"
+#include "net/uip-fw-drv.h"
+#include "net/uip-over-mesh.h"
+static struct uip_fw_netif slipif =
+  {UIP_FW_NETIF(192,168,1,2, 255,255,255,255, slip_send)};
+static struct uip_fw_netif meshif =
+  {UIP_FW_NETIF(172,16,0,0, 255,255,0,0, uip_over_mesh_send)};
+
+#endif /* WITH_UIP */
+
+#define UIP_OVER_MESH_CHANNEL 8
+#if WITH_UIP
+static uint8_t is_gateway;
+#endif /* WITH_UIP */
+
+/*---------------------------------------------------------------------------*/
+void uip_log(char *msg) { printf("%c",msg); }
+/*---------------------------------------------------------------------------*/
+#ifndef RF_CHANNEL
+#define RF_CHANNEL              26
+#endif
+/*---------------------------------------------------------------------------*/
+#if WITH_UIP
+static void
+set_gateway(void)
+{
+  if(!is_gateway) {
+//    leds_on(LEDS_RED);
+    printf("%d.%d: making myself the IP network gateway.\n\n",
+	   rimeaddr_node_addr.u8[0], rimeaddr_node_addr.u8[1]);
+    printf("IPv4 address of the gateway: %d.%d.%d.%d\n\n",
+	   uip_ipaddr_to_quad(&uip_hostaddr));
+    uip_over_mesh_set_gateway(&rimeaddr_node_addr);
+    uip_over_mesh_make_announced_gateway();
+    is_gateway = 1;
+  }
+}
+#endif /* WITH_UIP */
+/*---------------------------------------------------------------------------*/
+static void
+print_processes(struct process * const processes[])
+{
+  /*  const struct process * const * p = processes;*/
+  printf("Starting");
+  while(*processes != NULL) {
+    printf(" '%s'", (*processes)->name);
+    processes++;
+  }
+  printf("\n");
+}
+/*--------------------------------------------------------------------------*/
+
+SENSORS(&button_sensor);
+
 void
 init_lowlevel(void)
 {
@@ -98,13 +185,13 @@ init_lowlevel(void)
 
 	/* button init */
 	/* set up kbi */
-//	enable_irq_kbi(7);
-	kbi_edge(7);
-	enable_ext_wu(7);
-	kbi_pol_neg(7);
+	enable_irq_kbi(4);
+	kbi_edge(4);
+	enable_ext_wu(4);
+//	kbi_pol_neg(7);
 //	kbi_pol_pos(7);
 //	gpio_sel0_pullup(29);
-	gpio_pu0_disable(29);
+//	gpio_pu0_disable(29);
 
 	trim_xtal();
 	
@@ -118,6 +205,7 @@ init_lowlevel(void)
 	set_channel(RF_CHANNEL - 11); /* channel 11 */
 	set_power(0x12); /* 0x12 is the highest, not documented */
 
+	/* control TX_ON with the radio */
         *GPIO_FUNC_SEL2 = (0x01 << ((44-16*2)*2));
 	gpio_pad_dir_set( 1ULL << 44 );
 
@@ -142,14 +230,62 @@ init_lowlevel(void)
 //	enable_rtc_wu_irq();
 }
 
+#if RIMEADDR_SIZE == 1
+const rimeaddr_t addr_ff = { { 0xff } };
+#else /*RIMEADDR_SIZE == 2*/
+#if RIMEADDR_SIZE == 2
+const rimeaddr_t addr_ff = { { 0xff, 0xff } };
+#else /*RIMEADDR_SIZE == 2*/
+#if RIMEADDR_SIZE == 8
+const rimeaddr_t addr_ff = { { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff } };
+#endif /*RIMEADDR_SIZE == 8*/
+#endif /*RIMEADDR_SIZE == 2*/
+#endif /*RIMEADDR_SIZE == 1*/
+
+void iab_to_eui64(rimeaddr_t *eui64, uint32_t oui, uint16_t iab, uint32_t ext) {
+	/* OUI for IABs */
+	eui64->u8[0] =  0x00;
+	eui64->u8[1] =  0x50;
+	eui64->u8[2] =  0xc2;
+
+	/* EUI64 field */
+	eui64->u8[3] = 0xff;
+	eui64->u8[4] = 0xfe;
+
+	/* IAB */
+	eui64->u8[5] = (iab >> 4)  & 0xff;	
+	eui64->u8[6] = (iab & 0xf) << 4;
+
+	/* EXT */
+	eui64->u8[6] |= ((ext >> 8) &  0xf);	
+	eui64->u8[7] =    ext       & 0xff;
+}
+
+void oui_to_eui64(rimeaddr_t *eui64, uint32_t oui, uint32_t ext) {
+	/* OUI */
+	eui64->u8[0] = (oui >> 16) & 0xff;
+	eui64->u8[1] = (oui >> 8)  & 0xff;
+	eui64->u8[2] =  oui        & 0xff;
+
+	/* EUI64 field */
+	eui64->u8[3] = 0xff;
+	eui64->u8[4] = 0xfe;
+
+	/* EXT */
+	eui64->u8[5] = (ext >> 16) & 0xff;
+	eui64->u8[6] = (ext >> 8)  & 0xff;
+	eui64->u8[7] =  ext        & 0xff;
+}
+
 void
 set_rimeaddr(rimeaddr_t *addr) 
 {
 	nvmType_t type=0;
 	nvmErr_t err;	
 	volatile uint8_t buf[RIMEADDR_NBYTES];
+	rimeaddr_t eui64;
 	int i;
-
+		
 	err = nvm_detect(gNvmInternalInterface_c, &type);
 
 	err = nvm_read(gNvmInternalInterface_c, type, (uint8_t *)buf, RIMEADDR_NVM, RIMEADDR_NBYTES);
@@ -160,21 +296,41 @@ set_rimeaddr(rimeaddr_t *addr)
 		addr->u8[i] = buf[i];
 	}
 
+	if (memcmp(addr, &addr_ff, RIMEADDR_CONF_SIZE)==0) {
+
+		//set addr to EUI64
+#ifdef IAB		
+   #ifdef EXT_ID
+		PRINTF("address in flash blank, setting to defined IAB and extention.\n\r");
+	  	iab_to_eui64(&eui64, OUI, IAB, EXT_ID);
+   #else  /* ifdef EXT_ID */
+		PRINTF("address in flash blank, setting to defined IAB with a random extention.\n\r");
+		iab_to_eui64(&eui64, OUI, IAB, *MACA_RANDOM & 0xfff);
+   #endif /* ifdef EXT_ID */
+
+#else  /* ifdef IAB */
+
+   #ifdef EXT_ID
+		PRINTF("address in flash blank, setting to defined OUI and extention.\n\r");
+		oui_to_eui64(&eui64, OUI, EXT_ID);
+   #else  /*ifdef EXT_ID */
+		PRINTF("address in flash blank, setting to defined OUI with a random extention.\n\r");
+		oui_to_eui64(&eui64, OUI, *MACA_RANDOM & 0xffffff);
+   #endif /*endif EXTID */
+
+#endif /* ifdef IAB */
+
+		rimeaddr_copy(addr, &eui64);		
+#ifdef FLASH_BLANK_ADDR
+		PRINTF("flashing blank address\n\r");
+		err = nvm_write(gNvmInternalInterface_c, type, &(eui64.u8), RIMEADDR_NVM, RIMEADDR_NBYTES);		
+#endif /* ifdef FLASH_BLANK_ADDR */
+	} else {
+		PRINTF("loading rime address from flash.\n\r");
+	}
+
 	rimeaddr_set_node_addr(addr);
 }
-
-//PROCESS_NAME(blink8_process);
-//PROCESS_NAME(blink9_process);
-//PROCESS_NAME(blink10_process);
-//PROCESS_NAME(maca_process);
-
-//PROCINIT(&etimer_process, &blink8_process,&blink9_process,&blink10_process);
-//PROCINIT(&etimer_process, &blink8_process, &blink9_process, &blink10_process);
-//PROCINIT(&etimer_process, &ctimer_process, &maca_process, &blink8_process,&blink9_process,&blink10_process);
-PROCINIT(&etimer_process, &ctimer_process, &maca_process);
-//PROCINIT(&etimer_process, &ctimer_process);
-//AUTOSTART_PROCESSES(&etimer_process, &blink8_process, &blink9_process, &blink10_process);
-//AUTOSTART_PROCESSES(&hello_world_process);
 
 int
 main(void)
@@ -191,56 +347,84 @@ main(void)
 
 	/* Process subsystem */
 	process_init();
+	process_start(&etimer_process, NULL);
+	process_start(&contiki_maca_process, NULL);
 
-	/* Register initial processes */
-	procinit_init();
-
-//	rime_init(nullmac_init(&maca_driver));
-//	rime_init(xmac_init(&maca_driver));
-//	rime_init(lpp_init(&maca_driver));
-//	rime_init(sicslowmac_init(&maca_driver));
-
-#if !(USE_32KHZ_XTAL)
-	PRINTF("setting xmac to use calibrated rtc value\n\r");
-	xmac_config.on_time = cal_rtc_secs/200;
-	xmac_config.off_time = cal_rtc_secs/2 - xmac_config.on_time;
-	xmac_config.strobe_time = 20 * xmac_config.on_time + xmac_config.off_time;
-	xmac_config.strobe_wait_time = 7 * xmac_config.on_time / 8;
-	PRINTF("xmac_config.on_time %u\n\r",xmac_config.on_time);
-	PRINTF("xmac_config.off_time %u\n\r",xmac_config.off_time);
-	PRINTF("xmac_config.strobe_time %u\n\r",xmac_config.strobe_time);
-	PRINTF("xmac_config.strobe_wait_time %u\n\r",xmac_config.strobe_wait_time);
-#endif
+	ctimer_init();
 
 	set_rimeaddr(&addr);
 
 	printf("Rime started with address ");
 	for(i = 0; i < sizeof(addr.u8) - 1; i++) {
-		printf("%d.", addr.u8[i]);
+		printf("%02X:", addr.u8[i]);
 	}
-	printf("%d\n", addr.u8[i]);
+	printf("%02X\n", addr.u8[i]);
 
-	//Give ourselves a prefix
-	//init_net();
-	
-	printf("\n\r********BOOTING CONTIKI*********\n\r");
-	
+
 #if WITH_UIP6
-  memcpy(&uip_lladdr.addr, &addr.u8, 8);	
-  sicslowpan_init(sicslowmac_init(&maca_driver));
+  memcpy(&uip_lladdr.addr, &addr.u8, sizeof(uip_lladdr.addr));
+  /* Setup nullmac-like MAC for 802.15.4 */
+/*   sicslowpan_init(sicslowmac_init(&cc2420_driver)); */
+/*   printf(" %s channel %u\n", sicslowmac_driver.name, RF_CHANNEL); */
+
+  /* Setup X-MAC for 802.15.4 */
+  queuebuf_init();
+  NETSTACK_RDC.init();
+  NETSTACK_MAC.init();
+  NETSTACK_NETWORK.init();
+
+  printf("%s %s, channel check rate %lu Hz, radio channel %u\n",
+         NETSTACK_MAC.name, NETSTACK_RDC.name,
+         CLOCK_SECOND / (NETSTACK_RDC.channel_check_interval() == 0 ? 1:
+                         NETSTACK_RDC.channel_check_interval()),
+         RF_CHANNEL);
+
   process_start(&tcpip_process, NULL);
-  printf(" %s channel %u\n", sicslowmac_driver.name, RF_CHANNEL);
-#if UIP_CONF_ROUTER
-  rime_init(rime_udp_init(NULL));
-  uip_router_register(&rimeroute);
-#endif /* UIP_CONF_ROUTER */
+
+  printf("Tentative link-local IPv6 address ");
+  {
+    int i, a;
+    for(a = 0; a < UIP_DS6_ADDR_NB; a++) {
+      if (uip_ds6_if.addr_list[a].isused) {
+	for(i = 0; i < 7; ++i) {
+	  printf("%02x%02x:",
+		 uip_ds6_if.addr_list[a].ipaddr.u8[i * 2],
+		 uip_ds6_if.addr_list[a].ipaddr.u8[i * 2 + 1]);
+	}
+	printf("%02x%02x\n",
+	       uip_ds6_if.addr_list[a].ipaddr.u8[14],
+	       uip_ds6_if.addr_list[a].ipaddr.u8[15]);
+      }
+    }
+  }
+  
+  if(1) {
+    uip_ipaddr_t ipaddr;
+    int i;
+    uip_ip6addr(&ipaddr, 0xaaaa, 0, 0, 0, 0, 0, 0, 0);
+    uip_ds6_set_addr_iid(&ipaddr, &uip_lladdr);
+    uip_ds6_addr_add(&ipaddr, 0, ADDR_TENTATIVE);
+    printf("Tentative global IPv6 address ");
+    for(i = 0; i < 7; ++i) {
+      printf("%02x%02x:",
+             ipaddr.u8[i * 2], ipaddr.u8[i * 2 + 1]);
+    }
+    printf("%02x%02x\n",
+           ipaddr.u8[7 * 2], ipaddr.u8[7 * 2 + 1]);
+  }
+
+  
 #else /* WITH_UIP6 */
-#if WITH_NULLMAC
-  rime_init(nullmac_init(&maca_driver));
-#else /* WITH_NULLMAC */
-  rime_init(xmac_init(&maca_driver));
-#endif /* WITH_NULLMAC */
-  printf(" %s channel %u\n", rime_mac->name, RF_CHANNEL);
+
+  NETSTACK_RDC.init();
+  NETSTACK_MAC.init();
+  NETSTACK_NETWORK.init();
+
+  printf("%s %s, channel check rate %lu Hz, radio channel %u\n",
+         NETSTACK_MAC.name, NETSTACK_RDC.name,
+         CLOCK_SECOND / (NETSTACK_RDC.channel_check_interval() == 0? 1:
+                         NETSTACK_RDC.channel_check_interval()),
+         RF_CHANNEL);
 #endif /* WITH_UIP6 */
 
 #if PROFILE_CONF_ON
@@ -254,49 +438,60 @@ main(void)
 
 #if WITH_UIP
   process_start(&tcpip_process, NULL);
-  //process_start(&uip_fw_process, NULL);	/* Start IP output */
-  //process_start(&slip_process, NULL);
+  process_start(&uip_fw_process, NULL);	/* Start IP output */
+  process_start(&slip_process, NULL);
 
-  //slip_set_input_callback(set_gateway);
+  slip_set_input_callback(set_gateway);
 
-//  {
-//    uip_ipaddr_t hostaddr, netmask;
+  {
+    uip_ipaddr_t hostaddr, netmask;
 
-//    uip_init();
+    uip_init();
 
-//    uip_ipaddr(&hostaddr, 172,16,
-//	       rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1]);
-//    uip_ipaddr(&netmask, 255,255,0,0);
-    //uip_ipaddr_copy(&meshif.ipaddr, &hostaddr);
+    uip_ipaddr(&hostaddr, 172,16,
+	       rimeaddr_node_addr.u8[0],rimeaddr_node_addr.u8[1]);
+    uip_ipaddr(&netmask, 255,255,0,0);
+    uip_ipaddr_copy(&meshif.ipaddr, &hostaddr);
 
-    //uip_sethostaddr(&hostaddr);
-    //uip_setnetmask(&netmask);
-    //uip_over_mesh_set_net(&hostaddr, &netmask);
+    uip_sethostaddr(&hostaddr);
+    uip_setnetmask(&netmask);
+    uip_over_mesh_set_net(&hostaddr, &netmask);
     /*    uip_fw_register(&slipif);*/
-    //uip_over_mesh_set_gateway_netif(&slipif);
-    //uip_fw_default(&meshif);
-    //uip_over_mesh_init(UIP_OVER_MESH_CHANNEL);
-//    printf("uIP started with IP address %d.%d.%d.%d\n",
-//	   uip_ipaddr_to_quad(&hostaddr));
-//  }
+    uip_over_mesh_set_gateway_netif(&slipif);
+    uip_fw_default(&meshif);
+    uip_over_mesh_init(UIP_OVER_MESH_CHANNEL);
+    printf("uIP started with IP address %d.%d.%d.%d\n",
+	   uip_ipaddr_to_quad(&hostaddr));
+  }
 #endif /* WITH_UIP */
 
-#if WITH_UIP6
-  PRINTF("Local IPv6 address: ");
-  PRINT6ADDR(&uip_netif_physical_if.addresses[0].ipaddr);
-  PRINTF("\n");
-#endif
+  process_start(&sensors_process, NULL);
+  
+  print_processes(autostart_processes);
+  autostart_start(autostart_processes);
+ 
+  /* Main scheduler loop */
+  while(1) {
+	  check_maca();
 
-	printf("System online.\n\r");
-	
-	/* Autostart processes */
-	autostart_start(autostart_processes);
-	
-	/* Main scheduler loop */
-	while(1) {
-		check_maca();
-		process_run();
-	}
-	
-	return 0;
+	  /* TODO: replace this with a uart rx interrupt */
+	  if(uart1_input_handler != NULL) {
+		  if(uart1_can_get()) {
+			  uart1_input_handler(uart1_getc());
+		  }
+	  }
+	         
+	  process_run();
+  }
+  
+  return 0;
 }
+
+/*---------------------------------------------------------------------------*/
+#if LOG_CONF_ENABLED
+void
+log_message(char *m1, char *m2)
+{
+  printf("%s%s\n", m1, m2);
+}
+#endif /* LOG_CONF_ENABLED */
