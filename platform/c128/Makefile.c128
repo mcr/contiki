@@ -57,8 +57,8 @@ ifeq ($(findstring WITH_MOUSE,$(DEFINES)),WITH_MOUSE)
 	$(C1541) -attach contiki.d71 -write $(CC65_HOME)/mou/c128-1351.mou        c128-1351.mou,u
 endif
 ifeq ($(HTTPD-CFS),1)
-	$(C1541) -attach contiki.d71 -write httpd-cfs/index.html                  index.html,u
+	$(C1541) -attach contiki.d71 -write httpd-cfs/index.htm                   index.htm,u
 	$(C1541) -attach contiki.d71 -write httpd-cfs/backgrnd.gif                backgrnd.gif,u
 	$(C1541) -attach contiki.d71 -write httpd-cfs/contiki.gif                 contiki.gif,u
-	$(C1541) -attach contiki.d71 -write httpd-cfs/notfound.html               notfound.html,u
+	$(C1541) -attach contiki.d71 -write httpd-cfs/notfound.htm                notfound.htm,u
 endif
