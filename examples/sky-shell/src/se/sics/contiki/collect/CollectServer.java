@@ -59,9 +59,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Map;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Properties;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -85,6 +85,7 @@ import org.jfree.chart.axis.ValueAxis;
 import se.sics.contiki.collect.gui.AggregatedTimeChartPanel;
 import se.sics.contiki.collect.gui.BarChartPanel;
 import se.sics.contiki.collect.gui.MapPanel;
+import se.sics.contiki.collect.gui.NodeControl;
 import se.sics.contiki.collect.gui.NodeInfoPanel;
 import se.sics.contiki.collect.gui.SerialConsole;
 import se.sics.contiki.collect.gui.TimeChartPanel;
@@ -525,6 +526,7 @@ public class CollectServer {
           }
         },
         new NodeInfoPanel(this, MAIN),
+        new NodeControl(this, MAIN),
         serialConsole
     };
     for (int i = 0, n = visualizers.length; i < n; i++) {
