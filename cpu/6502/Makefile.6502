@@ -52,6 +52,11 @@ CONTIKI_SOURCEFILES += $(CTK) ctk-conio.c petsciiconv.c cfs-posix-dir.c \
                        
 TARGET_LIBFILES = $(TARGET).lib
 
+ifdef ETHERNET
+  CONTIKI_SOURCEFILES += $(ETHERNET)-eth.S
+  CFLAGS += -DETHERNET=$(ETHERNET)
+endif
+
 ### Compiler definitions
 
 AS = ca65
@@ -87,3 +92,8 @@ CUSTOM_RULE_C_TO_CO = 1
 
 %.eth: $(OBJECTDIR)/%.o
 	$(LD) -t module -m $@.map $< -o $@
+
+ifdef ETHERNET
+$(ETHERNET)-eth.S: $(ETHERNET).eth
+	co65 --code-label _$(ETHERNET) -o $@ $<
+endif
