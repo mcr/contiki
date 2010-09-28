@@ -67,7 +67,7 @@ ifeq ($(findstring WITH_MOUSE,$(DEFINES)),WITH_MOUSE)
 endif
 ifeq ($(HTTPD-CFS),1)
 	java -jar $(AC) -p    contiki.dsk index.html     bin 0 < httpd-cfs/index.html
-	java -jar $(AC) -p    contiki.dsk background.gif bin 0 < httpd-cfs/background.gif
+	java -jar $(AC) -p    contiki.dsk backgrnd.gif   bin 0 < httpd-cfs/backgrnd.gif
 	java -jar $(AC) -p    contiki.dsk contiki.gif    bin 0 < httpd-cfs/contiki.gif
 	java -jar $(AC) -p    contiki.dsk notfound.html  bin 0 < httpd-cfs/notfound.html
 endif
