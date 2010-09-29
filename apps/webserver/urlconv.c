@@ -139,7 +139,7 @@ urlconv_tofilename(char *dest, char *source, unsigned char maxlen)
       *to = c;
     }
   } while(c);
-  if(*to == ISO_slash && (len + sizeof(http_index_html) - 3) < maxlen) {
+  if(*to == ISO_slash && (len + sizeof(http_index_htm) - 3) < maxlen) {
     strcpy(to, http_index_htm);  // add index.htm
   } else {
     ++to;
