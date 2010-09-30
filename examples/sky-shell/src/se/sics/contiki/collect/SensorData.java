@@ -225,7 +225,7 @@ public class SensorData implements SensorInfo {
   }
 
   public double getBestNeighborETX() {
-    return values[BEST_NEIGHBOR_ETX] / 16.0;
+    return values[BEST_NEIGHBOR_ETX] / 8.0;
   }
 
 }
