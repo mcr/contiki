@@ -113,6 +113,16 @@ public class NodeInfoPanel extends JPanel implements Visualizer, Configurable {
             return node.getSensorDataAggregator().getAverageValue(SensorData.HOPS);
           }
         },
+        new TableData("Average Rtmetric", "Average Routing Metric", Double.class) {
+          public Object getValue(Node node) {
+            return node.getSensorDataAggregator().getAverageRtmetric();
+          }
+        },
+        new TableData("Average ETX", "Average ETX to Next Hop", Double.class) {
+          public Object getValue(Node node) {
+            return node.getSensorDataAggregator().getAverageValue(SensorData.BEST_NEIGHBOR_ETX);
+          }
+        },
         new TableData("Next Hop Changes", "Next Hop Change Count", Integer.class) {
           public Object getValue(Node node) {
             return node.getSensorDataAggregator().getNextHopChangeCount();
@@ -123,50 +133,50 @@ public class NodeInfoPanel extends JPanel implements Visualizer, Configurable {
           public Object getValue(Node node) {
             return node.getSensorDataAggregator().getEstimatedRestarts();
           }
-        }.setVisible(false),
+        },
 
         // Power
         new TableData("CPU Power", "Average CPU Power Consumption", Double.class) {
           public Object getValue(Node node) {
             return node.getSensorDataAggregator().getCPUPower();
           }
-        }.setVisible(false),
+        },
         new TableData("LPM Power", "Average LPM Power Consumption", Double.class) {
           public Object getValue(Node node) {
             return node.getSensorDataAggregator().getLPMPower();
           }
-        }.setVisible(false),
+        },
         new TableData("Listen Power", "Average Radio Listen Power Consumption", Double.class) {
           public Object getValue(Node node) {
             return node.getSensorDataAggregator().getListenPower();
           }
-        }.setVisible(false),
+        },
         new TableData("Transmit Power", "Average Radio Transmit Power Consumption", Double.class) {
           public Object getValue(Node node) {
             return node.getSensorDataAggregator().getTransmitPower();
           }
-        }.setVisible(false),
+        },
         new TableData("Power", "Average Power Consumption", Double.class) {
           public Object getValue(Node node) {
             return node.getSensorDataAggregator().getAveragePower();
           }
-        }.setVisible(false),
+        },
         new TableData("Power Time", "Power Measure Time", Long.class) {
           public Object getValue(Node node) {
             return node.getSensorDataAggregator().getPowerMeasureTime();
           }
-        }.setVisible(false),
+        },
 
         new TableData("Listen Duty Cycle", "Average Radio Listen Duty Cycle (%)", Double.class) {
           public Object getValue(Node node) {
             return 100 * node.getSensorDataAggregator().getAverageDutyCycle(SensorInfo.TIME_LISTEN);
           }
-        }.setVisible(false),
+        },
         new TableData("Transmit Duty Cycle", "Average Radio Transmit Duty Cycle (%)", Double.class) {
           public Object getValue(Node node) {
             return 100 * node.getSensorDataAggregator().getAverageDutyCycle(SensorInfo.TIME_TRANSMIT);
           }
-        }.setVisible(false),
+        },
 
         // Inter-packet times
         new TableData("Average Inter-packet Time", Long.class) {

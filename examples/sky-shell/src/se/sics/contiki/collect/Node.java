@@ -56,7 +56,8 @@ public class Node implements Comparable<Node> {
   private final String id;
   private final String name;
 
-  private int x = -1, y = -1;
+  public int x = -1;
+  public int y = -1;
 
   private Hashtable<String,Object> objectTable;
 

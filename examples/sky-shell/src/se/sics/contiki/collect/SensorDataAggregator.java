@@ -241,6 +241,10 @@ public class SensorDataAggregator implements SensorInfo {
     return dataCount > 0 ? (-39.6 + 0.01 * (values[TEMPERATURE] / dataCount)) : 0.0;
   }
 
+  public double getAverageRtmetric() {
+    return dataCount > 0 ? ((values[BEST_NEIGHBOR_RTMETRIC] + values[BEST_NEIGHBOR_ETX]) / dataCount) : 0.0;
+  }
+
   public double getAverageRadioIntensity() {
     return getAverageValue(RSSI);
   }

@@ -331,6 +331,28 @@ public class CollectServer {
             dataset.addValue(data.getNode().getSensorDataAggregator().getAverageValue(SensorData.HOPS), categories[1], data.getNode().getName());
           }
         },
+        new TimeChartPanel(this, NETWORK, "Routing Metric (Over Time)", "Routing Metric", "Time", "Routing Metric") {
+          {
+            ValueAxis axis = chart.getXYPlot().getRangeAxis();
+            ((NumberAxis)axis).setAutoRangeIncludesZero(true);
+            axis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+            setMaxItemCount(defaultMaxItemCount);
+          }
+          protected double getSensorDataValue(SensorData data) {
+            return data.getValue(SensorData.BEST_NEIGHBOR_RTMETRIC) + data.getValue(SensorData.BEST_NEIGHBOR_ETX);
+          }
+        },
+        new TimeChartPanel(this, NETWORK, "ETX (Over Time)", "ETX to Next Hop", "Time", "ETX") {
+          {
+            ValueAxis axis = chart.getXYPlot().getRangeAxis();
+            ((NumberAxis)axis).setAutoRangeIncludesZero(true);
+            axis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+            setMaxItemCount(defaultMaxItemCount);
+          }
+          protected double getSensorDataValue(SensorData data) {
+            return data.getValue(SensorData.BEST_NEIGHBOR_ETX);
+          }
+        },
         new AggregatedTimeChartPanel<int[]>(this, NETWORK,
             "Next Hop (Over Time)", "Time", "Next Hop Changes") {
           {
