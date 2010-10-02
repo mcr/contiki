@@ -62,6 +62,10 @@ main(void)
 {
   struct ethernet_config *ethernet_config;
 
+  clrscr();
+  bordercolor(BORDERCOLOR);
+  bgcolor(SCREENCOLOR);
+
   process_init();
 
 #if 1
