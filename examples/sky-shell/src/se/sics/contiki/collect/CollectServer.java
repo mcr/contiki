@@ -310,6 +310,17 @@ public class CollectServer {
             return data.getLight2();
           }
         },
+        new TimeChartPanel(this, NETWORK, "Neighbors (Over Time)", "Neighbor Count", "Time", "Neighbors") {
+          {
+            ValueAxis axis = chart.getXYPlot().getRangeAxis();
+            ((NumberAxis)axis).setAutoRangeIncludesZero(true);
+            axis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+            setMaxItemCount(defaultMaxItemCount);
+          }
+          protected double getSensorDataValue(SensorData data) {
+            return data.getValue(SensorData.NUM_NEIGHBORS);
+          }
+        },
         new TimeChartPanel(this, NETWORK, "Network Hops (Over Time)", "Network Hops", "Time", "Hops") {
           {
             ValueAxis axis = chart.getXYPlot().getRangeAxis();
