@@ -76,6 +76,7 @@ public class NodeControl implements Visualizer {
     final JFormattedTextField intervalField = new JFormattedTextField(new Integer(60));
     final JFormattedTextField randomField = new JFormattedTextField(new Integer(2));
     final JFormattedTextField reportsField = new JFormattedTextField(new Integer(0));
+    final JFormattedTextField rexmitsField = new JFormattedTextField(new Integer(15));
     statusLabel = new JLabel("", JLabel.CENTER);
     statusLabel.setOpaque(true);
 
@@ -95,9 +96,10 @@ public class NodeControl implements Visualizer {
         int interval = (Integer)intervalField.getValue();
         int random = (Integer)randomField.getValue();
         int reports = (Integer)reportsField.getValue();
+        int rexmits = (Integer)rexmitsField.getValue();
 
         sendCommand("netcmd { repeat " + reports + " " + interval
-            + " { randwait " + random + " sky-alldata | blink | send } }");
+            + " { randwait " + random + " sky-alldata | blink | send " + rexmits + " } }");
       }
 
     });
@@ -128,6 +130,12 @@ public class NodeControl implements Visualizer {
     label.setLabelFor(randomField);
     controlPanel.add(randomField, c);
     controlPanel.add(new JLabel("seconds"), c);
+
+    c.gridy++;
+    controlPanel.add(label = new JLabel("Hop-by-hop retransmissions", JLabel.RIGHT), c);
+    label.setLabelFor(rexmitsField);
+    controlPanel.add(rexmitsField, c);
+    controlPanel.add(new JLabel("retransmissions (0 - 31)"), c);
 
     c.gridy++;
     controlPanel.add(new JLabel("Number of reports", JLabel.RIGHT), c);
