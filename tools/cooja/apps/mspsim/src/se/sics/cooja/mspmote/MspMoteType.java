@@ -419,6 +419,7 @@ public abstract class MspMoteType implements MoteType {
         try {
           file = file.getCanonicalFile();
         } catch (IOException e) {
+        } catch (java.security.AccessControlException e) {
         }
 
         Hashtable<Integer, Integer> lineToAddrHash = fileToLineHash.get(file);
