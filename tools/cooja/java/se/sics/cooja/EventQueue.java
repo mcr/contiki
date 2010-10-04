@@ -52,10 +52,10 @@ public class EventQueue {
 
   private void addEvent(TimeEvent event) {
     if (event.queue != null) {
-      if (!event.isScheduled) {
-        removeFromQueue(event);
+      if (event.isScheduled) {
+        throw new IllegalStateException("Event is already scheduled: " + event);
       }
-      throw new IllegalStateException("Event is already scheduled: " + event);
+      removeFromQueue(event);
     }
 
     if (first == null) {
