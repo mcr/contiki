@@ -180,12 +180,9 @@ public class Simulation extends Observable implements Runnable {
    * @param time Execution time
    */
   public void scheduleEvent(final TimeEvent e, final long time) {
-    /* TODO Strict scheduling from simulation thread */
-    if (e.isScheduled()) {
-      throw new IllegalStateException("Event already scheduled: " + e);
-    }
-    if (isRunning && !isSimulationThread()) {
-      throw new IllegalStateException("Scheduling event from non-simulation thread: " + e);
+    if (isRunning) {
+      /* TODO Strict scheduling from simulation thread */
+      assert isSimulationThread() : "Scheduling event from non-simulation thread: " + e;
     }
     eventQueue.addEvent(e, time);
   }

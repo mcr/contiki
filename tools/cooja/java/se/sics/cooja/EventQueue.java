@@ -51,11 +51,11 @@ public class EventQueue {
   }
 
   private void addEvent(TimeEvent event) {
-    if (event.removed && event.queue != null) {
-      removeFromQueue(event);
-    }
     if (event.queue != null) {
-      throw new IllegalStateException("Event was already scheduled in the past: " + event);
+      if (!event.isScheduled) {
+        removeFromQueue(event);
+      }
+      throw new IllegalStateException("Event is already scheduled: " + event);
     }
 
     if (first == null) {
@@ -78,8 +78,8 @@ public class EventQueue {
         lastPos.nextEvent = event;
       }
     }
-    event.removed = false;
     event.queue = this;
+    event.isScheduled = true;
     eventCount++;
   }
 
@@ -112,6 +112,7 @@ public class EventQueue {
     pos.nextEvent = null;
 
     event.queue = null;
+    event.isScheduled = false;
     eventCount--;
     return true;
   }
@@ -142,10 +143,11 @@ public class EventQueue {
     tmp.queue = null;
     eventCount--;
 
-    if (tmp.removed) {
+    if (!tmp.isScheduled) {
       /* pop and return another event instead */
       return popFirst();
     }
+    tmp.isScheduled = false;
     return tmp;
   }
 
