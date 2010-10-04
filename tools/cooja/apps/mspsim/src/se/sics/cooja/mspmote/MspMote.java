@@ -82,7 +82,6 @@ public abstract class MspMote extends AbstractEmulatedMote implements Mote, Watc
     Visualizer.registerVisualizerSkin(CodeVisualizerSkin.class);
   }
 
-  private Simulation simulation;
   private CommandHandler commandHandler;
   private ArrayList<LineListener> commandListeners = new ArrayList<LineListener>();
   private MSP430 myCpu = null;
@@ -101,7 +100,6 @@ public abstract class MspMote extends AbstractEmulatedMote implements Mote, Watc
   private MspBreakpointContainer breakpointsContainer;
 
   public MspMote() {
-    simulation = null;
     myMoteType = null;
     myCpu = null;
     myMemory = null;
@@ -182,14 +180,6 @@ public abstract class MspMote extends AbstractEmulatedMote implements Mote, Watc
 
   public void setMemory(MoteMemory memory) {
     myMemory = (MspMoteMemory) memory;
-  }
-
-  public Simulation getSimulation() {
-    return simulation;
-  }
-
-  public void setSimulation(Simulation simulation) {
-    this.simulation = simulation;
   }
 
   /* Stack monitoring variables */

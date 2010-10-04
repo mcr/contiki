@@ -33,7 +33,6 @@ package se.sics.cooja.contikimote;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.jdom.Element;
@@ -68,7 +67,6 @@ public class ContikiMote extends AbstractWakeupMote implements Mote {
   private ContikiMoteType myType = null;
   private SectionMoteMemory myMemory = null;
   private MoteInterfaceHandler myInterfaceHandler = null;
-  private Simulation simulation = null;
 
   /**
    * Creates a new uninitialized Contiki mote.
@@ -88,7 +86,7 @@ public class ContikiMote extends AbstractWakeupMote implements Mote {
    * @param sim Mote's simulation
    */
   public ContikiMote(ContikiMoteType moteType, Simulation sim) {
-    this.simulation = sim;
+    setSimulation(sim);
     this.myType = moteType;
     this.myMemory = moteType.createInitialMemory();
     this.myInterfaceHandler = new MoteInterfaceHandler(this, moteType.getMoteInterfaceClasses());
@@ -122,14 +120,6 @@ public class ContikiMote extends AbstractWakeupMote implements Mote {
 
   public void setType(MoteType type) {
     myType = (ContikiMoteType) type;
-  }
-
-  public Simulation getSimulation() {
-    return simulation;
-  }
-
-  public void setSimulation(Simulation simulation) {
-    this.simulation = simulation;
   }
 
   /**
@@ -194,7 +184,7 @@ public class ContikiMote extends AbstractWakeupMote implements Mote {
   }
 
   public boolean setConfigXML(Simulation simulation, Collection<Element> configXML, boolean visAvailable) {
-    this.simulation = simulation;
+    setSimulation(simulation);
     myMemory = myType.createInitialMemory();
     myInterfaceHandler = new MoteInterfaceHandler(this, myType.getMoteInterfaceClasses());
 

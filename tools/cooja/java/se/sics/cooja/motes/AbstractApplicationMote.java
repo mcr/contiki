@@ -66,8 +66,6 @@ public abstract class AbstractApplicationMote extends AbstractWakeupMote impleme
 
   protected MoteInterfaceHandler moteInterfaces = null;
 
-  private Simulation simulation = null;
-
   /* Observe our own radio for incoming radio packets */
   private Observer radioDataObserver = new Observer() {
     public void update(Observable obs, Object obj) {
@@ -90,7 +88,7 @@ public abstract class AbstractApplicationMote extends AbstractWakeupMote impleme
   }
 
   public AbstractApplicationMote(MoteType moteType, Simulation sim) {
-    this.simulation = sim;
+    setSimulation(sim);
     this.moteType = moteType;
     this.memory = new SectionMoteMemory(new Properties());
     this.moteInterfaces = new MoteInterfaceHandler(this, moteType.getMoteInterfaceClasses());
@@ -126,14 +124,6 @@ public abstract class AbstractApplicationMote extends AbstractWakeupMote impleme
     moteType = type;
   }
 
-  public Simulation getSimulation() {
-    return simulation;
-  }
-
-  public void setSimulation(Simulation simulation) {
-    this.simulation = simulation;
-  }
-
   public Collection<Element> getConfigXML() {
     ArrayList<Element> config = new ArrayList<Element>();
     Element element;
@@ -154,7 +144,7 @@ public abstract class AbstractApplicationMote extends AbstractWakeupMote impleme
 
   public boolean setConfigXML(Simulation simulation,
       Collection<Element> configXML, boolean visAvailable) {
-    this.simulation = simulation;
+    setSimulation(simulation);
     this.memory = new SectionMoteMemory(new Properties());
     moteInterfaces.getRadio().addObserver(radioDataObserver);
 

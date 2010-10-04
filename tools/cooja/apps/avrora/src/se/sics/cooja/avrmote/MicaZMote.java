@@ -64,7 +64,6 @@ public class MicaZMote extends AbstractEmulatedMote implements Mote {
   /* 8 MHz according to Contiki config */
   public static long NR_CYCLES_PER_MSEC = 8000;
 
-  private Simulation mySimulation = null;
   private MoteInterfaceHandler myMoteInterfaceHandler;
   private AtmelMicrocontroller myCpu = null;
   private MicaZ micaZ = null;
@@ -81,14 +80,13 @@ public class MicaZMote extends AbstractEmulatedMote implements Mote {
 
   public MicaZMote() {
     myMoteType = null;
-    mySimulation = null;
     myCpu = null;
     /* TODO myMemory = null; */
     myMoteInterfaceHandler = null;
   }
 
   public MicaZMote(Simulation simulation, MicaZMoteType type) {
-    mySimulation = simulation;
+    setSimulation(simulation);
     myMoteType = type;
 
     /* Schedule us immediately */
@@ -126,14 +124,6 @@ public class MicaZMote extends AbstractEmulatedMote implements Mote {
       initEmulator(myMoteType.getContikiFirmwareFile());
       myMoteInterfaceHandler = createMoteInterfaceHandler();
     }
-  }
-
-  public Simulation getSimulation() {
-    return mySimulation;
-  }
-
-  public void setSimulation(Simulation simulation) {
-    mySimulation = simulation;
   }
 
   /**
