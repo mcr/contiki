@@ -200,7 +200,7 @@ struct {
 } stats;
 
 /* Debug definition: draw routing tree in Cooja. */
-#define DRAW_TREE 1
+#define DRAW_TREE 0
 
 #define DEBUG 0
 #if DEBUG
