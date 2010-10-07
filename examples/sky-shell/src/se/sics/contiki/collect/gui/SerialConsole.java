@@ -106,8 +106,11 @@ public class SerialConsole implements Visualizer {
               historyCount = (historyCount + 1) % history.length;
             }
             historyPos = historyCount;
-            SerialConsole.this.server.sendToNode(command);
-            commandField.setText("");
+            if (SerialConsole.this.server.sendToNode(command)) {
+              commandField.setText("");
+            } else {
+              addSerialData("*** failed to send command ***");
+            }
           } catch (Exception ex) {
             System.err.println("could not send '" + command + "':");
             ex.printStackTrace();
