@@ -242,7 +242,7 @@ public class SensorDataAggregator implements SensorInfo {
   }
 
   public double getAverageRtmetric() {
-    return dataCount > 0 ? ((values[BEST_NEIGHBOR_RTMETRIC] + values[BEST_NEIGHBOR_ETX]) / dataCount) : 0.0;
+    return dataCount > 0 ? ((values[BEST_NEIGHBOR_RTMETRIC] + (values[BEST_NEIGHBOR_ETX] / 8.0)) / dataCount) : 0.0;
   }
 
   public double getAverageRadioIntensity() {
@@ -270,7 +270,7 @@ public class SensorDataAggregator implements SensorInfo {
   }
 
   public double getAverageBestNeighborETX() {
-    return getAverageValue(BEST_NEIGHBOR_ETX) / 16.0;
+    return getAverageValue(BEST_NEIGHBOR_ETX) / 8.0;
   }
 
   public int getPacketCount() {
