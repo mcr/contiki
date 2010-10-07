@@ -118,9 +118,22 @@ public class SensorData implements SensorInfo {
   }
 
   public static SensorData parseSensorData(CollectServer server, String line, long systemTime) {
-    String[] components = line.trim().split(" ");
-    if (components.length == SensorData.VALUES_COUNT + 1) {
-      // Sensor data with system time
+    String[] components = line.trim().split("[ \t]+");
+    // Check if COOJA log
+    if (components.length == VALUES_COUNT + 2 && components[1].startsWith("ID:")) {
+      if (!components[2].equals("" + VALUES_COUNT)) {
+        // Ignore non sensor data
+        return null;
+      }
+      try {
+        systemTime = Long.parseLong(components[0]);
+        components = Arrays.copyOfRange(components, 2, components.length);
+      } catch (NumberFormatException e) {
+        // First column does not seem to be system time
+      }
+
+    } else if (components[0].length() > 8) {
+      // Sensor data prefixed with system time
       try {
         systemTime = Long.parseLong(components[0]);
         components = Arrays.copyOfRange(components, 1, components.length);
