@@ -280,7 +280,6 @@ public abstract class SerialUI extends Log implements SerialPort {
 
   private int tosChars = 0;
   boolean tosMode = false;
-  private int[] tosData = new int[255];
   private int tosPos = 0;
   private int tosLen = 0;
 
@@ -292,6 +291,7 @@ public abstract class SerialUI extends Log implements SerialPort {
         slipCounter++;
     }
     if (tosMode) {
+      int tmpData = data;
       /* needs to add checks to CRC */
       //    System.out.println("Received: " + Integer.toString(data, 16) + " = " + (char) data + "  tosPos: " + tosPos);
       if (data == 0x7e) {
@@ -315,11 +315,10 @@ public abstract class SerialUI extends Log implements SerialPort {
       }
       if (tosPos > 9 && tosPos < 10 + tosLen) {
         if (data < 32) {
-          data = 32;
+          tmpData = 32;
         }
-        newMessage.append((char) data);
+        newMessage.append((char) tmpData);
       }
-      tosData[tosPos++] = data;
     } else {
       if (data == 0x7e) {
         tosChars++;
