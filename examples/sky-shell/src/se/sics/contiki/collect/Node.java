@@ -56,9 +56,6 @@ public class Node implements Comparable<Node> {
   private final String id;
   private final String name;
 
-  public int x = -1;
-  public int y = -1;
-
   private Hashtable<String,Object> objectTable;
 
   private long lastActive;
@@ -75,23 +72,6 @@ public class Node implements Comparable<Node> {
 
   public final String getName() {
     return name;
-  }
-
-  public int getX() {
-    return x;
-  }
-
-  public int getY() {
-    return y;
-  }
-
-  public void setLocation(int x, int y) {
-    this.x = x;
-    this.y = y;
-  }
-
-  public boolean hasLocation() {
-    return x >= 0 && y >= 0;
   }
 
   public long getLastActive() {

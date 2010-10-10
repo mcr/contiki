@@ -229,7 +229,7 @@ public class CollectServer implements SerialConnectionListener {
     categoryTable.put(MAIN, mainPanel);
 
     serialConsole = new SerialConsole(this, MAIN);
-    mapPanel = new MapPanel(this, MAIN);
+    mapPanel = new MapPanel(this, "Sensor Map", MAIN, true);
     String image = getConfig("collect.mapimage");
     if (image != null) {
       mapPanel.setMapBackground(image);
@@ -237,6 +237,7 @@ public class CollectServer implements SerialConnectionListener {
     final int defaultMaxItemCount = 250;
     visualizers = new Visualizer[] {
         mapPanel,
+        new MapPanel(this, "Network Graph", MAIN, false),
         new BarChartPanel(this, SENSORS, "Average Temperature", "Temperature", "Nodes", "Celsius",
             new String[] { "Celsius" }) {
           {
@@ -867,7 +868,6 @@ public class CollectServer implements SerialConnectionListener {
     if (node == null) {
       node = new Node(nodeID);
       nodeTable.put(nodeID, node);
-      updateNodeLocation(node);
 
       synchronized (this) {
         nodeCache = null;
@@ -939,31 +939,6 @@ public class CollectServer implements SerialConnectionListener {
   // -------------------------------------------------------------------
   // Node location handling
   // -------------------------------------------------------------------
-
-  public boolean updateNodeLocation(Node node) {
-    String id = node.getID();
-    if (node.hasLocation()) {
-      String location = "" + node.getX() + ',' + node.getY();
-      if (!location.equals(configTable.get(id))) {
-        configTable.put(id, location);
-      }
-      return false;
-    }
-
-    String location = configTable.getProperty(id);
-    if (location != null) {
-      try {
-        String[] pos = location.split(",");
-        node.setLocation(Integer.parseInt(pos[0].trim()),
-            Integer.parseInt(pos[1].trim()));
-        return true;
-      } catch (Exception e) {
-        System.err.println("could not parse node location: " + location);
-        e.printStackTrace();
-      }
-    }
-    return false;
-  }
 
   private boolean loadConfig(Properties properties, String configFile) {
     try {
