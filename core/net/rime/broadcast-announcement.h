@@ -65,6 +65,8 @@ void broadcast_announcement_init(uint16_t channel,
                                  clock_time_t min_time,
                                  clock_time_t max_time);
 
+clock_time_t broadcast_announcement_beacon_interval(void);
+
 #endif /* __BROADCAST_ANNOUNCEMENT_H__ */
 /** @} */
 /** @} */
