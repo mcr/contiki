@@ -257,7 +257,7 @@ PROCESS_THREAD(shell_rfchannel_process, ev, data)
 
   msg.len = 1;
 
-  shell_output(&txpower_command, &msg, sizeof(msg), "", 0);
+  shell_output(&rfchannel_command, &msg, sizeof(msg), "", 0);
 
   PROCESS_END();
 }
