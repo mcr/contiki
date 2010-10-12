@@ -128,4 +128,6 @@ public abstract class AbstractWakeupMote implements Mote {
     return true;
   }
 
+  public void removed() {
+  }
 }
