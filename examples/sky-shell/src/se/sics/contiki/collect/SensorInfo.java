@@ -64,22 +64,23 @@ public interface SensorInfo {
   public static final int DATA_LEN2 = 8;
   public static final int CLOCK = 9;
   public static final int TIMESYNCHTIME = 10;
-  public static final int LIGHT1 = 11;
-  public static final int LIGHT2 = 12;
-  public static final int TEMPERATURE = 13;
-  public static final int HUMIDITY = 14;
-  public static final int RSSI = 15;
-  public static final int TIME_CPU = 16;
-  public static final int TIME_LPM = 17;
-  public static final int TIME_TRANSMIT = 18;
-  public static final int TIME_LISTEN = 19;
-  public static final int BEST_NEIGHBOR = 20;
-  public static final int BEST_NEIGHBOR_ETX = 21;
-  public static final int BEST_NEIGHBOR_RTMETRIC = 22;
-  public static final int BATTERY_VOLTAGE = 23;
-  public static final int BATTERY_INDICATOR = 24;
-  public static final int NUM_NEIGHBORS = 25;
+  public static final int TIME_CPU = 11;
+  public static final int TIME_LPM = 12;
+  public static final int TIME_TRANSMIT = 13;
+  public static final int TIME_LISTEN = 14;
+  public static final int BEST_NEIGHBOR = 15;
+  public static final int BEST_NEIGHBOR_ETX = 16;
+  public static final int BEST_NEIGHBOR_RTMETRIC = 17;
+  public static final int NUM_NEIGHBORS = 18;
+  public static final int BEACON_INTERVAL = 19;
+  public static final int BATTERY_VOLTAGE = 20;
+  public static final int BATTERY_INDICATOR = 21;
+  public static final int LIGHT1 = 22;
+  public static final int LIGHT2 = 23;
+  public static final int TEMPERATURE = 24;
+  public static final int HUMIDITY = 25;
+  public static final int RSSI = 26;
 
-  public static final int VALUES_COUNT = 26;
+  public static final int VALUES_COUNT = 30;
 
 }
