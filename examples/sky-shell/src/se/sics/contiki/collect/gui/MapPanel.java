@@ -428,18 +428,33 @@ public class MapPanel extends JPanel implements Configurable, Visualizer, Action
   @Override
   protected void paintComponent(Graphics g) {
     Graphics2D g2d = (Graphics2D) g;
+    FontMetrics fm = g.getFontMetrics();
+    int fnHeight = fm.getHeight();
+    int fnDescent = fm.getDescent();
+    int width = getWidth();
+    int height = getHeight();
+
     g.setColor(getBackground());
-    g.fillRect(0, 0, getWidth(), getHeight());
+    g.fillRect(0, 0, width, height);
     if (showBackground && isMap) {
       mapImage.paintIcon(this, g, 0, 0);
     }
     g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
         RenderingHints.VALUE_ANTIALIAS_ON);
+
+    // Display legend
+    if (!hideNetwork) {
+      int legendWidth = fm.stringWidth("ETX");
+      g.setColor(Color.black);
+      g.drawString("ETX", width - legendWidth - 10, 10 + fnHeight - fnDescent);
+      g.drawRect(width - legendWidth - 30, 8, legendWidth + 24, fnHeight + 4);
+      g.setColor(LINK_COLOR);
+      g2d.drawLine(width - legendWidth - 25, 10 + fnHeight / 2,
+          width - legendWidth - 15, 10 + fnHeight / 2);
+    }
+
     for (MapNode n : getNodeList()) {
       if (!isMap || !hideNetwork) {
-        FontMetrics fm = g.getFontMetrics();
-        int fnHeight = fm.getHeight();
-        int fnDescent = fm.getDescent();
         g.setColor(LINK_COLOR);
         for (int j = 0, mu = n.node.getLinkCount(); j < mu; j++) {
           Link link = n.node.getLink(j);
@@ -461,7 +476,9 @@ public class MapPanel extends JPanel implements Configurable, Visualizer, Action
             if (yn2 < yn1) {
               dy += fnHeight - fnDescent;
             }
-            g.drawString("ETX:" + (((int)(link.getETX() * 100 + 0.5)) / 100.0), dx, dy);
+            g.drawString(
+                Double.toString(((int) (link.getETX() * 100 + 0.5)) / 100.0),
+                dx, dy);
           }
         }
       }
