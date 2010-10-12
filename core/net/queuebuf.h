@@ -56,6 +56,12 @@
 
 #include "net/packetbuf.h"
 
+#ifdef QUEUEBUF_CONF_NUM
+#define QUEUEBUF_NUM QUEUEBUF_CONF_NUM
+#else
+#define QUEUEBUF_NUM 8
+#endif
+
 struct queuebuf;
 
 void queuebuf_init(void);

@@ -47,12 +47,6 @@
 
 #include <string.h> /* for memcpy() */
 
-#ifdef QUEUEBUF_CONF_NUM
-#define QUEUEBUF_NUM QUEUEBUF_CONF_NUM
-#else
-#define QUEUEBUF_NUM 8
-#endif
-
 #ifdef QUEUEBUF_CONF_REF_NUM
 #define QUEUEBUF_REF_NUM QUEUEBUF_CONF_REF_NUM
 #else
