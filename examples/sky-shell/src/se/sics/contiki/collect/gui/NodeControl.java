@@ -98,13 +98,15 @@ public class NodeControl implements Visualizer {
         int rexmits = (Integer)rexmitsField.getValue();
 
         sendCommand("netcmd { repeat " + reports + " " + interval
-            + " { randwait " + random + " sky-alldata | blink | send " + rexmits + " } }");
+            + " { randwait " + random + " collect-view-data | blink | send " + rexmits + " } }");
       }
 
     });
 
     JButton collectButton = createCommandButton("Start Collect",
-        "mac 0", SET_TIME_COMMAND, "collect | timestamp | blink | binprint &");
+                                                "~K", "killall",
+                                                "mac 0", SET_TIME_COMMAND,
+                                                "collect | timestamp | blink | binprint &");
     JButton stopCollectButton = createCommandButton("Stop Collect", "~K", "killall");
 
     JPanel controlPanel = new JPanel(new GridBagLayout());
