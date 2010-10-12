@@ -64,7 +64,7 @@ int snprintf(char *str, size_t size, const char *format, ...);
 #include <string.h>
 
 
-#define DEFAULT_COLLECT_REXMITS 4
+#define DEFAULT_COLLECT_REXMITS 15
 
 
 #define COLLECT_MSG_HDRSIZE 4
