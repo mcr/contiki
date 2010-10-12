@@ -147,7 +147,7 @@ public abstract class AbstractRadioMedium extends RadioMedium {
         conn.getSource().setCurrentSignalStrength(SS_STRONG);
       }
       for (Radio dstRadio : conn.getDestinations()) {
-        if (conn.getSource().getCurrentSignalStrength() < SS_STRONG) {
+        if (dstRadio.getCurrentSignalStrength() < SS_STRONG) {
           dstRadio.setCurrentSignalStrength(SS_STRONG);
         }
       }
@@ -156,8 +156,8 @@ public abstract class AbstractRadioMedium extends RadioMedium {
     /* Set signal strength to weak on interfered */
     for (RadioConnection conn : conns) {
       for (Radio intfRadio : conn.getInterfered()) {
-        if (intfRadio.getCurrentSignalStrength() < SS_WEAK) {
-          intfRadio.setCurrentSignalStrength(SS_WEAK);
+        if (intfRadio.getCurrentSignalStrength() < SS_STRONG) {
+          intfRadio.setCurrentSignalStrength(SS_STRONG);
         }
         
         if (!intfRadio.isInterfered()) {
