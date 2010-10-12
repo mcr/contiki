@@ -468,6 +468,10 @@ public class LogListener extends VisPlugin {
     element.setText(filterTextField.getText());
     config.add(element);
 
+    if (formatTimeString) {
+    	element = new Element("formatted_time");
+    	config.add(element);
+    }
     if (backgroundColors) {
       element = new Element("coloring");
       config.add(element);
@@ -488,6 +492,9 @@ public class LogListener extends VisPlugin {
       } else if ("coloring".equals(name)) {
         backgroundColors = true;
         colorCheckbox.setSelected(true);
+      } else if ("formatted_time".equals(name)) {
+      	formatTimeString = true;
+      	recacheAllTimeStrings();
       }
     }
 
