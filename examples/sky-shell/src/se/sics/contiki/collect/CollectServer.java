@@ -312,7 +312,7 @@ public class CollectServer implements SerialConnectionListener {
             return data.getLight2();
           }
         },
-        new TimeChartPanel(this, NETWORK, "Neighbors (Over Time)", "Neighbor Count", "Time", "Neighbors") {
+        new TimeChartPanel(this, NETWORK, "Neighbors", "Neighbor Count", "Time", "Neighbors") {
           {
             ValueAxis axis = chart.getXYPlot().getRangeAxis();
             ((NumberAxis)axis).setAutoRangeIncludesZero(true);
@@ -321,6 +321,17 @@ public class CollectServer implements SerialConnectionListener {
           }
           protected double getSensorDataValue(SensorData data) {
             return data.getValue(SensorData.NUM_NEIGHBORS);
+          }
+        },
+        new TimeChartPanel(this, NETWORK, "Beacon Interval", "Beacon interval", "Time", "Interval (s)") {
+          {
+            ValueAxis axis = chart.getXYPlot().getRangeAxis();
+            ((NumberAxis)axis).setAutoRangeIncludesZero(true);
+            axis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+            setMaxItemCount(defaultMaxItemCount);
+          }
+          protected double getSensorDataValue(SensorData data) {
+            return data.getValue(SensorData.BEACON_INTERVAL);
           }
         },
         new TimeChartPanel(this, NETWORK, "Network Hops (Over Time)", "Network Hops", "Time", "Hops") {
