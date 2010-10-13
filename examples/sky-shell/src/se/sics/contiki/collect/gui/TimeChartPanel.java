@@ -92,6 +92,7 @@ public abstract class TimeChartPanel extends JPanel implements Visualizer {
     this.chartPanel = new ChartPanel(chart);
     this.chartPanel.setPreferredSize(new Dimension(500, 270));
     setBaseShapeVisible(true);
+    setMaxItemCount(server.getDefaultMaxItemCount());
     add(chartPanel, BorderLayout.CENTER);
   }
 
@@ -197,7 +198,7 @@ public abstract class TimeChartPanel extends JPanel implements Visualizer {
       int sensorDataCount = node.getSensorDataCount();
       if (sensorDataCount > maxItemCount) {
         int groupSize = sensorDataCount / maxItemCount;
-        if (sensorDataCount / groupSize > maxItemCount) {
+        if (sensorDataCount / groupSize >= maxItemCount) {
           groupSize++;
         }
         return groupSize;
