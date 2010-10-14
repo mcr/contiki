@@ -42,6 +42,7 @@ package se.sics.contiki.collect.gui;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -198,6 +199,7 @@ public class NodeInfoPanel extends JPanel implements Visualizer, Configurable {
     nodeModel = new NodeModel(columns);
     table = new JTable(nodeModel) {
       private static final long serialVersionUID = 1L;
+      private Font fontForAverage;
 
       protected JTableHeader createDefaultTableHeader() {
           return new JTableHeader(columnModel) {
@@ -210,6 +212,20 @@ public class NodeInfoPanel extends JPanel implements Visualizer, Configurable {
             }
           };
       }
+
+      public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int vColIndex) {
+       Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);
+       int row = convertRowIndexToModel(rowIndex);
+       if (row == nodeModel.getRowCount() - 1) {
+         if (fontForAverage == null) {
+           fontForAverage = c.getFont().deriveFont(Font.BOLD);
+         }
+         // Last line is average
+         c.setFont(fontForAverage);
+       }
+       return c;
+      }
+
     };
 
     // Do not sort column when clicking between the columns (resizing)
@@ -487,7 +503,7 @@ public class NodeInfoPanel extends JPanel implements Visualizer, Configurable {
   public static abstract class TableData extends AbstractAction {
     private static final long serialVersionUID = -3045755073722516926L;
 
-    private final static Node AVERAGE_NODE = new Node("Average");
+    private final static Node AVERAGE_NODE = new Node("Avg");
 
     public final String name;
     public final Class<?> dataClass;
