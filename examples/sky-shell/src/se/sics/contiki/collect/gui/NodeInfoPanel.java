@@ -407,7 +407,7 @@ public class NodeInfoPanel extends JPanel implements Visualizer, Configurable {
     }
     long sec = time % 60;
     sb.append(time / 60).append(" min, ");
-    if (sec < 9) {
+    if (sec < 10) {
       sb.append('0');
     }
     sb.append(sec).append(" sec");
