@@ -61,8 +61,12 @@ public class Node implements Comparable<Node> {
   private long lastActive;
 
   public Node(String nodeID) {
+    this(nodeID, nodeID);
+  }
+
+  public Node(String nodeID, String nodeName) {
     this.id = nodeID;
-    this.name = nodeID;
+    this.name = nodeName;
     sensorDataAggregator = new SensorDataAggregator(this);
   }
 
