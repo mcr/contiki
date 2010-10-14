@@ -176,8 +176,12 @@ packet_sent(void *ptr, int status, int num_transmissions)
       free_packet(q);
       mac_call_sent_callback(sent, cptr, status, num_tx);
     }
-  } else if(status == MAC_TX_OK) {
-    PRINTF("csma: rexmit ok %d\n", q->transmissions);
+  } else  {
+    if(status == MAC_TX_OK) {
+      PRINTF("csma: rexmit ok %d\n", q->transmissions);
+    } else {
+      PRINTF("csma: rexmit failed %d: %d\n", q->transmissions, status);
+    }
     free_packet(q);
     mac_call_sent_callback(sent, cptr, status, num_tx);
   }
