@@ -60,6 +60,9 @@
 #define EMAIL_CONF_HEIGHT 20
 #define EMAIL_CONF_ERASE   0
 
+#define FTP_CONF_WIDTH  38
+#define FTP_CONF_HEIGHT 22
+
 #define IRC_CONF_WIDTH  80
 #define IRC_CONF_HEIGHT 24
 
