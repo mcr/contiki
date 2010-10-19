@@ -331,6 +331,20 @@ public class TimeLine extends VisPlugin {
       removeMote(m);
     }
   };
+  private Action removeAllOtherMotesAction = new AbstractAction() {
+  	private static final long serialVersionUID = 2924285037480429045L;
+  	public void actionPerformed(ActionEvent e) {
+  		JComponent b = (JComponent) e.getSource();
+  		Mote m = (Mote) b.getClientProperty("mote");
+  		MoteEvents[] mes = allMoteEvents.toArray(new MoteEvents[0]);
+  		for (MoteEvents me: mes) {
+  			if (me.mote == m) {
+  				continue;
+  			}
+  			removeMote(me.mote);
+  		}
+  	}
+  };
   private Action sortMoteAction = new AbstractAction() {
     private static final long serialVersionUID = 621116674700872058L;
     public void actionPerformed(ActionEvent e) {
@@ -1790,6 +1804,9 @@ public class TimeLine extends VisPlugin {
       final JMenuItem removeItem = new JMenuItem(removeMoteAction);
       removeItem.setText("Remove from timeline");
       popupMenu.add(removeItem);
+      final JMenuItem keepMoteOnlyItem = new JMenuItem(removeAllOtherMotesAction);
+      keepMoteOnlyItem.setText("Remove all motes from timeline but");
+      popupMenu.add(keepMoteOnlyItem);
 
       addMouseListener(new MouseAdapter() {
         public void mouseClicked(MouseEvent e) {
@@ -1805,6 +1822,8 @@ public class TimeLine extends VisPlugin {
           topItem.putClientProperty("mote", m);
           removeItem.setText("Remove from timeline: " + m);
           removeItem.putClientProperty("mote", m);
+          keepMoteOnlyItem.setText("Remove all motes from timeline but: " + m);
+          keepMoteOnlyItem.putClientProperty("mote", m);
           popupMenu.show(MoteRuler.this, e.getX(), e.getY());
         }
       });
