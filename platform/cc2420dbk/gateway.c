@@ -78,7 +78,7 @@ static struct uip_fw_netif slipif =
 {UIP_FW_NETIF(0,0,0,0, 255,255,255,255, slip_send)};
 
 /* Radio stuff in network byte order. */
-static u16_t panId = HTONS(0x2024);
+static u16_t panId = UIP_HTONS(0x2024);
 
 #ifndef RF_CHANNEL
 #define RF_CHANNEL              15

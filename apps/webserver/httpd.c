@@ -336,7 +336,7 @@ httpd_appcall(void *state)
 void
 httpd_init(void)
 {
-  tcp_listen(HTONS(80));
+  tcp_listen(UIP_HTONS(80));
   memb_init(&conns);
   httpd_cgi_init();
 }
@@ -362,7 +362,7 @@ httpd_sprint_ip6(uip_ip6addr_t addr, char * result)
       i += zerocnt;
       numprinted += zerocnt;
     } else {
-      result += sprintf(result, "%x", (unsigned int)(ntohs(addr.u16[i])));
+      result += sprintf(result, "%x", (unsigned int)(uip_ntohs(addr.u16[i])));
       i++;
       numprinted++;
     }

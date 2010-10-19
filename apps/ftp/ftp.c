@@ -436,7 +436,7 @@ PROCESS_THREAD(ftp_process, ev, data)
       /* Either found a hostname, or not. */
       if((char *)data != NULL &&
 	 (ipaddrptr = resolv_lookup((char *)data)) != NULL) {
-	connection = ftpc_connect(ipaddrptr, HTONS(21));
+	connection = ftpc_connect(ipaddrptr, UIP_HTONS(21));
 	show_statustext("Connecting to ", hostname);
       } else {
 	show_statustext("Host not found: ", hostname);
@@ -515,15 +515,15 @@ PROCESS_THREAD(ftp_process, ev, data)
 	    show_statustext("Resolving host ", hostname);
 	    break;
 	  }
-	  connection = ftpc_connect(ipaddrptr, HTONS(21));
+	  connection = ftpc_connect(ipaddrptr, UIP_HTONS(21));
 	  show_statustext("Connecting to ", hostname);
 	} else {
-	  connection = ftpc_connect(&ipaddr, HTONS(21));
+	  connection = ftpc_connect(&ipaddr, UIP_HTONS(21));
 	  show_statustext("Connecting to ", hostname);
 	}
 #else /* UIP_UDP */
 	uiplib_ipaddrconv(hostname, &ipaddr);
-	connection = ftpc_connect(&ipaddr, HTONS(21));
+	connection = ftpc_connect(&ipaddr, UIP_HTONS(21));
 	show_statustext("Connecting to ", hostname);
 #endif /* UIP_UDP */
       } 

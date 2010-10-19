@@ -39,8 +39,8 @@
 #include <stdio.h>
 
 /* Avoid 'conflicting types' errors. */
-#define htonl
-#define htons
+#define uip_htonl
+#define uip_htons
 
 #include "contiki-net.h"
 

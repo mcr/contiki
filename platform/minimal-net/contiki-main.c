@@ -80,7 +80,7 @@ sprint_ip6(uip_ip6addr_t addr)
       i += zerocnt;
       numprinted += zerocnt;
     } else {
-      result += sprintf(result, "%x", (unsigned int)(ntohs(addr.u16[i])));
+      result += sprintf(result, "%x", (unsigned int)(uip_ntohs(addr.u16[i])));
       i++;
       numprinted++;
     }

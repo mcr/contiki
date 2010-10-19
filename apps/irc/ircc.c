@@ -472,7 +472,7 @@ struct ircc_state *
 ircc_connect(struct ircc_state *s, char *servername, uip_ipaddr_t *ipaddr,
 	     char *nick)
 {
-  s->conn = tcp_connect((uip_ipaddr_t *)ipaddr, HTONS(PORT), s);
+  s->conn = tcp_connect((uip_ipaddr_t *)ipaddr, UIP_HTONS(PORT), s);
   if(s->conn == NULL) {
     return NULL;
   }

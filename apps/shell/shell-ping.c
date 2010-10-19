@@ -113,7 +113,7 @@ send_ping(uip_ipaddr_t *dest_addr)
   UIP_ICMP_BUF->type = ICMP_ECHO;
   UIP_ICMP_BUF->icode = 0;
   UIP_ICMP_BUF->id = 0xadad;
-  UIP_ICMP_BUF->seqno = htons(seqno++);
+  UIP_ICMP_BUF->seqno = uip_htons(seqno++);
   
   uip_len = UIP_ICMPH_LEN + UIP_IPH_LEN + PING_DATALEN;
   UIP_IP_BUF->len[0] = (u8_t)((uip_len) >> 8);

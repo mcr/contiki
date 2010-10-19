@@ -413,7 +413,7 @@ uip_fw_forward(void)
 
 #ifdef AODV_COMPLIANCE
 #define udp ((struct uip_udpip_hdr *)&uip_buf[UIP_LLH_LEN])
-  if(udp->proto == UIP_PROTO_UDP && udp->destport == HTONS(UAODV_UDPPORT)) {
+  if(udp->proto == UIP_PROTO_UDP && udp->destport == UIP_HTONS(UAODV_UDPPORT)) {
     return UIP_FW_LOCAL;
   }
 #endif
@@ -466,10 +466,10 @@ uip_fw_forward(void)
   BUF->ttl = BUF->ttl - 1;
   
   /* Update the IP checksum. */
-  if(BUF->ipchksum >= HTONS(0xffff - 0x0100)) {
-    BUF->ipchksum = BUF->ipchksum + HTONS(0x0100) + 1;
+  if(BUF->ipchksum >= UIP_HTONS(0xffff - 0x0100)) {
+    BUF->ipchksum = BUF->ipchksum + UIP_HTONS(0x0100) + 1;
   } else {
-    BUF->ipchksum = BUF->ipchksum + HTONS(0x0100);
+    BUF->ipchksum = BUF->ipchksum + UIP_HTONS(0x0100);
   }
 
   if(uip_len > 0) {

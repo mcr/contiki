@@ -51,8 +51,8 @@ PROCESS_THREAD(udprecv_process, ev, data)
   {
     uip_ipaddr_t any;
     uip_ipaddr(&any, 0,0,0,0);
-    c = udp_new(&any, HTONS(0), NULL);
-    uip_udp_bind(c, HTONS(4321));
+    c = udp_new(&any, UIP_HTONS(0), NULL);
+    uip_udp_bind(c, UIP_HTONS(4321));
   }
   
   while(1) {

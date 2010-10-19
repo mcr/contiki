@@ -179,7 +179,7 @@ PROCESS_THREAD(telnetd_process, ev, data)
 {
   PROCESS_BEGIN();
   
-  tcp_listen(HTONS(23));
+  tcp_listen(UIP_HTONS(23));
   buf_init(&buf);
 
   shell_init();

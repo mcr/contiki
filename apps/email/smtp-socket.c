@@ -213,7 +213,7 @@ smtp_send(char *to, char *cc, char *from, char *subject,
 {
   struct uip_conn *conn;
 
-  conn = tcp_connect(&smtpserver, HTONS(25), NULL);
+  conn = tcp_connect(&smtpserver, UIP_HTONS(25), NULL);
   if(conn == NULL) {
     return 0;
   }

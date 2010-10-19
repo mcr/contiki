@@ -355,12 +355,12 @@ PROCESS_THREAD(servreg_hack_process, ev, data)
   PROCESS_BEGIN();
 
   /* Create outbound UDP connection. */
-  outconn = udp_broadcast_new(HTONS(UDP_PORT), NULL);
-  udp_bind(outconn, HTONS(UDP_PORT));
+  outconn = udp_broadcast_new(UIP_HTONS(UDP_PORT), NULL);
+  udp_bind(outconn, UIP_HTONS(UDP_PORT));
 
   /* Create inbound UDP connection. */
-  inconn = udp_new(NULL, HTONS(UDP_PORT), NULL);
-  udp_bind(inconn, HTONS(UDP_PORT));
+  inconn = udp_new(NULL, UIP_HTONS(UDP_PORT), NULL);
+  udp_bind(inconn, UIP_HTONS(UDP_PORT));
 
   etimer_set(&periodic, PERIOD_TIME);
   etimer_set(&sendtimer, random_rand() % (PERIOD_TIME));

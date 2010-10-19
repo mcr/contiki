@@ -96,7 +96,7 @@ PROCESS_THREAD(radio_test_process, ev, data)
   other.led = LEDS_GREEN;
   flash.led = LEDS_RED;
 
-  conn = udp_broadcast_new(HTONS(PORT), NULL);
+  conn = udp_broadcast_new(UIP_HTONS(PORT), NULL);
   etimer_set(&send_timer, CLOCK_SECOND);
 
   while(1) {

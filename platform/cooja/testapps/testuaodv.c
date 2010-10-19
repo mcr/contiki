@@ -56,11 +56,11 @@ PROCESS_THREAD(test_uaodv_process, ev, data)
   printf("uIP uAODV test process started\n");
 
   uip_ipaddr(&addr, 0,0,0,0);
-  in_conn = udp_new(&addr, HTONS(0), NULL);
-  uip_udp_bind(in_conn, HTONS(COOJA_PORT));
+  in_conn = udp_new(&addr, UIP_HTONS(0), NULL);
+  uip_udp_bind(in_conn, UIP_HTONS(COOJA_PORT));
 
   uip_ipaddr(&addr, 10,10,10,4);
-  out_conn = udp_new(&addr, HTONS(COOJA_PORT), NULL);
+  out_conn = udp_new(&addr, UIP_HTONS(COOJA_PORT), NULL);
 
   button_sensor.configure(SENSORS_ACTIVE, 1);
 

@@ -55,7 +55,7 @@ rawpacket_udp_init(void)
 struct rawpacket_conn *
 rawpacket_setup(int id)
 {
-  return (struct rawpacket_conn *)udp_broadcast_new(HTONS(PORT + id), NULL);
+  return (struct rawpacket_conn *)udp_broadcast_new(UIP_HTONS(PORT + id), NULL);
 }
 /*---------------------------------------------------------------------------*/
 void

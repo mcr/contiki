@@ -1082,7 +1082,7 @@ PROCESS_THREAD(ctk_vncserver_process, ev, data)
   
   PROCESS_BEGIN();
 
-  tcp_listen(HTONS(5900));
+  tcp_listen(UIP_HTONS(5900));
   
   for(i = 0; i < CTK_VNCSERVER_CONF_NUMCONNS; ++i) {
     conns[i].state = VNC_DEALLOCATED;

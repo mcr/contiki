@@ -86,11 +86,11 @@ pollhandler(void)
     
     /* A frame was avaliable (and is now read into the uip_buf), so
        we process it. */
-    if(BUF->type == HTONS(UIP_ETHTYPE_IP)) {
+    if(BUF->type == UIP_HTONS(UIP_ETHTYPE_IP)) {
       uip_arp_ipin();
       uip_len -= sizeof(struct uip_eth_hdr);
       tcpip_input();
-    } else if(BUF->type == HTONS(UIP_ETHTYPE_ARP)) {
+    } else if(BUF->type == UIP_HTONS(UIP_ETHTYPE_ARP)) {
       uip_arp_arpin();
       /* If the above function invocation resulted in data that
          should be sent out on the network, the global variable

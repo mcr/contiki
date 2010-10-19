@@ -252,7 +252,7 @@ PROCESS_THREAD(slip_process, ev, data)
 	u16_t nid = ip_id++;
 	BUF->ipid[0] = nid >> 8;
 	BUF->ipid[1] = nid;
-	nid = htons(nid);
+	nid = uip_htons(nid);
 	nid = ~nid;		/* negate */
 	BUF->ipchksum += nid;	/* add */
 	if(BUF->ipchksum < nid) { /* 1-complement overflow? */

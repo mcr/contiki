@@ -95,11 +95,11 @@ PROCESS_THREAD(shell_udpsend_process, ev, data)
   port = shell_strtolong(next, &nextptr);
 
   uiplib_ipaddrconv(server, &serveraddr);
-  udpconn = udp_new(&serveraddr, htons(port), NULL);
+  udpconn = udp_new(&serveraddr, uip_htons(port), NULL);
   
   if(next != nextptr) {
     local_port = shell_strtolong(nextptr, &nextptr);
-    udp_bind(udpconn, htons(local_port));
+    udp_bind(udpconn, uip_htons(local_port));
   }
   running = 1;
 

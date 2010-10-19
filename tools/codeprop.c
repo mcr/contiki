@@ -76,7 +76,7 @@ main(int argc, char **argv) {
   bzero((char *) &sa, sizeof(sa));
   sa.sin_family = AF_INET;
   sa.sin_addr.s_addr = inet_addr(ip_addr);
-  sa.sin_port = htons(port);
+  sa.sin_port = uip_htons(port);
 
   /* Connect the socket to the remote host. */
   if(connect(s, (struct sockaddr *)&sa, sizeof(sa)) < 0) {

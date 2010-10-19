@@ -438,7 +438,7 @@ lcp_task(u8_t *buffer)
 #endif
       /* Write length */
       t = bptr - buffer;
-      pkt->len = htons(t);			/* length here -  code and ID + */
+      pkt->len = uip_htons(t);			/* length here -  code and ID + */
       
       DEBUG1((" len %d\n",t));
       

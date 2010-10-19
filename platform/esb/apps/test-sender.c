@@ -50,7 +50,7 @@ PROCESS_THREAD(test_sender_process, ev, data)
 
   PROCESS_BEGIN();
 
-  conn = udp_broadcast_new(HTONS(PORT), NULL);
+  conn = udp_broadcast_new(UIP_HTONS(PORT), NULL);
   etimer_set(&timer, CLOCK_SECOND * 2);
 
   while(1) {

@@ -130,10 +130,10 @@ _upper_layer_chksum_call:
 
 	ld	a, h
 	or	a, l
-	jr	nz, _upper_layer_htons
+	jr	nz, _upper_layer_uip_htons
 	ld	hl, #0xffff
 	jr	_upper_layer_ret
-_upper_layer_htons:
+_upper_layer_uip_htons:
 	ld	a, l
 	ld	l, h
 	ld	h, a

@@ -108,7 +108,7 @@ telnet_connect(struct telnet_state *s, uip_ipaddr_t *addr, u16_t port)
 {
   struct uip_conn *conn;
   
-  conn = tcp_connect(addr, htons(port), s);
+  conn = tcp_connect(addr, uip_htons(port), s);
   if(conn == NULL) {
     return NULL;
   }

@@ -54,7 +54,7 @@ PROCESS_THREAD(test_process, ev, data)
 
   uip_ip6addr(&ip6addr, 0xfc00,0,0,0,0,0,0,0x231);  
 
-  tcp_connect(&ip6addr, HTONS(7), NULL);
+  tcp_connect(&ip6addr, UIP_HTONS(7), NULL);
   
   while(1) {
     PROCESS_WAIT_EVENT();
@@ -67,7 +67,7 @@ PROCESS_THREAD(test_tcpip_process, ev, data)
 {
   PROCESS_BEGIN();
 
-  tcp_listen(HTONS(800));
+  tcp_listen(UIP_HTONS(800));
 
   while(1) {
     PROCESS_WAIT_EVENT_UNTIL(ev == tcpip_event);

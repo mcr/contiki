@@ -233,7 +233,7 @@ PROCESS_THREAD(twitter_process, ev, data)
 
   
   /* Open a TCP connection to port 80 on twitter.com */
-  conn = tcp_connect(&s->addr, htons(80), s);
+  conn = tcp_connect(&s->addr, uip_htons(80), s);
   if(conn == NULL) {
     PRINTF("Could not open TCP connection\n");
     /*    memb_free(&conns, s);*/
