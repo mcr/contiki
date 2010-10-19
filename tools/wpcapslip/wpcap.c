@@ -66,10 +66,6 @@
 
 #include <err.h>
 
-/* Avoid 'conflicting types' errors. */
-#define uip_htonl
-#define uip_htons
-
 
 #define PROGRESS(x)
 

@@ -38,10 +38,6 @@
 #include <winsock2.h>
 #include <stdio.h>
 
-/* Avoid 'conflicting types' errors. */
-#define uip_htonl
-#define uip_htons
-
 #include "contiki-net.h"
 
 #include "sys/clock.h"

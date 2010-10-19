@@ -54,10 +54,6 @@
 #define PRINTF(...)
 #endif
 
-/* Avoid 'conflicting types' errors. */
-#define uip_htonl
-#define uip_htons
-
 #include "contiki-net.h"
 #include "sys/log.h"
 
