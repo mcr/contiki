@@ -129,6 +129,13 @@ exit_process(struct process *p, struct process *fromprocess)
 
   PRINTF("process: exit_process '%s'\n", PROCESS_NAME_STRING(p));
 
+  /* Make sure the process is in the process list before we try to
+     exit it. */
+  for(q = process_list; q != p && q != NULL; q = q->next);
+  if(q == NULL) {
+    return;
+  }
+
   if(process_is_running(p)) {
     /* Process was running */
     p->state = PROCESS_STATE_NONE;
@@ -150,7 +157,7 @@ exit_process(struct process *p, struct process *fromprocess)
       p->thread(&p->pt, PROCESS_EVENT_EXIT, NULL);
     }
   }
-  
+
   if(p == process_list) {
     process_list = process_list->next;
   } else {
