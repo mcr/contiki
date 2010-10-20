@@ -103,7 +103,7 @@ PROCESS_THREAD(sky_shell_process, ev, data)
   /*  shell_checkpoint_init();*/
   /*  shell_sendtest_init();*/
 
-  collect_view_init();
+  shell_collect_view_init();
 
 #if DEBUG_SNIFFERS
   rime_sniffer_add(&s);
