@@ -39,69 +39,50 @@
  */
 
 #include "contiki.h"
-#include "net/rime/collect-neighbor.h"
-
-#include "net/rime.h"
-
-#include "net/rime/timesynch.h"
-
+#include "shell.h"
 #include "collect-view.h"
+#include "net/rime/broadcast-announcement.h"
 
 /*---------------------------------------------------------------------------*/
-void
-collect_view_construct_message(struct collect_view_data_msg *msg,
-                               rimeaddr_t *parent,
-                               uint16_t parent_etx,
-                               uint16_t parent_rtmetric,
-                               uint16_t num_neighbors,
-                               uint16_t beacon_interval)
+PROCESS(collect_view_data_process, "collect-view-data");
+SHELL_COMMAND(collect_view_data_command,
+	      "collect-view-data",
+	      "collect-view-data: sensor data, power consumption, network stats",
+	      &collect_view_data_process);
+/*---------------------------------------------------------------------------*/
+PROCESS_THREAD(collect_view_data_process, ev, data)
 {
-  static unsigned long last_cpu, last_lpm, last_transmit, last_listen;
-  unsigned long cpu, lpm, transmit, listen;
+  struct collect_view_data_msg msg;
+  struct collect_neighbor *n;
+  uint16_t parent_etx, parent_rtmetric;
+  uint16_t num_neighbors;
+  uint16_t beacon_interval;
+  
+  PROCESS_BEGIN();
 
-
-  msg->len = sizeof(struct collect_view_data_msg) / sizeof(uint16_t);
-  msg->clock = clock_time();
-#if TIMESYNCH_CONF_ENABLED
-  msg->timesynch_time = timesynch_time();
-#else /* TIMESYNCH_CONF_ENABLED */
-  msg->timesynch_time = 0;
-#endif /* TIMESYNCH_CONF_ENABLED */
-
-  energest_flush();
-
-  cpu = energest_type_time(ENERGEST_TYPE_CPU) - last_cpu;
-  lpm = energest_type_time(ENERGEST_TYPE_LPM) - last_lpm;
-  transmit = energest_type_time(ENERGEST_TYPE_TRANSMIT) - last_transmit;
-  listen = energest_type_time(ENERGEST_TYPE_LISTEN) - last_listen;
-
-  /* Make sure that the values are within 16 bits. If they are larger,
-     we scale them down to fit into 16 bits. */
-  while(cpu >= 65536ul || lpm >= 65536ul ||
-	transmit >= 65536ul || listen >= 65536ul) {
-    cpu /= 2;
-    lpm /= 2;
-    transmit /= 2;
-    listen /= 2;
+  n = collect_neighbor_list_find(&shell_collect_conn.neighbor_list,
+                                 &shell_collect_conn.parent);
+  if(n != NULL) {
+    parent_etx = collect_neighbor_link_estimate(n);
+    parent_rtmetric = n->rtmetric;
+  } else {
+    parent_etx = 0;
+    parent_rtmetric = 0;
   }
+  num_neighbors = collect_neighbor_list_num(&shell_collect_conn.neighbor_list);
+  beacon_interval = broadcast_announcement_beacon_interval() / CLOCK_SECOND;
 
-  msg->cpu = cpu;
-  msg->lpm = lpm;
-  msg->transmit = transmit;
-  msg->listen = listen;
+  collect_view_construct_message(&msg, &shell_collect_conn.parent,
+                                 parent_etx, parent_rtmetric,
+                                 num_neighbors, beacon_interval);
+  shell_output(&collect_view_data_command, &msg, sizeof(msg), "", 0);
 
-  last_cpu = energest_type_time(ENERGEST_TYPE_CPU);
-  last_lpm = energest_type_time(ENERGEST_TYPE_LPM);
-  last_transmit = energest_type_time(ENERGEST_TYPE_TRANSMIT);
-  last_listen = energest_type_time(ENERGEST_TYPE_LISTEN);
-
-  rimeaddr_copy(&msg->parent, parent);
-  msg->parent_etx = parent_etx;
-  msg->parent_rtmetric = parent_rtmetric;
-  msg->num_neighbors = num_neighbors;
-  msg->beacon_interval = beacon_interval;
-
-  memset(msg->sensors, 0, sizeof(msg->sensors));
-  collect_view_arch_read_sensors(msg);
+  PROCESS_END();
+}
+/*---------------------------------------------------------------------------*/
+void
+shell_collect_view_init(void)
+{
+  shell_register_command(&collect_view_data_command);
 }
 /*---------------------------------------------------------------------------*/
