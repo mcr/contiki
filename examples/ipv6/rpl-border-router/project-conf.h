@@ -36,7 +36,7 @@
 #define UIP_FALLBACK_INTERFACE rpl_interface
 
 #undef QUEUEBUF_CONF_NUM
-#define QUEUEBUF_CONF_NUM          6
+#define QUEUEBUF_CONF_NUM          4
 
 #undef UIP_CONF_BUFFER_SIZE
 #define UIP_CONF_BUFFER_SIZE    140
