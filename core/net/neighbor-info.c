@@ -164,3 +164,11 @@ neighbor_info_subscribe(neighbor_info_subscriber_t s)
   return 0;
 }
 /*---------------------------------------------------------------------------*/
+uint8_t
+neighbor_info_get_etx(const rimeaddr_t *addr)
+{
+  uint8_t *etxp;
+  etxp = (uint8_t *)neighbor_attr_get_data(&etx, addr);
+  return etxp == NULL ? 0 : etxp;
+}
+/*---------------------------------------------------------------------------*/
