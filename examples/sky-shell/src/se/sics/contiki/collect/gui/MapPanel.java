@@ -470,9 +470,10 @@ public class MapPanel extends JPanel implements Configurable, Visualizer, Action
           width - legendWidth - 15, 10 + fnHeight / 2);
     }
 
-    for (MapNode n : getNodeList()) {
-      if (!isMap || !hideNetwork) {
-        g.setColor(LINK_COLOR);
+    MapNode[] nodes = getNodeList();
+    if (!isMap || !hideNetwork) {
+      g.setColor(LINK_COLOR);
+      for (MapNode n : nodes) {
         for (int j = 0, mu = n.node.getLinkCount(); j < mu; j++) {
           Link link = n.node.getLink(j);
           MapNode linkNode = addMapNode(link.node);
@@ -499,7 +500,9 @@ public class MapPanel extends JPanel implements Configurable, Visualizer, Action
           }
         }
       }
+    }
 
+    for (MapNode n : nodes) {
       n.paint(g, n.x, n.y);
 
       g.setColor(Color.black);
