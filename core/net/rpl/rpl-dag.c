@@ -570,10 +570,11 @@ rpl_process_parent_event(rpl_dag_t *dag, rpl_parent_t *p)
       dag->min_rank = dag->rank;
     }
     PRINTF("RPL: Moving in the DAG from rank %hu to %hu\n",
-	   old_rank, dag->rank);
-    PRINTF("RPL: The new preferred parent is ");
+	   old_rank, DAG_RANK(dag->rank));
+    PRINTF("RPL: The preferred parent is ");
     PRINT6ADDR(&dag->preferred_parent->addr);
-    PRINTF(" (rank %u)\n", (unsigned)(dag->preferred_parent->rank));
+    PRINTF(" (rank %u)\n",
+           (unsigned)DAG_RANK(dag->preferred_parent->rank, dag));
     rpl_reset_dio_timer(dag, 1);
   }
 
