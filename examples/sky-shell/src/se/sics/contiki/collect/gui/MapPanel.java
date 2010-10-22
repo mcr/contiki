@@ -55,13 +55,17 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JFormattedTextField;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -131,6 +135,8 @@ public class MapPanel extends JPanel implements Configurable, Visualizer, Action
   private int layoutRepel = 100;
   private int layoutAttract = 50;
   private int layoutGravity = 1;
+
+  private double etxFactor = 1.0;
 
   private boolean isLayoutActive = true;
   private boolean hideNetwork = false;
@@ -212,8 +218,19 @@ public class MapPanel extends JPanel implements Configurable, Visualizer, Action
       });
       configPanel.add(slider);
 
-      add(configPanel);
+      final JFormattedTextField etxField = new JFormattedTextField(new Double(etxFactor));
+      etxField.setBorder(BorderFactory.createTitledBorder("ETX factor"));
+      etxField.setColumns(5);
+      etxField.addPropertyChangeListener("value", new PropertyChangeListener() {
+        public void propertyChange(PropertyChangeEvent evt) {
+          etxFactor = ((Number)etxField.getValue()).doubleValue();
+          repaint();
+        }
+      });
+      configPanel.add(etxField);
+
       configPanel.setVisible(false);
+      add(configPanel);
 
       addComponentListener(new ComponentAdapter() {
         public void componentResized(ComponentEvent ev) {
@@ -477,7 +494,7 @@ public class MapPanel extends JPanel implements Configurable, Visualizer, Action
               dy += fnHeight - fnDescent;
             }
             g.drawString(
-                Double.toString(((int) (link.getETX() * 100 + 0.5)) / 100.0),
+                Double.toString(((int) (link.getETX() * etxFactor * 100 + 0.5)) / 100.0),
                 dx, dy);
           }
         }
@@ -563,7 +580,7 @@ public class MapPanel extends JPanel implements Configurable, Visualizer, Action
         double vy = n2.y - n.y;
         double dist = Math.sqrt(vx * vx + vy * vy);
         dist = dist == 0 ? 0.00001 : dist;
-        double etx = link.getETX();
+        double etx = link.getETX() * etxFactor;
         if (etx > 5) etx = 5;
         double factor = (etx * layoutAttract - dist) / (dist * 3);
         double dx = factor * vx;
