@@ -43,6 +43,10 @@
 #define CTK_CONF_WIDGETUP_KEY     0x01	/* Ctrl-A */
 #define CTK_CONF_WIDGETDOWN_KEY   '\t'	/* Tab or Ctrl-I */
 
+#define cfs_opendir(dir, name)  0
+#define cfs_readdir(dir, entry) -1
+#define cfs_closedir(dir)
+
 #define textcolor(color) COLOR_WHITE
 
 #define BORDERCOLOR COLOR_BLACK

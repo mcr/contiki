@@ -33,7 +33,8 @@
 # $Id$
 #
 
-CONTIKI_SOURCEFILES += pfs.S
+CONTIKI_SOURCEFILES        += cfs-posix-dir.c
+CONTIKI_TARGET_SOURCEFILES += pfs.S
 
 CONTIKI_CPU = $(CONTIKI)/cpu/6502
 include $(CONTIKI_CPU)/Makefile.6502

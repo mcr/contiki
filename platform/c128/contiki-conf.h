@@ -46,6 +46,10 @@
 #define MOUSE_CONF_XTOC(x) ((x) / 4)
 #define MOUSE_CONF_YTOC(y) ((y) / 8)
 
+#define cfs_opendir(dir, name)  0
+#define cfs_readdir(dir, entry) -1
+#define cfs_closedir(dir)
+
 #define BORDERCOLOR       COLOR_BLACK
 #define SCREENCOLOR       COLOR_BLACK
 #define BACKGROUNDCOLOR   COLOR_BLACK
