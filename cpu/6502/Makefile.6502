@@ -39,7 +39,7 @@ endif
 
 all: cs8900a.eth lan91c96.eth
 
-CONTIKI_TARGET_DIRS = . lib sys
+CONTIKI_TARGET_DIRS = . lib sys cfs
 CONTIKI_CPU_DIRS    = . lib sys ctk net
 
 CONTIKI_TARGET_SOURCEFILES += contiki-main.c
