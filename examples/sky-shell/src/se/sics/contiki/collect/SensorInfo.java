@@ -70,7 +70,7 @@ public interface SensorInfo {
   public static final int TIME_LISTEN = 14;
   public static final int BEST_NEIGHBOR = 15;
   public static final int BEST_NEIGHBOR_ETX = 16;
-  public static final int BEST_NEIGHBOR_RTMETRIC = 17;
+  public static final int RTMETRIC = 17;
   public static final int NUM_NEIGHBORS = 18;
   public static final int BEACON_INTERVAL = 19;
   public static final int BATTERY_VOLTAGE = 20;

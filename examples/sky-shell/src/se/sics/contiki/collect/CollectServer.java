@@ -359,7 +359,7 @@ public class CollectServer implements SerialConnectionListener {
             axis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
           }
           protected double getSensorDataValue(SensorData data) {
-            return data.getValue(SensorData.BEST_NEIGHBOR_RTMETRIC) + data.getBestNeighborETX();
+            return data.getValue(SensorData.RTMETRIC);
           }
         },
         new TimeChartPanel(this, NETWORK, "ETX (Over Time)", "ETX to Next Hop", "Time", "ETX") {
