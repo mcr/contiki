@@ -60,9 +60,13 @@
 #define XMAC_CONF_COMPOWER               1
 #define CXMAC_CONF_COMPOWER              1
 
+#ifndef COLLECT_NEIGHBOR_CONF_MAX_COLLECT_NEIGHBORS
 #define COLLECT_NEIGHBOR_CONF_MAX_COLLECT_NEIGHBORS     32
+#endif /* COLLECT_NEIGHBOR_CONF_MAX_COLLECT_NEIGHBORS */
 
+#ifndef QUEUEBUF_CONF_NUM
 #define QUEUEBUF_CONF_NUM                16
+#endif /* QUEUEBUF_CONF_NUM */
 
 #endif /* WITH_UIP6 */
 
@@ -108,8 +112,12 @@
 #endif /* UIP_CONF_IPV6_RPL */
 
 /* configure number of neighbors and routes */
+#ifndef UIP_CONF_DS6_NBR_NBU
 #define UIP_CONF_DS6_NBR_NBU     30
+#endif /* UIP_CONF_DS6_NBR_NBU */
+#ifndef UIP_CONF_DS6_ROUTE_NBU
 #define UIP_CONF_DS6_ROUTE_NBU   30
+#endif /* UIP_CONF_DS6_ROUTE_NBU */
 
 #define UIP_CONF_ND6_SEND_RA		0
 #define UIP_CONF_ND6_REACHABLE_TIME     600000
