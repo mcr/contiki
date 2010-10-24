@@ -40,19 +40,18 @@
 
 #include "contiki.h"
 #include "net/rime/collect-neighbor.h"
-
 #include "net/rime.h"
-
 #include "net/rime/timesynch.h"
-
 #include "collect-view.h"
+
+#include <string.h>
 
 /*---------------------------------------------------------------------------*/
 void
 collect_view_construct_message(struct collect_view_data_msg *msg,
                                rimeaddr_t *parent,
                                uint16_t parent_etx,
-                               uint16_t parent_rtmetric,
+                               uint16_t current_rtmetric,
                                uint16_t num_neighbors,
                                uint16_t beacon_interval)
 {
@@ -95,9 +94,9 @@ collect_view_construct_message(struct collect_view_data_msg *msg,
   last_transmit = energest_type_time(ENERGEST_TYPE_TRANSMIT);
   last_listen = energest_type_time(ENERGEST_TYPE_LISTEN);
 
-  rimeaddr_copy(&msg->parent, parent);
+  memcpy(&msg->parent, &parent->u8[RIMEADDR_SIZE - 2], 2);
   msg->parent_etx = parent_etx;
-  msg->parent_rtmetric = parent_rtmetric;
+  msg->current_rtmetric = current_rtmetric;
   msg->num_neighbors = num_neighbors;
   msg->beacon_interval = beacon_interval;
 
