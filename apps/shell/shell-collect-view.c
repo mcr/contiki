@@ -54,7 +54,7 @@ PROCESS_THREAD(collect_view_data_process, ev, data)
 {
   struct collect_view_data_msg msg;
   struct collect_neighbor *n;
-  uint16_t parent_etx, parent_rtmetric;
+  uint16_t parent_etx;
   uint16_t num_neighbors;
   uint16_t beacon_interval;
   
@@ -64,16 +64,14 @@ PROCESS_THREAD(collect_view_data_process, ev, data)
                                  &shell_collect_conn.parent);
   if(n != NULL) {
     parent_etx = collect_neighbor_link_estimate(n);
-    parent_rtmetric = n->rtmetric;
   } else {
     parent_etx = 0;
-    parent_rtmetric = 0;
   }
   num_neighbors = collect_neighbor_list_num(&shell_collect_conn.neighbor_list);
   beacon_interval = broadcast_announcement_beacon_interval() / CLOCK_SECOND;
 
   collect_view_construct_message(&msg, &shell_collect_conn.parent,
-                                 parent_etx, parent_rtmetric,
+                                 parent_etx, shell_collect_conn.rtmetric,
                                  num_neighbors, beacon_interval);
   shell_output(&collect_view_data_command, &msg, sizeof(msg), "", 0);
 
