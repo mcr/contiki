@@ -400,6 +400,10 @@ public abstract class MspMoteType implements MoteType {
 
     /* Fetch all executable addresses */
     ArrayList<Integer> addresses = elf.getDebug().getExecutableAddresses();
+    if (addresses == null) {
+      // No debug information is available
+      return fileToLineHash;
+    }
 
     for (int address: addresses) {
       DebugInfo info = elf.getDebugInfo(address);
