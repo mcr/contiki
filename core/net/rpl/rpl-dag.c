@@ -117,16 +117,17 @@ remove_parents(rpl_dag_t *dag, rpl_rank_t minimum_rank)
 static int
 should_send_dao(rpl_dag_t *dag, rpl_dio_t *dio, rpl_parent_t *p)
 {
-  return 1;
-  return dio->dst_adv_supported && dio->dst_adv_trigger &&
-         dio->dtsn > p->dtsn && p == dag->preferred_parent;
+  return dio->dst_adv_supported;
+/*  return dio->dst_adv_supported && dio->dst_adv_trigger &&
+         dio->dtsn > p->dtsn && p == dag->preferred_parent;*/
 }
 /************************************************************************/
 static int
 acceptable_rank(rpl_dag_t *dag, rpl_rank_t rank)
 {
   return rank != INFINITE_RANK &&
-    DAG_RANK(rank, dag) <= DAG_RANK(dag->min_rank + dag->max_rankinc, dag);
+    (dag->max_rankinc == 0 ||
+     DAG_RANK(rank, dag) <= DAG_RANK(dag->min_rank + dag->max_rankinc, dag));
 }
 /************************************************************************/
 rpl_dag_t *
@@ -570,7 +571,7 @@ rpl_process_parent_event(rpl_dag_t *dag, rpl_parent_t *p)
       dag->min_rank = dag->rank;
     }
     PRINTF("RPL: Moving in the DAG from rank %hu to %hu\n",
-	   old_rank, DAG_RANK(dag->rank));
+	   DAG_RANK(old_rank, dag), DAG_RANK(dag->rank, dag));
     PRINTF("RPL: The preferred parent is ");
     PRINT6ADDR(&dag->preferred_parent->addr);
     PRINTF(" (rank %u)\n",
