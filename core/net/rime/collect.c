@@ -995,7 +995,6 @@ node_packet_received(struct unicast_conn *c, const rimeaddr_t *from)
         ackflags |= ACK_FLAGS_RTMETRIC_NEEDS_UPDATE;
       }
 
-      printf("potential loop detected\n");
       packetbuf_set_attr(PACKETBUF_ATTR_HOPS,
                          packetbuf_attr(PACKETBUF_ATTR_HOPS) + 1);
       packetbuf_set_attr(PACKETBUF_ATTR_TTL,
