@@ -52,9 +52,11 @@ cfs_readdir(struct cfs_dir *p, struct cfs_dirent *e)
 {
   struct cbm_dirent dirent;
 
-  if(cbm_readdir(12, &dirent)) {
-    return -1;
-  }
+  do {
+    if(cbm_readdir(12, &dirent)) {
+      return -1;
+    }
+  } while(dirent.type == CBM_T_HEADER);
   strcpy(e->name, dirent.name);
   e->size = dirent.size;
   return 0;
