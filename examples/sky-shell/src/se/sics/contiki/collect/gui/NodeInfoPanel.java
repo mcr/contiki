@@ -132,7 +132,7 @@ public class NodeInfoPanel extends JPanel implements Visualizer, Configurable {
         },
         new TableData("ETX", "Average ETX to Next Hop", Double.class) {
           public Object getValue(Node node) {
-            return node.getSensorDataAggregator().getAverageValue(SensorData.BEST_NEIGHBOR_ETX);
+            return node.getSensorDataAggregator().getAverageBestNeighborETX();
           }
         },
         new TableData("Churn", "Next Hop Change Count", Number.class) {
