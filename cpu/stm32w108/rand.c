@@ -34,22 +34,24 @@
 /*---------------------------------------------------------------------------*/
 /**
 * \file
-*			Clock.
+*			Random number functions for STM32W.
 * \author
 *			Salvatore Pitrulli <salvopitru@users.sourceforge.net>
 */
 /*---------------------------------------------------------------------------*/
 
-#include "lib/rand.h"
 #include "dev/stm32w-radio.h"
+#include "lib/random.h"
+
+#if (RANDOM_MAX != 0xffff)
+#warning "RANDOM_MAX is not defined as 65535."
+#endif
 
 int rand(void)
 {
 	u16_t rand_num;
 
 	ST_RadioGetRandomNumbers(&rand_num, 1);
-
-	rand_num &= RAND_MAX;
 
 	return (int)rand_num;
 }
