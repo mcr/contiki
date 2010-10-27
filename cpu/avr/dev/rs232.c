@@ -48,6 +48,10 @@
 #define RS232_PRINTF_BUFFER_LENGTH 64
 #endif
 
+#ifndef ADD_CARRAGE_RETURNS_TO_SERIAL_OUTPUT
+#define ADD_CARRAGE_RETURNS_TO_SERIAL_OUTPUT 1
+#endif
+
 #if defined (__AVR_ATmega128__) || defined(__AVR_ATmega1284P__) || defined(__AVR_ATmega1281__)
 typedef struct {
   volatile uint8_t * UDR;
@@ -200,7 +204,12 @@ void
 rs232_print(uint8_t port, char *buf)
 {
   while(*buf) {
+#if ADD_CARRAGE_RETURNS_TO_SERIAL_OUTPUT
+    if(*buf=='\n') rs232_send(port, '\r');
+	if(*buf=='\r') buf++; else rs232_send(port, *buf++);
+#else
     rs232_send(port, *buf++);
+#endif
   }
 }
 /*---------------------------------------------------------------------------*/
@@ -245,7 +254,12 @@ static FILE rs232_stdout = FDEV_SETUP_STREAM(rs232_stdout_putchar,
 
 int rs232_stdout_putchar(char c, FILE *stream)
 {
+#if ADD_CARRAGE_RETURNS_TO_SERIAL_OUTPUT
+  if(c=='\n') rs232_send(stdout_rs232_port, '\r');
+  if(c!='\r') rs232_send (stdout_rs232_port, c);
+#else
   rs232_send (stdout_rs232_port, c);
+#endif
   return 0;
 }
 /*---------------------------------------------------------------------------*/
