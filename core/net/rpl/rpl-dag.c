@@ -312,8 +312,10 @@ rpl_select_parent(rpl_dag_t *dag)
 
   if(dag->preferred_parent != best) {
     /* Visualize the change of the preferred parent in Cooja. */
-    ANNOTATE("#L %u 0\n",
-	     dag->preferred_parent->addr.u8[sizeof(best->addr) - 1]);
+    if(dag->preferred_parent != NULL) {
+      ANNOTATE("#L %u 0\n",
+               dag->preferred_parent->addr.u8[sizeof(best->addr) - 1]);
+    }
     ANNOTATE("#L %u 1\n", best->addr.u8[sizeof(best->addr) - 1]);
 
     dag->preferred_parent = best; /* Cache the value. */
@@ -362,6 +364,7 @@ rpl_remove_parent(rpl_dag_t *dag, rpl_parent_t *parent)
   PRINTF("\n");
 
   if(parent == dag->preferred_parent) {
+    ANNOTATE("#L %u 0\n", parent->addr.u8[sizeof(parent->addr) - 1]);
     dag->preferred_parent = NULL;
   }
 
