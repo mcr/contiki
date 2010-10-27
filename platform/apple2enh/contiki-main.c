@@ -105,12 +105,11 @@ main(void)
   
   while(1) {
 
+    process_run();
+
+    etimer_request_poll();
+
     clock_update();
-
-    if(process_run() < 2) {
-
-      etimer_request_poll();
-    }
   }
 }
 /*-----------------------------------------------------------------------------------*/

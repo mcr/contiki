@@ -101,10 +101,9 @@ main(void)
   
   while(1) {
 
-    if(process_run() < 2) {
+    process_run();
 
-      etimer_request_poll();
-    }
+    etimer_request_poll();
   }
 }
 /*-----------------------------------------------------------------------------------*/
