@@ -361,6 +361,10 @@ rpl_remove_parent(rpl_dag_t *dag, rpl_parent_t *parent)
   PRINT6ADDR(&parent->addr);
   PRINTF("\n");
 
+  if(parent == dag->preferred_parent) {
+    dag->preferred_parent = NULL;
+  }
+
   list_remove(dag->parents, parent);
   memb_free(&parent_memb, parent);
   return 0;
