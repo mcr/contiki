@@ -51,6 +51,11 @@
 #include "net/uip-debug.h"
 
 #include <limits.h>
+#include <string.h>
+
+#if RPL_CONF_STATS
+rpl_stats_t rpl_stats;
+#endif
 
 /************************************************************************/
 extern uip_ds6_route_t uip_ds6_routing_table[UIP_DS6_ROUTE_NB];
@@ -204,5 +209,8 @@ rpl_init(void)
 
   rpl_reset_periodic_timer();
   neighbor_info_subscribe(rpl_link_neighbor_callback);
+#if RPL_CONF_STATS
+  memset(&rpl_stats, 0, sizeof(rpl_stats));
+#endif
 }
 /************************************************************************/
