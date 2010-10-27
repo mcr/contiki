@@ -50,8 +50,8 @@
 
 #define ETX_LIMIT		15
 #define ETX_SCALE		100
-#define ETX_ALPHA		70
-#define ETX_FIRST_GUESS		2
+#define ETX_ALPHA		85
+#define ETX_FIRST_GUESS		3
 /*---------------------------------------------------------------------------*/
 NEIGHBOR_ATTRIBUTE(uint8_t, etx, NULL);
 
