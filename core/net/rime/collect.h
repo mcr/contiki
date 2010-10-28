@@ -101,7 +101,7 @@ struct collect_conn {
   struct ctimer keepalive_timer;
   clock_time_t keepalive_period;
 
-  struct timer proactive_maintenence_timer;
+  struct ctimer proactive_probing_timer;
 
   rimeaddr_t parent, current_parent;
   uint16_t rtmetric;
