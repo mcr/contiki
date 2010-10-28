@@ -42,6 +42,7 @@ package se.sics.contiki.collect;
 import java.awt.BorderLayout;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -63,7 +64,6 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Properties;
-
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
@@ -146,6 +146,10 @@ public class CollectServer implements SerialConnectionListener {
   /* Do not auto send init script at startup */
   private boolean doSendInitAtStartup = false;
   private String initScript;
+
+  private boolean hasStarted = false;
+  private boolean doExitOnRequest = true;
+  private JMenuItem exitItem;
 
   private int defaultMaxItemCount = 250;
   private long nodeTimeDelta;
@@ -660,15 +664,15 @@ public class CollectServer implements SerialConnectionListener {
     fileMenu.add(item);
 
     fileMenu.addSeparator();
-    item = new JMenuItem("Exit", KeyEvent.VK_X);
-    item.addActionListener(new ActionListener() {
+    exitItem = new JMenuItem("Exit", KeyEvent.VK_X);
+    exitItem.addActionListener(new ActionListener() {
 
       public void actionPerformed(ActionEvent e) {
         exit();
       }
 
     });
-    fileMenu.add(item);
+    fileMenu.add(exitItem);
 
     JMenu toolsMenu = new JMenu("Tools");
     toolsMenu.setMnemonic(KeyEvent.VK_T);
@@ -765,10 +769,11 @@ public class CollectServer implements SerialConnectionListener {
     return -1;
   }
 
-  void start(SerialConnection connection) {
-    if (this.serialConnection != null) {
+  public void start(SerialConnection connection) {
+    if (hasStarted) {
       throw new IllegalStateException("already started");
     }
+    hasStarted = true;
     this.serialConnection = connection;
     if (isSensorLogUsed) {
       initSensorData();
@@ -793,7 +798,7 @@ public class CollectServer implements SerialConnectionListener {
     }
   }
 
-  private void exit() {
+  public void stop() {
     save();
     if (serialConnection != null) {
       serialConnection.close();
@@ -802,7 +807,27 @@ public class CollectServer implements SerialConnectionListener {
     if (output != null) {
       output.close();
     }
-    System.exit(0);
+    window.setVisible(false);
+  }
+
+  public void setExitOnRequest(boolean doExit) {
+    this.doExitOnRequest = doExit;
+    if (exitItem != null) {
+      SwingUtilities.invokeLater(new Runnable() {
+        public void run() {
+          exitItem.setEnabled(doExitOnRequest);
+        }
+      });
+    }
+  }
+
+  private void exit() {
+    if (doExitOnRequest) {
+      stop();
+      System.exit(0);
+    } else {
+      Toolkit.getDefaultToolkit().beep();
+    }
   }
 
   private void sleep(long delay) {
