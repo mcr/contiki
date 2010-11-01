@@ -35,6 +35,9 @@
 
 ETHERNET = cs8900a
 
+CONTIKI_SOURCEFILES        += cfs-posix-dir.c
+CONTIKI_TARGET_SOURCEFILES += posixdirent.S
+
 CONTIKI_CPU = $(CONTIKI)/cpu/6502
 include $(CONTIKI_CPU)/Makefile.6502
 
