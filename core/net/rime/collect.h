@@ -126,6 +126,7 @@ int collect_send(struct collect_conn *c, int rexmits);
 void collect_set_sink(struct collect_conn *c, int should_be_sink);
 
 int collect_depth(struct collect_conn *c);
+const rimeaddr_t *collect_parent(struct collect_conn *c);
 
 void collect_set_keepalive(struct collect_conn *c, clock_time_t period);
 

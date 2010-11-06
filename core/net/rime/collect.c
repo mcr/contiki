@@ -1472,6 +1472,12 @@ collect_depth(struct collect_conn *tc)
   return tc->rtmetric;
 }
 /*---------------------------------------------------------------------------*/
+const rimeaddr_t *
+collect_parent(struct collect_conn *tc)
+{
+  return &tc->current_parent;
+}
+/*---------------------------------------------------------------------------*/
 void
 collect_purge(struct collect_conn *tc)
 {
