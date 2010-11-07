@@ -49,6 +49,10 @@ static volatile clock_time_t current_clock = 0;
 
 volatile unsigned long seconds = 0;
 
+#define TCF  15
+#define TCF1 4
+#define TCF2 5
+
 void
 clock_init()
 {
