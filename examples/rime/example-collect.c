@@ -99,8 +99,12 @@ PROCESS_THREAD(example_collect_process, ev, data)
 
       parent = collect_parent(&tc);
       if(!rimeaddr_cmp(parent, &oldparent)) {
-        printf("#L %d 0\n", oldparent.u8[0]);
-        printf("#L %d 1\n", parent->u8[0]);
+        if(!rimeaddr_cmp(&oldparent, &rimeaddr_null)) {
+          printf("#L %d 0\n", oldparent.u8[0]);
+        }
+        if(!rimeaddr_cmp(parent, &rimeaddr_null)) {
+          printf("#L %d 1\n", parent->u8[0]);
+        }
         rimeaddr_copy(&oldparent, parent);
       }
     }
