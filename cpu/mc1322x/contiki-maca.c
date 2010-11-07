@@ -53,8 +53,8 @@
 #define PRINTF(...)
 #endif
 
-#ifndef MACA_RAW_PREPEND
-#define MACA_RAW_PREPEND 0xff
+#ifndef CONTIKI_MACA_PREPEND_BYTE
+#define CONTIKI_MACA_PREPEND_BYTE 0xff
 #endif
 
 #ifndef BLOCKING_TX
