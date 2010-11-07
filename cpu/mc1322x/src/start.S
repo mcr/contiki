@@ -91,10 +91,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
        .code 32
        .align 2
 
-	.set _rom_data_init, 0x108d0
-        .global _start
+       .set _rom_data_init, 0x108d0
+       .global _start
        .func   _start
-
+       .section .start
+	
 _start:
         b     _begin                    // reset - _start
         ldr   pc,_undf                  // undefined 
