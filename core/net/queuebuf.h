@@ -56,6 +56,12 @@
 
 #include "net/packetbuf.h"
 
+#ifdef QUEUEBUF_CONF_NUM
+#define QUEUEBUF_NUM QUEUEBUF_CONF_NUM
+#else
+#define QUEUEBUF_NUM 8
+#endif
+
 struct queuebuf;
 
 void queuebuf_init(void);
@@ -68,6 +74,7 @@ void *queuebuf_dataptr(struct queuebuf *b);
 int queuebuf_datalen(struct queuebuf *b);
 
 rimeaddr_t *queuebuf_addr(struct queuebuf *b, uint8_t type);
+packetbuf_attr_t queuebuf_attr(struct queuebuf *b, uint8_t type);
 
 #endif /* __QUEUEBUF_H__ */
 

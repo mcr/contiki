@@ -34,6 +34,7 @@
  */
 #include "contiki.h"
 #include "ftpc.h"
+#include "lib/petsciiconv.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -123,7 +124,7 @@ void
 ftpc_init(void)
 {
   memb_init(&connections);
-  /*  tcp_listen(HTONS(DATAPORT));*/
+  /*  tcp_listen(UIP_HTONS(DATAPORT));*/
 }
 /*---------------------------------------------------------------------------*/
 void *
@@ -141,7 +142,7 @@ ftpc_connect(uip_ipaddr_t *ipaddr, u16_t port)
   c->codeptr = 0;
   c->dataconn.type = TYPE_DATA;
   c->dataconn.port = DATAPORT;
-  tcp_listen(HTONS(DATAPORT));
+  tcp_listen(UIP_HTONS(DATAPORT));
 
   if(tcp_connect(ipaddr, port, c) == NULL) {
     memb_free(&connections, c);
@@ -190,9 +191,9 @@ handle_input(struct ftp_connection *c)
 	     c->state == STATE_RETR_SENT ||
 	     c->state == STATE_CONNECTED)) {
     if(code == 226 || code == 550) {
-      tcp_unlisten(htons(c->dataconn.port));
+      tcp_unlisten(uip_htons(c->dataconn.port));
       ++c->dataconn.port;
-      tcp_listen(htons(c->dataconn.port));
+      tcp_listen(uip_htons(c->dataconn.port));
       c->state = STATE_SEND_PORT;
     }
 
@@ -271,48 +272,51 @@ senddata(struct ftp_connection *c)
   
   switch(c->state) {
   case STATE_SEND_USER:
+    len = 5 + (u16_t)strlen(ftpc_username()) + 2;
     strcpy(uip_appdata, "USER ");
-    strncpy((char *)uip_appdata + 5, ftpc_username(), uip_mss() - 7);
-    len = (u16_t)strlen(ftpc_username());
-    strcpy((char *)uip_appdata + 5 + len, "\r\n");
-    uip_send(uip_appdata, len + 2 + 5);
+    strncpy((char *)uip_appdata + 5, ftpc_username(), uip_mss() - 5 - 2);
+    strcpy((char *)uip_appdata + len - 2, "\r\n");
     break;
   case STATE_SEND_PASS:
+    len = 5 + (u16_t)strlen(ftpc_password()) + 2;
     strcpy(uip_appdata, "PASS ");
-    strncpy((char *)uip_appdata + 5, ftpc_password(), uip_mss() - 7);
-    len = (u16_t)strlen(ftpc_password());
-    strcpy((char *)uip_appdata + 5 + len, "\r\n");
-    uip_send(uip_appdata, len + 2 + 5);
+    strncpy((char *)uip_appdata + 5, ftpc_password(), uip_mss() - 5 - 2);
+    strcpy((char *)uip_appdata + len - 2, "\r\n");
     break;
   case STATE_SEND_PORT:
     len = sprintf(uip_appdata, "PORT %d,%d,%d,%d,%d,%d\n",
 		  uip_ipaddr_to_quad(&uip_hostaddr),
 		  (c->dataconn.port) >> 8,
 		  (c->dataconn.port) & 0xff);
-    uip_send(uip_appdata, len);
     break;
   case STATE_SEND_OPTIONS:
     len = (u16_t)strlen(options.commands[c->optionsptr]);
-    uip_send(options.commands[c->optionsptr], len);
+    strcpy(uip_appdata, options.commands[c->optionsptr]);
     break;
   case STATE_SEND_NLST:
-    uip_send("NLST\r\n", 6);
+    len = 6;
+    strcpy(uip_appdata, "NLST\r\n");
     break;
   case STATE_SEND_RETR:
     len = sprintf(uip_appdata, "RETR %s\r\n", c->filename);
-    uip_send(uip_appdata, len);
     break;
   case STATE_SEND_CWD:
     len = sprintf(uip_appdata, "CWD %s\r\n", c->filename);
-    uip_send(uip_appdata, len);
     break;
   case STATE_SEND_CDUP:
-    uip_send("CDUP\r\n", 6);
+    len = 6;
+    strcpy(uip_appdata, "CDUP\r\n");
     break;
   case STATE_SEND_QUIT:
-    uip_send("QUIT\r\n", 6);
+    len = 6;
+    strcpy(uip_appdata, "QUIT\r\n");
     break;
+  default:
+    return;
   }
+
+  petsciiconv_toascii(uip_appdata, len);
+  uip_send(uip_appdata, len);
 }
 /*---------------------------------------------------------------------------*/
 void
@@ -397,7 +401,8 @@ ftpc_appcall(void *state)
 	  
 	  if(t == ISO_nl) {
 	    d->filename[d->filenameptr] = 0;
-	    ftpc_list_file(d->filename);
+	    petsciiconv_topetscii(d->filename, d->filenameptr);
+            ftpc_list_file(d->filename);
 	    d->filenameptr = 0;
 	  }
 
@@ -449,6 +454,7 @@ ftpc_get(void *conn, char *filename)
   }
 
   strncpy(c->filename, filename, sizeof(c->filename));
+  petsciiconv_toascii(c->filename, sizeof(c->filename));
 
   c->state = STATE_SEND_RETR;
   c->dataconn.conntype = CONNTYPE_FILE;

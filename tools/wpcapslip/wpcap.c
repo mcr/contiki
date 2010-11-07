@@ -66,10 +66,6 @@
 
 #include <err.h>
 
-/* Avoid 'conflicting types' errors. */
-#define htonl
-#define htons
-
 
 #define PROGRESS(x)
 
@@ -449,12 +445,12 @@ arp_out(struct ethip_hdr *iphdr, int len)
     
       uip_ipaddr_copy(&arphdr->dipaddr, &ipaddr);
       uip_ipaddr_copy(&arphdr->sipaddr, &netaddr);
-      arphdr->opcode = HTONS(ARP_REQUEST); /* ARP request. */
-      arphdr->hwtype = HTONS(ARP_HWTYPE_ETH);
-      arphdr->protocol = HTONS(UIP_ETHTYPE_IP);
+      arphdr->opcode = UIP_HTONS(ARP_REQUEST); /* ARP request. */
+      arphdr->hwtype = UIP_HTONS(ARP_HWTYPE_ETH);
+      arphdr->protocol = UIP_HTONS(UIP_ETHTYPE_IP);
       arphdr->hwlen = 6;
       arphdr->protolen = 4;
-      arphdr->ethhdr.type = HTONS(UIP_ETHTYPE_ARP);
+      arphdr->ethhdr.type = UIP_HTONS(UIP_ETHTYPE_ARP);
 
       /*      uip_appdata = &uip_buf[UIP_TCPIP_HLEN + UIP_LLH_LEN];*/
 
@@ -467,7 +463,7 @@ arp_out(struct ethip_hdr *iphdr, int len)
 #endif /* 0 */
   memcpy(iphdr->ethhdr.src.addr, uip_ethaddr.addr, 6);
 
-  iphdr->ethhdr.type = HTONS(UIP_ETHTYPE_IP);
+  iphdr->ethhdr.type = UIP_HTONS(UIP_ETHTYPE_IP);
 
   return len + sizeof(struct uip_eth_hdr);
 }
@@ -478,8 +474,8 @@ do_arp(void *buf, int len)
   struct arp_hdr *hdr;
 
   hdr = (struct arp_hdr *)buf;
-  if(hdr->ethhdr.type == HTONS(UIP_ETHTYPE_ARP)) {
-    if(hdr->opcode == HTONS(ARP_REQUEST)) {
+  if(hdr->ethhdr.type == UIP_HTONS(UIP_ETHTYPE_ARP)) {
+    if(hdr->opcode == UIP_HTONS(ARP_REQUEST)) {
       /* Check if the ARP is for our network */
       /*      printf("ARP for %d.%d.%d.%d we are %d.%d.%d.%d/%d.%d.%d.%d\n",
 	     uip_ipaddr_to_quad(&hdr->dipaddr),
@@ -491,7 +487,7 @@ do_arp(void *buf, int len)
 	/*	printf("ARP for us.\n");*/
 	uip_arp_update(&hdr->sipaddr, &hdr->shwaddr);
 	
-	hdr->opcode = HTONS(ARP_REPLY);
+	hdr->opcode = UIP_HTONS(ARP_REPLY);
 	
 	memcpy(&hdr->dhwaddr.addr, &hdr->shwaddr.addr, 6);
 	memcpy(&hdr->shwaddr.addr, &uip_ethaddr.addr, 6);
@@ -502,11 +498,11 @@ do_arp(void *buf, int len)
 	uip_ipaddr_copy(&hdr->dipaddr, &hdr->sipaddr);
 	uip_ipaddr_copy(&hdr->sipaddr, &tmpaddr);
 	
-	hdr->ethhdr.type = HTONS(UIP_ETHTYPE_ARP);
+	hdr->ethhdr.type = UIP_HTONS(UIP_ETHTYPE_ARP);
 	raw_send(hdr, sizeof(struct arp_hdr));
 	return NULL;
       }
-    } else if(hdr->opcode == HTONS(ARP_REPLY)) {
+    } else if(hdr->opcode == UIP_HTONS(ARP_REPLY)) {
       /* ARP reply. We insert or update the ARP table if it was meant
 	 for us. */
       if(uip_ipaddr_maskcmp(&hdr->dipaddr, &netaddr, &netmask)) {
@@ -514,7 +510,7 @@ do_arp(void *buf, int len)
       }
     }
   }
-  if(hdr->ethhdr.type == HTONS(UIP_ETHTYPE_IP)) {
+  if(hdr->ethhdr.type == UIP_HTONS(UIP_ETHTYPE_IP)) {
     return &((struct ethip_hdr *)hdr)->vhl;
   }
   return NULL;

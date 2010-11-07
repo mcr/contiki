@@ -1123,7 +1123,7 @@ EK_EVENTHANDLER(eventhandler, ev, data)
   switch(ev) {
   case EK_EVENT_INIT:
   case EK_EVENT_REPLACE:
-    tcp_listen(HTONS(5900));
+    tcp_listen(UIP_HTONS(5900));
     
     for(i = 0; i < CTK_VNCSERVER_CONF_NUMCONNS; ++i) {
       conns[i].state = VNC_DEALLOCATED;

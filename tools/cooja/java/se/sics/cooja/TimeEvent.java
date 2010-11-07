@@ -43,7 +43,7 @@ public abstract class TimeEvent {
 
   protected long time;
 
-  boolean removed = false;
+  boolean isScheduled = false;
 
   public TimeEvent(long time) {
     this(time, null);
@@ -59,11 +59,11 @@ public abstract class TimeEvent {
   }
 
   public boolean isScheduled() {
-    return queue != null && !removed;
+    return isScheduled;
   }
 
   public boolean remove() {
-    removed = true;
+    isScheduled = false;
     return false;
   }
 

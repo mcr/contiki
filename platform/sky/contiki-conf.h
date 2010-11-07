@@ -6,38 +6,52 @@
 
 #include "platform-conf.h"
 
-#if WITH_UIP6
+#ifdef PROJECT_CONF_H
+#include "project-conf.h"
+#endif /* PROJECT_CONF_H */
 
+#ifndef NETSTACK_CONF_MAC
+#define NETSTACK_CONF_MAC     csma_driver
+#endif /* NETSTACK_CONF_MAC */
+
+#ifndef NETSTACK_CONF_RDC
+#define NETSTACK_CONF_RDC     contikimac_driver
+#endif /* NETSTACK_CONF_RDC */
+
+#ifndef NETSTACK_CONF_RDC_CHANNEL_CHECK_RATE
+#define NETSTACK_CONF_RDC_CHANNEL_CHECK_RATE 8
+#endif /* NETSTACK_CONF_RDC_CHANNEL_CHECK_RATE */
+
+#ifndef NETSTACK_CONF_RADIO
+#define NETSTACK_CONF_RADIO   cc2420_driver
+#endif /* NETSTACK_CONF_RADIO */
+
+#ifndef NETSTACK_CONF_FRAMER
+#define NETSTACK_CONF_FRAMER  framer_802154
+#endif /* NETSTACK_CONF_FRAMER */
+
+#ifndef CC2420_CONF_AUTOACK
+#define CC2420_CONF_AUTOACK              1
+#endif /* CC2420_CONF_AUTOACK */
+
+
+#if WITH_UIP6
 /* Network setup for IPv6 */
 #define NETSTACK_CONF_NETWORK sicslowpan_driver
-/* #define NETSTACK_CONF_MAC nullmac_driver */
-/* #define NETSTACK_CONF_RDC sicslowmac_driver */
-#define NETSTACK_CONF_MAC     csma_driver
-#define NETSTACK_CONF_RDC     contikimac_driver
-#define NETSTACK_CONF_FRAMER  framer_802154
-
-#define CC2420_CONF_AUTOACK              1
-#define MAC_CONF_CHANNEL_CHECK_RATE      8
-#define RIME_CONF_NO_POLITE_ANNOUCEMENTS 0
 #define CXMAC_CONF_ANNOUNCEMENTS         0
 #define XMAC_CONF_ANNOUNCEMENTS          0
 
+#ifndef QUEUEBUF_CONF_NUM
 #define QUEUEBUF_CONF_NUM                8
+#endif
 
 #else /* WITH_UIP6 */
 
 /* Network setup for non-IPv6 (rime). */
 
 #define NETSTACK_CONF_NETWORK rime_driver
-#define NETSTACK_CONF_MAC     csma_driver
-#define NETSTACK_CONF_RDC     contikimac_driver
-#define NETSTACK_CONF_FRAMER  framer_802154
-
-#define CC2420_CONF_AUTOACK              1
-#define MAC_CONF_CHANNEL_CHECK_RATE      8
 
 #define COLLECT_CONF_ANNOUNCEMENTS       1
-#define RIME_CONF_NO_POLITE_ANNOUCEMENTS 0
 #define CXMAC_CONF_ANNOUNCEMENTS         0
 #define XMAC_CONF_ANNOUNCEMENTS          0
 #define CONTIKIMAC_CONF_ANNOUNCEMENTS    0
@@ -46,9 +60,13 @@
 #define XMAC_CONF_COMPOWER               1
 #define CXMAC_CONF_COMPOWER              1
 
-#define COLLECT_NEIGHBOR_CONF_MAX_NEIGHBORS      32
+#ifndef COLLECT_NEIGHBOR_CONF_MAX_COLLECT_NEIGHBORS
+#define COLLECT_NEIGHBOR_CONF_MAX_COLLECT_NEIGHBORS     32
+#endif /* COLLECT_NEIGHBOR_CONF_MAX_COLLECT_NEIGHBORS */
 
-#define QUEUEBUF_CONF_NUM          16
+#ifndef QUEUEBUF_CONF_NUM
+#define QUEUEBUF_CONF_NUM                16
+#endif /* QUEUEBUF_CONF_NUM */
 
 #endif /* WITH_UIP6 */
 
@@ -89,18 +107,26 @@
 #define UIP_CONF_LLH_LEN                0
 
 #define UIP_CONF_ROUTER                 1
+#ifndef UIP_CONF_IPV6_RPL
 #define UIP_CONF_IPV6_RPL               1
+#endif /* UIP_CONF_IPV6_RPL */
 
 /* configure number of neighbors and routes */
+#ifndef UIP_CONF_DS6_NBR_NBU
 #define UIP_CONF_DS6_NBR_NBU     30
+#endif /* UIP_CONF_DS6_NBR_NBU */
+#ifndef UIP_CONF_DS6_ROUTE_NBU
 #define UIP_CONF_DS6_ROUTE_NBU   30
+#endif /* UIP_CONF_DS6_ROUTE_NBU */
 
 #define UIP_CONF_ND6_SEND_RA		0
 #define UIP_CONF_ND6_REACHABLE_TIME     600000
 #define UIP_CONF_ND6_RETRANS_TIMER      10000
 
 #define UIP_CONF_IPV6                   1
+#ifndef UIP_CONF_IPV6_QUEUE_PKT
 #define UIP_CONF_IPV6_QUEUE_PKT         0
+#endif /* UIP_CONF_IPV6_QUEUE_PKT */
 #define UIP_CONF_IPV6_CHECKS            1
 #define UIP_CONF_IPV6_REASSEMBLY        0
 #define UIP_CONF_NETIF_MAX_ADDRESSES    3
@@ -108,7 +134,9 @@
 #define UIP_CONF_ND6_MAX_NEIGHBORS      4
 #define UIP_CONF_ND6_MAX_DEFROUTERS     2
 #define UIP_CONF_IP_FORWARD             0
+#ifndef UIP_CONF_BUFFER_SIZE
 #define UIP_CONF_BUFFER_SIZE		240
+#endif
 
 #define SICSLOWPAN_CONF_COMPRESSION_IPV6        0
 #define SICSLOWPAN_CONF_COMPRESSION_HC1         1
@@ -120,6 +148,7 @@
 #endif /* SICSLOWPAN_CONF_FRAG */
 #define SICSLOWPAN_CONF_CONVENTIONAL_MAC	1
 #define SICSLOWPAN_CONF_MAX_ADDR_CONTEXTS       2
+#define SICSLOWPAN_CONF_MAX_MAC_TRANSMISSIONS   5
 #else /* WITH_UIP6 */
 #define UIP_CONF_IP_FORWARD      1
 #define UIP_CONF_BUFFER_SIZE     108
@@ -129,8 +158,12 @@
 
 #define UIP_CONF_DHCP_LIGHT
 #define UIP_CONF_LLH_LEN         0
+#ifndef  UIP_CONF_RECEIVE_WINDOW
 #define UIP_CONF_RECEIVE_WINDOW  48
+#endif
+#ifndef  UIP_CONF_TCP_MSS
 #define UIP_CONF_TCP_MSS         48
+#endif
 #define UIP_CONF_MAX_CONNECTIONS 4
 #define UIP_CONF_MAX_LISTENPORTS 8
 #define UIP_CONF_UDP_CONNS       12
@@ -144,10 +177,6 @@
 
 #define UIP_CONF_TCP_SPLIT       0
 
-
-#ifdef PROJECT_CONF_H
-#include PROJECT_CONF_H
-#endif /* PROJECT_CONF_H */
 
 
 

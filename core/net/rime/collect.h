@@ -75,7 +75,7 @@
                             { PACKETBUF_ATTR_PACKET_ID,   PACKETBUF_ATTR_BIT * COLLECT_PACKET_ID_BITS }, \
                             { PACKETBUF_ATTR_TTL,         PACKETBUF_ATTR_BIT * 4 }, \
                             { PACKETBUF_ATTR_HOPS,        PACKETBUF_ATTR_BIT * 4 }, \
-                            { PACKETBUF_ATTR_MAX_REXMIT,  PACKETBUF_ATTR_BIT * 4 }, \
+                            { PACKETBUF_ATTR_MAX_REXMIT,  PACKETBUF_ATTR_BIT * 5 }, \
                             { PACKETBUF_ATTR_PACKET_TYPE, PACKETBUF_ATTR_BIT }, \
                             UNICAST_ATTRIBUTES
 
@@ -93,11 +93,16 @@ struct collect_conn {
   struct ctimer transmit_after_scan_timer;
 #endif /* COLLECT_CONF_ANNOUNCEMENTS */
   const struct collect_callbacks *cb;
-  struct ctimer t;
   struct ctimer retransmission_timer;
   LIST_STRUCT(send_queue_list);
   struct packetqueue send_queue;
   struct collect_neighbor_list neighbor_list;
+
+  struct ctimer keepalive_timer;
+  clock_time_t keepalive_period;
+
+  struct ctimer proactive_probing_timer;
+
   rimeaddr_t parent, current_parent;
   uint16_t rtmetric;
   uint8_t seqno;
@@ -121,10 +126,13 @@ int collect_send(struct collect_conn *c, int rexmits);
 void collect_set_sink(struct collect_conn *c, int should_be_sink);
 
 int collect_depth(struct collect_conn *c);
+const rimeaddr_t *collect_parent(struct collect_conn *c);
+
+void collect_set_keepalive(struct collect_conn *c, clock_time_t period);
 
 void collect_print_stats(void);
 
-#define COLLECT_MAX_DEPTH 255
+#define COLLECT_MAX_DEPTH ((1 << 12) - 1)
 
 #endif /* __COLLECT_H__ */
 /** @} */

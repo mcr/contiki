@@ -50,7 +50,7 @@ PROCESS_THREAD(test_receiver_process, ev, data)
 
   PROCESS_BEGIN();
 
-  conn = udp_broadcast_new(HTONS(PORT), NULL);
+  conn = udp_broadcast_new(UIP_HTONS(PORT), NULL);
 
   while(1) {
     PROCESS_WAIT_EVENT_UNTIL(ev == tcpip_event && uip_newdata());

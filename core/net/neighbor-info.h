@@ -42,6 +42,15 @@
 
 #include "net/rime.h"
 
+/* ETX_DIVISOR is the value that a fix-point representation of the ETX 
+   should be divided by in order to obtain the integer representation. */
+#define ETX_DIVISOR	16
+
+/* Macros for converting between a fix-point representation of the ETX 
+   and a integer representation. */
+#define ETX2FIX(etx)    ((etx) << 4)
+#define FIX2ETX(fix)    ((fix) >> 4)
+
 typedef void (*neighbor_info_subscriber_t)(const rimeaddr_t *, int known, int etx);
 
 /**
@@ -69,5 +78,13 @@ void neighbor_info_packet_received(void);
  * \return Returns 1 if the subscription was successful, and 0 if not.
  */
 int neighbor_info_subscribe(neighbor_info_subscriber_t);
+
+
+/**
+ * Get link ETX value for a specific neighbor.
+ *
+ * \return Returns ETX if the neighbor exists, and 0 if not.
+ */
+uint8_t neighbor_info_get_etx(const rimeaddr_t *addr);
 
 #endif /* NEIGHBOR_INFO_H */

@@ -78,6 +78,10 @@ void  uart_usb_flush(void);
 bit   uart_usb_test_hit(void);
 char uart_usb_getchar(void);
 void uart_usb_set_stdout(void);
+uint8_t uart_usb_get_control_line_state(void);
+void uart_usb_set_control_line_state(uint8_t control_line_state);
+
+extern void uart_usb_configure_endpoints();
 
 /** @} **/
 

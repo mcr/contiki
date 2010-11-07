@@ -91,7 +91,15 @@ config_read(char *filename)
   log_message("Def. Router: ",  ipaddrtoa(&config.draddr, uip_buf));
   log_message("DNS Server:  ",  ipaddrtoa(&config.resolvaddr, uip_buf));
 
+#ifndef ETHERNET
   log_message("Eth. Driver: ",  config.ethernetcfg.name);
+#else /* !ETHERNET */
+  #define _stringize(arg) #arg
+  #define  stringize(arg) _stringize(arg)
+  log_message("Eth. Driver: ",  stringize(ETHERNET));
+  #undef  _stringize
+  #undef   stringize
+#endif /* !ETHERNET */
   log_message("Driver Port: $", utoa(config.ethernetcfg.addr, uip_buf, 16));
 
   uip_sethostaddr(&config.hostaddr);

@@ -167,7 +167,7 @@ main(int argc, char **argv)
 #undef LITTLE_ENDIAN
 #undef BIG_ENDIAN
 #undef BYTE_ORDER
-#undef HTONS
+#undef UIP_HTONS
 
 /*-----------------------------------------------------------------------------------*/
 

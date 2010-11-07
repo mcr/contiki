@@ -49,38 +49,64 @@
    the ETX. It cannot be larger than
    COLLECT_LINK_ESTIMATE_HISTORY_SIZE, which is defined in
    collect-link-estimate.h. */
-#define ETX_HISTORY_WINDOW 16
+#define ETX_HISTORY_WINDOW 8
 
+#define INITIAL_LINK_ESTIMATE 16
+
+#define DEBUG 0
+#if DEBUG
+#include <stdio.h>
+#define PRINTF(...) printf(__VA_ARGS__)
+#else
+#define PRINTF(...)
+#endif
+
+/*---------------------------------------------------------------------------*/
+static void
+set_all_estimates(struct collect_link_estimate *le, uint16_t value)
+{
+  int i;
+
+  for(i = 0; i < ETX_HISTORY_WINDOW; i++) {
+    le->history[i] = value;
+  }
+}
 /*---------------------------------------------------------------------------*/
 void
 collect_link_estimate_new(struct collect_link_estimate *le)
 {
-  int i;
-
   /* Start with a conservative / pessimistic estimate of link quality
      for new links. */
-  for(i = 0; i < ETX_HISTORY_WINDOW; i++) {
-    le->history[i] = 4;
-  }
+  set_all_estimates(le, 0/*INITIAL_LINK_ESTIMATE*/);
   le->historyptr = 0;
+  le->num_estimates = 0;
 }
 /*---------------------------------------------------------------------------*/
 void
-collect_link_estimate_update_tx_fail(struct collect_link_estimate *le, int tx)
+collect_link_estimate_update_tx(struct collect_link_estimate *le, uint8_t tx)
 {
+  if(tx == 0) {
+    /*    printf("ERROR tx == 0\n");*/
+    return;
+  }
   if(le != NULL) {
-    le->history[le->historyptr] = tx * 2;
-    le->historyptr = (le->historyptr + 1) % ETX_HISTORY_WINDOW;
+    /*    if(le->num_estimates == 0) {
+      set_all_estimates(le, tx);
+      } else*/ {
+      le->history[le->historyptr] = tx;
+      le->historyptr = (le->historyptr + 1) % ETX_HISTORY_WINDOW;
+    }
+    if(le->num_estimates < ETX_HISTORY_WINDOW) {
+      le->num_estimates++;
+    }
   }
 }
 /*---------------------------------------------------------------------------*/
 void
-collect_link_estimate_update_tx(struct collect_link_estimate *le, int tx)
+collect_link_estimate_update_tx_fail(struct collect_link_estimate *le,
+                                     uint8_t tx)
 {
-  if(le != NULL) {
-    le->history[le->historyptr] = tx;
-    le->historyptr = (le->historyptr + 1) % ETX_HISTORY_WINDOW;
-  }
+  collect_link_estimate_update_tx(le, tx * 2);
 }
 /*---------------------------------------------------------------------------*/
 void
@@ -89,20 +115,34 @@ collect_link_estimate_update_rx(struct collect_link_estimate *n)
 
 }
 /*---------------------------------------------------------------------------*/
-int
+uint16_t
 collect_link_estimate(struct collect_link_estimate *le)
 {
-  int i, etx;
+  int i;
+  uint16_t etx;
 
-  /*  printf("collect_link_estimate: ");*/
-  etx = 0;
-  for(i = 0; i < ETX_HISTORY_WINDOW; ++i) {
-    /*    printf("%d ", le->history[i]);*/
-    etx += le->history[i];
+  if(le->num_estimates == 0) {
+    return INITIAL_LINK_ESTIMATE * COLLECT_LINK_ESTIMATE_UNIT;
   }
-  /*  printf(", %d\n", (COLLECT_LINK_ESTIMATE_UNIT * etx) / ETX_HISTORY_WINDOW);*/
-  return (COLLECT_LINK_ESTIMATE_UNIT * etx) / ETX_HISTORY_WINDOW;
+
+  PRINTF("collect_link_estimate: ");
+  etx = 0;
+  for(i = 0; i < le->num_estimates; ++i) {
+    PRINTF("%d+", le->history[i]);
+    etx += le->history[(le->historyptr - i - 1) & (ETX_HISTORY_WINDOW - 1)];
+  }
+  PRINTF("/%d = %d\n", i,
+         (COLLECT_LINK_ESTIMATE_UNIT * etx) / i);
+  return (COLLECT_LINK_ESTIMATE_UNIT * etx) / i;
 }
 /*---------------------------------------------------------------------------*/
-
+int
+collect_link_estimate_num_estimates(struct collect_link_estimate *le)
+{
+  if(le != NULL) {
+    return le->num_estimates;
+  }
+  return 0;
+}
+/*---------------------------------------------------------------------------*/
 /** @} */

@@ -151,7 +151,7 @@ webclient_get(const char *host, u16_t port, const char *file)
 #endif /* UIP_UDP */
   }
   
-  conn = tcp_connect(ipaddr, htons(port), NULL);
+  conn = tcp_connect(ipaddr, uip_htons(port), NULL);
   
   if(conn == NULL) {
     return 0;

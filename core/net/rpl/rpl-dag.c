@@ -52,7 +52,7 @@
 #include <limits.h>
 #include <string.h>
 
-#define DEBUG DEBUG_ANNOTATE
+#define DEBUG DEBUG_NONE
 #include "net/uip-debug.h"
 
 /************************************************************************/
@@ -108,7 +108,7 @@ remove_parents(rpl_dag_t *dag, rpl_rank_t minimum_rank)
 
   for(p = list_head(dag->parents); p != NULL; p = p2) {
     p2 = p->next;
-    if(DAG_RANK(p->rank, dag) >= minimum_rank) {
+    if(p->rank >= minimum_rank) {
       rpl_remove_parent(dag, p);
     }
   }
@@ -117,16 +117,17 @@ remove_parents(rpl_dag_t *dag, rpl_rank_t minimum_rank)
 static int
 should_send_dao(rpl_dag_t *dag, rpl_dio_t *dio, rpl_parent_t *p)
 {
-  return 1;
-  return dio->dst_adv_supported && dio->dst_adv_trigger &&
-         dio->dtsn > p->dtsn && p == dag->preferred_parent;
+  return dio->dst_adv_supported;
+/*  return dio->dst_adv_supported && dio->dst_adv_trigger &&
+         dio->dtsn > p->dtsn && p == dag->preferred_parent;*/
 }
 /************************************************************************/
 static int
 acceptable_rank(rpl_dag_t *dag, rpl_rank_t rank)
 {
   return rank != INFINITE_RANK &&
-    DAG_RANK(rank, dag) <= DAG_RANK(dag->min_rank + dag->max_rankinc, dag);
+    (dag->max_rankinc == 0 ||
+     DAG_RANK(rank, dag) <= DAG_RANK(dag->min_rank + dag->max_rankinc, dag));
 }
 /************************************************************************/
 rpl_dag_t *
@@ -264,6 +265,7 @@ rpl_add_parent(rpl_dag_t *dag, rpl_dio_t *dio, uip_ipaddr_t *addr)
 
   p = memb_alloc(&parent_memb);
   if(p == NULL) {
+    RPL_STAT(rpl_stats.mem_overflows++);
     return NULL;
   }
 
@@ -310,8 +312,10 @@ rpl_select_parent(rpl_dag_t *dag)
 
   if(dag->preferred_parent != best) {
     /* Visualize the change of the preferred parent in Cooja. */
-    ANNOTATE("#L %u 0\n",
-	     dag->preferred_parent->addr.u8[sizeof(best->addr) - 1]);
+    if(dag->preferred_parent != NULL) {
+      ANNOTATE("#L %u 0\n",
+               dag->preferred_parent->addr.u8[sizeof(best->addr) - 1]);
+    }
     ANNOTATE("#L %u 1\n", best->addr.u8[sizeof(best->addr) - 1]);
 
     dag->preferred_parent = best; /* Cache the value. */
@@ -358,6 +362,11 @@ rpl_remove_parent(rpl_dag_t *dag, rpl_parent_t *parent)
   PRINTF("RPL: Removing parent ");
   PRINT6ADDR(&parent->addr);
   PRINTF("\n");
+
+  if(parent == dag->preferred_parent) {
+    ANNOTATE("#L %u 0\n", parent->addr.u8[sizeof(parent->addr) - 1]);
+    dag->preferred_parent = NULL;
+  }
 
   list_remove(dag->parents, parent);
   memb_free(&parent_memb, parent);
@@ -505,6 +514,7 @@ global_repair(uip_ipaddr_t *from, rpl_dag_t *dag, rpl_dio_t *dio)
   PRINTF("RPL: Participating in a global repair (version=%u, rank=%hu)\n",
          dag->version, dag->rank);
 
+  RPL_STAT(rpl_stats.global_repairs++);
 }
 /************************************************************************/
 int
@@ -517,6 +527,18 @@ rpl_repair_dag(rpl_dag_t *dag)
     return 1;
   }
   return 0;
+}
+/************************************************************************/
+void
+rpl_local_repair(rpl_dag_t *dag)
+{
+  PRINTF("RPL: Starting a local DAG repair\n");
+
+  dag->rank = INFINITE_RANK;
+  remove_parents(dag, 0);
+  rpl_reset_dio_timer(dag, 1);
+
+  RPL_STAT(rpl_stats.local_repairs++);
 }
 /************************************************************************/
 void
@@ -559,9 +581,8 @@ rpl_process_parent_event(rpl_dag_t *dag, rpl_parent_t *p)
 
   if(rpl_select_parent(dag) == NULL) {
     /* No suitable parent; trigger a local repair. */
-    PRINTF("RPL: No more parents, triggering a local repair\n");
-    dag->rank = INFINITE_RANK;
-    rpl_reset_dio_timer(dag, 1);
+    PRINTF("RPL: No parents found in a DAG\n");
+    rpl_local_repair(dag);
     return 1;
   }
 
@@ -570,10 +591,11 @@ rpl_process_parent_event(rpl_dag_t *dag, rpl_parent_t *p)
       dag->min_rank = dag->rank;
     }
     PRINTF("RPL: Moving in the DAG from rank %hu to %hu\n",
-	   old_rank, dag->rank);
-    PRINTF("RPL: The new preferred parent is ");
+	   DAG_RANK(old_rank, dag), DAG_RANK(dag->rank, dag));
+    PRINTF("RPL: The preferred parent is ");
     PRINT6ADDR(&dag->preferred_parent->addr);
-    PRINTF(" (rank %u)\n", (unsigned)(dag->preferred_parent->rank));
+    PRINTF(" (rank %u)\n",
+           (unsigned)DAG_RANK(dag->preferred_parent->rank, dag));
     rpl_reset_dio_timer(dag, 1);
   }
 
@@ -648,7 +670,7 @@ rpl_process_dio(uip_ipaddr_t *from, rpl_dio_t *dio)
   if(p == NULL) {
     if(RPL_PARENT_COUNT(dag) == RPL_MAX_PARENTS) {
       /* Try to make room for a new parent. */
-      remove_parents(dag, DAG_RANK(dio->rank, dag));
+      remove_parents(dag, dio->rank);
     }
 
     /* Add the DIO sender as a candidate parent. */

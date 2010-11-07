@@ -67,7 +67,7 @@
 #define WITH_PHASE_OPTIMIZATION      1
 #endif
 #ifndef WITH_STREAMING
-#define WITH_STREAMING               1
+#define WITH_STREAMING               0
 #endif
 #ifndef WITH_CONTIKIMAC_HEADER
 #define WITH_CONTIKIMAC_HEADER       1
@@ -108,7 +108,7 @@ struct announcement_msg {
 #ifdef CONTIKIMAC_CONF_CYCLE_TIME
 #define CYCLE_TIME (CONTIKIMAC_CONF_CYCLE_TIME)
 #else
-#define CYCLE_TIME (RTIMER_ARCH_SECOND / MAC_CHANNEL_CHECK_RATE)
+#define CYCLE_TIME (RTIMER_ARCH_SECOND / NETSTACK_RDC_CHANNEL_CHECK_RATE)
 #endif
 
 #define MAX_PHASE_STROBE_TIME              RTIMER_ARCH_SECOND / 20
@@ -122,7 +122,7 @@ struct announcement_msg {
 
 #define STREAM_CCA_COUNT                   (CYCLE_TIME / (CCA_SLEEP_TIME + CCA_CHECK_TIME) - CCA_COUNT_MAX)
 
-#define GUARD_TIME                         7 * CHECK_TIME
+#define GUARD_TIME                         9 * CHECK_TIME
 
 #define INTER_PACKET_INTERVAL              RTIMER_ARCH_SECOND / 5000
 #define AFTER_ACK_DETECTECT_WAIT_TIME      RTIMER_ARCH_SECOND / 1500
@@ -754,10 +754,11 @@ send_packet(mac_callback_t mac_callback, void *mac_callback_ptr)
         break;
       }
       off();
+      t0 = RTIMER_NOW();
 #if NURTIMER
-      while(RTIMER_CLOCK_LT(t0, RTIMER_NOW(), t0 + CCA_SLEEP_TIME + CCA_CHECK_TIME));
+      while(RTIMER_CLOCK_LT(t0, RTIMER_NOW(), t0 + CCA_SLEEP_TIME));
 #else
-      while(RTIMER_CLOCK_LT(RTIMER_NOW(), t0 + CCA_SLEEP_TIME + CCA_CHECK_TIME)) { }
+      while(RTIMER_CLOCK_LT(RTIMER_NOW(), t0 + CCA_SLEEP_TIME)) { }
 #endif
     }
   }
@@ -773,7 +774,7 @@ send_packet(mac_callback_t mac_callback, void *mac_callback_ptr)
     on();
   }
   
-  
+  watchdog_periodic();
   t0 = RTIMER_NOW();
   t = RTIMER_NOW();
 #if NURTIMER
@@ -875,9 +876,7 @@ send_packet(mac_callback_t mac_callback, void *mac_callback_ptr)
      return from the function.  */
   if(collisions > 0) {
     ret = MAC_TX_COLLISION;
-  }
-  
-  if(!is_broadcast && !got_strobe_ack) {
+  } else if(!is_broadcast && !got_strobe_ack) {
     ret = MAC_TX_NOACK;
   } else {
     ret = MAC_TX_OK;
@@ -911,6 +910,7 @@ qsend_packet(mac_callback_t sent, void *ptr)
 {
   int ret = send_packet(sent, ptr);
   if(ret != MAC_TX_DEFERRED) {
+    //    printf("contikimac qsend_packet %p\n", ptr);
     mac_call_sent_callback(sent, ptr, ret, 1);
   }
 }
@@ -1022,9 +1022,9 @@ send_announcement(void *ptr)
   int announcement_len;
   int transmit_len;
 #if WITH_CONTIKIMAC_HEADER
-  struct hdr *chdr
+  struct hdr *chdr;
 #endif /* WITH_CONTIKIMAC_HEADER */
-
+  
   /* Set up the probe header. */
   packetbuf_clear();
   announcement_len = format_announcement(packetbuf_dataptr());

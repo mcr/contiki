@@ -42,8 +42,9 @@
  */
 
 #include "net/rpl/rpl.h"
+#include "net/neighbor-info.h"
 
-#define DEBUG DEBUG_ANNOTATE
+#define DEBUG DEBUG_NONE
 #include "net/uip-debug.h"
 
 static void reset(void *);
@@ -106,9 +107,9 @@ calculate_rank(rpl_parent_t *p, rpl_rank_t base_rank)
   } else {
     dag = (rpl_dag_t *)p->dag;
     if(p->local_confidence == 0) {
-      p->local_confidence = LINK_ETX_GUESS;
+      p->local_confidence = LINK_ETX_GUESS * ETX_DIVISOR;
     }
-    rank_increase = p->local_confidence * dag->min_hoprankinc;
+    rank_increase = (p->local_confidence * dag->min_hoprankinc) / ETX_DIVISOR;
     if(base_rank == 0) {
       base_rank = p->rank;
     }

@@ -115,12 +115,15 @@
 #define RPL_DEFAULT_OCP                 1
 
 /* Represents 2^n ms. */
+/* Default alue according to the specification is 3 which
+   means 8 milliseconds - this is not a reasonable value if
+   using power-saving / duty-cycling    */
 #define DEFAULT_DIO_INTERVAL_MIN        12
 
 /* Maximum amount of timer doublings. */
 #define DEFAULT_DIO_INTERVAL_DOUBLINGS  8
 
-/* Desired DIO redundancy. */
+/* Default DIO redundancy. */
 #define DEFAULT_DIO_REDUNDANCY          10
 
 /* Expire DAOs from neighbors that do not respond in this time. (seconds) */
@@ -146,7 +149,11 @@
 
 /* DIS related */
 #define RPL_DIS_SEND                    1
+#ifdef  RPL_DIS_INTERVAL_CONF
+#define RPL_DIS_INTERVAL                RPL_DIS_INTERVAL_CONF
+#else
 #define RPL_DIS_INTERVAL                60
+#endif
 #define RPL_DIS_START_DELAY             5
 
 typedef uint16_t rpl_rank_t;
@@ -234,6 +241,24 @@ struct rpl_dio {
 
 typedef struct rpl_dio rpl_dio_t;
 
+#if RPL_CONF_STATS
+/* Statistics for fault management. */
+struct rpl_stats {
+  uint16_t mem_overflows;
+  uint16_t local_repairs;
+  uint16_t global_repairs;
+  uint16_t malformed_msgs;
+  uint16_t resets;
+};
+typedef struct rpl_stats rpl_stats_t;
+
+extern rpl_stats_t rpl_stats;
+
+#define RPL_STAT(code)	(code) 
+#else
+#define RPL_STAT(code)
+#endif /* RPL_CONF_STATS */
+
 /* Directed Acyclic Graph */
 struct rpl_dag {
   /* DAG configuration */
@@ -290,6 +315,7 @@ void uip_rpl_input(void);
 rpl_dag_t *rpl_set_root(uip_ipaddr_t *);
 int rpl_set_prefix(rpl_dag_t *dag, uip_ipaddr_t *prefix, int len);
 int rpl_repair_dag(rpl_dag_t *dag);
+void rpl_local_repair(rpl_dag_t *dag);
 int rpl_set_default_route(rpl_dag_t *dag, uip_ipaddr_t *from);
 void rpl_process_dio(uip_ipaddr_t *, rpl_dio_t *);
 int rpl_process_parent_event(rpl_dag_t *, rpl_parent_t *);

@@ -53,6 +53,8 @@ ifdef PLATFORM_BUILD
   CFLAGS += -DPLATFORM_BUILD -DWITH_LOADER_ARCH -DAUTOSTART_ENABLE
   LDFLAGS += -Wl,--out-implib=contiki-main.$(TARGET).a \
              -u _cfs_open -u _cfs_opendir -u _uiplib_ipaddrconv
+else
+  CONTIKI_TARGET_SOURCEFILES += unload.c
 endif
 
 ### Set a target-specific variable value

@@ -59,6 +59,9 @@ void CC_FASTCALL
 ethernet_init(struct ethernet_config *config)
 {
   static const char signature[4] = {0x65, 0x74, 0x68, 0x01};
+
+#ifndef ETHERNET
+
   struct mod_ctrl module_control = {cfs_read};
   u8_t byte;
 
@@ -85,6 +88,14 @@ ethernet_init(struct ethernet_config *config)
     }
   }
 
+#else /* !ETHERNET */
+
+  extern void ETHERNET;
+
+  module = &ETHERNET;
+
+#endif /* !ETHERNET */
+
   module->buffer = uip_buf;
   module->buffer_size = UIP_BUFSIZE;
   module->init(config->addr);
@@ -109,6 +120,8 @@ ethernet_exit(void)
 {
   module->exit();
 
+#ifndef ETHERNET
   mod_free(module);
+#endif /* !ETHERNET */
 }
 /*---------------------------------------------------------------------------*/

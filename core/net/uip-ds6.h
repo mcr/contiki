@@ -152,19 +152,23 @@
 
 
 /*--------------------------------------------------*/
+#if UIP_CONF_IPV6_QUEUE_PKT
+#include "net/uip-packetqueue.h"
+#endif                          /*UIP_CONF_QUEUE_PKT */
 /** \brief An entry in the nbr cache */
 typedef struct uip_ds6_nbr {
   uint8_t isused;
   uip_ipaddr_t ipaddr;
   uip_lladdr_t lladdr;
-  uint8_t isrouter;
-  uint8_t state;
   struct stimer reachable;
   struct stimer sendns;
+  clock_time_t last_lookup;
   uint8_t nscount;
+  uint8_t isrouter;
+  uint8_t state;
 #if UIP_CONF_IPV6_QUEUE_PKT
-  uint8_t queue_buf[UIP_BUFSIZE - UIP_LLH_LEN];
-  uint8_t queue_buf_len;
+  struct uip_packetqueue_handle packethandle;
+#define UIP_DS6_NBR_PACKET_LIFETIME CLOCK_SECOND * 4
 #endif                          /*UIP_CONF_QUEUE_PKT */
 } uip_ds6_nbr_t;
 
@@ -223,7 +227,6 @@ typedef struct uip_ds6_maddr {
 
 /** \brief define some additional RPL related route state and
  *  neighbor callback for RPL - if not a DS6_ROUTE_STATE is already set */
-/* #if UIP_CONF_IPV6_RPL */
 #ifndef UIP_DS6_ROUTE_STATE_TYPE
 #define UIP_DS6_ROUTE_STATE_TYPE rpl_route_entry_t
 /* Needed for the extended route entry state when using ContikiRPL */
@@ -234,10 +237,13 @@ typedef struct rpl_route_entry {
   uint8_t learned_from;
 } rpl_route_entry_t;
 #endif /* UIP_DS6_ROUTE_STATE_TYPE */
+
+/* only define the callback if RPL is active */
+#if UIP_CONF_IPV6_RPL
 #ifndef UIP_CONF_DS6_NEIGHBOR_STATE_CHANGED
 #define UIP_CONF_DS6_NEIGHBOR_STATE_CHANGED rpl_ipv6_neighbor_callback
 #endif /* UIP_CONF_DS6_NEIGHBOR_STATE_CHANGED */
-/* #endif /\* UIP_CONF_IPV6_RPL *\/ */
+#endif /* UIP_CONF_IPV6_RPL */
 
 
 

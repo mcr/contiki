@@ -141,7 +141,7 @@ PT_THREAD(handle_output(struct httpd_state *s))
   s->fd = cfs_open(&s->filename[1], CFS_READ);
   petsciiconv_toascii(s->filename, sizeof(s->filename));
   if(s->fd < 0) {
-    strcpy(s->filename, "/notfound.html");
+    strcpy(s->filename, "/notfound.htm");
     s->fd = cfs_open(&s->filename[1], CFS_READ);
     petsciiconv_toascii(s->filename, sizeof(s->filename));
     PT_WAIT_THREAD(&s->outputpt,
@@ -150,10 +150,10 @@ PT_THREAD(handle_output(struct httpd_state *s))
       PT_WAIT_THREAD(&s->outputpt,
                      send_string(s, "not found"));
       uip_close();
-      webserver_log_file(&uip_conn->ripaddr, "404 (no notfound.html)");
+      webserver_log_file(&uip_conn->ripaddr, "404 (no notfound.htm)");
       PT_EXIT(&s->outputpt);
     }
-    webserver_log_file(&uip_conn->ripaddr, "404 - notfound.html");
+    webserver_log_file(&uip_conn->ripaddr, "404 - notfound.htm");
   } else {
     PT_WAIT_THREAD(&s->outputpt,
 		   send_headers(s, http_header_200));
@@ -186,7 +186,7 @@ PT_THREAD(handle_input(struct httpd_state *s))
   urlconv_tofilename(s->filename, s->inputbuf, sizeof(s->filename));
 #else /* URLCONV */
   if(s->inputbuf[1] == ISO_space) {
-    strncpy(s->filename, http_index_html, sizeof(s->filename));
+    strncpy(s->filename, http_index_htm, sizeof(s->filename));
   } else {
     s->inputbuf[PSOCK_DATALEN(&s->sin) - 1] = 0;
     strncpy(s->filename, s->inputbuf, sizeof(s->filename));
@@ -271,7 +271,7 @@ httpd_appcall(void *state)
 void
 httpd_init(void)
 {
-  tcp_listen(HTONS(80));
+  tcp_listen(UIP_HTONS(80));
   memb_init(&conns);
 #if URLCONV
   urlconv_init();

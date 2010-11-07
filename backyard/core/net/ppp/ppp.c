@@ -166,8 +166,8 @@ ppp_reject_protocol(u16_t protocol, u8_t *buffer, u16_t count)
   pkt = (LCPPKT *)buffer;
   pkt->code = PROT_REJ;		/* Write Conf_rej */
   /*pkt->id = tid++;*/			/* write tid */
-  pkt->len = htons(count + 6);
-  *((u16_t *)(&pkt->data[0])) = htons(protocol);
+  pkt->len = uip_htons(count + 6);
+  *((u16_t *)(&pkt->data[0])) = uip_htons(protocol);
 
   ahdlc_tx(LCP, buffer, 0, (u16_t)(count + 6), 0);
 }

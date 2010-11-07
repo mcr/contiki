@@ -59,12 +59,6 @@ PROCINIT(&etimer_process,
 void clock_update(void);
 
 /*-----------------------------------------------------------------------------------*/
-off_t __fastcall__
-lseek(int, off_t, int)
-{
-  return -1;
-}
-/*-----------------------------------------------------------------------------------*/
 void
 main(void)
 {
@@ -111,12 +105,11 @@ main(void)
   
   while(1) {
 
+    process_run();
+
+    etimer_request_poll();
+
     clock_update();
-
-    if(process_run() < 2) {
-
-      etimer_request_poll();
-    }
   }
 }
 /*-----------------------------------------------------------------------------------*/

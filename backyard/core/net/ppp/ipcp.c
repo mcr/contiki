@@ -438,7 +438,7 @@ ipcp_task(u8_t *buffer)
       /* Write length */
       t = bptr - buffer;
       /* length here -  code and ID + */
-      pkt->len = htons(t);	
+      pkt->len = uip_htons(t);	
       
       DEBUG1(("\n**Sending IPCP Request packet\n"));
       

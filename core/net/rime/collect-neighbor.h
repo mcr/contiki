@@ -63,19 +63,22 @@ struct collect_neighbor_list {
 
 struct collect_neighbor {
   struct collect_neighbor *next;
-  uint16_t time;
   rimeaddr_t addr;
   uint16_t rtmetric;
+  uint16_t age;
+  uint16_t le_age;
   struct collect_link_estimate le;
+  struct timer congested_timer;
 };
 
 void collect_neighbor_init(void);
 
+list_t collect_neighbor_list(struct collect_neighbor_list *neighbor_list);
 
 void collect_neighbor_list_new(struct collect_neighbor_list *neighbor_list);
 
-void collect_neighbor_list_add(struct collect_neighbor_list *neighbor_list,
-                               const rimeaddr_t *addr, uint8_t rtmetric);
+int collect_neighbor_list_add(struct collect_neighbor_list *neighbor_list,
+                              const rimeaddr_t *addr, uint16_t rtmetric);
 void collect_neighbor_list_remove(struct collect_neighbor_list *neighbor_list,
                                   const rimeaddr_t *addr);
 struct collect_neighbor *collect_neighbor_list_find(struct collect_neighbor_list *neighbor_list,
@@ -85,13 +88,17 @@ int collect_neighbor_list_num(struct collect_neighbor_list *neighbor_list);
 struct collect_neighbor *collect_neighbor_list_get(struct collect_neighbor_list *neighbor_list, int num);
 void collect_neighbor_list_purge(struct collect_neighbor_list *neighbor_list);
 
-void collect_neighbor_update_rtmetric(struct collect_neighbor *n, uint8_t rtmetric);
-void collect_neighbor_set_lifetime(int seconds);
-void collect_neighbor_tx(struct collect_neighbor *n, uint8_t num_tx);
+void collect_neighbor_update_rtmetric(struct collect_neighbor *n,
+                                      uint16_t rtmetric);
+void collect_neighbor_tx(struct collect_neighbor *n, uint16_t num_tx);
 void collect_neighbor_rx(struct collect_neighbor *n);
-void collect_neighbor_tx_fail(struct collect_neighbor *n, uint8_t num_tx);
-int collect_neighbor_link_estimate(struct collect_neighbor *n);
-int collect_neighbor_rtmetric(struct collect_neighbor *n);
+void collect_neighbor_tx_fail(struct collect_neighbor *n, uint16_t num_tx);
+void collect_neighbor_set_congested(struct collect_neighbor *n);
+int collect_neighbor_is_congested(struct collect_neighbor *n);
+
+uint16_t collect_neighbor_link_estimate(struct collect_neighbor *n);
+uint16_t collect_neighbor_rtmetric_link_estimate(struct collect_neighbor *n);
+uint16_t collect_neighbor_rtmetric(struct collect_neighbor *n);
 
 
 #endif /* __COLLECT_NEIGHBOR_H__ */

@@ -47,10 +47,15 @@
 #include "net/rpl/rpl.h"
 #include "net/neighbor-info.h"
 
-#define DEBUG DEBUG_ANNOTATE
+#define DEBUG DEBUG_NONE
 #include "net/uip-debug.h"
 
 #include <limits.h>
+#include <string.h>
+
+#if RPL_CONF_STATS
+rpl_stats_t rpl_stats;
+#endif
 
 /************************************************************************/
 extern uip_ds6_route_t uip_ds6_routing_table[UIP_DS6_ROUTE_NB];
@@ -123,6 +128,8 @@ rpl_link_neighbor_callback(const rimeaddr_t *addr, int known, int etx)
   rpl_dag_t *dag;
   rpl_parent_t *parent;
 
+  /*  etx = FIX2ETX(etx); */
+
   uip_ip6addr(&ipaddr, 0xfe80, 0, 0, 0, 0, 0, 0, 0);
   uip_ds6_set_addr_iid(&ipaddr, (uip_lladdr_t *)addr);
   PRINTF("RPL: Neighbor ");
@@ -170,8 +177,19 @@ rpl_ipv6_neighbor_callback(uip_ds6_nbr_t *nbr)
   rpl_dag_t *dag;
   rpl_parent_t *p;
 
+  /* This only handles one DODAG - if multiple we need to check all */
   dag = rpl_get_dag(RPL_ANY_INSTANCE);
-  if(!nbr->isused && dag) {
+  if(dag == NULL) {
+    return;
+  }
+
+  /* if this is our default route then clean the dag->def_route state */
+  if(dag->def_route != NULL &&
+     uip_ipaddr_cmp(&dag->def_route->ipaddr, &nbr->ipaddr)) {
+    dag->def_route = NULL;
+  }
+
+  if(!nbr->isused) {
     PRINTF("RPL: Removing neighbor ");
     PRINT6ADDR(&nbr->ipaddr);
     PRINTF("\n");
@@ -191,5 +209,8 @@ rpl_init(void)
 
   rpl_reset_periodic_timer();
   neighbor_info_subscribe(rpl_link_neighbor_callback);
+#if RPL_CONF_STATS
+  memset(&rpl_stats, 0, sizeof(rpl_stats));
+#endif
 }
 /************************************************************************/

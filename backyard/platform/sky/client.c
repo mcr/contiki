@@ -86,7 +86,7 @@ struct uip_fw_netif cc2420if =
 PROCESS(button_process, "Button process");
 
 /* Radio stuff in network byte order. */
-static u16_t panId = HTONS(0x2024);
+static u16_t panId = UIP_HTONS(0x2024);
 
 #ifndef RF_CHANNEL
 #define RF_CHANNEL              15

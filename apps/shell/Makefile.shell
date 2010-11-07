@@ -10,19 +10,20 @@ shell_src = shell.c shell-reboot.c \
             shell-rime-sendcmd.c shell-download.c shell-rime-neighbors.c \
             shell-rime-unicast.c \
             shell-tweet.c shell-base64.c \
-            shell-netperf.c shell-memdebug.c
+            shell-netperf.c shell-memdebug.c \
+	    shell-powertrace.c shell-collect-view.c
 shell_dsc = shell-dsc.c
-
-APPS += webbrowser
-include $(CONTIKI)/apps/webbrowser/Makefile.webbrowser
-ifndef PLATFORM_BUILD
-  override webbrowser_src = webclient.c http-strings.c http-user-agent-string.c
-endif
 
 APPS += webserver
 include $(CONTIKI)/apps/webserver/Makefile.webserver
 ifndef PLATFORM_BUILD
   override webserver_src = http-strings.c psock.c memb.c httpd-cfs.c urlconv.c webserver-nogui.c
+endif
+
+APPS += webbrowser
+include $(CONTIKI)/apps/webbrowser/Makefile.webbrowser
+ifndef PLATFORM_BUILD
+  override webbrowser_src = webclient.c http-strings.c http-user-agent-string.c
 endif
 
 APPS += irc
@@ -39,6 +40,13 @@ endif
 
 APPS += twitter
 include $(CONTIKI)/apps/twitter/Makefile.twitter
+
+APPS += powertrace
+include $(CONTIKI)/apps/powertrace/Makefile.powertrace
+
+
+APPS += collect-view
+include $(CONTIKI)/apps/collect-view/Makefile.collect-view
 
 ifeq ($(TARGET),sky)
   shell_src += shell-sky.c shell-exec.c shell-sensortweet.c

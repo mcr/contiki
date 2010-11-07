@@ -43,7 +43,7 @@ endif
 LOWERCASE = -abcdefghijklmnopqrstuvwxyz
 UPPERCASE = _ABCDEFGHIJKLMNOPQRSTUVWXYZ
 TARGET_UPPERCASE := ${shell echo $(TARGET) | sed 'y!$(LOWERCASE)!$(UPPERCASE)!'}
-CFLAGS += -DCONTIKI_TARGET_$(TARGET_UPPERCASE)
+CFLAGS += -DCONTIKI=1 -DCONTIKI_TARGET_$(TARGET_UPPERCASE)=1
 
 include $(CONTIKI)/core/net/rime/Makefile.rime
 include $(CONTIKI)/core/net/mac/Makefile.mac
@@ -59,7 +59,7 @@ ifdef UIP_CONF_IPV6
   CFLAGS += -DUIP_CONF_IPV6=1
   UIP   = uip6.c tcpip.c psock.c uip-udp-packet.c uip-split.c \
           resolv.c tcpdump.c uiplib.c
-  NET   += $(UIP) uip-icmp6.c uip-nd6.c \
+  NET   += $(UIP) uip-icmp6.c uip-nd6.c uip-packetqueue.c \
           sicslowpan.c neighbor-attr.c neighbor-info.c uip-ds6.c
   include $(CONTIKI)/core/net/rpl/Makefile.rpl
 else # UIP_CONF_IPV6

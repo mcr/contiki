@@ -648,7 +648,7 @@ LOADER_INIT_FUNC(ctk_termtelnet_init, arg)
 EK_EVENTHANDLER(eventhandler, ev, data)
 {
   if(ev == EK_EVENT_INIT) {
-    tcp_listen(HTONS(PORT));
+    tcp_listen(UIP_HTONS(PORT));
   } else if(ev == tcpip_event) {
     ctk_termtelnet_appcall(data);
   }

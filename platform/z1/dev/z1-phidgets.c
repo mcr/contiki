@@ -51,11 +51,11 @@ sensors_activate(uint8_t type)
   uint8_t pre = adc_on;
 
   adc_on |= type;
-  P6SEL |= type;
 
   if(pre == 0 && adc_on > 0) {
     P6DIR = 0xff;
     P6OUT = 0x00;
+    P6SEL |= 0x8b; /* bit 7 + 3 + 1 + 0 */
 
     /* if nothing was started before, start up the ADC system */
     /* Set up the ADC. */

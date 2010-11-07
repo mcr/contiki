@@ -1,4 +1,3 @@
-
 /**
  * \addtogroup uip6
  * @{
@@ -55,7 +54,7 @@
 #include <limits.h>
 #include <string.h>
 
-#define DEBUG DEBUG_ANNOTATE
+#define DEBUG DEBUG_NONE
 
 #include "net/uip-debug.h"
 
@@ -238,16 +237,24 @@ dio_input(void)
       len = 2 + buffer[i + 1];
     }
 
+    if(len + i > buffer_length) {
+      PRINTF("RPL: Invalid DIO packet\n");
+      RPL_STAT(rpl_stats.malformed_msgs++);
+      return;
+    }
+
     switch(subopt_type) {
     case RPL_DIO_SUBOPT_DAG_MC:
       if(len < 7) {
         PRINTF("RPL: Invalid DAG MC, len = %d\n", len);
+	RPL_STAT(rpl_stats.malformed_msgs++);
         return;
       }
       break;
     case RPL_DIO_SUBOPT_ROUTE_INFO:
       if(len < 9) {
         PRINTF("RPL: Invalid destination prefix option, len = %d\n", len);
+	RPL_STAT(rpl_stats.malformed_msgs++);
         return;
       }
       /* flags is both preference and flags for now */
@@ -262,6 +269,8 @@ dio_input(void)
                (dio.destination_prefix.length + 7) / 8);
       } else {
         PRINTF("RPL: Invalid route infoprefix option, len = %d\n", len);
+	RPL_STAT(rpl_stats.malformed_msgs++);
+	return;
       }
 
       break;
@@ -280,6 +289,7 @@ dio_input(void)
     case RPL_DIO_SUBOPT_PREFIX_INFO:
       if(len != 32) {
         PRINTF("RPL: DAG Prefix info not ok, len != 32\n");
+	RPL_STAT(rpl_stats.malformed_msgs++);
         return;
       }
       dio.prefix_info.length = buffer[i + 2];
@@ -400,6 +410,7 @@ dao_input(void)
   int len;
   int i;
   int learned_from;
+  rpl_parent_t *p;
 
   lifetime = 0;
   prefixlen = 0;
@@ -483,6 +494,17 @@ dao_input(void)
   learned_from = uip_is_addr_mcast(&dao_sender_addr) ?
                  RPL_ROUTE_FROM_MULTICAST_DAO : RPL_ROUTE_FROM_UNICAST_DAO;
 
+  if(learned_from == RPL_ROUTE_FROM_UNICAST_DAO) {
+    /* Check if this is a DAO forwarding loop. */
+    p = rpl_find_parent(dag, &dao_sender_addr);
+    if(p != NULL && DAG_RANK(p->rank, dag) < DAG_RANK(dag->rank, dag)) {
+      printf("RPL: Loop detected when receiving a unicast DAO from a node with a lower rank! (%u < %u)\n",
+          DAG_RANK(p->rank, dag), DAG_RANK(dag->rank, dag));
+      rpl_local_repair(dag);
+      return;
+    }
+  }
+
   rep = rpl_add_route(dag, &prefix, prefixlen, &dao_sender_addr);
   if(rep == NULL) {
     PRINTF("RPL: Could not add a route after receiving a DAO\n");
@@ -498,7 +520,7 @@ dao_input(void)
       PRINT6ADDR(&dag->preferred_parent->addr);
       PRINTF("\n");
       uip_icmp6_send(&dag->preferred_parent->addr,
-	ICMP6_RPL, RPL_CODE_DAO, buffer_length);
+                     ICMP6_RPL, RPL_CODE_DAO, buffer_length);
     } else if(flags & RPL_DAO_K_FLAG) {
       dao_ack_output(dag, &dao_sender_addr, sequence);
     }

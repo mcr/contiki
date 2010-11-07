@@ -400,6 +400,10 @@ public abstract class MspMoteType implements MoteType {
 
     /* Fetch all executable addresses */
     ArrayList<Integer> addresses = elf.getDebug().getExecutableAddresses();
+    if (addresses == null) {
+      // No debug information is available
+      return fileToLineHash;
+    }
 
     for (int address: addresses) {
       DebugInfo info = elf.getDebugInfo(address);
@@ -419,6 +423,7 @@ public abstract class MspMoteType implements MoteType {
         try {
           file = file.getCanonicalFile();
         } catch (IOException e) {
+        } catch (java.security.AccessControlException e) {
         }
 
         Hashtable<Integer, Integer> lineToAddrHash = fileToLineHash.get(file);

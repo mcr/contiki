@@ -77,18 +77,18 @@ PROCESS_THREAD(rime_udp_process, ev, data)
 
   PROCESS_BEGIN();
 
-  broadcast_conn = udp_broadcast_new(HTONS(RIME_UDP_PORT), NULL);
+  broadcast_conn = udp_broadcast_new(UIP_HTONS(RIME_UDP_PORT), NULL);
   if(broadcast_conn == NULL) {
     PRINTF("rime-udp: Failed to allocate a broadcast connection!\n");
   }
 
   uip_create_unspecified(&ipaddr);
-  unicast_conn = udp_new(&ipaddr, HTONS(RIME_UDP_PORT), NULL);
+  unicast_conn = udp_new(&ipaddr, UIP_HTONS(RIME_UDP_PORT), NULL);
   if(unicast_conn == NULL) {
     PRINTF("rime-udp: Failed to allocate a unicast connection!\n");
   }
 
-  udp_bind(unicast_conn, HTONS(RIME_UDP_PORT));
+  udp_bind(unicast_conn, UIP_HTONS(RIME_UDP_PORT));
 
   while(1) {
     PROCESS_WAIT_EVENT_UNTIL(ev == tcpip_event);

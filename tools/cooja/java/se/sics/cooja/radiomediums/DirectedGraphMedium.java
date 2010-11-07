@@ -47,6 +47,8 @@ import se.sics.cooja.RadioConnection;
 import se.sics.cooja.Simulation;
 import se.sics.cooja.interfaces.Radio;
 import se.sics.cooja.plugins.DGRMConfigurator;
+import se.sics.cooja.plugins.Visualizer;
+import se.sics.cooja.plugins.skins.DGRMVisualizerSkin;
 
 /**
  * Directed Graph Radio Medium.
@@ -76,6 +78,7 @@ public class DirectedGraphMedium extends AbstractRadioMedium {
   public DirectedGraphMedium() {
     /* Do not initialize radio medium: use only for hash table */
     super(null);
+    Visualizer.registerVisualizerSkin(DGRMVisualizerSkin.class);
   }
 
   public DirectedGraphMedium(Simulation simulation) {
@@ -88,7 +91,8 @@ public class DirectedGraphMedium extends AbstractRadioMedium {
     /* Register plugin.
      * TODO Should be unregistered when radio medium is removed */
     simulation.getGUI().registerTemporaryPlugin(DGRMConfigurator.class);
-  }
+    Visualizer.registerVisualizerSkin(DGRMVisualizerSkin.class);
+}
 
   public void addEdge(Edge e) {
     edges.add(e);
@@ -137,7 +141,7 @@ public class DirectedGraphMedium extends AbstractRadioMedium {
   public void registerRadioInterface(Radio radio, Simulation sim) {
     super.registerRadioInterface(radio, sim);
 
-    for (Edge edge: edges) {
+    for (Edge edge: getEdges()) {
       if (edge.delayedLoadConfig == null) {
         continue;
       }
@@ -166,6 +170,41 @@ public class DirectedGraphMedium extends AbstractRadioMedium {
     requestEdgeAnalysis();
   }
 
+  public void updateSignalStrengths() {
+
+    /* Reset signal strengths */
+    for (Radio radio : getRegisteredRadios()) {
+      radio.setCurrentSignalStrength(SS_NOTHING);
+    }
+
+    /* Set signal strengths */
+    RadioConnection[] conns = getActiveConnections();
+    for (RadioConnection conn : conns) {
+      if (conn.getSource().getCurrentSignalStrength() < SS_STRONG) {
+        conn.getSource().setCurrentSignalStrength(SS_STRONG);
+      }
+      for (Radio dstRadio : conn.getDestinations()) {
+        if (dstRadio.getCurrentSignalStrength() < SS_STRONG) {
+          dstRadio.setCurrentSignalStrength(SS_STRONG);
+        }
+      }
+    }
+
+    /* Set signal strength to weak on interfered */
+    for (RadioConnection conn : conns) {
+      for (Radio intfRadio : conn.getInterfered()) {
+        if (intfRadio.getCurrentSignalStrength() < SS_STRONG) {
+          intfRadio.setCurrentSignalStrength(SS_STRONG);
+        }
+        
+        if (!intfRadio.isInterfered()) {
+          /*logger.warn("Radio was not interfered");*/
+          intfRadio.interfereAnyReception();
+        }
+      }
+    }
+  }
+  
   public static class DestinationRadio {
     public Radio radio; /* destination radio */
     public boolean toAll; /* to all destinations */
@@ -207,7 +246,7 @@ public class DirectedGraphMedium extends AbstractRadioMedium {
       new Hashtable<Radio,ArrayList<DestinationRadio>>();
 
     /* Fill edge hash table with all edges */
-    for (Edge edge: edges) {
+    for (Edge edge: getEdges()) {
       if (edge.source == null) {
         /* XXX Wait until edge configuration has been loaded */
         logger.warn("DGRM edges not loaded");
@@ -295,12 +334,27 @@ public class DirectedGraphMedium extends AbstractRadioMedium {
         /*logger.info(source + ": Fail, receiver is sender");*/
         continue;
       }
-
-      if (dest.ratio < 1.0 && random.nextDouble() > dest.ratio) {
-        /*logger.info(source + ": Fail, randomly");*/
+      
+      /* Fail if radios are on different (but configured) channels */ 
+      if (source.getChannel() >= 0 &&
+          dest.radio.getChannel() >= 0 &&
+          source.getChannel() != dest.radio.getChannel()) {
         continue;
       }
-
+      
+      if (!dest.radio.isReceiverOn()) {
+      	/* Fail: radio is off */
+      	/*logger.info(source + ": Fail, off");*/
+      	newConn.addInterfered(dest.radio);
+      	continue;
+      }
+      
+      if (dest.ratio < 1.0 && random.nextDouble() > dest.ratio) {
+        /*logger.info(source + ": Fail, randomly");*/
+      	/* TODO Interfere now? */
+        continue;
+      }
+      
       if (dest.radio.isReceiving()) {
         /* Fail: radio is already actively receiving */
         /*logger.info(source + ": Fail, receiving");*/
@@ -322,14 +376,14 @@ public class DirectedGraphMedium extends AbstractRadioMedium {
         }
         continue;
       }
-
+      
       if (dest.radio.isInterfered()) {
         /* Fail: radio is interfered in another connection */
         /*logger.info(source + ": Fail, interfered");*/
         newConn.addInterfered(dest.radio);
         continue;
       }
-
+      
       /* Success: radio starts receiving */
       /*logger.info(source + ": OK: " + dest.radio);*/
       newConn.addDestination(dest.radio, dest.delay);
@@ -342,7 +396,7 @@ public class DirectedGraphMedium extends AbstractRadioMedium {
     ArrayList<Element> config = new ArrayList<Element>();
     Element element;
 
-    for (Edge edge: edges) {
+    for (Edge edge: getEdges()) {
       element = new Element("edge");
       element.addContent(edge.getConfigXML());
       config.add(element);

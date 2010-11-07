@@ -133,6 +133,10 @@ generate_string_P(void *sstr)
 #endif
 }
 /*---------------------------------------------------------------------------*/
+#if FIND_THE_SCRIPT
+/* Needed if more than one script is implemented.
+ * The generate_routes RPL page is hard coded at present
+ */
 static
 PT_THREAD(send_string_P(struct httpd_state *s, char *str))
 {
@@ -140,6 +144,7 @@ PT_THREAD(send_string_P(struct httpd_state *s, char *str))
   PSOCK_GENERATOR_SEND(&s->sout, generate_string_P, str);
   PSOCK_END(&s->sout);
 }
+#endif
 /*---------------------------------------------------------------------------*/
 char http_content_type_html[] PROGMEM = "Content-type: text/html\r\n\r\n";
 static
@@ -202,7 +207,7 @@ bomb
 void
 httpd_init(void)
 {
-  tcp_listen(HTONS(80));
+  tcp_listen(UIP_HTONS(80));
   memb_init(&conns);
 }
 

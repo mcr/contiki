@@ -33,30 +33,47 @@
 
  /* Dummy watchdog routines for the Raven 1284p */
 #include "dev/watchdog.h"
+#include <avr/wdt.h>
+#include <avr/interrupt.h>
+
+static int stopped = 0;
 
 /*---------------------------------------------------------------------------*/
 void
 watchdog_init(void)
 {
+	MCUSR&=~(1<<WDRF);
+	stopped = 0;
+	watchdog_stop();
 }
 /*---------------------------------------------------------------------------*/
 void
 watchdog_start(void)
 {
+	stopped--;
+	if(!stopped)
+		wdt_enable(WDTO_2S);
 }
 /*---------------------------------------------------------------------------*/
 void
 watchdog_periodic(void)
 {
+	if(!stopped)
+		wdt_reset();
 }
 /*---------------------------------------------------------------------------*/
 void
 watchdog_stop(void)
 {
+	stopped++;
+	wdt_disable();
 }
 /*---------------------------------------------------------------------------*/
 void
 watchdog_reboot(void)
 {
+	cli();
+	wdt_enable(WDTO_15MS); //wd on,250ms 
+	while(1); //loop
 }
 /*---------------------------------------------------------------------------*/

@@ -180,12 +180,9 @@ public class Simulation extends Observable implements Runnable {
    * @param time Execution time
    */
   public void scheduleEvent(final TimeEvent e, final long time) {
-    /* TODO Strict scheduling from simulation thread */
-    if (e.isScheduled()) {
-      throw new IllegalStateException("Event already scheduled: " + e);
-    }
-    if (isRunning && !isSimulationThread()) {
-      throw new IllegalStateException("Scheduling event from non-simulation thread: " + e);
+    if (isRunning) {
+      /* TODO Strict scheduling from simulation thread */
+      assert isSimulationThread() : "Scheduling event from non-simulation thread: " + e;
     }
     eventQueue.addEvent(e, time);
   }
@@ -665,7 +662,11 @@ public class Simulation extends Observable implements Runnable {
         /* Create mote using mote type */
         Mote mote = moteType.generateMote(this);
         if (mote.setConfigXML(this, element.getChildren(), visAvailable)) {
-          addMote(mote);
+        	if (getMoteWithID(mote.getID()) != null) {
+        		logger.warn("Ignoring duplicate mote ID: " + mote.getID());
+        	} else {
+        		addMote(mote);
+        	}
         } else {
           logger.fatal("Mote was not created: " + element.getText().trim());
           throw new Exception("All motes were not recreated");
@@ -693,6 +694,7 @@ public class Simulation extends Observable implements Runnable {
         currentRadioMedium.unregisterMote(mote, Simulation.this);
         
         /* Dispose mote interface resources */
+        mote.removed();
         for (MoteInterface i: mote.getInterfaces().getInterfaces()) {
           i.removed();
         }

@@ -144,4 +144,8 @@ public interface Mote {
   public abstract boolean setConfigXML(Simulation simulation,
       Collection<Element> configXML, boolean visAvailable);
 
+  /**
+   * Called when mote is removed from simulation 
+   */
+  public void removed();
 }

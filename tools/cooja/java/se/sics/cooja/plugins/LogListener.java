@@ -44,6 +44,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileWriter;
@@ -108,12 +109,19 @@ public class LogListener extends VisPlugin {
   private final static int COLUMN_DATA = 2;
   private final static int COLUMN_CONCAT = 3;
   private final static String[] COLUMN_NAMES = {
-    "Time",
+    "Time ms",
     "Mote",
     "Message",
     "#"
   };
 
+  private static final long TIME_SECOND = 1000*Simulation.MILLISECOND;
+  private static final long TIME_MINUTE = 60*TIME_SECOND;
+  private static final long TIME_HOUR = 60*TIME_MINUTE;
+
+  private boolean formatTimeString = false;
+  private boolean hasHours = false;
+  
   private final JTable logTable;
   private TableRowSorter<TableModel> logFilter;
   private ArrayQueue<LogData> logs = new ArrayQueue<LogData>();
@@ -179,6 +187,12 @@ public class LogListener extends VisPlugin {
     model = new AbstractTableModel() {
       private static final long serialVersionUID = 3065150390849332924L;
       public String getColumnName(int col) {
+      	if (col == COLUMN_TIME && formatTimeString) {
+      		if (hasHours) {
+      			return "Time hh:mm:ss";
+      		}
+    			return "Time mm:ss";
+      	}
         return COLUMN_NAMES[col];
       }
       public int getRowCount() {
@@ -190,13 +204,13 @@ public class LogListener extends VisPlugin {
       public Object getValueAt(int row, int col) {
         LogData log = logs.get(row);
         if (col == COLUMN_TIME) {
-          return log.strTime;
+          return log.getTime();
         } else if (col == COLUMN_FROM) {
-          return log.strID;
+          return log.getID();
         } else if (col == COLUMN_DATA) {
           return log.ev.getMessage();
         } else if (col == COLUMN_CONCAT) {
-          return log.strID + ' ' + log.ev.getMessage();
+          return log.getID() + ' ' + log.ev.getMessage();
         }
         return null;
       }
@@ -252,7 +266,7 @@ public class LogListener extends VisPlugin {
 
       	if (backgroundColors) {
           LogData d = logs.get(logTable.getRowSorter().convertRowIndexToModel(row));
-          char last = d.strID.charAt(d.strID.length()-1);
+          char last = d.getID().charAt(d.getID().length()-1);
           if (last >= '0' && last <= '9') {
             setBackground(BG_COLORS[last - '0']);
           } else {
@@ -286,6 +300,35 @@ public class LogListener extends VisPlugin {
       logFilter.setSortable(i, false);
     }
     logTable.setRowSorter(logFilter);
+
+    /* Toggle time format */
+    logTable.getTableHeader().addMouseListener(new MouseAdapter() {
+    	public void mouseClicked(MouseEvent e) {
+        int colIndex = logTable.columnAtPoint(e.getPoint());
+        int columnIndex = logTable.convertColumnIndexToModel(colIndex);
+        if (columnIndex != COLUMN_TIME) {
+        	return;
+        }
+    		formatTimeString = !formatTimeString;
+    		repaintTimeColumn();
+    	}
+		});
+    logTable.addMouseListener(new MouseAdapter() {
+    	public void mouseClicked(MouseEvent e) {
+        int colIndex = logTable.columnAtPoint(e.getPoint());
+        int columnIndex = logTable.convertColumnIndexToModel(colIndex);
+        if (columnIndex != COLUMN_FROM) {
+        	return;
+        }
+
+        int rowIndex = logTable.rowAtPoint(e.getPoint());
+        LogData d = logs.get(logTable.getRowSorter().convertRowIndexToModel(rowIndex));
+        if (d == null) {
+        	return;
+        }
+        simulation.getGUI().signalMoteHighlight(d.ev.getMote());
+    	}
+		});
 
     /* Automatically update column widths */
     final TableColumnAdjuster adjuster = new TableColumnAdjuster(logTable);
@@ -323,6 +366,10 @@ public class LogListener extends VisPlugin {
     LogOutputEvent[] history = simulation.getEventCentral().getLogOutputHistory();
     if (history.length > 0) {
       for (LogOutputEvent historyEv: history) {
+      	if (!hasHours && historyEv.getTime() > TIME_HOUR) {
+      		hasHours = true;
+      		repaintTimeColumn();
+      	}
         LogData data = new LogData(historyEv);
         logs.add(data);
       }
@@ -356,6 +403,10 @@ public class LogListener extends VisPlugin {
       }
       public void newLogOutput(LogOutputEvent ev) {
         /* Display new log output */
+      	if (!hasHours && ev.getTime() > TIME_HOUR) {
+      		hasHours = true;
+      		repaintTimeColumn();
+      	}
         logUpdateAggregator.add(new LogData(ev));
       }
       public void removedLogOutput(LogOutputEvent ev) {
@@ -405,7 +456,13 @@ public class LogListener extends VisPlugin {
     setLocation(0, gui.getDesktopPane().getHeight() - 300);
   }
 
-  private void updateTitle() {
+  private void repaintTimeColumn() {
+  	logTable.getColumnModel().getColumn(COLUMN_TIME).setHeaderValue(
+  			logTable.getModel().getColumnName(COLUMN_TIME));
+  	repaint();
+	}
+
+	private void updateTitle() {
     setTitle("Log Listener (listening on " 
         + simulation.getEventCentral().getLogOutputObservationsCount() + " log interfaces)");
   }
@@ -424,6 +481,10 @@ public class LogListener extends VisPlugin {
     element.setText(filterTextField.getText());
     config.add(element);
 
+    if (formatTimeString) {
+    	element = new Element("formatted_time");
+    	config.add(element);
+    }
     if (backgroundColors) {
       element = new Element("coloring");
       config.add(element);
@@ -444,6 +505,9 @@ public class LogListener extends VisPlugin {
       } else if ("coloring".equals(name)) {
         backgroundColors = true;
         colorCheckbox.setSelected(true);
+      } else if ("formatted_time".equals(name)) {
+      	formatTimeString = true;
+      	repaintTimeColumn();
       }
     }
 
@@ -491,16 +555,35 @@ public class LogListener extends VisPlugin {
     });  
   }
 
-  private static class LogData {
+  private class LogData {
     public final LogOutputEvent ev;
-    public final String strID; /* cached value */
-    public final String strTime; /* cached value */
-
     public LogData(LogOutputEvent ev) {
       this.ev = ev;
-      this.strID = "ID:" + ev.getMote().getID();
-      this.strTime = "" + ev.getTime()/Simulation.MILLISECOND;
     }
+
+		public String getID() {
+			return "ID:" + ev.getMote().getID();
+		}
+
+		public String getTime() {
+			if (formatTimeString) {
+				long t = ev.getTime();
+				long h = (t / TIME_HOUR);
+				t -= (t / TIME_HOUR)*TIME_HOUR;
+				long m = (t / TIME_MINUTE);
+				t -= (t / TIME_MINUTE)*TIME_MINUTE;
+				long s = (t / TIME_SECOND);
+				t -= (t / TIME_SECOND)*TIME_SECOND;
+				long ms = t / Simulation.MILLISECOND;
+				if (hasHours) {
+					return String.format("%d:%02d:%02d.%03d", h,m,s,ms);
+				} else {
+					return String.format("%02d:%02d.%03d", m,s,ms);
+				}
+			} else {
+				return "" + ev.getTime() / Simulation.MILLISECOND;
+			}
+		}
   }
 
   private Action saveAction = new AbstractAction("Save to file") {
@@ -537,8 +620,8 @@ public class LogListener extends VisPlugin {
         PrintWriter outStream = new PrintWriter(new FileWriter(saveFile));
         for(LogData data : logs) {
           outStream.println(
-              data.strTime + "\t" + 
-              data.strID + "\t" + 
+              data.getTime() + "\t" + 
+              data.getID() + "\t" + 
               data.ev.getMessage());
         }
         outStream.close();
@@ -639,9 +722,9 @@ public class LogListener extends VisPlugin {
 
       StringBuilder sb = new StringBuilder();
       for(LogData data : logs) {
-        sb.append(data.strTime);
+        sb.append(data.getTime());
         sb.append("\t");
-        sb.append(data.strID);
+        sb.append(data.getID());
         sb.append("\t");
         sb.append(data.ev.getMessage());
         sb.append("\n");

@@ -33,8 +33,9 @@
 
 
 #include "lib/random.h"
-#include "lib/rand.h"
 #include "sys/clock.h"
+
+#include <stdlib.h>
 
 /*---------------------------------------------------------------------------*/
 void

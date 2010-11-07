@@ -60,7 +60,7 @@ PROCESS_THREAD(udpsend_process, ev, data)
   {
     uip_ipaddr_t addr;
     uip_ipaddr(&addr, 255,255,255,255); /* Change address here! */
-    c = udp_new(&addr, HTONS(4321), NULL);
+    c = udp_new(&addr, UIP_HTONS(4321), NULL);
     c->ttl = 1;			/* One hop only. */
   }
 

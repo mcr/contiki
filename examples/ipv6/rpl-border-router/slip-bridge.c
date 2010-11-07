@@ -41,7 +41,6 @@
 
 #include "net/uip.h"
 #include "net/uip-ds6.h"
-#include "net/rpl/rpl.h"
 #include "dev/slip.h"
 #include "dev/uart1.h"
 #include <string.h>

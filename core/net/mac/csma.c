@@ -96,16 +96,17 @@ retransmit_packet(void *ptr)
   struct queued_packet *q = ptr;
 
   queuebuf_to_packetbuf(q->buf);
-  PRINTF("csma: resending number %d\n", q->transmissions);
+  PRINTF("csma: resending number %d %p\n", q->transmissions, q);
   NETSTACK_RDC.send(packet_sent, q);
 }
 /*---------------------------------------------------------------------------*/
 static void
 free_packet(struct queued_packet *q)
 {
+  //  printf("free_packet %p\n", q);
+  ctimer_stop(&q->retransmit_timer);
   queuebuf_free(q->buf);
   memb_free(&packet_memb, q);
-  ctimer_stop(&q->retransmit_timer);
 }
 /*---------------------------------------------------------------------------*/
 static void
@@ -117,6 +118,8 @@ packet_sent(void *ptr, int status, int num_transmissions)
   void *cptr;
   int num_tx;
 
+  //  printf("packet_sent %p\n", q);
+  
   switch(status) {
   case MAC_TX_OK:
   case MAC_TX_NOACK:
@@ -143,7 +146,7 @@ packet_sent(void *ptr, int status, int num_transmissions)
     switch(status) {
     case MAC_TX_COLLISION:
       PRINTF("csma: rexmit collision %d\n", q->transmissions);
-      break; 
+      break;
     case MAC_TX_NOACK:
       PRINTF("csma: rexmit noack %d\n", q->transmissions);
       break;
@@ -159,26 +162,34 @@ packet_sent(void *ptr, int status, int num_transmissions)
        does not turn the radio off), we make the retransmission time
        proportional to the configured MAC channel check rate. */
     if(time == 0) {
-      time = CLOCK_SECOND / MAC_CHANNEL_CHECK_RATE;
+      time = CLOCK_SECOND / NETSTACK_RDC_CHANNEL_CHECK_RATE;
     }
 
     /* The retransmission time uses a linear backoff so that the
        interval between the transmissions increase with each
        retransmit. */
-    time = time + (random_rand() % ((q->transmissions + 1) * 3 * time));
-    
-    if(q->transmissions < q->max_transmissions) {
-      PRINTF("csma: retransmitting with time %lu\n", time);
+    time = time + (random_rand() % ((q->transmissions + 1) * 2 * time));
+
+    if(q->transmissions + q->collisions < q->max_transmissions) {
+      PRINTF("csma: retransmitting with time %lu %p\n", time, q);
       ctimer_set(&q->retransmit_timer, time,
                  retransmit_packet, q);
     } else {
       PRINTF("csma: drop after %d\n", q->transmissions);
+      queuebuf_to_packetbuf(q->buf);
       free_packet(q);
+      //      printf("call 1 %p\n", cptr);
       mac_call_sent_callback(sent, cptr, status, num_tx);
     }
-  } else if(status == MAC_TX_OK) {
-    PRINTF("csma: rexmit ok %d\n", q->transmissions);
+  } else {
+    if(status == MAC_TX_OK) {
+      PRINTF("csma: rexmit ok %d\n", q->transmissions);
+    } else {
+      PRINTF("csma: rexmit failed %d: %d\n", q->transmissions, status);
+    }
+    queuebuf_to_packetbuf(q->buf);
     free_packet(q);
+    //    printf("call 2 %p\n", cptr);
     mac_call_sent_callback(sent, cptr, status, num_tx);
   }
 }
@@ -194,6 +205,7 @@ send_packet(mac_callback_t sent, void *ptr)
   /* Remember packet for later. */
   q = memb_alloc(&packet_memb);
   if(q != NULL) {
+    //    printf("send_packet %p\n", q);
     q->buf = queuebuf_new_from_packetbuf();
     if(q != NULL) {
       if(packetbuf_attr(PACKETBUF_ATTR_MAX_MAC_TRANSMISSIONS) == 0) {

@@ -209,7 +209,7 @@ radio_uip_uaodv_send(void)
 
   /* Transmit uAODV packets with headers but without using route table */
   if (((struct uip_udpip_hdr *)&uip_buf[UIP_LLH_LEN])->proto == UIP_PROTO_UDP
-      && radio_uip_uaodv_dest_port(&uip_buf[UIP_LLH_LEN], uip_len) == HTONS(UAODV_UDPPORT)) {
+      && radio_uip_uaodv_dest_port(&uip_buf[UIP_LLH_LEN], uip_len) == UIP_HTONS(UAODV_UDPPORT)) {
     uip_ipaddr_t nexthop;
     memcpy(&nexthop, &((struct uip_udpip_hdr *)&uip_buf[UIP_LLH_LEN])->destipaddr, 4);
 
