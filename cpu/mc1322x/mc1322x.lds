@@ -2,7 +2,13 @@
 OUTPUT_FORMAT("elf32-littlearm", "elf32-bigarm",
 	      "elf32-littlearm")
 OUTPUT_ARCH(arm)
-SEARCH_DIR("=/usr/local/lib"); SEARCH_DIR("=/lib"); SEARCH_DIR("=/usr/lib");
+ENTRY(_start)
+
+MEMORY
+  {
+    ram (rwx) : org = 0x00400000, l = 96K
+  }
+
 SECTIONS
 {
 
@@ -18,43 +24,13 @@ HEAP_SIZE = 1024;
   PROVIDE (__executable_start = 0x00400000); . = 0x00400000;
   .text           :
   {
-    *start*.o	(.text)
+    *(.start)
     *(.irq)		
     *(.text .stub .text.* .gnu.linkonce.t.*)
     /* .gnu.warning sections are handled specially by elf32.em.  */
     *(.gnu.warning)
     *(.glue_7t) *(.glue_7) *(.vfp11_veneer) *(.v4_bx)
   } =0
-
-	.stack : {
-		__stack_start__ = . ;
-
-		. += IRQ_STACK_SIZE;
-		. = ALIGN (4);
-		__irq_stack_top__ = . ;
-
-		. += FIQ_STACK_SIZE;
-		. = ALIGN (4);
-		__fiq_stack_top__ = . ;
-
-		. += SVC_STACK_SIZE;
-		. = ALIGN (4);
-		__svc_stack_top__ = . ;
-
-		. += ABT_STACK_SIZE;
-		. = ALIGN (4);
-		__abt_stack_top__ = . ;
-
-		. += UND_STACK_SIZE;
-		. = ALIGN (4);
-		__und_stack_top__ = . ;
-
-		. += SYS_STACK_SIZE;
-		. = ALIGN (4);
-		__sys_stack_top__ = . ;
-
-		__stack_end__ = .;
-	}	
 
   .interp         : { *(.interp) }
   .note.gnu.build-id : { *(.note.gnu.build-id) }
@@ -189,6 +165,38 @@ HEAP_SIZE = 1024;
   }
   .data1          : { *(.data1) }
   _edata = .; PROVIDE (edata = .);
+
+	.stack : {
+		__stack_start__ = . ;
+
+		. += IRQ_STACK_SIZE;
+		. = ALIGN (4);
+		__irq_stack_top__ = . ;
+
+		. += FIQ_STACK_SIZE;
+		. = ALIGN (4);
+		__fiq_stack_top__ = . ;
+
+		. += SVC_STACK_SIZE;
+		. = ALIGN (4);
+		__svc_stack_top__ = . ;
+
+		. += ABT_STACK_SIZE;
+		. = ALIGN (4);
+		__abt_stack_top__ = . ;
+
+		. += UND_STACK_SIZE;
+		. = ALIGN (4);
+		__und_stack_top__ = . ;
+
+		. += SYS_STACK_SIZE;
+		. = ALIGN (4);
+		__sys_stack_top__ = . ;
+
+		__stack_end__ = .;
+	}
+
+
   __bss_start = .;
   __bss_start__ = .;
   .bss            :
