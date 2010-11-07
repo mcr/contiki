@@ -35,8 +35,17 @@
 
 #include <stdio.h>
 #include "contiki.h"
+#include "mc1322x.h"
 
 int raise(void)
 {
 	return 0;
+}
+
+void srand(unsigned int seed) {
+	*MACA_RANDOM = seed;
+}
+
+int rand(void) {
+	return (int)*MACA_RANDOM;
 }
