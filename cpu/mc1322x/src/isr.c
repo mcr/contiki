@@ -48,19 +48,6 @@ void irq_register_timer_handler(int timer, void (*isr)(void))
 }
 
 
-static void (*tmr_isr_funcs[4])(void) = {
-	tmr0_isr,
-	tmr1_isr,
-	tmr2_isr,
-	tmr3_isr
-};
-
-void irq_register_timer_handler(int timer, void (*isr)(void))
-{
-	tmr_isr_funcs[timer] = isr;
-}
-
-
 __attribute__ ((section (".irq")))
 __attribute__ ((interrupt("IRQ"))) 
 void irq(void)
