@@ -36,7 +36,7 @@
 #ifndef NVM_H
 #define NVM_H
 
-#include "stdint.h"
+#include <stdint.h>
 
 typedef enum
 {
