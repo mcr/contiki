@@ -441,6 +441,9 @@ public class LogScriptEngine {
 
   private TimeEvent timeoutEvent = new TimeEvent(0) {
     public void execute(long t) {
+    	if (!scriptActive) {
+    		return;
+    	}
       logger.info("Timeout event @ " + t);
       engine.put("TIMEOUT", true);
       stepScript();

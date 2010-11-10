@@ -1,6 +1,7 @@
 # $Id$
 
 CFLAGS+=-Os -g
+CLEAN += *.z1 symbols.c symbols.h
 
 ARCH=msp430.c leds.c watchdog.c xmem.c \
      spix.c cc2420.c cc2420-aes.c cc2420-arch.c cc2420-arch-sfd.c\

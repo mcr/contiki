@@ -352,6 +352,21 @@ public class DirectedGraphMedium extends AbstractRadioMedium {
       if (dest.ratio < 1.0 && random.nextDouble() > dest.ratio) {
         /*logger.info(source + ": Fail, randomly");*/
       	/* TODO Interfere now? */
+        newConn.addInterfered(dest.radio);
+
+        dest.radio.interfereAnyReception();
+        RadioConnection otherConnection = null;
+        for (RadioConnection conn : getActiveConnections()) {
+          for (Radio dstRadio : conn.getDestinations()) {
+            if (dstRadio == dest.radio) {
+              otherConnection = conn;
+              break;
+            }
+          }
+        }
+        if (otherConnection != null) {
+          otherConnection.addInterfered(dest.radio);
+        }
         continue;
       }
       

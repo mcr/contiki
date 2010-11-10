@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010, STMicroelectronics.
+ * Copyright (c) 2006, Swedish Institute of Computer Science
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,45 +26,54 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * This file is part of the Contiki operating system.
- *
- * $Id$
+ * @(#)$Id$
  */
 
-/**
- * \file
- *         MB851-specific Contiki shell
- * \author
- *         Salvatore Pitrulli <salvopitru@users.sourceforge.net>
- *
- */
+#include <io.h>
+#include <signal.h>
 
 #include "contiki.h"
-#include "serial-shell.h"
+#include "contiki-net.h"
 
-#include "shell-sensors.h"
+#include "dev/spi.h"
+#include "dev/cc2420.h"
 
-/*---------------------------------------------------------------------------*/
-PROCESS(mb851_shell_process, "MB851 Contiki shell");
-AUTOSTART_PROCESSES(&mb851_shell_process);
-/*---------------------------------------------------------------------------*/
-PROCESS_THREAD(mb851_shell_process, ev, data)
-{
-  PROCESS_BEGIN();
+#ifndef CONF_SFD_TIMESTAMPS
+#define CONF_SFD_TIMESTAMPS 0
+#endif /* CONF_SFD_TIMESTAMPS */
 
-  serial_shell_init();
-  shell_blink_init();
-  shell_ps_init();
-  shell_reboot_init();
-  shell_text_init();
-  shell_time_init();
-  shell_sensors_init();
-  
-#if COFFEE_FILES
-  shell_coffee_init();
-  shell_file_init();
+#ifdef CONF_SFD_TIMESTAMPS
+#include "cc2420-arch-sfd.h"
 #endif
-  
-  PROCESS_END();
+
+/*---------------------------------------------------------------------------*/
+#if 0
+// this is now handled in the ADXL345 accelerometer code as it uses irq on port1 too.
+interrupt(CC2420_IRQ_VECTOR)
+cc24240_port1_interrupt(void)
+{
+  ENERGEST_ON(ENERGEST_TYPE_IRQ);
+  if(cc2420_interrupt()) {
+    LPM4_EXIT;
+  }
+  ENERGEST_OFF(ENERGEST_TYPE_IRQ);
+}
+#endif
+/*---------------------------------------------------------------------------*/
+void
+cc2420_arch_init(void)
+{
+  spi_init();
+
+  /* all input by default, set these as output */
+  CC2420_CSN_PORT(DIR) |= BV(CC2420_CSN_PIN);
+  CC2420_VREG_PORT(DIR) |= BV(CC2420_VREG_PIN);
+  CC2420_RESET_PORT(DIR) |= BV(CC2420_RESET_PIN);
+
+#if CONF_SFD_TIMESTAMPS
+  cc2420_arch_sfd_init();
+#endif
+
+  CC2420_SPI_DISABLE();                /* Unselect radio. */
 }
 /*---------------------------------------------------------------------------*/
