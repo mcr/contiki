@@ -36,7 +36,7 @@
 #ifndef LOWLEVEL_H
 #define LOWLEVEL_H
 
-#include "types.h"
+#include "crm.h"
 
 #define trim_xtal() pack_XTAL_CNTL(CTUNE_4PF, CTUNE, FTUNE, IBIAS)
 void default_vreg_init(void);
