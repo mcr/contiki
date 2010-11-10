@@ -167,6 +167,11 @@ public class ContikiMoteCompileDialog extends AbstractCompileDialog {
           ((ContikiMoteType)moteType).archiveFile,
           ((ContikiMoteType)moteType).javaClassName
       );
+      CompileContiki.redefineCOOJASources(
+      		moteType,
+      		env
+      );
+      
       String[] envOneDimension = new String[env.length];
       for (int i=0; i < env.length; i++) {
         envOneDimension[i] = env[i][0] + "=" + env[i][1];
