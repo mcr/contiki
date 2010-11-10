@@ -38,6 +38,8 @@
 
 #define INTBASE        (0x80020000)
 
+#include <stdint.h>
+
 /* Structure-based ITC access */
 #define __INTERRUPT_union(x)		  \
 		union {			  \
