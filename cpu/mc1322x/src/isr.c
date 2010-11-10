@@ -34,6 +34,7 @@
  */
 
 #include <mc1322x.h>
+#include <stdint.h>
 
 static void (*tmr_isr_funcs[4])(void) = {
 	tmr0_isr,
