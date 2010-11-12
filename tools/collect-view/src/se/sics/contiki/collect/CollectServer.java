@@ -892,6 +892,10 @@ public class CollectServer implements SerialConnectionListener {
     return configTable.getProperty(property, config.getProperty(property, defaultValue));
   }
 
+  public void setConfig(String property, String value) {
+    configTable.setProperty(property, value);
+  }
+
   public void removeConfig(String property) {
     configTable.remove(property);
   }
