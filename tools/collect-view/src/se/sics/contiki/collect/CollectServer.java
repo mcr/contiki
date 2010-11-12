@@ -250,6 +250,7 @@ public class CollectServer implements SerialConnectionListener {
     NodeControl nodeControl = new NodeControl(this, MAIN);
 
     visualizers = new Visualizer[] {
+        nodeControl,
         mapPanel,
         new MapPanel(this, "Network Graph", MAIN, false),
         new BarChartPanel(this, SENSORS, "Average Temperature", "Temperature", "Nodes", "Celsius",
@@ -563,7 +564,6 @@ public class CollectServer implements SerialConnectionListener {
           }
         },
         new NodeInfoPanel(this, MAIN),
-        nodeControl,
         serialConsole
     };
     for (int i = 0, n = visualizers.length; i < n; i++) {
