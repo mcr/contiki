@@ -39,6 +39,7 @@ static int counter = 0;
 #define PRINT_STACK_ON_REBOOT 0
 
 /*---------------------------------------------------------------------------*/
+#if PRINT_STACK_ON_REBOOT
 #ifdef CONTIKI_TARGET_SKY
 static void
 printchar(char c)
@@ -66,7 +67,8 @@ printstring(char *s)
     printchar(*s++);
   }
 }
-#endif
+#endif /* CONTIKI_TARGET_SKY */
+#endif /* PRINT_STACK_ON_REBOOT */
 /*---------------------------------------------------------------------------*/
 interrupt(WDT_VECTOR)
 watchdog_interrupt(void)
