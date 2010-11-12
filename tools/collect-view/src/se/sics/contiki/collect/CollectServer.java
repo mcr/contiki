@@ -810,6 +810,10 @@ public class CollectServer implements SerialConnectionListener {
     window.setVisible(false);
   }
 
+  public void setUseSensorDataLog(boolean useSensorLog) {
+    this.isSensorLogUsed = useSensorLog;
+  }
+
   public void setExitOnRequest(boolean doExit) {
     this.doExitOnRequest = doExit;
     if (exitItem != null) {
@@ -886,6 +890,10 @@ public class CollectServer implements SerialConnectionListener {
 
   public String getConfig(String property, String defaultValue) {
     return configTable.getProperty(property, config.getProperty(property, defaultValue));
+  }
+
+  public void removeConfig(String property) {
+    configTable.remove(property);
   }
 
   public int getDefaultMaxItemCount() {
@@ -1229,6 +1237,13 @@ public class CollectServer implements SerialConnectionListener {
       for(Visualizer v : visualizers) {
         v.nodesSelected(null);
         v.clearNodeData();
+      }
+    }
+    // Remove any saved node positions
+    for(String key: configTable.keySet().toArray(new String[0])) {
+      String property = key.toString();
+      if (!property.startsWith("collect")) {
+        configTable.remove(property);
       }
     }
   }
