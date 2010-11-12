@@ -567,6 +567,9 @@ public class MapPanel extends JPanel implements Configurable, Visualizer, Action
         popupNode.hasFixedLocation = lockedItem.isSelected();
         if (wasFixed && !popupNode.hasFixedLocation) {
           server.removeConfig("collect.map." + popupNode.node.getID());
+        } else if (!wasFixed && popupNode.hasFixedLocation) {
+          server.setConfig("collect.map." + popupNode.node.getID(),
+                           "" + popupNode.x + ',' + popupNode.y);
         }
         repaint();
       }
@@ -837,12 +840,6 @@ public class MapPanel extends JPanel implements Configurable, Visualizer, Action
     if (isMap) {
       for (MapNode n : getNodeList()) {
         config.put(n.node.getID(), "" + n.x + ',' + n.y);
-      }
-    } else {
-      for (MapNode n : getNodeList()) {
-        if (n.hasFixedLocation) {
-          config.put("collect.map." + n.node.getID(), "" + n.x + ',' + n.y);
-        }
       }
     }
   }
