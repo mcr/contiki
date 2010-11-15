@@ -51,27 +51,28 @@ static unsigned short ie1, ie2;
 void
 flash_setup(void)
 {
-
-  /* Disable all interrupts. */
+  /* disable all interrupts to protect CPU
+     during programming from system crash */
+  _DINT();
 
   /* Clear interrupt flag1. */
-  IFG1 = 0;
+  /*  IFG1 = 0; */
+  /* The IFG1 = 0; statement locks up contikimac - not sure if this
+     statement needs to be here at all. I've removed it for now, since
+     it seems to work, but leave this little note here in case someone
+     stumbles over this code at some point. */
 
   /* Stop watchdog. */
   watchdog_stop();
   
   /* DCO(SMCLK) is 2,4576MHz, /6 = 409600 Hz
      select SMCLK for flash timing, divider 5+1 */
-  FCTL2 = 0xA5C5;              
-
-  /* disable all interrupts to protect CPU
-     during programming from system crash */
-  _DINT();                   
+  FCTL2 = 0xA5C5;
 
   /* disable all NMI-Interrupt sources */
   ie1 = IE1;
   ie2 = IE2;
-  IE1 = 0x00;                  
+  IE1 = 0x00;
   IE2 = 0x00;
 }
 /*---------------------------------------------------------------------------*/
