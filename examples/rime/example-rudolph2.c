@@ -157,7 +157,7 @@ PROCESS_THREAD(example_rudolph2_process, ev, data)
 
   PROCESS_PAUSE();
   
-  if(rimeaddr_node_addr.u8[0] == 7 &&
+  if(rimeaddr_node_addr.u8[0] == 1 &&
      rimeaddr_node_addr.u8[1] == 0) {
     {
       int i;
