@@ -29,10 +29,9 @@ Everything you need is in [Instant Contiki
 you are going to be working primarily with Contiki then this is the
 way to go.
 
-Instant Contiki contains the
-[mc1322x-oe](http://git.devl.org/?p=malvira/mc1322x-oe.git;a=summary)
-[[ubuntu]](http://mc1322x.devl.org/ubuntu.html)
-[[mac]](http://mc1322x.devl.org/mac.html) toolchain.
+Instant Contiki contains the following toolchain from Codesourcery:
+[Sourcery G++ Lite 2008q3-66 for ARM
+EABI](http://www.codesourcery.com/sgpp/lite/arm/portal/release642)
 
 Development of the mc1322x port occurs in a different branch from the
 main Contiki CVS repository. The most current mc1322x contiki port can be found here:
