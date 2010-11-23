@@ -749,6 +749,11 @@ public class MapPanel extends JPanel implements Configurable, Visualizer, Action
         draggedNode.x = e.getX();
         draggedNode.y = e.getY();
         setCursor(Cursor.getDefaultCursor());
+        if (!isMap && draggedNode.hasFixedLocation) {
+          /* Update fixed location */
+          server.setConfig("collect.map." + draggedNode.node.getID(),
+                           "" + draggedNode.x + ',' + draggedNode.y);
+        }
         draggedTime = 0;
         draggedNode = null;
         repaint();
