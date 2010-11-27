@@ -44,6 +44,7 @@
 #include "sys/energest.h"
 #include "sys/rtimer.h"
 #include "sys/process.h"
+#include "dev/watchdog.h"
 
 #define DEBUG 0
 #if DEBUG
