@@ -88,12 +88,19 @@ public class DirectedGraphMedium extends AbstractRadioMedium {
 
     requestEdgeAnalysis();
 
-    /* Register plugin.
-     * TODO Should be unregistered when radio medium is removed */
-    simulation.getGUI().registerTemporaryPlugin(DGRMConfigurator.class);
+  	/* Register plugin and visualizer skin */
+    simulation.getGUI().registerPlugin(DGRMConfigurator.class);
     Visualizer.registerVisualizerSkin(DGRMVisualizerSkin.class);
-}
+  }
 
+  public void removed() {
+  	super.removed();
+
+  	/* Unregister plugin and visualizer skin */
+    simulation.getGUI().unregisterPlugin(DGRMConfigurator.class);
+    Visualizer.unregisterVisualizerSkin(DGRMVisualizerSkin.class);
+  }
+  
   public void addEdge(Edge e) {
     edges.add(e);
     requestEdgeAnalysis();

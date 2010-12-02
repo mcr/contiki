@@ -165,4 +165,10 @@ public abstract class RadioMedium {
         .getConstructor(new Class[] { Simulation.class });
     return (RadioMedium) constr.newInstance(new Object[] { simulation });
   }
+  
+  /**
+   * Called when radio medium is removed. 
+   */
+  public void removed() {
+  }
 }
