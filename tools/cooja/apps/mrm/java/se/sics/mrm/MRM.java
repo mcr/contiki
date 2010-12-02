@@ -72,6 +72,7 @@ public class MRM extends AbstractRadioMedium {
 
   private Random random = null;
 
+  private Simulation sim;
   /**
    * Notifies observers when this radio medium has changed settings.
    */
@@ -82,16 +83,26 @@ public class MRM extends AbstractRadioMedium {
    */
   public MRM(Simulation simulation) {
     super(simulation);
+    sim = simulation;
+    
     random = simulation.getRandomGenerator();
 
     // Create the channel model
     currentChannelModel = new ChannelModel();
 
-    // Register temporary plugins
-    simulation.getGUI().registerTemporaryPlugin(AreaViewer.class);
-    simulation.getGUI().registerTemporaryPlugin(FormulaViewer.class);
+  	/* Register plugins */
+    sim.getGUI().registerPlugin(AreaViewer.class);
+    sim.getGUI().registerPlugin(FormulaViewer.class);
   }
 
+  public void removed() {
+  	super.removed();
+
+  	/* Unregister plugins */
+    sim.getGUI().unregisterPlugin(AreaViewer.class);
+    sim.getGUI().unregisterPlugin(FormulaViewer.class);
+  }
+  
   public MRMRadioConnection createConnections(Radio sendingRadio) {
     Position sendingPosition = sendingRadio.getPosition();
     MRMRadioConnection newConnection = new MRMRadioConnection(sendingRadio);
