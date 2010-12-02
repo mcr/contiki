@@ -33,6 +33,7 @@ package se.sics.cooja;
 
 import java.io.*;
 import java.util.*;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -293,6 +294,25 @@ public class ProjectConfig {
     return true;
   }
 
+  public boolean appendConfig(ProjectConfig config) {
+  	Enumeration<String> propertyNames = config.getPropertyNames();
+  	while (propertyNames.hasMoreElements()) {
+  		String key = propertyNames.nextElement();
+  		String property = config.getStringValue(key);
+      if (property.startsWith("+ ")) {
+        if (myConfig.getProperty(key) != null) {
+        	myConfig.setProperty(key, myConfig.getProperty(key) + " "
+              + property.substring(1).trim());
+        } else {
+        	myConfig.setProperty(key, property.substring(1).trim());
+        }
+      } else {
+      	myConfig.setProperty(key, property);
+      }
+  	}
+  	return true;
+  }
+
   /**
    * @return All property names in configuration
    */
@@ -338,7 +358,8 @@ public class ProjectConfig {
    */
   public String getStringValue(String name) {
     if (!myConfig.containsKey(name)) {
-      logger.debug("Could not find key named '" + name + "'");
+      /*logger.debug("Could not find key named '" + name + "'");*/
+    	return null;
     }
 
     return myConfig.getProperty(name);
