@@ -43,6 +43,7 @@
 #if defined(__AVR__)
 #include <avr/io.h>
 #include <util/delay.h>
+#define delay_us( us )   ( _delay_us( ( us ) ) )
 #include <avr/pgmspace.h>
 #elif defined(__MSP430__)
 #include <io.h>
