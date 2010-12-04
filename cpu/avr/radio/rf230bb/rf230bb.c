@@ -123,7 +123,6 @@ struct timestamp {
 #define RADIOSTATS 1
 #endif
 #if RADIOSTATS
-uint8_t RF230_rsigsi;
 uint16_t RF230_sendpackets,RF230_receivepackets,RF230_sendfail,RF230_receivefail;
 #endif
 
@@ -809,6 +808,9 @@ rf230_send(const void *payload, unsigned short payload_len)
 	ret = rf230_transmit(payload_len);
 	
 bail:
+#if RADIOSTATS
+    if (ret) RF230_sendfail++;
+#endif
 	return ret;
 }
 /*---------------------------------------------------------------------------*/
@@ -968,7 +970,7 @@ if (RF230_receive_on) {
  * It calls the core MAC layer which calls rf230_read to get the packet
  * rf230processflag can be printed in the main idle loop for debugging
  */
-#if 1
+#if 0
 uint8_t rf230processflag;
 #define RF230PROCESSFLAG(arg) rf230processflag=arg
 #else
@@ -1003,6 +1005,10 @@ PROCESS_THREAD(rf230_process, ev, data)
                                            &rf230_timetable);
       timetable_clear(&rf230_timetable);
 #endif /* RF230_TIMETABLE_PROFILING */
+    } else {
+#if RADIOSTATS
+       RF230_receivefail++;
+#endif
     }
   }
 
