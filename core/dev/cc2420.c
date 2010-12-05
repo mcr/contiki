@@ -840,6 +840,9 @@ cc2420_cca(void)
   /* Make sure that the radio really got turned on. */
   if(!receive_on) {
     RELEASE_LOCK();
+    if(radio_was_off) {
+      cc2420_off();
+    }
     return 1;
   }
 
