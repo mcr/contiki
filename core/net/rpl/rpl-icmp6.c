@@ -191,7 +191,7 @@ dio_input(void)
                               packetbuf_addr(PACKETBUF_ADDR_SENDER),
                               0, NBR_REACHABLE)) != NULL) {
       /* set reachable timer */
-      stimer_set(&(nbr->reachable), UIP_ND6_REACHABLE_TIME);
+      stimer_set(&nbr->reachable, UIP_ND6_REACHABLE_TIME / 1000);
       PRINTF("RPL: Neighbor added to neighbor cache ");
       PRINT6ADDR(&from);
       PRINTF(", ");
