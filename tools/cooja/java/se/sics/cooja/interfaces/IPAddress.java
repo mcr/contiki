@@ -231,7 +231,7 @@ public class IPAddress extends MoteInterface {
           ipLabel.setText("IPv4 address: " + getIPString());
         } else if (isVersion6()) {
           ipLabel.setText((ipv6IsGlobal?"Global":"Local") + 
-          		" IPv6 address(§" + ipv6AddressIndex + "): " + getIPString());
+          		" IPv6 address(#" + ipv6AddressIndex + "): " + getIPString());
         } else {
           ipLabel.setText("Unknown IP");
         }
