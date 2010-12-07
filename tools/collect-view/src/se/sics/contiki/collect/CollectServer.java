@@ -105,7 +105,7 @@ public class CollectServer implements SerialConnectionListener {
   public static final String SENSORDATA_FILE = "sensordata.log";
   public static final String CONFIG_DATA_FILE = "collect-data.conf";
   public static final String INIT_SCRIPT = "collect-init.script";
-  public static final String FIRMWARE_FILE = "sky-shell.ihex";
+  public static final String FIRMWARE_FILE = "collect-view-shell.ihex";
 
   /* Categories for the tab pane */
   private static final String MAIN = "main";
