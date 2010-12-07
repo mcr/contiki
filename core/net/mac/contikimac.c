@@ -1184,6 +1184,7 @@ turn_on(void)
 {
   if(contikimac_is_on == 0) {
     contikimac_is_on = 1;
+    contikimac_keep_radio_on = 0;
 #if NURTIMER
     rtimer_schedule(&rt, CYCLE_TIME, 1);
 #else
