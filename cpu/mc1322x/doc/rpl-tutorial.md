@@ -60,9 +60,9 @@ This will produce the binary image
 'border-router_redbee-econotag.bin', which you can load directly on to
 an mc1322x and execute.
 
-To build the udp-client, do:
+To build the rpl-udp, do:
 
-    cd contiki-2.x/examples/ipv6/udp-client
+    cd contiki-2.x/examples/ipv6/rpl-udp
     make TARGET=redbee-econotag
 
 which will build 'udp-client_redbee-econotag.bin'.
@@ -73,9 +73,17 @@ which will build 'udp-client_redbee-econotag.bin'.
 ### a) Run the econotags with randomized MAC addresses (random, but persistent)
 
 After building border-router_redbee-econotag.bin, you load the code
-with:
+with mc1322x-load.pl: 
 
     mc1322x-load.pl -f border-router_redbee-econotag.bin -t /dev/ttyUSB1 -c 'bbmc -l redbee-econotag reset'
+
+This script located in contiki/cpu/mc1322x/tools and also in
+libmc1322x/tools. Linux users may need to download and install
+[Device-SerialPort](http://search.cpan.org/perldoc?Device::SerialPort)
+and [TermReadKey](http://search.cpan.org/perldoc?Term::ReadKey)). See
+also [Getting started with
+libmc1322x](http://mc1322x.devl.org/libmc1322x.html) for more examples
+on how to load and run code on the mc13224v.
 
 The econotag will flash itself with a random Redwire MAC address if
 you haven't programmed one in:
