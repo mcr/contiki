@@ -847,7 +847,6 @@ public class Visualizer extends VisPlugin {
     Mote[] allMotes = simulation.getMotes();
 
     /* Paint mote relations */
-    g.setColor(Color.BLACK);
     MoteRelation[] relations = simulation.getGUI().getMoteRelations();
     for (MoteRelation r: relations) {
       Position sourcePos = r.source.getInterfaces().getPosition();
@@ -856,6 +855,7 @@ public class Visualizer extends VisPlugin {
       Point sourcePoint = transformPositionToPixel(sourcePos);
       Point destPoint = transformPositionToPixel(destPos);
 
+      g.setColor(r.color == null ? Color.black : r.color);
       drawArrow(g, sourcePoint.x, sourcePoint.y, destPoint.x, destPoint.y, MOTE_RADIUS + 1);
     }
 
