@@ -674,6 +674,10 @@ public class Simulation extends Observable implements Runnable {
       }
     }
 
+    if (currentRadioMedium != null) {
+      currentRadioMedium.simulationFinishedLoading();
+    }
+
     setChanged();
     notifyObservers(this);
     return true;
