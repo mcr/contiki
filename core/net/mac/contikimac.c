@@ -315,12 +315,14 @@ powercycle(struct rtimer *t, void *ptr)
 {
   PT_BEGIN(&pt);
 
+  cycle_start = RTIMER_NOW();
+
   while(1) {
     static uint8_t packet_seen;
     static rtimer_clock_t t0;
     static uint8_t count;
 
-    cycle_start = RTIMER_NOW();
+    cycle_start += CYCLE_TIME;
 
     if(WITH_STREAMING && is_streaming) {
 #if NURTIMER
