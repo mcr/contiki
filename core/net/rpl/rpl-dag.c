@@ -166,6 +166,9 @@ rpl_set_root(uip_ipaddr_t *dag_id)
   dag->max_rankinc = DEFAULT_MAX_RANKINC;
   dag->min_hoprankinc = DEFAULT_MIN_HOPRANKINC;
 
+  dag->default_lifetime = DEFAULT_RPL_DEF_LIFETIME;
+  dag->lifetime_unit = DEFAULT_RPL_LIFETIME_UNIT;
+
   PRINTF("RPL: Node set to be a DAG root with DAG ID ");
   PRINT6ADDR(&dag->dag_id);
   PRINTF("\n");
@@ -471,6 +474,9 @@ join_dag(uip_ipaddr_t *from, rpl_dio_t *dio)
 
   dag->rank = dag->of->calculate_rank(NULL, dio->rank);
   dag->min_rank = dag->rank; /* So far this is the lowest rank we know */
+
+  dag->default_lifetime = dio->default_lifetime;
+  dag->lifetime_unit = dio->lifetime_unit;
 
   rpl_reset_dio_timer(dag, 1);
   rpl_set_default_route(dag, from);
