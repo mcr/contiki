@@ -93,7 +93,7 @@ new_dio_interval(rpl_dag_t *dag)
 
   /* random number between I/2 and I */
   time = time >> 1;
-  time += (time * random_rand()) / RANDOM_MAX;
+  time += (time * random_rand()) / RANDOM_RAND_MAX;
 
   dag->dio_next_delay -= time;
   dag->dio_send = 1;
