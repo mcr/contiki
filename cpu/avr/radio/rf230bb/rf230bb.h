@@ -61,7 +61,10 @@
 #define RF230_REVA                              ( 1 )
 #define RF230_REVB                              ( 2 )
 #define SUPPORTED_MANUFACTURER_ID               ( 31 )
-#define RF230_SUPPORTED_INTERRUPT_MASK          ( 0x0C )
+/* RF230 does not support RX_START interrupts in extended mode, but it seems harmless to always enable it. */
+/* In non-extended mode this allows RX_START to sample the RF rssi at the end of the preamble */
+//#define RF230_SUPPORTED_INTERRUPT_MASK        ( 0x0C )  //disable RX_START
+#define RF230_SUPPORTED_INTERRUPT_MASK          ( 0x0F )
 
 #define RF230_MIN_CHANNEL                       ( 11 )
 #define RF230_MAX_CHANNEL                       ( 26 )
