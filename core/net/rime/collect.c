@@ -1277,7 +1277,11 @@ collect_open(struct collect_conn *tc, uint16_t channels,
   neighbor_discovery_open(&tc->neighbor_discovery_conn, channels,
 			  CLOCK_SECOND * 4,
 			  CLOCK_SECOND * 60,
-                          CLOCK_SECOND * 600UL,
+#ifdef COLLECT_CONF_BROADCAST_ANNOUNCEMENT_MAX_TIME
+              COLLECT_CONF_BROADCAST_ANNOUNCEMENT_MAX_TIME,
+#else
+              CLOCK_SECOND * 600UL,
+#endif
 			  &neighbor_discovery_callbacks);
   neighbor_discovery_start(&tc->neighbor_discovery_conn, tc->rtmetric);
 #else /* !COLLECT_ANNOUNCEMENTS */
