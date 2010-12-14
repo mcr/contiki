@@ -292,7 +292,6 @@ static const char httpd_cgi_addrn[] HTTPD_STRING_ATTR = "(none)<br>";
 extern uip_ds6_nbr_t uip_ds6_nbr_cache[];
 extern uip_ds6_route_t uip_ds6_routing_table[];
 extern uip_ds6_netif_t uip_ds6_if;
-#include "rpl.h"
 
 static unsigned short
 make_addresses(void *p)
