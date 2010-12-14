@@ -1255,6 +1255,11 @@ send_packet(rimeaddr_t *dest)
    */
   packetbuf_set_addr(PACKETBUF_ADDR_RECEIVER, dest);
 
+  /* Force acknowledge from sender (test hardware autoacks) */
+#if SICSLOWPAN_CONF_ACK_ALL
+    packetbuf_set_attr(PACKETBUF_ATTR_RELIABLE, 1);
+#endif
+  
   /* Provide a callback function to receive the result of
      a packet transmission. */
   NETSTACK_MAC.send(&packet_sent, NULL);
