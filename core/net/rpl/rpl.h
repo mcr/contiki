@@ -303,7 +303,7 @@ struct rpl_dag {
   uint16_t dio_totsend;
   uint16_t dio_totrecv;
 #endif /* RPL_CONF_STATS */
-  uint16_t dio_next_delay; /* delay for completion of dio interval */
+  uint32_t dio_next_delay; /* delay for completion of dio interval */
   struct ctimer dio_timer;
   struct ctimer dao_timer;
   rpl_parent_t *preferred_parent;
