@@ -312,7 +312,7 @@ dio_output(rpl_dag_t *dag, uip_ipaddr_t *uc_addr)
   int pos;
   uip_ipaddr_t addr;
 
-  /* DAG Information Solicitation */
+  /* DAG Information Object */
   pos = 0;
 
   buffer = UIP_ICMP_PAYLOAD;
