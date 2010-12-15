@@ -60,7 +60,7 @@ PROCESS_THREAD(mb851_shell_process, ev, data)
   shell_time_init();
   shell_sensors_init();
   
-#if COFFEE_FILES
+#if COFFEE
   shell_coffee_init();
   shell_file_init();
 #endif
