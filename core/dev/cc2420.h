@@ -169,8 +169,8 @@ void cc2420_set_cca_threshold(int value);
   do {                                                       \
     uint8_t i;                                               \
     CC2420_SPI_ENABLE();                                     \
-    SPI_WRITE_FAST(0x80 | (adr & 0x7f));                     \
-    SPI_WRITE_FAST((adr >> 1) & 0xc0);                       \
+    SPI_WRITE_FAST(0x80 | ((adr) & 0x7f));                   \
+    SPI_WRITE_FAST(((adr) >> 1) & 0xc0);                     \
     for(i = 0; i < (count); i++) {                           \
       SPI_WRITE_FAST(((uint8_t*)(buffer))[i]);               \
     }                                                        \
@@ -183,8 +183,8 @@ void cc2420_set_cca_threshold(int value);
   do {                                                       \
     uint8_t i;                                               \
     CC2420_SPI_ENABLE();                                     \
-    SPI_WRITE(0x80 | (adr & 0x7f));                          \
-    SPI_WRITE(((adr >> 1) & 0xc0) | 0x20);                   \
+    SPI_WRITE(0x80 | ((adr) & 0x7f));                        \
+    SPI_WRITE((((adr) >> 1) & 0xc0) | 0x20);                 \
     SPI_RXBUF;                                               \
     for(i = 0; i < (count); i++) {                           \
       SPI_READ(((uint8_t*)(buffer))[i]);                     \
