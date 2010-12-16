@@ -109,6 +109,8 @@ struct collect_conn {
   uint8_t sending, transmissions, max_rexmits;
   uint8_t eseqno;
   uint8_t is_router;
+
+  clock_time_t send_time;
 };
 
 enum {
@@ -132,7 +134,7 @@ void collect_set_keepalive(struct collect_conn *c, clock_time_t period);
 
 void collect_print_stats(void);
 
-#define COLLECT_MAX_DEPTH ((1 << 12) - 1)
+#define COLLECT_MAX_DEPTH (COLLECT_LINK_ESTIMATE_UNIT * 32 - 1)
 
 #endif /* __COLLECT_H__ */
 /** @} */
