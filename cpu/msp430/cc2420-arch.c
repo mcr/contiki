@@ -38,6 +38,10 @@
 #include "dev/spi.h"
 #include "dev/cc2420.h"
 
+#ifdef CC2420_CONF_SFD_TIMESTAMPS
+#define CONF_SFD_TIMESTAMPS CC2420_CONF_SFD_TIMESTAMPS
+#endif /* CC2420_CONF_SFD_TIMESTAMPS */
+
 #ifndef CONF_SFD_TIMESTAMPS
 #define CONF_SFD_TIMESTAMPS 0
 #endif /* CONF_SFD_TIMESTAMPS */
@@ -51,9 +55,11 @@ interrupt(CC2420_IRQ_VECTOR)
 cc24240_port1_interrupt(void)
 {
   ENERGEST_ON(ENERGEST_TYPE_IRQ);
+
   if(cc2420_interrupt()) {
     LPM4_EXIT;
   }
+
   ENERGEST_OFF(ENERGEST_TYPE_IRQ);
 }
 
