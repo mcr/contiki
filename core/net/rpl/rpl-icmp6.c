@@ -484,7 +484,7 @@ dao_input(void)
   PRINTF("\n");
 
   if(lifetime == ZERO_LIFETIME) {
-    /* No-DAO received; invoke the route purging routine. */
+    /* No-Path DAO received; invoke the route purging routine. */
     rep = uip_ds6_route_lookup(&prefix);
     if(rep != NULL && rep->state.saved_lifetime == 0) {
       PRINTF("RPL: Setting expiration timer for prefix ");
@@ -515,6 +515,7 @@ dao_input(void)
 
   rep = rpl_add_route(dag, &prefix, prefixlen, &dao_sender_addr);
   if(rep == NULL) {
+    RPL_STAT(rpl_stats.memory_overflows++);
     PRINTF("RPL: Could not add a route after receiving a DAO\n");
     return;
   } else {

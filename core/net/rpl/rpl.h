@@ -85,7 +85,8 @@
 /*---------------------------------------------------------------------------*/
 /* Default values for RPL constants and variables. */
 
-#define DEFAULT_DAO_LATENCY             (CLOCK_SECOND * (1 + (random_rand() & 0xf)))
+/* The default value for the DAO timer. */
+#define DEFAULT_DAO_LATENCY             (CLOCK_SECOND * 8)
 
 /* Special value indicating immediate removal. */
 #define ZERO_LIFETIME                   0
