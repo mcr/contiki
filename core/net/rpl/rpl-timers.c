@@ -224,10 +224,11 @@ rpl_schedule_dao(rpl_dag_t *dag)
   if(!etimer_expired(&dag->dao_timer.etimer)) {
     PRINTF("RPL: DAO timer already scheduled\n");
   } else {
-    PRINTF("RPL: Scheduling DAO timer %u ticks in the future (%u %u)\n",
-           (unsigned)DEFAULT_DAO_LATENCY / dag->rank,
-           (unsigned)DEFAULT_DAO_LATENCY, (unsigned)dag->rank);
-    ctimer_set(&dag->dao_timer, DEFAULT_DAO_LATENCY,
+    expiration_time = DEFAULT_DAO_LATENCY / 2 +
+      (random_rand() % (DEFAULT_DAO_LATENCY));
+    PRINTF("RPL: Scheduling DAO timer %u ticks in the future\n",
+           (unsigned)expiration_time);
+    ctimer_set(&dag->dao_timer, expiration_time,
                handle_dao_timer, dag);
   }
 }
