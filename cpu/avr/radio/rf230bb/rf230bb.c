@@ -106,7 +106,8 @@ struct timestamp {
 #if JACKDAW
 #define RADIOALWAYSON 1
 #else
-//#define RADIOALWAYSON 1
+#define RADIOALWAYSON 0
+#define RADIOSLEEPSWHENOFF 1
 #endif
 
 #define DEBUG 0
@@ -462,6 +463,7 @@ on(void)
 #else
   radio_set_trx_state(RX_ON);
 #endif
+
  // flushrx();
  //  DEBUGFLOW('O');
   RF230_receive_on = 1;
@@ -485,7 +487,7 @@ off(void)
   /* Force the device into TRX_OFF. */   
   radio_reset_state_machine();
 
-#if 0            //optionally sleep
+#if RADIOSLEEPSWHENOFF
   /* Sleep Radio */
   hal_set_slptr_high();
   RF230_sleeping = 1;
