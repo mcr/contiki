@@ -214,7 +214,7 @@ struct {
 /* Forward declarations. */
 static void send_queued_packet(struct collect_conn *c);
 static void retransmit_callback(void *ptr);
-static void retransmit_not_sent_callback(void *ptr);
+//static void retransmit_not_sent_callback(void *ptr); //Currently not used, avoid any compiler warning
 static void set_keepalive_timer(struct collect_conn *c);
 
 /*---------------------------------------------------------------------------*/
@@ -1133,6 +1133,7 @@ node_packet_sent(struct unicast_conn *c, int status, int transmissions)
  * MAC layer transmissions to the transmission count, and call the
  * retransmit function.
  */
+#if 0 //not currently used, avoid any compiler warning
 static void
 retransmit_not_sent_callback(void *ptr)
 {
@@ -1142,6 +1143,7 @@ retransmit_not_sent_callback(void *ptr)
   c->transmissions += MAX_MAC_REXMITS + 1;
   retransmit_callback(c);
 }
+#endif
 /*---------------------------------------------------------------------------*/
 /**
  * This function is called from a ctimer that is setup when a packet
