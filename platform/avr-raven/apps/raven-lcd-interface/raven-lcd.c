@@ -163,10 +163,12 @@ char serial_char_received;
 /* Sleep for howlong seconds, or until UART interrupt if howlong==0.
  * Uses TIMER2 with external 32768 Hz crystal to sleep in 1 second multiples.
  * TIMER2 may have already been set up for 125 ticks/second in clock.c
- * If so the clock is adjusted to reflect the sleep time
+
  *
  * Until someone figures out how to get UART to wake from powerdown,
  * a three second powersave cycle is used with exit based on any character received.
+ 
+ * The system clock is adjusted to reflect the sleep time.
  */
 
 void micro_sleep(uint8_t howlong)
@@ -209,8 +211,7 @@ void micro_sleep(uint8_t howlong)
        serial_char_received=0;                  // Set when chars received by UART
        sleep_mode();                            // Sleep
 
-/* Adjust clock.c for the time sleeping */
-/* TODO:keep track of realtime, ontime, and radioontime */
+       /* Adjust clock.c for the time spent sleeping */
        extern void clock_adjust_seconds(uint8_t howmany);
        clock_adjust_seconds(howlong);
 
