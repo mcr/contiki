@@ -407,11 +407,13 @@
 /**
  * How long a connection should stay in the TIME_WAIT state.
  *
- * This configuration option has no real implication, and it should be
- * left untouched.
+ * This can be reduced for faster entry into power saving modes.
  */
+#ifndef UIP_CONF_WAIT_TIMEOUT
 #define UIP_TIME_WAIT_TIMEOUT 120
-
+#else
+#define UIP_TIME_WAIT_TIMEOUT UIP_CONF_WAIT_TIMEOUT
+#endif
 
 /** @} */
 /*------------------------------------------------------------------------------*/
