@@ -51,21 +51,21 @@ void
 watchdog_start(void)
 {
 	stopped--;
-	if(!stopped)
+//	if(!stopped)
 		wdt_enable(WDTO_2S);
 }
 /*---------------------------------------------------------------------------*/
 void
 watchdog_periodic(void)
 {
-	if(!stopped)
+//	if(!stopped)
 		wdt_reset();
 }
 /*---------------------------------------------------------------------------*/
 void
 watchdog_stop(void)
 {
-	stopped++;
+//	stopped++;
 	wdt_disable();
 }
 /*---------------------------------------------------------------------------*/

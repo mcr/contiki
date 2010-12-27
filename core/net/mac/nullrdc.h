@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007, Swedish Institute of Computer Science.
+ * Copyright (c) 2010, Swedish Institute of Computer Science.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,16 +33,16 @@
 
 /**
  * \file
- *         A MAC protocol implementation that does not do anything.
+ *         A null RDC implementation that uses framer for headers.
  * \author
  *         Adam Dunkels <adam@sics.se>
+ *         Niclas Finne <nfi@sics.se>
  */
 
 #ifndef __NULLRDC_H__
 #define __NULLRDC_H__
 
 #include "net/mac/rdc.h"
-#include "dev/radio.h"
 
 extern const struct rdc_driver nullrdc_driver;
 

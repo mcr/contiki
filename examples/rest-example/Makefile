@@ -11,7 +11,7 @@ WITH_COAP = 1
 
 CFLAGS += -DPROJECT_CONF_H=1
 
-ifdef WITH_COAP 
+ifeq ($(WITH_COAP), 1)
 CFLAGS += -DWITH_COAP
 APPS = rest-coap
 else

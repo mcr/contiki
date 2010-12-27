@@ -91,8 +91,6 @@
 #include "radio/rf230bb/rf230bb.h"
 #include "net/mac/frame802154.h"
 #define UIP_IP_BUF ((struct uip_ip_hdr *)&uip_buf[UIP_LLH_LEN])
-extern int rf230_interrupt_flag;
-extern uint8_t rf230processflag;
 rimeaddr_t macLongAddr;
 #define	tmp_addr	macLongAddr
 #else                 //legacy radio driver using Atmel/Cisco 802.15.4'ish MAC
@@ -140,48 +138,50 @@ const struct uip_fallback_interface rpl_interface = {
   init, output
 };
 
-#define RPL_BORDER_ROUTER 1     //Set to 1 for border router
-#define RPL_HTTPD_SERVER  0     //Set to 1 for border router web page
-
+#if RPL_BORDER_ROUTER
 #include "net/rpl/rpl.h"
 
-#if RPL_BORDER_ROUTER
 // avr-objdump --section .bss -x ravenusbstick.elf
 uint16_t dag_id[] PROGMEM = {0x1111, 0x1100, 0, 0, 0, 0, 0, 0x0011};
 
 PROCESS(border_router_process, "RPL Border Router");
 PROCESS_THREAD(border_router_process, ev, data)
 {
-  rpl_dag_t *dag;
 
   PROCESS_BEGIN();
 
   PROCESS_PAUSE();
 
-//  printf_P(PSTR("%d neighbors"),  UIP_DS6_ADDR_NB);
-{ char buf[sizeof(dag_id)];
+{ rpl_dag_t *dag;
+  char buf[sizeof(dag_id)];
   memcpy_P(buf,dag_id,sizeof(dag_id));
   dag = rpl_set_root((uip_ip6addr_t *)buf);
-}
-#if 0  //horrible cludge to direct aaaa::11 to internal webserver
+
+/* Assign bbbb::11 to the uip stack, and bbbb::1 to the host network interface, e.g. $ip -6 address add bbbb::1/64 dev usb0 */
+/* $ifconfig usb0 -arp on Ubuntu to skip the neighbor solicitations. Add explicit neighbors on other OSs */
   if(dag != NULL) {
+    PRINTF("created a new RPL dag\n");
+
+#if UIP_CONF_ROUTER_RECEIVE_RA
+//Contiki stack will shut down until assigned an address from the interface RA
+//Currently this requires changes in the core rpl-icmp6.c to pass the link-local RA broadcast
+
+#else
     uip_ip6addr_t ipaddr;
-    uip_ip6addr(&ipaddr, 0xaaaa, 0, 0, 0, 0, 0, 0, 0x11);
-//	    uip_ip6addr(&ipaddr, 0xaaaa, 0, 0, 0, 0, 0, 0, 0x1);
- // uip_ds6_addr_add(&ipaddr, 0, ADDR_AUTOCONF);
+    uip_ip6addr(&ipaddr, 0xbbbb, 0, 0, 0, 0, 0, 0, 0x1);
     uip_ds6_addr_add(&ipaddr, 0, ADDR_MANUAL);
     rpl_set_prefix(dag, &ipaddr, 64);
-    PRINTF("created a new RPL dag\n");
-  }
 #endif
-
+  }
+}
   /* The border router runs with a 100% duty cycle in order to ensure high
      packet reception rates. */
  // NETSTACK_MAC.off(1);
 
   while(1) {
     PROCESS_YIELD();
- // rpl_repair_dag(rpl_get_dag(RPL_ANY_INSTANCE));
+ //   rpl_set_prefix(rpl_get_dag(RPL_ANY_INSTANCE), &ipaddr, 64);
+ //   rpl_repair_dag(rpl_get_dag(RPL_ANY_INSTANCE));
 
   }
 
@@ -223,7 +223,13 @@ static uint8_t get_channel_from_eeprom() {
 
 	if(eeprom_channel==~eeprom_check)
 		return eeprom_channel;
+
+#ifdef CHANNEL_802_15_4
+	return(CHANNEL_802_15_4);
+#else
 	return 26;
+#endif		
+
 #endif
 	
 }
@@ -368,7 +374,10 @@ static void initialize(void) {
   //Fix MAC address
   init_net();
 
+#if UIP_CONF_IPV6
   memcpy(&uip_lladdr.addr, &tmp_addr.u8, 8);
+#endif
+
   rf230_set_pan_addr(
 	get_panid_from_eeprom(),
 	get_panaddr_from_eeprom(),
@@ -376,7 +385,10 @@ static void initialize(void) {
   );
   
 #if JACKDAW_CONF_USE_SETTINGS
-  rf230_set_txpower(settings_get_uint8(SETTINGS_KEY_TXPOWER,0));
+/* Allow radio code to overrite power for testing miniature Raven mesh */
+#ifndef RF230_MAX_TX_POWER
+   rf230_set_txpower(settings_get_uint8(SETTINGS_KEY_TXPOWER,0));
+#endif
 #endif
 
   rimeaddr_set_node_addr(&tmp_addr); 
@@ -481,6 +493,15 @@ main(void)
 
     watchdog_periodic();
 
+/* Print rssi of all received packets, useful for range testing */
+#ifdef RF230_MIN_RX_POWER
+    uint8_t lastprint;
+    if (rf230_last_rssi != lastprint) {        //can be set in halbb.c interrupt routine
+        printf_P(PSTR("%u "),rf230_last_rssi);
+        lastprint=rf230_last_rssi;
+    }
+#endif
+
 #if TESTRTIMER
     if (rtimerflag) {  //8 seconds is maximum interval, my jackdaw 4% slow
       rtimer_set(&rt, RTIMER_NOW()+ RTIMER_ARCH_SECOND*1UL, 1,(void *) rtimercycle, NULL);
@@ -500,8 +521,7 @@ main(void)
     }
 #endif /* TESTRTIMER */
 
-//Use with RF230BB DEBUGFLOW to show path through driver
-//Warning, Jackdaw doesn't handle simultaneous radio and USB interrupts very well.
+/* Use with rf230bb.c DEBUGFLOW to show the sequence of driver calls from the uip stack */
 #if RF230BB&&0
 extern uint8_t debugflowsize,debugflow[];
   if (debugflowsize) {
@@ -511,16 +531,19 @@ extern uint8_t debugflowsize,debugflow[];
    }
 #endif
 
+/* Use for low level interrupt debugging */
 #if RF230BB&&0
+extern uint8_t rf230interruptflag;   //in halbb.c
+extern uint8_t rf230processflag;     //in rf230bb.c
   if (rf230processflag) {
     printf("**RF230 process flag %u\n\r",rf230processflag);
     rf230processflag=0;
   }
-  if (rf230_interrupt_flag) {
-//  if (rf230_interrupt_flag!=11) {
-      printf("**RF230 Interrupt %u\n\r",rf230_interrupt_flag);
+  if (rf230interruptflag) {
+//  if (rf230interruptflag!=11) {
+      printf("**RF230 Interrupt %u\n\r",rf230interruptflag);
  // }
-    rf230_interrupt_flag=0;
+    rf230interruptflag=0;
   }
 #endif
   }

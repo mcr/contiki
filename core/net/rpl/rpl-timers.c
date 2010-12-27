@@ -82,19 +82,25 @@ handle_periodic_timer(void *ptr)
 static void
 new_dio_interval(rpl_dag_t *dag)
 {
-  unsigned long time;
+  uint32_t time;
 
   /* TODO: too small timer intervals for many cases */
   time = 1UL << dag->dio_intcurrent;
 
-  /* need to convert from milliseconds to CLOCK_TICKS */
+  /* Convert from milliseconds to CLOCK_TICKS. */
   time = (time * CLOCK_SECOND) / 1000;
+
   dag->dio_next_delay = time;
 
   /* random number between I/2 and I */
   time = time >> 1;
-  time += (time * random_rand()) / RANDOM_MAX;
+  time += (time * random_rand()) / RANDOM_RAND_MAX;
 
+  /*
+   * The intervals must be equally long among the nodes for Trickle to
+   * operate efficiently. Therefore we need to calculate the delay between
+   * the randomized time and the start time of the next interval.
+   */
   dag->dio_next_delay -= time;
   dag->dio_send = 1;
 
@@ -116,7 +122,7 @@ new_dio_interval(rpl_dag_t *dag)
 
   /* schedule the timer */
   PRINTF("RPL: Scheduling DIO timer %lu ticks in future (Interval)\n", time);
-  ctimer_set(&dag->dio_timer, time & 0xffff, &handle_dio_timer, dag);
+  ctimer_set(&dag->dio_timer, time, &handle_dio_timer, dag);
 }
 /************************************************************************/
 static void
@@ -218,10 +224,11 @@ rpl_schedule_dao(rpl_dag_t *dag)
   if(!etimer_expired(&dag->dao_timer.etimer)) {
     PRINTF("RPL: DAO timer already scheduled\n");
   } else {
-    PRINTF("RPL: Scheduling DAO timer %u ticks in the future (%u %u)\n",
-           (unsigned)DEFAULT_DAO_LATENCY / dag->rank,
-           (unsigned)DEFAULT_DAO_LATENCY, (unsigned)dag->rank);
-    ctimer_set(&dag->dao_timer, DEFAULT_DAO_LATENCY,
+    expiration_time = DEFAULT_DAO_LATENCY / 2 +
+      (random_rand() % (DEFAULT_DAO_LATENCY));
+    PRINTF("RPL: Scheduling DAO timer %u ticks in the future\n",
+           (unsigned)expiration_time);
+    ctimer_set(&dag->dao_timer, expiration_time,
                handle_dao_timer, dag);
   }
 }

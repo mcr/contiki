@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include "contiki.h"
 #include "contiki-net.h"
-#include "dev/leds.h"
-
 #include "rest.h"
 
-PROCESS(rest_example, "Rest Example");
-AUTOSTART_PROCESSES(&rest_example);
+#include "dev/light-sensor.h"
+#include "dev/battery-sensor.h"
+#include "dev/sht11-sensor.h"
+#include "dev/leds.h"
 
 #define DEBUG 1
 #if DEBUG
@@ -35,7 +35,7 @@ helloworld_handler(REQUEST* request, RESPONSE* response)
   sprintf(temp,"Hello World!\n");
 
   rest_set_header_content_type(response, TEXT_PLAIN);
-  rest_set_payload(response, temp, strlen(temp));
+  rest_set_response_payload(response, temp, strlen(temp));
 }
 
 /*A simple actuator example, depending on the color query parameter and post variable mode, corresponding led is activated or deactivated*/
@@ -84,17 +84,32 @@ led_handler(REQUEST* request, RESPONSE* response)
   }
 }
 
+uint16_t light_photosynthetic;
+uint16_t light_solar;
+
+void
+read_light_sensor(uint16_t* light_1, uint16_t* light_2)
+{
+  *light_1 = light_sensor.value(LIGHT_SENSOR_PHOTOSYNTHETIC);
+  *light_2 = light_sensor.value(LIGHT_SENSOR_TOTAL_SOLAR);
+}
+
 /*A simple getter example. Returns the reading from light sensor with a simple etag*/
 RESOURCE(light, METHOD_GET, "light");
 void
 light_handler(REQUEST* request, RESPONSE* response)
 {
-  sprintf(temp,"%d.%d", 131,6);
+#ifdef CONTIKI_TARGET_SKY
+  read_light_sensor(&light_photosynthetic, &light_solar);
+  sprintf(temp,"%u;%u", light_photosynthetic, light_solar);
+#else /*CONTIKI_TARGET_SKY*/
+  sprintf(temp,"%d.%d", 0, 0);
+#endif /*CONTIKI_TARGET_SKY*/
 
   char etag[4] = "ABCD";
   rest_set_header_content_type(response, TEXT_PLAIN);
   rest_set_header_etag(response, etag, sizeof(etag));
-  rest_set_payload(response, temp, strlen(temp));
+  rest_set_response_payload(response, temp, strlen(temp));
 }
 
 /*A simple actuator example. Toggles the red led*/
@@ -115,14 +130,24 @@ discover_handler(REQUEST* request, RESPONSE* response)
   index += sprintf(temp + index, "%s\n", "<led>;n=\"LedControl\"");
   index += sprintf(temp + index, "%s\n", "<light>;n=\"Light\"");
 
-  rest_set_payload(response, temp, strlen(temp));
+  rest_set_response_payload(response, temp, strlen(temp));
   rest_set_header_content_type(response, APPLICATION_LINK_FORMAT);
 }
 
-PROCESS_THREAD(rest_example, ev, data)
+PROCESS(rest_server_example, "Rest Server Example");
+AUTOSTART_PROCESSES(&rest_server_example);
+
+PROCESS_THREAD(rest_server_example, ev, data)
 {
   PROCESS_BEGIN();
-  PRINTF("REST Example\n");
+
+#ifdef WITH_COAP
+  PRINTF("COAP Server\n");
+#else
+  PRINTF("HTTP Server\n");
+#endif
+
+  SENSORS_ACTIVATE(light_sensor);
 
   rest_init();
 

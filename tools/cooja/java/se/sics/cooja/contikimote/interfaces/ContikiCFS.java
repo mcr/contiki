@@ -70,7 +70,7 @@ import se.sics.cooja.interfaces.PolledAfterActiveTicks;
 public class ContikiCFS extends MoteInterface implements ContikiMoteInterface, PolledAfterActiveTicks {
   private static Logger logger = Logger.getLogger(ContikiCFS.class);
 
-  public int FILESYSTEM_SIZE = 1000; /* Configure CFS size here and in cfs-cooja.c */
+  public int FILESYSTEM_SIZE = 4000; /* Configure CFS size here and in cfs-cooja.c */
   private Mote mote = null;
   private SectionMoteMemory moteMem = null;
 

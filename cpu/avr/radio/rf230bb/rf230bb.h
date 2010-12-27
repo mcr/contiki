@@ -61,7 +61,10 @@
 #define RF230_REVA                              ( 1 )
 #define RF230_REVB                              ( 2 )
 #define SUPPORTED_MANUFACTURER_ID               ( 31 )
-#define RF230_SUPPORTED_INTERRUPT_MASK          ( 0x0C )
+/* RF230 does not support RX_START interrupts in extended mode, but it seems harmless to always enable it. */
+/* In non-extended mode this allows RX_START to sample the RF rssi at the end of the preamble */
+//#define RF230_SUPPORTED_INTERRUPT_MASK        ( 0x0C )  //disable RX_START
+#define RF230_SUPPORTED_INTERRUPT_MASK          ( 0x0F )
 
 #define RF230_MIN_CHANNEL                       ( 11 )
 #define RF230_MAX_CHANNEL                       ( 26 )
@@ -196,6 +199,7 @@ int rf230_init(void);
 //int rf230_on(void);
 //int rf230_off(void);
 void rf230_set_channel(uint8_t channel);
+void rf230_listen_channel(uint8_t channel);
 uint8_t rf230_get_channel(void);
 void rf230_set_pan_addr(unsigned pan,unsigned addr,const uint8_t ieee_addr[8]);
 void rf230_set_txpower(uint8_t power);
@@ -210,8 +214,6 @@ extern uint8_t rf230_last_correlation;
 uint8_t rf230_get_raw_rssi(void);
 
 #define rf230_rssi	rf230_get_raw_rssi
-
-#define delay_us( us )   ( _delay_loop_2( ( F_CPU / 4000000UL ) * ( us ) ) )
 
 #endif
 /** @} */

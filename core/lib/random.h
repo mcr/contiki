@@ -46,6 +46,8 @@ void random_init(unsigned short seed);
  */
 unsigned short random_rand(void);
 
-#define RANDOM_MAX 65535U
+/* In gcc int rand() uses RAND_MAX and long random() uses RANDOM_MAX */
+/* Since random_rand casts to unsigned short, we'll use this maxmimum */
+#define RANDOM_RAND_MAX 65535U
 
 #endif /* __RANDOM_H__ */

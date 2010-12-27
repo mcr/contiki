@@ -117,9 +117,7 @@ remove_parents(rpl_dag_t *dag, rpl_rank_t minimum_rank)
 static int
 should_send_dao(rpl_dag_t *dag, rpl_dio_t *dio, rpl_parent_t *p)
 {
-  return dio->dst_adv_supported;
-/*  return dio->dst_adv_supported && dio->dst_adv_trigger &&
-         dio->dtsn > p->dtsn && p == dag->preferred_parent;*/
+  return dio->dtsn > p->dtsn && p == dag->preferred_parent;
 }
 /************************************************************************/
 static int
@@ -153,6 +151,7 @@ rpl_set_root(uip_ipaddr_t *dag_id)
   dag->joined = 1;
   dag->version = version + 1;
   dag->grounded = RPL_GROUNDED;
+  dag->mop = RPL_MOP_DEFAULT;
   dag->rank = ROOT_RANK;
   dag->of = rpl_find_of(RPL_DEFAULT_OCP);
   dag->preferred_parent = NULL;
@@ -165,6 +164,9 @@ rpl_set_root(uip_ipaddr_t *dag_id)
   dag->dio_redundancy = DEFAULT_DIO_REDUNDANCY;
   dag->max_rankinc = DEFAULT_MAX_RANKINC;
   dag->min_hoprankinc = DEFAULT_MIN_HOPRANKINC;
+
+  dag->default_lifetime = DEFAULT_RPL_DEF_LIFETIME;
+  dag->lifetime_unit = DEFAULT_RPL_LIFETIME_UNIT;
 
   PRINTF("RPL: Node set to be a DAG root with DAG ID ");
   PRINT6ADDR(&dag->dag_id);
@@ -234,6 +236,8 @@ rpl_alloc_dag(uint8_t instance_id)
       return dag;
     }
   }
+
+  RPL_STAT(rpl_stats.mem_overflows++);
   return NULL;
 }
 /************************************************************************/
@@ -311,13 +315,6 @@ rpl_select_parent(rpl_dag_t *dag)
   }
 
   if(dag->preferred_parent != best) {
-    /* Visualize the change of the preferred parent in Cooja. */
-    if(dag->preferred_parent != NULL) {
-      ANNOTATE("#L %u 0\n",
-               dag->preferred_parent->addr.u8[sizeof(best->addr) - 1]);
-    }
-    ANNOTATE("#L %u 1\n", best->addr.u8[sizeof(best->addr) - 1]);
-
     dag->preferred_parent = best; /* Cache the value. */
     rpl_set_default_route(dag, &best->addr);
     /* The DAO parent set changed - schedule a DAO transmission. */
@@ -364,7 +361,6 @@ rpl_remove_parent(rpl_dag_t *dag, rpl_parent_t *parent)
   PRINTF("\n");
 
   if(parent == dag->preferred_parent) {
-    ANNOTATE("#L %u 0\n", parent->addr.u8[sizeof(parent->addr) - 1]);
     dag->preferred_parent = NULL;
   }
 
@@ -377,6 +373,7 @@ rpl_dag_t *
 rpl_get_dag(int instance_id)
 {
   int i;
+
   for(i = 0; i < RPL_MAX_DAG_ENTRIES; i++) {
     if(dag_table[i].joined && (instance_id == RPL_ANY_INSTANCE ||
                                dag_table[i].instance_id == instance_id)) {
@@ -452,8 +449,9 @@ join_dag(uip_ipaddr_t *from, rpl_dio_t *dio)
   dag->joined = 1;
   dag->used = 1;
   dag->of = of;
-  dag->preference = dio->preference;
   dag->grounded = dio->grounded;
+  dag->mop = dio->mop;
+  dag->preference = dio->preference;
   dag->instance_id = dio->instance_id;
 
   dag->max_rankinc = dio->dag_max_rankinc;
@@ -461,7 +459,6 @@ join_dag(uip_ipaddr_t *from, rpl_dio_t *dio)
 
   dag->version = dio->version;
   dag->preferred_parent = p;
-  ANNOTATE("#L %u 1\n", p->addr.u8[sizeof(p->addr) - 1]);
 
   dag->dio_intdoubl = dio->dag_intdoubl;
   dag->dio_intmin = dio->dag_intmin;
@@ -480,13 +477,16 @@ join_dag(uip_ipaddr_t *from, rpl_dio_t *dio)
   dag->rank = dag->of->calculate_rank(NULL, dio->rank);
   dag->min_rank = dag->rank; /* So far this is the lowest rank we know */
 
+  dag->default_lifetime = dio->default_lifetime;
+  dag->lifetime_unit = dio->lifetime_unit;
+
   rpl_reset_dio_timer(dag, 1);
   rpl_set_default_route(dag, from);
 
   if(should_send_dao(dag, dio, p)) {
     rpl_schedule_dao(dag);
   } else {
-    PRINTF("RPL: dst_adv_trigger not set in incoming DIO!\n");
+    PRINTF("RPL: The DIO does not meet the prerequisites for sending a DAO\n");
   }
 }
 /************************************************************************/
@@ -613,6 +613,11 @@ rpl_process_dio(uip_ipaddr_t *from, rpl_dio_t *dio)
 {
   rpl_dag_t *dag;
   rpl_parent_t *p;
+
+  if(dio->mop != RPL_MOP_DEFAULT) {
+    PRINTF("RPL: Ignoring a DIO with an unsupported MOP: %d\n", dio->mop);
+    return;
+  }
 
   dag = rpl_get_dag(dio->instance_id);
   if(dag == NULL) {

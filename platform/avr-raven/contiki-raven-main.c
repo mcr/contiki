@@ -126,7 +126,12 @@ static uint8_t get_channel_from_eeprom() {
 
 	if(eeprom_channel==~eeprom_check)
 		return eeprom_channel;
+
+#ifdef CHANNEL_802_15_4
+	return(CHANNEL_802_15_4);
+#else
 	return 26;
+#endif
 }
 
 static bool get_mac_from_eeprom(uint8_t* macptr) {
@@ -189,7 +194,9 @@ void initialize(void)
   memset(&addr, 0, sizeof(rimeaddr_t));
   get_mac_from_eeprom(addr.u8);
  
-  memcpy(&uip_lladdr.addr, &addr.u8, 8);	
+#if UIP_CONF_IPV6 
+  memcpy(&uip_lladdr.addr, &addr.u8, 8);
+#endif  
   rf230_set_pan_addr(
 	get_panid_from_eeprom(),
 	get_panaddr_from_eeprom(),

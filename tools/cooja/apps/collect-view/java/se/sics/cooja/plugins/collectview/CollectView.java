@@ -116,7 +116,7 @@ public class CollectView extends VisPlugin implements MotePlugin, HasQuickHelp {
     }
 
     String contikiPath = GUI.getExternalToolsSetting("PATH_CONTIKI", "../../..");
-    String jarFile = contikiPath + "/tools/collect-view/dist/collect-demo.jar";
+    String jarFile = contikiPath + "/tools/collect-view/dist/collect-view.jar";
     if (!new File(jarFile).canRead()) {
       logger.fatal("Could not find the CollectView application:" + jarFile);
       if (GUI.isVisualized()) {

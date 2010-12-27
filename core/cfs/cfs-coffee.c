@@ -53,11 +53,16 @@
 #include "cfs-coffee-arch.h"
 #include "cfs/cfs-coffee.h"
 
+/* Platforms that have watchdog timers enable should
+   define these macros in cfs-coffee-arch.h. */
 #ifndef COFFEE_WATCHDOG_START
 #define COFFEE_WATCHDOG_START()
 #endif
 #ifndef COFFEE_WATCHDOG_STOP
 #define COFFEE_WATCHDOG_STOP()
+#endif
+#ifndef COFFEE_WATCHDOG_PERIODIC
+#define COFFEE_WATCHDOG_PERIODIC()
 #endif
 
 #ifndef COFFEE_CONF_APPEND_ONLY
@@ -502,7 +507,7 @@ file_end(coffee_page_t start)
    */
 
   for(page = hdr.max_pages - 1; page >= 0; page--) {
-    watchdog_periodic();
+    COFFEE_WATCHDOG_PERIODIC();
     COFFEE_READ(buf, sizeof(buf), (start + page) * COFFEE_PAGE_SIZE);
     for(i = COFFEE_PAGE_SIZE - 1; i >= 0; i--) {
       if(buf[i] != 0) {
@@ -937,7 +942,7 @@ write_log_page(struct file *file, struct log_param *lp)
   }
 
   {
-    unsigned char copy_buf[log_record_size];
+    char copy_buf[log_record_size];
 
     lp_out.offset = offset = region * log_record_size;
     lp_out.buf = copy_buf;
@@ -949,8 +954,12 @@ write_log_page(struct file *file, struct log_param *lp)
 	  absolute_offset(file->page, offset));
     }
 
-    memcpy((char *)&copy_buf + lp->offset, lp->buf, lp->size);
+    memcpy(&copy_buf[lp->offset], lp->buf, lp->size);
 
+    /*
+     * Write the region number in the region index table.
+     * The region number is incremented to avoid values of zero.
+     */
     offset = absolute_offset(log_page, 0);
     ++region;
     COFFEE_WRITE(&region, sizeof(region),
@@ -1079,13 +1088,13 @@ cfs_remove(const char *name)
 int
 cfs_read(int fd, void *buf, unsigned size)
 {
-  struct file_header hdr;
   struct file_desc *fdp;
   struct file *file;
+#if COFFEE_MICRO_LOGS
+  struct file_header hdr;
+  struct log_param lp;
   unsigned bytes_left;
   int r;
-#if COFFEE_MICRO_LOGS
-  struct log_param lp;
 #endif
 
   if(!(FD_VALID(fd) && FD_READABLE(fd))) {
@@ -1098,35 +1107,39 @@ cfs_read(int fd, void *buf, unsigned size)
     size = file->end - fdp->offset;
   }
 
-  bytes_left = size;
-  if(FILE_MODIFIED(file)) {
-    read_header(&hdr, file->page);
+  /* If the file is allocated, read directly in the file. */
+  if(!FILE_MODIFIED(file)) {
+    COFFEE_READ(buf, size, absolute_offset(file->page, fdp->offset));
+    fdp->offset += size;
+    return size;
   }
+
+#if COFFEE_MICRO_LOGS
+  read_header(&hdr, file->page);
 
   /*
    * Fill the buffer by copying from the log in first hand, or the
    * ordinary file if the page has no log record.
    */
-  while(bytes_left) {
-    watchdog_periodic();
+  for(bytes_left = size; bytes_left > 0; bytes_left -= r) {
+    COFFEE_WATCHDOG_PERIODIC();
     r = -1;
-#if COFFEE_MICRO_LOGS
-    if(FILE_MODIFIED(file)) {
-      lp.offset = fdp->offset;
-      lp.buf = buf;
-      lp.size = bytes_left;
-      r = read_log_page(&hdr, file->record_count, &lp);
-    }
-#endif /* COFFEE_MICRO_LOGS */
+
+    lp.offset = fdp->offset;
+    lp.buf = buf;
+    lp.size = bytes_left;
+    r = read_log_page(&hdr, file->record_count, &lp);
+
     /* Read from the original file if we cannot find the data in the log. */
     if(r < 0) {
+      COFFEE_READ(buf, bytes_left, absolute_offset(file->page, fdp->offset));
       r = bytes_left;
-      COFFEE_READ(buf, r, absolute_offset(file->page, fdp->offset));
     }
-    bytes_left -= r;
     fdp->offset += r;
     buf += r;
   }
+#endif /* COFFEE_MICRO_LOGS */
+
   return size;
 }
 /*---------------------------------------------------------------------------*/
@@ -1160,8 +1173,7 @@ cfs_write(int fd, const void *buf, unsigned size)
 
 #if COFFEE_MICRO_LOGS
   if(FILE_MODIFIED(file) || fdp->offset < file->end) {
-    bytes_left = size;
-    while(bytes_left) {
+    for(bytes_left = size; bytes_left > 0;) {
       lp.offset = fdp->offset;
       lp.buf = buf;
       lp.size = bytes_left;
@@ -1180,6 +1192,12 @@ cfs_write(int fd, const void *buf, unsigned size)
 	bytes_left -= i;
 	fdp->offset += i;
 	buf += i;
+
+        /* Update the file end for a potential log merge that might
+           occur while writing log records. */
+        if(fdp->offset > file->end) {
+          file->end = fdp->offset;
+        }
       }
     }
 
@@ -1190,10 +1208,11 @@ cfs_write(int fd, const void *buf, unsigned size)
   } else {
 #endif /* COFFEE_MICRO_LOGS */
 #if COFFEE_APPEND_ONLY
-   if(fdp->offset < file->end) {
-     return -1;
-   }
+    if(fdp->offset < file->end) {
+      return -1;
+    }
 #endif /* COFFEE_APPEND_ONLY */
+
     COFFEE_WRITE(buf, size, absolute_offset(file->page, fdp->offset));
     fdp->offset += size;
 #if COFFEE_MICRO_LOGS
@@ -1214,7 +1233,7 @@ cfs_opendir(struct cfs_dir *dir, const char *name)
    * Coffee is only guaranteed to support "/" and ".", but it does not 
    * currently enforce this.
    */
-    *(coffee_page_t *)dir->dummy_space = 0;
+  memset(dir->dummy_space, 0, sizeof(coffee_page_t));
   return 0;
 }
 /*---------------------------------------------------------------------------*/
@@ -1224,14 +1243,19 @@ cfs_readdir(struct cfs_dir *dir, struct cfs_dirent *record)
   struct file_header hdr;
   coffee_page_t page;
 
-  for(page = *(coffee_page_t *)dir->dummy_space; page < COFFEE_PAGE_COUNT;) {
-    watchdog_periodic();
+  memcpy(&page, dir->dummy_space, sizeof(coffee_page_t));
+
+  while(page < COFFEE_PAGE_COUNT) {
+    COFFEE_WATCHDOG_PERIODIC();
     read_header(&hdr, page);
     if(HDR_ACTIVE(hdr) && !HDR_LOG(hdr)) {
+      coffee_page_t next_page;
       memcpy(record->name, hdr.name, sizeof(record->name));
       record->name[sizeof(record->name) - 1] = '\0';
       record->size = file_end(page);
-      *(coffee_page_t *)dir->dummy_space = next_file(page, &hdr);
+
+      next_page = next_file(page, &hdr);
+      memcpy(dir->dummy_space, &next_page, sizeof(coffee_page_t));
       return 0;
     }
     page = next_file(page, &hdr);

@@ -5,7 +5,7 @@
   <project EXPORT="discard">[CONTIKI_DIR]/tools/cooja/apps/avrora</project>
   <project EXPORT="discard">[CONTIKI_DIR]/tools/cooja/apps/serial_socket</project>
   <simulation>
-    <title>Rest with RPL router</title>
+    <title>REST with RPL router</title>
     <delaytime>-2147483648</delaytime>
     <randomseed>123456</randomseed>
     <motedelay_us>1000000</motedelay_us>
@@ -46,9 +46,9 @@
       se.sics.cooja.mspmote.SkyMoteType
       <identifier>skyweb</identifier>
       <description>Rest</description>
-      <source EXPORT="discard">[CONTIKI_DIR]/examples/rest-example/rest-example.c</source>
-      <commands EXPORT="discard">make rest-example.sky TARGET=sky</commands>
-      <firmware EXPORT="copy">[CONTIKI_DIR]/examples/rest-example/rest-example.sky</firmware>
+      <source EXPORT="discard">[CONTIKI_DIR]/examples/rest-example/rest-server-example.c</source>
+      <commands EXPORT="discard">make rest-server-example.sky TARGET=sky</commands>
+      <firmware EXPORT="copy">[CONTIKI_DIR]/examples/rest-example/rest-server-example.sky</firmware>
       <moteinterface>se.sics.cooja.interfaces.Position</moteinterface>
       <moteinterface>se.sics.cooja.interfaces.RimeAddress</moteinterface>
       <moteinterface>se.sics.cooja.interfaces.IPAddress</moteinterface>
@@ -103,7 +103,7 @@
       </interface_config>
       <interface_config>
         se.sics.cooja.mspmote.interfaces.MspMoteID
-        <id>6</id>
+        <id>3</id>
       </interface_config>
       <motetype_identifier>skyweb</motetype_identifier>
     </mote>

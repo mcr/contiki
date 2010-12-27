@@ -674,6 +674,10 @@ public class Simulation extends Observable implements Runnable {
       }
     }
 
+    if (currentRadioMedium != null) {
+      currentRadioMedium.simulationFinishedLoading();
+    }
+
     setChanged();
     notifyObservers(this);
     return true;
@@ -732,6 +736,11 @@ public class Simulation extends Observable implements Runnable {
    * This method is called just before the simulation is removed.
    */
   public void removed() {
+  	/* Remove radio medium */
+  	if (currentRadioMedium != null) {
+  		currentRadioMedium.removed();
+  	}
+  	
     /* Remove all motes */
     Mote[] motes = getMotes();
     for (Mote m: motes) {

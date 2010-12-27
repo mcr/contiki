@@ -56,7 +56,7 @@ import se.sics.cooja.interfaces.PolledBeforeAllTicks;
  *
  * This observable never changes.
  *
- * @author Fredrik Österlind
+ * @author Fredrik Osterlind
  */
 @ClassDescription("Dummy Interface")
 public class DummyInterface extends MoteInterface implements ContikiMoteInterface, PolledBeforeAllTicks, PolledAfterAllTicks {

@@ -563,7 +563,14 @@ public class MapPanel extends JPanel implements Configurable, Visualizer, Action
 
     } else if (!isMap && source == lockedItem) {
       if (popupNode != null) {
+        boolean wasFixed = popupNode.hasFixedLocation;
         popupNode.hasFixedLocation = lockedItem.isSelected();
+        if (wasFixed && !popupNode.hasFixedLocation) {
+          server.removeConfig("collect.map." + popupNode.node.getID());
+        } else if (!wasFixed && popupNode.hasFixedLocation) {
+          server.setConfig("collect.map." + popupNode.node.getID(),
+                           "" + popupNode.x + ',' + popupNode.y);
+        }
         repaint();
       }
 
@@ -742,6 +749,11 @@ public class MapPanel extends JPanel implements Configurable, Visualizer, Action
         draggedNode.x = e.getX();
         draggedNode.y = e.getY();
         setCursor(Cursor.getDefaultCursor());
+        if (!isMap && draggedNode.hasFixedLocation) {
+          /* Update fixed location */
+          server.setConfig("collect.map." + draggedNode.node.getID(),
+                           "" + draggedNode.x + ',' + draggedNode.y);
+        }
         draggedTime = 0;
         draggedNode = null;
         repaint();
@@ -833,12 +845,6 @@ public class MapPanel extends JPanel implements Configurable, Visualizer, Action
     if (isMap) {
       for (MapNode n : getNodeList()) {
         config.put(n.node.getID(), "" + n.x + ',' + n.y);
-      }
-    } else {
-      for (MapNode n : getNodeList()) {
-        if (n.hasFixedLocation) {
-          config.put("collect.map." + n.node.getID(), "" + n.x + ',' + n.y);
-        }
       }
     }
   }

@@ -59,14 +59,10 @@
 #include "net/uip-debug.h"
 
 /*---------------------------------------------------------------------------*/
-#define RPL_DIO_GROUNDED            0x80
-#define RPL_DIO_DEST_ADV_SUPPORTED  0x40
-#define RPL_DIO_DEST_ADV_TRIGGER    0x20
-#define RPL_DIO_MOP_MASK            0x18
-#define RPL_DIO_MOP_NON_STORING     0x00
-#define RPL_DIO_MOP_STORING         0x10
-#define RPL_DIO_DAG_PREFERENCE_MASK 0x07
-
+#define RPL_DIO_GROUNDED                 0x80
+#define RPL_DIO_MOP_SHIFT                3
+#define RPL_DIO_MOP_MASK                 0x3c
+#define RPL_DIO_PREFERENCE_MASK          0x07
 
 #define UIP_IP_BUF       ((struct uip_ip_hdr *)&uip_buf[UIP_LLH_LEN])
 #define UIP_ICMP_BUF     ((struct uip_icmp_hdr *)&uip_buf[uip_l2_l3_hdr_len])
@@ -146,7 +142,7 @@ dis_output(uip_ipaddr_t *addr)
   /*      0                   1                   2        */
   /*      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3  */
   /*     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ */
-  /*     |           Reserved            |   Option(s)...  */
+  /*     |     Flags     |   Reserved    |   Option(s)...  */
   /*     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ */
 
   buffer = UIP_ICMP_PAYLOAD;
@@ -160,7 +156,6 @@ dis_output(uip_ipaddr_t *addr)
     PRINTF("RPL: Sending a unicast DIS\n");
   }
   uip_icmp6_send(addr, ICMP6_RPL, RPL_CODE_DIS, 2);
-
 }
 /*---------------------------------------------------------------------------*/
 static void
@@ -191,7 +186,7 @@ dio_input(void)
                               packetbuf_addr(PACKETBUF_ADDR_SENDER),
                               0, NBR_REACHABLE)) != NULL) {
       /* set reachable timer */
-      stimer_set(&(nbr->reachable), UIP_ND6_REACHABLE_TIME);
+      stimer_set(&nbr->reachable, UIP_ND6_REACHABLE_TIME / 1000);
       PRINTF("RPL: Neighbor added to neighbor cache ");
       PRINT6ADDR(&from);
       PRINTF(", ");
@@ -216,9 +211,8 @@ dio_input(void)
   PRINTF("RPL: Incoming DIO rank %u\n", (unsigned)dio.rank);
 
   dio.grounded = buffer[i] & RPL_DIO_GROUNDED;
-  dio.dst_adv_trigger = buffer[i] & RPL_DIO_DEST_ADV_TRIGGER;
-  dio.dst_adv_supported = buffer[i] & RPL_DIO_DEST_ADV_SUPPORTED;
-  dio.preference = buffer[i++] & RPL_DIO_DAG_PREFERENCE_MASK;
+  dio.mop = (buffer[i]& RPL_DIO_MOP_MASK) >> RPL_DIO_MOP_SHIFT;
+  dio.preference = buffer[i++] & RPL_DIO_PREFERENCE_MASK;
 
   dio.dtsn = buffer[i++];
   /* two reserved bytes */
@@ -282,9 +276,13 @@ dio_input(void)
       dio.dag_max_rankinc = (buffer[i + 6] << 8) | buffer[i + 7];
       dio.dag_min_hoprankinc = (buffer[i + 8] << 8) | buffer[i + 9];
       dio.ocp = (buffer[i + 10] << 8) | buffer[i + 11];
-      PRINTF("RPL: DIO Conf:dbl=%d, min=%d red=%d maxinc=%d mininc=%d ocp=%d\n",
+      /* buffer + 12 is reserved */
+      dio.default_lifetime = buffer[i + 13];
+      dio.lifetime_unit = (buffer[i + 14] << 8) | buffer[i + 15];
+      PRINTF("RPL: DIO Conf:dbl=%d, min=%d red=%d maxinc=%d mininc=%d ocp=%d d_l=%u l_u=%u\n",
              dio.dag_intdoubl, dio.dag_intmin, dio.dag_redund,
-             dio.dag_max_rankinc, dio.dag_min_hoprankinc, dio.ocp);
+             dio.dag_max_rankinc, dio.dag_min_hoprankinc, dio.ocp,
+             dio.default_lifetime, dio.lifetime_unit);
       break;
     case RPL_DIO_SUBOPT_PREFIX_INFO:
       if(len != 32) {
@@ -314,7 +312,7 @@ dio_output(rpl_dag_t *dag, uip_ipaddr_t *uc_addr)
   int pos;
   uip_ipaddr_t addr;
 
-  /* DAG Information Solicitation */
+  /* DAG Information Object */
   pos = 0;
 
   buffer = UIP_ICMP_PAYLOAD;
@@ -323,24 +321,27 @@ dio_output(rpl_dag_t *dag, uip_ipaddr_t *uc_addr)
   buffer[pos++] = dag->rank >> 8;
   buffer[pos++] = dag->rank & 0xff;
 
+  buffer[pos] = 0;
   if(dag->grounded) {
     buffer[pos] |= RPL_DIO_GROUNDED;
   }
-  /* Set dst_adv_trigger and dst_adv_supported. */
-  buffer[pos] |= RPL_DIO_DEST_ADV_SUPPORTED | RPL_DIO_DEST_ADV_TRIGGER;
+
+  buffer[pos] = dag->mop << RPL_DIO_MOP_SHIFT;
   pos++;
 
   buffer[pos++] = ++dag->dtsn_out;
+
   /* reserved 2 bytes */
-  pos += 2;
+  buffer[pos++] = 0; /* flags */
+  buffer[pos++] = 0; /* reserved */
 
   memcpy(buffer + pos, &dag->dag_id, sizeof(dag->dag_id));
   pos += 16;
 
   /* always add a sub-option for DAG configuration */
   buffer[pos++] = RPL_DIO_SUBOPT_DAG_CONF;
-  buffer[pos++] = 10;
-  buffer[pos++] = 0; /* PCS */
+  buffer[pos++] = 14;
+  buffer[pos++] = 0; /* No Auth, PCS = 0 */
   buffer[pos++] = dag->dio_intdoubl;
   buffer[pos++] = dag->dio_intmin;
   buffer[pos++] = dag->dio_redundancy;
@@ -348,9 +349,13 @@ dio_output(rpl_dag_t *dag, uip_ipaddr_t *uc_addr)
   buffer[pos++] = dag->max_rankinc & 0xff;
   buffer[pos++] = dag->min_hoprankinc >> 8;
   buffer[pos++] = dag->min_hoprankinc & 0xff;
-  /* OCP is now last in the DAG_CONF option */
+  /* OCP is in the DAG_CONF option */
   buffer[pos++] = dag->of->ocp >> 8;
   buffer[pos++] = dag->of->ocp & 0xff;
+  buffer[pos++] = 0; /* reserved */
+  buffer[pos++] = dag->default_lifetime;
+  buffer[pos++] = dag->lifetime_unit >> 8;
+  buffer[pos++] = dag->lifetime_unit & 0xff;
 
   /* if prefix info length > 0 then we have a prefix to send! */
   if(dag->prefix_info.length > 0) {
@@ -440,7 +445,7 @@ dao_input(void)
   pos++;
   sequence = buffer[pos++];
 
-  /* is the DAGID present ? */
+  /* Is the DAGID present? */
   if(flags & RPL_DAO_D_FLAG) {
     /* currently the DAG ID is ignored since we only use global
        RPL Instance IDs... */
@@ -479,7 +484,7 @@ dao_input(void)
   PRINTF("\n");
 
   if(lifetime == ZERO_LIFETIME) {
-    /* No-DAO received; invoke the route purging routine. */
+    /* No-Path DAO received; invoke the route purging routine. */
     rep = uip_ds6_route_lookup(&prefix);
     if(rep != NULL && rep->state.saved_lifetime == 0) {
       PRINTF("RPL: Setting expiration timer for prefix ");
@@ -497,8 +502,11 @@ dao_input(void)
   if(learned_from == RPL_ROUTE_FROM_UNICAST_DAO) {
     /* Check if this is a DAO forwarding loop. */
     p = rpl_find_parent(dag, &dao_sender_addr);
-    if(p != NULL && DAG_RANK(p->rank, dag) < DAG_RANK(dag->rank, dag)) {
-      printf("RPL: Loop detected when receiving a unicast DAO from a node with a lower rank! (%u < %u)\n",
+    /* check if this is a new DAO registration with an "illegal" rank */
+    /* if we already route to this node it is likely */
+    if(p != NULL && DAG_RANK(p->rank, dag) < DAG_RANK(dag->rank, dag) 
+      /* && uip_ds6_route_lookup(&prefix) == NULL*/) {
+      PRINTF("RPL: Loop detected when receiving a unicast DAO from a node with a lower rank! (%u < %u)\n",
           DAG_RANK(p->rank, dag), DAG_RANK(dag->rank, dag));
       rpl_local_repair(dag);
       return;
@@ -507,6 +515,7 @@ dao_input(void)
 
   rep = rpl_add_route(dag, &prefix, prefixlen, &dao_sender_addr);
   if(rep == NULL) {
+    RPL_STAT(rpl_stats.memory_overflows++);
     PRINTF("RPL: Could not add a route after receiving a DAO\n");
     return;
   } else {

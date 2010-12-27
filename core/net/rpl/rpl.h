@@ -54,7 +54,7 @@
 
 /* set to 1 for some statistics on trickle / DIO */
 #ifndef RPL_CONF_STATS
-#define RPL_CONF_STATS 1
+#define RPL_CONF_STATS 0
 #endif /* RPL_CONF_STATS */
 
 /* The RPL Codes for the message types */
@@ -85,7 +85,8 @@
 /*---------------------------------------------------------------------------*/
 /* Default values for RPL constants and variables. */
 
-#define DEFAULT_DAO_LATENCY             (CLOCK_SECOND * (1 + (random_rand() & 0xf)))
+/* The default value for the DAO timer. */
+#define DEFAULT_DAO_LATENCY             (CLOCK_SECOND * 8)
 
 /* Special value indicating immediate removal. */
 #define ZERO_LIFETIME                   0
@@ -96,10 +97,13 @@
 /* Default route lifetime in seconds. */
 #define DEFAULT_ROUTE_LIFETIME          INFINITE_LIFETIME
 
-#define DEFAULT_MIN_HOPRANKINC          256
-#define DEFAULT_MAX_RANKINC             3*DEFAULT_MIN_HOPRANKINC
+#define DEFAULT_RPL_LIFETIME_UNIT       0xffff
+#define DEFAULT_RPL_DEF_LIFETIME        0xff
 
-#define DAG_RANK(fixpt_rank, dag)	((fixpt_rank) / dag->min_hoprankinc)
+#define DEFAULT_MIN_HOPRANKINC          256
+#define DEFAULT_MAX_RANKINC             (3 * DEFAULT_MIN_HOPRANKINC)
+
+#define DAG_RANK(fixpt_rank, dag)	((fixpt_rank) / (dag)->min_hoprankinc)
 
 /* Rank of a node outside the LLN. */
 #define BASE_RANK                       0
@@ -132,20 +136,28 @@
 #define RPL_INSTANCE_LOCAL_FLAG         0x80
 #define RPL_INSTANCE_D_FLAG             0x40
 
+/* Values that tell where a route came from. */
 #define RPL_ROUTE_FROM_INTERNAL         0
 #define RPL_ROUTE_FROM_UNICAST_DAO      1
 #define RPL_ROUTE_FROM_MULTICAST_DAO    2
 #define RPL_ROUTE_FROM_DIO              3
 
+/* DAG Mode of Operation */
+#define RPL_MOP_NO_DOWNWARD_ROUTES      0
+#define RPL_MOP_NON_STORING             1
+#define RPL_MOP_STORING_NO_MULTICAST    2
+#define RPL_MOP_STORING_MULTICAST       3
+#define RPL_MOP_DEFAULT                 RPL_MOP_STORING_NO_MULTICAST
+
 /* DAG Metric Container Object Types, to be confirmed by IANA. */
-#define RPL_DAG_MC_NSA                  1
-#define RPL_DAG_MC_NE                   2
-#define RPL_DAG_MC_HC                   3
-#define RPL_DAG_MC_THROUGHPUT           4
-#define RPL_DAG_MC_LATENCY              5
-#define RPL_DAG_MC_LQL                  6
-#define RPL_DAG_MC_ETX                  7
-#define RPL_DAG_MC_LC                   8
+#define RPL_DAG_MC_NSA                  1 /* Node State and Attributes */
+#define RPL_DAG_MC_NE                   2 /* Node Energy */
+#define RPL_DAG_MC_HC                   3 /* Hop Count */
+#define RPL_DAG_MC_THROUGHPUT           4 /* Throughput */
+#define RPL_DAG_MC_LATENCY              5 /* Latency */
+#define RPL_DAG_MC_LQL                  6 /* Link Quality Level */
+#define RPL_DAG_MC_ETX                  7 /* Expected Transmission Count */
+#define RPL_DAG_MC_LC                   8 /* Link Color */
 
 /* DIS related */
 #define RPL_DIS_SEND                    1
@@ -224,8 +236,7 @@ struct rpl_dio {
   rpl_ocp_t ocp;
   rpl_rank_t rank;
   uint8_t grounded;
-  uint8_t dst_adv_trigger;
-  uint8_t dst_adv_supported;
+  uint8_t mop;
   uint8_t preference;
   uint8_t version;
   uint8_t instance_id;
@@ -233,6 +244,8 @@ struct rpl_dio {
   uint8_t dag_intdoubl;
   uint8_t dag_intmin;
   uint8_t dag_redund;
+  uint8_t default_lifetime;
+  uint16_t lifetime_unit;
   rpl_rank_t dag_max_rankinc;
   rpl_rank_t dag_min_hoprankinc;
   rpl_prefix_t destination_prefix;
@@ -271,14 +284,17 @@ struct rpl_dag {
   uint8_t dtsn_out;
   uint8_t instance_id;
   uint8_t version;
-  uint8_t preference;
   uint8_t grounded;
+  uint8_t mop;
+  uint8_t preference;
   uint8_t dio_intdoubl;
   uint8_t dio_intmin;
   uint8_t dio_redundancy;
   rpl_rank_t max_rankinc;
   rpl_rank_t min_hoprankinc;
   uint8_t used;
+  uint8_t default_lifetime;
+  uint16_t lifetime_unit; /* lifetime in seconds = l_u * d_l */
   /* live data for the DAG */
   uint8_t joined;
   uint8_t dio_intcurrent;
@@ -289,7 +305,7 @@ struct rpl_dag {
   uint16_t dio_totsend;
   uint16_t dio_totrecv;
 #endif /* RPL_CONF_STATS */
-  uint16_t dio_next_delay; /* delay for completion of dio interval */
+  uint32_t dio_next_delay; /* delay for completion of dio interval */
   struct ctimer dio_timer;
   struct ctimer dao_timer;
   rpl_parent_t *preferred_parent;
@@ -313,6 +329,7 @@ void uip_rpl_input(void);
 
 /* RPL logic functions. */
 rpl_dag_t *rpl_set_root(uip_ipaddr_t *);
+void rpl_join_dag(rpl_dag_t *);
 int rpl_set_prefix(rpl_dag_t *dag, uip_ipaddr_t *prefix, int len);
 int rpl_repair_dag(rpl_dag_t *dag);
 void rpl_local_repair(rpl_dag_t *dag);
@@ -320,9 +337,10 @@ int rpl_set_default_route(rpl_dag_t *dag, uip_ipaddr_t *from);
 void rpl_process_dio(uip_ipaddr_t *, rpl_dio_t *);
 int rpl_process_parent_event(rpl_dag_t *, rpl_parent_t *);
 
-/* DAG allocation and deallocation. */
+/* DAG object management. */
 rpl_dag_t *rpl_alloc_dag(uint8_t);
 void rpl_free_dag(rpl_dag_t *);
+rpl_dag_t *rpl_get_dag(int instance_id);
 
 /* DAG parent management function. */
 rpl_parent_t *rpl_add_parent(rpl_dag_t *, rpl_dio_t *dio, uip_ipaddr_t *);
@@ -330,10 +348,6 @@ rpl_parent_t *rpl_find_parent(rpl_dag_t *, uip_ipaddr_t *);
 int rpl_remove_parent(rpl_dag_t *, rpl_parent_t *);
 rpl_parent_t *rpl_select_parent(rpl_dag_t *dag);
 void rpl_recalculate_ranks(void);
-
-void rpl_join_dag(rpl_dag_t *);
-rpl_dag_t *rpl_get_dag(int instance_id);
-rpl_dag_t *rpl_find_dag(unsigned char aucIndex);
 
 /* RPL routing table functions. */
 void rpl_remove_routes(rpl_dag_t *dag);

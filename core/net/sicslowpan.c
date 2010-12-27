@@ -1255,6 +1255,11 @@ send_packet(rimeaddr_t *dest)
    */
   packetbuf_set_addr(PACKETBUF_ADDR_RECEIVER, dest);
 
+  /* Force acknowledge from sender (test hardware autoacks) */
+#if SICSLOWPAN_CONF_ACK_ALL
+    packetbuf_set_attr(PACKETBUF_ATTR_RELIABLE, 1);
+#endif
+  
   /* Provide a callback function to receive the result of
      a packet transmission. */
   NETSTACK_MAC.send(&packet_sent, NULL);
@@ -1336,7 +1341,7 @@ output(uip_lladdr_t *localdest)
      */
 
 
-    printf("Fragmentation sending packet len %d\n", uip_len);
+    PRINTFO("Fragmentation sending packet len %d\n", uip_len);
     
     /* Create 1st Fragment */
     PRINTFO("sicslowpan output: 1rst fragment ");
@@ -1659,17 +1664,44 @@ sicslowpan_init(void)
   tcpip_set_outputfunc(output);
 
 #if SICSLOWPAN_COMPRESSION == SICSLOWPAN_COMPRESSION_HC06
+/* Preinitialize any address contexts for better header compression
+ * (Saves up to 13 bytes per 6lowpan packet)
+ * The platform contiki-conf.h file can override this using e.g.
+ * #define SICSLOWPAN_CONF_ADDR_CONTEXT_0 {addr_contexts[0].prefix[0]=0xbb;addr_contexts[0].prefix[1]=0xbb;}
+ */
 #if SICSLOWPAN_CONF_MAX_ADDR_CONTEXTS > 0 
-  addr_contexts[0].used = 1;
+  addr_contexts[0].used   = 1;
   addr_contexts[0].number = 0;
+#ifdef SICSLOWPAN_CONF_ADDR_CONTEXT_0
+	SICSLOWPAN_CONF_ADDR_CONTEXT_0;
+#else
   addr_contexts[0].prefix[0] = 0xaa; 
   addr_contexts[0].prefix[1] = 0xaa;
+#endif
 #endif /* SICSLOWPAN_CONF_MAX_ADDR_CONTEXTS > 0 */
+
 #if SICSLOWPAN_CONF_MAX_ADDR_CONTEXTS > 1
   {
     int i;
     for(i = 1; i < SICSLOWPAN_CONF_MAX_ADDR_CONTEXTS; i++) {
+#ifdef SICSLOWPAN_CONF_ADDR_CONTEXT_1
+	  if (i==1) {
+	    addr_contexts[1].used   = 1;
+		addr_contexts[1].number = 1;
+		SICSLOWPAN_CONF_ADDR_CONTEXT_1;
+#ifdef SICSLOWPAN_CONF_ADDR_CONTEXT_2
+      } else if (i==2) {
+	  	addr_contexts[2].used   = 1;
+		addr_contexts[2].number = 2;
+		SICSLOWPAN_CONF_ADDR_CONTEXT_2;
+#endif
+      } else {
+        addr_contexts[i].used = 0;
+      }	  
+#else
       addr_contexts[i].used = 0;
+#endif /* SICSLOWPAN_CONF_ADDR_CONTEXT_1 */
+
     }
   }
 #endif /* SICSLOWPAN_CONF_MAX_ADDR_CONTEXTS > 1 */
