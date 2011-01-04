@@ -57,6 +57,18 @@
 #define RPL_CONF_STATS 0
 #endif /* RPL_CONF_STATS */
 
+/*
+ * The objective function used by RPL is configurable through the 
+ * RPL_CONF_OF parameter. This should be defined to be the name of an 
+ * rpl_of_t object linked into the system image, e.g., rpl_of0.
+ */
+#ifdef RPL_CONF_OF
+#define RPL_OF RPL_CONF_OF
+#else
+/* ETX is the default objective function. */
+#define RPL_OF rpl_of_etx
+#endif /* RPL_CONF_OF */
+
 /* The RPL Codes for the message types */
 #define RPL_CODE_DIS                     0   /* DIS message */
 #define RPL_CODE_DIO                     1   /* DIO message */
@@ -115,8 +127,6 @@
 
 #define RPL_DEFAULT_INSTANCE            0
 #define RPL_ANY_INSTANCE               -1
-
-#define RPL_DEFAULT_OCP                 1
 
 /* Represents 2^n ms. */
 /* Default alue according to the specification is 3 which
