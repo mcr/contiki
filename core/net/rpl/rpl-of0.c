@@ -58,10 +58,7 @@ rpl_of_t rpl_of0 = {
   0
 };
 
-#define DEFAULT_RANK_INCREMENT  4
-#define MINIMUM_RANK_INCREMENT  1
-#define MAXIMUM_RANK_INCREMENT  16
-#define MAXIMUM_RANK_STRETCH    4
+#define DEFAULT_RANK_INCREMENT  DEFAULT_MIN_HOPRANKINC
 
 static void
 reset(void *dag)
