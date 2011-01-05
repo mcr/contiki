@@ -54,7 +54,7 @@
 #define MSP430_REQUIRE_LPM2 2
 #define MSP430_REQUIRE_LPM3 3
 
-void msp430_add_lpm_req();
-void msp430_remove_lpm_req();
+void msp430_add_lpm_req(int req);
+void msp430_remove_lpm_req(int req);
 
 #endif /* __MSP430_H__ */
