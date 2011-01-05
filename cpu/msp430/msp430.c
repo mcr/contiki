@@ -195,7 +195,7 @@ static char *cur_break = (char *)&_end;
 void
 msp430_add_lpm_req(int req)
 {
-  if (req <= MSP430_REQUIRE_LPM1) {
+  if(req <= MSP430_REQUIRE_LPM1) {
     msp430_dco_required++;
   }
 }
@@ -203,7 +203,7 @@ msp430_add_lpm_req(int req)
 void
 msp430_remove_lpm_req(int req)
 {
-  if (req <= MSP430_REQUIRE_LPM1) {
+  if(req <= MSP430_REQUIRE_LPM1) {
     msp430_dco_required--;
   }
 }
