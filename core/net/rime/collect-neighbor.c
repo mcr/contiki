@@ -63,7 +63,7 @@
 
 MEMB(collect_neighbors_mem, struct collect_neighbor, MAX_COLLECT_NEIGHBORS);
 
-#define MAX_AGE                      60
+#define MAX_AGE                      180
 #define MAX_LE_AGE                   10
 #define PERIODIC_INTERVAL            CLOCK_SECOND * 60
 
@@ -98,6 +98,7 @@ periodic(void *ptr)
       n->le_age = 0;
     }
     if(n->age == MAX_AGE) {
+      memb_free(&collect_neighbors_mem, n);
       list_remove(neighbor_list->list, n);
       n = list_head(neighbor_list->list);
     }
