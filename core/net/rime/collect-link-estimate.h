@@ -59,12 +59,8 @@
 
 
 
-
-#define COLLECT_LINK_ESTIMATE_HISTORY_SIZE   16
-
 struct collect_link_estimate {
-  uint8_t history[COLLECT_LINK_ESTIMATE_HISTORY_SIZE];
-  uint8_t historyptr;
+  uint32_t etx_accumulator;
   uint8_t num_estimates;
 };
 
