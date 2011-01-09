@@ -431,7 +431,9 @@ main(int argc, char **argv)
         watchdog_periodic();
 	timer_reset(&mgt_timer);
 	msp430_sync_dco();
+#if CC2420_CONF_SFD_TIMESTAMPS
         cc2420_arch_sfd_init();
+#endif /* CC2420_CONF_SFD_TIMESTAMPS */
       }
 #endif
       
