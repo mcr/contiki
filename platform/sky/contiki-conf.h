@@ -50,11 +50,6 @@
 
 /* Network setup for non-IPv6 (rime). */
 
-#define TIMESYNCH_CONF_ENABLED           1
-#if TIMESYNCH_CONF_ENABLED
-#define CC2420_CONF_SFD_TIMESTAMPS       1
-#endif /* TIMESYNCH_CONF_ENABLED */
-
 #define NETSTACK_CONF_NETWORK rime_driver
 
 #define COLLECT_CONF_ANNOUNCEMENTS       1
@@ -73,6 +68,16 @@
 #ifndef QUEUEBUF_CONF_NUM
 #define QUEUEBUF_CONF_NUM                16
 #endif /* QUEUEBUF_CONF_NUM */
+
+#ifndef TIMESYNCH_CONF_ENABLED
+#define TIMESYNCH_CONF_ENABLED           0
+#endif /* TIMESYNCH_CONF_ENABLED */
+
+#if TIMESYNCH_CONF_ENABLED
+/* CC2420 SDF timestamps must be on if timesynch is enabled. */
+#undef CC2420_CONF_SFD_TIMESTAMPS
+#define CC2420_CONF_SFD_TIMESTAMPS       1
+#endif /* TIMESYNCH_CONF_ENABLED */
 
 #endif /* WITH_UIP6 */
 
