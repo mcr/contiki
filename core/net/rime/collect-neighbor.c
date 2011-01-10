@@ -144,6 +144,11 @@ collect_neighbor_list_add(struct collect_neighbor_list *neighbors_list,
 {
   struct collect_neighbor *n;
 
+  if(addr == NULL) {
+    PRINTF("collect_neighbor_list_add: attempt to add NULL addr\n");
+    return 0;
+  }
+
   PRINTF("collect_neighbor_add: adding %d.%d\n", addr->u8[0], addr->u8[1]);
 
   /* Check if the collect_neighbor is already on the list. */
@@ -195,8 +200,10 @@ collect_neighbor_list_add(struct collect_neighbor_list *neighbors_list,
     if(nrtmetric < worst_rtmetric) {
       n = worst_neighbor;
     }
-    PRINTF("collect_neighbor_add: not on list, not allocated, recycling %d.%d\n",
-           n->addr.u8[0], n->addr.u8[1]);
+    if(n != NULL) {
+      PRINTF("collect_neighbor_add: not on list, not allocated, recycling %d.%d\n",
+             n->addr.u8[0], n->addr.u8[1]);
+    }
   }
 
   if(n != NULL) {
