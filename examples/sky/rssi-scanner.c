@@ -57,8 +57,8 @@ set_frq(int c)
   /* fine graied channel - can we even read other channels with CC2420 ? */
   f = c + 302 + 0x4000;
 
-  FASTSPI_SETREG(CC2420_FSCTRL, f);
-  FASTSPI_STROBE(CC2420_SRXON);
+  CC2420_WRITE_REG(CC2420_FSCTRL, f);
+  CC2420_STROBE(CC2420_SRXON);
 }
 
 static void
