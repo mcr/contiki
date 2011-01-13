@@ -295,7 +295,12 @@ public class Simulation extends Observable implements Runnable {
     this.setChanged();
     this.notifyObservers(this);
     logger.info("Simulation main loop stopped, system time: " + System.currentTimeMillis() + 
-        "\tDuration: " + (System.currentTimeMillis() - lastStartTime) + " ms");
+        "\tDuration: " + (System.currentTimeMillis() - lastStartTime) +
+                " ms" +
+                "\tSimulated time " + getSimulationTimeMillis() +
+                " ms\tRatio " +
+                ((double)getSimulationTimeMillis() /
+                 (double)(System.currentTimeMillis() - lastStartTime)));
   }
 
   /**
