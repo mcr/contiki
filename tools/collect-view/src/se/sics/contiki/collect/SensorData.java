@@ -214,7 +214,7 @@ public class SensorData implements SensorInfo {
   }
 
   public double getLatency() {
-    return values[LATENCY] / 8192.0;
+    return values[LATENCY] / 32678.0;
   }
 
   public double getHumidity() {

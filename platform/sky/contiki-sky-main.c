@@ -72,12 +72,12 @@
 #endif /* UIP_ROUTER_MODULE */
 
 extern const struct uip_router UIP_ROUTER_MODULE;
-
 #endif /* UIP_CONF_ROUTER */
 
 #if DCOSYNCH_CONF_ENABLED
 static struct timer mgt_timer;
 #endif
+extern int msp430_dco_required;
 
 #ifndef WITH_UIP
 #define WITH_UIP 0
@@ -431,7 +431,9 @@ main(int argc, char **argv)
         watchdog_periodic();
 	timer_reset(&mgt_timer);
 	msp430_sync_dco();
+#if CC2420_CONF_SFD_TIMESTAMPS
         cc2420_arch_sfd_init();
+#endif /* CC2420_CONF_SFD_TIMESTAMPS */
       }
 #endif
       
@@ -443,13 +445,17 @@ main(int argc, char **argv)
 	 were awake. */
       energest_type_set(ENERGEST_TYPE_IRQ, irq_energest);
       watchdog_stop();
-      _BIS_SR(GIE | SCG0 | SCG1 | CPUOFF); /* LPM3 sleep. This
-					      statement will block
-					      until the CPU is
-					      woken up by an
-					      interrupt that sets
-					      the wake up flag. */
-
+      /* check if the DCO needs to be on - if so - only LPM 1 */
+      if (msp430_dco_required) {
+	_BIS_SR(GIE | CPUOFF); /* LPM1 sleep for DMA to work!. */
+      } else {
+	_BIS_SR(GIE | SCG0 | SCG1 | CPUOFF); /* LPM3 sleep. This
+						statement will block
+						until the CPU is
+						woken up by an
+						interrupt that sets
+						the wake up flag. */
+      }
       /* We get the current processing time for interrupts that was
 	 done during the LPM and store it for next time around.  */
       dint();

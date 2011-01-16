@@ -49,4 +49,12 @@
 #define MSP430_CPU_SPEED 2457600UL
 #endif
 
+#define MSP430_REQUIRE_CPUON 0
+#define MSP430_REQUIRE_LPM1 1
+#define MSP430_REQUIRE_LPM2 2
+#define MSP430_REQUIRE_LPM3 3
+
+void msp430_add_lpm_req(int req);
+void msp430_remove_lpm_req(int req);
+
 #endif /* __MSP430_H__ */

@@ -647,17 +647,16 @@ PROCESS_THREAD(cc2420_process, ev, data)
     packetbuf_clear();
     packetbuf_set_attr(PACKETBUF_ATTR_TIMESTAMP, last_packet_timestamp);
     len = cc2420_read(packetbuf_dataptr(), PACKETBUF_SIZE);
-    if(len > 0) {
-      packetbuf_set_datalen(len);
-
-      NETSTACK_RDC.input();
+    
+    packetbuf_set_datalen(len);
+    
+    NETSTACK_RDC.input();
 #if CC2420_TIMETABLE_PROFILING
-      TIMETABLE_TIMESTAMP(cc2420_timetable, "end");
-      timetable_aggregate_compute_detailed(&aggregate_time,
-                                           &cc2420_timetable);
+    TIMETABLE_TIMESTAMP(cc2420_timetable, "end");
+    timetable_aggregate_compute_detailed(&aggregate_time,
+                                         &cc2420_timetable);
       timetable_clear(&cc2420_timetable);
 #endif /* CC2420_TIMETABLE_PROFILING */
-    }
   }
 
   PROCESS_END();

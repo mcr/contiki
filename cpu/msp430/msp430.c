@@ -38,6 +38,10 @@
 #include "dev/watchdog.h"
 #include "net/uip.h"
 
+/* dco_required set to 1 will cause the CPU not to go into
+   sleep modes where the DCO clock stopped */
+int msp430_dco_required;
+
 /*---------------------------------------------------------------------------*/
 #if defined(__MSP430__) && defined(__GNUC__) && MSP430_MEMCPY_WORKAROUND
 void *
@@ -126,7 +130,6 @@ static void
 init_ports(void)
 {
   /* Turn everything off, device drivers enable what is needed. */
-
   /* All configured for digital I/O */
 #ifdef P1SEL
   P1SEL = 0;
@@ -183,6 +186,28 @@ init_ports(void)
 extern int _end;		/* Not in sys/unistd.h */
 static char *cur_break = (char *)&_end;
 
+/*---------------------------------------------------------------------------*/
+/* add/remove_lpm_req - for requiring a specific LPM mode. currently Contiki */
+/* jumps to LPM3 to save power, but DMA will not work if DCO is not clocked  */
+/* so some modules might need to enter their LPM requirements                */
+/* NOTE: currently only works with LPM1 (e.g. DCO) requirements.             */
+/*---------------------------------------------------------------------------*/
+void
+msp430_add_lpm_req(int req)
+{
+  if(req <= MSP430_REQUIRE_LPM1) {
+    msp430_dco_required++;
+  }
+}
+
+void
+msp430_remove_lpm_req(int req)
+{
+  if(req <= MSP430_REQUIRE_LPM1) {
+    msp430_dco_required--;
+  }
+}
+
 void
 msp430_cpu_init(void)
 {
@@ -194,6 +219,7 @@ msp430_cpu_init(void)
   if((uintptr_t)cur_break & 1) { /* Workaround for msp430-ld bug! */
     cur_break++;
   }
+  msp430_dco_required = 0;
 }
 /*---------------------------------------------------------------------------*/
 #define asmv(arg) __asm__ __volatile__(arg)

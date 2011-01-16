@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "contiki.h"
 #include "contiki-net.h"
 #include "rest.h"
@@ -126,9 +127,9 @@ discover_handler(REQUEST* request, RESPONSE* response)
 {
   char temp[100];
   int index = 0;
-  index += sprintf(temp + index, "%s\n", "<helloworld>;n=\"HelloWorld\"");
-  index += sprintf(temp + index, "%s\n", "<led>;n=\"LedControl\"");
-  index += sprintf(temp + index, "%s\n", "<light>;n=\"Light\"");
+  index += sprintf(temp + index, "%s,", "</helloworld>;n=\"HelloWorld\"");
+  index += sprintf(temp + index, "%s,", "</led>;n=\"LedControl\"");
+  index += sprintf(temp + index, "%s", "</light>;n=\"Light\"");
 
   rest_set_response_payload(response, temp, strlen(temp));
   rest_set_header_content_type(response, APPLICATION_LINK_FORMAT);
