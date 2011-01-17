@@ -34,69 +34,64 @@
  */
 
 #include <mc1322x.h>
-#include <board.h>
-#include <stdio.h>
+#include <stdlib.h>
+#include "tmr.h"
 
-#include "tests.h"
-#include "config.h"
-
-#define LED LED_GREEN
-
-void maca_rx_callback(volatile packet_t *p) {
-	(void)p;
-	gpio_data_set(1ULL<< LED);
-	gpio_data_reset(1ULL<< LED);
-}
-
-void main(void) {
-	volatile packet_t *p;
-	volatile uint8_t chan;
-
-	gpio_data(0);
+/* Initialize timer.  This just counts and interrupts, doesn't drive an output.
+   timer_num = 0, 1, 2, 3
+   rate = desired rate in Hz,
+   enable_int = whether to enable an interrupt on every cycle
+   Returns actual timer rate. */
+uint32_t timer_setup_ex(int timer_num, uint32_t rate, int enable_int)
+{
+	uint32_t actual_rate;
+	volatile struct TMR_struct *timer = TMR_ADDR(timer_num);
+	int log_divisor = 0;
+	uint32_t period;
 	
-	gpio_pad_dir_set( 1ULL << LED );
-        /* read from the data register instead of the pad */
-	/* this is needed because the led clamps the voltage low */
-	gpio_data_sel( 1ULL << LED);
+	/* Turn timer off */
+	TMR0->ENBL &= ~(1 << timer_num);
 
-	/* trim the reference osc. to 24MHz */
-	trim_xtal();
-
-	uart_init(INC, MOD, SAMP);
-
-	vreg_init();
-
-	maca_init();
-
-        /* sets up tx_on, should be a board specific item */
-	//       *GPIO_FUNC_SEL2 = (0x01 << ((44-16*2)*2));
-	gpio_pad_dir_set( 1ULL << 44 );
-
-	set_power(0x0f); /* 0dbm */
-	chan = 0;
-	set_channel(chan); /* channel 11 */
-
-	print_welcome("rftest-rx");
-	while(1) {		
-
-		/* call check_maca() periodically --- this works around */
-		/* a few lockup conditions */
-		check_maca();
-
-		if((p = rx_packet())) {
-			/* print and free the packet */
-			printf("rftest-rx --- ");
-			print_packet(p);
-			free_packet(p);
-		}
-
-		if(uart1_can_get()) {
-			uart1_getc();
-			chan++;
-			if(chan >= 16) { chan = 0; }
-			set_channel(chan);
-			printf("channel: %d\n\r", chan);
-		}
-
+	/* Calculate optimal rate */
+	for (log_divisor = 0; log_divisor < 8; log_divisor++)
+	{
+		int denom = (rate * (1 << log_divisor));
+		period = (REF_OSC + denom/2) / denom;
+		if (period <= 65535)
+			break;
 	}
+	if (log_divisor >= 8)
+	{
+		period = 65535;
+		log_divisor = 7;
+	}
+
+	if (period < 2) period = 2;
+
+	actual_rate = REF_OSC / (period * (1 << log_divisor));
+
+	/* Set up timer */
+	
+	timer->LOAD = 0;
+	timer->CMPLD1 = (period - 1);
+	timer->COMP1 = timer->CMPLD1;
+	timer->CNTR = timer->LOAD;
+	timer->SCTRL = 0;
+	timer->CSCTRLbits = (struct TMR_CSCTRL) {
+		.CL1 = 0x01,	// Reload COMP1 when COMP1 matches
+	};
+	timer->CTRLbits = (struct TMR_CTRL) {
+		.COUNT_MODE = 1,		// Count rising edge of primary source
+		.PRIMARY_CNT_SOURCE = 8 + log_divisor,	// Peripheral clock divided by (divisor)
+		.LENGTH = 1,			// At compare, reset to LOAD
+	};
+
+	TMR0->ENBL |= (1 << timer_num);
+
+	if (enable_int) {
+		enable_irq(TMR);
+		timer->SCTRLbits.TCFIE = 1;
+	}
+
+	return actual_rate;
 }
