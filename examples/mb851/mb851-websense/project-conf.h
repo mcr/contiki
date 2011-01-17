@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007, Swedish Institute of Computer Science.
+ * Copyright (c) 2010, Swedish Institute of Computer Science.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,26 +26,22 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * This file is part of the Contiki operating system.
- *
  * $Id$
  */
 
-/**
- * \file
- *         A brief description of what this file is.
- * \author
- *         Adam Dunkels <adam@sics.se>
- */
+#ifndef __PROJECT_RPL_WEB_CONF_H__
+#define __PROJECT_RPL_WEB_CONF_H__
 
-#ifndef __UART1_H__
-#define __UART1_H__
+#undef QUEUEBUF_CONF_NUM
+#define QUEUEBUF_CONF_NUM          2
 
-#define BAUD2UBR(baud) baud
+#undef UIP_CONF_BUFFER_SIZE
+#define UIP_CONF_BUFFER_SIZE    140
 
-void uart1_set_input(int (*input)(unsigned char c));
-void uart1_writeb(unsigned char c);
-void uart1_init(unsigned long ubr);
-//uint8_t uart1_active(void);
+#undef UIP_CONF_RECEIVE_WINDOW
+#define UIP_CONF_RECEIVE_WINDOW  60
 
-#endif /* __UART1_H__ */
+#undef WEBSERVER_CONF_CFS_CONNS
+#define WEBSERVER_CONF_CFS_CONNS 2
+
+#endif /* __PROJECT_RPL_WEB_CONF_H__ */

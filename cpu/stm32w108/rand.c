@@ -43,8 +43,8 @@
 #include "dev/stm32w-radio.h"
 #include "lib/random.h"
 
-#if (RANDOM_MAX != 0xffff)
-#warning "RANDOM_MAX is not defined as 65535."
+#if (RANDOM_RAND_MAX != 0xffff)
+#warning "RANDOM_RAND_MAX is not defined as 65535."
 #endif
 
 int rand(void)
