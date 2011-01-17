@@ -48,6 +48,7 @@
 	printf("): %d\n", sizeof(x));		\
 	} while(0)
 
+#if (__linux__)
 FILE *stderr;
 
 void __assert_fail(void) {
@@ -59,9 +60,10 @@ int fputs(const char *s, FILE *stream) {
 }
 
 size_t fwrite(const void *ptr, size_t size, size_t nmemb,
-	      FILE *stream) {       
+	      FILE *stream) {
 	return 0;
 }
+#endif
 
 int main(void)
 {
