@@ -41,9 +41,7 @@
 #ifndef __UART1_H__
 #define __UART1_H__
 
-//#include "msp430.h"
-//
-//#define UART1_BAUD2UBR(baud) ((MSP430_CPU_SPEED)/(baud))
+#define BAUD2UBR(baud) baud
 
 void uart1_set_input(int (*input)(unsigned char c));
 void uart1_writeb(unsigned char c);
