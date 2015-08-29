@@ -31,9 +31,12 @@
 
 /**
  * \file
- *      Erbium (Er) REST Engine example.
+ *      Protein 1 outlet controller
  * \author
- *      Matthias Kovatsch <kovatsch@inf.ethz.ch>
+ *      Michael Richardson <mcr@sandelman.ca>
+ *
+ *      based upon Erbium (Er) REST Engine example (with CoAP-specific code)
+ *       by Matthias Kovatsch <kovatsch@inf.ethz.ch>
  */
 
 #include <stdio.h>
@@ -42,6 +45,9 @@
 #include "contiki.h"
 #include "contiki-net.h"
 #include "rest-engine.h"
+#include "dev/leds.h"
+
+#define REST_RES_LEDS 1
 
 #if PLATFORM_HAS_BUTTON
 #include "dev/button-sensor.h"
@@ -59,20 +65,104 @@
 #define PRINTLLADDR(addr)
 #endif
 
-#if PLATFORM_HAS_LEDS && 0
-extern resource_t res_leds, res_toggle;
+/******************************************************************************/
+#if defined (PLATFORM_HAS_LEDS)
+/******************************************************************************/
+
+#if REST_RES_LEDS
+/*
+ * This example turns on/off and toggles LEDs
+ */
+
+/* A simple actuator example, depending on the color query parameter
+ * and post variable mode, corresponding led is activated or deactivated*/
+
+static void
+res_post_put_handler(void *request, void *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
+{
+  size_t len = 0;
+  const char *color = NULL;
+  const char *mode = NULL;
+  uint8_t led = 0;
+  int success = 1;
+
+  if ((len=REST.get_query_variable(request, "color", &color))) {
+    PRINTF("color %.*s\n", len, color);
+
+    if (strncmp(color, "r", len)==0) {
+      led = LEDS_RED;
+    } else if(strncmp(color,"g", len)==0) {
+      led = LEDS_GREEN;
+    } else if (strncmp(color,"b", len)==0) {
+      led = LEDS_BLUE;
+    } else {
+      success = 0;
+    }
+  } else {
+    success = 0;
+  }
+
+  if (success && (len=REST.get_post_variable(request, "mode", &mode))) {
+    PRINTF("mode %s\n", mode);
+
+    if (strncmp(mode, "on", len)==0) {
+      leds_on(led);
+    } else if (strncmp(mode, "off", len)==0) {
+      leds_off(led);
+    } else {
+      success = 0;
+    }
+  } else {
+    success = 0;
+  }
+
+  if (!success) {
+    REST.set_response_status(response, REST.status.BAD_REQUEST);
+  }
+}
+
+RESOURCE(res_leds,
+         "title=\"LEDs: ?color=r|g|b, POST/PUT mode=on|off\";rt=\"Control\"",
+         NULL,
+         res_post_put_handler,
+         res_post_put_handler,
+         NULL);
+
 #endif
 
-PROCESS(er_example_server, "Erbium Example Server");
-AUTOSTART_PROCESSES(&er_example_server);
+/******************************************************************************/
+#if REST_RES_TOGGLE
 
-PROCESS_THREAD(er_example_server, ev, data)
+void
+toggle_handler(void* request, void* response,
+               uint8_t *buffer, uint16_t preferred_size,
+               int32_t *offset)
+{
+  leds_toggle(LEDS_RED);
+}
+
+/* A simple actuator example. Toggles the red led */
+RESOURCE(res_toggle,
+         "title=\"Red LED\";rt=\"Control\"",
+         NULL,
+         res_post_handler,
+         NULL,
+         NULL);
+
+#endif
+#endif /* PLATFORM_HAS_LEDS */
+
+PROCESS(protein_server, "Protein Server");
+AUTOSTART_PROCESSES(&protein_server);
+
+static struct etimer et;
+PROCESS_THREAD(protein_server, ev, data)
 {
   PROCESS_BEGIN();
 
   PROCESS_PAUSE();
 
-  PRINTF("Starting Erbium Example Server\n");
+  PRINTF("Starting Protein Server 3.0 - single outlet control\n");
 
 #ifdef RF_CHANNEL
   PRINTF("RF channel: %u\n", RF_CHANNEL);
@@ -81,18 +171,13 @@ PROCESS_THREAD(er_example_server, ev, data)
   PRINTF("PAN ID: 0x%04X\n", IEEE802154_PANID);
 #endif
 
-  PRINTF("uIP buffer: %u\n", UIP_BUFSIZE);
-  PRINTF("LL header: %u\n", UIP_LLH_LEN);
-  PRINTF("IP+UDP header: %u\n", UIP_IPUDPH_LEN);
-  PRINTF("REST max chunk: %u\n", REST_MAX_CHUNK_SIZE);
-
   /* Initialize the REST engine. */
   rest_init_engine();
 
   /* rest_activate_resource(&res_hello, "test/hello"); */
-#if PLATFORM_HAS_LEDS && 0
+#if PLATFORM_HAS_LEDS
   rest_activate_resource(&res_leds, "actuators/leds");
-  rest_activate_resource(&res_toggle, "actuators/toggle");
+  //rest_activate_resource(&res_toggle, "actuators/toggle");
 #endif
 
   /* Define application-specific events here. */
