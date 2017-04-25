@@ -89,5 +89,4 @@
 #define ENERGEST_CONF_ON 1
 #endif /* ENERGEST_CONF_ON */
 
-
 #endif /* __PROJECT_ERBIUM_CONF_H__ */

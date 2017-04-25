@@ -65,6 +65,14 @@
 #define PRINTLLADDR(addr)
 #endif
 
+#include "dev/serial-line.h"
+
+#ifdef __CYGWIN__
+#include "net/wpcap-drv.h"
+#else /* __CYGWIN__ */
+#include "net/tapdev-drv.h"
+#endif /* __CYGWIN__ */
+
 /******************************************************************************/
 #if defined (PLATFORM_HAS_LEDS)
 /******************************************************************************/
