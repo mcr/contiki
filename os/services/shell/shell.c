@@ -130,6 +130,9 @@ PT_THREAD(shell_input(struct pt *pt, shell_output_func output, const char *cmd))
     args++;
   }
 
+  /* ignore empty lines */
+  if(strlen(cmd)==0) goto done;
+
   /* Lookup for command */
   cmd_ptr = shell_commands;
   while(cmd_ptr->name != NULL) {
