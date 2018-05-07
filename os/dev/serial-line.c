@@ -52,6 +52,9 @@
 #ifndef END
 #define END 0x0a
 #endif
+#ifndef END2
+#define END2 0x0d
+#endif
 
 static struct ringbuf rxbuf;
 static uint8_t rxbuf_data[BUFSIZE];
@@ -79,7 +82,7 @@ serial_line_input_byte(unsigned char c)
   } else {
     /* Buffer overflowed:
      * Only (try to) add terminator characters, otherwise skip */
-    if(c == END && ringbuf_put(&rxbuf, c) != 0) {
+    if((c == END || c == END2) && ringbuf_put(&rxbuf, c) != 0) {
       overflow = 0;
     }
   }
